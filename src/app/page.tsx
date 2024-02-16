@@ -1,7 +1,9 @@
-export default function Home() {
+"use server";
+
+export default async function Page() {
   return (
     <>
-      pre-login area
+      <p>pre-login area</p>
     </>
   );
 }
