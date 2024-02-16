@@ -21,4 +21,8 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 ## Deploy on AWS App Runner
 
-The `main` branch will be deployed by AWS App Runner at TBC. This is a dev deployment for integration testing.
+The `main` branch will be deployed by AWS App Runner at:
+
+* https://f8ppypkcjp.ap-southeast-1.awsapprunner.com/
+
+This is a dev deployment for integration testing.
