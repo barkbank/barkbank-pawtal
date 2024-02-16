@@ -1,6 +1,10 @@
 .PHONY: default
-default: fmt
+default: fmt test
 
 .PHONY:fmt
 fmt:
 	npm run fmt
+
+.PHONY: test
+test:
+	npm run test
