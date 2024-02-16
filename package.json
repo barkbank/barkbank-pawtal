@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "next lint",
     "fmt": "npx prettier . --write",
-    "shadcn-ui": "npx shadcn-ui@latest"
+    "shadcn-ui": "npx shadcn-ui@latest",
+    "test": "jest"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
