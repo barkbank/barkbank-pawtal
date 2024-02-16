@@ -9,6 +9,7 @@ import {
   BarkFormSubmitButton,
 } from "@/components/bark/bark-form";
 import { useState } from "react";
+import { sendOtp } from "./_actions";
 
 const EMAIL_FORM_SCHEMA = z.object({
   email: z.string().email(),
@@ -39,7 +40,9 @@ export default function LoginForm() {
 
   async function onSubmitEmail(values: EmailFormDataType) {
     console.log("SubmitEmail:", values);
-    setEmail(values.email);
+    const { email } = values;
+    await sendOtp(email);
+    setEmail(email);
   }
 
   async function onSubmitOtp(values: OtpFormDataType) {
