@@ -5,74 +5,71 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   BarkForm,
+  BarkFormButton,
   BarkFormInput,
+  BarkFormParagraph,
   BarkFormSubmitButton,
 } from "@/components/bark/bark-form";
 import { useState } from "react";
-import { sendOtp } from "./_actions";
+import { sendLoginOtp } from "./_actions";
+import { Button } from "@/components/ui/button";
 
-const EMAIL_FORM_SCHEMA = z.object({
+const FORM_SCHEMA = z.object({
   email: z.string().email(),
-});
-
-type EmailFormDataType = z.infer<typeof EMAIL_FORM_SCHEMA>;
-
-const OTP_FORM_SCHEMA = z.object({
   otp: z.string().min(6).max(6),
 });
 
-type OtpFormDataType = z.infer<typeof OTP_FORM_SCHEMA>;
+type FormDataType = z.infer<typeof FORM_SCHEMA>;
 
 export default function LoginForm() {
-  const [email, setEmail] = useState("");
-  const emailForm = useForm<EmailFormDataType>({
-    resolver: zodResolver(EMAIL_FORM_SCHEMA),
+  const [recipientEmail, setRecipientEmail] = useState("");
+  const emailForm = useForm<FormDataType>({
+    resolver: zodResolver(FORM_SCHEMA),
     defaultValues: {
       email: "",
-    },
-  });
-  const otpForm = useForm<OtpFormDataType>({
-    resolver: zodResolver(OTP_FORM_SCHEMA),
-    defaultValues: {
       otp: "",
     },
   });
 
-  async function onSubmitEmail(values: EmailFormDataType) {
-    console.log("SubmitEmail:", values);
-    const { email } = values;
-    await sendOtp(email);
-    setEmail(email);
+  async function onSubmit(values: FormDataType) {
+    console.log("TODO - Authenticate", values);
   }
 
-  async function onSubmitOtp(values: OtpFormDataType) {
-    const credentials = { email, ...values };
-    console.log("SubmitOtp:", credentials);
+  async function onRequestOtp() {
+    const {email} = emailForm.getValues();
+    emailForm.clearErrors("otp");
+    try {
+      const validEmail = z.string().email().parse(email);
+      emailForm.clearErrors("email");
+      console.log("Send OTP to %s", validEmail);
+      await sendLoginOtp(validEmail);
+      // Do not show errors to user here so that this doesn't become an
+      // interface for querying our database.
+      setRecipientEmail(validEmail);
+    } catch {
+      emailForm.setError("email", {message: "Invalid email address"});
+      setRecipientEmail("");
+    }
   }
 
   return (
     <>
-      {email === "" && (
-        <BarkForm form={emailForm} onSubmit={onSubmitEmail}>
-          <BarkFormInput
-            form={emailForm}
-            name="email"
-            label="Enter email address"
-          />
-          <BarkFormSubmitButton label="Send me an OTP" />
-        </BarkForm>
-      )}
-      {email !== "" && (
-        <BarkForm form={otpForm} onSubmit={onSubmitOtp}>
-          <BarkFormInput
-            form={otpForm}
-            name="otp"
-            label="Enter 6-digit OTP"
-            description={`OTP was sent to ${email}`}
-          />
-          <BarkFormSubmitButton label="Submit" />
-        </BarkForm>
-      )}
+      <BarkForm form={emailForm} onSubmit={onSubmit}>
+        <BarkFormInput
+          form={emailForm}
+          name="email"
+          label="Please provide your email address"
+        />
+        {/* TODO - We need a CAPTCHA to prevent abuse of Send me an OTP */}
+        <BarkFormButton onClick={onRequestOtp}>Send me an OTP</BarkFormButton>
+        {recipientEmail !== "" && <BarkFormParagraph>An OTP has been sent to {recipientEmail}</BarkFormParagraph>}
+        <BarkFormInput
+          form={emailForm}
+          name="otp"
+          label="Enter OTP"
+        />
+        <BarkFormSubmitButton>Login</BarkFormSubmitButton>
+      </BarkForm>
     </>
   );
 }

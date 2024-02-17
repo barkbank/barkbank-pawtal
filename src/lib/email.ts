@@ -2,15 +2,15 @@
 
 import nodemailer from "nodemailer";
 import { Err, Ok, Result } from "./result";
+import { guaranteed } from "./stringutils";
 
 const TRANSPORT = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port:
-    process.env.SMTP_PORT === undefined ? 465 : parseInt(process.env.SMTP_PORT),
+  host: guaranteed(process.env.SMTP_HOST),
+  port: parseInt(guaranteed(process.env.SMTP_PORT)),
   secure: true,
   auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASSWORD,
+    user: guaranteed(process.env.SMTP_USER),
+    pass: guaranteed(process.env.SMTP_PASSWORD),
   },
 });
 

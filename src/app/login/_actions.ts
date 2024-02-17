@@ -3,7 +3,7 @@
 import { sendEmail } from "@/lib/email";
 import { guaranteed } from "@/lib/stringutils";
 
-export async function sendOtp(email: string): Promise<void> {
+export async function sendLoginOtp(email: string): Promise<void> {
   console.log("Sending OTP to:", email);
   const { result } = await sendEmail({
     sender: {
