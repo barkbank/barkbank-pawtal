@@ -1,10 +1,12 @@
 "use server";
 
+import { getCurrentOtp } from "@/lib/auth";
 import { sendEmail } from "@/lib/email";
 import { guaranteed } from "@/lib/stringutils";
 
 export async function sendLoginOtp(email: string): Promise<void> {
   console.log("Sending OTP to:", email);
+  const otp = getCurrentOtp(email);
   const { result } = await sendEmail({
     sender: {
       email: guaranteed(process.env.OTP_SENDER_EMAIL),
@@ -12,8 +14,8 @@ export async function sendLoginOtp(email: string): Promise<void> {
     },
     recipient: { email },
     subject: "Bark Bank OTP",
-    bodyText: "Your Bark Bank OTP is 123456",
-    bodyHtml: "<p>Your Bark Bank OTP is <b>123456</b></p>",
+    bodyText: `Your Bark Bank OTP is ${otp}`,
+    bodyHtml: `<p>Your Bark Bank OTP is <b>${otp}</b></p>`,
   });
   if (result) {
     console.log("Message sent: %s", result.messageId);
