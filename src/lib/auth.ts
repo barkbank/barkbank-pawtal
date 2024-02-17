@@ -19,6 +19,7 @@ export const NEXT_AUTH_OPTIONS: NextAuthOptions = {
             return null;
           }
           const recentOtps = getRecentOtps(credentials.email);
+          console.log(recentOtps);
           if (!recentOtps.includes(credentials.otp)) {
             return null;
           }

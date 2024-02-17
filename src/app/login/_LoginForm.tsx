@@ -39,20 +39,27 @@ export default function LoginForm() {
 
   const qs = useSearchParams();
 
-  async function onRequestOtp() {
-    const { email } = form.getValues();
-    form.clearErrors("otp");
+  function validateEmail(email: string): string {
     try {
       const validEmail = z.string().email().parse(email);
       form.clearErrors("email");
-      console.log("Send OTP to %s", validEmail);
-      await sendLoginOtp(validEmail);
-      // Do not show errors to user here so that this doesn't become an
-      // interface for querying our database.
       setRecipientEmail(validEmail);
+      return validEmail;
     } catch {
       form.setError("email", { message: "Invalid email address" });
       setRecipientEmail("");
+      return "";
+    }
+  }
+
+  async function onRequestOtp() {
+    const { email } = form.getValues();
+    form.clearErrors("otp");
+    const validEmail = validateEmail(email);
+    if (validEmail) {
+      await sendLoginOtp(validEmail);
+      // Do not show errors to user here so that this doesn't become an
+      // interface for querying our database.
     }
   }
 
