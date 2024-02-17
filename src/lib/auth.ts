@@ -18,7 +18,6 @@ export const NEXT_AUTH_OPTIONS: NextAuthOptions = {
           if (!credentials || !credentials.email || !credentials.otp) {
             return null;
           }
-          console.log("Credentials:", credentials);
           const recentOtps = getRecentOtps(credentials.email);
           if (!recentOtps.includes(credentials.otp)) {
             return null;
@@ -43,25 +42,27 @@ export const NEXT_AUTH_OPTIONS: NextAuthOptions = {
 
 const RECENT_PERIODS = parseInt(guaranteed(process.env.OTP_NUM_RECENT_PERIODS));
 const PERIOD_MILLIS = parseInt(guaranteed(process.env.OTP_PERIOD_MILLIS));
-const SERVER_SECRET = guaranteed(process.env.OTP_SECRET)
+const SERVER_SECRET = guaranteed(process.env.OTP_SECRET);
 
 export function getCurrentOtp(email: string): string {
   return getOtp({
     email,
     period: getCurrentPeriod(PERIOD_MILLIS),
     serverSecret: SERVER_SECRET,
-  })
+  });
 }
 
 export function getRecentOtps(email: string): string[] {
   const currentPeriod = getCurrentPeriod(PERIOD_MILLIS);
   const otps: string[] = [];
   for (let i = -RECENT_PERIODS; i <= 0; ++i) {
-    otps.push(getOtp({
-      email,
-      period: currentPeriod + i,
-      serverSecret: SERVER_SECRET
-    }))
+    otps.push(
+      getOtp({
+        email,
+        period: currentPeriod + i,
+        serverSecret: SERVER_SECRET,
+      }),
+    );
   }
   return otps;
 }
@@ -74,5 +75,6 @@ export async function getAuthenticatedAccount(): Promise<
     return Err("NO_SESSION");
   }
   const { email, name } = session.user;
+  // TODO: Retrieve some user details from DB in future.
   return Ok({ email, name });
 }
