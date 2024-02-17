@@ -1,29 +1,23 @@
 "use server";
 
-import nodemailer from "nodemailer";
+import { sendEmail } from "@/lib/email";
+import { guaranteed } from "@/lib/stringutils";
 
 export async function sendOtp(email: string): Promise<void> {
   console.log("Sending OTP to:", email);
-  const transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_SMTP_HOST,
-    port:
-      process.env.EMAIL_SMTP_PORT === undefined
-        ? 465
-        : parseInt(process.env.EMAIL_SMTP_PORT),
-    secure: true,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
+  const { result } = await sendEmail({
+    sender: {
+      email: guaranteed(process.env.OTP_SENDER_EMAIL),
+      name: process.env.OTP_SENDER_NAME,
     },
-  });
-
-  const info = await transporter.sendMail({
-    from: process.env.EMAIL_FROM,
-    to: email,
+    recipient: { email },
     subject: "Bark Bank OTP",
-    text: "Your Bark Bank OTP is 123456",
-    html: "<b>Your Bark Bank OTP is 123456</b>",
+    bodyText: "Your Bark Bank OTP is 123456",
+    bodyHtml: "<p>Your Bark Bank OTP is <b>123456</b></p>",
   });
-
-  console.log("Message sent: %s", info.messageId);
+  if (result) {
+    console.log("Message sent: %s", result.messageId);
+  } else {
+    console.warn("Failed to send email");
+  }
 }
