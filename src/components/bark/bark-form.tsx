@@ -1,4 +1,4 @@
-import { UseFormReturn } from "react-hook-form";
+import { Controller, UseFormReturn } from "react-hook-form";
 import {
   Form,
   FormControl,
@@ -13,6 +13,7 @@ import { Checkbox } from "../ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
+import Select from "react-select";
 
 export function BarkForm(props: {
   children: React.ReactNode;
@@ -257,5 +258,44 @@ export function BarkFormSubmitButton(props: { label?: string }) {
     <Button type="submit" className="mt-6">
       {label || "Submit"}
     </Button>
+  );
+}
+
+export function BarkFormSelect(props: {
+  form: UseFormReturn<any>;
+  options: BarkFormOption[];
+  label: string;
+  name: string;
+  placeholder?: string;
+  description?: string;
+}) {
+  const { form, label, name, options, placeholder, description } = props;
+  return (
+    <FormField
+      control={form.control}
+      name={name}
+      render={() => (
+        <FormItem className="mt-6">
+          <FormLabel>{label}</FormLabel>
+          <Controller
+            control={form.control}
+            name={name}
+            render={({ field: { onChange } }) => (
+              <Select
+                placeholder={placeholder}
+                instanceId={name}
+                options={options}
+                onChange={(val) => {
+                  onChange(val?.value);
+                }}
+              />
+            )}
+          />
+
+          {description && <FormDescription>{description}</FormDescription>}
+          <FormMessage />
+        </FormItem>
+      )}
+    />
   );
 }
