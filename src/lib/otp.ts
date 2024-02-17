@@ -1,24 +1,30 @@
 import crypto from "crypto";
 
-export const MILLIS_PER_PERIOD = 60000;
-
-function secureHash(arg: string): string {
-  const serverSecret = "a55b451605d17d7ed1cf7b38ee11c7ebdf9f6661";
-  const hmac = crypto.createHmac("sha1", serverSecret);
-  hmac.update(arg);
-  const hash = hmac.digest("hex");
-  const offset = parseInt(hash.slice(-1), 16);
-  const otp =
-    (parseInt(hash.slice(offset * 2, offset * 2 + 8), 16) & 0x7fffffff) %
-    1000000;
+export function getOtp(args: {
+  email: string;
+  period: number;
+  serverSecret: string;
+}): string {
+  const { email, period, serverSecret } = args;
+  const hmac = crypto.createHmac("sha256", serverSecret);
+  hmac.update(`e:${email}`);
+  hmac.update(`p:${period}`);
+  const hashHex = hmac.digest("hex");
+  const n = hashHex.length;
+  let i = 0;
+  let j = 8;
+  let xoredValue = 0;
+  while (i < n && j < n) {
+    const sliceValue = parseInt(hashHex.slice(i, j));
+    xoredValue ^= sliceValue;
+    i += 8;
+    j += 8;
+  }
+  const otp = (xoredValue & 0x7fffffff) % 1000000;
   return otp.toString().padStart(6, "0");
 }
 
-export function getPeriodOtp(email: string, period: number): string {
-  return secureHash(`${email}:${period}`);
-}
-
-export function getCurrentPeriod(): number {
+export function getCurrentPeriod(periodDuration: number): number {
   const ts = new Date().getTime();
-  return Math.floor(ts / MILLIS_PER_PERIOD);
+  return Math.floor(ts / periodDuration);
 }

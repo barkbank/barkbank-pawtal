@@ -1,30 +1,68 @@
-import { MILLIS_PER_PERIOD, getCurrentPeriod, getPeriodOtp } from "@/lib/otp";
+import { getCurrentPeriod, getOtp } from "@/lib/otp";
 
 describe("otp", () => {
   describe("getCurrentPeriod", () => {
     it("should return the current period", () => {
+      const periodDuration = 60000;
       const ts = new Date().getTime();
-      const period = Math.floor(ts / MILLIS_PER_PERIOD);
-      const currentPeriod = getCurrentPeriod();
+      const period = Math.floor(ts / periodDuration);
+      const currentPeriod = getCurrentPeriod(periodDuration);
       expect(currentPeriod).toBeGreaterThanOrEqual(period - 1);
       expect(currentPeriod).toBeLessThanOrEqual(period + 1);
     });
   });
   describe("getOtp", () => {
     it("should be deterministic", () => {
-      expect(getPeriodOtp("foo@email.com", 1)).toBe(
-        getPeriodOtp("foo@email.com", 1),
-      );
+      const otp1 = getOtp({
+        email: "foo@email.com",
+        period: 1,
+        serverSecret: "secret1",
+      });
+      const otp2 = getOtp({
+        email: "foo@email.com",
+        period: 1,
+        serverSecret: "secret1",
+      });
+      expect(otp1).toEqual(otp2);
     });
     it("should return different OTPs for different periods", () => {
-      expect(
-        getPeriodOtp("foo@email.com", 1) === getPeriodOtp("foo@email.com", 2),
-      ).toBe(false);
+      const otp1 = getOtp({
+        email: "foo@email.com",
+        period: 1,
+        serverSecret: "secret1",
+      });
+      const otp2 = getOtp({
+        email: "foo@email.com",
+        period: 2,
+        serverSecret: "secret1",
+      });
+      expect(otp1).not.toBe(otp2);
     });
     it("should return different OTPs for different emails", () => {
-      expect(
-        getPeriodOtp("foo@email.com", 1) === getPeriodOtp("bar@email.com", 1),
-      ).toBe(false);
+      const otp1 = getOtp({
+        email: "foo@email.com",
+        period: 1,
+        serverSecret: "secret1",
+      });
+      const otp2 = getOtp({
+        email: "bar@email.com",
+        period: 1,
+        serverSecret: "secret1",
+      });
+      expect(otp1).not.toBe(otp2);
+    });
+    it("should return different OTPs for different server secrets", () => {
+      const otp1 = getOtp({
+        email: "foo@email.com",
+        period: 1,
+        serverSecret: "secret1",
+      });
+      const otp2 = getOtp({
+        email: "foo@email.com",
+        period: 1,
+        serverSecret: "secret2",
+      });
+      expect(otp1).not.toBe(otp2);
     });
   });
 });
