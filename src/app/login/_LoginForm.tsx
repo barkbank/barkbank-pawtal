@@ -14,6 +14,8 @@ import {
 import { useState } from "react";
 import { sendLoginOtp } from "./_actions";
 import { signIn } from "next-auth/react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { BarkH4 } from "@/components/bark/bark-typography";
 
 const FORM_SCHEMA = z.object({
   email: z.string().email(),
@@ -31,6 +33,8 @@ export default function LoginForm() {
       otp: "",
     },
   });
+
+  const qs = useSearchParams();
 
   async function onRequestOtp() {
     const { email } = form.getValues();
@@ -72,6 +76,11 @@ export default function LoginForm() {
         <BarkFormInput form={form} name="otp" label="Enter OTP" />
         <BarkFormSubmitButton>Login</BarkFormSubmitButton>
         <BarkFormError form={form} />
+        {qs.get("error") !== null && (
+          <h4 className="mt-6 scroll-m-20 text-xl font-semibold tracking-tight text-red-600">
+            Login Failed
+          </h4>
+        )}
       </BarkForm>
     </>
   );
