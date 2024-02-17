@@ -251,10 +251,18 @@ export function BarkFormTextArea(props: {
   );
 }
 
-export function BarkFormButton(props: { children: React.ReactNode; onClick: () => Promise<void>}) {
+export function BarkFormButton(props: {
+  children: React.ReactNode;
+  onClick: () => Promise<void>;
+}) {
   const { children, onClick } = props;
   return (
-    <Button type="button" className="mt-6" onClick={onClick} variant="secondary">
+    <Button
+      type="button"
+      className="mt-6"
+      onClick={onClick}
+      variant="secondary"
+    >
       {children}
     </Button>
   );

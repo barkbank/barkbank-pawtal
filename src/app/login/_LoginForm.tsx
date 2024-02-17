@@ -6,13 +6,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   BarkForm,
   BarkFormButton,
+  BarkFormError,
   BarkFormInput,
   BarkFormParagraph,
   BarkFormSubmitButton,
 } from "@/components/bark/bark-form";
 import { useState } from "react";
 import { sendLoginOtp } from "./_actions";
-import { Button } from "@/components/ui/button";
+import { signIn } from "next-auth/react";
 
 const FORM_SCHEMA = z.object({
   email: z.string().email(),
@@ -23,7 +24,7 @@ type FormDataType = z.infer<typeof FORM_SCHEMA>;
 
 export default function LoginForm() {
   const [recipientEmail, setRecipientEmail] = useState("");
-  const emailForm = useForm<FormDataType>({
+  const form = useForm<FormDataType>({
     resolver: zodResolver(FORM_SCHEMA),
     defaultValues: {
       email: "",
@@ -31,44 +32,46 @@ export default function LoginForm() {
     },
   });
 
-  async function onSubmit(values: FormDataType) {
-    console.log("TODO - Authenticate", values);
-  }
-
   async function onRequestOtp() {
-    const {email} = emailForm.getValues();
-    emailForm.clearErrors("otp");
+    const { email } = form.getValues();
+    form.clearErrors("otp");
     try {
       const validEmail = z.string().email().parse(email);
-      emailForm.clearErrors("email");
+      form.clearErrors("email");
       console.log("Send OTP to %s", validEmail);
       await sendLoginOtp(validEmail);
       // Do not show errors to user here so that this doesn't become an
       // interface for querying our database.
       setRecipientEmail(validEmail);
     } catch {
-      emailForm.setError("email", {message: "Invalid email address"});
+      form.setError("email", { message: "Invalid email address" });
       setRecipientEmail("");
     }
   }
 
+  async function onSubmit(values: FormDataType) {
+    const { email, otp } = values;
+    signIn("credentials", { email, otp });
+  }
+
   return (
     <>
-      <BarkForm form={emailForm} onSubmit={onSubmit}>
+      <BarkForm form={form} onSubmit={onSubmit}>
         <BarkFormInput
-          form={emailForm}
+          form={form}
           name="email"
           label="Please provide your email address"
         />
         {/* TODO - We need a CAPTCHA to prevent abuse of Send me an OTP */}
         <BarkFormButton onClick={onRequestOtp}>Send me an OTP</BarkFormButton>
-        {recipientEmail !== "" && <BarkFormParagraph>An OTP has been sent to {recipientEmail}</BarkFormParagraph>}
-        <BarkFormInput
-          form={emailForm}
-          name="otp"
-          label="Enter OTP"
-        />
+        {recipientEmail !== "" && (
+          <BarkFormParagraph>
+            An OTP has been sent to {recipientEmail}
+          </BarkFormParagraph>
+        )}
+        <BarkFormInput form={form} name="otp" label="Enter OTP" />
         <BarkFormSubmitButton>Login</BarkFormSubmitButton>
+        <BarkFormError form={form} />
       </BarkForm>
     </>
   );
