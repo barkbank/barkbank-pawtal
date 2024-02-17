@@ -9,7 +9,9 @@ export function LogoutButton(props: { children: React.ReactNode }) {
   };
   return (
     <>
-      <Button onClick={onClick}>{props.children}</Button>
+      <Button variant="link" onClick={onClick}>
+        {props.children}
+      </Button>
     </>
   );
 }
