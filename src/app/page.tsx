@@ -10,7 +10,9 @@ export default async function Page() {
     <>
       <BarkH1>Bark Bank</BarkH1>
       <BarkP>This is a public area.</BarkP>
-      <Link href={RoutePath.LOGIN_PAGE}><Button>Login</Button></Link>
+      <Link href={RoutePath.LOGIN_PAGE}>
+        <Button>Login</Button>
+      </Link>
     </>
   );
 }

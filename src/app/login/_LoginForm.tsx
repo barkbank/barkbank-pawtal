@@ -16,6 +16,9 @@ import { sendLoginOtp } from "./_actions";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { BarkH4 } from "@/components/bark/bark-typography";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { RoutePath } from "@/lib/routes";
 
 const FORM_SCHEMA = z.object({
   email: z.string().email(),
@@ -74,7 +77,12 @@ export default function LoginForm() {
           </BarkFormParagraph>
         )}
         <BarkFormInput form={form} name="otp" label="Enter OTP" />
-        <BarkFormSubmitButton>Login</BarkFormSubmitButton>
+        <BarkFormSubmitButton>Login</BarkFormSubmitButton>{" "}
+        <Link href={RoutePath.ROOT}>
+          <Button variant="secondary" type="button">
+            Cancel
+          </Button>
+        </Link>
         <BarkFormError form={form} />
         {qs.get("error") !== null && (
           <h4 className="mt-6 scroll-m-20 text-xl font-semibold tracking-tight text-red-600">
