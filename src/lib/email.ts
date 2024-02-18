@@ -5,8 +5,13 @@ import { Err, Ok, Result } from "./result";
 import { guaranteed } from "./stringutils";
 import Mail from "nodemailer/lib/mailer";
 
-function getNodemailerEmailTransport() {
-  const TRANSPORT = nodemailer.createTransport({
+type EmailTransportResult = { messageId: string };
+type EmailTransportFn = (
+  options: Mail.Options,
+) => Promise<EmailTransportResult>;
+
+function getNodemailerEmailTransport(): EmailTransportFn {
+  const nodemailerTransport = nodemailer.createTransport({
     host: guaranteed(process.env.SMTP_HOST),
     port: parseInt(guaranteed(process.env.SMTP_PORT)),
     secure: true,
@@ -16,15 +21,15 @@ function getNodemailerEmailTransport() {
     },
   });
 
-  async function sendFn(options: Mail.Options): Promise<{ messageId: string }> {
-    return TRANSPORT.sendMail(options);
+  async function sendFn(options: Mail.Options): Promise<EmailTransportResult> {
+    return nodemailerTransport.sendMail(options);
   }
 
   return sendFn;
 }
 
-function getPassThroughEmailTransport() {
-  async function sendFn(options: Mail.Options): Promise<{ messageId: string }> {
+function getPassThroughEmailTransport(): EmailTransportFn {
+  async function sendFn(options: Mail.Options): Promise<EmailTransportResult> {
     console.log(options);
     return { messageId: "message1" };
   }
@@ -32,7 +37,7 @@ function getPassThroughEmailTransport() {
   return sendFn;
 }
 
-const emailTransport =
+const emailTransport: EmailTransportFn =
   guaranteed(process.env.SMTP_HOST) === ""
     ? getPassThroughEmailTransport()
     : getNodemailerEmailTransport();
