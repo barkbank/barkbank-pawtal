@@ -15,7 +15,7 @@ export function getOtp(args: {
   let j = 8;
   let xoredValue = 0;
   while (i < n && j < n) {
-    const sliceValue = parseInt(hashHex.slice(i, j));
+    const sliceValue = parseInt(hashHex.slice(i, j), 16);
     xoredValue ^= sliceValue;
     i += 8;
     j += 8;
