@@ -34,7 +34,6 @@ export const NEXT_AUTH_OPTIONS: NextAuthOptions = {
       },
     }),
   ],
-  secret: guaranteed(process.env.NEXTAUTH_SECRET),
   pages: {
     // This tells NextAuth to use the /login page instead of /api/auth/signin.
     signIn: "/login",

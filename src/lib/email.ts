@@ -6,11 +6,10 @@ import { guaranteed } from "./stringutils";
 import Mail from "nodemailer/lib/mailer";
 
 type EmailTransportResult = { messageId: string };
-type EmailTransportFn = (
-  options: Mail.Options,
-) => Promise<EmailTransportResult>;
 
-function getNodemailerEmailTransport(): EmailTransportFn {
+async function sendUsingNodemailer(
+  options: Mail.Options,
+): Promise<EmailTransportResult> {
   const nodemailerTransport = nodemailer.createTransport({
     host: guaranteed(process.env.SMTP_HOST),
     port: parseInt(guaranteed(process.env.SMTP_PORT)),
@@ -20,12 +19,7 @@ function getNodemailerEmailTransport(): EmailTransportFn {
       pass: guaranteed(process.env.SMTP_PASSWORD),
     },
   });
-
-  async function sendFn(options: Mail.Options): Promise<EmailTransportResult> {
-    return nodemailerTransport.sendMail(options);
-  }
-
-  return sendFn;
+  return nodemailerTransport.sendMail(options);
 }
 
 /**
@@ -34,19 +28,22 @@ function getNodemailerEmailTransport(): EmailTransportFn {
  * to the SMTP_HOST environment variable. When enabled, the email message will
  * be logged to the console (this should be the server console).
  */
-function getPassthroughEmailTransport(): EmailTransportFn {
-  async function sendFn(options: Mail.Options): Promise<EmailTransportResult> {
-    console.log(options);
-    return { messageId: "PASSTHROUGH" };
-  }
-
-  return sendFn;
+async function passThrough(
+  options: Mail.Options,
+): Promise<EmailTransportResult> {
+  console.log(options);
+  return { messageId: "PASSTHROUGH" };
 }
 
-const emailTransport: EmailTransportFn =
-  guaranteed(process.env.SMTP_HOST) === ""
-    ? getPassthroughEmailTransport()
-    : getNodemailerEmailTransport();
+async function emailTransport(
+  options: Mail.Options,
+): Promise<EmailTransportResult> {
+  if (guaranteed(process.env.SMTP_HOST) === "") {
+    return await passThrough(options);
+  } else {
+    return await sendUsingNodemailer(options);
+  }
+}
 
 export type EmailContact = {
   email: string;
