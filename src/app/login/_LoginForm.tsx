@@ -27,6 +27,10 @@ const FORM_SCHEMA = z.object({
 type FormDataType = z.infer<typeof FORM_SCHEMA>;
 
 export default function LoginForm() {
+  const hasErrorInQueryString = useSearchParams().get("error") !== null;
+  const [shouldShowLoginFailed, setShouldShowLoginFailed] = useState(
+    hasErrorInQueryString,
+  );
   const [recipientEmail, setRecipientEmail] = useState("");
   const form = useForm<FormDataType>({
     resolver: zodResolver(FORM_SCHEMA),
@@ -35,8 +39,6 @@ export default function LoginForm() {
       otp: "",
     },
   });
-
-  const qs = useSearchParams();
 
   function validateEmail(email: string): string {
     try {
@@ -50,6 +52,7 @@ export default function LoginForm() {
   }
 
   async function onRequestOtp() {
+    setShouldShowLoginFailed(false);
     const { email } = form.getValues();
     form.clearErrors("otp");
     const validEmail = validateEmail(email);
@@ -91,7 +94,7 @@ export default function LoginForm() {
           </Button>
         </Link>
         <BarkFormError form={form} />
-        {qs.get("error") !== null && (
+        {shouldShowLoginFailed && (
           <h4 className="mt-6 scroll-m-20 text-xl font-semibold tracking-tight text-red-600">
             Login Failed
           </h4>
