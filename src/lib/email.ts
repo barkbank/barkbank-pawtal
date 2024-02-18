@@ -32,7 +32,7 @@ function getNodemailerEmailTransport(): EmailTransportFn {
  * Passthrough email transport is used in dev when an SMTP server is not easily
  * available, or too costly to use. It is enabled by assigning an empty string
  * to the SMTP_HOST environment variable. When enabled, the email message will
- * be logged to the console (this shoudl be the server console).
+ * be logged to the console (this should be the server console).
  */
 function getPassthroughEmailTransport(): EmailTransportFn {
   async function sendFn(options: Mail.Options): Promise<EmailTransportResult> {
