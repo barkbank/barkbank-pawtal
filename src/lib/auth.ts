@@ -41,27 +41,33 @@ export const NEXT_AUTH_OPTIONS: NextAuthOptions = {
   },
 };
 
-const RECENT_PERIODS = parseInt(guaranteed(process.env.OTP_NUM_RECENT_PERIODS));
-const PERIOD_MILLIS = parseInt(guaranteed(process.env.OTP_PERIOD_MILLIS));
-const SERVER_SECRET = guaranteed(process.env.OTP_SECRET);
+function getOtpConfig() {
+  return {
+    recentPeriods: parseInt(guaranteed(process.env.OTP_NUM_RECENT_PERIODS)),
+    periodMillis: parseInt(guaranteed(process.env.OTP_PERIOD_MILLIS)),
+    serverSecret: guaranteed(process.env.OTP_SECRET),
+  };
+}
 
 export function getCurrentOtp(email: string): string {
+  const { periodMillis, serverSecret } = getOtpConfig();
   return getOtp({
     email,
-    period: getCurrentPeriod(PERIOD_MILLIS),
-    serverSecret: SERVER_SECRET,
+    period: getCurrentPeriod(periodMillis),
+    serverSecret: serverSecret,
   });
 }
 
 export function getRecentOtps(email: string): string[] {
-  const currentPeriod = getCurrentPeriod(PERIOD_MILLIS);
+  const { periodMillis, serverSecret, recentPeriods } = getOtpConfig();
+  const currentPeriod = getCurrentPeriod(periodMillis);
   const otps: string[] = [];
-  for (let i = -RECENT_PERIODS; i <= 0; ++i) {
+  for (let i = -recentPeriods; i <= 0; ++i) {
     otps.push(
       getOtp({
         email,
         period: currentPeriod + i,
-        serverSecret: SERVER_SECRET,
+        serverSecret: serverSecret,
       }),
     );
   }
