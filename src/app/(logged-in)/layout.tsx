@@ -3,7 +3,7 @@
 import { getAuthenticatedAccount } from "@/lib/auth";
 import { RoutePath } from "@/lib/routes";
 import { redirect } from "next/navigation";
-import { LogoutButton } from "./_logout";
+import { LogoutLink } from "./_logout";
 
 export default async function Layout(props: { children: React.ReactNode }) {
   const { result: account } = await getAuthenticatedAccount();
@@ -14,7 +14,7 @@ export default async function Layout(props: { children: React.ReactNode }) {
     <>
       <div>
         Temp Nav Bar | {account.name} ({account.email}) |{" "}
-        <LogoutButton>Logout</LogoutButton>
+        <LogoutLink>Logout</LogoutLink>
       </div>
       {props.children}
     </>
