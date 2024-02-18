@@ -37,7 +37,7 @@ function getNodemailerEmailTransport(): EmailTransportFn {
 function getPassthroughEmailTransport(): EmailTransportFn {
   async function sendFn(options: Mail.Options): Promise<EmailTransportResult> {
     console.log(options);
-    return { messageId: "message1" };
+    return { messageId: "PASSTHROUGH" };
   }
 
   return sendFn;
