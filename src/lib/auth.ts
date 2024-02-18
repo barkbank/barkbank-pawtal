@@ -14,13 +14,11 @@ export const NEXT_AUTH_OPTIONS: NextAuthOptions = {
         otp: { label: "OTP", type: "text" },
       },
       async authorize(credentials, req) {
-        console.log("Received credentials:", credentials);
         try {
           if (!credentials || !credentials.email || !credentials.otp) {
             return null;
           }
           const recentOtps = getRecentOtps(credentials.email);
-          console.log(recentOtps);
           if (!recentOtps.includes(credentials.otp)) {
             return null;
           }
