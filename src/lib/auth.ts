@@ -40,7 +40,11 @@ export const NEXT_AUTH_OPTIONS: NextAuthOptions = {
   },
 };
 
-function getOtpConfig() {
+function getOtpConfig(): {
+  recentPeriods: number;
+  periodMillis: number;
+  serverSecret: string;
+} {
   return {
     recentPeriods: parseInt(guaranteed(process.env.OTP_NUM_RECENT_PERIODS)),
     periodMillis: parseInt(guaranteed(process.env.OTP_PERIOD_MILLIS)),
