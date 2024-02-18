@@ -1,5 +1,12 @@
 import crypto from "crypto";
 
+const OTP_LENGTH = 6;
+const OTP_MODULUS = Math.pow(10, OTP_LENGTH);
+
+const POSITIVE_31_BIT_MASK = 0x7fffffff;
+const NUM_CHARS_PER_32_BITS = 8;
+const BASE_16 = 16;
+
 export function getOtp(args: {
   email: string;
   period: number;
@@ -12,16 +19,16 @@ export function getOtp(args: {
   const hashHex = hmac.digest("hex");
   const n = hashHex.length;
   let i = 0;
-  let j = 8;
+  let j = NUM_CHARS_PER_32_BITS;
   let xoredValue = 0;
   while (i < n && j < n) {
-    const sliceValue = parseInt(hashHex.slice(i, j), 16);
+    const sliceValue = parseInt(hashHex.slice(i, j), BASE_16);
     xoredValue ^= sliceValue;
-    i += 8;
-    j += 8;
+    i += NUM_CHARS_PER_32_BITS;
+    j += NUM_CHARS_PER_32_BITS;
   }
-  const otp = (xoredValue & 0x7fffffff) % 1000000;
-  return otp.toString().padStart(6, "0");
+  const otp = (xoredValue & POSITIVE_31_BIT_MASK) % OTP_MODULUS;
+  return otp.toString().padStart(OTP_LENGTH, "0");
 }
 
 export function getCurrentPeriod(periodDuration: number): number {

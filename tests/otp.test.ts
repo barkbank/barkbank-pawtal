@@ -12,6 +12,16 @@ describe("otp", () => {
     });
   });
   describe("getOtp", () => {
+    it("should have 6 digits", () => {
+      for (let period = 0; period < 20; ++period) {
+        const otp = getOtp({
+          email: "foo@example.com",
+          period: period,
+          serverSecret: "secretSauce",
+        });
+        expect(otp).toMatch(/^[0-9]{6}$/);
+      }
+    });
     it("should be deterministic", () => {
       const otp1 = getOtp({
         email: "foo@email.com",
