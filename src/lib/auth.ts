@@ -7,6 +7,7 @@ import { getCurrentPeriod, getOtp } from "./otp";
 export const NEXT_AUTH_OPTIONS: NextAuthOptions = {
   providers: [
     CredentialsProvider({
+      // Name MUST be "credentials" for signIn to work.
       name: "credentials",
       credentials: {
         email: { label: "Email", type: "text" },
@@ -37,6 +38,7 @@ export const NEXT_AUTH_OPTIONS: NextAuthOptions = {
   ],
   secret: guaranteed(process.env.NEXTAUTH_SECRET),
   pages: {
+    // This tells NextAuth to use the /login page instead of /api/auth/signin.
     signIn: "/login",
   },
 };
