@@ -64,7 +64,7 @@ export default function LoginForm() {
 
   async function onSubmit(values: FormDataType) {
     const { email, otp } = values;
-    signIn("credentials", { email, otp });
+    await signIn("credentials", { email, otp });
   }
 
   return (
