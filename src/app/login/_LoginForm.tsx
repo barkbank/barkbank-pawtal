@@ -42,11 +42,9 @@ export default function LoginForm() {
     try {
       const validEmail = z.string().email().parse(email);
       form.clearErrors("email");
-      setRecipientEmail(validEmail);
       return validEmail;
     } catch {
       form.setError("email", { message: "Invalid email address" });
-      setRecipientEmail("");
       return "";
     }
   }
@@ -59,6 +57,9 @@ export default function LoginForm() {
       await sendLoginOtp(validEmail);
       // Do not show errors to user here so that this doesn't become an
       // interface for querying our database.
+      setRecipientEmail(validEmail);
+    } else {
+      setRecipientEmail("");
     }
   }
 
