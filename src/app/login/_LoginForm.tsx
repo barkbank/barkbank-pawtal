@@ -14,15 +14,14 @@ import {
 import { useState } from "react";
 import { sendLoginOtp } from "./_actions";
 import { signIn } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { BarkH4 } from "@/components/bark/bark-typography";
+import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { RoutePath } from "@/lib/routes";
 
 const FORM_SCHEMA = z.object({
   email: z.string().email(),
-  otp: z.string().min(6).max(6),
+  otp: z.string().min(1, { message: "OTP cannot be empty" }),
 });
 
 type FormDataType = z.infer<typeof FORM_SCHEMA>;
