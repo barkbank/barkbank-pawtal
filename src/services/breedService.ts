@@ -1,4 +1,5 @@
-import { promises as fs } from "fs";
+// import { promises as fs } from "fs";
+import dog_breeds_json from "../resources/dog_breeds.json";
 
 export type Breed = {
   dog_breed: string;
@@ -10,13 +11,9 @@ class BreedService {
    * Get all breeds.
    * @returns
    */
-  async getAllBreeds() {
+  public async getAllBreeds(): Promise<Breed[]> {
     try {
-      const file = await fs.readFile(
-        process.cwd() + "/src/resources/dog_breeds.json",
-        "utf8",
-      );
-      const data = JSON.parse(file) as {
+      const data = dog_breeds_json as {
         dog_breeds: { dog_breed: string; wikipedia_url: string }[];
       };
 
