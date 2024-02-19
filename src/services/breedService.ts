@@ -1,4 +1,3 @@
-// import { promises as fs } from "fs";
 import dog_breeds_json from "../resources/dog_breeds.json";
 
 export type Breed = {
