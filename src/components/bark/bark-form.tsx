@@ -13,7 +13,21 @@ import { Checkbox } from "../ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
-import Select from "react-select";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Check, ChevronsUpDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+import React from "react";
 
 export function BarkForm(props: {
   children: React.ReactNode;
@@ -269,33 +283,70 @@ export function BarkFormSelect(props: {
   placeholder?: string;
   description?: string;
 }) {
+  const [open, setOpen] = React.useState(false);
+
   const { form, label, name, options, placeholder, description } = props;
   return (
-    <FormField
-      control={form.control}
-      name={name}
-      render={() => (
-        <FormItem className="mt-6">
-          <FormLabel>{label}</FormLabel>
-          <Controller
-            control={form.control}
-            name={name}
-            render={({ field: { onChange } }) => (
-              <Select
-                placeholder={placeholder}
-                instanceId={name}
-                options={options}
-                onChange={(val) => {
-                  onChange(val?.value);
-                }}
-              />
-            )}
-          />
+    <Popover open={open} onOpenChange={setOpen}>
+      <FormField
+        control={form.control}
+        name={name}
+        render={({ field }) => (
+          <FormItem className="mt-6 flex flex-col">
+            <FormLabel>{label}</FormLabel>
 
-          {description && <FormDescription>{description}</FormDescription>}
-          <FormMessage />
-        </FormItem>
-      )}
-    />
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                role="combobox"
+                aria-expanded={open}
+                className="w-[200px] justify-between"
+              >
+                {/* Convert to lowercase because shadcn convert current value to lowercase */}
+                {field.value
+                  ? options.find(
+                      (option) => option.value.toLowerCase() === field.value,
+                    )?.label
+                  : placeholder}
+                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+              </Button>
+            </PopoverTrigger>
+
+            <PopoverContent className="w-[200px] p-0">
+              <Command>
+                <CommandInput placeholder="Search breed..." />
+                <CommandEmpty>No breed found.</CommandEmpty>
+                <CommandGroup>
+                  {options.map((option) => (
+                    <CommandItem
+                      key={option.value}
+                      value={option.value}
+                      onSelect={(currentValue) => {
+                        console.log(currentValue);
+                        field.onChange(currentValue);
+                        setOpen(false);
+                      }}
+                    >
+                      <Check
+                        className={cn(
+                          "mr-2 h-4 w-4",
+                          field.value === option.value
+                            ? "opacity-100"
+                            : "opacity-0",
+                        )}
+                      />
+                      {option.label}
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </Command>
+            </PopoverContent>
+
+            {description && <FormDescription>{description}</FormDescription>}
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+    </Popover>
   );
 }

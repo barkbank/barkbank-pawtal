@@ -29,6 +29,7 @@ export default function BreedForm({ breeds }: { breeds: Breed[] }) {
             value: breed.dog_breed,
           }))}
           description="this is some description"
+          placeholder="Select a breed"
         />
       </BarkForm>
     </main>
