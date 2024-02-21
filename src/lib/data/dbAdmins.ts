@@ -3,7 +3,7 @@ import { Admin, AdminGen, AdminSpec } from "./models";
 
 export async function dbInsertAdmin(
   ctx: DbContext,
-  staffSpec: AdminSpec,
+  adminSpec: AdminSpec,
 ): Promise<AdminGen> {
   const sql = `
     INSERT INTO admins (
@@ -16,16 +16,16 @@ export async function dbInsertAdmin(
     RETURNING admin_id, admin_creation_time
   `;
   const res = await dbQuery(ctx, sql, [
-    staffSpec.adminEmail,
-    staffSpec.adminName,
-    staffSpec.adminPhoneNumber,
+    adminSpec.adminEmail,
+    adminSpec.adminName,
+    adminSpec.adminPhoneNumber,
   ]);
   return toCamelCaseRow(res.rows[0]);
 }
 
 export async function dbSelectAdmin(
   ctx: DbContext,
-  staffId: string,
+  adminId: string,
 ): Promise<Admin | null> {
   const sql = `
     SELECT
@@ -37,7 +37,7 @@ export async function dbSelectAdmin(
     FROM admins
     WHERE admin_id = $1
   `;
-  const res = await dbQuery(ctx, sql, [staffId]);
+  const res = await dbQuery(ctx, sql, [adminId]);
   if (res.rows.length === 1) {
     return toCamelCaseRow(res.rows[0]);
   }
