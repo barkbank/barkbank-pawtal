@@ -17,7 +17,7 @@ import {
 import { dbInserUser, dbSelectUser } from "@/lib/data/dbUsers";
 import { sprintf } from "sprintf-js";
 import { dbInsertDog, dbSelectDog } from "@/lib/data/dbDogs";
-import { dbInsertStaff, dbSelectStaff } from "@/lib/data/dbStaff";
+import { dbInsertStaff, dbSelectStaff } from "@/lib/data/dbAdmins";
 import { dbInsertVet, dbSelectVet } from "@/lib/data/dbVets";
 
 describe("Database Layer", () => {
