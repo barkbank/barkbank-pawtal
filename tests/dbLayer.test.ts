@@ -11,7 +11,7 @@ import {
 import {
   toDogSpec,
   toUserSpec,
-  toStaffSpec,
+  toAdminSpec,
   toVetSpec,
 } from "@/lib/data/mappers";
 import { dbInserUser, dbSelectUser } from "@/lib/data/dbUsers";
@@ -102,7 +102,7 @@ describe("Database Layer", () => {
         const staff = await dbSelectAdmin(db, staffGen.adminId);
         if (!staff) fail("staff is null");
         expect(staff.adminCreationTime).toBeTruthy();
-        const spec = toStaffSpec(staff);
+        const spec = toAdminSpec(staff);
         expect(spec).toMatchObject(staffSpec(1));
       });
     });
