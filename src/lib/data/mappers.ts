@@ -3,8 +3,8 @@ import {
   DogSpec,
   User,
   UserSpec,
-  Staff,
-  StaffSpec,
+  Admin,
+  AdminSpec,
   Vet,
   VetSpec,
 } from "./models";
@@ -19,8 +19,8 @@ export function toDogSpec(dog: Dog): DogSpec {
   return spec;
 }
 
-export function toStaffSpec(staff: Staff): StaffSpec {
-  const { staffId, staffCreationTime, ...spec } = staff;
+export function toAdminSpec(admin: Admin): AdminSpec {
+  const { adminId, adminCreationTime, ...spec } = admin;
   return spec;
 }
 

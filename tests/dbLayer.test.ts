@@ -5,19 +5,19 @@ import {
   DogSpec,
   DogStatus,
   UserSpec,
-  StaffSpec,
+  AdminSpec,
   VetSpec,
 } from "@/lib/data/models";
 import {
   toDogSpec,
   toUserSpec,
-  toStaffSpec,
+  toAdminSpec,
   toVetSpec,
 } from "@/lib/data/mappers";
 import { dbInserUser, dbSelectUser } from "@/lib/data/dbUsers";
 import { sprintf } from "sprintf-js";
 import { dbInsertDog, dbSelectDog } from "@/lib/data/dbDogs";
-import { dbInsertStaff, dbSelectStaff } from "@/lib/data/dbStaff";
+import { dbInsertAdmin, dbSelectAdmin } from "@/lib/data/dbAdmins";
 import { dbInsertVet, dbSelectVet } from "@/lib/data/dbVets";
 
 describe("Database Layer", () => {
@@ -95,21 +95,21 @@ describe("Database Layer", () => {
       });
     });
   });
-  describe("dbStaff", () => {
+  describe("dbAdmins", () => {
     it("should support insert and select", async () => {
       await withDb(async (db) => {
-        const staffGen = await dbInsertStaff(db, staffSpec(1));
-        const staff = await dbSelectStaff(db, staffGen.staffId);
-        if (!staff) fail("staff is null");
-        expect(staff.staffCreationTime).toBeTruthy();
-        const spec = toStaffSpec(staff);
-        expect(spec).toMatchObject(staffSpec(1));
+        const adminGen = await dbInsertAdmin(db, adminSpec(1));
+        const admin = await dbSelectAdmin(db, adminGen.adminId);
+        if (!admin) fail("admin is null");
+        expect(admin.adminCreationTime).toBeTruthy();
+        const spec = toAdminSpec(admin);
+        expect(spec).toMatchObject(adminSpec(1));
       });
     });
-    it("should return null when staff does not exist", async () => {
+    it("should return null when admin does not exist", async () => {
       await withDb(async (db) => {
-        const staff = await dbSelectStaff(db, "111");
-        expect(staff).toBeNull();
+        const admin = await dbSelectAdmin(db, "111");
+        expect(admin).toBeNull();
       });
     });
   });
@@ -141,11 +141,11 @@ function userSpec(idx: number): UserSpec {
   };
 }
 
-function staffSpec(idx: number): StaffSpec {
+function adminSpec(idx: number): AdminSpec {
   return {
-    staffEmail: email(idx),
-    staffName: `Staff ${idx}`,
-    staffPhoneNumber: phoneNumber(idx),
+    adminEmail: email(idx),
+    adminName: `Admin ${idx}`,
+    adminPhoneNumber: phoneNumber(idx),
   };
 }
 

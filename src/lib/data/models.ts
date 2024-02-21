@@ -63,18 +63,18 @@ export type DogGen = {
 
 export type Dog = { userId: string } & DogSpec & DogGen;
 
-export type StaffSpec = {
-  staffEmail: string;
-  staffName: string;
-  staffPhoneNumber: string;
+export type AdminSpec = {
+  adminEmail: string;
+  adminName: string;
+  adminPhoneNumber: string;
 };
 
-export type StaffGen = {
-  staffId: string;
-  staffCreationTime: Date;
+export type AdminGen = {
+  adminId: string;
+  adminCreationTime: Date;
 };
 
-export type Staff = StaffSpec & StaffGen;
+export type Admin = AdminSpec & AdminGen;
 
 export type VetSpec = {
   vetEmail: string;
