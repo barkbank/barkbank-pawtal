@@ -14,8 +14,8 @@ CREATE TABLE admins (
   admin_email TEXT NOT NULL,
   admin_name TEXT NOT NULL,
   admin_phone_number TEXT NOT NULL,
-  CONSTRAINT admin_unique_admin_email UNIQUE (admin_email),
-  CONSTRAINT admin_pk PRIMARY KEY (admin_id)
+  CONSTRAINT admins_unique_admin_email UNIQUE (admin_email),
+  CONSTRAINT admins_pk PRIMARY KEY (admin_id)
 );
 
 CREATE TABLE vets (
