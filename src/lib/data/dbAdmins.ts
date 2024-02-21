@@ -1,10 +1,10 @@
 import { DbContext, dbQuery, toCamelCaseRow } from "./dbUtils";
-import { Staff, StaffGen, StaffSpec } from "./models";
+import { Admin, AdminGen, AdminSpec } from "./models";
 
 export async function dbInsertStaff(
   ctx: DbContext,
-  staffSpec: StaffSpec,
-): Promise<StaffGen> {
+  staffSpec: AdminSpec,
+): Promise<AdminGen> {
   const sql = `
     INSERT INTO staff (
       staff_email,
@@ -26,7 +26,7 @@ export async function dbInsertStaff(
 export async function dbSelectStaff(
   ctx: DbContext,
   staffId: string,
-): Promise<Staff | null> {
+): Promise<Admin | null> {
   const sql = `
     SELECT
       staff_email,

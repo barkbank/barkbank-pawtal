@@ -5,7 +5,7 @@ import {
   DogSpec,
   DogStatus,
   UserSpec,
-  StaffSpec,
+  AdminSpec,
   VetSpec,
 } from "@/lib/data/models";
 import {
@@ -141,7 +141,7 @@ function userSpec(idx: number): UserSpec {
   };
 }
 
-function staffSpec(idx: number): StaffSpec {
+function staffSpec(idx: number): AdminSpec {
   return {
     staffEmail: email(idx),
     staffName: `Staff ${idx}`,
