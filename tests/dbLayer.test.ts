@@ -95,21 +95,21 @@ describe("Database Layer", () => {
       });
     });
   });
-  describe("dbStaff", () => {
+  describe("dbAdmins", () => {
     it("should support insert and select", async () => {
       await withDb(async (db) => {
-        const staffGen = await dbInsertAdmin(db, staffSpec(1));
-        const staff = await dbSelectAdmin(db, staffGen.adminId);
-        if (!staff) fail("staff is null");
-        expect(staff.adminCreationTime).toBeTruthy();
-        const spec = toAdminSpec(staff);
-        expect(spec).toMatchObject(staffSpec(1));
+        const adminGen = await dbInsertAdmin(db, adminSpec(1));
+        const admin = await dbSelectAdmin(db, adminGen.adminId);
+        if (!admin) fail("admin is null");
+        expect(admin.adminCreationTime).toBeTruthy();
+        const spec = toAdminSpec(admin);
+        expect(spec).toMatchObject(adminSpec(1));
       });
     });
-    it("should return null when staff does not exist", async () => {
+    it("should return null when admin does not exist", async () => {
       await withDb(async (db) => {
-        const staff = await dbSelectAdmin(db, "111");
-        expect(staff).toBeNull();
+        const admin = await dbSelectAdmin(db, "111");
+        expect(admin).toBeNull();
       });
     });
   });
@@ -141,10 +141,10 @@ function userSpec(idx: number): UserSpec {
   };
 }
 
-function staffSpec(idx: number): AdminSpec {
+function adminSpec(idx: number): AdminSpec {
   return {
     adminEmail: email(idx),
-    adminName: `Staff ${idx}`,
+    adminName: `Admin ${idx}`,
     adminPhoneNumber: phoneNumber(idx),
   };
 }
