@@ -17,7 +17,7 @@ import {
 import { dbInserUser, dbSelectUser } from "@/lib/data/dbUsers";
 import { sprintf } from "sprintf-js";
 import { dbInsertDog, dbSelectDog } from "@/lib/data/dbDogs";
-import { dbInsertStaff, dbSelectStaff } from "@/lib/data/dbAdmins";
+import { dbInsertAdmin, dbSelectAdmin } from "@/lib/data/dbAdmins";
 import { dbInsertVet, dbSelectVet } from "@/lib/data/dbVets";
 
 describe("Database Layer", () => {
@@ -98,8 +98,8 @@ describe("Database Layer", () => {
   describe("dbStaff", () => {
     it("should support insert and select", async () => {
       await withDb(async (db) => {
-        const staffGen = await dbInsertStaff(db, staffSpec(1));
-        const staff = await dbSelectStaff(db, staffGen.adminId);
+        const staffGen = await dbInsertAdmin(db, staffSpec(1));
+        const staff = await dbSelectAdmin(db, staffGen.adminId);
         if (!staff) fail("staff is null");
         expect(staff.adminCreationTime).toBeTruthy();
         const spec = toStaffSpec(staff);
@@ -108,7 +108,7 @@ describe("Database Layer", () => {
     });
     it("should return null when staff does not exist", async () => {
       await withDb(async (db) => {
-        const staff = await dbSelectStaff(db, "111");
+        const staff = await dbSelectAdmin(db, "111");
         expect(staff).toBeNull();
       });
     });

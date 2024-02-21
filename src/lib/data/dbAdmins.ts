@@ -1,7 +1,7 @@
 import { DbContext, dbQuery, toCamelCaseRow } from "./dbUtils";
 import { Admin, AdminGen, AdminSpec } from "./models";
 
-export async function dbInsertStaff(
+export async function dbInsertAdmin(
   ctx: DbContext,
   staffSpec: AdminSpec,
 ): Promise<AdminGen> {
@@ -23,7 +23,7 @@ export async function dbInsertStaff(
   return toCamelCaseRow(res.rows[0]);
 }
 
-export async function dbSelectStaff(
+export async function dbSelectAdmin(
   ctx: DbContext,
   staffId: string,
 ): Promise<Admin | null> {
