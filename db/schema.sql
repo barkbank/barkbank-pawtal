@@ -8,14 +8,14 @@ CREATE TABLE users (
   CONSTRAINT users_pk PRIMARY KEY (user_id)
 );
 
-CREATE TABLE staff (
-  staff_id BIGSERIAL,
-  staff_creation_time TIMESTAMP WITH TIME ZONE NOT NULL,
-  staff_email TEXT NOT NULL,
-  staff_name TEXT NOT NULL,
-  staff_phone_number TEXT NOT NULL,
-  CONSTRAINT staff_unique_staff_email UNIQUE (staff_email),
-  CONSTRAINT staff_pk PRIMARY KEY (staff_id)
+CREATE TABLE admins (
+  admin_id BIGSERIAL,
+  admin_creation_time TIMESTAMP WITH TIME ZONE NOT NULL,
+  admin_email TEXT NOT NULL,
+  admin_name TEXT NOT NULL,
+  admin_phone_number TEXT NOT NULL,
+  CONSTRAINT admin_unique_admin_email UNIQUE (admin_email),
+  CONSTRAINT admin_pk PRIMARY KEY (admin_id)
 );
 
 CREATE TABLE vets (

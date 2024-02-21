@@ -6,19 +6,19 @@ export async function dbInsertStaff(
   staffSpec: AdminSpec,
 ): Promise<AdminGen> {
   const sql = `
-    INSERT INTO staff (
-      staff_email,
-      staff_name,
-      staff_phone_number,
-      staff_creation_time
+    INSERT INTO admins (
+      admin_email,
+      admin_name,
+      admin_phone_number,
+      admin_creation_time
     )
     VALUES ($1, $2, $3, CURRENT_TIMESTAMP)
-    RETURNING staff_id, staff_creation_time
+    RETURNING admin_id, admin_creation_time
   `;
   const res = await dbQuery(ctx, sql, [
-    staffSpec.staffEmail,
-    staffSpec.staffName,
-    staffSpec.staffPhoneNumber,
+    staffSpec.adminEmail,
+    staffSpec.adminName,
+    staffSpec.adminPhoneNumber,
   ]);
   return toCamelCaseRow(res.rows[0]);
 }
@@ -29,13 +29,13 @@ export async function dbSelectStaff(
 ): Promise<Admin | null> {
   const sql = `
     SELECT
-      staff_email,
-      staff_name,
-      staff_phone_number,
-      staff_id,
-      staff_creation_time
-    FROM staff
-    WHERE staff_id = $1
+      admin_email,
+      admin_name,
+      admin_phone_number,
+      admin_id,
+      admin_creation_time
+    FROM admins
+    WHERE admin_id = $1
   `;
   const res = await dbQuery(ctx, sql, [staffId]);
   if (res.rows.length === 1) {

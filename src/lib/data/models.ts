@@ -64,14 +64,14 @@ export type DogGen = {
 export type Dog = { userId: string } & DogSpec & DogGen;
 
 export type AdminSpec = {
-  staffEmail: string;
-  staffName: string;
-  staffPhoneNumber: string;
+  adminEmail: string;
+  adminName: string;
+  adminPhoneNumber: string;
 };
 
 export type AdminGen = {
-  staffId: string;
-  staffCreationTime: Date;
+  adminId: string;
+  adminCreationTime: Date;
 };
 
 export type Admin = AdminSpec & AdminGen;

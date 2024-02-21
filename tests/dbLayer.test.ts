@@ -99,9 +99,9 @@ describe("Database Layer", () => {
     it("should support insert and select", async () => {
       await withDb(async (db) => {
         const staffGen = await dbInsertStaff(db, staffSpec(1));
-        const staff = await dbSelectStaff(db, staffGen.staffId);
+        const staff = await dbSelectStaff(db, staffGen.adminId);
         if (!staff) fail("staff is null");
-        expect(staff.staffCreationTime).toBeTruthy();
+        expect(staff.adminCreationTime).toBeTruthy();
         const spec = toStaffSpec(staff);
         expect(spec).toMatchObject(staffSpec(1));
       });
@@ -143,9 +143,9 @@ function userSpec(idx: number): UserSpec {
 
 function staffSpec(idx: number): AdminSpec {
   return {
-    staffEmail: email(idx),
-    staffName: `Staff ${idx}`,
-    staffPhoneNumber: phoneNumber(idx),
+    adminEmail: email(idx),
+    adminName: `Staff ${idx}`,
+    adminPhoneNumber: phoneNumber(idx),
   };
 }
 

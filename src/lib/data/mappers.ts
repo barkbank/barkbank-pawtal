@@ -20,7 +20,7 @@ export function toDogSpec(dog: Dog): DogSpec {
 }
 
 export function toStaffSpec(staff: Admin): AdminSpec {
-  const { staffId, staffCreationTime, ...spec } = staff;
+  const { adminId, adminCreationTime, ...spec } = staff;
   return spec;
 }
 
