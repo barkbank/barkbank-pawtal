@@ -1,8 +1,7 @@
 import { NextAuthOptions, getServerSession } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { Err, Ok, Result } from "./result";
-import { guaranteed } from "./stringutils";
-import { getCurrentPeriod, getOtp } from "./otp";
+import APP from "./app";
 
 export const NEXT_AUTH_OPTIONS: NextAuthOptions = {
   providers: [
@@ -18,7 +17,8 @@ export const NEXT_AUTH_OPTIONS: NextAuthOptions = {
           if (!credentials || !credentials.email || !credentials.otp) {
             return null;
           }
-          const recentOtps = getRecentOtps(credentials.email);
+          const otpService = await APP.getOtpService();
+          const recentOtps = otpService.getRecentOtps(credentials.email);
           if (!recentOtps.includes(credentials.otp)) {
             return null;
           }
@@ -39,43 +39,6 @@ export const NEXT_AUTH_OPTIONS: NextAuthOptions = {
     signIn: "/login",
   },
 };
-
-function getOtpConfig(): {
-  recentPeriods: number;
-  periodMillis: number;
-  serverSecret: string;
-} {
-  return {
-    recentPeriods: parseInt(guaranteed(process.env.OTP_NUM_RECENT_PERIODS)),
-    periodMillis: parseInt(guaranteed(process.env.OTP_PERIOD_MILLIS)),
-    serverSecret: guaranteed(process.env.OTP_SECRET),
-  };
-}
-
-export function getCurrentOtp(email: string): string {
-  const { periodMillis, serverSecret } = getOtpConfig();
-  return getOtp({
-    email,
-    period: getCurrentPeriod(periodMillis),
-    serverSecret: serverSecret,
-  });
-}
-
-export function getRecentOtps(email: string): string[] {
-  const { periodMillis, serverSecret, recentPeriods } = getOtpConfig();
-  const currentPeriod = getCurrentPeriod(periodMillis);
-  const otps: string[] = [];
-  for (let i = -recentPeriods; i <= 0; ++i) {
-    otps.push(
-      getOtp({
-        email,
-        period: currentPeriod + i,
-        serverSecret: serverSecret,
-      }),
-    );
-  }
-  return otps;
-}
 
 export async function getAuthenticatedAccount(): Promise<
   Result<{ email: string; name: string }, "NO_SESSION">
