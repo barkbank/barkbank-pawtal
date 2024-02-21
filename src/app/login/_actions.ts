@@ -1,24 +1,23 @@
 "use server";
 
-import { getCurrentOtp } from "@/lib/auth";
-import { sendEmail } from "@/lib/email";
-import { guaranteed } from "@/lib/stringutils";
+import APP from "@/lib/app";
+import { Email } from "@/lib/services/email";
 
-export async function sendLoginOtp(email: string): Promise<void> {
-  console.log("Sending OTP to:", email);
-  const otp = getCurrentOtp(email);
-  const { result } = await sendEmail({
-    sender: {
-      email: guaranteed(process.env.OTP_SENDER_EMAIL),
-      name: process.env.OTP_SENDER_NAME,
-    },
-    recipient: { email },
+export async function sendLoginOtp(emailAddress: string): Promise<void> {
+  console.log("Sending OTP to", emailAddress);
+  const emailService = await APP.getEmailService();
+  const otpService = await APP.getOtpService();
+  const otp = otpService.getCurrentOtp(emailAddress);
+  const email: Email = {
+    sender: APP.getSenderForOtpEmail(),
+    recipient: { email: emailAddress },
     subject: "Bark Bank OTP",
     bodyText: `Your Bark Bank OTP is ${otp}`,
     bodyHtml: `<p>Your Bark Bank OTP is <b>${otp}</b></p>`,
-  });
+  };
+  const { result } = await emailService.sendEmail(email);
   if (result) {
-    console.log("Message sent: %s", result.messageId);
+    console.log("OTP email was sent to", emailAddress);
   } else {
     console.warn("Failed to send email");
   }
