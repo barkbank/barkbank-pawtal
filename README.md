@@ -23,7 +23,7 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 The `main` branch will be deployed by AWS App Runner at:
 
-- https://f8ppypkcjp.ap-southeast-1.awsapprunner.com/
+- https://fewspg9b3p.ap-southeast-1.awsapprunner.com/
 
 This is a dev deployment for integration testing.
 
