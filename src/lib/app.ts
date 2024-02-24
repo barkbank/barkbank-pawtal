@@ -22,15 +22,15 @@ class AppFactory {
 
   public async getEmailService(): Promise<EmailService> {
     function resolveEmailSender(): EmailSender {
-      if (guaranteed(process.env.SMTP_HOST) === "") {
+      if (guaranteed(process.env.BARKBANK_SMTP_HOST) === "") {
         console.log("Using PassthroughEmailSender");
         return new PassthroughEmailSender();
       }
       const config: SmtpConfig = {
-        smtpHost: guaranteed(process.env.SMTP_HOST),
-        smtpPort: parseInt(guaranteed(process.env.SMTP_PORT)),
-        smtpUser: guaranteed(process.env.SMTP_USER),
-        smtpPassword: guaranteed(process.env.SMTP_PASSWORD),
+        smtpHost: guaranteed(process.env.BARKBANK_SMTP_HOST),
+        smtpPort: parseInt(guaranteed(process.env.BARKBANK_SMTP_PORT)),
+        smtpUser: guaranteed(process.env.BARKBANK_SMTP_USER),
+        smtpPassword: guaranteed(process.env.BARKBANK_SMTP_PASSWORD),
       };
       console.log("Using NodemailerEmailSender");
       return new NodemailerEmailSender(config);
@@ -47,12 +47,14 @@ class AppFactory {
     if (!this.otpService) {
       const config: OtpConfig = {
         otpLength: 6,
-        otpPeriodMillis: parseInt(guaranteed(process.env.OTP_PERIOD_MILLIS)),
+        otpPeriodMillis: parseInt(
+          guaranteed(process.env.BARKBANK_OTP_PERIOD_MILLIS),
+        ),
         otpRecentPeriods: parseInt(
-          guaranteed(process.env.OTP_NUM_RECENT_PERIODS),
+          guaranteed(process.env.BARKBANK_OTP_NUM_RECENT_PERIODS),
         ),
         otpHashService: new SecretHashService(
-          guaranteed(process.env.OTP_SECRET),
+          guaranteed(process.env.BARKBANK_OTP_SECRET),
         ),
       };
       this.otpService = new OtpService(config);
@@ -63,15 +65,15 @@ class AppFactory {
 
   public async getSenderForOtpEmail(): Promise<EmailContact> {
     return {
-      email: guaranteed(process.env.OTP_SENDER_EMAIL),
-      name: process.env.OTP_SENDER_NAME,
+      email: guaranteed(process.env.BARKBANK_OTP_SENDER_EMAIL),
+      name: process.env.BARKBANK_OTP_SENDER_NAME,
     };
   }
 
   public async getPiiHashService(): Promise<HashService> {
     if (!this.piiHashService) {
       this.piiHashService = new SecretHashService(
-        guaranteed(process.env.PII_SECRET),
+        guaranteed(process.env.BARKBANK_PII_SECRET),
       );
     }
     return this.piiHashService;
@@ -80,7 +82,7 @@ class AppFactory {
   public async getPiiEncryptionService(): Promise<EncryptionService> {
     if (!this.piiEncryptionService) {
       this.piiEncryptionService = new SecretEncryptionService(
-        guaranteed(process.env.PII_SECRET),
+        guaranteed(process.env.BARKBANK_PII_SECRET),
       );
     }
     return this.piiEncryptionService;
