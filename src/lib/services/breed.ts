@@ -1,11 +1,11 @@
-import dog_breeds_json from "../resources/dog_breeds.json";
+import dog_breeds_json from "@/resources/dog_breeds.json";
 
 export type Breed = {
   dog_breed: string;
   wikipedia_url: string;
 };
 
-class BreedService {
+export class BreedService {
   /**
    * Get all breeds.
    * @returns
@@ -23,6 +23,3 @@ class BreedService {
     }
   }
 }
-
-const breedService = new BreedService();
-export default breedService;
