@@ -8,8 +8,9 @@ export async function sendLoginOtp(emailAddress: string): Promise<void> {
   const emailService = await APP.getEmailService();
   const otpService = await APP.getOtpService();
   const otp = await otpService.getCurrentOtp(emailAddress);
+  const sender = await APP.getSenderForOtpEmail();
   const email: Email = {
-    sender: APP.getSenderForOtpEmail(),
+    sender,
     recipient: { email: emailAddress },
     subject: "Bark Bank OTP",
     bodyText: `Your Bark Bank OTP is ${otp}`,

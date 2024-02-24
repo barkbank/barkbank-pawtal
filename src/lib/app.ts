@@ -61,14 +61,14 @@ class AppFactory {
     return this.otpService;
   }
 
-  public getSenderForOtpEmail(): EmailContact {
+  public async getSenderForOtpEmail(): Promise<EmailContact> {
     return {
       email: guaranteed(process.env.OTP_SENDER_EMAIL),
       name: process.env.OTP_SENDER_NAME,
     };
   }
 
-  public getPiiHashService(): HashService {
+  public async getPiiHashService(): Promise<HashService> {
     if (!this.piiHashService) {
       this.piiHashService = new SecretHashService(
         guaranteed(process.env.PII_SECRET),
@@ -77,7 +77,7 @@ class AppFactory {
     return this.piiHashService;
   }
 
-  public getPiiEncryptionService(): EncryptionService {
+  public async getPiiEncryptionService(): Promise<EncryptionService> {
     if (!this.piiEncryptionService) {
       this.piiEncryptionService = new SecretEncryptionService(
         guaranteed(process.env.PII_SECRET),

@@ -7,18 +7,16 @@ export async function dbInsertAdmin(
 ): Promise<AdminGen> {
   const sql = `
     INSERT INTO admins (
-      admin_email,
-      admin_name,
-      admin_phone_number,
+      admin_hashed_email,
+      admin_encrypted_pii,
       admin_creation_time
     )
-    VALUES ($1, $2, $3, CURRENT_TIMESTAMP)
+    VALUES ($1, $2, CURRENT_TIMESTAMP)
     RETURNING admin_id, admin_creation_time
   `;
   const res = await dbQuery(ctx, sql, [
-    adminSpec.adminEmail,
-    adminSpec.adminName,
-    adminSpec.adminPhoneNumber,
+    adminSpec.adminHashedEmail,
+    adminSpec.adminEncryptedPii,
   ]);
   return toCamelCaseRow(res.rows[0]);
 }
@@ -29,9 +27,8 @@ export async function dbSelectAdmin(
 ): Promise<Admin | null> {
   const sql = `
     SELECT
-      admin_email,
-      admin_name,
-      admin_phone_number,
+      admin_hashed_email,
+      admin_encrypted_pii,
       admin_id,
       admin_creation_time
     FROM admins
