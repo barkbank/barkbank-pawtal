@@ -1,4 +1,4 @@
-import crypto from "crypto";
+import { HashService } from "./hash";
 
 const POSITIVE_31_BIT_MASK = 0x7fffffff;
 const NUM_CHARS_PER_32_BITS = 8;
@@ -14,7 +14,7 @@ export type OtpConfig = {
   otpLength: number;
   otpRecentPeriods: number;
   otpPeriodMillis: number;
-  otpServerSecret: string;
+  otpHashService: HashService;
 };
 
 export class OtpService {
@@ -29,18 +29,18 @@ export class OtpService {
     this.otpModulus = Math.pow(10, config.otpLength);
   }
 
-  public getCurrentOtp(value: string): string {
+  public async getCurrentOtp(value: string): Promise<string> {
     const period = this.getCurrentPeriod();
     return this.getOtp(value, period);
   }
 
-  public getRecentOtps(value: string): string[] {
+  public async getRecentOtps(value: string): Promise<string[]> {
     const currentPeriod = this.getCurrentPeriod();
-    const otps: string[] = [];
+    const otpPromises: Promise<string>[] = [];
     for (let i = -this.config.otpRecentPeriods + 1; i <= 0; ++i) {
-      otps.push(this.getOtp(value, currentPeriod + i));
+      otpPromises.push(this.getOtp(value, currentPeriod + i));
     }
-    return otps;
+    return Promise.all(otpPromises);
   }
 
   private getCurrentPeriod(): number {
@@ -48,11 +48,13 @@ export class OtpService {
     return Math.floor(ts / this.config.otpPeriodMillis);
   }
 
-  public getOtp(value: string, period: number): string {
-    const hmac = crypto.createHmac("sha256", this.config.otpServerSecret);
-    hmac.update(`v:${value}`);
-    hmac.update(`p:${period}`);
-    const hashHex = hmac.digest("hex");
+  public async getOtp(value: string, period: number): Promise<string> {
+    const data = `v:${value}p:${period}`;
+    const { result, error } = await this.config.otpHashService.digest(data);
+    if (!result) {
+      throw Error(error);
+    }
+    const { hashHex } = result;
     const n = hashHex.length;
     let i = 0;
     let j = NUM_CHARS_PER_32_BITS;

@@ -18,7 +18,7 @@ export const NEXT_AUTH_OPTIONS: NextAuthOptions = {
             return null;
           }
           const otpService = await APP.getOtpService();
-          const recentOtps = otpService.getRecentOtps(credentials.email);
+          const recentOtps = await otpService.getRecentOtps(credentials.email);
           if (!recentOtps.includes(credentials.otp)) {
             return null;
           }

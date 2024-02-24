@@ -7,7 +7,7 @@ export async function sendLoginOtp(emailAddress: string): Promise<void> {
   console.log("Sending OTP to", emailAddress);
   const emailService = await APP.getEmailService();
   const otpService = await APP.getOtpService();
-  const otp = otpService.getCurrentOtp(emailAddress);
+  const otp = await otpService.getCurrentOtp(emailAddress);
   const email: Email = {
     sender: APP.getSenderForOtpEmail(),
     recipient: { email: emailAddress },
