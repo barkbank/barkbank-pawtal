@@ -23,6 +23,26 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 
 The `main` branch will be deployed by AWS App Runner at:
 
-- https://f8ppypkcjp.ap-southeast-1.awsapprunner.com/
+- https://fewspg9b3p.ap-southeast-1.awsapprunner.com/
 
 This is a dev deployment for integration testing.
+
+## Environment Variables for Dev
+
+Put these into `.env.local` for local development.
+
+```
+NEXTAUTH_SECRET="secret-for-next-auth"
+NEXTAUTH_URL=http://localhost:3000
+
+BARKBANK_SMTP_USER=""
+BARKBANK_SMTP_PASSWORD=""
+BARKBANK_SMTP_HOST=""  # Set to empty string, then the email can be read in the server logs.
+BARKBANK_SMTP_PORT=465
+BARKBANK_OTP_SENDER_NAME="Bark Bank OTP"
+BARKBANK_OTP_SENDER_EMAIL="otp@barkbank.co"
+BARKBANK_OTP_PERIOD_MILLIS=15000
+BARKBANK_OTP_NUM_RECENT_PERIODS=4
+BARKBANK_OTP_SECRET="secret-for-otp-generation"
+BARKBANK_PII_SECRET="secret-for-pii-privacy"
+```

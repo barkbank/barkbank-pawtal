@@ -266,11 +266,28 @@ export function BarkFormTextArea(props: {
   );
 }
 
-export function BarkFormSubmitButton(props: { label?: string }) {
-  const { label } = props;
+export function BarkFormButton(props: {
+  children: React.ReactNode;
+  onClick: () => Promise<void>;
+}) {
+  const { children, onClick } = props;
+  return (
+    <Button
+      type="button"
+      className="mt-6"
+      onClick={onClick}
+      variant="secondary"
+    >
+      {children}
+    </Button>
+  );
+}
+
+export function BarkFormSubmitButton(props: { children: React.ReactNode }) {
+  const { children } = props;
   return (
     <Button type="submit" className="mt-6">
-      {label || "Submit"}
+      {children}
     </Button>
   );
 }
