@@ -1,3 +1,4 @@
+import { BreedService } from "./services/breed";
 import {
   EmailContact,
   EmailSender,
@@ -19,6 +20,7 @@ class AppFactory {
   private otpService: OtpService | null = null;
   private piiHashService: HashService | null = null;
   private piiEncryptionService: EncryptionService | null = null;
+  private breedService: BreedService | null = null;
 
   public async getEmailService(): Promise<EmailService> {
     function resolveEmailSender(): EmailSender {
@@ -86,6 +88,13 @@ class AppFactory {
       );
     }
     return this.piiEncryptionService;
+  }
+
+  public async getBreedService(): Promise<BreedService> {
+    if (!this.breedService) {
+      this.breedService = new BreedService();
+    }
+    return this.breedService;
   }
 }
 

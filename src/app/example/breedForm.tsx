@@ -5,7 +5,7 @@ import {
   BarkFormHeader,
   BarkFormSelect,
 } from "@/components/bark/bark-form";
-import { Breed } from "@/services/breedService";
+import { Breed } from "@/lib/services/breed";
 import { useForm } from "react-hook-form";
 
 export default function BreedForm({ breeds }: { breeds: Breed[] }) {
