@@ -1,0 +1,2408 @@
+{
+  "dog_breeds": [
+      {
+          "dog_breed": "Affenpinscher",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Affenpinscher"
+      },
+      {
+          "dog_breed": "Afghan Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Afghan_Hound"
+      },
+      {
+          "dog_breed": "Africanis",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Africanis"
+      },
+      {
+          "dog_breed": "Aidi",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Aidi"
+      },
+      {
+          "dog_breed": "Airedale Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Airedale_Terrier"
+      },
+      {
+          "dog_breed": "Akbash",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Akbash"
+      },
+      {
+          "dog_breed": "Akita (dog)",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Akita_(dog)"
+      },
+      {
+          "dog_breed": "Aksaray Malaklisi",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Aksaray_Malaklisi"
+      },
+      {
+          "dog_breed": "Alano Espa\u00f1ol",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Alano_Espa%C3%B1ol"
+      },
+      {
+          "dog_breed": "Alapaha Blue Blood Bulldog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Alapaha_Blue_Blood_Bulldog"
+      },
+      {
+          "dog_breed": "Alaskan husky",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Alaskan_husky"
+      },
+      {
+          "dog_breed": "Alaskan Klee Kai",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Alaskan_Klee_Kai"
+      },
+      {
+          "dog_breed": "Alaskan Malamute",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Alaskan_Malamute"
+      },
+      {
+          "dog_breed": "Alopekis",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Alopekis"
+      },
+      {
+          "dog_breed": "Alpine Dachsbracke",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Alpine_Dachsbracke"
+      },
+      {
+          "dog_breed": "American Bulldog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/American_Bulldog"
+      },
+      {
+          "dog_breed": "American Bully",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/American_Bully"
+      },
+      {
+          "dog_breed": "American Cocker Spaniel",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/American_Cocker_Spaniel"
+      },
+      {
+          "dog_breed": "American English Coonhound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/American_English_Coonhound"
+      },
+      {
+          "dog_breed": "American Eskimo Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/American_Eskimo_Dog"
+      },
+      {
+          "dog_breed": "American Foxhound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/American_Foxhound"
+      },
+      {
+          "dog_breed": "American Hairless Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/American_Hairless_Terrier"
+      },
+      {
+          "dog_breed": "American Leopard Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/American_Leopard_Hound"
+      },
+      {
+          "dog_breed": "American Pit Bull Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/American_Pit_Bull_Terrier"
+      },
+      {
+          "dog_breed": "American Staffordshire Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/American_Staffordshire_Terrier"
+      },
+      {
+          "dog_breed": "American Water Spaniel",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/American_Water_Spaniel"
+      },
+      {
+          "dog_breed": "Anglo-Fran\u00e7ais de Petite V\u00e9nerie",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Anglo-Fran%C3%A7ais_de_Petite_V%C3%A9nerie"
+      },
+      {
+          "dog_breed": "Appenzeller Sennenhund",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Appenzeller_Sennenhund"
+      },
+      {
+          "dog_breed": "Ari\u00e8ge Pointer",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Ari%C3%A8ge_Pointer"
+      },
+      {
+          "dog_breed": "Ari\u00e9geois",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Ari%C3%A9geois"
+      },
+      {
+          "dog_breed": "Argentine Pila",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Argentine_Pila"
+      },
+      {
+          "dog_breed": "Armant (dog)",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Armant_(dog)"
+      },
+      {
+          "dog_breed": "Armenian Gampr",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Armenian_Gampr"
+      },
+      {
+          "dog_breed": "Artois Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Artois_Hound"
+      },
+      {
+          "dog_breed": "Australian Cattle Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Australian_Cattle_Dog"
+      },
+      {
+          "dog_breed": "Australian Kelpie",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Australian_Kelpie"
+      },
+      {
+          "dog_breed": "Australian Shepherd",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Australian_Shepherd"
+      },
+      {
+          "dog_breed": "Australian Stumpy Tail Cattle Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Australian_Stumpy_Tail_Cattle_Dog"
+      },
+      {
+          "dog_breed": "Australian Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Australian_Terrier"
+      },
+      {
+          "dog_breed": "Austrian Black and Tan Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Austrian_Black_and_Tan_Hound"
+      },
+      {
+          "dog_breed": "Austrian Pinscher",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Austrian_Pinscher"
+      },
+      {
+          "dog_breed": "Australian Silky Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Australian_Silky_Terrier"
+      },
+      {
+          "dog_breed": "Azawakh",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Azawakh"
+      },
+      {
+          "dog_breed": "B\u1eafc H\u00e0 dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/B%E1%BA%AFc_H%C3%A0_dog"
+      },
+      {
+          "dog_breed": "Bakharwal dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Bakharwal_dog"
+      },
+      {
+          "dog_breed": "Banjara Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Banjara_Hound"
+      },
+      {
+          "dog_breed": "Bankhar Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Bankhar_Dog"
+      },
+      {
+          "dog_breed": "Barak hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Barak_hound"
+      },
+      {
+          "dog_breed": "Barbado da Terceira",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Barbado_da_Terceira"
+      },
+      {
+          "dog_breed": "Barbet (dog)",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Barbet_(dog)"
+      },
+      {
+          "dog_breed": "Basenji",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Basenji"
+      },
+      {
+          "dog_breed": "Basque Shepherd Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Basque_Shepherd_Dog"
+      },
+      {
+          "dog_breed": "Basset Art\u00e9sien Normand",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Basset_Art%C3%A9sien_Normand"
+      },
+      {
+          "dog_breed": "Basset Bleu de Gascogne",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Basset_Bleu_de_Gascogne"
+      },
+      {
+          "dog_breed": "Basset Fauve de Bretagne",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Basset_Fauve_de_Bretagne"
+      },
+      {
+          "dog_breed": "Basset Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Basset_Hound"
+      },
+      {
+          "dog_breed": "Bavarian Mountain Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Bavarian_Mountain_Hound"
+      },
+      {
+          "dog_breed": "Beagle",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Beagle"
+      },
+      {
+          "dog_breed": "Beagle-Harrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Beagle-Harrier"
+      },
+      {
+          "dog_breed": "Bearded Collie",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Bearded_Collie"
+      },
+      {
+          "dog_breed": "Beauceron",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Beauceron"
+      },
+      {
+          "dog_breed": "Bedlington Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Bedlington_Terrier"
+      },
+      {
+          "dog_breed": "Belgian Shepherd",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Belgian_Shepherd"
+      },
+      {
+          "dog_breed": "Bergamasco Shepherd",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Bergamasco_Shepherd"
+      },
+      {
+          "dog_breed": "Berger Picard",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Berger_Picard"
+      },
+      {
+          "dog_breed": "Bernese Mountain Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Bernese_Mountain_Dog"
+      },
+      {
+          "dog_breed": "Bichon Fris\u00e9",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Bichon_Fris%C3%A9"
+      },
+      {
+          "dog_breed": "Biewer Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Biewer_Terrier"
+      },
+      {
+          "dog_breed": "Billy (dog)",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Billy_(dog)"
+      },
+      {
+          "dog_breed": "Black and Tan Coonhound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Black_and_Tan_Coonhound"
+      },
+      {
+          "dog_breed": "Black and Tan Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Black_and_Tan_Terrier"
+      },
+      {
+          "dog_breed": "Black Norwegian Elkhound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Black_Norwegian_Elkhound"
+      },
+      {
+          "dog_breed": "Black Russian Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Black_Russian_Terrier"
+      },
+      {
+          "dog_breed": "Black Mouth Cur",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Black_Mouth_Cur"
+      },
+      {
+          "dog_breed": "Bloodhound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Bloodhound"
+      },
+      {
+          "dog_breed": "Blue Lacy",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Blue_Lacy"
+      },
+      {
+          "dog_breed": "Blue Picardy Spaniel",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Blue_Picardy_Spaniel"
+      },
+      {
+          "dog_breed": "Bluetick Coonhound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Bluetick_Coonhound"
+      },
+      {
+          "dog_breed": "Boerboel",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Boerboel"
+      },
+      {
+          "dog_breed": "Bohemian Shepherd",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Bohemian_Shepherd"
+      },
+      {
+          "dog_breed": "Bolognese dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Bolognese_dog"
+      },
+      {
+          "dog_breed": "Border Collie",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Border_Collie"
+      },
+      {
+          "dog_breed": "Border Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Border_Terrier"
+      },
+      {
+          "dog_breed": "Borzoi",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Borzoi"
+      },
+      {
+          "dog_breed": "Boston Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Boston_Terrier"
+      },
+      {
+          "dog_breed": "Bouvier des Ardennes",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Bouvier_des_Ardennes"
+      },
+      {
+          "dog_breed": "Bouvier des Flandres",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Bouvier_des_Flandres"
+      },
+      {
+          "dog_breed": "Boxer (dog)",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Boxer_(dog)"
+      },
+      {
+          "dog_breed": "Boykin Spaniel",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Boykin_Spaniel"
+      },
+      {
+          "dog_breed": "Bracco Italiano",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Bracco_Italiano"
+      },
+      {
+          "dog_breed": "Braque d'Auvergne",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Braque_d%27Auvergne"
+      },
+      {
+          "dog_breed": "Braque du Bourbonnais",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Braque_du_Bourbonnais"
+      },
+      {
+          "dog_breed": "Braque Fran\u00e7ais",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Braque_Fran%C3%A7ais"
+      },
+      {
+          "dog_breed": "Braque Saint-Germain",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Braque_Saint-Germain"
+      },
+      {
+          "dog_breed": "Brazilian Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Brazilian_Terrier"
+      },
+      {
+          "dog_breed": "Briard",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Briard"
+      },
+      {
+          "dog_breed": "Briquet de Provence",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Briquet_de_Provence"
+      },
+      {
+          "dog_breed": "Briquet Griffon Vend\u00e9en",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Briquet_Griffon_Vend%C3%A9en"
+      },
+      {
+          "dog_breed": "Brittany (dog)",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Brittany_(dog)"
+      },
+      {
+          "dog_breed": "Broholmer",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Broholmer"
+      },
+      {
+          "dog_breed": "Bruno Jura Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Bruno_Jura_Hound"
+      },
+      {
+          "dog_breed": "Bucovina Shepherd Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Bucovina_Shepherd_Dog"
+      },
+      {
+          "dog_breed": "Bulgarian Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Bulgarian_Hound"
+      },
+      {
+          "dog_breed": "Bulgarian Scenthound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Bulgarian_Scenthound"
+      },
+      {
+          "dog_breed": "Bull Arab",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Bull_Arab"
+      },
+      {
+          "dog_breed": "Bull Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Bull_Terrier"
+      },
+      {
+          "dog_breed": "Bulldog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Bulldog"
+      },
+      {
+          "dog_breed": "Bullmastiff",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Bullmastiff"
+      },
+      {
+          "dog_breed": "Bully Kutta",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Bully_Kutta"
+      },
+      {
+          "dog_breed": "Burgos Pointer",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Burgos_Pointer"
+      },
+      {
+          "dog_breed": "Ca M\u00e8 Mallorqu\u00ed",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Ca_M%C3%A8_Mallorqu%C3%AD"
+      },
+      {
+          "dog_breed": "Ca de Bou",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Ca_de_Bou"
+      },
+      {
+          "dog_breed": "Ca Rater Mallorqu\u00ed",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Ca_Rater_Mallorqu%C3%AD"
+      },
+      {
+          "dog_breed": "Cairn Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Cairn_Terrier"
+      },
+      {
+          "dog_breed": "Calupoh",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Calupoh"
+      },
+      {
+          "dog_breed": "Campeiro Bulldog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Campeiro_Bulldog"
+      },
+      {
+          "dog_breed": "Can de Chira",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Can_de_Chira"
+      },
+      {
+          "dog_breed": "Can de Palleiro",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Can_de_Palleiro"
+      },
+      {
+          "dog_breed": "Canaan Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Canaan_Dog"
+      },
+      {
+          "dog_breed": "Canadian Eskimo Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Canadian_Eskimo_Dog"
+      },
+      {
+          "dog_breed": "Cane Corso",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Cane_Corso"
+      },
+      {
+          "dog_breed": "Cane di Oropa",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Cane_di_Oropa"
+      },
+      {
+          "dog_breed": "Cane Paratore",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Cane_Paratore"
+      },
+      {
+          "dog_breed": "Cantabrian Water Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Cantabrian_Water_Dog"
+      },
+      {
+          "dog_breed": "C\u00e3o de Gado Transmontano",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/C%C3%A3o_de_Gado_Transmontano"
+      },
+      {
+          "dog_breed": "Cardigan Welsh Corgi",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Cardigan_Welsh_Corgi"
+      },
+      {
+          "dog_breed": "Carea Leon\u00e9s",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Carea_Leon%C3%A9s"
+      },
+      {
+          "dog_breed": "Carolina Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Carolina_Dog"
+      },
+      {
+          "dog_breed": "Carpathian Shepherd Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Carpathian_Shepherd_Dog"
+      },
+      {
+          "dog_breed": "Castro Laboreiro Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Castro_Laboreiro_Dog"
+      },
+      {
+          "dog_breed": "Catahoula Leopard Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Catahoula_Leopard_Dog"
+      },
+      {
+          "dog_breed": "Catalan Sheepdog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Catalan_Sheepdog"
+      },
+      {
+          "dog_breed": "Caucasian Shepherd Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Caucasian_Shepherd_Dog"
+      },
+      {
+          "dog_breed": "Cavalier King Charles Spaniel",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Cavalier_King_Charles_Spaniel"
+      },
+      {
+          "dog_breed": "Central Asian Shepherd Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Central_Asian_Shepherd_Dog"
+      },
+      {
+          "dog_breed": "\u010cesk\u00fd fousek",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/%C4%8Cesk%C3%BD_fousek"
+      },
+      {
+          "dog_breed": "\u010cesk\u00fd strakat\u00fd pes",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/%C4%8Cesk%C3%BD_strakat%C3%BD_pes"
+      },
+      {
+          "dog_breed": "Cesky Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Cesky_Terrier"
+      },
+      {
+          "dog_breed": "Chesapeake Bay Retriever",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Chesapeake_Bay_Retriever"
+      },
+      {
+          "dog_breed": "Chien Fran\u00e7ais Blanc et Noir",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Chien_Fran%C3%A7ais_Blanc_et_Noir"
+      },
+      {
+          "dog_breed": "Chien Fran\u00e7ais Blanc et Orange",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Chien_Fran%C3%A7ais_Blanc_et_Orange"
+      },
+      {
+          "dog_breed": "Chien Fran\u00e7ais Tricolore",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Chien_Fran%C3%A7ais_Tricolore"
+      },
+      {
+          "dog_breed": "Chihuahua (dog)",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Chihuahua_(dog)"
+      },
+      {
+          "dog_breed": "Chilean Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Chilean_Terrier"
+      },
+      {
+          "dog_breed": "Chinese Crested Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Chinese_Crested_Dog"
+      },
+      {
+          "dog_breed": "Chinook (dog)",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Chinook_(dog)"
+      },
+      {
+          "dog_breed": "Chippiparai",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Chippiparai"
+      },
+      {
+          "dog_breed": "Chongqing dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Chongqing_dog"
+      },
+      {
+          "dog_breed": "Chortai",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Chortai"
+      },
+      {
+          "dog_breed": "Chow Chow",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Chow_Chow"
+      },
+      {
+          "dog_breed": "Chukotka sled dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Chukotka_sled_dog"
+      },
+      {
+          "dog_breed": "Cimarr\u00f3n Uruguayo",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Cimarr%C3%B3n_Uruguayo"
+      },
+      {
+          "dog_breed": "Cirneco dell'Etna",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Cirneco_dell%27Etna"
+      },
+      {
+          "dog_breed": "Clumber Spaniel",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Clumber_Spaniel"
+      },
+      {
+          "dog_breed": "Colombian Fino Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Colombian_Fino_Hound"
+      },
+      {
+          "dog_breed": "Continental bulldog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Continental_bulldog"
+      },
+      {
+          "dog_breed": "Corsican Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Corsican_Dog"
+      },
+      {
+          "dog_breed": "Coton de Tulear",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Coton_de_Tulear"
+      },
+      {
+          "dog_breed": "Cretan Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Cretan_Hound"
+      },
+      {
+          "dog_breed": "Croatian Sheepdog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Croatian_Sheepdog"
+      },
+      {
+          "dog_breed": "Curly-coated Retriever",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Curly-coated_Retriever"
+      },
+      {
+          "dog_breed": "Czechoslovakian Wolfdog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Czechoslovakian_Wolfdog"
+      },
+      {
+          "dog_breed": "Dachshund",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Dachshund"
+      },
+      {
+          "dog_breed": "Dalmatian (dog)",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Dalmatian_(dog)"
+      },
+      {
+          "dog_breed": "Dandie Dinmont Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Dandie_Dinmont_Terrier"
+      },
+      {
+          "dog_breed": "Danish Spitz",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Danish_Spitz"
+      },
+      {
+          "dog_breed": "Danish\u2013Swedish Farmdog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Danish%E2%80%93Swedish_Farmdog"
+      },
+      {
+          "dog_breed": "Denmark Feist",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Denmark_Feist"
+      },
+      {
+          "dog_breed": "Dikkulak",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Dikkulak"
+      },
+      {
+          "dog_breed": "Dingo",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Dingo"
+      },
+      {
+          "dog_breed": "Dobermann",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Dobermann"
+      },
+      {
+          "dog_breed": "Dogo Argentino",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Dogo_Argentino"
+      },
+      {
+          "dog_breed": "Dogo Sardesco",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Dogo_Sardesco"
+      },
+      {
+          "dog_breed": "Dogue Brasileiro",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Dogue_Brasileiro"
+      },
+      {
+          "dog_breed": "Dogue de Bordeaux",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Dogue_de_Bordeaux"
+      },
+      {
+          "dog_breed": "Donggyeongi",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Donggyeongi"
+      },
+      {
+          "dog_breed": "Drentse Patrijshond",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Drentse_Patrijshond"
+      },
+      {
+          "dog_breed": "Drever",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Drever"
+      },
+      {
+          "dog_breed": "Dunker",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Dunker"
+      },
+      {
+          "dog_breed": "Dutch Shepherd",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Dutch_Shepherd"
+      },
+      {
+          "dog_breed": "Dutch Smoushond",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Dutch_Smoushond"
+      },
+      {
+          "dog_breed": "East Siberian Laika",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/East_Siberian_Laika"
+      },
+      {
+          "dog_breed": "East European Shepherd",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/East_European_Shepherd"
+      },
+      {
+          "dog_breed": "Ecuadorian Hairless Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Ecuadorian_Hairless_Dog"
+      },
+      {
+          "dog_breed": "English Cocker Spaniel",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/English_Cocker_Spaniel"
+      },
+      {
+          "dog_breed": "English Foxhound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/English_Foxhound"
+      },
+      {
+          "dog_breed": "English Mastiff",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/English_Mastiff"
+      },
+      {
+          "dog_breed": "English Setter",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/English_Setter"
+      },
+      {
+          "dog_breed": "English Shepherd",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/English_Shepherd"
+      },
+      {
+          "dog_breed": "English Springer Spaniel",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/English_Springer_Spaniel"
+      },
+      {
+          "dog_breed": "English Toy Terrier (Black & Tan)",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/English_Toy_Terrier_(Black_%26_Tan)"
+      },
+      {
+          "dog_breed": "Entlebucher Mountain Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Entlebucher_Mountain_Dog"
+      },
+      {
+          "dog_breed": "Erbi Txakur",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Erbi_Txakur"
+      },
+      {
+          "dog_breed": "Estonian Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Estonian_Hound"
+      },
+      {
+          "dog_breed": "Estrela Mountain Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Estrela_Mountain_Dog"
+      },
+      {
+          "dog_breed": "Eurasier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Eurasier"
+      },
+      {
+          "dog_breed": "Faroese Sheepdog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Faroese_Sheepdog"
+      },
+      {
+          "dog_breed": "Field Spaniel",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Field_Spaniel"
+      },
+      {
+          "dog_breed": "Fila Brasileiro",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Fila_Brasileiro"
+      },
+      {
+          "dog_breed": "Finnish Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Finnish_Hound"
+      },
+      {
+          "dog_breed": "Finnish Lapphund",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Finnish_Lapphund"
+      },
+      {
+          "dog_breed": "Finnish Spitz",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Finnish_Spitz"
+      },
+      {
+          "dog_breed": "Flat-coated Retriever",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Flat-coated_Retriever"
+      },
+      {
+          "dog_breed": "French Bulldog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/French_Bulldog"
+      },
+      {
+          "dog_breed": "French Spaniel",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/French_Spaniel"
+      },
+      {
+          "dog_breed": "Galgo Espa\u00f1ol",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Galgo_Espa%C3%B1ol"
+      },
+      {
+          "dog_breed": "Gascon Saintongeois",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Gascon_Saintongeois"
+      },
+      {
+          "dog_breed": "Gaucho sheepdog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Gaucho_sheepdog"
+      },
+      {
+          "dog_breed": "Georgian Shepherd",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Georgian_Shepherd"
+      },
+      {
+          "dog_breed": "German Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/German_Hound"
+      },
+      {
+          "dog_breed": "German Longhaired Pointer",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/German_Longhaired_Pointer"
+      },
+      {
+          "dog_breed": "German Pinscher",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/German_Pinscher"
+      },
+      {
+          "dog_breed": "German Roughhaired Pointer",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/German_Roughhaired_Pointer"
+      },
+      {
+          "dog_breed": "German Shepherd",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/German_Shepherd"
+      },
+      {
+          "dog_breed": "German Shorthaired Pointer",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/German_Shorthaired_Pointer"
+      },
+      {
+          "dog_breed": "German Spaniel",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/German_Spaniel"
+      },
+      {
+          "dog_breed": "German Spitz",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/German_Spitz"
+      },
+      {
+          "dog_breed": "German Wirehaired Pointer",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/German_Wirehaired_Pointer"
+      },
+      {
+          "dog_breed": "Giant Schnauzer",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Giant_Schnauzer"
+      },
+      {
+          "dog_breed": "Glen of Imaal Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Glen_of_Imaal_Terrier"
+      },
+      {
+          "dog_breed": "Goldendoodle",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Goldendoodle"
+      },
+      {
+          "dog_breed": "Golden Retriever",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Golden_Retriever"
+      },
+      {
+          "dog_breed": "Go\u0144czy Polski",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Go%C5%84czy_Polski"
+      },
+      {
+          "dog_breed": "Gordon Setter",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Gordon_Setter"
+      },
+      {
+          "dog_breed": "Grand Anglo-Fran\u00e7ais Blanc et Noir",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Grand_Anglo-Fran%C3%A7ais_Blanc_et_Noir"
+      },
+      {
+          "dog_breed": "Grand Anglo-Fran\u00e7ais Blanc et Orange",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Grand_Anglo-Fran%C3%A7ais_Blanc_et_Orange"
+      },
+      {
+          "dog_breed": "Grand Anglo-Fran\u00e7ais Tricolore",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Grand_Anglo-Fran%C3%A7ais_Tricolore"
+      },
+      {
+          "dog_breed": "Grand Basset Griffon Vend\u00e9en",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Grand_Basset_Griffon_Vend%C3%A9en"
+      },
+      {
+          "dog_breed": "Grand Bleu de Gascogne",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Grand_Bleu_de_Gascogne"
+      },
+      {
+          "dog_breed": "Grand Griffon Vend\u00e9en",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Grand_Griffon_Vend%C3%A9en"
+      },
+      {
+          "dog_breed": "Great Dane",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Great_Dane"
+      },
+      {
+          "dog_breed": "Greater Swiss Mountain Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Greater_Swiss_Mountain_Dog"
+      },
+      {
+          "dog_breed": "Greek Harehound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Greek_Harehound"
+      },
+      {
+          "dog_breed": "Greek Shepherd",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Greek_Shepherd"
+      },
+      {
+          "dog_breed": "Greenland Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Greenland_Dog"
+      },
+      {
+          "dog_breed": "Greyhound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Greyhound"
+      },
+      {
+          "dog_breed": "Griffon Bleu de Gascogne",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Griffon_Bleu_de_Gascogne"
+      },
+      {
+          "dog_breed": "Griffon Bruxellois",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Griffon_Bruxellois"
+      },
+      {
+          "dog_breed": "Griffon Fauve de Bretagne",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Griffon_Fauve_de_Bretagne"
+      },
+      {
+          "dog_breed": "Griffon Nivernais",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Griffon_Nivernais"
+      },
+      {
+          "dog_breed": "Guatemalan Dogo",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Guatemalan_Dogo"
+      },
+      {
+          "dog_breed": "Gull Dong",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Gull_Dong"
+      },
+      {
+          "dog_breed": "Gull Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Gull_Terrier"
+      },
+      {
+          "dog_breed": "H\u00e4llefors Elkhound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/H%C3%A4llefors_Elkhound"
+      },
+      {
+          "dog_breed": "Halden Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Halden_Hound"
+      },
+      {
+          "dog_breed": "Hamiltonst\u00f6vare",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Hamiltonst%C3%B6vare"
+      },
+      {
+          "dog_breed": "Hanover Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Hanover_Hound"
+      },
+      {
+          "dog_breed": "Harrier (dog)",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Harrier_(dog)"
+      },
+      {
+          "dog_breed": "Havanese dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Havanese_dog"
+      },
+      {
+          "dog_breed": "Himalayan Sheepdog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Himalayan_Sheepdog"
+      },
+      {
+          "dog_breed": "Hmong bobtail dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Hmong_bobtail_dog"
+      },
+      {
+          "dog_breed": "Hokkaido (dog)",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Hokkaido_(dog)"
+      },
+      {
+          "dog_breed": "Hovawart",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Hovawart"
+      },
+      {
+          "dog_breed": "Huntaway",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Huntaway"
+      },
+      {
+          "dog_breed": "Hygen Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Hygen_Hound"
+      },
+      {
+          "dog_breed": "Ibizan Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Ibizan_Hound"
+      },
+      {
+          "dog_breed": "Icelandic Sheepdog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Icelandic_Sheepdog"
+      },
+      {
+          "dog_breed": "Indian pariah dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Indian_pariah_dog"
+      },
+      {
+          "dog_breed": "Indian Spitz",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Indian_Spitz"
+      },
+      {
+          "dog_breed": "Irish Red and White Setter",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Irish_Red_and_White_Setter"
+      },
+      {
+          "dog_breed": "Irish Setter",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Irish_Setter"
+      },
+      {
+          "dog_breed": "Irish Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Irish_Terrier"
+      },
+      {
+          "dog_breed": "Irish Water Spaniel",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Irish_Water_Spaniel"
+      },
+      {
+          "dog_breed": "Irish Wolfhound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Irish_Wolfhound"
+      },
+      {
+          "dog_breed": "Istrian Coarse-haired Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Istrian_Coarse-haired_Hound"
+      },
+      {
+          "dog_breed": "Istrian Shorthaired Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Istrian_Shorthaired_Hound"
+      },
+      {
+          "dog_breed": "Italian Greyhound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Italian_Greyhound"
+      },
+      {
+          "dog_breed": "Jack Russell Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Jack_Russell_Terrier"
+      },
+      {
+          "dog_breed": "Jagdterrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Jagdterrier"
+      },
+      {
+          "dog_breed": "J\u00e4mthund",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/J%C3%A4mthund"
+      },
+      {
+          "dog_breed": "Japanese Chin",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Japanese_Chin"
+      },
+      {
+          "dog_breed": "Japanese Spitz",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Japanese_Spitz"
+      },
+      {
+          "dog_breed": "Japanese Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Japanese_Terrier"
+      },
+      {
+          "dog_breed": "Jeju dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Jeju_dog"
+      },
+      {
+          "dog_breed": "Jonangi",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Jonangi"
+      },
+      {
+          "dog_breed": "Kai Ken",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Kai_Ken"
+      },
+      {
+          "dog_breed": "Kaikadi (dog)",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Kaikadi_(dog)"
+      },
+      {
+          "dog_breed": "Kamchatka Sled Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Kamchatka_Sled_Dog"
+      },
+      {
+          "dog_breed": "Kangal Shepherd Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Kangal_Shepherd_Dog"
+      },
+      {
+          "dog_breed": "Kanni",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Kanni"
+      },
+      {
+          "dog_breed": "Karakachan dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Karakachan_dog"
+      },
+      {
+          "dog_breed": "Karelian Bear Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Karelian_Bear_Dog"
+      },
+      {
+          "dog_breed": "Karelo-Finnish Laika",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Karelo-Finnish_Laika"
+      },
+      {
+          "dog_breed": "Kars dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Kars_dog"
+      },
+      {
+          "dog_breed": "Karst Shepherd",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Karst_Shepherd"
+      },
+      {
+          "dog_breed": "Keeshond",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Keeshond"
+      },
+      {
+          "dog_breed": "Kerry Beagle",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Kerry_Beagle"
+      },
+      {
+          "dog_breed": "Kerry Blue Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Kerry_Blue_Terrier"
+      },
+      {
+          "dog_breed": "Khala (dog breed)",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Khala_(dog_breed)"
+      },
+      {
+          "dog_breed": "King Charles Spaniel",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/King_Charles_Spaniel"
+      },
+      {
+          "dog_breed": "King Shepherd",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/King_Shepherd"
+      },
+      {
+          "dog_breed": "Kintamani (dog)",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Kintamani_(dog)"
+      },
+      {
+          "dog_breed": "Kishu",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Kishu"
+      },
+      {
+          "dog_breed": "Kokoni",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Kokoni"
+      },
+      {
+          "dog_breed": "Kombai dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Kombai_dog"
+      },
+      {
+          "dog_breed": "Komondor",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Komondor"
+      },
+      {
+          "dog_breed": "Kooikerhondje",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Kooikerhondje"
+      },
+      {
+          "dog_breed": "Koolie",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Koolie"
+      },
+      {
+          "dog_breed": "Korean Jindo",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Korean_Jindo"
+      },
+      {
+          "dog_breed": "Kromfohrl\u00e4nder",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Kromfohrl%C3%A4nder"
+      },
+      {
+          "dog_breed": "Kuchi dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Kuchi_dog"
+      },
+      {
+          "dog_breed": "Kunming dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Kunming_dog"
+      },
+      {
+          "dog_breed": "Kurdish Mastiff",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Kurdish_Mastiff"
+      },
+      {
+          "dog_breed": "Kuvasz",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Kuvasz"
+      },
+      {
+          "dog_breed": "Labrador Retriever",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Labrador_Retriever"
+      },
+      {
+          "dog_breed": "Lagotto Romagnolo",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Lagotto_Romagnolo"
+      },
+      {
+          "dog_breed": "L\u00e0i dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/L%C3%A0i_dog"
+      },
+      {
+          "dog_breed": "Lakeland Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Lakeland_Terrier"
+      },
+      {
+          "dog_breed": "Lancashire Heeler",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Lancashire_Heeler"
+      },
+      {
+          "dog_breed": "Landseer dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Landseer_dog"
+      },
+      {
+          "dog_breed": "Lapponian Herder",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Lapponian_Herder"
+      },
+      {
+          "dog_breed": "Large M\u00fcnsterl\u00e4nder",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Large_M%C3%BCnsterl%C3%A4nder"
+      },
+      {
+          "dog_breed": "Leonberger",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Leonberger"
+      },
+      {
+          "dog_breed": "Levriero Sardo",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Levriero_Sardo"
+      },
+      {
+          "dog_breed": "Lhasa Apso",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Lhasa_Apso"
+      },
+      {
+          "dog_breed": "Liangshan Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Liangshan_Dog"
+      },
+      {
+          "dog_breed": "Lithuanian Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Lithuanian_Hound"
+      },
+      {
+          "dog_breed": "Lobito Herre\u00f1o",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Lobito_Herre%C3%B1o"
+      },
+      {
+          "dog_breed": "L\u00f6wchen",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/L%C3%B6wchen"
+      },
+      {
+          "dog_breed": "Lucas Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Lucas_Terrier"
+      },
+      {
+          "dog_breed": "Lupo Italiano",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Lupo_Italiano"
+      },
+      {
+          "dog_breed": "Mackenzie River husky",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Mackenzie_River_husky"
+      },
+      {
+          "dog_breed": "Magyar Ag\u00e1r",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Magyar_Ag%C3%A1r"
+      },
+      {
+          "dog_breed": "Mahratta Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Mahratta_Hound"
+      },
+      {
+          "dog_breed": "Majorca Shepherd Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Majorca_Shepherd_Dog"
+      },
+      {
+          "dog_breed": "Maltese dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Maltese_dog"
+      },
+      {
+          "dog_breed": "Manchester Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Manchester_Terrier"
+      },
+      {
+          "dog_breed": "Maneto",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Maneto"
+      },
+      {
+          "dog_breed": "Markiesje",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Markiesje"
+      },
+      {
+          "dog_breed": "Maremmano-Abruzzese Sheepdog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Maremmano-Abruzzese_Sheepdog"
+      },
+      {
+          "dog_breed": "McNab dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/McNab_dog"
+      },
+      {
+          "dog_breed": "Miniature American Shepherd",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Miniature_American_Shepherd"
+      },
+      {
+          "dog_breed": "Miniature Bull Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Miniature_Bull_Terrier"
+      },
+      {
+          "dog_breed": "Miniature Fox Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Miniature_Fox_Terrier"
+      },
+      {
+          "dog_breed": "Miniature Pinscher",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Miniature_Pinscher"
+      },
+      {
+          "dog_breed": "Miniature Schnauzer",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Miniature_Schnauzer"
+      },
+      {
+          "dog_breed": "Molossus of Epirus",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Molossus_of_Epirus"
+      },
+      {
+          "dog_breed": "Mongrel",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Mongrel"
+      },
+      {
+          "dog_breed": "Montenegrin Mountain Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Montenegrin_Mountain_Hound"
+      },
+      {
+          "dog_breed": "Moscow Watchdog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Moscow_Watchdog"
+      },
+      {
+          "dog_breed": "Mountain Cur",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Mountain_Cur"
+      },
+      {
+          "dog_breed": "Mountain Feist",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Mountain_Feist"
+      },
+      {
+          "dog_breed": "Mudhol Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Mudhol_Hound"
+      },
+      {
+          "dog_breed": "Mudi",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Mudi"
+      },
+      {
+          "dog_breed": "Neapolitan Mastiff",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Neapolitan_Mastiff"
+      },
+      {
+          "dog_breed": "Nenets Herding Laika",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Nenets_Herding_Laika"
+      },
+      {
+          "dog_breed": "New Guinea singing dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/New_Guinea_singing_dog"
+      },
+      {
+          "dog_breed": "New Zealand Heading Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/New_Zealand_Heading_Dog"
+      },
+      {
+          "dog_breed": "Newfoundland dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Newfoundland_dog"
+      },
+      {
+          "dog_breed": "Norfolk Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Norfolk_Terrier"
+      },
+      {
+          "dog_breed": "Norrbottenspets",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Norrbottenspets"
+      },
+      {
+          "dog_breed": "Northern Inuit Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Northern_Inuit_Dog"
+      },
+      {
+          "dog_breed": "Norwegian Buhund",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Norwegian_Buhund"
+      },
+      {
+          "dog_breed": "Norwegian Elkhound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Norwegian_Elkhound"
+      },
+      {
+          "dog_breed": "Norwegian Lundehund",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Norwegian_Lundehund"
+      },
+      {
+          "dog_breed": "Norwich Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Norwich_Terrier"
+      },
+      {
+          "dog_breed": "Nova Scotia Duck Tolling Retriever",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Nova_Scotia_Duck_Tolling_Retriever"
+      },
+      {
+          "dog_breed": "Old Danish Pointer",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Old_Danish_Pointer"
+      },
+      {
+          "dog_breed": "Old English Sheepdog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Old_English_Sheepdog"
+      },
+      {
+          "dog_breed": "Olde English Bulldogge",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Olde_English_Bulldogge"
+      },
+      {
+          "dog_breed": "Otterhound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Otterhound"
+      },
+      {
+          "dog_breed": "Pach\u00f3n Navarro",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Pach%C3%B3n_Navarro"
+      },
+      {
+          "dog_breed": "Pampas Deerhound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Pampas_Deerhound"
+      },
+      {
+          "dog_breed": "Papillon dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Papillon_dog"
+      },
+      {
+          "dog_breed": "Parson Russell Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Parson_Russell_Terrier"
+      },
+      {
+          "dog_breed": "Pastor Garafiano",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Pastor_Garafiano"
+      },
+      {
+          "dog_breed": "Pastore della Lessinia e del Lagorai",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Pastore_della_Lessinia_e_del_Lagorai"
+      },
+      {
+          "dog_breed": "Patagonian Sheepdog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Patagonian_Sheepdog"
+      },
+      {
+          "dog_breed": "Patterdale Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Patterdale_Terrier"
+      },
+      {
+          "dog_breed": "Pekingese",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Pekingese"
+      },
+      {
+          "dog_breed": "Pembroke Welsh Corgi",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Pembroke_Welsh_Corgi"
+      },
+      {
+          "dog_breed": "Perdigueiro Galego",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Perdigueiro_Galego"
+      },
+      {
+          "dog_breed": "Perro Majorero",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Perro_Majorero"
+      },
+      {
+          "dog_breed": "Peruvian Hairless Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Peruvian_Hairless_Dog"
+      },
+      {
+          "dog_breed": "Petit Basset Griffon Vend\u00e9en",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Petit_Basset_Griffon_Vend%C3%A9en"
+      },
+      {
+          "dog_breed": "Petit Bleu de Gascogne",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Petit_Bleu_de_Gascogne"
+      },
+      {
+          "dog_breed": "Phal\u00e8ne",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Phal%C3%A8ne"
+      },
+      {
+          "dog_breed": "Pharaoh Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Pharaoh_Hound"
+      },
+      {
+          "dog_breed": "Phu Quoc Ridgeback",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Phu_Quoc_Ridgeback"
+      },
+      {
+          "dog_breed": "Picardy Spaniel",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Picardy_Spaniel"
+      },
+      {
+          "dog_breed": "Plummer Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Plummer_Terrier"
+      },
+      {
+          "dog_breed": "Plott Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Plott_Hound"
+      },
+      {
+          "dog_breed": "Podenco Andaluz",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Podenco_Andaluz"
+      },
+      {
+          "dog_breed": "Podenco Canario",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Podenco_Canario"
+      },
+      {
+          "dog_breed": "Podenco Valenciano",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Podenco_Valenciano"
+      },
+      {
+          "dog_breed": "Pointer (dog breed)",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Pointer_(dog_breed)"
+      },
+      {
+          "dog_breed": "Poitevin hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Poitevin_hound"
+      },
+      {
+          "dog_breed": "Polish Greyhound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Polish_Greyhound"
+      },
+      {
+          "dog_breed": "Polish Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Polish_Hound"
+      },
+      {
+          "dog_breed": "Polish Lowland Sheepdog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Polish_Lowland_Sheepdog"
+      },
+      {
+          "dog_breed": "Pomeranian dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Pomeranian_dog"
+      },
+      {
+          "dog_breed": "Pont-Audemer Spaniel",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Pont-Audemer_Spaniel"
+      },
+      {
+          "dog_breed": "Poodle",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Poodle"
+      },
+      {
+          "dog_breed": "Porcelaine",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Porcelaine"
+      },
+      {
+          "dog_breed": "Portuguese Podengo",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Portuguese_Podengo"
+      },
+      {
+          "dog_breed": "Portuguese Pointer",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Portuguese_Pointer"
+      },
+      {
+          "dog_breed": "Portuguese Sheepdog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Portuguese_Sheepdog"
+      },
+      {
+          "dog_breed": "Portuguese Water Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Portuguese_Water_Dog"
+      },
+      {
+          "dog_breed": "Posavac Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Posavac_Hound"
+      },
+      {
+          "dog_breed": "Pra\u017esk\u00fd Krysa\u0159\u00edk",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Pra%C5%BEsk%C3%BD_Krysa%C5%99%C3%ADk"
+      },
+      {
+          "dog_breed": "Presa Canario",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Presa_Canario"
+      },
+      {
+          "dog_breed": "Pudelpointer",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Pudelpointer"
+      },
+      {
+          "dog_breed": "Pug",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Pug"
+      },
+      {
+          "dog_breed": "Puli dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Puli_dog"
+      },
+      {
+          "dog_breed": "Pumi dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Pumi_dog"
+      },
+      {
+          "dog_breed": "Pungsan dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Pungsan_dog"
+      },
+      {
+          "dog_breed": "Pyrenean Mastiff",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Pyrenean_Mastiff"
+      },
+      {
+          "dog_breed": "Pyrenean Mountain Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Pyrenean_Mountain_Dog"
+      },
+      {
+          "dog_breed": "Pyrenean Sheepdog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Pyrenean_Sheepdog"
+      },
+      {
+          "dog_breed": "Rafeiro do Alentejo",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Rafeiro_do_Alentejo"
+      },
+      {
+          "dog_breed": "Rajapalayam dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Rajapalayam_dog"
+      },
+      {
+          "dog_breed": "Rampur Greyhound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Rampur_Greyhound"
+      },
+      {
+          "dog_breed": "Rastreador Brasileiro",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Rastreador_Brasileiro"
+      },
+      {
+          "dog_breed": "Rat Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Rat_Terrier"
+      },
+      {
+          "dog_breed": "Ratonero Bodeguero Andaluz",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Ratonero_Bodeguero_Andaluz"
+      },
+      {
+          "dog_breed": "Ratonero Murciano",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Ratonero_Murciano"
+      },
+      {
+          "dog_breed": "Redbone Coonhound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Redbone_Coonhound"
+      },
+      {
+          "dog_breed": "Rhodesian Ridgeback",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Rhodesian_Ridgeback"
+      },
+      {
+          "dog_breed": "Rize Koyun",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Rize_Koyun"
+      },
+      {
+          "dog_breed": "Romanian Mioritic Shepherd Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Romanian_Mioritic_Shepherd_Dog"
+      },
+      {
+          "dog_breed": "Romanian Raven Shepherd Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Romanian_Raven_Shepherd_Dog"
+      },
+      {
+          "dog_breed": "Rottweiler",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Rottweiler"
+      },
+      {
+          "dog_breed": "Rough Collie",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Rough_Collie"
+      },
+      {
+          "dog_breed": "Russian Spaniel",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Russian_Spaniel"
+      },
+      {
+          "dog_breed": "Russkiy Toy",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Russkiy_Toy"
+      },
+      {
+          "dog_breed": "Russo-European Laika",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Russo-European_Laika"
+      },
+      {
+          "dog_breed": "Ryukyu dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Ryukyu_dog"
+      },
+      {
+          "dog_breed": "Saarloos wolfdog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Saarloos_wolfdog"
+      },
+      {
+          "dog_breed": "Sabueso Espa\u00f1ol",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Sabueso_Espa%C3%B1ol"
+      },
+      {
+          "dog_breed": "Saint Miguel Cattle Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Saint_Miguel_Cattle_Dog"
+      },
+      {
+          "dog_breed": "Saint-Usuge Spaniel",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Saint-Usuge_Spaniel"
+      },
+      {
+          "dog_breed": "Sakhalin Husky",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Sakhalin_Husky"
+      },
+      {
+          "dog_breed": "Saluki",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Saluki"
+      },
+      {
+          "dog_breed": "Samoyed dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Samoyed_dog"
+      },
+      {
+          "dog_breed": "Sapsali",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Sapsali"
+      },
+      {
+          "dog_breed": "Sarabi dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Sarabi_dog"
+      },
+      {
+          "dog_breed": "Sardinian Shepherd Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Sardinian_Shepherd_Dog"
+      },
+      {
+          "dog_breed": "\u0160arplaninac",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/%C5%A0arplaninac"
+      },
+      {
+          "dog_breed": "Schapendoes",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Schapendoes"
+      },
+      {
+          "dog_breed": "Schillerst\u00f6vare",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Schillerst%C3%B6vare"
+      },
+      {
+          "dog_breed": "Schipperke",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Schipperke"
+      },
+      {
+          "dog_breed": "Schweizer Laufhund",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Schweizer_Laufhund"
+      },
+      {
+          "dog_breed": "Schweizerischer Niederlaufhund",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Schweizerischer_Niederlaufhund"
+      },
+      {
+          "dog_breed": "Scottish Deerhound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Scottish_Deerhound"
+      },
+      {
+          "dog_breed": "Scottish Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Scottish_Terrier"
+      },
+      {
+          "dog_breed": "Sealyham Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Sealyham_Terrier"
+      },
+      {
+          "dog_breed": "Segugio dell'Appennino",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Segugio_dell%27Appennino"
+      },
+      {
+          "dog_breed": "Segugio Italiano",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Segugio_Italiano"
+      },
+      {
+          "dog_breed": "Segugio Maremmano",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Segugio_Maremmano"
+      },
+      {
+          "dog_breed": "Serbian Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Serbian_Hound"
+      },
+      {
+          "dog_breed": "Serbian Tricolour Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Serbian_Tricolour_Hound"
+      },
+      {
+          "dog_breed": "Serrano Bulldog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Serrano_Bulldog"
+      },
+      {
+          "dog_breed": "Shar Pei",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Shar_Pei"
+      },
+      {
+          "dog_breed": "Shetland Sheepdog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Shetland_Sheepdog"
+      },
+      {
+          "dog_breed": "Shiba Inu",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Shiba_Inu"
+      },
+      {
+          "dog_breed": "Shih Tzu",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Shih_Tzu"
+      },
+      {
+          "dog_breed": "Shikoku dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Shikoku_dog"
+      },
+      {
+          "dog_breed": "Shiloh Shepherd",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Shiloh_Shepherd"
+      },
+      {
+          "dog_breed": "Siberian Husky",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Siberian_Husky"
+      },
+      {
+          "dog_breed": "Silken Windhound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Silken_Windhound"
+      },
+      {
+          "dog_breed": "Sinhala Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Sinhala_Hound"
+      },
+      {
+          "dog_breed": "Skye Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Skye_Terrier"
+      },
+      {
+          "dog_breed": "Sloughi",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Sloughi"
+      },
+      {
+          "dog_breed": "Slovak Rough-haired Pointer",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Slovak_Rough-haired_Pointer"
+      },
+      {
+          "dog_breed": "Slovak Cuvac",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Slovak_Cuvac"
+      },
+      {
+          "dog_breed": "Slovensk\u00fd kopov",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Slovensk%C3%BD_kopov"
+      },
+      {
+          "dog_breed": "Smaland Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Smaland_Hound"
+      },
+      {
+          "dog_breed": "Small M\u00fcnsterl\u00e4nder",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Small_M%C3%BCnsterl%C3%A4nder"
+      },
+      {
+          "dog_breed": "Smithfield (dog)",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Smithfield_(dog)"
+      },
+      {
+          "dog_breed": "Smooth Collie",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Smooth_Collie"
+      },
+      {
+          "dog_breed": "Smooth Fox Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Smooth_Fox_Terrier"
+      },
+      {
+          "dog_breed": "Soft-coated Wheaten Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Soft-coated_Wheaten_Terrier"
+      },
+      {
+          "dog_breed": "South Russian Ovcharka",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/South_Russian_Ovcharka"
+      },
+      {
+          "dog_breed": "Spanish Mastiff",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Spanish_Mastiff"
+      },
+      {
+          "dog_breed": "Spanish Water Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Spanish_Water_Dog"
+      },
+      {
+          "dog_breed": "Spino degli Iblei",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Spino_degli_Iblei"
+      },
+      {
+          "dog_breed": "Spinone Italiano",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Spinone_Italiano"
+      },
+      {
+          "dog_breed": "Sporting Lucas Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Sporting_Lucas_Terrier"
+      },
+      {
+          "dog_breed": "St. Bernard (dog)",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/St._Bernard_(dog)"
+      },
+      {
+          "dog_breed": "St. Hubert Jura Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/St._Hubert_Jura_Hound"
+      },
+      {
+          "dog_breed": "Stabyhoun",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Stabyhoun"
+      },
+      {
+          "dog_breed": "Staffordshire Bull Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Staffordshire_Bull_Terrier"
+      },
+      {
+          "dog_breed": "Standard Schnauzer",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Standard_Schnauzer"
+      },
+      {
+          "dog_breed": "Stephens Stock",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Stephens_Stock"
+      },
+      {
+          "dog_breed": "Styrian Coarse-haired Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Styrian_Coarse-haired_Hound"
+      },
+      {
+          "dog_breed": "Sussex Spaniel",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Sussex_Spaniel"
+      },
+      {
+          "dog_breed": "Swedish Lapphund",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Swedish_Lapphund"
+      },
+      {
+          "dog_breed": "Swedish Vallhund",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Swedish_Vallhund"
+      },
+      {
+          "dog_breed": "Taigan",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Taigan"
+      },
+      {
+          "dog_breed": "Taiwan Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Taiwan_Dog"
+      },
+      {
+          "dog_breed": "Tamaskan Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Tamaskan_Dog"
+      },
+      {
+          "dog_breed": "Tang Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Tang_Dog"
+      },
+      {
+          "dog_breed": "Tarsus \u00e7atalburun",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Tarsus_%C3%A7atalburun"
+      },
+      {
+          "dog_breed": "Tatra Shepherd Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Tatra_Shepherd_Dog"
+      },
+      {
+          "dog_breed": "Tazy",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Tazy"
+      },
+      {
+          "dog_breed": "Teddy Roosevelt Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Teddy_Roosevelt_Terrier"
+      },
+      {
+          "dog_breed": "Telomian",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Telomian"
+      },
+      {
+          "dog_breed": "Tenterfield Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Tenterfield_Terrier"
+      },
+      {
+          "dog_breed": "Thai Bangkaew Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Thai_Bangkaew_Dog"
+      },
+      {
+          "dog_breed": "Thai Ridgeback",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Thai_Ridgeback"
+      },
+      {
+          "dog_breed": "Tibetan Kyi Apso",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Tibetan_Kyi_Apso"
+      },
+      {
+          "dog_breed": "Tibetan Mastiff",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Tibetan_Mastiff"
+      },
+      {
+          "dog_breed": "Tibetan spaniel",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Tibetan_spaniel"
+      },
+      {
+          "dog_breed": "Tibetan Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Tibetan_Terrier"
+      },
+      {
+          "dog_breed": "Tonya Finosu",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Tonya_Finosu"
+      },
+      {
+          "dog_breed": "Tornjak",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Tornjak"
+      },
+      {
+          "dog_breed": "Tosa (dog)",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Tosa_(dog)"
+      },
+      {
+          "dog_breed": "Toy Fox Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Toy_Fox_Terrier"
+      },
+      {
+          "dog_breed": "Toy Manchester Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Toy_Manchester_Terrier"
+      },
+      {
+          "dog_breed": "Transylvanian Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Transylvanian_Hound"
+      },
+      {
+          "dog_breed": "Treeing Cur",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Treeing_Cur"
+      },
+      {
+          "dog_breed": "Treeing Feist",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Treeing_Feist"
+      },
+      {
+          "dog_breed": "Treeing Tennessee Brindle",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Treeing_Tennessee_Brindle"
+      },
+      {
+          "dog_breed": "Treeing Walker Coonhound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Treeing_Walker_Coonhound"
+      },
+      {
+          "dog_breed": "Trigg Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Trigg_Hound"
+      },
+      {
+          "dog_breed": "Tyrolean Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Tyrolean_Hound"
+      },
+      {
+          "dog_breed": "Valencian Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Valencian_Terrier"
+      },
+      {
+          "dog_breed": "Vikhan",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Vikhan"
+      },
+      {
+          "dog_breed": "Villano de Las Encartaciones",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Villano_de_Las_Encartaciones"
+      },
+      {
+          "dog_breed": "Villanuco de Las Encartaciones",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Villanuco_de_Las_Encartaciones"
+      },
+      {
+          "dog_breed": "Vizsla",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Vizsla"
+      },
+      {
+          "dog_breed": "Volkosob",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Volkosob"
+      },
+      {
+          "dog_breed": "Volpino Italiano",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Volpino_Italiano"
+      },
+      {
+          "dog_breed": "Weimaraner",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Weimaraner"
+      },
+      {
+          "dog_breed": "Welsh Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Welsh_Hound"
+      },
+      {
+          "dog_breed": "Welsh Sheepdog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Welsh_Sheepdog"
+      },
+      {
+          "dog_breed": "Welsh Springer Spaniel",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Welsh_Springer_Spaniel"
+      },
+      {
+          "dog_breed": "Welsh Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Welsh_Terrier"
+      },
+      {
+          "dog_breed": "West Country Harrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/West_Country_Harrier"
+      },
+      {
+          "dog_breed": "West Highland White Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/West_Highland_White_Terrier"
+      },
+      {
+          "dog_breed": "West Siberian Laika",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/West_Siberian_Laika"
+      },
+      {
+          "dog_breed": "Westphalian Dachsbracke",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Westphalian_Dachsbracke"
+      },
+      {
+          "dog_breed": "Wetterhoun",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Wetterhoun"
+      },
+      {
+          "dog_breed": "Whippet",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Whippet"
+      },
+      {
+          "dog_breed": "White Shepherd",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/White_Shepherd"
+      },
+      {
+          "dog_breed": "White Swiss Shepherd Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/White_Swiss_Shepherd_Dog"
+      },
+      {
+          "dog_breed": "Wire Fox Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Wire_Fox_Terrier"
+      },
+      {
+          "dog_breed": "Wirehaired Pointing Griffon",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Wirehaired_Pointing_Griffon"
+      },
+      {
+          "dog_breed": "Wirehaired Vizsla",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Wirehaired_Vizsla"
+      },
+      {
+          "dog_breed": "Xiasi Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Xiasi_Dog"
+      },
+      {
+          "dog_breed": "Xoloitzcuintle",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Xoloitzcuintle"
+      },
+      {
+          "dog_breed": "Yakutian Laika",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Yakutian_Laika"
+      },
+      {
+          "dog_breed": "Yorkshire Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Yorkshire_Terrier"
+      },
+      {
+          "dog_breed": "Zerdava",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Zerdava"
+      },
+      {
+          "dog_breed": "Abyssinian sand terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Abyssinian_sand_terrier"
+      },
+      {
+          "dog_breed": "Alaunt",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Alaunt"
+      },
+      {
+          "dog_breed": "Alpine Mastiff",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Alpine_Mastiff"
+      },
+      {
+          "dog_breed": "Argentine Polar Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Argentine_Polar_Dog"
+      },
+      {
+          "dog_breed": "Assyrian Mastiff",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Assyrian_Mastiff"
+      },
+      {
+          "dog_breed": "Belgian Mastiff",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Belgian_Mastiff"
+      },
+      {
+          "dog_breed": "Braque Dupuy",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Braque_Dupuy"
+      },
+      {
+          "dog_breed": "Buckhound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Buckhound"
+      },
+      {
+          "dog_breed": "Bullenbeisser",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Bullenbeisser"
+      },
+      {
+          "dog_breed": "Chien-gris",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Chien-gris"
+      },
+      {
+          "dog_breed": "Chiribaya Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Chiribaya_Dog"
+      },
+      {
+          "dog_breed": "C\u00f3rdoba fighting dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/C%C3%B3rdoba_fighting_dog"
+      },
+      {
+          "dog_breed": "Cumberland Sheepdog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Cumberland_Sheepdog"
+      },
+      {
+          "dog_breed": "Cur",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Cur"
+      },
+      {
+          "dog_breed": "Dalbo dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Dalbo_dog"
+      },
+      {
+          "dog_breed": "Dogo Cubano",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Dogo_Cubano"
+      },
+      {
+          "dog_breed": "Dumfriesshire hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Dumfriesshire_hound"
+      },
+      {
+          "dog_breed": "English Water Spaniel",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/English_Water_Spaniel"
+      },
+      {
+          "dog_breed": "English White Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/English_White_Terrier"
+      },
+      {
+          "dog_breed": "Fuegian dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Fuegian_dog"
+      },
+      {
+          "dog_breed": "Grand Fauve de Bretagne",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Grand_Fauve_de_Bretagne"
+      },
+      {
+          "dog_breed": "Halls Heeler",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Halls_Heeler"
+      },
+      {
+          "dog_breed": "Hare Indian Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Hare_Indian_Dog"
+      },
+      {
+          "dog_breed": "Hawaiian Poi Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Hawaiian_Poi_Dog"
+      },
+      {
+          "dog_breed": "King's White Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/King%27s_White_Hound"
+      },
+      {
+          "dog_breed": "Kur\u012b",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Kur%C4%AB"
+      },
+      {
+          "dog_breed": "Lapponian Shepherd",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Lapponian_Shepherd"
+      },
+      {
+          "dog_breed": "Limer",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Limer"
+      },
+      {
+          "dog_breed": "Marquesan Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Marquesan_Dog"
+      },
+      {
+          "dog_breed": "Molossus (dog)",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Molossus_(dog)"
+      },
+      {
+          "dog_breed": "Moscow Water Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Moscow_Water_Dog"
+      },
+      {
+          "dog_breed": "Norfolk Spaniel",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Norfolk_Spaniel"
+      },
+      {
+          "dog_breed": "Norman Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Norman_Hound"
+      },
+      {
+          "dog_breed": "North Country Beagle",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/North_Country_Beagle"
+      },
+      {
+          "dog_breed": "Old Croatian Sighthound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Old_Croatian_Sighthound"
+      },
+      {
+          "dog_breed": "Old English Bulldog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Old_English_Bulldog"
+      },
+      {
+          "dog_breed": "Old Spanish Pointer",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Old_Spanish_Pointer"
+      },
+      {
+          "dog_breed": "Old Welsh Grey Sheepdog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Old_Welsh_Grey_Sheepdog"
+      },
+      {
+          "dog_breed": "Paisley Terrier",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Paisley_Terrier"
+      },
+      {
+          "dog_breed": "Polynesian Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Polynesian_Dog"
+      },
+      {
+          "dog_breed": "Rache",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Rache"
+      },
+      {
+          "dog_breed": "Salish Wool Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Salish_Wool_Dog"
+      },
+      {
+          "dog_breed": "Sleuth hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Sleuth_hound"
+      },
+      {
+          "dog_breed": "Southern Hound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Southern_Hound"
+      },
+      {
+          "dog_breed": "St. John's water dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/St._John%27s_water_dog"
+      },
+      {
+          "dog_breed": "Staghound",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Staghound"
+      },
+      {
+          "dog_breed": "Tahitian Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Tahitian_Dog"
+      },
+      {
+          "dog_breed": "Tahltan Bear Dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Tahltan_Bear_Dog"
+      },
+      {
+          "dog_breed": "Talbot (dog)",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Talbot_(dog)"
+      },
+      {
+          "dog_breed": "Techichi",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Techichi"
+      },
+      {
+          "dog_breed": "Terceira Mastiff",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Terceira_Mastiff"
+      },
+      {
+          "dog_breed": "Tesem",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Tesem"
+      },
+      {
+          "dog_breed": "Toy Bulldog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Toy_Bulldog"
+      },
+      {
+          "dog_breed": "Toy Trawler Spaniel",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Toy_Trawler_Spaniel"
+      },
+      {
+          "dog_breed": "Turnspit dog",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Turnspit_dog"
+      },
+      {
+          "dog_breed": "Tweed Water Spaniel",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Tweed_Water_Spaniel"
+      },
+      {
+          "dog_breed": "Welsh Hillman",
+          "wikipedia_url": "https://en.wikipedia.org/wiki/Welsh_Hillman"
+      }
+  ]
+}
