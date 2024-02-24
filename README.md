@@ -34,14 +34,15 @@ Put these into `.env.local` for local development.
 ```
 NEXTAUTH_SECRET="secret-for-next-auth"
 NEXTAUTH_URL=http://localhost:3000
-SMTP_USER=""
-SMTP_PASSWORD=""
-SMTP_HOST=""  # Set to empty string, then the email can be read in the server logs.
-SMTP_PORT=465
-OTP_SENDER_NAME="Bark Bank OTP"
-OTP_SENDER_EMAIL="otp@barkbank.co"
-OTP_PERIOD_MILLIS=15000
-OTP_NUM_RECENT_PERIODS=4
-OTP_SECRET="secret-for-otp-generation"
-PII_SECRET="secret-for-pii-privacy"
+
+BARKBANK_SMTP_USER=""
+BARKBANK_SMTP_PASSWORD=""
+BARKBANK_SMTP_HOST=""  # Set to empty string, then the email can be read in the server logs.
+BARKBANK_SMTP_PORT=465
+BARKBANK_OTP_SENDER_NAME="Bark Bank OTP"
+BARKBANK_OTP_SENDER_EMAIL="otp@barkbank.co"
+BARKBANK_OTP_PERIOD_MILLIS=15000
+BARKBANK_OTP_NUM_RECENT_PERIODS=4
+BARKBANK_OTP_SECRET="secret-for-otp-generation"
+BARKBANK_PII_SECRET="secret-for-pii-privacy"
 ```
