@@ -7,20 +7,18 @@ export async function dbInserUser(
 ): Promise<UserGen> {
   const sql = `
   INSERT INTO users (
-    user_name,
-    user_email,
-    user_phone_number,
+    user_hashed_email,
+    user_encrypted_pii,
     user_creation_time
   )
-  VALUES ($1, $2, $3, CURRENT_TIMESTAMP)
+  VALUES ($1, $2, CURRENT_TIMESTAMP)
   RETURNING
     user_id,
     user_creation_time
   `;
   const res = await dbQuery(ctx, sql, [
-    userSpec.userName,
-    userSpec.userEmail,
-    userSpec.userPhoneNumber,
+    userSpec.userHashedEmail,
+    userSpec.userEncryptedPii,
   ]);
   return toCamelCaseRow(res.rows[0]);
 }
@@ -33,9 +31,8 @@ export async function dbSelectUser(
   SELECT
     user_id,
     user_creation_time,
-    user_email,
-    user_name,
-    user_phone_number
+    user_hashed_email,
+    user_encrypted_pii
   FROM users
   WHERE user_id = $1
   `;

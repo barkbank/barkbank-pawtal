@@ -135,17 +135,15 @@ describe("Database Layer", () => {
 
 function userSpec(idx: number): UserSpec {
   return {
-    userEmail: email(idx),
-    userName: `User ${idx}`,
-    userPhoneNumber: phoneNumber(idx),
+    userHashedEmail: hashedEmail(idx),
+    userEncryptedPii: encryptedPii(idx),
   };
 }
 
 function adminSpec(idx: number): AdminSpec {
   return {
-    adminEmail: email(idx),
-    adminName: `Admin ${idx}`,
-    adminPhoneNumber: phoneNumber(idx),
+    adminHashedEmail: hashedEmail(idx),
+    adminEncryptedPii: encryptedPii(idx),
   };
 }
 
@@ -161,7 +159,7 @@ function vetSpec(idx: number): VetSpec {
 function dogSpec(idx: number): DogSpec {
   return {
     dogStatus: dogStatus(idx),
-    dogName: `dogName${idx}`,
+    dogEncryptedOii: `dogEncryptedOii-${idx}`,
     dogBreed: `dogBreed${idx}`,
     dogBirthMonth: yearMonth(idx),
     dogGender: dogGender(idx),
@@ -190,6 +188,14 @@ function dogGender(idx: number): DogGender {
 function dogStatus(idx: number): DogStatus {
   const statusList: DogStatus[] = Object.values(DogStatus);
   return statusList[idx % statusList.length];
+}
+
+function encryptedPii(idx: number): string {
+  return `encryptedPii(${idx})`;
+}
+
+function hashedEmail(idx: number): string {
+  return `hashed(${email(idx)})`;
 }
 
 function email(idx: number): string {

@@ -10,7 +10,7 @@ export async function dbInsertDog(
     INSERT INTO dogs (
       user_id,
       dog_status,
-      dog_name,
+      dog_encrypted_oii,
       dog_breed,
       dog_birth_month,
       dog_gender,
@@ -24,7 +24,7 @@ export async function dbInsertDog(
   const res = await dbQuery(ctx, sql, [
     userId,
     dogSpec.dogStatus,
-    dogSpec.dogName,
+    dogSpec.dogEncryptedOii,
     dogSpec.dogBreed,
     dogSpec.dogBirthMonth,
     dogSpec.dogGender,
@@ -41,7 +41,7 @@ export async function dbSelectDog(
     SELECT
       user_id,
       dog_status,
-      dog_name,
+      dog_encrypted_oii,
       dog_breed,
       dog_birth_month,
       dog_gender,

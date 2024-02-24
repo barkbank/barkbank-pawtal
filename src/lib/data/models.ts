@@ -12,9 +12,8 @@
 //
 
 export type UserSpec = {
-  userEmail: string;
-  userName: string;
-  userPhoneNumber: string;
+  userHashedEmail: string;
+  userEncryptedPii: string;
 };
 
 export type UserGen = {
@@ -49,7 +48,7 @@ export enum DogStatus {
 
 export type DogSpec = {
   dogStatus: DogStatus;
-  dogName: string;
+  dogEncryptedOii: string;
   dogBreed: string;
   dogBirthMonth: string;
   dogGender: DogGender;
@@ -64,9 +63,8 @@ export type DogGen = {
 export type Dog = { userId: string } & DogSpec & DogGen;
 
 export type AdminSpec = {
-  adminEmail: string;
-  adminName: string;
-  adminPhoneNumber: string;
+  adminHashedEmail: string;
+  adminEncryptedPii: string;
 };
 
 export type AdminGen = {
