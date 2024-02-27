@@ -12,12 +12,13 @@ import {
   BarkFormSubmitButton,
 } from "@/components/bark/bark-form";
 import { useState } from "react";
-import { sendLoginOtp } from "./_actions";
-import { signIn } from "next-auth/react";
-import { useSearchParams } from "next/navigation";
+import { SignInResponse, signIn } from "next-auth/react";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { RoutePath } from "@/lib/routes";
+import { RoutePath } from "@/lib/route-path";
+import { AccountType } from "@/lib/auth";
+import { sendLoginOtp } from "@/lib/actions/send-login-otp";
 
 const FORM_SCHEMA = z.object({
   email: z.string().email(),
@@ -26,7 +27,12 @@ const FORM_SCHEMA = z.object({
 
 type FormDataType = z.infer<typeof FORM_SCHEMA>;
 
-export default function LoginForm() {
+export default function BarkLoginForm(props: {
+  accountType: AccountType;
+  successPath: string;
+}) {
+  const { accountType, successPath } = props;
+  const router = useRouter();
   const hasErrorInQueryString = useSearchParams().get("error") !== null;
   const [shouldShowLoginFailed, setShouldShowLoginFailed] = useState(
     hasErrorInQueryString,
@@ -68,7 +74,25 @@ export default function LoginForm() {
 
   async function onSubmit(values: FormDataType) {
     const { email, otp } = values;
-    await signIn("credentials", { email, otp });
+
+    // https://next-auth.js.org/getting-started/client#using-the-redirect-false-option
+    const result = await signIn("credentials", {
+      email,
+      otp,
+      accountType,
+      redirect: false,
+    });
+    if (!result) {
+      setShouldShowLoginFailed(true);
+      return;
+    }
+    console.log(result);
+    const { ok } = result as SignInResponse;
+    if (!ok) {
+      setShouldShowLoginFailed(true);
+      return;
+    }
+    router.push(successPath);
   }
 
   return (

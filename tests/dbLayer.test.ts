@@ -14,12 +14,25 @@ import {
   toAdminSpec,
   toVetSpec,
 } from "@/lib/data/mappers";
-import { dbInserUser, dbSelectUser } from "@/lib/data/dbUsers";
+import {
+  dbInserUser,
+  dbSelectUser,
+  dbSelectUserByHashedEmail,
+} from "@/lib/data/dbUsers";
 import { sprintf } from "sprintf-js";
 import { dbInsertDog, dbSelectDog } from "@/lib/data/dbDogs";
-import { dbInsertAdmin, dbSelectAdmin } from "@/lib/data/dbAdmins";
-import { dbInsertVet, dbSelectVet } from "@/lib/data/dbVets";
+import {
+  dbInsertAdmin,
+  dbSelectAdmin,
+  dbSelectAdminByAdminHashedEmail,
+} from "@/lib/data/dbAdmins";
+import {
+  dbInsertVet,
+  dbSelectVet,
+  dbSelectVetByEmail,
+} from "@/lib/data/dbVets";
 
+// TODO: Split into dbUsers.test.ts, dbVets.test.ts, etc.
 describe("Database Layer", () => {
   describe("DogStatus enumeration", () => {
     it("is an enumeration of strings", () => {
@@ -27,21 +40,40 @@ describe("Database Layer", () => {
       expect(typeof DogStatus.NEW_PROFILE).toBe("string");
     });
   });
-  describe("dbPersons", () => {
+  describe("dbUsers", () => {
     it("should support insert and select", async () => {
       await withDb(async (db) => {
         const userGen = await dbInserUser(db, userSpec(1));
-        const person = await dbSelectUser(db, userGen.userId);
-        if (!person) fail("person is null");
-        expect(person.userCreationTime).toBeTruthy();
-        const spec = toUserSpec(person);
+        const user = await dbSelectUser(db, userGen.userId);
+        if (!user) fail("person is null");
+        expect(user.userCreationTime).toBeTruthy();
+        const spec = toUserSpec(user);
         expect(spec).toMatchObject(userSpec(1));
       });
     });
     it("should return null when person does not exist", async () => {
       await withDb(async (db) => {
-        const person = await dbSelectUser(db, "111");
-        expect(person).toBeNull();
+        const user = await dbSelectUser(db, "111");
+        expect(user).toBeNull();
+      });
+    });
+    it("should support insert and select by hashed email", async () => {
+      await withDb(async (db) => {
+        const userGen = await dbInserUser(db, userSpec(1));
+        const user = await dbSelectUserByHashedEmail(
+          db,
+          userSpec(1).userHashedEmail,
+        );
+        if (!user) fail("person is null");
+        expect(user.userCreationTime).toBeTruthy();
+        const spec = toUserSpec(user);
+        expect(spec).toMatchObject(userSpec(1));
+      });
+    });
+    it("should return null when no user exists with the hashed email", async () => {
+      await withDb(async (db) => {
+        const user = await dbSelectUserByHashedEmail(db, "no-no-no");
+        expect(user).toBeNull();
       });
     });
   });
@@ -112,6 +144,25 @@ describe("Database Layer", () => {
         expect(admin).toBeNull();
       });
     });
+    it("should support insert and select by hashed email", async () => {
+      await withDb(async (db) => {
+        const adminGen = await dbInsertAdmin(db, adminSpec(1));
+        const admin = await dbSelectAdminByAdminHashedEmail(
+          db,
+          adminSpec(1).adminHashedEmail,
+        );
+        if (!admin) fail("admin is null");
+        expect(admin.adminCreationTime).toBeTruthy();
+        const spec = toAdminSpec(admin);
+        expect(spec).toMatchObject(adminSpec(1));
+      });
+    });
+    it("should return null when admin does not exist that has the hashed email", async () => {
+      await withDb(async (db) => {
+        const admin = await dbSelectAdminByAdminHashedEmail(db, "not_found");
+        expect(admin).toBeNull();
+      });
+    });
   });
   describe("dbVets", () => {
     it("should support insert and select", async () => {
@@ -127,6 +178,22 @@ describe("Database Layer", () => {
     it("should return null when vet does not exist", async () => {
       await withDb(async (db) => {
         const vet = await dbSelectVet(db, "111");
+        expect(vet).toBeNull();
+      });
+    });
+    it("should support insert and select by email", async () => {
+      await withDb(async (db) => {
+        const vetGen = await dbInsertVet(db, vetSpec(1));
+        const vet = await dbSelectVetByEmail(db, vetSpec(1).vetEmail);
+        if (!vet) fail("vet is null");
+        expect(vet.vetCreationTime).toBeTruthy();
+        const spec = toVetSpec(vet);
+        expect(spec).toMatchObject(vetSpec(1));
+      });
+    });
+    it("should return null when no vet exists with the email", async () => {
+      await withDb(async (db) => {
+        const vet = await dbSelectVetByEmail(db, "notavet@vet.com");
         expect(vet).toBeNull();
       });
     });

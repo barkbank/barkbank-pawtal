@@ -42,3 +42,23 @@ export async function dbSelectUser(
   }
   return null;
 }
+
+export async function dbSelectUserByHashedEmail(
+  ctx: DbContext,
+  userHashedEmail: string,
+): Promise<User | null> {
+  const sql = `
+  SELECT
+    user_id,
+    user_creation_time,
+    user_hashed_email,
+    user_encrypted_pii
+  FROM users
+  WHERE user_hashed_email = $1
+  `;
+  const res = await dbQuery(ctx, sql, [userHashedEmail]);
+  if (res.rows.length === 1) {
+    return toCamelCaseRow(res.rows[0]);
+  }
+  return null;
+}

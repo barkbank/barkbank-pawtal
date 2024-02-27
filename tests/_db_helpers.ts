@@ -30,7 +30,9 @@ const getDbName = (() => {
 
 async function createDatabase(): Promise<string> {
   const db = new pg.Pool(getPoolConfig());
-  const dbName = getDbName("testdb");
+  const ts = new Date().getTime();
+  const nonce = Math.floor(Math.random() * 1000000);
+  const dbName = getDbName(`testdb_${ts}_${nonce}`);
   await db.query(`CREATE DATABASE ${dbName}`);
   await db.end();
   return dbName;

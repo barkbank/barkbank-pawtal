@@ -40,3 +40,23 @@ export async function dbSelectAdmin(
   }
   return null;
 }
+
+export async function dbSelectAdminByAdminHashedEmail(
+  ctx: DbContext,
+  adminHashedEmail: string,
+): Promise<Admin | null> {
+  const sql = `
+    SELECT
+      admin_hashed_email,
+      admin_encrypted_pii,
+      admin_id,
+      admin_creation_time
+    FROM admins
+    WHERE admin_hashed_email = $1
+  `;
+  const res = await dbQuery(ctx, sql, [adminHashedEmail]);
+  if (res.rows.length === 1) {
+    return toCamelCaseRow(res.rows[0]);
+  }
+  return null;
+}
