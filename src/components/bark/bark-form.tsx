@@ -283,10 +283,13 @@ export function BarkFormButton(props: {
   );
 }
 
-export function BarkFormSubmitButton(props: { children: React.ReactNode }) {
-  const { children } = props;
+export function BarkFormSubmitButton(props: {
+  className?: string;
+  children: React.ReactNode;
+}) {
+  const { children, className } = props;
   return (
-    <Button type="submit" className="mt-6">
+    <Button type="submit" className={cn("mt-6", className)}>
       {children}
     </Button>
   );
