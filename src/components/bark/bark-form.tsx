@@ -73,7 +73,7 @@ export function BarkFormInput(props: {
   form: UseFormReturn<any>;
   name: string;
   label: string;
-  type?: "text" | "password" | "number";
+  type?: "text" | "password" | "number" | "email";
   placeholder?: string;
   description?: string;
 }) {
@@ -317,7 +317,7 @@ export function BarkFormSelect(props: {
                 variant="outline"
                 role="combobox"
                 aria-expanded={open}
-                className="w-[200px] justify-between"
+                className="justify-between"
               >
                 {/* Convert to lowercase because shadcn convert current value to lowercase */}
                 {field.value
