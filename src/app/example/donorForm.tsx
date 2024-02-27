@@ -7,20 +7,53 @@ import {
   BarkFormInput,
   BarkFormRadioGroup,
   BarkFormSelect,
+  BarkFormSubmitButton,
 } from "@/components/bark/bark-form";
 import { Breed } from "@/lib/services/breed";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+const FORM_SCHEMA = z.object({
+  name: z.string(),
+  mobile: z.string(),
+  email: z.string().email(),
+  "country-based": z.string(),
+  "dog-name": z.string(),
+  "dog-breed": z.string(),
+  "dog-birthday": z.string().regex(/^\d{2}\d{4}$/),
+  "dog-sex": z.string(),
+  "dog-weight": z.number(),
+  "dog-blood-type": z.string(),
+  "dog-blood-transfusion-status": z.string(),
+  "dog-pregnant-status": z.string(),
+  "dog-last-heartworm-vaccination": z
+    .string()
+    .regex(/^\d{2}\d{2}\d{4}$/)
+    .optional()
+    .or(z.literal("")),
+  "dog-last-donation": z
+    .string()
+    .regex(/^\d{2}\d{2}\d{4}$/)
+    .optional()
+    .or(z.literal("")),
+  "dog-preferred-vets": z.array(z.string()),
+});
+
+type FormDataType = z.infer<typeof FORM_SCHEMA>;
 
 export default function DonorForm({ breeds }: { breeds: Breed[] }) {
-  const form = useForm<FormData>();
+  const form = useForm<FormDataType>({
+    resolver: zodResolver(FORM_SCHEMA),
+    defaultValues: {},
+  });
+
+  async function onSubmit(values: FormDataType) {
+    console.log(values);
+  }
 
   return (
-    <BarkForm
-      onSubmit={async (data) => {
-        console.log(data);
-      }}
-      form={form}
-    >
+    <BarkForm onSubmit={onSubmit} form={form}>
       {/* Owner's detail */}
       <BarkFormHeader>Owners Detail</BarkFormHeader>
       <BarkFormInput
@@ -65,7 +98,7 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
       <BarkFormSelect
         form={form}
         label="What’s your dog’s breed?"
-        name="dof-breed"
+        name="dog-breed"
         options={breeds.map((breed) => ({
           label: breed.dog_breed,
           value: breed.dog_breed,
@@ -180,6 +213,9 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
           },
         ]}
       />
+      {/* Dog's detail end */}
+
+      <BarkFormSubmitButton className="w-full">Submit</BarkFormSubmitButton>
     </BarkForm>
   );
 }
