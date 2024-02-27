@@ -152,10 +152,27 @@ export function BarkFormRadioGroup(props: {
         <FormItem className="mt-6 space-y-3">
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <RadioGroup
+            <div className="flex space-x-2">
+              {options.map((option) => (
+                <Button
+                  variant={
+                    field.value === option.value ? "default" : "secondary"
+                  }
+                  key={option.value}
+                  className="flex-grow"
+                  onClick={async () => {
+                    field.onChange(option.value);
+                  }}
+                >
+                  {option.label}
+                </Button>
+              ))}
+            </div>
+
+            {/* <RadioGroup
               onValueChange={field.onChange}
               defaultValue={field.value}
-              className="flex flex-col space-y-1"
+              className="flex"
             >
               {options.map((option) => (
                 <FormItem
@@ -168,7 +185,7 @@ export function BarkFormRadioGroup(props: {
                   <FormLabel className="font-normal">{option.label}</FormLabel>
                 </FormItem>
               ))}
-            </RadioGroup>
+            </RadioGroup> */}
           </FormControl>
           {description && <FormDescription>{description}</FormDescription>}
           <FormMessage />
@@ -268,13 +285,14 @@ export function BarkFormTextArea(props: {
 
 export function BarkFormButton(props: {
   children: React.ReactNode;
+  className?: string;
   onClick: () => Promise<void>;
 }) {
-  const { children, onClick } = props;
+  const { children, onClick, className } = props;
   return (
     <Button
       type="button"
-      className="mt-6"
+      className={cn("mt-6", className)}
       onClick={onClick}
       variant="secondary"
     >

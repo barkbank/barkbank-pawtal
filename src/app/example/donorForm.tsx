@@ -21,20 +21,20 @@ const FORM_SCHEMA = z.object({
   "country-based": z.string(),
   "dog-name": z.string(),
   "dog-breed": z.string(),
-  "dog-birthday": z.string().regex(/^\d{2}\d{4}$/),
+  "dog-birthday": z.string().regex(/^\d{2}\/\d{4}$/),
   "dog-sex": z.string(),
-  "dog-weight": z.number(),
+  "dog-weight": z.string().regex(/^\d+(\.\d+)?$/),
   "dog-blood-type": z.string(),
   "dog-blood-transfusion-status": z.string(),
   "dog-pregnant-status": z.string(),
   "dog-last-heartworm-vaccination": z
     .string()
-    .regex(/^\d{2}\d{2}\d{4}$/)
+    .regex(/^\d{2}\/\d{2}\/\d{4}$/)
     .optional()
     .or(z.literal("")),
   "dog-last-donation": z
     .string()
-    .regex(/^\d{2}\d{2}\d{4}$/)
+    .regex(/^\d{2}\/\d{2}\/\d{4}$/)
     .optional()
     .or(z.literal("")),
   "dog-preferred-vets": z.array(z.string()),
@@ -108,7 +108,7 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
       {/* Need to have regex to format, in zod as well */}
       <BarkFormInput
         form={form}
-        label="When is it’s birthday? (MMYYYY)"
+        label="When is it’s birthday? (MM/YYYY)"
         name="dog-birthday"
       />
 
@@ -185,14 +185,14 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
 
       <BarkFormInput
         form={form}
-        label="When was it’s last heartworm vaccination? (YYMMYYYY)"
+        label="When was it’s last heartworm vaccination? (DD/MM/YYYY)"
         name="dog-last-heartworm-vaccination"
         description="If applicable"
       />
 
       <BarkFormInput
         form={form}
-        label="When was it’s last blood donation? (YYMMYYYY)"
+        label="When was it’s last blood donation? (DD/MM/YYYY)"
         name="dog-last-donation"
         description="If applicable"
       />
