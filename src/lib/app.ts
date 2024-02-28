@@ -159,7 +159,7 @@ class AppFactory {
   }
 
   public shouldAllowDangerousApiCalls(): boolean {
-    return envOptionalString("DANGEROUS_ENABLED") === "true"
+    return envOptionalString("DANGEROUS_ENABLED") === "true";
   }
 }
 

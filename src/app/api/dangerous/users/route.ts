@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   if (!APP.shouldAllowDangerousApiCalls()) {
-    return NextResponse.json({}, {status: 404})
+    return NextResponse.json({}, { status: 404 });
   }
   const body = await request.json();
   const pii = body as UserPii;
