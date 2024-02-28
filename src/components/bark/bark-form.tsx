@@ -217,6 +217,7 @@ export function BarkFormRadioGroup(props: {
                       field.value === option.value ? "default" : "secondary"
                     }
                     key={option.value}
+                    type="button"
                     className="flex-grow"
                     onClick={async () => {
                       field.onChange(option.value);
