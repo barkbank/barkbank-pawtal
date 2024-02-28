@@ -70,7 +70,7 @@ export class AdminActorFactory {
   }
 
   public async getAdminActor(adminEmail: string): Promise<AdminActor | null> {
-    // TODO: Remove this when we have a way to create admin accounts.
+    // WIP: Remove this when we have a way to create admin accounts.
     await insertMockAdminAccounts();
 
     const { dbPool, emailHashService, piiEncryptionService } = this.config;
