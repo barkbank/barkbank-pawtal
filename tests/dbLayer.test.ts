@@ -17,7 +17,7 @@ import {
 import {
   dbInsertUser,
   dbSelectUser,
-  dbSelectUserByHashedEmail,
+  dbSelectUserIdByHashedEmail,
 } from "@/lib/data/dbUsers";
 import { sprintf } from "sprintf-js";
 import { dbInsertDog, dbSelectDog } from "@/lib/data/dbDogs";
@@ -57,23 +57,20 @@ describe("Database Layer", () => {
         expect(user).toBeNull();
       });
     });
-    it("should support insert and select by hashed email", async () => {
+    it("should support retrieval of user ID by hashed email", async () => {
       await withDb(async (db) => {
         const userGen = await dbInsertUser(db, userSpec(1));
-        const user = await dbSelectUserByHashedEmail(
+        const userId = await dbSelectUserIdByHashedEmail(
           db,
           userSpec(1).userHashedEmail,
         );
-        if (!user) fail("person is null");
-        expect(user.userCreationTime).toBeTruthy();
-        const spec = toUserSpec(user);
-        expect(spec).toMatchObject(userSpec(1));
+        expect(userId).toEqual(userGen.userId);
       });
     });
     it("should return null when no user exists with the hashed email", async () => {
       await withDb(async (db) => {
-        const user = await dbSelectUserByHashedEmail(db, "no-no-no");
-        expect(user).toBeNull();
+        const userId = await dbSelectUserIdByHashedEmail(db, "no-no-no");
+        expect(userId).toBeNull();
       });
     });
   });
