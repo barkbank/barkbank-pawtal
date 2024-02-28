@@ -4,6 +4,7 @@ import { Err, Ok, Result } from "./result";
 import APP from "./app";
 import { AdminActor } from "./admin/admin-actor";
 import { VetActor } from "./vet/vet-actor";
+import { UserActor } from "./user/user-actor";
 
 export enum AccountType {
   USER = "USER",
@@ -23,7 +24,12 @@ export const NEXT_AUTH_OPTIONS: NextAuthOptions = {
       },
       async authorize(credentials, req) {
         try {
-          if (!credentials || !credentials.email || !credentials.otp) {
+          if (
+            !credentials ||
+            !credentials.email ||
+            !credentials.otp ||
+            !credentials.accountType
+          ) {
             return null;
           }
           const otpService = await APP.getOtpService();
@@ -31,27 +37,35 @@ export const NEXT_AUTH_OPTIONS: NextAuthOptions = {
           if (!recentOtps.includes(credentials.otp)) {
             return null;
           }
-          const authUser = {
-            id: credentials.email,
-            email: credentials.email,
-            name: credentials.accountType || "NONE",
+          const toAuthUser = () => {
+            return {
+              id: credentials.email,
+              email: credentials.email,
+              name: credentials.accountType,
+            };
           };
           if (credentials.accountType === "ADMIN") {
             const adminActor = await getAdminActorByEmail(credentials.email);
             if (adminActor === null) {
               return null;
             }
-            return authUser;
+            return toAuthUser();
           }
           if (credentials.accountType === "VET") {
             const vetActor = await getVetActorByEmail(credentials.email);
             if (vetActor === null) {
               return null;
             }
-            return authUser;
+            return toAuthUser();
           }
-          // WIP: USER account type, UserActor, etc. call getUserActorByEmail
-          return authUser;
+          if (credentials.accountType === "USER") {
+            const userActor = await getUserActorByEmail(credentials.email);
+            if (userActor === null) {
+              return null;
+            }
+            return toAuthUser();
+          }
+          return null;
         } catch (error) {
           console.log(error);
           throw error;
@@ -89,7 +103,13 @@ export async function getAuthenticatedVetActor(): Promise<VetActor | null> {
   return getVetActorByEmail(session.email);
 }
 
-// WIP: impl getAuthenticatedUserActor
+export async function getAuthenticatedUserActor(): Promise<UserActor | null> {
+  const session = await getLoggedInSession();
+  if (session === null || session.accountType !== AccountType.USER) {
+    return null;
+  }
+  return getUserActorByEmail(session.email);
+}
 
 async function getLoggedInSession(): Promise<{
   email: string;
@@ -116,4 +136,8 @@ async function getVetActorByEmail(email: string): Promise<VetActor | null> {
   return actor;
 }
 
-// WIP: impl getUserActorByEmail
+async function getUserActorByEmail(email: string): Promise<UserActor | null> {
+  const factory = await APP.getUserActorFactory();
+  const actor = await factory.getUserActor(email);
+  return actor;
+}
