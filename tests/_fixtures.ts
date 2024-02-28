@@ -1,7 +1,14 @@
 import { AdminActorConfig } from "@/lib/admin/admin-actor";
 import { encryptAdminPii, AdminPii } from "@/lib/admin/admin-pii";
 import { dbInsertAdmin, dbSelectAdmin } from "@/lib/data/dbAdmins";
-import { Admin, AdminSpec, User, UserSpec } from "@/lib/data/models";
+import {
+  Admin,
+  AdminSpec,
+  User,
+  UserSpec,
+  Vet,
+  VetSpec,
+} from "@/lib/data/models";
 import { Pool } from "pg";
 import { HarnessHashService, HarnessEncryptionService } from "./_harness";
 import { AdminActorFactoryConfig } from "@/lib/admin/admin-actor-factory";
@@ -9,6 +16,8 @@ import { dbInsertUser, dbSelectUser } from "@/lib/data/dbUsers";
 import { UserActorConfig } from "@/lib/user/user-actor";
 import { encryptUserPii, UserPii } from "@/lib/user/user-pii";
 import { UserActorFactoryConfig } from "@/lib/user/user-actor-factory";
+import { VetActorFactoryConfig } from "@/lib/vet/vet-actor-factory";
+import { dbInsertVet, dbSelectVet } from "@/lib/data/dbVets";
 
 const emailHashService = new HarnessHashService();
 const piiEncryptionService = new HarnessEncryptionService();
@@ -34,7 +43,7 @@ export async function createAdmin(idx: number, db: Pool): Promise<Admin> {
   const gen = await dbInsertAdmin(db, spec);
   const admin = await dbSelectAdmin(db, gen.adminId);
   if (admin === null) {
-    fail("Failed to retrieve admin");
+    throw new Error("Failed to retrieve admin");
   }
   return admin;
 }
@@ -74,7 +83,7 @@ export async function createUser(idx: number, db: Pool): Promise<User> {
   const gen = await dbInsertUser(db, spec);
   const user = await dbSelectUser(db, gen.userId);
   if (user === null) {
-    fail("Failed to retrieve user");
+    throw new Error("Failed to retrieve user");
   }
   return user;
 }
@@ -91,5 +100,31 @@ export function userPii(idx: number): UserPii {
     userEmail: `user${idx}@user.com`,
     userName: `User ${idx}`,
     userPhoneNumber: `+65 ${10000000 + idx}`,
+  };
+}
+
+export function getVetActorFactoryConfig(dbPool: Pool): VetActorFactoryConfig {
+  return {
+    dbPool,
+    piiEncryptionService,
+  };
+}
+
+export async function createVet(idx: number, dbPool: Pool): Promise<Vet> {
+  const spec = vetSpec(idx);
+  const gen = await dbInsertVet(dbPool, spec);
+  const vet = await dbSelectVet(dbPool, gen.vetId);
+  if (!vet) {
+    throw new Error("Failed to retrieve vet");
+  }
+  return vet;
+}
+
+export function vetSpec(idx: number): VetSpec {
+  return {
+    vetName: `Vet ${idx}`,
+    vetEmail: `vet${idx}@vet.com`,
+    vetPhoneNumber: `+65 ${6000000 + idx}`,
+    vetAddress: `${100 + idx} Dog Park Drive`,
   };
 }

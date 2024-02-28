@@ -24,25 +24,7 @@ export class VetActor {
     this.config = config;
   }
 
-  public getOwnId(): string {
+  public getVetId(): string {
     return this.vet.vetId;
-  }
-
-  /**
-   * Retrieve user contact details.
-   *
-   * @param userId User ID
-   *
-   * @returns User name and phone number.
-   */
-  public async getUserContactDetails(
-    userId: string,
-  ): Promise<{ userName: string; userPhoneNumber: string }> {
-    // TODO: A stub to illustate how VetActor might develop. (Remove if not needed.)
-    // TODO: Impl dbSelectUserByUserIdAndVetPreference - Should return null if user does not prefer this vet.
-    return {
-      userName: "Ms Han",
-      userPhoneNumber: "+65 12341234",
-    };
   }
 }
