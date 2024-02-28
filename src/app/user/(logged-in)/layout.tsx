@@ -1,13 +1,13 @@
 "use server";
 
 import BarkNav, { BarkNavRoute } from "@/components/bark/bark-nav";
-import { AccountType, isLoggedIn } from "@/lib/auth";
+import { getAuthenticatedUserActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
 
 export default async function Layout(props: { children: React.ReactNode }) {
-  // WIP: Change to getAuthenticatedUserActor
-  if (!(await isLoggedIn(AccountType.USER))) {
+  const actor = await getAuthenticatedUserActor();
+  if (!actor) {
     redirect(RoutePath.USER_LOGIN_PAGE);
   }
   const navRoutes: BarkNavRoute[] = [
