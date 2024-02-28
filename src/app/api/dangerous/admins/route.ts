@@ -11,7 +11,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   const piiEncryptionService = await APP.getPiiEncryptionService();
   const adminHashedEmail = await emailHashService.getHashHex(pii.adminEmail);
   const adminEncryptedPii = await encryptAdminPii(pii, piiEncryptionService);
-  const spec: AdminSpec = {adminHashedEmail, adminEncryptedPii}
+  const spec: AdminSpec = { adminHashedEmail, adminEncryptedPii };
   const dbPool = await APP.getDbPool();
   const gen = await dbInsertAdmin(dbPool, spec);
   return NextResponse.json(gen);

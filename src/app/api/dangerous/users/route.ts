@@ -11,7 +11,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   const piiEncryptionService = await APP.getPiiEncryptionService();
   const userHashedEmail = await emailHashService.getHashHex(pii.userEmail);
   const userEncryptedPii = await encryptUserPii(pii, piiEncryptionService);
-  const spec: UserSpec = {userHashedEmail, userEncryptedPii}
+  const spec: UserSpec = { userHashedEmail, userEncryptedPii };
   const dbPool = await APP.getDbPool();
   const gen = await dbInsertUser(dbPool, spec);
   return NextResponse.json(gen);
