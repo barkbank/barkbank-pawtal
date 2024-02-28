@@ -16,6 +16,7 @@ import { HashService, SecretHashService } from "./services/hash";
 import { OtpConfig, OtpService } from "./services/otp";
 import pg from "pg";
 import { VetActorFactory } from "./vet/vet-actor-factory";
+import { UserActorFactory } from "./user/user-actor-factory";
 
 class AppFactory {
   private emailService: EmailService | null = null;
@@ -26,6 +27,7 @@ class AppFactory {
   private dbPool: pg.Pool | null = null;
   private adminActorFactory: AdminActorFactory | null = null;
   private vetActorFactory: VetActorFactory | null = null;
+  private userActorFactory: UserActorFactory | null = null;
 
   public async getEmailService(): Promise<EmailService> {
     function resolveEmailSender(): EmailSender {
@@ -141,7 +143,20 @@ class AppFactory {
     return this.vetActorFactory;
   }
 
-  // WIP: Add getUserActorFactory
+  public async getUserActorFactory(): Promise<UserActorFactory> {
+    if (!this.userActorFactory) {
+      const dbPool = await this.getDbPool();
+      const emailHashService = await this.getEmailHashService();
+      const piiEncryptionService = await this.getPiiEncryptionService();
+      this.userActorFactory = new UserActorFactory({
+        dbPool,
+        emailHashService,
+        piiEncryptionService,
+      });
+      console.log("Created UserActorFactory");
+    }
+    return this.userActorFactory;
+  }
 }
 
 function envOptionalString(key: string): string | undefined {
