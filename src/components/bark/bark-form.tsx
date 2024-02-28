@@ -279,7 +279,7 @@ export function BarkFormCheckboxes(props: {
             <FormField
               key={option.value}
               control={form.control}
-              name="vaccinations"
+              name={name}
               render={({ field }) => {
                 return (
                   <FormItem
@@ -291,7 +291,10 @@ export function BarkFormCheckboxes(props: {
                         checked={field.value?.includes(option.value)}
                         onCheckedChange={(checked) => {
                           return checked
-                            ? field.onChange([...field.value, option.value])
+                            ? field.onChange([
+                                ...(field.value ?? []),
+                                option.value,
+                              ])
                             : field.onChange(
                                 field.value?.filter(
                                   (value: string) => value !== option.value,
@@ -366,10 +369,15 @@ export function BarkFormButton(props: {
 export function BarkFormSubmitButton(props: {
   className?: string;
   children: React.ReactNode;
+  disabled?: boolean;
 }) {
-  const { children, className } = props;
+  const { disabled, children, className } = props;
   return (
-    <Button type="submit" className={cn("mt-6", className)}>
+    <Button
+      type="submit"
+      className={cn("mt-6", className)}
+      disabled={disabled ?? false}
+    >
       {children}
     </Button>
   );
@@ -422,7 +430,6 @@ export function BarkFormSelect(props: {
                       key={option.value}
                       value={option.value}
                       onSelect={(currentValue) => {
-                        console.log(currentValue);
                         field.onChange(currentValue);
                         setOpen(false);
                       }}

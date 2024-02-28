@@ -38,10 +38,13 @@ type FormDataType = z.infer<typeof FORM_SCHEMA>;
 export default function DonorForm({ breeds }: { breeds: Breed[] }) {
   const form = useForm<FormDataType>({
     resolver: zodResolver(FORM_SCHEMA),
-    defaultValues: {},
+    defaultValues: {
+      "dog-preferred-vets": [],
+    },
   });
 
   async function onSubmit(values: FormDataType) {
+    // ! Send the form data to the server.
     console.log(values);
   }
 
@@ -211,7 +214,12 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
       />
       {/* Dog's detail end */}
 
-      <BarkFormSubmitButton className="w-full">Submit</BarkFormSubmitButton>
+      <BarkFormSubmitButton
+        disabled={!form.formState.isValid}
+        className="w-full"
+      >
+        Submit
+      </BarkFormSubmitButton>
     </BarkForm>
   );
 }
