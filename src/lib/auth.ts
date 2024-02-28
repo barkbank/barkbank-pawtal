@@ -80,11 +80,22 @@ export const NEXT_AUTH_OPTIONS: NextAuthOptions = {
 };
 
 export async function isLoggedIn(accountType: AccountType): Promise<boolean> {
-  const session = await getLoggedInSession();
-  if (session === null) {
-    return false;
+  async function getActor(): Promise<
+    AdminActor | VetActor | UserActor | null
+  > {
+    if (accountType === AccountType.ADMIN) {
+      return getAuthenticatedAdminActor();
+    }
+    if (accountType === AccountType.VET) {
+      return getAuthenticatedVetActor();
+    }
+    if (accountType === AccountType.USER) {
+      return getAuthenticatedUserActor();
+    }
+    return null;
   }
-  return accountType === session.accountType;
+  const actor = await getActor();
+  return actor !== null;
 }
 
 export async function getAuthenticatedAdminActor(): Promise<AdminActor | null> {
