@@ -16,15 +16,15 @@ export type VetActorConfig = {
  * Encapsulates all data access for a given vet.
  */
 export class VetActor {
-  private vet: Vet;
+  private vetId: string;
   private config: VetActorConfig;
 
-  constructor(vet: Vet, config: VetActorConfig) {
-    this.vet = vet;
+  constructor(vetId: string, config: VetActorConfig) {
+    this.vetId = vetId;
     this.config = config;
   }
 
   public getVetId(): string {
-    return this.vet.vetId;
+    return this.vetId;
   }
 }

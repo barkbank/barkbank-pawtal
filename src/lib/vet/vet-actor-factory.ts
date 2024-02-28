@@ -1,7 +1,7 @@
 import { Pool } from "pg";
 import { EncryptionService } from "../services/encryption";
 import { VetActor, VetActorConfig } from "./vet-actor";
-import { dbSelectVetByEmail } from "../data/dbVets";
+import { dbSelectVetIdByEmail } from "../data/dbVets";
 
 export type VetActorFactoryConfig = {
   dbPool: Pool;
@@ -17,12 +17,12 @@ export class VetActorFactory {
 
   public async getVetActor(vetEmail: string): Promise<VetActor | null> {
     const { dbPool, piiEncryptionService } = this.config;
-    const vet = await dbSelectVetByEmail(dbPool, vetEmail);
-    if (vet === null) {
+    const vetId = await dbSelectVetIdByEmail(dbPool, vetEmail);
+    if (vetId === null) {
       return null;
     }
     const config: VetActorConfig = { dbPool, piiEncryptionService };
-    const actor = new VetActor(vet, config);
+    const actor = new VetActor(vetId, config);
     return actor;
   }
 }

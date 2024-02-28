@@ -29,7 +29,7 @@ import {
 import {
   dbInsertVet,
   dbSelectVet,
-  dbSelectVetByEmail,
+  dbSelectVetIdByEmail,
 } from "@/lib/data/dbVets";
 
 // TODO: Split into dbUsers.test.ts, dbVets.test.ts, etc.
@@ -181,20 +181,17 @@ describe("Database Layer", () => {
         expect(vet).toBeNull();
       });
     });
-    it("should support insert and select by email", async () => {
+    it("should support retrieval of vet ID by email", async () => {
       await withDb(async (db) => {
         const vetGen = await dbInsertVet(db, vetSpec(1));
-        const vet = await dbSelectVetByEmail(db, vetSpec(1).vetEmail);
-        if (!vet) fail("vet is null");
-        expect(vet.vetCreationTime).toBeTruthy();
-        const spec = toVetSpec(vet);
-        expect(spec).toMatchObject(vetSpec(1));
+        const vetId = await dbSelectVetIdByEmail(db, vetSpec(1).vetEmail);
+        expect(vetId).toEqual(vetGen.vetId);
       });
     });
     it("should return null when no vet exists with the email", async () => {
       await withDb(async (db) => {
-        const vet = await dbSelectVetByEmail(db, "notavet@vet.com");
-        expect(vet).toBeNull();
+        const vetId = await dbSelectVetIdByEmail(db, "notavet@vet.com");
+        expect(vetId).toBeNull();
       });
     });
   });
