@@ -24,7 +24,7 @@ import { dbInsertDog, dbSelectDog } from "@/lib/data/dbDogs";
 import {
   dbInsertAdmin,
   dbSelectAdmin,
-  dbSelectAdminByAdminHashedEmail,
+  dbSelectAdminIdByAdminHashedEmail,
 } from "@/lib/data/dbAdmins";
 import {
   dbInsertVet,
@@ -144,23 +144,23 @@ describe("Database Layer", () => {
         expect(admin).toBeNull();
       });
     });
-    it("should support insert and select by hashed email", async () => {
+    it("should support retrieval of adminId by hashed email", async () => {
       await withDb(async (db) => {
         const adminGen = await dbInsertAdmin(db, adminSpec(1));
-        const admin = await dbSelectAdminByAdminHashedEmail(
+        const adminId = await dbSelectAdminIdByAdminHashedEmail(
           db,
           adminSpec(1).adminHashedEmail,
         );
-        if (!admin) fail("admin is null");
-        expect(admin.adminCreationTime).toBeTruthy();
-        const spec = toAdminSpec(admin);
-        expect(spec).toMatchObject(adminSpec(1));
+        expect(adminId).toEqual(adminGen.adminId);
       });
     });
-    it("should return null when admin does not exist that has the hashed email", async () => {
+    it("should return null adminId when admin does not exist that has the hashed email", async () => {
       await withDb(async (db) => {
-        const admin = await dbSelectAdminByAdminHashedEmail(db, "not_found");
-        expect(admin).toBeNull();
+        const adminId = await dbSelectAdminIdByAdminHashedEmail(
+          db,
+          "not_found",
+        );
+        expect(adminId).toBeNull();
       });
     });
   });

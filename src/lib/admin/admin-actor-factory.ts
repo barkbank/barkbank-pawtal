@@ -7,7 +7,7 @@ import { EncryptionService } from "../services/encryption";
 import { dbBegin, dbCommit, dbRollbackAndRelease } from "../data/dbUtils";
 import {
   dbInsertAdmin,
-  dbSelectAdminByAdminHashedEmail,
+  dbSelectAdminIdByAdminHashedEmail,
 } from "../data/dbAdmins";
 import { AdminPii, encryptAdminPii } from "./admin-pii";
 
@@ -39,7 +39,7 @@ async function insertMockAdminAccounts(): Promise<void> {
   try {
     await dbBegin(conn);
     specs.forEach(async (spec) => {
-      const existingAdmin = await dbSelectAdminByAdminHashedEmail(
+      const existingAdmin = await dbSelectAdminIdByAdminHashedEmail(
         conn,
         spec.adminHashedEmail,
       );
@@ -75,8 +75,7 @@ export class AdminActorFactory {
 
     const { dbPool, emailHashService, piiEncryptionService } = this.config;
     const adminHashedEmail = await emailHashService.getHashHex(adminEmail);
-    // TODO: Only need to fetch the adminId.
-    const admin = await dbSelectAdminByAdminHashedEmail(
+    const admin = await dbSelectAdminIdByAdminHashedEmail(
       dbPool,
       adminHashedEmail,
     );
