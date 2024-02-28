@@ -157,6 +157,10 @@ class AppFactory {
     }
     return this.userActorFactory;
   }
+
+  public shouldAllowDangerousApiCalls(): boolean {
+    return envOptionalString("DANGEROUS_ENABLED") === "true"
+  }
 }
 
 function envOptionalString(key: string): string | undefined {
