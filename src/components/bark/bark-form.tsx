@@ -1,4 +1,5 @@
-import { Controller, UseFormReturn } from "react-hook-form";
+import { UseFormReturn } from "react-hook-form";
+import { format } from "date-fns";
 import {
   Form,
   FormControl,
@@ -25,7 +26,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { CalendarIcon, Check, ChevronsUpDown } from "lucide-react";
+import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import React from "react";
 
@@ -96,6 +98,60 @@ export function BarkFormInput(props: {
   );
 }
 
+export function BarkFormDatetimeInput(props: {
+  form: UseFormReturn<any>;
+  name: string;
+  label: string;
+  placeholder?: string;
+  description?: string;
+}) {
+  const { form, name, label, placeholder, description } = props;
+  return (
+    <FormField
+      control={form.control}
+      name={name}
+      render={({ field }) => (
+        <FormItem className="mt-6 flex flex-col">
+          <FormLabel>{label}</FormLabel>
+          <FormControl>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant={"outline"}
+                  className={cn(
+                    "justify-start text-left font-normal",
+                    !field.value && "text-muted-foreground",
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {field.value ? (
+                    format(field.value, "dd/MM/yy")
+                  ) : (
+                    <span>{placeholder}</span>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar
+                  mode="single"
+                  selected={field.value}
+                  onSelect={(v) => {
+                    console.log(v);
+                    field.onChange(v);
+                  }}
+                  initialFocus
+                />
+              </PopoverContent>
+            </Popover>
+          </FormControl>
+          {description && <FormDescription>{description}</FormDescription>}
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+  );
+}
+
 // Field type should be a boolean.
 export function BarkFormSingleCheckbox(props: {
   form: UseFormReturn<any>;
@@ -142,8 +198,9 @@ export function BarkFormRadioGroup(props: {
   label: string;
   options: BarkFormOption[];
   description?: string;
+  layout?: "button" | "radio";
 }) {
-  const { form, name, label, options, description } = props;
+  const { layout, form, name, label, options, description } = props;
   return (
     <FormField
       control={form.control}
@@ -152,40 +209,44 @@ export function BarkFormRadioGroup(props: {
         <FormItem className="mt-6 space-y-3">
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <div className="flex space-x-2">
-              {options.map((option) => (
-                <Button
-                  variant={
-                    field.value === option.value ? "default" : "secondary"
-                  }
-                  key={option.value}
-                  className="flex-grow"
-                  onClick={async () => {
-                    field.onChange(option.value);
-                  }}
-                >
-                  {option.label}
-                </Button>
-              ))}
-            </div>
-
-            {/* <RadioGroup
-              onValueChange={field.onChange}
-              defaultValue={field.value}
-              className="flex"
-            >
-              {options.map((option) => (
-                <FormItem
-                  key={option.value}
-                  className="flex items-center space-x-3 space-y-0"
-                >
-                  <FormControl>
-                    <RadioGroupItem value={option.value} />
-                  </FormControl>
-                  <FormLabel className="font-normal">{option.label}</FormLabel>
-                </FormItem>
-              ))}
-            </RadioGroup> */}
+            {layout === "button" ? (
+              <div className="flex space-x-2">
+                {options.map((option) => (
+                  <Button
+                    variant={
+                      field.value === option.value ? "default" : "secondary"
+                    }
+                    key={option.value}
+                    className="flex-grow"
+                    onClick={async () => {
+                      field.onChange(option.value);
+                    }}
+                  >
+                    {option.label}
+                  </Button>
+                ))}
+              </div>
+            ) : (
+              <RadioGroup
+                onValueChange={field.onChange}
+                defaultValue={field.value}
+                className="flex"
+              >
+                {options.map((option) => (
+                  <FormItem
+                    key={option.value}
+                    className="flex items-center space-x-3 space-y-0"
+                  >
+                    <FormControl>
+                      <RadioGroupItem value={option.value} />
+                    </FormControl>
+                    <FormLabel className="font-normal">
+                      {option.label}
+                    </FormLabel>
+                  </FormItem>
+                ))}
+              </RadioGroup>
+            )}
           </FormControl>
           {description && <FormDescription>{description}</FormDescription>}
           <FormMessage />

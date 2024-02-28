@@ -3,6 +3,7 @@
 import {
   BarkForm,
   BarkFormCheckboxes,
+  BarkFormDatetimeInput,
   BarkFormHeader,
   BarkFormInput,
   BarkFormRadioGroup,
@@ -21,22 +22,14 @@ const FORM_SCHEMA = z.object({
   "country-based": z.string(),
   "dog-name": z.string(),
   "dog-breed": z.string(),
-  "dog-birthday": z.string().regex(/^\d{2}\/\d{4}$/),
+  "dog-birthday": z.date(),
   "dog-sex": z.string(),
   "dog-weight": z.string().regex(/^\d+(\.\d+)?$/),
   "dog-blood-type": z.string(),
   "dog-blood-transfusion-status": z.string(),
   "dog-pregnant-status": z.string(),
-  "dog-last-heartworm-vaccination": z
-    .string()
-    .regex(/^\d{2}\/\d{2}\/\d{4}$/)
-    .optional()
-    .or(z.literal("")),
-  "dog-last-donation": z
-    .string()
-    .regex(/^\d{2}\/\d{2}\/\d{4}$/)
-    .optional()
-    .or(z.literal("")),
+  "dog-last-heartworm-vaccination": z.date().optional().or(z.literal("")),
+  "dog-last-donation": z.date().optional().or(z.literal("")),
   "dog-preferred-vets": z.array(z.string()),
 });
 
@@ -77,6 +70,7 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
         form={form}
         label="Are you currently based in Singapore?"
         name="country-based"
+        layout="button"
         options={[
           { label: "Yes", value: "yes" },
           {
@@ -105,10 +99,9 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
         }))}
       />
 
-      {/* Need to have regex to format, in zod as well */}
-      <BarkFormInput
+      <BarkFormDatetimeInput
         form={form}
-        label="When is it’s birthday? (MM/YYYY)"
+        label="When is it’s birthday? (DD/MM/YYYY)"
         name="dog-birthday"
       />
 
@@ -116,6 +109,7 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
         form={form}
         label="What’s your dog’s sex?"
         name="dog-sex"
+        layout="button"
         options={[
           { label: "Yes", value: "yes" },
           {
@@ -153,6 +147,7 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
         form={form}
         label="Has it received blood transfusion before?"
         name="dog-blood-transfusion-status"
+        layout="button"
         options={[
           { label: "I don't know", value: "idk" },
           {
@@ -170,6 +165,7 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
         form={form}
         label="Has your dog been pregnant before?"
         name="dog-pregnant-status"
+        layout="button"
         options={[
           { label: "I don't know", value: "idk" },
           {
@@ -183,14 +179,14 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
         ]}
       />
 
-      <BarkFormInput
+      <BarkFormDatetimeInput
         form={form}
-        label="When was it’s last heartworm vaccination? (DD/MM/YYYY)"
+        label="When was it’s last blood donation? (DD/MM/YYYY)"
         name="dog-last-heartworm-vaccination"
         description="If applicable"
       />
 
-      <BarkFormInput
+      <BarkFormDatetimeInput
         form={form}
         label="When was it’s last blood donation? (DD/MM/YYYY)"
         name="dog-last-donation"
