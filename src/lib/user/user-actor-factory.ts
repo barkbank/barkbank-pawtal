@@ -2,10 +2,10 @@ import { EncryptionService } from "../services/encryption";
 import { HashService } from "../services/hash";
 import { UserActor, UserActorConfig } from "./user-actor";
 
-export type UserActorFactoryConfig = {  
+export type UserActorFactoryConfig = {
   emailHashService: HashService;
   piiEncryptionService: EncryptionService;
-}
+};
 
 export class UserActorFactory {
   private config: UserActorFactoryConfig;

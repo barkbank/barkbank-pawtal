@@ -15,7 +15,7 @@ import {
   toVetSpec,
 } from "@/lib/data/mappers";
 import {
-  dbInserUser,
+  dbInsertUser,
   dbSelectUser,
   dbSelectUserByHashedEmail,
 } from "@/lib/data/dbUsers";
@@ -43,7 +43,7 @@ describe("Database Layer", () => {
   describe("dbUsers", () => {
     it("should support insert and select", async () => {
       await withDb(async (db) => {
-        const userGen = await dbInserUser(db, userSpec(1));
+        const userGen = await dbInsertUser(db, userSpec(1));
         const user = await dbSelectUser(db, userGen.userId);
         if (!user) fail("person is null");
         expect(user.userCreationTime).toBeTruthy();
@@ -59,7 +59,7 @@ describe("Database Layer", () => {
     });
     it("should support insert and select by hashed email", async () => {
       await withDb(async (db) => {
-        const userGen = await dbInserUser(db, userSpec(1));
+        const userGen = await dbInsertUser(db, userSpec(1));
         const user = await dbSelectUserByHashedEmail(
           db,
           userSpec(1).userHashedEmail,
@@ -80,7 +80,7 @@ describe("Database Layer", () => {
   describe("dbDogs", () => {
     it("should support insert and select", async () => {
       await withDb(async (db) => {
-        const userGen = await dbInserUser(db, userSpec(1));
+        const userGen = await dbInsertUser(db, userSpec(1));
         const dogGen = await dbInsertDog(db, userGen.userId, dogSpec(1));
         const dog = await dbSelectDog(db, dogGen.dogId);
         if (!dog) fail("dog is null");
@@ -100,7 +100,7 @@ describe("Database Layer", () => {
       await withDb(async (db) => {
         const originalLogFn = console.error;
         console.error = jest.fn();
-        const userGen = await dbInserUser(db, userSpec(1));
+        const userGen = await dbInsertUser(db, userSpec(1));
         const spec: Record<string, any> = dogSpec(1);
         spec.dogGender = "F"; // Correct is 'Female'
         await expect(
@@ -115,7 +115,7 @@ describe("Database Layer", () => {
       await withDb(async (db) => {
         const originalLogFn = console.error;
         console.error = jest.fn();
-        const userGen = await dbInserUser(db, userSpec(1));
+        const userGen = await dbInsertUser(db, userSpec(1));
         const spec: Record<string, any> = dogSpec(1);
         spec.dogDea1Point1 = "+"; // Correct is 'Positive'
         await expect(

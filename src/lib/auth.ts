@@ -89,14 +89,17 @@ export async function getAuthenticatedVetActor(): Promise<VetActor | null> {
   return getVetActorByEmail(session.email);
 }
 
-async function getLoggedInSession(): Promise<{email: string, accountType: AccountType} | null> {
+async function getLoggedInSession(): Promise<{
+  email: string;
+  accountType: AccountType;
+} | null> {
   const session = await getServerSession(NEXT_AUTH_OPTIONS);
   if (!session || !session.user || !session.user.email || !session.user.name) {
     return null;
   }
   const { email, name } = session.user;
   const accountType = name as AccountType;
-  return {email, accountType};
+  return { email, accountType };
 }
 
 async function getAdminActorByEmail(email: string): Promise<AdminActor | null> {

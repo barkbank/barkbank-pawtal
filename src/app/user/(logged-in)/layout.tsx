@@ -6,7 +6,7 @@ import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
 
 export default async function Layout(props: { children: React.ReactNode }) {
-  if (!await isLoggedIn(AccountType.USER)) {
+  if (!(await isLoggedIn(AccountType.USER))) {
     redirect(RoutePath.USER_LOGIN_PAGE);
   }
   const navRoutes: BarkNavRoute[] = [

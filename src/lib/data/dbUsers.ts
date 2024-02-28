@@ -1,7 +1,7 @@
 import { DbContext, dbQuery, toCamelCaseRow } from "./dbUtils";
 import { User, UserGen, UserSpec } from "./models";
 
-export async function dbInserUser(
+export async function dbInsertUser(
   ctx: DbContext,
   userSpec: UserSpec,
 ): Promise<UserGen> {
