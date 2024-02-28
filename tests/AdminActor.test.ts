@@ -11,7 +11,7 @@ describe("AdminActor", () => {
     await withDb(async (db) => {
       const admin = await createAdmin(1, db);
       const config = getAdminActorConfig(db);
-      const actor = new AdminActor(admin, config);
+      const actor = new AdminActor(admin.adminId, config);
       const ownAdmin = await actor.getOwnAdmin();
       expect(ownAdmin).toEqual(admin);
     });
@@ -20,7 +20,7 @@ describe("AdminActor", () => {
     await withDb(async (db) => {
       const admin = await createAdmin(1, db);
       const config = getAdminActorConfig(db);
-      const actor = new AdminActor(admin, config);
+      const actor = new AdminActor(admin.adminId, config);
       const ownPii = await actor.getOwnPii();
       expect(ownPii).toEqual(adminPii(1));
     });

@@ -15,16 +15,16 @@ export type AdminActorConfig = {
  * Responsible for data access control for a given admin.
  */
 export class AdminActor {
-  private admin: Admin;
+  private adminId: string;
   private config: AdminActorConfig;
 
-  constructor(admin: Admin, config: AdminActorConfig) {
-    this.admin = admin;
+  constructor(adminId: string, config: AdminActorConfig) {
+    this.adminId = adminId;
     this.config = config;
   }
 
   public getAdminId(): string {
-    return this.admin.adminId;
+    return this.adminId;
   }
 
   private getDbPool(): Pool {

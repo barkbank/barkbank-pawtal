@@ -75,6 +75,7 @@ export class AdminActorFactory {
 
     const { dbPool, emailHashService, piiEncryptionService } = this.config;
     const adminHashedEmail = await emailHashService.getHashHex(adminEmail);
+    // TODO: Only need to fetch the adminId.
     const admin = await dbSelectAdminByAdminHashedEmail(
       dbPool,
       adminHashedEmail,
@@ -88,6 +89,6 @@ export class AdminActorFactory {
       emailHashService,
       piiEncryptionService,
     };
-    return new AdminActor(admin, config);
+    return new AdminActor(admin.adminId, config);
   }
 }
