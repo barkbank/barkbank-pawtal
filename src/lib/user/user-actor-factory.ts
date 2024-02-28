@@ -17,6 +17,7 @@ export class UserActorFactory {
   }
 
   public async getUserActor(userEmail: string): Promise<UserActor | null> {
+    // WIP: Implement getUserActor
     return null;
   }
 }

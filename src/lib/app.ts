@@ -140,6 +140,8 @@ class AppFactory {
     }
     return this.vetActorFactory;
   }
+
+  // WIP: Add getUserActorFactory
 }
 
 function envOptionalString(key: string): string | undefined {

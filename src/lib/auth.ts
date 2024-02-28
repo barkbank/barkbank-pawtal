@@ -50,7 +50,7 @@ export const NEXT_AUTH_OPTIONS: NextAuthOptions = {
             }
             return authUser;
           }
-          // WIP: USER account type, UserActor, etc.
+          // WIP: USER account type, UserActor, etc. call getUserActorByEmail
           return authUser;
         } catch (error) {
           console.log(error);
@@ -89,6 +89,8 @@ export async function getAuthenticatedVetActor(): Promise<VetActor | null> {
   return getVetActorByEmail(session.email);
 }
 
+// WIP: impl getAuthenticatedUserActor
+
 async function getLoggedInSession(): Promise<{
   email: string;
   accountType: AccountType;
@@ -113,3 +115,5 @@ async function getVetActorByEmail(email: string): Promise<VetActor | null> {
   const actor = await factory.getVetActor(email);
   return actor;
 }
+
+// WIP: impl getUserActorByEmail
