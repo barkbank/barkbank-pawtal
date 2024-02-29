@@ -37,7 +37,7 @@ export const NEXT_AUTH_OPTIONS: NextAuthOptions = {
           if (!recentOtps.includes(credentials.otp)) {
             return null;
           }
-          const toAuthUser = () => {
+          const getNextAuthUser = () => {
             return {
               id: credentials.email,
               email: credentials.email,
@@ -49,21 +49,21 @@ export const NEXT_AUTH_OPTIONS: NextAuthOptions = {
             if (adminActor === null) {
               return null;
             }
-            return toAuthUser();
+            return getNextAuthUser();
           }
           if (credentials.accountType === "VET") {
             const vetActor = await getVetActorByEmail(credentials.email);
             if (vetActor === null) {
               return null;
             }
-            return toAuthUser();
+            return getNextAuthUser();
           }
           if (credentials.accountType === "USER") {
             const userActor = await getUserActorByEmail(credentials.email);
             if (userActor === null) {
               return null;
             }
-            return toAuthUser();
+            return getNextAuthUser();
           }
           return null;
         } catch (error) {
