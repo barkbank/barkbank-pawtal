@@ -36,11 +36,7 @@ export class AdminActor {
   }
 
   public async getOwnAdmin(): Promise<Admin | null> {
-    const admin = await dbSelectAdmin(this.getDbPool(), this.getAdminId());
-    if (admin === null) {
-      return null;
-    }
-    return admin;
+    return dbSelectAdmin(this.getDbPool(), this.getAdminId());
   }
 
   public async getOwnPii(): Promise<AdminPii | null> {
