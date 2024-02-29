@@ -5,7 +5,7 @@ import { AdminSpec } from "@/lib/data/models";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
-  if (!APP.shouldAllowDangerousApiCalls()) {
+  if (!APP.getDangerousApiIsEnabled()) {
     return NextResponse.json({}, { status: 404 });
   }
   const body = await request.json();

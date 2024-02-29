@@ -18,7 +18,8 @@ import pg from "pg";
 import { VetActorFactory } from "./vet/vet-actor-factory";
 import { UserActorFactory } from "./user/user-actor-factory";
 
-class AppFactory {
+export class AppFactory {
+  private envs: NodeJS.Dict<string>;
   private emailService: EmailService | null = null;
   private otpService: OtpService | null = null;
   private piiHashService: HashService | null = null;
@@ -29,17 +30,54 @@ class AppFactory {
   private vetActorFactory: VetActorFactory | null = null;
   private userActorFactory: UserActorFactory | null = null;
 
+  constructor(envs: NodeJS.Dict<string>) {
+    this.envs = envs;
+  }
+
+  private envOptionalString(key: string): string | undefined {
+    return this.envs[key];
+  }
+
+  private envString(key: string): string {
+    const value = this.envOptionalString(key);
+    if (value === undefined) {
+      throw Error(`${key} is not specified`);
+    }
+    return value;
+  }
+
+  private envInteger(key: string): number {
+    return parseInt(this.envString(key));
+  }
+
+  public getNodeEnv(): "development" | "production" | "test" {
+    const val = this.envOptionalString("NODE_ENV");
+    if (val === "production" || val === "test") {
+      return val;
+    }
+    return "development";
+  }
+
+  public getDangerousApiIsEnabled(): boolean {
+    if (this.getNodeEnv() === "production") {
+      return false;
+    }
+    return this.envOptionalString("DANGEROUS_ENABLED") === "true";
+  }
+
   public async getEmailService(): Promise<EmailService> {
+    const self = this;
+
     function resolveEmailSender(): EmailSender {
-      if (envString("BARKBANK_SMTP_HOST") === "") {
+      if (self.envString("BARKBANK_SMTP_HOST") === "") {
         console.log("Using PassthroughEmailSender");
         return new PassthroughEmailSender();
       }
       const config: SmtpConfig = {
-        smtpHost: envString("BARKBANK_SMTP_HOST"),
-        smtpPort: envInteger("BARKBANK_SMTP_PORT"),
-        smtpUser: envString("BARKBANK_SMTP_USER"),
-        smtpPassword: envString("BARKBANK_SMTP_PASSWORD"),
+        smtpHost: self.envString("BARKBANK_SMTP_HOST"),
+        smtpPort: self.envInteger("BARKBANK_SMTP_PORT"),
+        smtpUser: self.envString("BARKBANK_SMTP_USER"),
+        smtpPassword: self.envString("BARKBANK_SMTP_PASSWORD"),
       };
       console.log("Using NodemailerEmailSender");
       return new NodemailerEmailSender(config);
@@ -56,9 +94,11 @@ class AppFactory {
     if (!this.otpService) {
       const config: OtpConfig = {
         otpLength: 6,
-        otpPeriodMillis: envInteger("BARKBANK_OTP_PERIOD_MILLIS"),
-        otpRecentPeriods: envInteger("BARKBANK_OTP_NUM_RECENT_PERIODS"),
-        otpHashService: new SecretHashService(envString("BARKBANK_OTP_SECRET")),
+        otpPeriodMillis: this.envInteger("BARKBANK_OTP_PERIOD_MILLIS"),
+        otpRecentPeriods: this.envInteger("BARKBANK_OTP_NUM_RECENT_PERIODS"),
+        otpHashService: new SecretHashService(
+          this.envString("BARKBANK_OTP_SECRET"),
+        ),
       };
       this.otpService = new OtpService(config);
       console.log("Created OtpService");
@@ -68,15 +108,15 @@ class AppFactory {
 
   public async getSenderForOtpEmail(): Promise<EmailContact> {
     return {
-      email: envString("BARKBANK_OTP_SENDER_EMAIL"),
-      name: envOptionalString("BARKBANK_OTP_SENDER_NAME"),
+      email: this.envString("BARKBANK_OTP_SENDER_EMAIL"),
+      name: this.envOptionalString("BARKBANK_OTP_SENDER_NAME"),
     };
   }
 
   public async getEmailHashService(): Promise<HashService> {
     if (!this.piiHashService) {
       this.piiHashService = new SecretHashService(
-        envString("BARKBANK_PII_SECRET"),
+        this.envString("BARKBANK_PII_SECRET"),
       );
       console.log("Created EmailHashService");
     }
@@ -86,7 +126,7 @@ class AppFactory {
   public async getPiiEncryptionService(): Promise<EncryptionService> {
     if (!this.piiEncryptionService) {
       this.piiEncryptionService = new SecretEncryptionService(
-        envString("BARKBANK_PII_SECRET"),
+        this.envString("BARKBANK_PII_SECRET"),
       );
       console.log("Created PiiEncryptionService");
     }
@@ -104,11 +144,11 @@ class AppFactory {
   public async getDbPool(): Promise<pg.Pool> {
     if (!this.dbPool) {
       this.dbPool = new pg.Pool({
-        host: envString("BARKBANK_DB_HOST"),
-        port: envInteger("BARKBANK_DB_PORT"),
-        user: envString("BARKBANK_DB_USER"),
-        password: envString("BARKBANK_DB_PASSWORD"),
-        database: envString("BARKBANK_DB_NAME"),
+        host: this.envString("BARKBANK_DB_HOST"),
+        port: this.envInteger("BARKBANK_DB_PORT"),
+        user: this.envString("BARKBANK_DB_USER"),
+        password: this.envString("BARKBANK_DB_PASSWORD"),
+        database: this.envString("BARKBANK_DB_NAME"),
       });
       console.log("Created database connection pool");
     }
@@ -157,27 +197,7 @@ class AppFactory {
     }
     return this.userActorFactory;
   }
-
-  public shouldAllowDangerousApiCalls(): boolean {
-    return envOptionalString("DANGEROUS_ENABLED") === "true";
-  }
 }
 
-function envOptionalString(key: string): string | undefined {
-  return process.env[key];
-}
-
-function envString(key: string): string {
-  const value = envOptionalString(key);
-  if (value === undefined) {
-    throw Error(`${key} is not specified`);
-  }
-  return value;
-}
-
-function envInteger(key: string): number {
-  return parseInt(envString(key));
-}
-
-const APP: AppFactory = new AppFactory();
+const APP: AppFactory = new AppFactory(process.env);
 export default APP;

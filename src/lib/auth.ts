@@ -80,9 +80,7 @@ export const NEXT_AUTH_OPTIONS: NextAuthOptions = {
 };
 
 export async function isLoggedIn(accountType: AccountType): Promise<boolean> {
-  async function getActor(): Promise<
-    AdminActor | VetActor | UserActor | null
-  > {
+  async function getActor(): Promise<AdminActor | VetActor | UserActor | null> {
     if (accountType === AccountType.ADMIN) {
       return getAuthenticatedAdminActor();
     }
