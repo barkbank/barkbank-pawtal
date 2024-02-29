@@ -3,12 +3,27 @@ import { Ok, Result } from "../result";
 
 export interface HashService {
   digest(data: string): Promise<Result<{ hashHex: string }, string>>;
+  getHashHex(data: string): Promise<string>;
 }
 
-export class SecretHashService implements HashService {
+abstract class ConvenientHashService {
+  abstract digest(data: string): Promise<Result<{ hashHex: string }, string>>;
+
+  public async getHashHex(data: string): Promise<string> {
+    const { result, error } = await this.digest(data);
+    if (error !== undefined) {
+      throw new Error(error);
+    }
+    const { hashHex } = result;
+    return hashHex;
+  }
+}
+
+export class SecretHashService extends ConvenientHashService {
   private secret: string;
 
   public constructor(secret: string) {
+    super();
     this.secret = secret;
   }
 

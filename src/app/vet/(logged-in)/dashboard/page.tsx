@@ -3,7 +3,7 @@
 export default async function Page() {
   return (
     <>
-      <p>Private content</p>
+      <p>Vet Dashboard</p>
     </>
   );
 }

@@ -40,3 +40,19 @@ export async function dbSelectAdmin(
   }
   return null;
 }
+
+export async function dbSelectAdminIdByAdminHashedEmail(
+  ctx: DbContext,
+  adminHashedEmail: string,
+): Promise<string | null> {
+  const sql = `
+    SELECT admin_id
+    FROM admins
+    WHERE admin_hashed_email = $1
+  `;
+  const res = await dbQuery(ctx, sql, [adminHashedEmail]);
+  if (res.rows.length === 1) {
+    return res.rows[0].admin_id;
+  }
+  return null;
+}

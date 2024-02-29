@@ -1,7 +1,7 @@
 import { DbContext, dbQuery, toCamelCaseRow } from "./dbUtils";
 import { User, UserGen, UserSpec } from "./models";
 
-export async function dbInserUser(
+export async function dbInsertUser(
   ctx: DbContext,
   userSpec: UserSpec,
 ): Promise<UserGen> {
@@ -39,6 +39,22 @@ export async function dbSelectUser(
   const res = await dbQuery(ctx, sql, [userId]);
   if (res.rows.length === 1) {
     return toCamelCaseRow(res.rows[0]);
+  }
+  return null;
+}
+
+export async function dbSelectUserIdByHashedEmail(
+  ctx: DbContext,
+  userHashedEmail: string,
+): Promise<string | null> {
+  const sql = `
+  SELECT user_id
+  FROM users
+  WHERE user_hashed_email = $1
+  `;
+  const res = await dbQuery(ctx, sql, [userHashedEmail]);
+  if (res.rows.length === 1) {
+    return res.rows[0].user_id;
   }
   return null;
 }
