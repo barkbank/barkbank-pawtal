@@ -8,7 +8,7 @@ CREATE TABLE users (
   CONSTRAINT users_pk PRIMARY KEY (user_id)
 );
 
-CREATE FUNCTION update_user()
+CREATE FUNCTION update_user_modification_time()
 RETURNS TRIGGER AS $$
 BEGIN
     NEW.user_modification_time = CURRENT_TIMESTAMP;
@@ -16,9 +16,9 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER update_user_trigger
+CREATE TRIGGER update_user_modification_time_trigger
 BEFORE UPDATE ON users
-FOR EACH ROW EXECUTE FUNCTION update_user();
+FOR EACH ROW EXECUTE FUNCTION update_user_modification_time();
 
 
 CREATE TABLE admins (
@@ -31,7 +31,7 @@ CREATE TABLE admins (
   CONSTRAINT admins_pk PRIMARY KEY (admin_id)
 );
 
-CREATE FUNCTION update_admin()
+CREATE FUNCTION update_admin_modification_time()
 RETURNS TRIGGER AS $$
 BEGIN
     NEW.admin_modification_time = CURRENT_TIMESTAMP;
@@ -39,9 +39,9 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER update_admin_trigger
+CREATE TRIGGER update_admin_modification_time_trigger
 BEFORE UPDATE ON admins
-FOR EACH ROW EXECUTE FUNCTION update_admin();
+FOR EACH ROW EXECUTE FUNCTION update_admin_modification_time();
 
 
 CREATE TABLE vets (
@@ -56,7 +56,7 @@ CREATE TABLE vets (
   CONSTRAINT vet_pk PRIMARY KEY (vet_id)
 );
 
-CREATE FUNCTION update_vet()
+CREATE FUNCTION update_vet_modification_time()
 RETURNS TRIGGER AS $$
 BEGIN
     NEW.vet_modification_time = CURRENT_TIMESTAMP;
@@ -64,9 +64,9 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER update_vet_trigger
+CREATE TRIGGER update_vet_modification_time_trigger
 BEFORE UPDATE ON vets
-FOR EACH ROW EXECUTE FUNCTION update_vet();
+FOR EACH ROW EXECUTE FUNCTION update_vet_modification_time();
 
 
 CREATE TYPE t_dog_gender AS ENUM ('MALE', 'FEMALE', 'UNKNOWN');
@@ -87,7 +87,7 @@ CREATE TABLE dogs (
   CONSTRAINT dogs_pk PRIMARY KEY (dog_id)
 );
 
-CREATE FUNCTION update_dog()
+CREATE FUNCTION update_dog_modification_time()
 RETURNS TRIGGER AS $$
 BEGIN
     NEW.dog_modification_time = CURRENT_TIMESTAMP;
@@ -95,6 +95,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER update_dog_trigger
+CREATE TRIGGER update_dog_modification_time_trigger
 BEFORE UPDATE ON dogs
-FOR EACH ROW EXECUTE FUNCTION update_dog();
+FOR EACH ROW EXECUTE FUNCTION update_dog_modification_time();
