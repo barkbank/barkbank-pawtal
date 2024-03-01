@@ -18,6 +18,7 @@ import {
   dbInsertUser,
   dbSelectUser,
   dbSelectUserIdByHashedEmail,
+  dbUpdateUser,
 } from "@/lib/data/dbUsers";
 import { sprintf } from "sprintf-js";
 import { dbInsertDog, dbSelectDog } from "@/lib/data/dbDogs";
@@ -73,6 +74,18 @@ describe("Database Layer", () => {
       await withDb(async (db) => {
         const userId = await dbSelectUserIdByHashedEmail(db, "no-no-no");
         expect(userId).toBeNull();
+      });
+    });
+    it("should update modification time on update", async () => {
+      await withDb(async (db) => {
+        const gen1 = await dbInsertUser(db, userSpec(1));
+        ensureTimePassed();
+        const gen2 = await dbUpdateUser(db, gen1.userId, userSpec(2));
+        expect(gen2.userId).toEqual(gen1.userId);
+        expect(gen2.userCreationTime).toEqual(gen1.userCreationTime);
+        expect(gen2.userModificationTime.getTime()).toBeGreaterThan(
+          gen1.userModificationTime.getTime(),
+        );
       });
     });
   });
@@ -201,6 +214,14 @@ describe("Database Layer", () => {
     });
   });
 });
+
+function ensureTimePassed(): void {
+  const t0 = new Date().getTime();
+  let t1 = new Date().getTime();
+  while (t0 === t1) {
+    t1 = new Date().getTime();
+  }
+}
 
 function userSpec(idx: number): UserSpec {
   return {
