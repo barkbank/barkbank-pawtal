@@ -1,6 +1,6 @@
 CREATE TABLE users (
   user_id BIGSERIAL,
-  user_creation_time TIMESTAMP WITH TIME ZONE NOT NULL,
+  user_creation_time TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   user_hashed_email TEXT NOT NULL,
   user_encrypted_pii TEXT NOT NULL,
   CONSTRAINT users_unique_user_hashed_email UNIQUE (user_hashed_email),
@@ -9,7 +9,7 @@ CREATE TABLE users (
 
 CREATE TABLE admins (
   admin_id BIGSERIAL,
-  admin_creation_time TIMESTAMP WITH TIME ZONE NOT NULL,
+  admin_creation_time TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   admin_hashed_email TEXT NOT NULL,
   admin_encrypted_pii TEXT NOT NULL,
   CONSTRAINT admins_unique_admin_hashed_email UNIQUE (admin_hashed_email),
@@ -18,7 +18,7 @@ CREATE TABLE admins (
 
 CREATE TABLE vets (
   vet_id BIGSERIAL,
-  vet_creation_time TIMESTAMP WITH TIME ZONE NOT NULL,
+  vet_creation_time TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   vet_email TEXT NOT NULL,
   vet_name TEXT NOT NULL,
   vet_phone_number TEXT NOT NULL,
@@ -32,7 +32,7 @@ CREATE TYPE t_dog_antigen_presence AS ENUM ('POSITIVE', 'NEGATIVE', 'UNKNOWN');
 
 CREATE TABLE dogs (
   dog_id BIGSERIAL,
-  dog_creation_time TIMESTAMP WITH TIME ZONE NOT NULL,
+  dog_creation_time TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   dog_status TEXT NOT NULL,
   user_id BIGINT NOT NULL,
   dog_encrypted_oii TEXT NOT NULL,
