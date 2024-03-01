@@ -10,10 +10,9 @@ export async function dbInsertVet(
       vet_email,
       vet_name,
       vet_phone_number,
-      vet_address,
-      vet_creation_time
+      vet_address
     )
-    VALUES ($1, $2, $3, $4, CURRENT_TIMESTAMP)
+    VALUES ($1, $2, $3, $4)
     RETURNING vet_id, vet_creation_time
   `;
   const res = await dbQuery(ctx, sql, [

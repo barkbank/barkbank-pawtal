@@ -8,10 +8,9 @@ export async function dbInsertAdmin(
   const sql = `
     INSERT INTO admins (
       admin_hashed_email,
-      admin_encrypted_pii,
-      admin_creation_time
+      admin_encrypted_pii
     )
-    VALUES ($1, $2, CURRENT_TIMESTAMP)
+    VALUES ($1, $2)
     RETURNING admin_id, admin_creation_time
   `;
   const res = await dbQuery(ctx, sql, [

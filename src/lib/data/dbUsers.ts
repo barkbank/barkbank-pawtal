@@ -8,10 +8,9 @@ export async function dbInsertUser(
   const sql = `
   INSERT INTO users (
     user_hashed_email,
-    user_encrypted_pii,
-    user_creation_time
+    user_encrypted_pii
   )
-  VALUES ($1, $2, CURRENT_TIMESTAMP)
+  VALUES ($1, $2)
   RETURNING
     user_id,
     user_creation_time

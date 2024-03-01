@@ -14,11 +14,9 @@ export async function dbInsertDog(
       dog_breed,
       dog_birth_month,
       dog_gender,
-      dog_dea1_point1,
-
-      dog_creation_time
+      dog_dea1_point1
     )
-    VALUES ($1, $2, $3, $4, $5, $6, $7, CURRENT_TIMESTAMP)
+    VALUES ($1, $2, $3, $4, $5, $6, $7)
     RETURNING dog_id, dog_creation_time
   `;
   const res = await dbQuery(ctx, sql, [
