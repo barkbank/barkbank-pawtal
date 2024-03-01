@@ -17,7 +17,7 @@ export async function dbInsertDog(
       dog_dea1_point1
     )
     VALUES ($1, $2, $3, $4, $5, $6, $7)
-    RETURNING dog_id, dog_creation_time
+    RETURNING dog_id, dog_creation_time, dog_modification_time
   `;
   const res = await dbQuery(ctx, sql, [
     userId,
@@ -46,7 +46,8 @@ export async function dbSelectDog(
       dog_dea1_point1,
 
       dog_id,
-      dog_creation_time
+      dog_creation_time,
+      dog_modification_time
     FROM dogs
     WHERE dog_id = $1
   `;

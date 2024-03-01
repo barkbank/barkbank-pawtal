@@ -19,6 +19,7 @@ export type UserSpec = {
 export type UserGen = {
   userId: string;
   userCreationTime: Date;
+  userModificationTime: Date;
 };
 
 export type User = UserSpec & UserGen;
@@ -58,6 +59,7 @@ export type DogSpec = {
 export type DogGen = {
   dogId: string;
   dogCreationTime: Date;
+  dogModificationTime: Date;
 };
 
 export type Dog = { userId: string } & DogSpec & DogGen;
@@ -70,6 +72,7 @@ export type AdminSpec = {
 export type AdminGen = {
   adminId: string;
   adminCreationTime: Date;
+  adminModificationTime: Date;
 };
 
 export type Admin = AdminSpec & AdminGen;
@@ -84,6 +87,7 @@ export type VetSpec = {
 export type VetGen = {
   vetId: string;
   vetCreationTime: Date;
+  vetModificationTime: Date;
 };
 
 export type Vet = VetSpec & VetGen;

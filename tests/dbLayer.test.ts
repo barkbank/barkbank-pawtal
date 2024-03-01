@@ -18,6 +18,7 @@ import {
   dbInsertUser,
   dbSelectUser,
   dbSelectUserIdByHashedEmail,
+  dbUpdateUser,
 } from "@/lib/data/dbUsers";
 import { sprintf } from "sprintf-js";
 import { dbInsertDog, dbSelectDog } from "@/lib/data/dbDogs";
@@ -47,6 +48,8 @@ describe("Database Layer", () => {
         const user = await dbSelectUser(db, userGen.userId);
         if (!user) fail("person is null");
         expect(user.userCreationTime).toBeTruthy();
+        expect(user.userModificationTime).toBeTruthy();
+        expect(user.userModificationTime).toEqual(user.userCreationTime);
         const spec = toUserSpec(user);
         expect(spec).toMatchObject(userSpec(1));
       });
@@ -73,6 +76,18 @@ describe("Database Layer", () => {
         expect(userId).toBeNull();
       });
     });
+    it("should update modification time on update", async () => {
+      await withDb(async (db) => {
+        const gen1 = await dbInsertUser(db, userSpec(1));
+        ensureTimePassed();
+        const gen2 = await dbUpdateUser(db, gen1.userId, userSpec(2));
+        expect(gen2.userId).toEqual(gen1.userId);
+        expect(gen2.userCreationTime).toEqual(gen1.userCreationTime);
+        expect(gen2.userModificationTime.getTime()).toBeGreaterThan(
+          gen1.userModificationTime.getTime(),
+        );
+      });
+    });
   });
   describe("dbDogs", () => {
     it("should support insert and select", async () => {
@@ -82,6 +97,8 @@ describe("Database Layer", () => {
         const dog = await dbSelectDog(db, dogGen.dogId);
         if (!dog) fail("dog is null");
         expect(dog.dogCreationTime).toBeTruthy();
+        expect(dog.dogModificationTime).toBeTruthy();
+        expect(dog.dogModificationTime).toEqual(dog.dogCreationTime);
         expect(dog.userId).toBe(userGen.userId);
         const spec = toDogSpec(dog);
         expect(spec).toMatchObject(dogSpec(1));
@@ -131,6 +148,8 @@ describe("Database Layer", () => {
         const admin = await dbSelectAdmin(db, adminGen.adminId);
         if (!admin) fail("admin is null");
         expect(admin.adminCreationTime).toBeTruthy();
+        expect(admin.adminModificationTime).toBeTruthy();
+        expect(admin.adminModificationTime).toEqual(admin.adminCreationTime);
         const spec = toAdminSpec(admin);
         expect(spec).toMatchObject(adminSpec(1));
       });
@@ -168,6 +187,8 @@ describe("Database Layer", () => {
         const vet = await dbSelectVet(db, vetGen.vetId);
         if (!vet) fail("vet is null");
         expect(vet.vetCreationTime).toBeTruthy();
+        expect(vet.vetModificationTime).toBeTruthy();
+        expect(vet.vetModificationTime).toEqual(vet.vetCreationTime);
         const spec = toVetSpec(vet);
         expect(spec).toMatchObject(vetSpec(1));
       });
@@ -193,6 +214,14 @@ describe("Database Layer", () => {
     });
   });
 });
+
+function ensureTimePassed(): void {
+  const t0 = new Date().getTime();
+  let t1 = new Date().getTime();
+  while (t0 === t1) {
+    t1 = new Date().getTime();
+  }
+}
 
 function userSpec(idx: number): UserSpec {
   return {
