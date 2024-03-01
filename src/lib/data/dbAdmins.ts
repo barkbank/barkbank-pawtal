@@ -11,7 +11,7 @@ export async function dbInsertAdmin(
       admin_encrypted_pii
     )
     VALUES ($1, $2)
-    RETURNING admin_id, admin_creation_time
+    RETURNING admin_id, admin_creation_time, admin_modification_time
   `;
   const res = await dbQuery(ctx, sql, [
     adminSpec.adminHashedEmail,
@@ -29,7 +29,8 @@ export async function dbSelectAdmin(
       admin_hashed_email,
       admin_encrypted_pii,
       admin_id,
-      admin_creation_time
+      admin_creation_time,
+      admin_modification_time
     FROM admins
     WHERE admin_id = $1
   `;

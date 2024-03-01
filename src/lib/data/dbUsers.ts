@@ -13,7 +13,8 @@ export async function dbInsertUser(
   VALUES ($1, $2)
   RETURNING
     user_id,
-    user_creation_time
+    user_creation_time,
+    user_modification_time
   `;
   const res = await dbQuery(ctx, sql, [
     userSpec.userHashedEmail,
@@ -30,6 +31,7 @@ export async function dbSelectUser(
   SELECT
     user_id,
     user_creation_time,
+    user_modification_time,
     user_hashed_email,
     user_encrypted_pii
   FROM users

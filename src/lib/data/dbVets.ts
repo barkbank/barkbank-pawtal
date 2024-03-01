@@ -13,7 +13,7 @@ export async function dbInsertVet(
       vet_address
     )
     VALUES ($1, $2, $3, $4)
-    RETURNING vet_id, vet_creation_time
+    RETURNING vet_id, vet_creation_time, vet_modification_time
   `;
   const res = await dbQuery(ctx, sql, [
     vetSpec.vetEmail,
@@ -35,7 +35,8 @@ export async function dbSelectVet(
       vet_phone_number,
       vet_address,
       vet_id,
-      vet_creation_time
+      vet_creation_time,
+      vet_modification_time
     FROM vets
     WHERE vet_id = $1
   `;
