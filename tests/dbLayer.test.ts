@@ -33,6 +33,7 @@ import {
   dbSelectVetIdByEmail,
 } from "@/lib/data/dbVets";
 import { guaranteed } from "@/lib/bark-utils";
+import { Pool } from "pg";
 
 /**
  * Database Layer refers to the code in lib/data.
@@ -64,10 +65,10 @@ describe("Database Layer", () => {
         await withDb(async (db) => {
           const userGen = await dbInsertUser(db, userSpec(1));
           const user = await dbSelectUser(db, userGen.userId);
-          if (!user) fail("person is null");
-          expect(user.userCreationTime).toEqual(userGen.userCreationTime);
-          expect(user.userModificationTime).toEqual(userGen.userCreationTime);
-          const spec = toUserSpec(user);
+          expect(user).not.toBeNull()
+          expect(user?.userCreationTime).toEqual(userGen.userCreationTime);
+          expect(user?.userModificationTime).toEqual(userGen.userCreationTime);
+          const spec = toUserSpec(guaranteed(user));
           expect(spec).toMatchObject(userSpec(1));
         });
       });
@@ -115,54 +116,88 @@ describe("Database Layer", () => {
     });
   });
   describe("dbDogs", () => {
-    it("should support insert and select", async () => {
-      await withDb(async (db) => {
-        const userGen = await dbInsertUser(db, userSpec(1));
-        const dogGen = await dbInsertDog(db, userGen.userId, dogSpec(1));
-        const dog = await dbSelectDog(db, dogGen.dogId);
-        if (!dog) fail("dog is null");
-        expect(dog.dogCreationTime).toBeTruthy();
-        expect(dog.dogModificationTime).toBeTruthy();
-        expect(dog.dogModificationTime).toEqual(dog.dogCreationTime);
-        expect(dog.userId).toBe(userGen.userId);
-        const spec = toDogSpec(dog);
-        expect(spec).toMatchObject(dogSpec(1));
+    describe("dbInsertDog", () => {
+      it("should insert a new dog", async () => {
+        await withDb(async (db) => {
+          // Given a user
+          const userGen = await dbInsertUser(db, userSpec(1));
+
+          // When a dog is inserted for the user
+          const dogGen = await dbInsertDog(db, userGen.userId, dogSpec(1));
+
+          // Then
+          expect(dogGen.dogCreationTime).toBeTruthy();
+          expect(dogGen.dogModificationTime).toBeTruthy();
+          expect(dogGen.dogModificationTime).toEqual(dogGen.dogCreationTime);
+        });
       });
     });
-    it("should return null when dog does not exist", async () => {
-      await withDb(async (db) => {
-        const dog = await dbSelectDog(db, "111");
-        expect(dog).toBeNull();
-      });
-    });
-    it("should not allow insertion of incorrect gender enum", async () => {
-      await withDb(async (db) => {
-        const originalLogFn = console.error;
+    describe("dbInsertDog Data Validation", () => {
+      const originalLogFn = console.error;
+      beforeAll(() => {
         console.error = jest.fn();
+      });
+      afterAll(() => {
+        console.error = originalLogFn;
+      });
+      async function expectErrorWhenInserting(
+        spec: Record<string, any>,
+        db: Pool,
+      ) {
         const userGen = await dbInsertUser(db, userSpec(1));
-        const spec: Record<string, any> = dogSpec(1);
-        spec.dogGender = "F"; // Correct is 'Female'
         await expect(
           (async () => {
             await dbInsertDog(db, userGen.userId, spec as DogSpec);
           })(),
         ).rejects.toThrow(Error);
-        console.error = originalLogFn;
+      }
+      it("should not allow insertion of incorrect gender enum", async () => {
+        await withDb(async (db) => {
+          const spec: Record<string, any> = dogSpec(1);
+          spec.dogGender = "F"; // Correct is 'FEMALE'
+          await expectErrorWhenInserting(spec, db);
+        });
+      });
+      it("should not allow insertion of incorrect antigen presence value", async () => {
+        await withDb(async (db) => {
+          const spec: Record<string, any> = dogSpec(1);
+          spec.dogDea1Point1 = "+"; // Correct is 'POSITIVE'
+          await expectErrorWhenInserting(spec, db);
+        });
+      });
+      it("should not allow insertion of incorrect birthday format", async () => {
+        await withDb(async (db) => {
+          const spec: Record<string, any> = dogSpec(1);
+          spec.dogBirthday = "2020-06"; // Correct should be padded like '2020-06-00'
+          await expectErrorWhenInserting(spec, db);
+        });
       });
     });
-    it("should not allow insertion of incorrect antigen presence value", async () => {
-      await withDb(async (db) => {
-        const originalLogFn = console.error;
-        console.error = jest.fn();
-        const userGen = await dbInsertUser(db, userSpec(1));
-        const spec: Record<string, any> = dogSpec(1);
-        spec.dogDea1Point1 = "+"; // Correct is 'Positive'
-        await expect(
-          (async () => {
-            await dbInsertDog(db, userGen.userId, spec as DogSpec);
-          })(),
-        ).rejects.toThrow(Error);
-        console.error = originalLogFn;
+    describe("dbSelectDog", () => {
+      it("should return the dog", async () => {
+        await withDb(async (db) => {
+          // Given a user with a dog
+          const userGen = await dbInsertUser(db, userSpec(1));
+          const dogGen = await dbInsertDog(db, userGen.userId, dogSpec(1));
+
+          // When the dog is selected by dogId
+          const dog = await dbSelectDog(db, dogGen.dogId);
+
+          // Then
+          expect(dog).not.toBeNull();
+          expect(dog?.dogCreationTime).toBeTruthy();
+          expect(dog?.dogModificationTime).toBeTruthy();
+          expect(dog?.dogModificationTime).toEqual(dog?.dogCreationTime);
+          expect(dog?.userId).toBe(userGen.userId);
+          const spec = toDogSpec(guaranteed(dog));
+          expect(spec).toMatchObject(dogSpec(1));
+        });
+      });
+      it("should return null no dog matches the input dogId", async () => {
+        await withDb(async (db) => {
+          const dog = await dbSelectDog(db, "111");
+          expect(dog).toBeNull();
+        });
       });
     });
   });
