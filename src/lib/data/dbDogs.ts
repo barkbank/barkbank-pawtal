@@ -12,7 +12,7 @@ export async function dbInsertDog(
       dog_status,
       dog_encrypted_oii,
       dog_breed,
-      dog_birth_month,
+      dog_birthday,
       dog_gender,
       dog_dea1_point1
     )
@@ -24,7 +24,7 @@ export async function dbInsertDog(
     dogSpec.dogStatus,
     dogSpec.dogEncryptedOii,
     dogSpec.dogBreed,
-    dogSpec.dogBirthMonth,
+    dogSpec.dogBirthday,
     dogSpec.dogGender,
     dogSpec.dogDea1Point1,
   ]);
@@ -41,7 +41,7 @@ export async function dbSelectDog(
       dog_status,
       dog_encrypted_oii,
       dog_breed,
-      dog_birth_month,
+      dog_birthday,
       dog_gender,
       dog_dea1_point1,
 

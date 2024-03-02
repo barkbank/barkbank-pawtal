@@ -251,18 +251,19 @@ function dogSpec(idx: number): DogSpec {
     dogStatus: dogStatus(idx),
     dogEncryptedOii: `dogEncryptedOii-${idx}`,
     dogBreed: `dogBreed${idx}`,
-    dogBirthMonth: yearMonth(idx),
+    dogBirthday: birthday(idx),
     dogGender: dogGender(idx),
     dogDea1Point1: dogAntigenPresence(idx + 1 + 1),
   };
 }
 
-function yearMonth(idx: number): string {
+function birthday(idx: number): string {
   const baseYear = 2023;
   const yearOffset = idx % 5;
   const year = baseYear - yearOffset;
   const monthOfYear = idx % 13;
-  return sprintf("%d-%02d", year, monthOfYear);
+  const dayOfMonth = idx % 29;
+  return sprintf("%d-%02d-%02d", year, monthOfYear, dayOfMonth);
 }
 
 function dogAntigenPresence(idx: number): DogAntigenPresence {
