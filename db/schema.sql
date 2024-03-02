@@ -38,7 +38,12 @@ CREATE TABLE dogs (
   dog_id BIGSERIAL,
   dog_creation_time TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   dog_status TEXT NOT NULL,
-  user_id BIGINT NOT NULL,
+
+  -- User ID is nullable, allowing User records to be deleted while leaving
+  -- behind Dog records. This way records used to track dog related activities
+  -- would not have broken references.
+  user_id BIGINT,
+
   dog_encrypted_oii TEXT NOT NULL,
   dog_breed TEXT NOT NULL,
   dog_gender t_dog_gender NOT NULL,
@@ -50,10 +55,25 @@ CREATE TABLE dogs (
   dog_weight_kg INTEGER, -- NULL means weight is not known.
   CONSTRAINT dog_weight_kg_is_positive CHECK (dog_weight_kg > 0),
   CONSTRAINT dog_birthday_fmt CHECK (dog_birthday ~ '^\d{4}-\d{2}-\d{2}$'),
-  CONSTRAINT dogs_fk_users FOREIGN KEY (user_id) REFERENCES users (user_id),
+  CONSTRAINT dogs_fk_users FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE SET NULL,
   CONSTRAINT dogs_pk PRIMARY KEY (dog_id)
 );
 
+-- A user's vet preference for each given dog.
+CREATE TABLE dog_vet_preferences (
+  dog_id BIGINT NOT NULL,
+  vet_id BIGINT NOT NULL,
+
+  -- The reason for this FK is so that dog-vet preferences can be deleted when
+  -- user is deleted. Necessary because ON DELETE for dogs_fk_users is SET NULL.
+  user_id BIGINT NOT NULL,
+
+  preference_creation_time TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT dog_vet_preferences_fk_dogs FOREIGN KEY (dog_id) REFERENCES dogs (dog_id) ON DELETE CASCADE,
+  CONSTRAINT dog_vet_preferences_fk_vets FOREIGN KEY (vet_id) REFERENCES vets (vet_id) ON DELETE CASCADE,
+  CONSTRAINT dog_vet_preferences_fk_users FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE,
+  CONSTRAINT dog_vet_preferences_pk PRIMARY KEY (dog_id, vet_id)
+);
 
 -- ------------------------------------------------------------
 -- # Triggers

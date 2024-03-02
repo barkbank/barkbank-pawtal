@@ -16,13 +16,20 @@ import {
   toVetSpec,
 } from "@/lib/data/mappers";
 import {
+  dbDeleteUser,
   dbInsertUser,
   dbSelectUser,
   dbSelectUserIdByHashedEmail,
   dbUpdateUser,
 } from "@/lib/data/dbUsers";
 import { sprintf } from "sprintf-js";
-import { dbInsertDog, dbSelectDog } from "@/lib/data/dbDogs";
+import {
+  dbDeleteDogVetPreferences,
+  dbInsertDog,
+  dbInsertDogVetPreference,
+  dbSelectDog,
+  dbSelectPreferredVetIds,
+} from "@/lib/data/dbDogs";
 import {
   dbInsertAdmin,
   dbSelectAdmin,
@@ -112,6 +119,23 @@ describe("Database Layer", () => {
           const user = guaranteed(await dbSelectUser(db, gen1.userId));
           const spec = toUserSpec(user);
           expect(spec).toEqual(userSpec(2));
+        });
+      });
+    });
+    describe("dbDeleteUser", () => {
+      it("should remove the user record", async () => {
+        await withDb(async (db) => {
+          const userGen = await dbInsertUser(db, userSpec(1));
+          const didDelete = await dbDeleteUser(db, userGen.userId);
+          expect(didDelete).toBe(true);
+          const user = await dbSelectUser(db, userGen.userId);
+          expect(user).toBeNull();
+        });
+      });
+      it("should return false if user does not exist", async () => {
+        await withDb(async (db) => {
+          const didDelete = await dbDeleteUser(db, "123456");
+          expect(didDelete).toBe(false);
         });
       });
     });
@@ -229,6 +253,87 @@ describe("Database Layer", () => {
         await withDb(async (db) => {
           const dog = await dbSelectDog(db, "111");
           expect(dog).toBeNull();
+        });
+      });
+    });
+    describe("dbInsertDogVetPreference", () => {
+      it("should insert a dog's vet preference", async () => {
+        await withDb(async (db) => {
+          const userGen = await dbInsertUser(db, userSpec(1));
+          const dogGen = await dbInsertDog(db, userGen.userId, dogSpec(1));
+          const vetGen = await dbInsertVet(db, vetSpec(1));
+          const inserted = await dbInsertDogVetPreference(
+            db,
+            dogGen.dogId,
+            vetGen.vetId,
+          );
+          expect(inserted).toBe(true);
+        });
+      });
+      it("should return false if dog-vet preference already exists", async () => {
+        await withDb(async (db) => {
+          const userGen = await dbInsertUser(db, userSpec(1));
+          const dogGen = await dbInsertDog(db, userGen.userId, dogSpec(1));
+          const vetGen = await dbInsertVet(db, vetSpec(1));
+          const firstInsertion = await dbInsertDogVetPreference(
+            db,
+            dogGen.dogId,
+            vetGen.vetId,
+          );
+          expect(firstInsertion).toBe(true);
+          const secondInsertion = await dbInsertDogVetPreference(
+            db,
+            dogGen.dogId,
+            vetGen.vetId,
+          );
+          expect(secondInsertion).toBe(false);
+        });
+      });
+      it("should return false if the dog has no user owner", async () => {
+        await withDb(async (db) => {
+          const userGen = await dbInsertUser(db, userSpec(1));
+          const dogGen = await dbInsertDog(db, userGen.userId, dogSpec(1));
+          const vetGen = await dbInsertVet(db, vetSpec(1));
+          const didDelete = await dbDeleteUser(db, userGen.userId);
+          expect(didDelete).toBe(true);
+          const didInsert = await dbInsertDogVetPreference(
+            db,
+            dogGen.dogId,
+            vetGen.vetId,
+          );
+          expect(didInsert).toBe(false);
+        });
+      });
+    });
+    describe("dbSelectPreferredVetIds", () => {
+      it("should return list of preferred vet IDs", async () => {
+        await withDb(async (db) => {
+          const userGen = await dbInsertUser(db, userSpec(1));
+          const dogGen = await dbInsertDog(db, userGen.userId, dogSpec(1));
+          const vetGen1 = await dbInsertVet(db, vetSpec(1));
+          const vetGen2 = await dbInsertVet(db, vetSpec(2));
+          await dbInsertDogVetPreference(db, dogGen.dogId, vetGen1.vetId);
+          await dbInsertDogVetPreference(db, dogGen.dogId, vetGen2.vetId);
+          const vetIds = await dbSelectPreferredVetIds(db, dogGen.dogId);
+          expect(vetIds.includes(vetGen1.vetId)).toBe(true);
+          expect(vetIds.includes(vetGen2.vetId)).toBe(true);
+          expect(vetIds.length).toEqual(2);
+        });
+      });
+    });
+    describe("dbDeleteDogVetPreferences", () => {
+      it("should delete dog vet preferences for the given dog", async () => {
+        await withDb(async (db) => {
+          const userGen = await dbInsertUser(db, userSpec(1));
+          const dogGen = await dbInsertDog(db, userGen.userId, dogSpec(1));
+          const vetGen1 = await dbInsertVet(db, vetSpec(1));
+          const vetGen2 = await dbInsertVet(db, vetSpec(2));
+          await dbInsertDogVetPreference(db, dogGen.dogId, vetGen1.vetId);
+          await dbInsertDogVetPreference(db, dogGen.dogId, vetGen2.vetId);
+          const numDeleted = await dbDeleteDogVetPreferences(db, dogGen.dogId);
+          expect(numDeleted).toEqual(2);
+          const vetIds = await dbSelectPreferredVetIds(db, dogGen.dogId);
+          expect(vetIds.length).toEqual(0);
         });
       });
     });

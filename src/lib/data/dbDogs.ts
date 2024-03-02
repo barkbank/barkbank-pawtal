@@ -66,3 +66,58 @@ export async function dbSelectDog(
   }
   return null;
 }
+
+/**
+ * Inserts a dog_vet_preferences record
+ */
+export async function dbInsertDogVetPreference(
+  ctx: DbContext,
+  dogId: string,
+  vetId: string,
+): Promise<boolean> {
+  const sql = `
+  WITH mIdentifiers AS (
+    SELECT
+      user_id,
+      dog_id,
+      CAST($2 as BIGINT) as vet_id
+    FROM dogs
+    WHERE dog_id = $1
+    AND user_id IS NOT NULL
+  )
+
+  INSERT INTO dog_vet_preferences (user_id, dog_id, vet_id)
+  SELECT user_id, dog_id, vet_id FROM mIdentifiers
+  ON CONFLICT (dog_id, vet_id) DO NOTHING
+  RETURNING 1
+  `;
+  const res = await dbQuery(ctx, sql, [dogId, vetId]);
+  return res.rows.length === 1;
+}
+
+export async function dbDeleteDogVetPreferences(
+  ctx: DbContext,
+  dogId: string,
+): Promise<number> {
+  const sql = `
+  WITH
+  mDeletion AS (
+    DELETE FROM dog_vet_preferences WHERE dog_id = $1
+    RETURNING 1
+  )
+  SELECT COUNT(*) as num_deleted FROM mDeletion;
+  `;
+  const res = await dbQuery(ctx, sql, [dogId]);
+  return parseInt(res.rows[0].num_deleted);
+}
+
+export async function dbSelectPreferredVetIds(
+  ctx: DbContext,
+  dogId: string,
+): Promise<string[]> {
+  const sql = `
+  SELECT vet_id FROM dog_vet_preferences WHERE dog_id = $1
+  `;
+  const res = await dbQuery(ctx, sql, [dogId]);
+  return res.rows.map((row) => row.vet_id);
+}

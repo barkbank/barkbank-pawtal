@@ -82,3 +82,14 @@ export async function dbSelectUserIdByHashedEmail(
   }
   return null;
 }
+
+export async function dbDeleteUser(
+  ctx: DbContext,
+  userId: string,
+): Promise<boolean> {
+  const sql = `
+  DELETE FROM users WHERE user_id = $1 RETURNING 1
+  `;
+  const res = await dbQuery(ctx, sql, [userId]);
+  return res.rows.length === 1;
+}
