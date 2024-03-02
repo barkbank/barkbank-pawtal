@@ -16,6 +16,7 @@ import {
   toVetSpec,
 } from "@/lib/data/mappers";
 import {
+  dbDeleteUser,
   dbInsertUser,
   dbSelectUser,
   dbSelectUserIdByHashedEmail,
@@ -41,7 +42,6 @@ import {
 } from "@/lib/data/dbVets";
 import { guaranteed } from "@/lib/bark-utils";
 import { Pool } from "pg";
-import exp from "constants";
 
 /**
  * Database Layer refers to the code in lib/data.
@@ -119,6 +119,23 @@ describe("Database Layer", () => {
           const user = guaranteed(await dbSelectUser(db, gen1.userId));
           const spec = toUserSpec(user);
           expect(spec).toEqual(userSpec(2));
+        });
+      });
+    });
+    describe("dbDeleteUser", () => {
+      it("should remove the user record", async () => {
+        await withDb(async (db) => {
+          const userGen = await dbInsertUser(db, userSpec(1));
+          const didDelete = await dbDeleteUser(db, userGen.userId);
+          expect(didDelete).toBe(true);
+          const user = await dbSelectUser(db, userGen.userId);
+          expect(user).toBeNull();
+        });
+      });
+      it("should return false if user does not exist", async () => {
+        await withDb(async (db) => {
+          const didDelete = await dbDeleteUser(db, "123456");
+          expect(didDelete).toBe(false);
         });
       });
     });
@@ -251,6 +268,40 @@ describe("Database Layer", () => {
             vetGen.vetId,
           );
           expect(inserted).toBe(true);
+        });
+      });
+      it("should return false if dog-vet preference already exists", async () => {
+        await withDb(async (db) => {
+          const userGen = await dbInsertUser(db, userSpec(1));
+          const dogGen = await dbInsertDog(db, userGen.userId, dogSpec(1));
+          const vetGen = await dbInsertVet(db, vetSpec(1));
+          const firstInsertion = await dbInsertDogVetPreference(
+            db,
+            dogGen.dogId,
+            vetGen.vetId,
+          );
+          expect(firstInsertion).toBe(true);
+          const secondInsertion = await dbInsertDogVetPreference(
+            db,
+            dogGen.dogId,
+            vetGen.vetId,
+          );
+          expect(secondInsertion).toBe(false);
+        });
+      });
+      it("should return false if the dog has no user owner", async () => {
+        await withDb(async (db) => {
+          const userGen = await dbInsertUser(db, userSpec(1));
+          const dogGen = await dbInsertDog(db, userGen.userId, dogSpec(1));
+          const vetGen = await dbInsertVet(db, vetSpec(1));
+          const didDelete = await dbDeleteUser(db, userGen.userId);
+          expect(didDelete).toBe(true);
+          const didInsert = await dbInsertDogVetPreference(
+            db,
+            dogGen.dogId,
+            vetGen.vetId,
+          );
+          expect(didInsert).toBe(false);
         });
       });
     });

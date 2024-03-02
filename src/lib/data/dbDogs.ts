@@ -67,14 +67,27 @@ export async function dbSelectDog(
   return null;
 }
 
+/**
+ * Inserts a dog_vet_preferences record
+ */
 export async function dbInsertDogVetPreference(
   db: DbContext,
   dogId: string,
   vetId: string,
 ): Promise<boolean> {
   const sql = `
-  INSERT INTO dog_vet_preferences (dog_id, vet_id)
-  VALUES ($1, $2)
+  WITH mIdentifiers AS (
+    SELECT
+      user_id,
+      dog_id,
+      CAST($2 as BIGINT) as vet_id
+    FROM dogs
+    WHERE dog_id = $1
+    AND user_id IS NOT NULL
+  )
+
+  INSERT INTO dog_vet_preferences (user_id, dog_id, vet_id)
+  SELECT user_id, dog_id, vet_id FROM mIdentifiers
   ON CONFLICT (dog_id, vet_id) DO NOTHING
   RETURNING preference_creation_time
   `;
