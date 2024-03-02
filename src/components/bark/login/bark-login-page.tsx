@@ -18,8 +18,8 @@ export default async function BarkLoginPage(props: {
   }
   return (
     <>
-      <div className="flex h-screen flex-col items-center justify-center px-6">
-        <LoginLayout>
+      <div className="flex h-screen flex-col items-center justify-center">
+        <LoginLayout accountType={accountType}>
           <div className="w-full sm:w-[36rem]">
             <BarkH1>{title}</BarkH1>
             <BarkLoginForm
