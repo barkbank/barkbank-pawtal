@@ -19,9 +19,9 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         brandInverse:
-          "text-brand font-bold border-2 border-brand shadow hover:bg-brand hover:text-white",
+          "text-brand font-bold border-2 border-brand bg-brand-light hover:bg-brand hover:text-white w-[160px] shadow-button",
         brand:
-          "text-white bg-brand hover:bg-brand-light hover:text-brand border-2 border-brand",
+          "text-white font-bold border-2 border-brand bg-brand hover:bg-brand-light hover:text-brand w-[160px] shadow-button",
       },
       size: {
         default: "h-10 px-4 py-2",
