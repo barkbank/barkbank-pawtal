@@ -24,9 +24,9 @@ This section walks through the steps for setting up a local deployment with a Pa
 In the `main` branch of the `barkbank-schema` repository, run `make local` to create the local PostgreSQL database that listens at port 5800.
 
 Additional notes:
+
 - The `make local` target is idempotent. It will always try to bring the locally running database at 5800 to the latest schema defined. It will not make changes to the schema or existing data once all migrations have been applied.
 - Instructions for changing the schema itself can be found in the `barkbank-schema` repository.
-
 
 ### Second, create `.env.local`
 
@@ -59,6 +59,14 @@ DANGEROUS_ENABLED=true
 In the `main` branch of the `barkbank-pawtal` repository, run `make run` to start a Pawtal service that listens on port 3000. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 Keep this terminal window handy. In the local deployment configured above, OTP emails are not sent, they are logged to standard out.
+
+### Fourth, create local accounts
+
+Run `make local-accounts` to create the following accounts in the local deployment:
+
+- Admin Account: alice@admin.com
+- User Account: bob@user.com
+- Vet Account: vincent@vet.com
 
 ## Development
 

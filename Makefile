@@ -19,3 +19,7 @@ run:
 .PHONY: npm-install
 npm-install:
 	npm install
+
+.PHONY: local-accounts
+local-accounts:
+	bash scripts/create_local_accounts.sh
