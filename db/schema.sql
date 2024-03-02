@@ -54,6 +54,12 @@ CREATE TABLE dogs (
   CONSTRAINT dogs_pk PRIMARY KEY (dog_id)
 );
 
+CREATE TABLE dog_vet_preferences (
+  dog_id BIGINT,
+  vet_id BIGINT,
+  preference_creation_time TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT dog_vet_preferences_pk PRIMARY KEY (dog_id, vet_id)
+);
 
 -- ------------------------------------------------------------
 -- # Triggers
