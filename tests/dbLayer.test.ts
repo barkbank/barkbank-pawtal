@@ -32,8 +32,11 @@ import {
   dbSelectVet,
   dbSelectVetIdByEmail,
 } from "@/lib/data/dbVets";
+import { guaranteed } from "@/lib/bark-utils";
 
-// TODO: Split into dbUsers.test.ts, dbVets.test.ts, etc.
+/**
+ * Database Layer refers to the code in lib/data.
+ */
 describe("Database Layer", () => {
   describe("DogStatus enumeration", () => {
     it("is an enumeration of strings", () => {
@@ -42,50 +45,70 @@ describe("Database Layer", () => {
     });
   });
   describe("dbUsers", () => {
-    it("should support insert and select", async () => {
-      await withDb(async (db) => {
-        const userGen = await dbInsertUser(db, userSpec(1));
-        const user = await dbSelectUser(db, userGen.userId);
-        if (!user) fail("person is null");
-        expect(user.userCreationTime).toBeTruthy();
-        expect(user.userModificationTime).toBeTruthy();
-        expect(user.userModificationTime).toEqual(user.userCreationTime);
-        const spec = toUserSpec(user);
-        expect(spec).toMatchObject(userSpec(1));
+    describe("dbInsertUser", () => {
+      it("should insert a new user and return UserGen", async () => {
+        await withDb(async (db) => {
+          const userGen = await dbInsertUser(db, userSpec(1));
+          expect(userGen.userCreationTime).toBeTruthy();
+          expect(userGen.userModificationTime).toBeTruthy();
+          expect(userGen.userModificationTime).toEqual(
+            userGen.userCreationTime,
+          );
+        });
       });
     });
-    it("should return null when person does not exist", async () => {
-      await withDb(async (db) => {
-        const user = await dbSelectUser(db, "111");
-        expect(user).toBeNull();
+    describe("dbSelectUser", () => {
+      it("should return User", async () => {
+        await withDb(async (db) => {
+          const userGen = await dbInsertUser(db, userSpec(1));
+          const user = await dbSelectUser(db, userGen.userId);
+          if (!user) fail("person is null");
+          expect(user.userCreationTime).toEqual(userGen.userCreationTime);
+          expect(user.userModificationTime).toEqual(userGen.userCreationTime);
+          const spec = toUserSpec(user);
+          expect(spec).toMatchObject(userSpec(1));
+        });
+      });
+      it("should return null when person does not exist", async () => {
+        await withDb(async (db) => {
+          const user = await dbSelectUser(db, "111");
+          expect(user).toBeNull();
+        });
       });
     });
-    it("should support retrieval of user ID by hashed email", async () => {
-      await withDb(async (db) => {
-        const userGen = await dbInsertUser(db, userSpec(1));
-        const userId = await dbSelectUserIdByHashedEmail(
-          db,
-          userSpec(1).userHashedEmail,
-        );
-        expect(userId).toEqual(userGen.userId);
+    describe("dbSelectUserIdByHashedEmail", () => {
+      it("should return user ID of the user matching the hashed email", async () => {
+        await withDb(async (db) => {
+          const userGen = await dbInsertUser(db, userSpec(1));
+          const userId = await dbSelectUserIdByHashedEmail(
+            db,
+            userSpec(1).userHashedEmail,
+          );
+          expect(userId).toEqual(userGen.userId);
+        });
+      });
+      it("should return null when no user matches the hashed email", async () => {
+        await withDb(async (db) => {
+          const userId = await dbSelectUserIdByHashedEmail(db, "no-no-no");
+          expect(userId).toBeNull();
+        });
       });
     });
-    it("should return null when no user exists with the hashed email", async () => {
-      await withDb(async (db) => {
-        const userId = await dbSelectUserIdByHashedEmail(db, "no-no-no");
-        expect(userId).toBeNull();
-      });
-    });
-    it("should update modification time on update", async () => {
-      await withDb(async (db) => {
-        const gen1 = await dbInsertUser(db, userSpec(1));
-        ensureTimePassed();
-        const gen2 = await dbUpdateUser(db, gen1.userId, userSpec(2));
-        expect(gen2.userId).toEqual(gen1.userId);
-        expect(gen2.userCreationTime).toEqual(gen1.userCreationTime);
-        expect(gen2.userModificationTime.getTime()).toBeGreaterThan(
-          gen1.userModificationTime.getTime(),
-        );
+    describe("dbUpdateUser", () => {
+      it("should update user details and modification time", async () => {
+        await withDb(async (db) => {
+          const gen1 = await dbInsertUser(db, userSpec(1));
+          ensureTimePassed();
+          const gen2 = await dbUpdateUser(db, gen1.userId, userSpec(2));
+          expect(gen2.userId).toEqual(gen1.userId);
+          expect(gen2.userCreationTime).toEqual(gen1.userCreationTime);
+          expect(gen2.userModificationTime.getTime()).toBeGreaterThan(
+            gen1.userModificationTime.getTime(),
+          );
+          const user = guaranteed(await dbSelectUser(db, gen1.userId));
+          const spec = toUserSpec(user);
+          expect(spec).toEqual(userSpec(2));
+        });
       });
     });
   });
