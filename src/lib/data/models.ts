@@ -51,7 +51,7 @@ export type DogSpec = {
   dogStatus: DogStatus;
   dogEncryptedOii: string;
   dogBreed: string;
-  dogBirthMonth: string;
+  dogBirthday: string;
   dogGender: DogGender;
   dogDea1Point1: DogAntigenPresence;
 };
