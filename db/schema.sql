@@ -50,7 +50,7 @@ CREATE TABLE dogs (
   dog_weight_kg INTEGER, -- NULL means weight is not known.
   CONSTRAINT dog_weight_kg_is_positive CHECK (dog_weight_kg > 0),
   CONSTRAINT dog_birthday_fmt CHECK (dog_birthday ~ '^\d{4}-\d{2}-\d{2}$'),
-  CONSTRAINT dogs_fk_users FOREIGN KEY (user_id) REFERENCES users (user_id),
+  CONSTRAINT dogs_fk_users FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE CASCADE,
   CONSTRAINT dogs_pk PRIMARY KEY (dog_id)
 );
 
@@ -58,6 +58,8 @@ CREATE TABLE dog_vet_preferences (
   dog_id BIGINT,
   vet_id BIGINT,
   preference_creation_time TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  CONSTRAINT dog_vet_preferences_fk_dogs FOREIGN KEY (dog_id) REFERENCES dogs (dog_id) ON DELETE CASCADE,
+  CONSTRAINT dog_vet_preferences_fk_vets FOREIGN KEY (vet_id) REFERENCES vets (vet_id) ON DELETE CASCADE,
   CONSTRAINT dog_vet_preferences_pk PRIMARY KEY (dog_id, vet_id)
 );
 
