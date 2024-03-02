@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { BarkH1 } from "@/components/bark/bark-typography";
 import { AccountType } from "@/lib/auth";
 import BarkLoginForm from "./bark-login-form";
+import LoginLayout from "./layout";
 
 export default async function BarkLoginPage(props: {
   title: string;
@@ -18,10 +19,15 @@ export default async function BarkLoginPage(props: {
   return (
     <>
       <div className="flex h-screen flex-col items-center justify-center px-6">
-        <div className="w-full sm:w-[36rem]">
-          <BarkH1>{title}</BarkH1>
-          <BarkLoginForm accountType={accountType} successPath={successPath} />
-        </div>
+        <LoginLayout>
+          <div className="w-full sm:w-[36rem]">
+            <BarkH1>{title}</BarkH1>
+            <BarkLoginForm
+              accountType={accountType}
+              successPath={successPath}
+            />
+          </div>
+        </LoginLayout>
       </div>
     </>
   );
