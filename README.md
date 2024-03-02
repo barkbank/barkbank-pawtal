@@ -78,7 +78,7 @@ Running `make` does a couple of things. It will run `npm install`, format the co
 
 Write your code, and don't forget tests.
 
-### Repeat, run `make again!
+### Repeat, run `make` again!
 
 Rinse and repeat. Run `make` to test and auto format the code, make changes, and so on and so forth.
 
