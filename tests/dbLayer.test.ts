@@ -65,7 +65,7 @@ describe("Database Layer", () => {
         await withDb(async (db) => {
           const userGen = await dbInsertUser(db, userSpec(1));
           const user = await dbSelectUser(db, userGen.userId);
-          expect(user).not.toBeNull()
+          expect(user).not.toBeNull();
           expect(user?.userCreationTime).toEqual(userGen.userCreationTime);
           expect(user?.userModificationTime).toEqual(userGen.userCreationTime);
           const spec = toUserSpec(guaranteed(user));
@@ -202,41 +202,59 @@ describe("Database Layer", () => {
     });
   });
   describe("dbAdmins", () => {
-    it("should support insert and select", async () => {
-      await withDb(async (db) => {
-        const adminGen = await dbInsertAdmin(db, adminSpec(1));
-        const admin = await dbSelectAdmin(db, adminGen.adminId);
-        if (!admin) fail("admin is null");
-        expect(admin.adminCreationTime).toBeTruthy();
-        expect(admin.adminModificationTime).toBeTruthy();
-        expect(admin.adminModificationTime).toEqual(admin.adminCreationTime);
-        const spec = toAdminSpec(admin);
-        expect(spec).toMatchObject(adminSpec(1));
+    describe("dbInsertAdmin", () => {
+      it("should insert an admin", async () => {
+        await withDb(async (db) => {
+          const adminGen = await dbInsertAdmin(db, adminSpec(1));
+          expect(adminGen.adminCreationTime).toBeTruthy();
+          expect(adminGen.adminModificationTime).toBeTruthy();
+          expect(adminGen.adminModificationTime).toEqual(
+            adminGen.adminCreationTime,
+          );
+        });
       });
     });
-    it("should return null when admin does not exist", async () => {
-      await withDb(async (db) => {
-        const admin = await dbSelectAdmin(db, "111");
-        expect(admin).toBeNull();
+    describe("dbSelectAdmin", () => {
+      it("should return admin matching the adminId", async () => {
+        await withDb(async (db) => {
+          const adminGen = await dbInsertAdmin(db, adminSpec(1));
+          const admin = await dbSelectAdmin(db, adminGen.adminId);
+          expect(admin).not.toBeNull();
+          expect(admin?.adminCreationTime).toBeTruthy();
+          expect(admin?.adminModificationTime).toBeTruthy();
+          expect(admin?.adminModificationTime).toEqual(
+            admin?.adminCreationTime,
+          );
+          const spec = toAdminSpec(guaranteed(admin));
+          expect(spec).toMatchObject(adminSpec(1));
+        });
+      });
+      it("should return null when no admin matches the adminId", async () => {
+        await withDb(async (db) => {
+          const admin = await dbSelectAdmin(db, "111");
+          expect(admin).toBeNull();
+        });
       });
     });
-    it("should support retrieval of adminId by hashed email", async () => {
-      await withDb(async (db) => {
-        const adminGen = await dbInsertAdmin(db, adminSpec(1));
-        const adminId = await dbSelectAdminIdByAdminHashedEmail(
-          db,
-          adminSpec(1).adminHashedEmail,
-        );
-        expect(adminId).toEqual(adminGen.adminId);
+    describe("dbSelectAdminIdByAdminHashedEmail", () => {
+      it("should return adminId matching the hashed email", async () => {
+        await withDb(async (db) => {
+          const adminGen = await dbInsertAdmin(db, adminSpec(1));
+          const adminId = await dbSelectAdminIdByAdminHashedEmail(
+            db,
+            adminSpec(1).adminHashedEmail,
+          );
+          expect(adminId).toEqual(adminGen.adminId);
+        });
       });
-    });
-    it("should return null adminId when admin does not exist that has the hashed email", async () => {
-      await withDb(async (db) => {
-        const adminId = await dbSelectAdminIdByAdminHashedEmail(
-          db,
-          "not_found",
-        );
-        expect(adminId).toBeNull();
+      it("should return null when no admin matches the hashed email", async () => {
+        await withDb(async (db) => {
+          const adminId = await dbSelectAdminIdByAdminHashedEmail(
+            db,
+            "not_found",
+          );
+          expect(adminId).toBeNull();
+        });
       });
     });
   });
