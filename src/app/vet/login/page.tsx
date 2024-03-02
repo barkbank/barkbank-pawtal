@@ -2,7 +2,7 @@
 
 import { RoutePath } from "@/lib/route-path";
 import { AccountType } from "@/lib/auth";
-import BarkLoginPage from "@/components/bark/bark-login-page";
+import BarkLoginPage from "@/components/bark/login/bark-login-page";
 
 export default async function Page() {
   return (

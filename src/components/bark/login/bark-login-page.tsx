@@ -3,8 +3,8 @@
 import { isLoggedIn } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { BarkH1 } from "@/components/bark/bark-typography";
-import BarkLoginForm from "@/components/bark/bark-login-form";
 import { AccountType } from "@/lib/auth";
+import BarkLoginForm from "./bark-login-form";
 
 export default async function BarkLoginPage(props: {
   title: string;
