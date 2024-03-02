@@ -14,9 +14,11 @@ export async function dbInsertDog(
       dog_breed,
       dog_birthday,
       dog_gender,
-      dog_dea1_point1
+      dog_dea1_point1,
+      dog_ever_pregnant,
+      dog_ever_received_transfusion
     )
-    VALUES ($1, $2, $3, $4, $5, $6, $7)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
     RETURNING dog_id, dog_creation_time, dog_modification_time
   `;
   const res = await dbQuery(ctx, sql, [
@@ -27,6 +29,8 @@ export async function dbInsertDog(
     dogSpec.dogBirthday,
     dogSpec.dogGender,
     dogSpec.dogDea1Point1,
+    dogSpec.dogEverPregnant,
+    dogSpec.dogEverReceivedTransfusion,
   ]);
   return toCamelCaseRow(res.rows[0]);
 }
@@ -44,6 +48,8 @@ export async function dbSelectDog(
       dog_birthday,
       dog_gender,
       dog_dea1_point1,
+      dog_ever_pregnant,
+      dog_ever_received_transfusion,
 
       dog_id,
       dog_creation_time,

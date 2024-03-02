@@ -24,6 +24,12 @@ export type UserGen = {
 
 export type User = UserSpec & UserGen;
 
+export enum YesNoUnknown {
+  YES = "YES",
+  NO = "NO",
+  UNKNOWN = "UNKNOWN",
+}
+
 export enum DogGender {
   MALE = "MALE",
   FEMALE = "FEMALE",
@@ -54,6 +60,8 @@ export type DogSpec = {
   dogBirthday: string;
   dogGender: DogGender;
   dogDea1Point1: DogAntigenPresence;
+  dogEverPregnant: YesNoUnknown;
+  dogEverReceivedTransfusion: YesNoUnknown;
 };
 
 export type DogGen = {
