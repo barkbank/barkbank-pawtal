@@ -89,7 +89,7 @@ export async function dbInsertDogVetPreference(
   INSERT INTO dog_vet_preferences (user_id, dog_id, vet_id)
   SELECT user_id, dog_id, vet_id FROM mIdentifiers
   ON CONFLICT (dog_id, vet_id) DO NOTHING
-  RETURNING preference_creation_time
+  RETURNING 1
   `;
   const res = await dbQuery(ctx, sql, [dogId, vetId]);
   return res.rows.length === 1;
@@ -103,7 +103,7 @@ export async function dbDeleteDogVetPreferences(
   WITH
   mDeletion AS (
     DELETE FROM dog_vet_preferences WHERE dog_id = $1
-    RETURNING *
+    RETURNING 1
   )
   SELECT COUNT(*) as num_deleted FROM mDeletion;
   `;
