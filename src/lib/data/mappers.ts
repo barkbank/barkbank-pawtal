@@ -10,21 +10,21 @@ import {
 } from "./models";
 
 export function toUserSpec(user: User): UserSpec {
-  const { userId, userCreationTime, ...spec } = user;
+  const { userId, userCreationTime, userModificationTime, ...spec } = user;
   return spec;
 }
 
 export function toDogSpec(dog: Dog): DogSpec {
-  const { userId, dogId, dogCreationTime, ...spec } = dog;
+  const { userId, dogId, dogCreationTime, dogModificationTime, ...spec } = dog;
   return spec;
 }
 
 export function toAdminSpec(admin: Admin): AdminSpec {
-  const { adminId, adminCreationTime, ...spec } = admin;
+  const { adminId, adminCreationTime, adminModificationTime, ...spec } = admin;
   return spec;
 }
 
 export function toVetSpec(vet: Vet): VetSpec {
-  const { vetId, vetCreationTime, ...spec } = vet;
+  const { vetId, vetCreationTime, vetModificationTime, ...spec } = vet;
   return spec;
 }
