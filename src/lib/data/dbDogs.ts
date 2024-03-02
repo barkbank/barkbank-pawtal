@@ -71,7 +71,7 @@ export async function dbSelectDog(
  * Inserts a dog_vet_preferences record
  */
 export async function dbInsertDogVetPreference(
-  db: DbContext,
+  ctx: DbContext,
   dogId: string,
   vetId: string,
 ): Promise<boolean> {
@@ -91,12 +91,12 @@ export async function dbInsertDogVetPreference(
   ON CONFLICT (dog_id, vet_id) DO NOTHING
   RETURNING preference_creation_time
   `;
-  const res = await dbQuery(db, sql, [dogId, vetId]);
+  const res = await dbQuery(ctx, sql, [dogId, vetId]);
   return res.rows.length === 1;
 }
 
 export async function dbDeleteDogVetPreferences(
-  db: DbContext,
+  ctx: DbContext,
   dogId: string,
 ): Promise<number> {
   const sql = `
@@ -107,17 +107,17 @@ export async function dbDeleteDogVetPreferences(
   )
   SELECT COUNT(*) as num_deleted FROM mDeletion;
   `;
-  const res = await dbQuery(db, sql, [dogId]);
+  const res = await dbQuery(ctx, sql, [dogId]);
   return parseInt(res.rows[0].num_deleted);
 }
 
 export async function dbSelectPreferredVetIds(
-  db: DbContext,
+  ctx: DbContext,
   dogId: string,
 ): Promise<string[]> {
   const sql = `
   SELECT vet_id FROM dog_vet_preferences WHERE dog_id = $1
   `;
-  const res = await dbQuery(db, sql, [dogId]);
+  const res = await dbQuery(ctx, sql, [dogId]);
   return res.rows.map((row) => row.vet_id);
 }
