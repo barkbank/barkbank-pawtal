@@ -78,7 +78,7 @@ export async function dbInsertDogVetPreference(
   ON CONFLICT (dog_id, vet_id) DO NOTHING
   RETURNING preference_creation_time
   `;
-  const res = await db.query(sql, [dogId, vetId]);
+  const res = await dbQuery(db, sql, [dogId, vetId]);
   return res.rows.length === 1;
 }
 
@@ -94,7 +94,7 @@ export async function dbDeleteDogVetPreferences(
   )
   SELECT COUNT(*) as num_deleted FROM mDeletion;
   `;
-  const res = await db.query(sql, [dogId]);
+  const res = await dbQuery(db, sql, [dogId]);
   return parseInt(res.rows[0].num_deleted);
 }
 
@@ -102,5 +102,9 @@ export async function dbSelectPreferredVetIds(
   db: DbContext,
   dogId: string,
 ): Promise<string[]> {
-  return [];
+  const sql = `
+  SELECT vet_id FROM dog_vet_preferences WHERE dog_id = $1
+  `;
+  const res = await dbQuery(db, sql, [dogId]);
+  return res.rows.map((row) => row.vet_id);
 }
