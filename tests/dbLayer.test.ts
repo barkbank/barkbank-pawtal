@@ -38,10 +38,12 @@ import { guaranteed } from "@/lib/bark-utils";
  * Database Layer refers to the code in lib/data.
  */
 describe("Database Layer", () => {
-  describe("DogStatus enumeration", () => {
-    it("is an enumeration of strings", () => {
-      expect(DogStatus.NEW_PROFILE).toBe("NEW_PROFILE");
-      expect(typeof DogStatus.NEW_PROFILE).toBe("string");
+  describe("models", () => {
+    describe("DogStatus enumeration", () => {
+      it("is an enumeration of strings", () => {
+        expect(DogStatus.NEW_PROFILE).toBe("NEW_PROFILE");
+        expect(typeof DogStatus.NEW_PROFILE).toBe("string");
+      });
     });
   });
   describe("dbUsers", () => {
