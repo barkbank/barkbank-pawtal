@@ -7,6 +7,7 @@ import {
   UserSpec,
   AdminSpec,
   VetSpec,
+  YesNoUnknown,
 } from "@/lib/data/models";
 import {
   toDogSpec,
@@ -346,6 +347,8 @@ function dogSpec(idx: number): DogSpec {
     dogBirthday: birthday(idx),
     dogGender: dogGender(idx),
     dogDea1Point1: dogAntigenPresence(idx + 1 + 1),
+    dogEverPregnant: dogEverPregnant(idx),
+    dogEverReceivedTransfusion: yesNoUnknown(idx),
   };
 }
 
@@ -371,6 +374,22 @@ function dogGender(idx: number): DogGender {
 function dogStatus(idx: number): DogStatus {
   const statusList: DogStatus[] = Object.values(DogStatus);
   return statusList[idx % statusList.length];
+}
+
+function yesNoUnknown(idx: number): YesNoUnknown {
+  const responseList: YesNoUnknown[] = Object.values(YesNoUnknown);
+  return responseList[idx % responseList.length];
+}
+
+function dogEverPregnant(idx: number): YesNoUnknown {
+  const gender = dogGender(idx);
+  if (gender === DogGender.MALE) {
+    return YesNoUnknown.NO;
+  }
+  if (gender === DogGender.UNKNOWN) {
+    return YesNoUnknown.UNKNOWN;
+  }
+  return yesNoUnknown(idx);
 }
 
 function encryptedPii(idx: number): string {
