@@ -14,11 +14,12 @@ export async function dbInsertDog(
       dog_breed,
       dog_birthday,
       dog_gender,
+      dog_weight_kg,
       dog_dea1_point1,
       dog_ever_pregnant,
       dog_ever_received_transfusion
     )
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
     RETURNING dog_id, dog_creation_time, dog_modification_time
   `;
   const res = await dbQuery(ctx, sql, [
@@ -28,6 +29,7 @@ export async function dbInsertDog(
     dogSpec.dogBreed,
     dogSpec.dogBirthday,
     dogSpec.dogGender,
+    dogSpec.dogWeightKg,
     dogSpec.dogDea1Point1,
     dogSpec.dogEverPregnant,
     dogSpec.dogEverReceivedTransfusion,
@@ -47,6 +49,7 @@ export async function dbSelectDog(
       dog_breed,
       dog_birthday,
       dog_gender,
+      dog_weight_kg,
       dog_dea1_point1,
       dog_ever_pregnant,
       dog_ever_received_transfusion,
