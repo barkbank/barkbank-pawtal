@@ -57,6 +57,9 @@ const config = {
           light: "hsl(var(--brand-light-pink))",
           white: "hsl(var(--brand-white))",
         },
+        grey: {
+          DEFAULT: "hsl(var(--grey))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
