@@ -59,6 +59,10 @@ export type DogSpec = {
   dogBreed: string;
   dogBirthday: string;
   dogGender: DogGender;
+  /**
+   * Weight of the dog. It should either be a positive integer or null.
+   */
+  dogWeightKg: number | null;
   dogDea1Point1: DogAntigenPresence;
   dogEverPregnant: YesNoUnknown;
   dogEverReceivedTransfusion: YesNoUnknown;

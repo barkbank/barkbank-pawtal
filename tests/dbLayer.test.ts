@@ -132,6 +132,14 @@ describe("Database Layer", () => {
           expect(dogGen.dogModificationTime).toEqual(dogGen.dogCreationTime);
         });
       });
+      it("should permit null weight kg", async () => {
+        await withDb(async (db) => {
+          const userGen = await dbInsertUser(db, userSpec(1));
+          const spec = dogSpec(1);
+          spec.dogWeightKg = null;
+          await dbInsertDog(db, userGen.userId, spec);
+        });
+      });
     });
     describe("dbInsertDog Data Validation", () => {
       const originalLogFn = console.error;
@@ -170,6 +178,29 @@ describe("Database Layer", () => {
         await withDb(async (db) => {
           const spec: Record<string, any> = dogSpec(1);
           spec.dogBirthday = "2020-06"; // Correct should be padded like '2020-06-00'
+          await expectErrorWhenInserting(spec, db);
+        });
+      });
+      it("should not allow insertion of float weight", async () => {
+        await withDb(async (db) => {
+          const spec: Record<string, any> = dogSpec(1);
+          spec.dogWeightKg = 17.5; // Cannot insert floats
+          await expectErrorWhenInserting(spec, db);
+        });
+      });
+      it("should not allow insertion of negative weight", async () => {
+        // If weight is unknown, it should be null.
+        await withDb(async (db) => {
+          const spec: Record<string, any> = dogSpec(1);
+          spec.dogWeightKg = -1;
+          await expectErrorWhenInserting(spec, db);
+        });
+      });
+      it("should not allow insertion of zero weight", async () => {
+        // If weight is unknown, it should be null.
+        await withDb(async (db) => {
+          const spec: Record<string, any> = dogSpec(1);
+          spec.dogWeightKg = 0;
           await expectErrorWhenInserting(spec, db);
         });
       });
@@ -346,6 +377,7 @@ function dogSpec(idx: number): DogSpec {
     dogBreed: `dogBreed${idx}`,
     dogBirthday: birthday(idx),
     dogGender: dogGender(idx),
+    dogWeightKg: dogWeightKg(idx),
     dogDea1Point1: dogAntigenPresence(idx + 1 + 1),
     dogEverPregnant: dogEverPregnant(idx),
     dogEverReceivedTransfusion: yesNoUnknown(idx),
@@ -369,6 +401,11 @@ function dogAntigenPresence(idx: number): DogAntigenPresence {
 function dogGender(idx: number): DogGender {
   const genderList: DogGender[] = Object.values(DogGender);
   return genderList[idx % genderList.length];
+}
+
+function dogWeightKg(idx: number): number | null {
+  const options: (number | null)[] = [null, 6, 12, 17, 22, 26, 31, 38];
+  return options[idx % options.length];
 }
 
 function dogStatus(idx: number): DogStatus {

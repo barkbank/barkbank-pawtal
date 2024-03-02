@@ -47,6 +47,8 @@ CREATE TABLE dogs (
   dog_birthday TEXT NOT NULL, -- YYYY-MM-DD format, 00 for absent DD and/or MM
   dog_ever_pregnant t_yes_no_unknown NOT NULL,
   dog_ever_received_transfusion t_yes_no_unknown NOT NULL,
+  dog_weight_kg INTEGER, -- NULL means weight is not known.
+  CONSTRAINT dog_weight_kg_is_positive CHECK (dog_weight_kg > 0),
   CONSTRAINT dog_birthday_fmt CHECK (dog_birthday ~ '^\d{4}-\d{2}-\d{2}$'),
   CONSTRAINT dogs_fk_users FOREIGN KEY (user_id) REFERENCES users (user_id),
   CONSTRAINT dogs_pk PRIMARY KEY (dog_id)
