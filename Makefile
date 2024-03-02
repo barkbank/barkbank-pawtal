@@ -12,6 +12,10 @@ test:
 	bash scripts/testdb.sh testDbDown
 	bash scripts/test_only_app_has_process_env.sh
 
+.PHONY: run
+run:
+	npm run dev
+
 .PHONY: npm-install
 npm-install:
 	npm install
