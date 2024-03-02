@@ -103,3 +103,14 @@ export type VetGen = {
 };
 
 export type Vet = VetSpec & VetGen;
+
+export type DogVetPreferenceSpec = {
+  dogId: string;
+  vetId: string;
+};
+
+export type DogVetPreferenceGen = {
+  preferenceCreationTime: Date;
+};
+
+export type DogVetPreference = DogVetPreferenceSpec & DogVetPreferenceGen;

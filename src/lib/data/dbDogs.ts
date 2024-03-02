@@ -66,3 +66,41 @@ export async function dbSelectDog(
   }
   return null;
 }
+
+export async function dbInsertDogVetPreference(
+  db: DbContext,
+  dogId: string,
+  vetId: string,
+): Promise<boolean> {
+  const sql = `
+  INSERT INTO dog_vet_preferences (dog_id, vet_id)
+  VALUES ($1, $2)
+  ON CONFLICT (dog_id, vet_id) DO NOTHING
+  RETURNING preference_creation_time
+  `;
+  const res = await db.query(sql, [dogId, vetId]);
+  return res.rows.length === 1;
+}
+
+export async function dbDeleteDogVetPreferences(
+  db: DbContext,
+  dogId: string,
+): Promise<number> {
+  const sql = `
+  WITH
+  mDeletion AS (
+    DELETE FROM dog_vet_preferences WHERE dog_id = $1
+    RETURNING *
+  )
+  SELECT COUNT(*) as num_deleted FROM mDeletion;
+  `;
+  const res = await db.query(sql, [dogId]);
+  return parseInt(res.rows[0].num_deleted);
+}
+
+export async function dbSelectPreferredVetIds(
+  db: DbContext,
+  dogId: string,
+): Promise<string[]> {
+  return [];
+}
