@@ -1,4 +1,4 @@
-import { withDb } from "./_db_helpers";
+import { withDb } from "../_db_helpers";
 import {
   DogAntigenPresence,
   DogGender,
