@@ -10,6 +10,7 @@ export default async function Page() {
       title={"Admin Login"}
       accountType={AccountType.ADMIN}
       successPath={RoutePath.ADMIN_DASHBOARD_PAGE}
+      logoSrc="/purpleDogHouse.svg"
     />
   );
 }

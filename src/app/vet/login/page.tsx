@@ -10,6 +10,7 @@ export default async function Page() {
       title={"Vet Login"}
       accountType={AccountType.VET}
       successPath={RoutePath.VET_DASHBOARD_PAGE}
+      logoSrc="/pawPrint.svg"
     />
   );
 }

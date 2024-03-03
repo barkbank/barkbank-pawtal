@@ -11,15 +11,16 @@ export default async function BarkLoginPage(props: {
   title: string;
   accountType: AccountType;
   successPath: string;
+  logoSrc: string;
 }) {
-  const { title, accountType, successPath } = props;
+  const { title, accountType, successPath, logoSrc } = props;
   if (await isLoggedIn(accountType)) {
     redirect(successPath);
   }
   return (
     <>
       <div className="flex h-screen flex-col items-center justify-center">
-        <LoginLayout accountType={accountType}>
+        <LoginLayout logoSrc={logoSrc}>
           <div className="mx-auto w-full max-w-[1100px] sm:w-[36rem] md:w-full">
             <BarkH1>{title}</BarkH1>
             <BarkLoginForm

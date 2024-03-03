@@ -2,21 +2,12 @@ import Image from "next/image";
 import { BarkH1 } from "../bark-typography";
 import { BarkNavRoute } from "../bark-nav";
 import Link from "next/link";
+import React from "react";
 
 const LoginLayout = ({
-  accountType,
+  logoSrc,
   children,
-}: Readonly<{ accountType: string; children: React.ReactNode }>) => {
-  let logoSrc = "";
-
-  if (accountType === "ADMIN") {
-    logoSrc = "/purpleDogHouse.svg";
-  } else if (accountType === "VET") {
-    logoSrc = "/pawPrint.svg";
-  } else if (accountType === "USER") {
-    logoSrc = "/orangeDogHouse.svg";
-  }
-
+}: Readonly<{ logoSrc: string; children: React.ReactNode }>) => {
   const footerRoutes: BarkNavRoute[] = [
     {
       label: "Contact us",
@@ -48,7 +39,7 @@ const LoginLayout = ({
       </div>
       <div className="border px-6 py-10 sm:py-64">{children}</div>
       {/* Footer */}
-      <div className="bg-grey mt-10 flex min-h-[100px] items-center justify-center sm:min-h-[200px]">
+      <div className="mt-10 flex min-h-[100px] items-center justify-center bg-grey sm:min-h-[200px]">
         <div className="flex justify-between sm:w-[40%] ">
           {footerRoutes.map((route) => {
             return (
