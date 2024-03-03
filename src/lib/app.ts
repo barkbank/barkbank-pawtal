@@ -59,24 +59,6 @@ export class AppFactory {
     return "development";
   }
 
-  public getDangerousApiIsEnabled(): boolean {
-    if (this.getNodeEnv() === "production") {
-      return false;
-    }
-    if (null === this.getDangerousCredentialsB64()) {
-      return false;
-    }
-    return this.envOptionalString(AppEnv.DANGEROUS_ENABLED) === "true";
-  }
-
-  public getDangerousCredentialsB64(): string | null {
-    const cred = this.envOptionalString(AppEnv.DANGEROUS_CREDENTIALS);
-    if (cred === undefined || cred === "") {
-      return null;
-    }
-    return Buffer.from(cred, "utf-8").toString("base64");
-  }
-
   public async getEmailService(): Promise<EmailService> {
     const self = this;
 
