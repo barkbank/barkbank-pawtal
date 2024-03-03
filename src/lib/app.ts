@@ -17,6 +17,7 @@ import { OtpConfig, OtpService } from "./services/otp";
 import pg from "pg";
 import { VetActorFactory } from "./vet/vet-actor-factory";
 import { UserActorFactory } from "./user/user-actor-factory";
+import { AppEnvs } from "./appenvs";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -62,7 +63,18 @@ export class AppFactory {
     if (this.getNodeEnv() === "production") {
       return false;
     }
+    if (null === this.getDangerousCredentialsB64()) {
+      return false;
+    }
     return this.envOptionalString("DANGEROUS_ENABLED") === "true";
+  }
+
+  public getDangerousCredentialsB64(): string | null {
+    const cred = this.envOptionalString(AppEnvs.DANGEROUS_CREDENTIALS);
+    if (cred === undefined || cred === "") {
+      return null;
+    }
+    return Buffer.from(cred, "utf-8").toString("base64");
   }
 
   public async getEmailService(): Promise<EmailService> {
