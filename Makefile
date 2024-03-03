@@ -14,7 +14,7 @@ test:
 	bash scripts/testdb.sh testDbUp
 	npm run test
 	bash scripts/testdb.sh testDbDown
-	bash scripts/test_only_app_has_process_env.sh
+	bash scripts/test_minimal_process_env_usage.sh
 
 # Runs the local development server.
 .PHONY: run
