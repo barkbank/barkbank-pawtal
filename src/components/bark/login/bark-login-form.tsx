@@ -112,9 +112,11 @@ export default function BarkLoginForm(props: {
         )}
         <BarkFormInput form={form} name="otp" label="Enter OTP" />
         <div className="mt-6 flex w-full gap-x-4">
-          <Button variant="brandInverse" type="button" className="">
-            Cancel
-          </Button>
+          <Link href={RoutePath.ROOT}>
+            <Button variant="brandInverse" type="button">
+              Cancel
+            </Button>
+          </Link>
           <BarkFormSubmitButton>Login</BarkFormSubmitButton>{" "}
         </div>
         <BarkFormError form={form} />
