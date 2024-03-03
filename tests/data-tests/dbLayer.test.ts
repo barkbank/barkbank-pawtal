@@ -1,14 +1,5 @@
 import { withDb } from "../_db_helpers";
-import {
-  DogAntigenPresence,
-  DogGender,
-  DogSpec,
-  DogStatus,
-  UserSpec,
-  AdminSpec,
-  VetSpec,
-  YesNoUnknown,
-} from "@/lib/data/models";
+import { DogSpec, DogStatus } from "@/lib/data/models";
 import {
   toDogSpec,
   toUserSpec,
@@ -22,7 +13,6 @@ import {
   dbSelectUserIdByHashedEmail,
   dbUpdateUser,
 } from "@/lib/data/dbUsers";
-import { sprintf } from "sprintf-js";
 import {
   dbDeleteDogVetPreferences,
   dbInsertDog,
@@ -42,6 +32,13 @@ import {
 } from "@/lib/data/dbVets";
 import { guaranteed } from "@/lib/bark-utils";
 import { Pool } from "pg";
+import {
+  userSpec,
+  ensureTimePassed,
+  dogSpec,
+  vetSpec,
+  adminSpec,
+} from "./_dbFixtures";
 
 /**
  * Database Layer refers to the code in lib/data.
@@ -343,63 +340,6 @@ describe("Database Layer", () => {
       });
     });
   });
-  describe("dbAdmins", () => {
-    describe("dbInsertAdmin", () => {
-      it("should insert an admin", async () => {
-        await withDb(async (db) => {
-          const adminGen = await dbInsertAdmin(db, adminSpec(1));
-          expect(adminGen.adminCreationTime).toBeTruthy();
-          expect(adminGen.adminModificationTime).toBeTruthy();
-          expect(adminGen.adminModificationTime).toEqual(
-            adminGen.adminCreationTime,
-          );
-        });
-      });
-    });
-    describe("dbSelectAdmin", () => {
-      it("should return admin matching the adminId", async () => {
-        await withDb(async (db) => {
-          const adminGen = await dbInsertAdmin(db, adminSpec(1));
-          const admin = await dbSelectAdmin(db, adminGen.adminId);
-          expect(admin).not.toBeNull();
-          expect(admin?.adminCreationTime).toBeTruthy();
-          expect(admin?.adminModificationTime).toBeTruthy();
-          expect(admin?.adminModificationTime).toEqual(
-            admin?.adminCreationTime,
-          );
-          const spec = toAdminSpec(guaranteed(admin));
-          expect(spec).toMatchObject(adminSpec(1));
-        });
-      });
-      it("should return null when no admin matches the adminId", async () => {
-        await withDb(async (db) => {
-          const admin = await dbSelectAdmin(db, "111");
-          expect(admin).toBeNull();
-        });
-      });
-    });
-    describe("dbSelectAdminIdByAdminHashedEmail", () => {
-      it("should return adminId matching the hashed email", async () => {
-        await withDb(async (db) => {
-          const adminGen = await dbInsertAdmin(db, adminSpec(1));
-          const adminId = await dbSelectAdminIdByAdminHashedEmail(
-            db,
-            adminSpec(1).adminHashedEmail,
-          );
-          expect(adminId).toEqual(adminGen.adminId);
-        });
-      });
-      it("should return null when no admin matches the hashed email", async () => {
-        await withDb(async (db) => {
-          const adminId = await dbSelectAdminIdByAdminHashedEmail(
-            db,
-            "not_found",
-          );
-          expect(adminId).toBeNull();
-        });
-      });
-    });
-  });
   describe("dbVets", () => {
     describe("dbInsertVet", () => {
       it("should return VetGen", async () => {
@@ -448,109 +388,3 @@ describe("Database Layer", () => {
     });
   });
 });
-
-function ensureTimePassed(): void {
-  const t0 = new Date().getTime();
-  let t1 = new Date().getTime();
-  while (t0 === t1) {
-    t1 = new Date().getTime();
-  }
-}
-
-function userSpec(idx: number): UserSpec {
-  return {
-    userHashedEmail: hashedEmail(idx),
-    userEncryptedPii: encryptedPii(idx),
-  };
-}
-
-function adminSpec(idx: number): AdminSpec {
-  return {
-    adminHashedEmail: hashedEmail(idx),
-    adminEncryptedPii: encryptedPii(idx),
-  };
-}
-
-function vetSpec(idx: number): VetSpec {
-  return {
-    vetEmail: email(idx),
-    vetName: `Vet${idx}`,
-    vetPhoneNumber: phoneNumber(idx),
-    vetAddress: `1${idx} Jalan Mango`,
-  };
-}
-
-function dogSpec(idx: number): DogSpec {
-  return {
-    dogStatus: dogStatus(idx),
-    dogEncryptedOii: `dogEncryptedOii-${idx}`,
-    dogBreed: `dogBreed${idx}`,
-    dogBirthday: birthday(idx),
-    dogGender: dogGender(idx),
-    dogWeightKg: dogWeightKg(idx),
-    dogDea1Point1: dogAntigenPresence(idx + 1 + 1),
-    dogEverPregnant: dogEverPregnant(idx),
-    dogEverReceivedTransfusion: yesNoUnknown(idx),
-  };
-}
-
-function birthday(idx: number): string {
-  const baseYear = 2023;
-  const yearOffset = idx % 5;
-  const year = baseYear - yearOffset;
-  const monthOfYear = idx % 13;
-  const dayOfMonth = idx % 29;
-  return sprintf("%d-%02d-%02d", year, monthOfYear, dayOfMonth);
-}
-
-function dogAntigenPresence(idx: number): DogAntigenPresence {
-  const presenceList: DogAntigenPresence[] = Object.values(DogAntigenPresence);
-  return presenceList[idx % presenceList.length];
-}
-
-function dogGender(idx: number): DogGender {
-  const genderList: DogGender[] = Object.values(DogGender);
-  return genderList[idx % genderList.length];
-}
-
-function dogWeightKg(idx: number): number | null {
-  const options: (number | null)[] = [null, 6, 12, 17, 22, 26, 31, 38];
-  return options[idx % options.length];
-}
-
-function dogStatus(idx: number): DogStatus {
-  const statusList: DogStatus[] = Object.values(DogStatus);
-  return statusList[idx % statusList.length];
-}
-
-function yesNoUnknown(idx: number): YesNoUnknown {
-  const responseList: YesNoUnknown[] = Object.values(YesNoUnknown);
-  return responseList[idx % responseList.length];
-}
-
-function dogEverPregnant(idx: number): YesNoUnknown {
-  const gender = dogGender(idx);
-  if (gender === DogGender.MALE) {
-    return YesNoUnknown.NO;
-  }
-  if (gender === DogGender.UNKNOWN) {
-    return YesNoUnknown.UNKNOWN;
-  }
-  return yesNoUnknown(idx);
-}
-
-function encryptedPii(idx: number): string {
-  return `encryptedPii(${idx})`;
-}
-
-function hashedEmail(idx: number): string {
-  return `hashed(${email(idx)})`;
-}
-
-function email(idx: number): string {
-  return `user${idx}@system.com`;
-}
-
-function phoneNumber(idx: number): string {
-  return (90001000 + idx).toString();
-}
