@@ -161,7 +161,12 @@ describe("Database Layer", () => {
           const userGen = await dbInsertUser(db, userSpec(1));
           const spec = dogSpec(1);
           spec.dogWeightKg = null;
-          await dbInsertDog(db, userGen.userId, spec);
+          const dogGen = await dbInsertDog(db, userGen.userId, spec);
+
+          // Verify that dog weight KG is null
+          const dog = await dbSelectDog(db, dogGen.dogId);
+          expect(dog).not.toBeNull();
+          expect(dog?.dogWeightKg).toBeNull();
         });
       });
     });
