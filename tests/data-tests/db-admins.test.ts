@@ -2,13 +2,13 @@ import {
   dbInsertAdmin,
   dbSelectAdmin,
   dbSelectAdminIdByAdminHashedEmail,
-} from "@/lib/data/dbAdmins";
+} from "@/lib/data/db-admins";
 import { withDb } from "../_db_helpers";
-import { adminSpec } from "./_dbFixtures";
+import { adminSpec } from "./_db_fixtures";
 import { guaranteed } from "@/lib/bark-utils";
-import { toAdminSpec } from "@/lib/data/mappers";
+import { toAdminSpec } from "@/lib/data/db-mappers";
 
-describe("dbAdmins", () => {
+describe("db-admins", () => {
   describe("dbInsertAdmin", () => {
     it("should insert an admin", async () => {
       await withDb(async (db) => {

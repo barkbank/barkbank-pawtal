@@ -4,17 +4,17 @@ import {
   dbInsertDogVetPreference,
   dbSelectDog,
   dbSelectPreferredVetIds,
-} from "@/lib/data/dbDogs";
-import { dbInsertVet } from "@/lib/data/dbVets";
-import { dogSpec, userSpec, vetSpec } from "./_dbFixtures";
-import { dbDeleteUser, dbInsertUser } from "@/lib/data/dbUsers";
+} from "@/lib/data/db-dogs";
+import { dbInsertVet } from "@/lib/data/db-vets";
+import { dogSpec, userSpec, vetSpec } from "./_db_fixtures";
+import { dbDeleteUser, dbInsertUser } from "@/lib/data/db-users";
 import { withDb } from "../_db_helpers";
-import { toDogSpec } from "@/lib/data/mappers";
+import { toDogSpec } from "@/lib/data/db-mappers";
 import { guaranteed } from "@/lib/bark-utils";
-import { DogSpec } from "@/lib/data/models";
+import { DogSpec } from "@/lib/data/db-models";
 import { Pool } from "pg";
 
-describe("dbDogs", () => {
+describe("db-dogs", () => {
   describe("dbInsertDog", () => {
     it("should insert a new dog", async () => {
       await withDb(async (db) => {

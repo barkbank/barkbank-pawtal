@@ -1,6 +1,6 @@
 import { AdminActorConfig } from "@/lib/admin/admin-actor";
 import { encryptAdminPii, AdminPii } from "@/lib/admin/admin-pii";
-import { dbInsertAdmin, dbSelectAdmin } from "@/lib/data/dbAdmins";
+import { dbInsertAdmin, dbSelectAdmin } from "@/lib/data/db-admins";
 import {
   Admin,
   AdminSpec,
@@ -8,16 +8,16 @@ import {
   UserSpec,
   Vet,
   VetSpec,
-} from "@/lib/data/models";
+} from "@/lib/data/db-models";
 import { Pool } from "pg";
 import { HarnessHashService, HarnessEncryptionService } from "./_harness";
 import { AdminActorFactoryConfig } from "@/lib/admin/admin-actor-factory";
-import { dbInsertUser, dbSelectUser } from "@/lib/data/dbUsers";
+import { dbInsertUser, dbSelectUser } from "@/lib/data/db-users";
 import { UserActorConfig } from "@/lib/user/user-actor";
 import { encryptUserPii, UserPii } from "@/lib/user/user-pii";
 import { UserActorFactoryConfig } from "@/lib/user/user-actor-factory";
 import { VetActorFactoryConfig } from "@/lib/vet/vet-actor-factory";
-import { dbInsertVet, dbSelectVet } from "@/lib/data/dbVets";
+import { dbInsertVet, dbSelectVet } from "@/lib/data/db-vets";
 
 const emailHashService = new HarnessHashService();
 const piiEncryptionService = new HarnessEncryptionService();

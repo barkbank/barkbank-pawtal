@@ -1,6 +1,6 @@
 import APP from "@/lib/app";
-import { dbInsertVet } from "@/lib/data/dbVets";
-import { VetSpec } from "@/lib/data/models";
+import { dbInsertVet } from "@/lib/data/db-vets";
+import { VetSpec } from "@/lib/data/db-models";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {

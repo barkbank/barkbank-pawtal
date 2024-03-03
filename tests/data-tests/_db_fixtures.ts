@@ -7,7 +7,7 @@ import {
   DogGender,
   DogStatus,
   YesNoUnknown,
-} from "@/lib/data/models";
+} from "@/lib/data/db-models";
 import { sprintf } from "sprintf-js";
 
 export function ensureTimePassed(): void {

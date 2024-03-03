@@ -7,7 +7,7 @@ import {
   AdminSpec,
   Vet,
   VetSpec,
-} from "./models";
+} from "./db-models";
 
 export function toUserSpec(user: User): UserSpec {
   const { userId, userCreationTime, userModificationTime, ...spec } = user;

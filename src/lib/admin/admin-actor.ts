@@ -1,8 +1,8 @@
 import { Pool } from "pg";
-import { Admin } from "../data/models";
+import { Admin } from "../data/db-models";
 import { HashService } from "../services/hash";
 import { EncryptionService } from "../services/encryption";
-import { dbSelectAdmin } from "../data/dbAdmins";
+import { dbSelectAdmin } from "../data/db-admins";
 import { AdminPii, decryptAdminPii } from "./admin-pii";
 
 export type AdminActorConfig = {

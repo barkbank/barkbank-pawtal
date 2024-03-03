@@ -1,4 +1,4 @@
-import { DogStatus } from "@/lib/data/models";
+import { DogStatus } from "@/lib/data/db-models";
 
 describe("models", () => {
   describe("DogStatus enumeration", () => {

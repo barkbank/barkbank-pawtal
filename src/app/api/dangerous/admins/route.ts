@@ -1,7 +1,7 @@
 import { AdminPii, encryptAdminPii } from "@/lib/admin/admin-pii";
 import APP from "@/lib/app";
-import { dbInsertAdmin } from "@/lib/data/dbAdmins";
-import { AdminSpec } from "@/lib/data/models";
+import { dbInsertAdmin } from "@/lib/data/db-admins";
+import { AdminSpec } from "@/lib/data/db-models";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {

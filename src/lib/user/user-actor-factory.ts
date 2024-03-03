@@ -2,7 +2,7 @@ import { Pool } from "pg";
 import { EncryptionService } from "../services/encryption";
 import { HashService } from "../services/hash";
 import { UserActor, UserActorConfig } from "./user-actor";
-import { dbSelectUserIdByHashedEmail } from "../data/dbUsers";
+import { dbSelectUserIdByHashedEmail } from "../data/db-users";
 
 export type UserActorFactoryConfig = {
   dbPool: Pool;

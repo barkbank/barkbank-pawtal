@@ -1,5 +1,5 @@
-import { DbContext, dbQuery, toCamelCaseRow } from "./dbUtils";
-import { User, UserGen, UserSpec } from "./models";
+import { DbContext, dbQuery, toCamelCaseRow } from "./db-utils";
+import { User, UserGen, UserSpec } from "./db-models";
 
 export async function dbInsertUser(
   ctx: DbContext,

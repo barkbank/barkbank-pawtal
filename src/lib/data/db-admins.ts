@@ -1,5 +1,5 @@
-import { DbContext, dbQuery, toCamelCaseRow } from "./dbUtils";
-import { Admin, AdminGen, AdminSpec } from "./models";
+import { DbContext, dbQuery, toCamelCaseRow } from "./db-utils";
+import { Admin, AdminGen, AdminSpec } from "./db-models";
 
 export async function dbInsertAdmin(
   ctx: DbContext,

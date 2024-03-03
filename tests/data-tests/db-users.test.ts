@@ -4,13 +4,13 @@ import {
   dbSelectUser,
   dbSelectUserIdByHashedEmail,
   dbUpdateUser,
-} from "@/lib/data/dbUsers";
+} from "@/lib/data/db-users";
 import { withDb } from "../_db_helpers";
-import { ensureTimePassed, userSpec } from "./_dbFixtures";
-import { toUserSpec } from "@/lib/data/mappers";
+import { ensureTimePassed, userSpec } from "./_db_fixtures";
+import { toUserSpec } from "@/lib/data/db-mappers";
 import { guaranteed } from "@/lib/bark-utils";
 
-describe("dbUsers", () => {
+describe("db-users", () => {
   describe("dbInsertUser", () => {
     it("should insert a new user and return UserGen", async () => {
       await withDb(async (db) => {

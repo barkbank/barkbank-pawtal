@@ -2,13 +2,13 @@ import {
   dbInsertVet,
   dbSelectVet,
   dbSelectVetIdByEmail,
-} from "@/lib/data/dbVets";
+} from "@/lib/data/db-vets";
 import { withDb } from "../_db_helpers";
-import { vetSpec } from "./_dbFixtures";
-import { toVetSpec } from "@/lib/data/mappers";
+import { vetSpec } from "./_db_fixtures";
+import { toVetSpec } from "@/lib/data/db-mappers";
 import { guaranteed } from "@/lib/bark-utils";
 
-describe("dbVets", () => {
+describe("db-vets", () => {
   describe("dbInsertVet", () => {
     it("should return VetGen", async () => {
       await withDb(async (db) => {
