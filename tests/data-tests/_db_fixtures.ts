@@ -10,6 +10,8 @@ import {
 } from "@/lib/data/db-models";
 import { sprintf } from "sprintf-js";
 
+// TODO: Consolidate these fixtures in _db_fixtures.ts into _fixtures.ts
+
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
   let t1 = new Date().getTime();
@@ -27,6 +29,10 @@ export function adminSpec(idx: number): AdminSpec {
   return {
     adminHashedEmail: hashedEmail(idx),
     adminEncryptedPii: encryptedPii(idx),
+    adminCanManageAdminAccounts: (idx + 1) % 3 == 0,
+    adminCanManageVetAccounts: (idx + 2) % 3 == 0,
+    adminCanManageUserAccounts: (idx + 3) % 3 == 0,
+    adminCanManageDonors: (idx + 4) % 3 == 0,
   };
 }
 export function vetSpec(idx: number): VetSpec {

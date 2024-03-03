@@ -76,10 +76,26 @@ export type DogGen = {
 
 export type Dog = { userId: string } & DogSpec & DogGen;
 
-export type AdminSpec = {
+export type AdminPersonalData = {
   adminHashedEmail: string;
   adminEncryptedPii: string;
 };
+
+export type AdminPermissions = {
+  adminCanManageAdminAccounts: boolean;
+  adminCanManageVetAccounts: boolean;
+  adminCanManageUserAccounts: boolean;
+  adminCanManageDonors: boolean;
+};
+
+export const ADMIN_NO_PERMISSIONS: AdminPermissions = {
+  adminCanManageAdminAccounts: false,
+  adminCanManageVetAccounts: false,
+  adminCanManageUserAccounts: false,
+  adminCanManageDonors: false,
+}
+
+export type AdminSpec = AdminPersonalData & AdminPermissions;
 
 export type AdminGen = {
   adminId: string;

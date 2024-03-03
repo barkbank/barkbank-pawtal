@@ -3,6 +3,8 @@ import { encryptAdminPii, AdminPii } from "@/lib/admin/admin-pii";
 import { dbInsertAdmin, dbSelectAdmin } from "@/lib/data/db-admins";
 import {
   Admin,
+  AdminPermissions,
+  AdminPersonalData,
   AdminSpec,
   User,
   UserSpec,
@@ -49,10 +51,27 @@ export async function createAdmin(idx: number, db: Pool): Promise<Admin> {
 }
 
 export async function adminSpec(idx: number): Promise<AdminSpec> {
+  const personalData = await adminPersonalData(idx);
+  const permissions = adminPermissions(idx);
+  return { ...personalData, ...permissions };
+}
+
+export async function adminPersonalData(
+  idx: number,
+): Promise<AdminPersonalData> {
   const pii = adminPii(idx);
   const adminEncryptedPii = await encryptAdminPii(pii, piiEncryptionService);
   const adminHashedEmail = await emailHashService.getHashHex(pii.adminEmail);
   return { adminHashedEmail, adminEncryptedPii };
+}
+
+export function adminPermissions(idx: number): AdminPermissions {
+  return {
+    adminCanManageAdminAccounts: (idx + 1) % 3 == 0,
+    adminCanManageVetAccounts: (idx + 2) % 3 == 0,
+    adminCanManageUserAccounts: (idx + 3) % 3 == 0,
+    adminCanManageDonors: (idx + 4) % 3 == 0,
+  };
 }
 
 export function adminPii(idx: number): AdminPii {
