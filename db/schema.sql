@@ -53,7 +53,20 @@ CREATE TABLE dogs (
   dog_ever_pregnant t_yes_no_unknown NOT NULL,
   dog_ever_received_transfusion t_yes_no_unknown NOT NULL,
   dog_weight_kg INTEGER, -- NULL means weight is not known.
-  CONSTRAINT dog_weight_kg_is_positive CHECK (dog_weight_kg > 0),
+
+  -- In PostgreSQL ``a check constraint is satisfied if the check expression
+  -- evaluates to true or the null value. Since most expressions will evaluate
+  -- to the null value if any operand is null, they will not prevent null values
+  -- in the constrained columns'' (Ref1)
+  --
+  -- However, in the interest of clarity and the avoidence of doubt, we have
+  -- included it in the constraint.
+  --
+  -- Ref1:
+  -- https://www.postgresql.org/docs/15/ddl-constraints.html#DDL-CONSTRAINTS-CHECK-CONSTRAINTS
+  --
+  CONSTRAINT dog_weight_kg_is_null_or_positive CHECK (dog_weight_kg IS NULL OR dog_weight_kg > 0),
+
   CONSTRAINT dog_birthday_fmt CHECK (dog_birthday ~ '^\d{4}-\d{2}-\d{2}$'),
   CONSTRAINT dogs_fk_users FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE SET NULL,
   CONSTRAINT dogs_pk PRIMARY KEY (dog_id)
