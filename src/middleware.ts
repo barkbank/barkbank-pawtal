@@ -2,9 +2,13 @@ import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 import { AppEnv } from "./lib/app-env";
 
-const _404_NOT_FOUND = NextResponse.json({}, { status: 404 });
-const _401_UNAUTHORIZED = NextResponse.json({}, { status: 401 });
-const _403_FORBIDDEN = NextResponse.json({}, { status: 403 });
+function responseWithStatus(status: number) {
+  return NextResponse.json({ _error: { status } }, { status });
+}
+
+const _404_NOT_FOUND = responseWithStatus(404);
+const _401_UNAUTHORIZED = responseWithStatus(401);
+const _403_FORBIDDEN = responseWithStatus(403);
 const _AUTHORIZATION_HEADER = "Authorization";
 
 /**
@@ -36,12 +40,15 @@ export async function authDangerous(
 }
 
 export async function middleware(request: NextRequest): Promise<Response> {
+  const method = request.method;
   const path = request.nextUrl.pathname;
   if (path.startsWith("/api/dangerous/")) {
     const errorResponse = await authDangerous(request, process.env);
     if (errorResponse) {
+      console.warn(`Access Rejected for Dangerous API: ${method} ${path}`);
       return errorResponse;
     }
+    console.warn(`Access Granted for Dangerous API: ${method} ${path}`);
     return NextResponse.next();
   }
 
