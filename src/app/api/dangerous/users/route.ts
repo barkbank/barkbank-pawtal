@@ -1,7 +1,7 @@
 import { UserPii, encryptUserPii } from "@/lib/user/user-pii";
 import APP from "@/lib/app";
-import { dbInsertUser } from "@/lib/data/dbUsers";
-import { UserSpec } from "@/lib/data/models";
+import { dbInsertUser } from "@/lib/data/db-users";
+import { UserSpec } from "@/lib/data/db-models";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {

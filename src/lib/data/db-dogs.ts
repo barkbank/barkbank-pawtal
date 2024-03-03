@@ -1,5 +1,5 @@
-import { DbContext, dbQuery, toCamelCaseRow } from "./dbUtils";
-import { Dog, DogGen, DogSpec } from "./models";
+import { DbContext, dbQuery, toCamelCaseRow } from "./db-utils";
+import { Dog, DogGen, DogSpec } from "./db-models";
 
 export async function dbInsertDog(
   ctx: DbContext,

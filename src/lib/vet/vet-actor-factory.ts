@@ -1,7 +1,7 @@
 import { Pool } from "pg";
 import { EncryptionService } from "../services/encryption";
 import { VetActor, VetActorConfig } from "./vet-actor";
-import { dbSelectVetIdByEmail } from "../data/dbVets";
+import { dbSelectVetIdByEmail } from "../data/db-vets";
 
 export type VetActorFactoryConfig = {
   dbPool: Pool;
