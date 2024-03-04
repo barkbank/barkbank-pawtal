@@ -22,7 +22,7 @@ export class AppFactory {
   private envs: NodeJS.Dict<string>;
   private promisedEmailService: Promise<EmailService> | null = null;
   private promisedOtpService: Promise<OtpService> | null = null;
-  private piiHashService: HashService | null = null;
+  private promisedPiiHashService: Promise<HashService> | null = null;
   private piiEncryptionService: EncryptionService | null = null;
   private breedService: BreedService | null = null;
   private dbPool: pg.Pool | null = null;
@@ -116,13 +116,13 @@ export class AppFactory {
   }
 
   public async getEmailHashService(): Promise<HashService> {
-    if (!this.piiHashService) {
-      this.piiHashService = new SecretHashService(
-        this.envString("BARKBANK_PII_SECRET"),
+    if (this.promisedPiiHashService === null) {
+      this.promisedPiiHashService = Promise.resolve(
+        new SecretHashService(this.envString("BARKBANK_PII_SECRET")),
       );
       console.log("Created EmailHashService");
     }
-    return this.piiHashService;
+    return this.promisedPiiHashService;
   }
 
   public async getPiiEncryptionService(): Promise<EncryptionService> {
