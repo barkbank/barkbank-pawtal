@@ -61,4 +61,44 @@ describe("AdminActor", () => {
       expect(await actor.canManageDonors()).toBe(false);
     });
   });
+  it("can manage admin accounts with required permissions", async () => {
+    await withDb(async (db) => {
+      const admin = await insertAdmin(1, db, {
+        adminCanManageAdminAccounts: true,
+      });
+      const config = getAdminActorConfig(db);
+      const actor = new AdminActor(admin.adminId, config);
+      expect(await actor.canManageAdminAccounts()).toBe(true);
+    });
+  });
+  it("can manage vet accounts with required permissions", async () => {
+    await withDb(async (db) => {
+      const admin = await insertAdmin(1, db, {
+        adminCanManageVetAccounts: true,
+      });
+      const config = getAdminActorConfig(db);
+      const actor = new AdminActor(admin.adminId, config);
+      expect(await actor.canManageVetAccounts()).toBe(true);
+    });
+  });
+  it("can manage user accounts with required permissions", async () => {
+    await withDb(async (db) => {
+      const admin = await insertAdmin(1, db, {
+        adminCanManageUserAccounts: true,
+      });
+      const config = getAdminActorConfig(db);
+      const actor = new AdminActor(admin.adminId, config);
+      expect(await actor.canManageUserAccounts()).toBe(true);
+    });
+  });
+  it("can manage donors with required permissions", async () => {
+    await withDb(async (db) => {
+      const admin = await insertAdmin(1, db, {
+        adminCanManageDonors: true,
+      });
+      const config = getAdminActorConfig(db);
+      const actor = new AdminActor(admin.adminId, config);
+      expect(await actor.canManageDonors()).toBe(true);
+    });
+  });
 });

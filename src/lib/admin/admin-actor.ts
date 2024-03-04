@@ -17,6 +17,7 @@ export type AdminActorConfig = {
 export class AdminActor {
   private adminId: string;
   private config: AdminActorConfig;
+  private promisedAdmin: Promise<Admin | null> | null = null;
 
   constructor(adminId: string, config: AdminActorConfig) {
     this.adminId = adminId;
@@ -36,7 +37,10 @@ export class AdminActor {
   }
 
   public async getOwnAdmin(): Promise<Admin | null> {
-    return dbSelectAdmin(this.getDbPool(), this.getAdminId());
+    if (this.promisedAdmin === null) {
+      this.promisedAdmin = dbSelectAdmin(this.getDbPool(), this.getAdminId());
+    }
+    return this.promisedAdmin;
   }
 
   public async getOwnPii(): Promise<AdminPii | null> {
@@ -52,18 +56,22 @@ export class AdminActor {
   }
 
   public async canManageAdminAccounts(): Promise<boolean> {
-    return false;
+    const admin = await this.getOwnAdmin();
+    return admin ? admin.adminCanManageAdminAccounts : false;
   }
 
   public async canManageVetAccounts(): Promise<boolean> {
-    return false;
+    const admin = await this.getOwnAdmin();
+    return admin ? admin.adminCanManageVetAccounts : false;
   }
 
   public async canManageUserAccounts(): Promise<boolean> {
-    return false;
+    const admin = await this.getOwnAdmin();
+    return admin ? admin.adminCanManageUserAccounts : false;
   }
 
   public async canManageDonors(): Promise<boolean> {
-    return false;
+    const admin = await this.getOwnAdmin();
+    return admin ? admin.adminCanManageDonors : false;
   }
 }
