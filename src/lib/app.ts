@@ -26,7 +26,7 @@ export class AppFactory {
   private promisedPiiEncryptionService: Promise<EncryptionService> | null =
     null;
   private promisedBreedService: Promise<BreedService> | null = null;
-  private dbPool: pg.Pool | null = null;
+  private promisedDbPool: Promise<pg.Pool> | null = null;
   private adminActorFactory: AdminActorFactory | null = null;
   private vetActorFactory: VetActorFactory | null = null;
   private userActorFactory: UserActorFactory | null = null;
@@ -145,17 +145,19 @@ export class AppFactory {
   }
 
   public async getDbPool(): Promise<pg.Pool> {
-    if (!this.dbPool) {
-      this.dbPool = new pg.Pool({
-        host: this.envString("BARKBANK_DB_HOST"),
-        port: this.envInteger("BARKBANK_DB_PORT"),
-        user: this.envString("BARKBANK_DB_USER"),
-        password: this.envString("BARKBANK_DB_PASSWORD"),
-        database: this.envString("BARKBANK_DB_NAME"),
-      });
+    if (this.promisedDbPool === null) {
+      this.promisedDbPool = Promise.resolve(
+        new pg.Pool({
+          host: this.envString("BARKBANK_DB_HOST"),
+          port: this.envInteger("BARKBANK_DB_PORT"),
+          user: this.envString("BARKBANK_DB_USER"),
+          password: this.envString("BARKBANK_DB_PASSWORD"),
+          database: this.envString("BARKBANK_DB_NAME"),
+        }),
+      );
       console.log("Created database connection pool");
     }
-    return this.dbPool;
+    return this.promisedDbPool;
   }
 
   public async getAdminActorFactory(): Promise<AdminActorFactory> {
