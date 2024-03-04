@@ -52,6 +52,7 @@ BARKBANK_DB_NAME=devdb
 BARKBANK_DB_USER=postgres
 BARKBANK_DB_PASSWORD=password
 DANGEROUS_ENABLED=true
+DANGEROUS_CREDENTIALS=developer:password
 ```
 
 ### Third, start the service
