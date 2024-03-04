@@ -29,7 +29,7 @@ export class AppFactory {
   private promisedDbPool: Promise<pg.Pool> | null = null;
   private promisedAdminActorFactory: Promise<AdminActorFactory> | null = null;
   private promisedVetActorFactory: Promise<VetActorFactory> | null = null;
-  private userActorFactory: UserActorFactory | null = null;
+  private promisedUserActorFactory: Promise<UserActorFactory> | null = null;
 
   constructor(envs: NodeJS.Dict<string>) {
     this.envs = envs;
@@ -194,19 +194,22 @@ export class AppFactory {
     return this.promisedVetActorFactory;
   }
 
-  public async getUserActorFactory(): Promise<UserActorFactory> {
-    if (!this.userActorFactory) {
-      const dbPool = await this.getDbPool();
-      const emailHashService = await this.getEmailHashService();
-      const piiEncryptionService = await this.getPiiEncryptionService();
-      this.userActorFactory = new UserActorFactory({
-        dbPool,
-        emailHashService,
-        piiEncryptionService,
+  public getUserActorFactory(): Promise<UserActorFactory> {
+    if (this.promisedUserActorFactory === null) {
+      this.promisedUserActorFactory = new Promise(async (resolve) => {
+        const dbPool = await this.getDbPool();
+        const emailHashService = await this.getEmailHashService();
+        const piiEncryptionService = await this.getPiiEncryptionService();
+        const factory = new UserActorFactory({
+          dbPool,
+          emailHashService,
+          piiEncryptionService,
+        });
+        console.log("Created UserActorFactory");
+        resolve(factory);
       });
-      console.log("Created UserActorFactory");
     }
-    return this.userActorFactory;
+    return this.promisedUserActorFactory;
   }
 }
 
