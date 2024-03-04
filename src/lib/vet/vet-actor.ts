@@ -1,6 +1,6 @@
 import { Pool } from "pg";
 import { EncryptionService } from "../services/encryption";
-import { Vet } from "../data/models";
+import { Vet } from "../data/db-models";
 
 export type VetActorConfig = {
   dbPool: Pool;

@@ -1,5 +1,5 @@
-import { DbContext, dbQuery, toCamelCaseRow } from "./dbUtils";
-import { Vet, VetGen, VetSpec } from "./models";
+import { DbContext, dbQuery, toCamelCaseRow } from "./db-utils";
+import { Vet, VetGen, VetSpec } from "./db-models";
 
 export async function dbInsertVet(
   ctx: DbContext,

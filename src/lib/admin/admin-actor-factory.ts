@@ -2,7 +2,7 @@ import { AdminActor, AdminActorConfig } from "./admin-actor";
 import { HashService } from "../services/hash";
 import { Pool } from "pg";
 import { EncryptionService } from "../services/encryption";
-import { dbSelectAdminIdByAdminHashedEmail } from "../data/dbAdmins";
+import { dbSelectAdminIdByAdminHashedEmail } from "../data/db-admins";
 
 export type AdminActorFactoryConfig = {
   dbPool: Pool;

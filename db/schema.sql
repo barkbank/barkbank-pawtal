@@ -4,6 +4,10 @@ CREATE TABLE admins (
   admin_hashed_email TEXT NOT NULL,
   admin_encrypted_pii TEXT NOT NULL,
   admin_modification_time TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  admin_can_manage_admin_accounts BOOLEAN NOT NULL DEFAULT FALSE,
+  admin_can_manage_vet_accounts BOOLEAN NOT NULL DEFAULT FALSE,
+  admin_can_manage_user_accounts BOOLEAN NOT NULL DEFAULT FALSE,
+  admin_can_manage_donors BOOLEAN NOT NULL DEFAULT FALSE,
   CONSTRAINT admins_unique_admin_hashed_email UNIQUE (admin_hashed_email),
   CONSTRAINT admins_pk PRIMARY KEY (admin_id)
 );

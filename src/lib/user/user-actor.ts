@@ -1,8 +1,8 @@
 import { Pool } from "pg";
-import { User } from "../data/models";
+import { User } from "../data/db-models";
 import { EncryptionService } from "../services/encryption";
 import { UserPii, decryptUserPii } from "./user-pii";
-import { dbSelectUser } from "../data/dbUsers";
+import { dbSelectUser } from "../data/db-users";
 
 export type UserActorConfig = {
   /**
