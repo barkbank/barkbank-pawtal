@@ -28,7 +28,7 @@ export class AppFactory {
   private promisedBreedService: Promise<BreedService> | null = null;
   private promisedDbPool: Promise<pg.Pool> | null = null;
   private promisedAdminActorFactory: Promise<AdminActorFactory> | null = null;
-  private vetActorFactory: VetActorFactory | null = null;
+  private promisedVetActorFactory: Promise<VetActorFactory> | null = null;
   private userActorFactory: UserActorFactory | null = null;
 
   constructor(envs: NodeJS.Dict<string>) {
@@ -178,17 +178,20 @@ export class AppFactory {
     return this.promisedAdminActorFactory;
   }
 
-  public async getVetActorFactory(): Promise<VetActorFactory> {
-    if (!this.vetActorFactory) {
-      const dbPool = await this.getDbPool();
-      const piiEncryptionService = await this.getPiiEncryptionService();
-      this.vetActorFactory = new VetActorFactory({
-        dbPool,
-        piiEncryptionService,
+  public getVetActorFactory(): Promise<VetActorFactory> {
+    if (this.promisedVetActorFactory === null) {
+      this.promisedVetActorFactory = new Promise(async (resolve) => {
+        const dbPool = await this.getDbPool();
+        const piiEncryptionService = await this.getPiiEncryptionService();
+        const factory = new VetActorFactory({
+          dbPool,
+          piiEncryptionService,
+        });
+        console.log("Created VetActorFactory");
+        resolve(factory);
       });
-      console.log("Created VetActorFactory");
     }
-    return this.vetActorFactory;
+    return this.promisedVetActorFactory;
   }
 
   public async getUserActorFactory(): Promise<UserActorFactory> {
