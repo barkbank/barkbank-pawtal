@@ -93,7 +93,7 @@ export const ADMIN_NO_PERMISSIONS: AdminPermissions = {
   adminCanManageVetAccounts: false,
   adminCanManageUserAccounts: false,
   adminCanManageDonors: false,
-}
+};
 
 export type AdminSpec = AdminPersonalData & AdminPermissions;
 
