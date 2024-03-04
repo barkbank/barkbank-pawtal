@@ -38,10 +38,10 @@ const LoginLayout = ({
           <BarkH1>Bark Bank Canine Blood Donation Pawtal</BarkH1>
         </div>
       </div>
-      <div className="border px-6 py-10 sm:py-64">{children}</div>
+      <div className="border px-6 py-10 ">{children}</div>
       {/* Footer */}
       <div className="mt-10 flex min-h-[100px] items-center justify-center bg-grey sm:min-h-[200px]">
-        <div className="flex justify-between sm:w-[40%] ">
+        <div className="flex sm:w-[40%]">
           {footerRoutes.map((route) => {
             return (
               <Link
