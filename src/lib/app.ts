@@ -20,15 +20,16 @@ import { UserActorFactory } from "./user/user-actor-factory";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
-  private emailService: EmailService | null = null;
-  private otpService: OtpService | null = null;
-  private piiHashService: HashService | null = null;
-  private piiEncryptionService: EncryptionService | null = null;
-  private breedService: BreedService | null = null;
-  private dbPool: pg.Pool | null = null;
-  private adminActorFactory: AdminActorFactory | null = null;
-  private vetActorFactory: VetActorFactory | null = null;
-  private userActorFactory: UserActorFactory | null = null;
+  private promisedEmailService: Promise<EmailService> | null = null;
+  private promisedOtpService: Promise<OtpService> | null = null;
+  private promisedPiiHashService: Promise<HashService> | null = null;
+  private promisedPiiEncryptionService: Promise<EncryptionService> | null =
+    null;
+  private promisedBreedService: Promise<BreedService> | null = null;
+  private promisedDbPool: Promise<pg.Pool> | null = null;
+  private promisedAdminActorFactory: Promise<AdminActorFactory> | null = null;
+  private promisedVetActorFactory: Promise<VetActorFactory> | null = null;
+  private promisedUserActorFactory: Promise<UserActorFactory> | null = null;
 
   constructor(envs: NodeJS.Dict<string>) {
     this.envs = envs;
@@ -65,7 +66,7 @@ export class AppFactory {
     return this.envOptionalString("DANGEROUS_ENABLED") === "true";
   }
 
-  public async getEmailService(): Promise<EmailService> {
+  public getEmailService(): Promise<EmailService> {
     const self = this;
 
     function resolveEmailSender(): EmailSender {
@@ -83,15 +84,17 @@ export class AppFactory {
       return new NodemailerEmailSender(config);
     }
 
-    if (!this.emailService) {
-      this.emailService = new EmailService(resolveEmailSender());
+    if (this.promisedEmailService === null) {
+      this.promisedEmailService = Promise.resolve(
+        new EmailService(resolveEmailSender()),
+      );
       console.log("Created EmailService");
     }
-    return this.emailService;
+    return this.promisedEmailService;
   }
 
-  public async getOtpService(): Promise<OtpService> {
-    if (!this.otpService) {
+  public getOtpService(): Promise<OtpService> {
+    if (this.promisedOtpService === null) {
       const config: OtpConfig = {
         otpLength: 6,
         otpPeriodMillis: this.envInteger("BARKBANK_OTP_PERIOD_MILLIS"),
@@ -100,102 +103,113 @@ export class AppFactory {
           this.envString("BARKBANK_OTP_SECRET"),
         ),
       };
-      this.otpService = new OtpService(config);
+      this.promisedOtpService = Promise.resolve(new OtpService(config));
       console.log("Created OtpService");
     }
-    return this.otpService;
+    return this.promisedOtpService;
   }
 
-  public async getSenderForOtpEmail(): Promise<EmailContact> {
-    return {
+  public getSenderForOtpEmail(): Promise<EmailContact> {
+    return Promise.resolve({
       email: this.envString("BARKBANK_OTP_SENDER_EMAIL"),
       name: this.envOptionalString("BARKBANK_OTP_SENDER_NAME"),
-    };
+    });
   }
 
-  public async getEmailHashService(): Promise<HashService> {
-    if (!this.piiHashService) {
-      this.piiHashService = new SecretHashService(
-        this.envString("BARKBANK_PII_SECRET"),
+  public getEmailHashService(): Promise<HashService> {
+    if (this.promisedPiiHashService === null) {
+      this.promisedPiiHashService = Promise.resolve(
+        new SecretHashService(this.envString("BARKBANK_PII_SECRET")),
       );
       console.log("Created EmailHashService");
     }
-    return this.piiHashService;
+    return this.promisedPiiHashService;
   }
 
-  public async getPiiEncryptionService(): Promise<EncryptionService> {
-    if (!this.piiEncryptionService) {
-      this.piiEncryptionService = new SecretEncryptionService(
-        this.envString("BARKBANK_PII_SECRET"),
+  public getPiiEncryptionService(): Promise<EncryptionService> {
+    if (this.promisedPiiEncryptionService === null) {
+      this.promisedPiiEncryptionService = Promise.resolve(
+        new SecretEncryptionService(this.envString("BARKBANK_PII_SECRET")),
       );
       console.log("Created PiiEncryptionService");
     }
-    return this.piiEncryptionService;
+    return this.promisedPiiEncryptionService;
   }
 
-  public async getBreedService(): Promise<BreedService> {
-    if (!this.breedService) {
-      this.breedService = new BreedService();
+  public getBreedService(): Promise<BreedService> {
+    if (this.promisedBreedService === null) {
+      this.promisedBreedService = Promise.resolve(new BreedService());
       console.log("Created BreedService");
     }
-    return this.breedService;
+    return this.promisedBreedService;
   }
 
-  public async getDbPool(): Promise<pg.Pool> {
-    if (!this.dbPool) {
-      this.dbPool = new pg.Pool({
-        host: this.envString("BARKBANK_DB_HOST"),
-        port: this.envInteger("BARKBANK_DB_PORT"),
-        user: this.envString("BARKBANK_DB_USER"),
-        password: this.envString("BARKBANK_DB_PASSWORD"),
-        database: this.envString("BARKBANK_DB_NAME"),
-      });
+  public getDbPool(): Promise<pg.Pool> {
+    if (this.promisedDbPool === null) {
+      this.promisedDbPool = Promise.resolve(
+        new pg.Pool({
+          host: this.envString("BARKBANK_DB_HOST"),
+          port: this.envInteger("BARKBANK_DB_PORT"),
+          user: this.envString("BARKBANK_DB_USER"),
+          password: this.envString("BARKBANK_DB_PASSWORD"),
+          database: this.envString("BARKBANK_DB_NAME"),
+        }),
+      );
       console.log("Created database connection pool");
     }
-    return this.dbPool;
+    return this.promisedDbPool;
   }
 
-  public async getAdminActorFactory(): Promise<AdminActorFactory> {
-    if (!this.adminActorFactory) {
-      const dbPool = await this.getDbPool();
-      const emailHashService = await this.getEmailHashService();
-      const piiEncryptionService = await this.getPiiEncryptionService();
-      this.adminActorFactory = new AdminActorFactory({
-        dbPool,
-        emailHashService,
-        piiEncryptionService,
+  public getAdminActorFactory(): Promise<AdminActorFactory> {
+    if (this.promisedAdminActorFactory === null) {
+      this.promisedAdminActorFactory = new Promise(async (resolve) => {
+        const dbPool = await this.getDbPool();
+        const emailHashService = await this.getEmailHashService();
+        const piiEncryptionService = await this.getPiiEncryptionService();
+        const factory = new AdminActorFactory({
+          dbPool,
+          emailHashService,
+          piiEncryptionService,
+        });
+        console.log("Created AdminActorFactory");
+        resolve(factory);
       });
-      console.log("Created AdminActorFactory");
     }
-    return this.adminActorFactory;
+    return this.promisedAdminActorFactory;
   }
 
-  public async getVetActorFactory(): Promise<VetActorFactory> {
-    if (!this.vetActorFactory) {
-      const dbPool = await this.getDbPool();
-      const piiEncryptionService = await this.getPiiEncryptionService();
-      this.vetActorFactory = new VetActorFactory({
-        dbPool,
-        piiEncryptionService,
+  public getVetActorFactory(): Promise<VetActorFactory> {
+    if (this.promisedVetActorFactory === null) {
+      this.promisedVetActorFactory = new Promise(async (resolve) => {
+        const dbPool = await this.getDbPool();
+        const piiEncryptionService = await this.getPiiEncryptionService();
+        const factory = new VetActorFactory({
+          dbPool,
+          piiEncryptionService,
+        });
+        console.log("Created VetActorFactory");
+        resolve(factory);
       });
-      console.log("Created VetActorFactory");
     }
-    return this.vetActorFactory;
+    return this.promisedVetActorFactory;
   }
 
-  public async getUserActorFactory(): Promise<UserActorFactory> {
-    if (!this.userActorFactory) {
-      const dbPool = await this.getDbPool();
-      const emailHashService = await this.getEmailHashService();
-      const piiEncryptionService = await this.getPiiEncryptionService();
-      this.userActorFactory = new UserActorFactory({
-        dbPool,
-        emailHashService,
-        piiEncryptionService,
+  public getUserActorFactory(): Promise<UserActorFactory> {
+    if (this.promisedUserActorFactory === null) {
+      this.promisedUserActorFactory = new Promise(async (resolve) => {
+        const dbPool = await this.getDbPool();
+        const emailHashService = await this.getEmailHashService();
+        const piiEncryptionService = await this.getPiiEncryptionService();
+        const factory = new UserActorFactory({
+          dbPool,
+          emailHashService,
+          piiEncryptionService,
+        });
+        console.log("Created UserActorFactory");
+        resolve(factory);
       });
-      console.log("Created UserActorFactory");
     }
-    return this.userActorFactory;
+    return this.promisedUserActorFactory;
   }
 }
 
