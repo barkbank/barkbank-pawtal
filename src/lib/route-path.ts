@@ -10,4 +10,8 @@ export class RoutePath {
 
   static readonly ADMIN_LOGIN_PAGE = "/admin/login";
   static readonly ADMIN_DASHBOARD_PAGE = "/admin/dashboard";
+
+  static readonly CONTACT_US = "/contact-us";
+  static readonly PRIVACY_POLICY = "/privacy-policy";
+  static readonly TERMS_AND_CONDITIONS = "/terms-and-conditions";
 }

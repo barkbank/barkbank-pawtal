@@ -3,6 +3,7 @@ import { BarkH1 } from "../bark-typography";
 import { BarkNavRoute } from "../bark-nav";
 import Link from "next/link";
 import React from "react";
+import { RoutePath } from "@/lib/route-path";
 
 const LoginLayout = ({
   logoSrc,
@@ -11,15 +12,15 @@ const LoginLayout = ({
   const footerRoutes: BarkNavRoute[] = [
     {
       label: "Contact us",
-      href: "/contact-us",
+      href: RoutePath.CONTACT_US,
     },
     {
       label: "Privacy Policy",
-      href: "/privacy-policy",
+      href: RoutePath.PRIVACY_POLICY,
     },
     {
       label: "Terms & Conditions",
-      href: "/terms-and-conditions",
+      href: RoutePath.TERMS_AND_CONDITIONS,
     },
   ];
 
