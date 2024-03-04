@@ -17,6 +17,7 @@ export type AdminActorConfig = {
 export class AdminActor {
   private adminId: string;
   private config: AdminActorConfig;
+  private promisedAdmin: Promise<Admin | null> | null = null;
 
   constructor(adminId: string, config: AdminActorConfig) {
     this.adminId = adminId;
@@ -35,8 +36,14 @@ export class AdminActor {
     return this.config.piiEncryptionService;
   }
 
-  public async getOwnAdmin(): Promise<Admin | null> {
-    return dbSelectAdmin(this.getDbPool(), this.getAdminId());
+  public getOwnAdmin(): Promise<Admin | null> {
+    // Caches own admin. It is safe to do this because a new AdminActor is
+    // created on every server request as part of session validation; starting
+    // from getAuthenticatedAdminActor to new AdminActor in AdminActorFactory.
+    if (this.promisedAdmin === null) {
+      this.promisedAdmin = dbSelectAdmin(this.getDbPool(), this.getAdminId());
+    }
+    return this.promisedAdmin;
   }
 
   public async getOwnPii(): Promise<AdminPii | null> {
@@ -49,5 +56,25 @@ export class AdminActor {
       this.getPiiEncryptionService(),
     );
     return pii;
+  }
+
+  public async canManageAdminAccounts(): Promise<boolean> {
+    const admin = await this.getOwnAdmin();
+    return admin ? admin.adminCanManageAdminAccounts : false;
+  }
+
+  public async canManageVetAccounts(): Promise<boolean> {
+    const admin = await this.getOwnAdmin();
+    return admin ? admin.adminCanManageVetAccounts : false;
+  }
+
+  public async canManageUserAccounts(): Promise<boolean> {
+    const admin = await this.getOwnAdmin();
+    return admin ? admin.adminCanManageUserAccounts : false;
+  }
+
+  public async canManageDonors(): Promise<boolean> {
+    const admin = await this.getOwnAdmin();
+    return admin ? admin.adminCanManageDonors : false;
   }
 }
