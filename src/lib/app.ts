@@ -21,7 +21,7 @@ import { UserActorFactory } from "./user/user-actor-factory";
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
   private promisedEmailService: Promise<EmailService> | null = null;
-  private otpService: OtpService | null = null;
+  private promisedOtpService: Promise<OtpService> | null = null;
   private piiHashService: HashService | null = null;
   private piiEncryptionService: EncryptionService | null = null;
   private breedService: BreedService | null = null;
@@ -93,7 +93,7 @@ export class AppFactory {
   }
 
   public async getOtpService(): Promise<OtpService> {
-    if (!this.otpService) {
+    if (this.promisedOtpService === null) {
       const config: OtpConfig = {
         otpLength: 6,
         otpPeriodMillis: this.envInteger("BARKBANK_OTP_PERIOD_MILLIS"),
@@ -102,10 +102,10 @@ export class AppFactory {
           this.envString("BARKBANK_OTP_SECRET"),
         ),
       };
-      this.otpService = new OtpService(config);
+      this.promisedOtpService = Promise.resolve(new OtpService(config));
       console.log("Created OtpService");
     }
-    return this.otpService;
+    return this.promisedOtpService;
   }
 
   public async getSenderForOtpEmail(): Promise<EmailContact> {
