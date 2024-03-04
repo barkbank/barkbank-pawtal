@@ -25,7 +25,7 @@ export class AppFactory {
   private promisedPiiHashService: Promise<HashService> | null = null;
   private promisedPiiEncryptionService: Promise<EncryptionService> | null =
     null;
-  private breedService: BreedService | null = null;
+  private promisedBreedService: Promise<BreedService> | null = null;
   private dbPool: pg.Pool | null = null;
   private adminActorFactory: AdminActorFactory | null = null;
   private vetActorFactory: VetActorFactory | null = null;
@@ -137,11 +137,11 @@ export class AppFactory {
   }
 
   public async getBreedService(): Promise<BreedService> {
-    if (!this.breedService) {
-      this.breedService = new BreedService();
+    if (this.promisedBreedService === null) {
+      this.promisedBreedService = Promise.resolve(new BreedService());
       console.log("Created BreedService");
     }
-    return this.breedService;
+    return this.promisedBreedService;
   }
 
   public async getDbPool(): Promise<pg.Pool> {
