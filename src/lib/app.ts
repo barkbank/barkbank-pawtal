@@ -27,7 +27,7 @@ export class AppFactory {
     null;
   private promisedBreedService: Promise<BreedService> | null = null;
   private promisedDbPool: Promise<pg.Pool> | null = null;
-  private adminActorFactory: AdminActorFactory | null = null;
+  private promisedAdminActorFactory: Promise<AdminActorFactory> | null = null;
   private vetActorFactory: VetActorFactory | null = null;
   private userActorFactory: UserActorFactory | null = null;
 
@@ -160,19 +160,22 @@ export class AppFactory {
     return this.promisedDbPool;
   }
 
-  public async getAdminActorFactory(): Promise<AdminActorFactory> {
-    if (!this.adminActorFactory) {
-      const dbPool = await this.getDbPool();
-      const emailHashService = await this.getEmailHashService();
-      const piiEncryptionService = await this.getPiiEncryptionService();
-      this.adminActorFactory = new AdminActorFactory({
-        dbPool,
-        emailHashService,
-        piiEncryptionService,
+  public getAdminActorFactory(): Promise<AdminActorFactory> {
+    if (this.promisedAdminActorFactory === null) {
+      this.promisedAdminActorFactory = new Promise(async (resolve) => {
+        const dbPool = await this.getDbPool();
+        const emailHashService = await this.getEmailHashService();
+        const piiEncryptionService = await this.getPiiEncryptionService();
+        const factory = new AdminActorFactory({
+          dbPool,
+          emailHashService,
+          piiEncryptionService,
+        });
+        console.log("Created AdminActorFactory");
+        resolve(factory);
       });
-      console.log("Created AdminActorFactory");
     }
-    return this.adminActorFactory;
+    return this.promisedAdminActorFactory;
   }
 
   public async getVetActorFactory(): Promise<VetActorFactory> {
