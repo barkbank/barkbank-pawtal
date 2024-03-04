@@ -72,10 +72,6 @@ export const NEXT_AUTH_OPTIONS: NextAuthOptions = {
       },
     }),
   ],
-  pages: {
-    // This tells NextAuth to use the /login page instead of /api/auth/signin.
-    signIn: "/login",
-  },
 };
 
 export async function isLoggedIn(accountType: AccountType): Promise<boolean> {
