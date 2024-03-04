@@ -37,6 +37,9 @@ export class AdminActor {
   }
 
   public async getOwnAdmin(): Promise<Admin | null> {
+    // Caches own admin. It is safe to do this because a new AdminActor is
+    // created on every server request as part of session validation; starting
+    // from getAuthenticatedAdminActor to new AdminActor in AdminActorFactory.
     if (this.promisedAdmin === null) {
       this.promisedAdmin = dbSelectAdmin(this.getDbPool(), this.getAdminId());
     }

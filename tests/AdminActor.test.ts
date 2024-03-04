@@ -12,6 +12,17 @@ describe("AdminActor", () => {
       expect(ownAdmin).toEqual(admin);
     });
   });
+  it("caches own admin", async () => {
+    await withDb(async (db) => {
+      const admin = await insertAdmin(1, db);
+      const config = getAdminActorConfig(db);
+      const actor = new AdminActor(admin.adminId, config);
+      const promise1 = actor.getOwnAdmin();
+      const promise2 = actor.getOwnAdmin();
+      const promises = await Promise.all([promise1, promise2]);
+      expect(promises[0]).toBe(promises[1]);
+    });
+  });
   it("can retrieve its own PII", async () => {
     await withDb(async (db) => {
       const admin = await insertAdmin(2, db);
