@@ -51,8 +51,7 @@ export async function insertAdmin(
   specOverrides?: Partial<AdminSpec>,
 ): Promise<Admin> {
   const specBase = await adminSpec(idx);
-  const spec =
-    specOverrides === undefined ? specBase : { ...specBase, ...specOverrides };
+  const spec = { ...specBase, ...specOverrides };
   const gen = await dbInsertAdmin(db, spec);
   const admin = await dbSelectAdmin(db, gen.adminId);
   if (admin === null) {
