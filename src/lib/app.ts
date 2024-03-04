@@ -20,7 +20,7 @@ import { UserActorFactory } from "./user/user-actor-factory";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
-  private emailService: EmailService | null = null;
+  private promisedEmailService: Promise<EmailService> | null = null;
   private otpService: OtpService | null = null;
   private piiHashService: HashService | null = null;
   private piiEncryptionService: EncryptionService | null = null;
@@ -83,11 +83,13 @@ export class AppFactory {
       return new NodemailerEmailSender(config);
     }
 
-    if (!this.emailService) {
-      this.emailService = new EmailService(resolveEmailSender());
+    if (this.promisedEmailService === null) {
+      this.promisedEmailService = Promise.resolve(
+        new EmailService(resolveEmailSender()),
+      );
       console.log("Created EmailService");
     }
-    return this.emailService;
+    return this.promisedEmailService;
   }
 
   public async getOtpService(): Promise<OtpService> {
