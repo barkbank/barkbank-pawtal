@@ -31,4 +31,34 @@ describe("AdminActor", () => {
       expect(await actor.canManageAdminAccounts()).toBe(false);
     });
   });
+  it("cannot manage vet accounts without required permissions", async () => {
+    await withDb(async (db) => {
+      const admin = await insertAdmin(1, db, {
+        adminCanManageVetAccounts: false,
+      });
+      const config = getAdminActorConfig(db);
+      const actor = new AdminActor(admin.adminId, config);
+      expect(await actor.canManageVetAccounts()).toBe(false);
+    });
+  });
+  it("cannot manage user accounts without required permissions", async () => {
+    await withDb(async (db) => {
+      const admin = await insertAdmin(1, db, {
+        adminCanManageUserAccounts: false,
+      });
+      const config = getAdminActorConfig(db);
+      const actor = new AdminActor(admin.adminId, config);
+      expect(await actor.canManageUserAccounts()).toBe(false);
+    });
+  });
+  it("cannot manage donors without required permissions", async () => {
+    await withDb(async (db) => {
+      const admin = await insertAdmin(1, db, {
+        adminCanManageDonors: false,
+      });
+      const config = getAdminActorConfig(db);
+      const actor = new AdminActor(admin.adminId, config);
+      expect(await actor.canManageDonors()).toBe(false);
+    });
+  });
 });
