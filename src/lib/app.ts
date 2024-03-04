@@ -23,7 +23,8 @@ export class AppFactory {
   private promisedEmailService: Promise<EmailService> | null = null;
   private promisedOtpService: Promise<OtpService> | null = null;
   private promisedPiiHashService: Promise<HashService> | null = null;
-  private piiEncryptionService: EncryptionService | null = null;
+  private promisedPiiEncryptionService: Promise<EncryptionService> | null =
+    null;
   private breedService: BreedService | null = null;
   private dbPool: pg.Pool | null = null;
   private adminActorFactory: AdminActorFactory | null = null;
@@ -126,13 +127,13 @@ export class AppFactory {
   }
 
   public async getPiiEncryptionService(): Promise<EncryptionService> {
-    if (!this.piiEncryptionService) {
-      this.piiEncryptionService = new SecretEncryptionService(
-        this.envString("BARKBANK_PII_SECRET"),
+    if (this.promisedPiiEncryptionService === null) {
+      this.promisedPiiEncryptionService = Promise.resolve(
+        new SecretEncryptionService(this.envString("BARKBANK_PII_SECRET")),
       );
       console.log("Created PiiEncryptionService");
     }
-    return this.piiEncryptionService;
+    return this.promisedPiiEncryptionService;
   }
 
   public async getBreedService(): Promise<BreedService> {
