@@ -50,4 +50,20 @@ export class AdminActor {
     );
     return pii;
   }
+
+  public async canManageAdminAccounts(): Promise<boolean> {
+    return false;
+  }
+
+  public async canManageVetAccounts(): Promise<boolean> {
+    return false;
+  }
+
+  public async canManageUserAccounts(): Promise<boolean> {
+    return false;
+  }
+
+  public async canManageDonors(): Promise<boolean> {
+    return false;
+  }
 }
