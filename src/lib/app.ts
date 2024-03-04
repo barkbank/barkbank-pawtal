@@ -66,7 +66,7 @@ export class AppFactory {
     return this.envOptionalString("DANGEROUS_ENABLED") === "true";
   }
 
-  public async getEmailService(): Promise<EmailService> {
+  public getEmailService(): Promise<EmailService> {
     const self = this;
 
     function resolveEmailSender(): EmailSender {
@@ -93,7 +93,7 @@ export class AppFactory {
     return this.promisedEmailService;
   }
 
-  public async getOtpService(): Promise<OtpService> {
+  public getOtpService(): Promise<OtpService> {
     if (this.promisedOtpService === null) {
       const config: OtpConfig = {
         otpLength: 6,
@@ -109,14 +109,14 @@ export class AppFactory {
     return this.promisedOtpService;
   }
 
-  public async getSenderForOtpEmail(): Promise<EmailContact> {
-    return {
+  public getSenderForOtpEmail(): Promise<EmailContact> {
+    return Promise.resolve({
       email: this.envString("BARKBANK_OTP_SENDER_EMAIL"),
       name: this.envOptionalString("BARKBANK_OTP_SENDER_NAME"),
-    };
+    });
   }
 
-  public async getEmailHashService(): Promise<HashService> {
+  public getEmailHashService(): Promise<HashService> {
     if (this.promisedPiiHashService === null) {
       this.promisedPiiHashService = Promise.resolve(
         new SecretHashService(this.envString("BARKBANK_PII_SECRET")),
@@ -126,7 +126,7 @@ export class AppFactory {
     return this.promisedPiiHashService;
   }
 
-  public async getPiiEncryptionService(): Promise<EncryptionService> {
+  public getPiiEncryptionService(): Promise<EncryptionService> {
     if (this.promisedPiiEncryptionService === null) {
       this.promisedPiiEncryptionService = Promise.resolve(
         new SecretEncryptionService(this.envString("BARKBANK_PII_SECRET")),
@@ -136,7 +136,7 @@ export class AppFactory {
     return this.promisedPiiEncryptionService;
   }
 
-  public async getBreedService(): Promise<BreedService> {
+  public getBreedService(): Promise<BreedService> {
     if (this.promisedBreedService === null) {
       this.promisedBreedService = Promise.resolve(new BreedService());
       console.log("Created BreedService");
@@ -144,7 +144,7 @@ export class AppFactory {
     return this.promisedBreedService;
   }
 
-  public async getDbPool(): Promise<pg.Pool> {
+  public getDbPool(): Promise<pg.Pool> {
     if (this.promisedDbPool === null) {
       this.promisedDbPool = Promise.resolve(
         new pg.Pool({
