@@ -8,6 +8,7 @@ export type AdminActorFactoryConfig = {
   dbPool: Pool;
   emailHashService: HashService;
   piiEncryptionService: EncryptionService;
+  rootAdminEmail: string;
 };
 
 export class AdminActorFactory {

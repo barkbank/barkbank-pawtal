@@ -24,12 +24,17 @@ import { dbInsertVet, dbSelectVet } from "@/lib/data/db-vets";
 const emailHashService = new HarnessHashService();
 const piiEncryptionService = new HarnessEncryptionService();
 
-export function getAdminActorFactoryConfig(db: Pool): AdminActorFactoryConfig {
-  return {
+export function getAdminActorFactoryConfig(
+  db: Pool,
+  overrides?: Partial<AdminActorFactoryConfig>,
+): AdminActorFactoryConfig {
+  const base: AdminActorFactoryConfig = {
     dbPool: db,
     emailHashService: emailHashService,
     piiEncryptionService: piiEncryptionService,
+    rootAdminEmail: "",
   };
+  return { ...base, ...overrides };
 }
 
 export function getAdminActorConfig(db: Pool): AdminActorConfig {
@@ -152,4 +157,8 @@ export function vetSpec(idx: number): VetSpec {
     vetPhoneNumber: `+65 ${6000000 + idx}`,
     vetAddress: `${100 + idx} Dog Park Drive`,
   };
+}
+
+export function someEmail(idx: number): string {
+  return `some${idx}@some.com`;
 }
