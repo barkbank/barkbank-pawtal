@@ -36,7 +36,7 @@ export class AdminActor {
     return this.config.piiEncryptionService;
   }
 
-  public async getOwnAdmin(): Promise<Admin | null> {
+  public getOwnAdmin(): Promise<Admin | null> {
     // Caches own admin. It is safe to do this because a new AdminActor is
     // created on every server request as part of session validation; starting
     // from getAuthenticatedAdminActor to new AdminActor in AdminActorFactory.
