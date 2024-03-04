@@ -1,6 +1,5 @@
 import { NextAuthOptions, getServerSession } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { Err, Ok, Result } from "./result";
 import APP from "./app";
 import { AdminActor } from "./admin/admin-actor";
 import { VetActor } from "./vet/vet-actor";

@@ -40,8 +40,14 @@ export function getAdminActorConfig(db: Pool): AdminActorConfig {
   };
 }
 
-export async function createAdmin(idx: number, db: Pool): Promise<Admin> {
-  const spec = await adminSpec(1);
+export async function insertAdmin(
+  idx: number,
+  db: Pool,
+  specOverrides?: Partial<AdminSpec>,
+): Promise<Admin> {
+  const specBase = await adminSpec(idx);
+  const spec =
+    specOverrides === undefined ? specBase : { ...specBase, ...specOverrides };
   const gen = await dbInsertAdmin(db, spec);
   const admin = await dbSelectAdmin(db, gen.adminId);
   if (admin === null) {
@@ -97,7 +103,7 @@ export function getUserActorFactoryConfig(db: Pool): UserActorFactoryConfig {
   };
 }
 
-export async function createUser(idx: number, db: Pool): Promise<User> {
+export async function insertUser(idx: number, db: Pool): Promise<User> {
   const spec = await userSpec(1);
   const gen = await dbInsertUser(db, spec);
   const user = await dbSelectUser(db, gen.userId);
@@ -129,7 +135,7 @@ export function getVetActorFactoryConfig(dbPool: Pool): VetActorFactoryConfig {
   };
 }
 
-export async function createVet(idx: number, dbPool: Pool): Promise<Vet> {
+export async function insertVet(idx: number, dbPool: Pool): Promise<Vet> {
   const spec = vetSpec(idx);
   const gen = await dbInsertVet(dbPool, spec);
   const vet = await dbSelectVet(dbPool, gen.vetId);
