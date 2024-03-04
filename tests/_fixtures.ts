@@ -40,8 +40,14 @@ export function getAdminActorConfig(db: Pool): AdminActorConfig {
   };
 }
 
-export async function createAdmin(idx: number, db: Pool): Promise<Admin> {
-  const spec = await adminSpec(1);
+export async function insertAdmin(
+  idx: number,
+  db: Pool,
+  specOverrides?: Partial<AdminSpec>,
+): Promise<Admin> {
+  const specBase = await adminSpec(idx);
+  const spec =
+    specOverrides === undefined ? specBase : { ...specBase, ...specOverrides };
   const gen = await dbInsertAdmin(db, spec);
   const admin = await dbSelectAdmin(db, gen.adminId);
   if (admin === null) {
