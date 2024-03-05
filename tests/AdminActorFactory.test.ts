@@ -112,18 +112,19 @@ describe("AdminActorFactory", () => {
     });
     it("should not create root admin account if called with another email", async () => {
       await withDb(async (db) => {
-        // Given an existing admin account that is not the root admin email;
+        // Given BARKBANK_ROOT_ADMIN_EMAIL is a valid email; AND no existing
+        // admin account exists for the email;
         const rootAdminEmail = someEmail(123);
-        await insertAdmin(1, db);
 
-        // WHEN called with that account's email that isn't the root admin
-        // email;
+        // WHEN called with some other email;
+        await insertAdmin(1, db);
         const factory = new AdminActorFactory(
           getAdminActorFactoryConfig(db, { rootAdminEmail }),
         );
         await factory.getAdminActor(adminPii(1).adminEmail);
 
-        // THEN no root account should be created for the root admin email;
+        // THEN no admin account should be created for the configured root admin
+        // email.
         const rootAdminHashedEmail = await getHashedEmail(rootAdminEmail);
         const adminId = await dbSelectAdminIdByAdminHashedEmail(
           db,
