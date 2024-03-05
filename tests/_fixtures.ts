@@ -60,19 +60,32 @@ export async function insertAdmin(
   return admin;
 }
 
-export async function adminSpec(idx: number): Promise<AdminSpec> {
+export async function adminSpec(
+  idx: number,
+  overrides?: Partial<AdminSpec>,
+): Promise<AdminSpec> {
   const personalData = await adminPersonalData(idx);
   const permissions = adminPermissions(idx);
-  return { ...personalData, ...permissions };
+  return { ...personalData, ...permissions, ...overrides };
+}
+
+export async function getAdminPersonalData(
+  adminPii: AdminPii,
+): Promise<AdminPersonalData> {
+  const adminEncryptedPii = await encryptAdminPii(
+    adminPii,
+    piiEncryptionService,
+  );
+  const adminHashedEmail = await emailHashService.getHashHex(
+    adminPii.adminEmail,
+  );
+  return { adminHashedEmail, adminEncryptedPii };
 }
 
 export async function adminPersonalData(
   idx: number,
 ): Promise<AdminPersonalData> {
-  const pii = adminPii(idx);
-  const adminEncryptedPii = await encryptAdminPii(pii, piiEncryptionService);
-  const adminHashedEmail = await emailHashService.getHashHex(pii.adminEmail);
-  return { adminHashedEmail, adminEncryptedPii };
+  return getAdminPersonalData(adminPii(idx));
 }
 
 export function adminPermissions(idx: number): AdminPermissions {
