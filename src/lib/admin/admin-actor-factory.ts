@@ -54,7 +54,7 @@ export class AdminActorFactory {
       );
       if (didGrant) {
         console.log(
-          `Granted permission to manage admin accounts to ${rootAdminEmail}`,
+          "Granted to root admin account the permission to manage admin accounts",
         );
       }
       return actor;
@@ -79,6 +79,7 @@ export class AdminActorFactory {
         adminCanManageAdminAccounts: true,
       };
       const gen = await dbInsertAdmin(dbPool, spec);
+      console.log("Created root admin account");
       return new AdminActor(gen.adminId, config);
     }
     throw new Error("BUG - Unhandled case");
