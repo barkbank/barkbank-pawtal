@@ -88,7 +88,7 @@ export type AdminPermissions = {
   adminCanManageDonors: boolean;
 };
 
-export const ADMIN_NO_PERMISSIONS: AdminPermissions = {
+export const NO_ADMIN_PERMISSIONS: AdminPermissions = {
   adminCanManageAdminAccounts: false,
   adminCanManageVetAccounts: false,
   adminCanManageUserAccounts: false,
