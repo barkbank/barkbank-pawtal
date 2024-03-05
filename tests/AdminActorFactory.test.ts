@@ -5,7 +5,6 @@ import {
   insertAdmin,
   getAdminActorFactoryConfig,
   someEmail,
-  adminSpec,
   getAdminPersonalData,
 } from "./_fixtures";
 import { AdminPii } from "@/lib/admin/admin-pii";
@@ -16,10 +15,17 @@ describe("AdminActorFactory", () => {
   describe("getAdminActor", () => {
     it("should load the AdminActor for the corresponding email", async () => {
       await withDb(async (db) => {
+        // Given an existing admin account;
         const admin = await insertAdmin(1, db);
-        const factory = new AdminActorFactory(getAdminActorFactoryConfig(db));
         const pii = adminPii(1);
+
+        // WHEN called with that accounts email;
+        const factory = new AdminActorFactory(getAdminActorFactoryConfig(db));
         const actor = await factory.getAdminActor(pii.adminEmail);
+
+        // THEN an admin actor should be returned; AND the actor's admin ID
+        // should be that of the existing account;
+        expect(actor).not.toBeNull();
         expect(actor?.getAdminId()).toEqual(admin.adminId);
       });
     });
@@ -30,15 +36,16 @@ describe("AdminActorFactory", () => {
         const rootAdminEmail = someEmail(1);
 
         // WHEN called with root admin email;
-        const factory = new AdminActorFactory(
-          getAdminActorFactoryConfig(db, { rootAdminEmail: rootAdminEmail }),
-        );
+        const factoryConfig = getAdminActorFactoryConfig(db, {
+          rootAdminEmail: rootAdminEmail,
+        });
+        const factory = new AdminActorFactory(factoryConfig);
+        const actor = await factory.getAdminActor(rootAdminEmail);
 
         // THEN an admin account should be created for the email; AND the
         // account should have permissions to manage admin accounts; AND no
         // other permissions should be granted; AND the admin name should be
         // “Root”; AND the admin phone number should be empty string.
-        const actor = await factory.getAdminActor(rootAdminEmail);
         expect(actor).not.toBeNull();
         expect(await actor?.canManageAdminAccounts()).toBe(true);
         expect(await actor?.canManageVetAccounts()).toBe(false);
@@ -75,16 +82,18 @@ describe("AdminActorFactory", () => {
         const adminGen = await dbInsertAdmin(db, spec);
 
         // WHEN called with the existing root email;
-        const factory = new AdminActorFactory(
-          getAdminActorFactoryConfig(db, { rootAdminEmail: rootAdminEmail }),
-        );
-
-        // THEN the admin account should be granted permissions to manage admin
-        // accounts; AND the admin account shall continue to be granted
-        // permissions to manage donors, user accounts, and vet accounts; AND
-        // the admin name should still be “Adam”; AND the admin phone number
-        // should still be “87651234”.
+        const factoryConfig = getAdminActorFactoryConfig(db, {
+          rootAdminEmail: rootAdminEmail,
+        });
+        const factory = new AdminActorFactory(factoryConfig);
         const actor = await factory.getAdminActor(rootAdminEmail);
+
+        // THEN an actor should be returned for the existing account; AND the
+        // admin account should be granted permissions to manage admin accounts;
+        // AND the admin account shall continue to be granted permissions to
+        // manage donors, user accounts, and vet accounts; AND the admin name
+        // should still be “Adam”; AND the admin phone number should still be
+        // “87651234”.
         expect(actor).not.toBeNull();
         expect(actor?.getAdminId()).toEqual(adminGen.adminId);
         expect(await actor?.canManageAdminAccounts()).toBe(true);
