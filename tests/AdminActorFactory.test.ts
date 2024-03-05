@@ -6,10 +6,14 @@ import {
   getAdminActorFactoryConfig,
   someEmail,
   getAdminPersonalData,
+  getHashedEmail,
 } from "./_fixtures";
 import { AdminPii } from "@/lib/admin/admin-pii";
 import { AdminPersonalData, AdminSpec } from "@/lib/data/db-models";
-import { dbInsertAdmin } from "@/lib/data/db-admins";
+import {
+  dbInsertAdmin,
+  dbSelectAdminIdByAdminHashedEmail,
+} from "@/lib/data/db-admins";
 
 describe("AdminActorFactory", () => {
   describe("getAdminActor", () => {
@@ -37,7 +41,7 @@ describe("AdminActorFactory", () => {
 
         // WHEN called with root admin email;
         const factoryConfig = getAdminActorFactoryConfig(db, {
-          rootAdminEmail: rootAdminEmail,
+          rootAdminEmail,
         });
         const factory = new AdminActorFactory(factoryConfig);
         const actor = await factory.getAdminActor(rootAdminEmail);
@@ -83,7 +87,7 @@ describe("AdminActorFactory", () => {
 
         // WHEN called with the existing root email;
         const factoryConfig = getAdminActorFactoryConfig(db, {
-          rootAdminEmail: rootAdminEmail,
+          rootAdminEmail,
         });
         const factory = new AdminActorFactory(factoryConfig);
         const actor = await factory.getAdminActor(rootAdminEmail);
@@ -104,6 +108,28 @@ describe("AdminActorFactory", () => {
         expect(pii?.adminEmail).toEqual(rootAdminEmail);
         expect(pii?.adminName).toEqual(existingPii.adminName);
         expect(pii?.adminPhoneNumber).toEqual(existingPii.adminPhoneNumber);
+      });
+    });
+    it("should not create root admin account if called with another email", async () => {
+      await withDb(async (db) => {
+        // Given an existing admin account that is not the root admin email;
+        const rootAdminEmail = someEmail(123);
+        await insertAdmin(1, db);
+
+        // WHEN called with that account's email that isn't the root admin
+        // email;
+        const factory = new AdminActorFactory(
+          getAdminActorFactoryConfig(db, { rootAdminEmail }),
+        );
+        await factory.getAdminActor(adminPii(1).adminEmail);
+
+        // THEN no root account should be created for the root admin email;
+        const rootAdminHashedEmail = await getHashedEmail(rootAdminEmail);
+        const adminId = await dbSelectAdminIdByAdminHashedEmail(
+          db,
+          rootAdminHashedEmail,
+        );
+        expect(adminId).toBeNull();
       });
     });
   });

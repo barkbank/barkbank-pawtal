@@ -69,6 +69,10 @@ export async function adminSpec(
   return { ...personalData, ...permissions, ...overrides };
 }
 
+export async function getHashedEmail(email: string): Promise<string> {
+  return emailHashService.getHashHex(email);
+}
+
 export async function getAdminPersonalData(
   adminPii: AdminPii,
 ): Promise<AdminPersonalData> {
