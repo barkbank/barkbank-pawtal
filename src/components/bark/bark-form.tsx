@@ -40,7 +40,7 @@ export function BarkForm(props: {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="mt-3 rounded border px-3 pb-6 shadow-md"
+        className="mt-3"
         autoComplete="off"
       >
         {children}
@@ -276,7 +276,7 @@ export function BarkFormButton(props: {
       type="button"
       className="mt-6"
       onClick={onClick}
-      variant="secondary"
+      variant="brandInverse"
     >
       {children}
     </Button>
@@ -286,7 +286,7 @@ export function BarkFormButton(props: {
 export function BarkFormSubmitButton(props: { children: React.ReactNode }) {
   const { children } = props;
   return (
-    <Button type="submit" className="mt-6">
+    <Button type="submit" variant="brand">
       {children}
     </Button>
   );

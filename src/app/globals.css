@@ -33,6 +33,14 @@
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
+
+    --brand-pink: 355, 81%, 73%;
+    --brand-light-pink: 30, 50%, 99%;
+    --brand-white: 0 0% 100%;
+
+    --shadow-btn: 4px 4px 4px 0px rgba(0, 0, 0, 0.25);
+
+    --grey: 300 1% 82%;
   }
 
   .dark {
