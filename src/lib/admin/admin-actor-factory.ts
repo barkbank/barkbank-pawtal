@@ -3,6 +3,7 @@ import { HashService } from "../services/hash";
 import { Pool } from "pg";
 import { EncryptionService } from "../services/encryption";
 import {
+  dbGrantCanManageAdminAccounts,
   dbInsertAdmin,
   dbSelectAdminIdByAdminHashedEmail,
 } from "../data/db-admins";
@@ -47,7 +48,15 @@ export class AdminActorFactory {
     if (adminId !== null && adminEmail === rootAdminEmail) {
       // Ensure actor for the root admin account can manage admin accounts and return it.
       const actor = new AdminActor(adminId, config);
-      // WIP - dbGrantCanManageAdminAccounts
+      const didGrant = await dbGrantCanManageAdminAccounts(
+        dbPool,
+        actor.getAdminId(),
+      );
+      if (didGrant) {
+        console.log(
+          `Granted permission to manage admin accounts to ${rootAdminEmail}`,
+        );
+      }
       return actor;
     }
     if (adminId === null && adminEmail === rootAdminEmail) {

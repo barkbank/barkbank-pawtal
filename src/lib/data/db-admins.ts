@@ -68,3 +68,18 @@ export async function dbSelectAdminIdByAdminHashedEmail(
   }
   return null;
 }
+
+export async function dbGrantCanManageAdminAccounts(
+  ctx: DbContext,
+  adminId: string,
+): Promise<boolean> {
+  const sql = `
+    UPDATE admins
+    SET admin_can_manage_admin_accounts = TRUE
+    WHERE admin_id = $1
+    AND admin_can_manage_admin_accounts = FALSE
+    RETURNING 1
+  `;
+  const res = await dbQuery(ctx, sql, [adminId]);
+  return res.rows.length === 1;
+}
