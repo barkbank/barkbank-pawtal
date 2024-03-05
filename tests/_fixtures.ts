@@ -24,12 +24,17 @@ import { dbInsertVet, dbSelectVet } from "@/lib/data/db-vets";
 const emailHashService = new HarnessHashService();
 const piiEncryptionService = new HarnessEncryptionService();
 
-export function getAdminActorFactoryConfig(db: Pool): AdminActorFactoryConfig {
-  return {
+export function getAdminActorFactoryConfig(
+  db: Pool,
+  overrides?: Partial<AdminActorFactoryConfig>,
+): AdminActorFactoryConfig {
+  const base: AdminActorFactoryConfig = {
     dbPool: db,
     emailHashService: emailHashService,
     piiEncryptionService: piiEncryptionService,
+    rootAdminEmail: "",
   };
+  return { ...base, ...overrides };
 }
 
 export function getAdminActorConfig(db: Pool): AdminActorConfig {
@@ -46,8 +51,7 @@ export async function insertAdmin(
   specOverrides?: Partial<AdminSpec>,
 ): Promise<Admin> {
   const specBase = await adminSpec(idx);
-  const spec =
-    specOverrides === undefined ? specBase : { ...specBase, ...specOverrides };
+  const spec = { ...specBase, ...specOverrides };
   const gen = await dbInsertAdmin(db, spec);
   const admin = await dbSelectAdmin(db, gen.adminId);
   if (admin === null) {
@@ -56,19 +60,36 @@ export async function insertAdmin(
   return admin;
 }
 
-export async function adminSpec(idx: number): Promise<AdminSpec> {
+export async function adminSpec(
+  idx: number,
+  overrides?: Partial<AdminSpec>,
+): Promise<AdminSpec> {
   const personalData = await adminPersonalData(idx);
   const permissions = adminPermissions(idx);
-  return { ...personalData, ...permissions };
+  return { ...personalData, ...permissions, ...overrides };
+}
+
+export async function getHashedEmail(email: string): Promise<string> {
+  return emailHashService.getHashHex(email);
+}
+
+export async function getAdminPersonalData(
+  adminPii: AdminPii,
+): Promise<AdminPersonalData> {
+  const adminEncryptedPii = await encryptAdminPii(
+    adminPii,
+    piiEncryptionService,
+  );
+  const adminHashedEmail = await emailHashService.getHashHex(
+    adminPii.adminEmail,
+  );
+  return { adminHashedEmail, adminEncryptedPii };
 }
 
 export async function adminPersonalData(
   idx: number,
 ): Promise<AdminPersonalData> {
-  const pii = adminPii(idx);
-  const adminEncryptedPii = await encryptAdminPii(pii, piiEncryptionService);
-  const adminHashedEmail = await emailHashService.getHashHex(pii.adminEmail);
-  return { adminHashedEmail, adminEncryptedPii };
+  return getAdminPersonalData(adminPii(idx));
 }
 
 export function adminPermissions(idx: number): AdminPermissions {
@@ -152,4 +173,8 @@ export function vetSpec(idx: number): VetSpec {
     vetPhoneNumber: `+65 ${6000000 + idx}`,
     vetAddress: `${100 + idx} Dog Park Drive`,
   };
+}
+
+export function someEmail(idx: number): string {
+  return `some${idx}@some.com`;
 }

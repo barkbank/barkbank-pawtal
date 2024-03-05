@@ -18,6 +18,7 @@ import pg from "pg";
 import { VetActorFactory } from "./vet/vet-actor-factory";
 import { UserActorFactory } from "./user/user-actor-factory";
 import { AppEnv } from "./app-env";
+import { isValidEmail } from "./bark-utils";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -162,10 +163,15 @@ export class AppFactory {
         const dbPool = await this.getDbPool();
         const emailHashService = await this.getEmailHashService();
         const piiEncryptionService = await this.getPiiEncryptionService();
+        const rootAdminEmail = this.envString(AppEnv.BARKBANK_ROOT_ADMIN_EMAIL);
+        if (!isValidEmail(rootAdminEmail)) {
+          throw new Error("BARKBANK_ROOT_ADMIN_EMAIL is not a valid email");
+        }
         const factory = new AdminActorFactory({
           dbPool,
           emailHashService,
           piiEncryptionService,
+          rootAdminEmail,
         });
         console.log("Created AdminActorFactory");
         resolve(factory);

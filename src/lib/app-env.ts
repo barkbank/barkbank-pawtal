@@ -24,6 +24,12 @@ export enum AppEnv {
   BARKBANK_SMTP_PASSWORD = "BARKBANK_SMTP_PASSWORD",
 
   /**
+   * The root admin email is a whitelisted admin email address for which account
+   * will be granted the permission to manage admin accounts.
+   */
+  BARKBANK_ROOT_ADMIN_EMAIL = "BARKBANK_ROOT_ADMIN_EMAIL",
+
+  /**
    * Configuration for /api/dangerous.
    *
    * To enable the API, DANGEROUS_ENABLED must be 'true' and
