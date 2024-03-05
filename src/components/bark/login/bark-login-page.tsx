@@ -37,9 +37,9 @@ export default async function BarkLoginPage(props: {
   }
   return (
     <>
-      <div className="mt-32 flex h-screen flex-col items-center justify-center">
+      <div className="flex min-h-screen flex-col items-center justify-between">
         {/* Hero Section */}
-        <div className="mt-20 flex w-full flex-col items-center px-6 pb-10 sm:mt-0">
+        <div className="mt-20 flex w-full flex-col items-center px-6 pb-10 sm:mt-32">
           <Image
             src={logoSrc}
             alt="" // Decorative image so alt text is empty
