@@ -11,6 +11,12 @@
 //   also those foreign keys. (See Dog, for example).
 //
 
+export type UserPii = {
+  userName: string;
+  userEmail: string;
+  userPhoneNumber: string;
+};
+
 export type UserSpec = {
   userHashedEmail: string;
   userEncryptedPii: string;
@@ -52,6 +58,10 @@ export enum DogStatus {
   MEDICAL_COOLDOWN = "MEDICAL_COOLDOWN",
   PERMANENTLY_INELIGIBLE = "PERMANENTLY_INELIGIBLE",
 }
+
+export type DogOii = {
+  dogName: string;
+};
 
 export type DogSpec = {
   dogStatus: DogStatus;

@@ -1,4 +1,5 @@
-import { UserPii, encryptUserPii } from "@/lib/user/user-pii";
+import { encryptUserPii } from "@/lib/user/user-pii";
+import { UserPii } from "@/lib/data/db-models";
 import APP from "@/lib/app";
 import { dbInsertUser } from "@/lib/data/db-users";
 import { UserSpec } from "@/lib/data/db-models";

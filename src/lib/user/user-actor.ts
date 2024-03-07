@@ -1,5 +1,5 @@
 import { User } from "../data/db-models";
-import { UserPii } from "./user-pii";
+import { UserPii } from "../data/db-models";
 import { UserAccountService } from "./user-account-service";
 
 /**

@@ -3,7 +3,8 @@ import { HashService } from "../services/hash";
 import { EncryptionService } from "../services/encryption";
 import { User } from "../data/db-models";
 import { dbSelectUser, dbSelectUserIdByHashedEmail } from "../data/db-users";
-import { UserPii, decryptUserPii } from "./user-pii";
+import { decryptUserPii } from "./user-pii";
+import { UserPii } from "../data/db-models";
 
 export type UserAccountServiceConfig = {
   dbPool: Pool;

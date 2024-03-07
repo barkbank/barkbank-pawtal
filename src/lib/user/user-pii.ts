@@ -1,14 +1,5 @@
+import { UserPii, DogOii } from "../data/db-models";
 import { EncryptionService } from "../services/encryption";
-
-export type UserPii = {
-  userName: string;
-  userEmail: string;
-  userPhoneNumber: string;
-};
-
-export type DogOii = {
-  dogName: string;
-};
 
 export async function encryptUserPii(
   pii: UserPii,
