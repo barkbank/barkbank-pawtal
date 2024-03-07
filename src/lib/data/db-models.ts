@@ -121,6 +121,8 @@ export type AdminGen = {
 
 export type AdminRecord = AdminSecurePii & AdminPermissions & AdminGen;
 
+export type Admin = AdminPii & AdminPermissions & AdminGen;
+
 export type VetSpec = {
   vetEmail: string;
   vetName: string;

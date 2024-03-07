@@ -42,7 +42,10 @@ export class AdminActor {
     // created on every server request as part of session validation; starting
     // from getAuthenticatedAdminActor to new AdminActor in AdminActorFactory.
     if (this.promisedAdminRecord === null) {
-      this.promisedAdminRecord = dbSelectAdmin(this.getDbPool(), this.getAdminId());
+      this.promisedAdminRecord = dbSelectAdmin(
+        this.getDbPool(),
+        this.getAdminId(),
+      );
     }
     return this.promisedAdminRecord;
   }
