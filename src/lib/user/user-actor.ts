@@ -18,6 +18,9 @@ export type UserActorConfig = {
 
 /**
  * Actor for user accounts
+ *
+ * Responsible for ensuring users only take actions for which they have proper
+ * authorisation. E.g. view own PII and not that of another user.
  */
 export class UserActor {
   private userId: string;

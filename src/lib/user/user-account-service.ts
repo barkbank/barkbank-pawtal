@@ -11,6 +11,12 @@ export type UserAccountServiceConfig = {
   piiEncryptionService: EncryptionService;
 };
 
+/**
+ * Responsible for user account related operations.
+ *
+ * NOT responsible for authorisation of the operations. That responsibility
+ * falls on the actors; i.e. UserActor, VetActor, and AdminActor.
+ */
 export class UserAccountService {
   private config: UserAccountServiceConfig;
 

@@ -10,6 +10,12 @@ export type UserActorFactoryConfig = {
   piiEncryptionService: EncryptionService;
 };
 
+/**
+ * Responsible for creating user actors
+ *
+ * NOTE: Including a getUserActor in UserAccountService would introduce a
+ * circular dependency because UserActor depends on UserAccountService.
+ */
 export class UserActorFactory {
   private config: UserActorFactoryConfig;
 
