@@ -31,7 +31,7 @@ describe("UserAccountService", () => {
       });
     });
   });
-  describe("getUser()", () => {
+  describe("getUser", () => {
     it("should return the user matching the user ID", async () => {
       await withDb(async (db) => {
         // GIVEN an existing user;
@@ -53,6 +53,21 @@ describe("UserAccountService", () => {
 
         // THEN null should be returned.
         expect(userOut).toBeNull();
+      });
+    });
+  });
+  describe("getUserPii", () => {
+    it("should return the PII of the user", async () => {
+      await withDb(async (db) => {
+        // GIVEN a user record;
+        const rec = await insertUser(88, db);
+
+        // WHEN getUserPii is called with the record;
+        const service = await getService(db);
+        const pii = await service.getUserPii(rec);
+
+        // THEN the PII from the record should be decrypted and returned.
+        expect(pii).toEqual(userPii(88));
       });
     });
   });
