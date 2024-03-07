@@ -3,7 +3,7 @@ import { encryptAdminPii } from "@/lib/admin/admin-pii";
 import { AdminPii } from "@/lib/data/db-models";
 import { dbInsertAdmin, dbSelectAdmin } from "@/lib/data/db-admins";
 import {
-  Admin,
+  AdminRecord,
   AdminPermissions,
   AdminSecurePii,
   AdminSpec,
@@ -57,7 +57,7 @@ export async function insertAdmin(
   idx: number,
   db: Pool,
   specOverrides?: Partial<AdminSpec>,
-): Promise<Admin> {
+): Promise<AdminRecord> {
   const specBase = await adminSpec(idx);
   const spec = { ...specBase, ...specOverrides };
   const gen = await dbInsertAdmin(db, spec);

@@ -1,5 +1,5 @@
 import { Pool } from "pg";
-import { Admin } from "../data/db-models";
+import { AdminRecord } from "../data/db-models";
 import { HashService } from "../services/hash";
 import { EncryptionService } from "../services/encryption";
 import { dbSelectAdmin } from "../data/db-admins";
@@ -18,7 +18,7 @@ export type AdminActorConfig = {
 export class AdminActor {
   private adminId: string;
   private config: AdminActorConfig;
-  private promisedAdmin: Promise<Admin | null> | null = null;
+  private promisedAdminRecord: Promise<AdminRecord | null> | null = null;
 
   constructor(adminId: string, config: AdminActorConfig) {
     this.adminId = adminId;
@@ -37,18 +37,18 @@ export class AdminActor {
     return this.config.piiEncryptionService;
   }
 
-  public getOwnAdmin(): Promise<Admin | null> {
+  public getOwnAdminRecord(): Promise<AdminRecord | null> {
     // Caches own admin. It is safe to do this because a new AdminActor is
     // created on every server request as part of session validation; starting
     // from getAuthenticatedAdminActor to new AdminActor in AdminActorFactory.
-    if (this.promisedAdmin === null) {
-      this.promisedAdmin = dbSelectAdmin(this.getDbPool(), this.getAdminId());
+    if (this.promisedAdminRecord === null) {
+      this.promisedAdminRecord = dbSelectAdmin(this.getDbPool(), this.getAdminId());
     }
-    return this.promisedAdmin;
+    return this.promisedAdminRecord;
   }
 
   public async getOwnPii(): Promise<AdminPii | null> {
-    const admin = await this.getOwnAdmin();
+    const admin = await this.getOwnAdminRecord();
     if (admin === null) {
       return null;
     }
@@ -60,22 +60,22 @@ export class AdminActor {
   }
 
   public async canManageAdminAccounts(): Promise<boolean> {
-    const admin = await this.getOwnAdmin();
+    const admin = await this.getOwnAdminRecord();
     return admin ? admin.adminCanManageAdminAccounts : false;
   }
 
   public async canManageVetAccounts(): Promise<boolean> {
-    const admin = await this.getOwnAdmin();
+    const admin = await this.getOwnAdminRecord();
     return admin ? admin.adminCanManageVetAccounts : false;
   }
 
   public async canManageUserAccounts(): Promise<boolean> {
-    const admin = await this.getOwnAdmin();
+    const admin = await this.getOwnAdminRecord();
     return admin ? admin.adminCanManageUserAccounts : false;
   }
 
   public async canManageDonors(): Promise<boolean> {
-    const admin = await this.getOwnAdmin();
+    const admin = await this.getOwnAdminRecord();
     return admin ? admin.adminCanManageDonors : false;
   }
 }

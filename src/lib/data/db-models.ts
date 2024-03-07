@@ -119,7 +119,7 @@ export type AdminGen = {
   adminModificationTime: Date;
 };
 
-export type Admin = AdminSecurePii & AdminPermissions & AdminGen;
+export type AdminRecord = AdminSecurePii & AdminPermissions & AdminGen;
 
 export type VetSpec = {
   vetEmail: string;

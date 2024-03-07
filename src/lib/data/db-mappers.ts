@@ -3,7 +3,7 @@ import {
   DogSpec,
   User,
   UserSpec,
-  Admin,
+  AdminRecord,
   AdminSpec,
   Vet,
   VetSpec,
@@ -19,7 +19,7 @@ export function toDogSpec(dog: Dog): DogSpec {
   return spec;
 }
 
-export function toAdminSpec(admin: Admin): AdminSpec {
+export function toAdminSpec(admin: AdminRecord): AdminSpec {
   const { adminId, adminCreationTime, adminModificationTime, ...spec } = admin;
   return spec;
 }
