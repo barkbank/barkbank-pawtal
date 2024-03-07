@@ -125,7 +125,7 @@ export function getUserActorFactoryConfig(db: Pool): UserActorFactoryConfig {
 }
 
 export async function insertUser(idx: number, db: Pool): Promise<User> {
-  const spec = await userSpec(1);
+  const spec = await userSpec(idx);
   const gen = await dbInsertUser(db, spec);
   const user = await dbSelectUser(db, gen.userId);
   if (user === null) {
