@@ -19,6 +19,7 @@ import { VetActorFactory } from "./vet/vet-actor-factory";
 import { UserActorFactory } from "./user/user-actor-factory";
 import { AppEnv } from "./app-env";
 import { isValidEmail } from "./bark-utils";
+import { UserAccountService } from "./user/user-account-service";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -32,6 +33,7 @@ export class AppFactory {
   private promisedAdminActorFactory: Promise<AdminActorFactory> | null = null;
   private promisedVetActorFactory: Promise<VetActorFactory> | null = null;
   private promisedUserActorFactory: Promise<UserActorFactory> | null = null;
+  private promisedUserAccountService: Promise<UserAccountService> | null = null;
 
   constructor(envs: NodeJS.Dict<string>) {
     this.envs = envs;
@@ -212,6 +214,24 @@ export class AppFactory {
       });
     }
     return this.promisedUserActorFactory;
+  }
+
+  public getUserAccountService(): Promise<UserAccountService> {
+    if (this.promisedUserAccountService === null) {
+      this.promisedUserAccountService = new Promise(async (resolve) => {
+        const dbPool = await this.getDbPool();
+        const emailHashService = await this.getEmailHashService();
+        const piiEncryptionService = await this.getPiiEncryptionService();
+        const service = new UserAccountService({
+          dbPool,
+          emailHashService,
+          piiEncryptionService,
+        });
+        console.log("Created UserAccountService");
+        resolve(service);
+      });
+    }
+    return this.promisedUserAccountService;
   }
 }
 
