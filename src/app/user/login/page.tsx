@@ -11,6 +11,7 @@ export default async function Page() {
       title={"User Login"}
       accountType={AccountType.USER}
       successPath={RoutePath.USER_DASHBOARD_PAGE}
-      logoSrc="/orangeDogHouse.svg"/>
+      logoSrc="/orangeDogHouse.svg"
+    />
   );
 }

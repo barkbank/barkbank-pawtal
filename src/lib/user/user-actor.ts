@@ -1,47 +1,28 @@
-import { Pool } from "pg";
 import { User } from "../data/db-models";
-import { EncryptionService } from "../services/encryption";
-import { UserPii, decryptUserPii } from "./user-pii";
-import { dbSelectUser } from "../data/db-users";
-
-export type UserActorConfig = {
-  /**
-   * For user actor to access the database
-   */
-  dbPool: Pool;
-
-  /**
-   * For user actor to decrypt their own PII
-   */
-  piiEncryptionService: EncryptionService;
-};
+import { UserPii } from "./user-pii";
+import { UserAccountService } from "./user-account-service";
 
 /**
  * Actor for user accounts
+ *
+ * Responsible for ensuring users only take actions for which they have proper
+ * authorisation. E.g. view own PII and not that of another user.
  */
 export class UserActor {
   private userId: string;
-  private config: UserActorConfig;
+  private service: UserAccountService;
 
-  constructor(userId: string, config: UserActorConfig) {
+  constructor(userId: string, service: UserAccountService) {
     this.userId = userId;
-    this.config = config;
+    this.service = service;
   }
 
   public getUserId(): string {
     return this.userId;
   }
 
-  private getDbPool(): Pool {
-    return this.config.dbPool;
-  }
-
-  private getPiiEncryptionService(): EncryptionService {
-    return this.config.piiEncryptionService;
-  }
-
-  public async getOwnUser(): Promise<User | null> {
-    return dbSelectUser(this.getDbPool(), this.getUserId());
+  public getOwnUser(): Promise<User | null> {
+    return this.service.getUser(this.getUserId());
   }
 
   public async getOwnPii(): Promise<UserPii | null> {
@@ -49,9 +30,6 @@ export class UserActor {
     if (user === null) {
       return null;
     }
-    return decryptUserPii(
-      user.userEncryptedPii,
-      this.getPiiEncryptionService(),
-    );
+    return this.service.getUserPii(user);
   }
 }
