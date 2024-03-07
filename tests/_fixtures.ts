@@ -6,16 +6,24 @@ import {
   AdminPermissions,
   AdminPersonalData,
   AdminSpec,
+  DogAntigenPresence,
+  DogGender,
   User,
   UserSpec,
   Vet,
   VetSpec,
+  YesNoUnknown,
 } from "@/lib/data/db-models";
 import { Pool } from "pg";
 import { HarnessHashService, HarnessEncryptionService } from "./_harness";
 import { AdminActorFactoryConfig } from "@/lib/admin/admin-actor-factory";
 import { dbInsertUser, dbSelectUser } from "@/lib/data/db-users";
-import { encryptUserPii, UserPii } from "@/lib/user/user-models";
+import {
+  DogRegistration,
+  encryptUserPii,
+  UserPii,
+  UserRegistration,
+} from "@/lib/user/user-models";
 import { VetActorFactoryConfig } from "@/lib/vet/vet-actor-factory";
 import { dbInsertVet, dbSelectVet } from "@/lib/data/db-vets";
 import { UserAccountService } from "@/lib/user/user-account-service";
@@ -178,4 +186,71 @@ export function vetSpec(idx: number): VetSpec {
 
 export function someEmail(idx: number): string {
   return `some${idx}@some.com`;
+}
+
+export function userRegistration(idx: number): UserRegistration {
+  return {
+    userEmail: someEmail(idx),
+    userName: `Reg Junior The ${idx}`,
+    userPhoneNumber: `+65 ${81000000 + idx}`,
+  };
+}
+
+export function dogRegistration(
+  idx: number,
+  overrides?: Partial<DogRegistration>,
+): DogRegistration {
+  const base: DogRegistration = {
+    dogName: `Ruffles-${idx}`,
+    dogBreed: `Breed${idx}`,
+    dogBirthday: _dogBirthday(idx),
+    dogGender: _dogGender(idx),
+    dogWeightKg: _dogWeightKg(idx),
+    dogDea1Point1: _dogAntigenPresence(idx),
+    dogEverPregnant: _dogEverPregnant(idx),
+    dogEverReceivedTransfusion: _yesNoUnknown(idx),
+    dogPreferredVetIdList: [],
+  };
+  return { ...base, ...overrides };
+}
+
+function _dogBirthday(idx: number): string {
+  const yearList = ["2020", "2021", "2022"];
+  const monthList = ["03", "04", "08", "09", "11"];
+  const dayList = ["07", "11", "13", "17", "19", "23", "29"];
+  const year = yearList[idx % yearList.length];
+  const month = monthList[idx % monthList.length];
+  const day = dayList[idx % dayList.length];
+  return `${year}-${month}-${day}`;
+}
+
+function _dogAntigenPresence(idx: number): DogAntigenPresence {
+  const presenceList: DogAntigenPresence[] = Object.values(DogAntigenPresence);
+  return presenceList[idx % presenceList.length];
+}
+
+function _dogGender(idx: number): DogGender {
+  const genderList: DogGender[] = Object.values(DogGender);
+  return genderList[idx % genderList.length];
+}
+
+function _dogWeightKg(idx: number): number | null {
+  const options: (number | null)[] = [null, 6, 12, 17, 22, 26, 31, 38];
+  return options[idx % options.length];
+}
+
+function _yesNoUnknown(idx: number): YesNoUnknown {
+  const responseList: YesNoUnknown[] = Object.values(YesNoUnknown);
+  return responseList[idx % responseList.length];
+}
+
+function _dogEverPregnant(idx: number): YesNoUnknown {
+  const gender = _dogGender(idx);
+  if (gender === DogGender.MALE) {
+    return YesNoUnknown.NO;
+  }
+  if (gender === DogGender.UNKNOWN) {
+    return YesNoUnknown.UNKNOWN;
+  }
+  return _yesNoUnknown(idx);
 }

@@ -1,5 +1,13 @@
+import { dbQuery } from "@/lib/data/db-utils";
 import { withDb } from "./_db_helpers";
-import { getUserAccountService, insertUser, userPii } from "./_fixtures";
+import {
+  dogRegistration,
+  getUserAccountService,
+  insertUser,
+  insertVet,
+  userPii,
+  userRegistration,
+} from "./_fixtures";
 
 describe("UserAccountService", () => {
   describe("getUserIdByEmail", () => {
@@ -72,10 +80,40 @@ describe("UserAccountService", () => {
     it("should create new user account with dog", async () => {
       await withDb(async (db) => {
         // WHEN createUserAccount is called with details about a user and one
-        // dog; THEN a user account should be created for the user detailed; AND
-        // a dog record should be created for the one dog; AND the owner of that
+        // dog;
+        const vet6 = await insertVet(6, db);
+        const service = await getUserAccountService(db);
+        const result = await service.createUserAccount({
+          user: userRegistration(8),
+          dogList: [
+            dogRegistration(3, { dogPreferredVetIdList: [vet6.vetId] }),
+          ],
+        });
+
+        // THEN a user account should be created for the user detailed; AND a
+        // dog record should be created for the one dog; AND the owner of that
         // dog should be the created user account; AND the createUserAccount
-        // method should return True.
+        // method should return True; AND there should be a dog-vet preference
+        // for user, dog, and vet.
+        const userId = service.getUserIdByEmail(userRegistration(8).userEmail);
+        expect(userId).not.toBeNull();
+        const dbRes1 = await dbQuery(
+          db,
+          `SELECT user_id, dog_id FROM dogs`,
+          [],
+        );
+        expect(dbRes1.rows.length).toEqual(1);
+        expect(dbRes1.rows[0].user_id).toEqual(userId);
+        expect(result).toBe(true);
+        const dbRes2 = await dbQuery(
+          db,
+          `SELECT user_id, dog_id, vet_id FROM dog_vet_preferences`,
+          [],
+        );
+        expect(dbRes2.rows.length).toEqual(1);
+        expect(dbRes2.rows[0].user_id).toEqual(userId);
+        expect(dbRes2.rows[0].dog_id).toEqual(dbRes1.rows[0].dog_id);
+        expect(dbRes2.rows[0].vet_id).toEqual(vet6.vetId);
       });
     });
     it("should not create user account when there is an existing account", async () => {
