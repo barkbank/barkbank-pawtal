@@ -1,8 +1,5 @@
 import { withDb } from "./_db_helpers";
-import { insertUser, userPii } from "./_fixtures";
-import { Pool } from "pg";
-import { UserAccountService } from "@/lib/user/user-account-service";
-import { HarnessEncryptionService, HarnessHashService } from "./_harness";
+import { getUserAccountService, insertUser, userPii } from "./_fixtures";
 
 describe("UserAccountService", () => {
   describe("getUserIdByEmail", () => {
@@ -12,7 +9,7 @@ describe("UserAccountService", () => {
         const user = await insertUser(7, db);
 
         // WHEN getUserIdByEmail is called with that user's email;
-        const service = await getService(db);
+        const service = await getUserAccountService(db);
         const userId = await service.getUserIdByEmail(userPii(7).userEmail);
 
         // THEN the user ID of that user should be returned.
@@ -23,7 +20,7 @@ describe("UserAccountService", () => {
       await withDb(async (db) => {
         // WHEN getUserIdByEmail is called with an email that does not match
         // any existing user;
-        const service = await getService(db);
+        const service = await getUserAccountService(db);
         const userId = await service.getUserIdByEmail("nobody@email.com");
 
         // THEN null is expected.
@@ -38,7 +35,7 @@ describe("UserAccountService", () => {
         const userIn = await insertUser(5, db);
 
         // WHEN getUser is called with the ID of that user;
-        const service = await getService(db);
+        const service = await getUserAccountService(db);
         const userOut = await service.getUser(userIn.userId);
 
         // THEN the user record for that user should be returned.
@@ -48,7 +45,7 @@ describe("UserAccountService", () => {
     it("should reutrn null if the user ID matches no user record", async () => {
       await withDb(async (db) => {
         // WHEN getUser is called with an ID that matches that of no user;
-        const service = await getService(db);
+        const service = await getUserAccountService(db);
         const userOut = await service.getUser("12345");
 
         // THEN null should be returned.
@@ -63,7 +60,7 @@ describe("UserAccountService", () => {
         const rec = await insertUser(88, db);
 
         // WHEN getUserPii is called with the record;
-        const service = await getService(db);
+        const service = await getUserAccountService(db);
         const pii = await service.getUserPii(rec);
 
         // THEN the PII from the record should be decrypted and returned.
@@ -72,11 +69,3 @@ describe("UserAccountService", () => {
     });
   });
 });
-
-async function getService(dbPool: Pool): Promise<UserAccountService> {
-  return new UserAccountService({
-    dbPool,
-    piiEncryptionService: new HarnessEncryptionService(),
-    emailHashService: new HarnessHashService(),
-  });
-}

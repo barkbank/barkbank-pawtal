@@ -201,14 +201,8 @@ export class AppFactory {
   public getUserActorFactory(): Promise<UserActorFactory> {
     if (this.promisedUserActorFactory === null) {
       this.promisedUserActorFactory = new Promise(async (resolve) => {
-        const dbPool = await this.getDbPool();
-        const emailHashService = await this.getEmailHashService();
-        const piiEncryptionService = await this.getPiiEncryptionService();
-        const factory = new UserActorFactory({
-          dbPool,
-          emailHashService,
-          piiEncryptionService,
-        });
+        const service = await this.getUserAccountService();
+        const factory = new UserActorFactory(service);
         console.log("Created UserActorFactory");
         resolve(factory);
       });

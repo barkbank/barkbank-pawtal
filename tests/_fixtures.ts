@@ -15,14 +15,20 @@ import { Pool } from "pg";
 import { HarnessHashService, HarnessEncryptionService } from "./_harness";
 import { AdminActorFactoryConfig } from "@/lib/admin/admin-actor-factory";
 import { dbInsertUser, dbSelectUser } from "@/lib/data/db-users";
-import { UserActorConfig } from "@/lib/user/user-actor";
 import { encryptUserPii, UserPii } from "@/lib/user/user-pii";
-import { UserActorFactoryConfig } from "@/lib/user/user-actor-factory";
 import { VetActorFactoryConfig } from "@/lib/vet/vet-actor-factory";
 import { dbInsertVet, dbSelectVet } from "@/lib/data/db-vets";
+import { UserAccountService } from "@/lib/user/user-account-service";
+import { HashService } from "@/lib/services/hash";
+import { EncryptionService } from "@/lib/services/encryption";
 
-const emailHashService = new HarnessHashService();
-const piiEncryptionService = new HarnessEncryptionService();
+export function getEmailHashService(): HashService {
+  return new HarnessHashService();
+}
+
+export function getPiiEncryptionService(): EncryptionService {
+  return new HarnessEncryptionService();
+}
 
 export function getAdminActorFactoryConfig(
   db: Pool,
@@ -30,8 +36,8 @@ export function getAdminActorFactoryConfig(
 ): AdminActorFactoryConfig {
   const base: AdminActorFactoryConfig = {
     dbPool: db,
-    emailHashService: emailHashService,
-    piiEncryptionService: piiEncryptionService,
+    emailHashService: getEmailHashService(),
+    piiEncryptionService: getPiiEncryptionService(),
     rootAdminEmail: "",
   };
   return { ...base, ...overrides };
@@ -40,8 +46,8 @@ export function getAdminActorFactoryConfig(
 export function getAdminActorConfig(db: Pool): AdminActorConfig {
   return {
     dbPool: db,
-    emailHashService: emailHashService,
-    piiEncryptionService: piiEncryptionService,
+    emailHashService: getEmailHashService(),
+    piiEncryptionService: getPiiEncryptionService(),
   };
 }
 
@@ -70,7 +76,7 @@ export async function adminSpec(
 }
 
 export async function getHashedEmail(email: string): Promise<string> {
-  return emailHashService.getHashHex(email);
+  return getEmailHashService().getHashHex(email);
 }
 
 export async function getAdminPersonalData(
@@ -78,9 +84,9 @@ export async function getAdminPersonalData(
 ): Promise<AdminPersonalData> {
   const adminEncryptedPii = await encryptAdminPii(
     adminPii,
-    piiEncryptionService,
+    getPiiEncryptionService(),
   );
-  const adminHashedEmail = await emailHashService.getHashHex(
+  const adminHashedEmail = await getEmailHashService().getHashHex(
     adminPii.adminEmail,
   );
   return { adminHashedEmail, adminEncryptedPii };
@@ -109,19 +115,14 @@ export function adminPii(idx: number): AdminPii {
   };
 }
 
-export function getUserActorConfig(db: Pool): UserActorConfig {
-  return {
-    dbPool: db,
-    piiEncryptionService: piiEncryptionService,
-  };
-}
-
-export function getUserActorFactoryConfig(db: Pool): UserActorFactoryConfig {
-  return {
-    dbPool: db,
-    piiEncryptionService,
-    emailHashService,
-  };
+export async function getUserAccountService(
+  dbPool: Pool,
+): Promise<UserAccountService> {
+  return new UserAccountService({
+    dbPool,
+    piiEncryptionService: getPiiEncryptionService(),
+    emailHashService: getEmailHashService(),
+  });
 }
 
 export async function insertUser(idx: number, db: Pool): Promise<User> {
@@ -136,8 +137,8 @@ export async function insertUser(idx: number, db: Pool): Promise<User> {
 
 export async function userSpec(idx: number): Promise<UserSpec> {
   const pii = userPii(idx);
-  const userEncryptedPii = await encryptUserPii(pii, piiEncryptionService);
-  const userHashedEmail = await emailHashService.getHashHex(pii.userEmail);
+  const userEncryptedPii = await encryptUserPii(pii, getPiiEncryptionService());
+  const userHashedEmail = await getEmailHashService().getHashHex(pii.userEmail);
   return { userHashedEmail, userEncryptedPii };
 }
 
@@ -152,7 +153,7 @@ export function userPii(idx: number): UserPii {
 export function getVetActorFactoryConfig(dbPool: Pool): VetActorFactoryConfig {
   return {
     dbPool,
-    piiEncryptionService,
+    piiEncryptionService: getPiiEncryptionService(),
   };
 }
 
