@@ -1,5 +1,6 @@
 import { AdminActorConfig } from "@/lib/admin/admin-actor";
-import { encryptAdminPii, AdminPii } from "@/lib/admin/admin-pii";
+import { encryptAdminPii } from "@/lib/admin/admin-pii";
+import { AdminPii } from "@/lib/data/db-models";
 import { dbInsertAdmin, dbSelectAdmin } from "@/lib/data/db-admins";
 import {
   Admin,

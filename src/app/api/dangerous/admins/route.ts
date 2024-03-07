@@ -1,4 +1,5 @@
-import { AdminPii, encryptAdminPii } from "@/lib/admin/admin-pii";
+import { encryptAdminPii } from "@/lib/admin/admin-pii";
+import { AdminPii } from "@/lib/data/db-models";
 import APP from "@/lib/app";
 import { dbInsertAdmin } from "@/lib/data/db-admins";
 import { NO_ADMIN_PERMISSIONS, AdminSpec } from "@/lib/data/db-models";

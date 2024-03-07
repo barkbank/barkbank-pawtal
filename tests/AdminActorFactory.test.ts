@@ -8,7 +8,7 @@ import {
   getAdminPersonalData,
   getHashedEmail,
 } from "./_fixtures";
-import { AdminPii } from "@/lib/admin/admin-pii";
+import { AdminPii } from "@/lib/data/db-models";
 import { AdminPersonalData, AdminSpec } from "@/lib/data/db-models";
 import {
   dbInsertAdmin,

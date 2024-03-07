@@ -86,6 +86,12 @@ export type DogGen = {
 
 export type Dog = { userId: string } & DogSpec & DogGen;
 
+export type AdminPii = {
+  adminName: string;
+  adminEmail: string;
+  adminPhoneNumber: string;
+};
+
 export type AdminPersonalData = {
   adminHashedEmail: string;
   adminEncryptedPii: string;

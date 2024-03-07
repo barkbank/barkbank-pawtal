@@ -1,13 +1,5 @@
+import { AdminPii } from "../data/db-models";
 import { EncryptionService } from "../services/encryption";
-
-/**
- * Structure of the data that goes into Admin::adminEncryptedPii
- */
-export type AdminPii = {
-  adminName: string;
-  adminEmail: string;
-  adminPhoneNumber: string;
-};
 
 export async function encryptAdminPii(
   pii: AdminPii,

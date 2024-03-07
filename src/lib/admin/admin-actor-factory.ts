@@ -8,7 +8,8 @@ import {
   dbSelectAdminIdByAdminHashedEmail,
 } from "../data/db-admins";
 import { NO_ADMIN_PERMISSIONS, AdminSpec } from "../data/db-models";
-import { AdminPii, encryptAdminPii } from "./admin-pii";
+import { encryptAdminPii } from "./admin-pii";
+import { AdminPii } from "../data/db-models";
 
 export type AdminActorFactoryConfig = {
   dbPool: Pool;

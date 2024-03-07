@@ -3,7 +3,8 @@ import { Admin } from "../data/db-models";
 import { HashService } from "../services/hash";
 import { EncryptionService } from "../services/encryption";
 import { dbSelectAdmin } from "../data/db-admins";
-import { AdminPii, decryptAdminPii } from "./admin-pii";
+import { decryptAdminPii } from "./admin-pii";
+import { AdminPii } from "../data/db-models";
 
 export type AdminActorConfig = {
   dbPool: Pool;
