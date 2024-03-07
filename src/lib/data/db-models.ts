@@ -92,7 +92,7 @@ export type AdminPii = {
   adminPhoneNumber: string;
 };
 
-export type AdminPersonalData = {
+export type AdminSecurePii = {
   adminHashedEmail: string;
   adminEncryptedPii: string;
 };
@@ -111,7 +111,7 @@ export const NO_ADMIN_PERMISSIONS: AdminPermissions = {
   adminCanManageDonors: false,
 };
 
-export type AdminSpec = AdminPersonalData & AdminPermissions;
+export type AdminSpec = AdminSecurePii & AdminPermissions;
 
 export type AdminGen = {
   adminId: string;

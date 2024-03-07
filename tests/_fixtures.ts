@@ -5,7 +5,7 @@ import { dbInsertAdmin, dbSelectAdmin } from "@/lib/data/db-admins";
 import {
   Admin,
   AdminPermissions,
-  AdminPersonalData,
+  AdminSecurePii,
   AdminSpec,
   User,
   UserSpec,
@@ -72,18 +72,18 @@ export async function adminSpec(
   idx: number,
   overrides?: Partial<AdminSpec>,
 ): Promise<AdminSpec> {
-  const personalData = await adminPersonalData(idx);
+  const securePii = await adminSecurePii(idx);
   const permissions = adminPermissions(idx);
-  return { ...personalData, ...permissions, ...overrides };
+  return { ...securePii, ...permissions, ...overrides };
 }
 
 export async function getHashedEmail(email: string): Promise<string> {
   return getEmailHashService().getHashHex(email);
 }
 
-export async function getAdminPersonalData(
+export async function getAdminSecurePii(
   adminPii: AdminPii,
-): Promise<AdminPersonalData> {
+): Promise<AdminSecurePii> {
   const adminEncryptedPii = await encryptAdminPii(
     adminPii,
     getPiiEncryptionService(),
@@ -94,10 +94,8 @@ export async function getAdminPersonalData(
   return { adminHashedEmail, adminEncryptedPii };
 }
 
-export async function adminPersonalData(
-  idx: number,
-): Promise<AdminPersonalData> {
-  return getAdminPersonalData(adminPii(idx));
+export async function adminSecurePii(idx: number): Promise<AdminSecurePii> {
+  return getAdminSecurePii(adminPii(idx));
 }
 
 export function adminPermissions(idx: number): AdminPermissions {
