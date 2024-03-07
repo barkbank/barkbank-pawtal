@@ -15,7 +15,7 @@ import { Pool } from "pg";
 import { HarnessHashService, HarnessEncryptionService } from "./_harness";
 import { AdminActorFactoryConfig } from "@/lib/admin/admin-actor-factory";
 import { dbInsertUser, dbSelectUser } from "@/lib/data/db-users";
-import { encryptUserPii, UserPii } from "@/lib/user/user-pii";
+import { encryptUserPii, UserPii } from "@/lib/user/user-models";
 import { VetActorFactoryConfig } from "@/lib/vet/vet-actor-factory";
 import { dbInsertVet, dbSelectVet } from "@/lib/data/db-vets";
 import { UserAccountService } from "@/lib/user/user-account-service";

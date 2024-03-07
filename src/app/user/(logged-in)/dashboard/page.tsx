@@ -3,7 +3,7 @@
 import { BarkH1 } from "@/components/bark/bark-typography";
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
-import { UserPii } from "@/lib/user/user-pii";
+import { UserPii } from "@/lib/user/user-models";
 import { redirect } from "next/navigation";
 
 export default async function Page() {
