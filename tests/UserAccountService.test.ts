@@ -2,6 +2,7 @@ import { dbQuery } from "@/lib/data/db-utils";
 import { withDb } from "./_db_helpers";
 import {
   dogRegistration,
+  getPiiEncryptionService,
   getUserAccountService,
   insertUser,
   insertVet,
@@ -12,7 +13,8 @@ import {
 import { guaranteed } from "@/lib/bark-utils";
 import { dbSelectPreferredVetIds } from "@/lib/data/db-dogs";
 import { toUserSpec } from "@/lib/data/db-mappers";
-import { Registration } from "@/lib/user/user-models";
+import { Registration, encryptDogOii } from "@/lib/user/user-models";
+import { DogStatus } from "@/lib/data/db-models";
 
 describe("UserAccountService", () => {
   describe("getUserIdByEmail", () => {
@@ -88,11 +90,13 @@ describe("UserAccountService", () => {
         // dog;
         const vet6 = await insertVet(6, db);
         const service = await getUserAccountService(db);
+        const userReg = userRegistration(8);
+        const dogReg = dogRegistration(3, {
+          dogPreferredVetIdList: [vet6.vetId],
+        });
         const result = await service.createUserAccount({
-          user: userRegistration(8),
-          dogList: [
-            dogRegistration(3, { dogPreferredVetIdList: [vet6.vetId] }),
-          ],
+          user: userReg,
+          dogList: [dogReg],
         });
 
         // THEN a user account should be created for the user detailed;
@@ -102,12 +106,30 @@ describe("UserAccountService", () => {
         expect(userId).not.toBeNull();
         const user = await service.getUser(guaranteed(userId));
         const userPii = await service.getUserPii(guaranteed(user));
-        expect(userPii).toMatchObject(userRegistration(8));
+        expect(userPii).toMatchObject(userReg);
 
         // AND a dog record should be created for the one dog;
         const dogList = await service.getUserDogs(guaranteed(userId));
         expect(dogList.length).toEqual(1);
         const dog = dogList[0];
+
+        expect(dog.dogBreed).toEqual(dogReg.dogBreed);
+        expect(dog.dogBirthday).toEqual(dogReg.dogBirthday);
+        expect(dog.dogGender).toEqual(dogReg.dogGender);
+        expect(dog.dogWeightKg).toEqual(dogReg.dogWeightKg);
+        expect(dog.dogDea1Point1).toEqual(dogReg.dogDea1Point1);
+        expect(dog.dogEverPregnant).toEqual(dogReg.dogEverPregnant);
+        expect(dog.dogEverReceivedTransfusion).toEqual(
+          dogReg.dogEverReceivedTransfusion,
+        );
+
+        expect(dog.dogStatus).toEqual(DogStatus.NEW_PROFILE);
+        expect(dog.dogEncryptedOii).toEqual(
+          await encryptDogOii(
+            { dogName: dogReg.dogName },
+            getPiiEncryptionService(),
+          ),
+        );
 
         // AND the owner of that dog should be the created user account;
         expect(dog.userId).toEqual(userId);
