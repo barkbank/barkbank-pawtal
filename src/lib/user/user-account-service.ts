@@ -3,7 +3,7 @@ import { HashService } from "../services/hash";
 import { EncryptionService } from "../services/encryption";
 import { User } from "../data/db-models";
 import { dbSelectUser, dbSelectUserIdByHashedEmail } from "../data/db-users";
-import { UserPii } from "./user-models";
+import { Registration, UserPii } from "./user-models";
 
 export type UserAccountServiceConfig = {
   dbPool: Pool;
@@ -40,6 +40,10 @@ export class UserAccountService {
 
   public getUserPii(user: User): Promise<UserPii> {
     return this.decryptUserPii(user.userEncryptedPii);
+  }
+
+  public createUserAccount(registration: Registration): Promise<boolean> {
+    return Promise.resolve(true);
   }
 
   private getDbPool(): Pool {
