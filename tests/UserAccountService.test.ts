@@ -10,7 +10,7 @@ import {
   userRegistration,
 } from "./_fixtures";
 import { guaranteed } from "@/lib/bark-utils";
-import { encryptDogOii } from "@/lib/user/user-models";
+import { Registration, encryptDogOii } from "@/lib/user/user-models";
 import { DogStatus } from "@/lib/data/db-models";
 
 describe("UserAccountService", () => {
@@ -172,13 +172,41 @@ describe("UserAccountService", () => {
     });
     it("should create user accounts atomically", async () => {
       await withDb(async (db) => {
-        // GIVEN details about a user and one dog; AND 10 un-awaited promises
-        // from calling createUserAccount with same user and dog details; WHEN
-        // the promises are all awaited concurrently (i.e. using Promise.all);
-        // THEN at exactly one promise should result in True; AND a user account
-        // should be created for the user detailed; AND a dog record should be
-        // created for the one dog; AND the owner of that dog should be the
-        // created user account.
+        // GIVEN details about a user and one dog;
+        const vet6 = await insertVet(6, db);
+        const service = await getUserAccountService(db);
+        const userReg = userRegistration(8);
+        const dogReg = dogRegistration(3, {
+          dogPreferredVetIdList: [vet6.vetId],
+        });
+        const reg: Registration = {
+          user: userReg,
+          dogList: [dogReg],
+        };
+
+        // AND 5 un-awaited promises from calling createUserAccount with same
+        // user and dog details;
+        const promises = [
+          service.createUserAccount(reg),
+          service.createUserAccount(reg),
+          service.createUserAccount(reg),
+          service.createUserAccount(reg),
+          service.createUserAccount(reg),
+        ];
+
+        // WHEN the promises are all awaited concurrently (i.e. using
+        // Promise.all);
+        const results = await Promise.all(promises);
+
+        // THEN at exactly one promise should result in True;
+        const numTrue = results
+          .map((val) => (val ? 1 : 0))
+          .reduce(
+            (partialSum: number, currentValue: number) =>
+              partialSum + currentValue,
+            0,
+          );
+        expect(numTrue).toEqual(1);
       });
     });
     it("should support the creation of accounts with multiple dogs", async () => {
