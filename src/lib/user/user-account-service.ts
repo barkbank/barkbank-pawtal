@@ -1,9 +1,10 @@
 import { Pool } from "pg";
 import { HashService } from "../services/hash";
 import { EncryptionService } from "../services/encryption";
-import { User } from "../data/db-models";
+import { Dog, User } from "../data/db-models";
 import { dbSelectUser, dbSelectUserIdByHashedEmail } from "../data/db-users";
 import { Registration, UserPii } from "./user-models";
+import { dbSelectDogListByUserId } from "../data/db-dogs";
 
 export type UserAccountServiceConfig = {
   dbPool: Pool;
@@ -44,6 +45,10 @@ export class UserAccountService {
 
   public createUserAccount(registration: Registration): Promise<boolean> {
     return Promise.resolve(true);
+  }
+
+  public getUserDogs(userId: string): Promise<Dog[]> {
+    return dbSelectDogListByUserId(this.getDbPool(), userId);
   }
 
   private getDbPool(): Pool {

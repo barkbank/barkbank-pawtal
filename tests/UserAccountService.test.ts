@@ -7,7 +7,12 @@ import {
   insertVet,
   userPii,
   userRegistration,
+  userSpec,
 } from "./_fixtures";
+import { guaranteed } from "@/lib/bark-utils";
+import { dbSelectPreferredVetIds } from "@/lib/data/db-dogs";
+import { toUserSpec } from "@/lib/data/db-mappers";
+import { Registration } from "@/lib/user/user-models";
 
 describe("UserAccountService", () => {
   describe("getUserIdByEmail", () => {
@@ -90,21 +95,27 @@ describe("UserAccountService", () => {
           ],
         });
 
-        // THEN a user account should be created for the user detailed; AND a
-        // dog record should be created for the one dog; AND the owner of that
-        // dog should be the created user account; AND the createUserAccount
-        // method should return True; AND there should be a dog-vet preference
-        // for user, dog, and vet.
-        const userId = service.getUserIdByEmail(userRegistration(8).userEmail);
-        expect(userId).not.toBeNull();
-        const dbRes1 = await dbQuery(
-          db,
-          `SELECT user_id, dog_id FROM dogs`,
-          [],
+        // THEN a user account should be created for the user detailed;
+        const userId = await service.getUserIdByEmail(
+          userRegistration(8).userEmail,
         );
-        expect(dbRes1.rows.length).toEqual(1);
-        expect(dbRes1.rows[0].user_id).toEqual(userId);
+        expect(userId).not.toBeNull();
+        const user = await service.getUser(guaranteed(userId));
+        const userPii = await service.getUserPii(guaranteed(user));
+        expect(userPii).toMatchObject(userRegistration(8));
+
+        // AND a dog record should be created for the one dog;
+        const dogList = await service.getUserDogs(guaranteed(userId));
+        expect(dogList.length).toEqual(1);
+        const dog = dogList[0];
+
+        // AND the owner of that dog should be the created user account;
+        expect(dog.userId).toEqual(userId);
+
+        // AND the createUserAccount method should return True;
         expect(result).toBe(true);
+
+        // AND there should be a dog-vet preference for user, dog, and vet.
         const dbRes2 = await dbQuery(
           db,
           `SELECT user_id, dog_id, vet_id FROM dog_vet_preferences`,
@@ -112,17 +123,32 @@ describe("UserAccountService", () => {
         );
         expect(dbRes2.rows.length).toEqual(1);
         expect(dbRes2.rows[0].user_id).toEqual(userId);
-        expect(dbRes2.rows[0].dog_id).toEqual(dbRes1.rows[0].dog_id);
+        expect(dbRes2.rows[0].dog_id).toEqual(dog.dogId);
         expect(dbRes2.rows[0].vet_id).toEqual(vet6.vetId);
       });
     });
     it("should not create user account when there is an existing account", async () => {
       await withDb(async (db) => {
-        // GIVEN there is an existing user; WHEN createUserAccount is called
-        // with details about a user and one dog; AND this user has the same
-        // email as the existing user; THEN no data shall be added to the
-        // database; AND the createUserAccount method should return False. (I.e.
-        // rollback)
+        // GIVEN there is an existing user;
+        await insertUser(33, db);
+
+        // WHEN createUserAccount is called with details about a user and one
+        // dog; AND this user has the same email as the existing user;
+        const service = await getUserAccountService(db);
+        const result = await service.createUserAccount({
+          user: userRegistration(86, {
+            userEmail: userPii(33).userEmail,
+          }),
+          dogList: [dogRegistration(91)],
+        });
+
+        //THEN no data shall be added to the database; (there should still be
+        //only one user)
+        const res1 = await dbQuery(db, `SELECT 1 FROM users`, []);
+        expect(res1.rows.length).toEqual(1);
+
+        // AND the createUserAccount method should return False. (I.e. rollback)
+        expect(result).toBe(false);
       });
     });
     it("should create user accounts atomically", async () => {

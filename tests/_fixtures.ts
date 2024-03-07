@@ -188,12 +188,16 @@ export function someEmail(idx: number): string {
   return `some${idx}@some.com`;
 }
 
-export function userRegistration(idx: number): UserRegistration {
-  return {
+export function userRegistration(
+  idx: number,
+  overrides?: Partial<UserRegistration>,
+): UserRegistration {
+  const base: UserRegistration = {
     userEmail: someEmail(idx),
     userName: `Reg Junior The ${idx}`,
     userPhoneNumber: `+65 ${81000000 + idx}`,
   };
+  return { ...base, ...overrides };
 }
 
 export function dogRegistration(
