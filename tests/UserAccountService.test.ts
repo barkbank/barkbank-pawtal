@@ -68,4 +68,44 @@ describe("UserAccountService", () => {
       });
     });
   });
+  describe("createUserAccount", () => {
+    it("should create new user account with dog", async () => {
+      await withDb(async (db) => {
+        // WHEN createUserAccount is called with details about a user and one
+        // dog; THEN a user account should be created for the user detailed; AND
+        // a dog record should be created for the one dog; AND the owner of that
+        // dog should be the created user account; AND the createUserAccount
+        // method should return True.
+      });
+    });
+    it("should not create user account when there is an existing account", async () => {
+      await withDb(async (db) => {
+        // GIVEN there is an existing user; WHEN createUserAccount is called
+        // with details about a user and one dog; AND this user has the same
+        // email as the existing user; THEN no data shall be added to the
+        // database; AND the createUserAccount method should return False. (I.e.
+        // rollback)
+      });
+    });
+    it("should create user accounts atomically", async () => {
+      await withDb(async (db) => {
+        // GIVEN details about a user and one dog; AND 10 un-awaited promises
+        // from calling createUserAccount with same user and dog details; WHEN
+        // the promises are all awaited concurrently (i.e. using Promise.all);
+        // THEN at exactly one promise should result in True; AND a user account
+        // should be created for the user detailed; AND a dog record should be
+        // created for the one dog; AND the owner of that dog should be the
+        // created user account.
+      });
+    });
+    it("should support the creation of accounts with multiple dogs", async () => {
+      await withDb(async (db) => {
+        // WHEN createUserAccount is called with details about a user and three
+        // dogs; THEN a user account should be created for the user detailed;
+        // AND three dog records should be created; AND the owner of those dogs
+        // should be the created user account; AND the createUserAccount method
+        // should return True.
+      });
+    });
+  });
 });
