@@ -216,6 +216,7 @@ describe("UserAccountService", () => {
         // AND three dog records should be created; AND the owner of those dogs
         // should be the created user account; AND the createUserAccount method
         // should return True.
+        fail("WIP");
       });
     });
   });
