@@ -31,6 +31,31 @@ describe("UserAccountService", () => {
       });
     });
   });
+  describe("getUser()", () => {
+    it("should return the user matching the user ID", async () => {
+      await withDb(async (db) => {
+        // GIVEN an existing user;
+        const userIn = await insertUser(5, db);
+
+        // WHEN getUser is called with the ID of that user;
+        const service = await getService(db);
+        const userOut = await service.getUser(userIn.userId);
+
+        // THEN the user record for that user should be returned.
+        expect(userOut).toEqual(userIn);
+      });
+    });
+    it("should reutrn null if the user ID matches no user record", async () => {
+      await withDb(async (db) => {
+        // WHEN getUser is called with an ID that matches that of no user;
+        const service = await getService(db);
+        const userOut = await service.getUser("12345");
+
+        // THEN null should be returned.
+        expect(userOut).toBeNull();
+      });
+    });
+  });
 });
 
 async function getService(dbPool: Pool): Promise<UserAccountService> {
