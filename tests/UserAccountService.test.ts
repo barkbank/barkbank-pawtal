@@ -8,12 +8,9 @@ import {
   insertVet,
   userPii,
   userRegistration,
-  userSpec,
 } from "./_fixtures";
 import { guaranteed } from "@/lib/bark-utils";
-import { dbSelectPreferredVetIds } from "@/lib/data/db-dogs";
-import { toUserSpec } from "@/lib/data/db-mappers";
-import { Registration, encryptDogOii } from "@/lib/user/user-models";
+import { encryptDogOii } from "@/lib/user/user-models";
 import { DogStatus } from "@/lib/data/db-models";
 
 describe("UserAccountService", () => {
