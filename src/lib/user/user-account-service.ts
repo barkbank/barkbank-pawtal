@@ -3,7 +3,7 @@ import { HashService } from "../services/hash";
 import { EncryptionService } from "../services/encryption";
 import { User } from "../data/db-models";
 import { dbSelectUser, dbSelectUserIdByHashedEmail } from "../data/db-users";
-import { UserPii, decryptUserPii } from "./user-models";
+import { UserPii } from "./user-models";
 
 export type UserAccountServiceConfig = {
   dbPool: Pool;
@@ -24,18 +24,6 @@ export class UserAccountService {
     this.config = config;
   }
 
-  private getDbPool(): Pool {
-    return this.config.dbPool;
-  }
-
-  private getPiiEncryptionService(): EncryptionService {
-    return this.config.piiEncryptionService;
-  }
-
-  private getEmailHashService(): HashService {
-    return this.config.emailHashService;
-  }
-
   public async getUserIdByEmail(userEmail: string): Promise<string | null> {
     const userHashedEmail =
       await this.getEmailHashService().getHashHex(userEmail);
@@ -51,9 +39,29 @@ export class UserAccountService {
   }
 
   public getUserPii(user: User): Promise<UserPii> {
-    return decryptUserPii(
-      user.userEncryptedPii,
-      this.getPiiEncryptionService(),
-    );
+    return this.decryptUserPii(user.userEncryptedPii);
+  }
+
+  private getDbPool(): Pool {
+    return this.config.dbPool;
+  }
+
+  private getPiiEncryptionService(): EncryptionService {
+    return this.config.piiEncryptionService;
+  }
+
+  private getEmailHashService(): HashService {
+    return this.config.emailHashService;
+  }
+
+  private encryptUserPii(userPii: UserPii): Promise<string> {
+    const data = JSON.stringify(userPii);
+    return this.getPiiEncryptionService().getEncryptedData(data);
+  }
+
+  private async decryptUserPii(userEncryptedPii: string): Promise<UserPii> {
+    const service = this.getPiiEncryptionService();
+    const data = await service.getDecryptedData(userEncryptedPii);
+    return JSON.parse(data) as UserPii;
   }
 }

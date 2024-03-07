@@ -10,6 +10,7 @@ export type DogOii = {
   dogName: string;
 };
 
+// WIP: No one should use this.
 export async function encryptUserPii(
   pii: UserPii,
   encryptionService: EncryptionService,
@@ -19,6 +20,7 @@ export async function encryptUserPii(
   return encryptedData;
 }
 
+// WIP: No one should use this.
 export async function decryptUserPii(
   userEncryptedPii: string,
   encryptionService: EncryptionService,
