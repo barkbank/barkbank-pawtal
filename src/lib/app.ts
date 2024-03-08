@@ -21,6 +21,7 @@ import { AppEnv } from "./app-env";
 import { isValidEmail } from "./bark-utils";
 import { UserAccountService } from "./user/user-account-service";
 import { UserMapper } from "./data/user-mapper";
+import { AdminMapper } from "./data/admin-mapper";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -32,6 +33,7 @@ export class AppFactory {
   private promisedBreedService: Promise<BreedService> | null = null;
   private promisedDbPool: Promise<pg.Pool> | null = null;
   private promisedAdminActorFactory: Promise<AdminActorFactory> | null = null;
+  private promisedAdminMapper: Promise<AdminMapper> | null = null;
   private promisedVetActorFactory: Promise<VetActorFactory> | null = null;
   private promisedUserActorFactory: Promise<UserActorFactory> | null = null;
   private promisedUserAccountService: Promise<UserAccountService> | null = null;
@@ -164,11 +166,12 @@ export class AppFactory {
   public getAdminActorFactory(): Promise<AdminActorFactory> {
     if (this.promisedAdminActorFactory === null) {
       this.promisedAdminActorFactory = new Promise(async (resolve) => {
-        const [dbPool, emailHashService, piiEncryptionService] =
+        const [dbPool, emailHashService, piiEncryptionService, adminMapper] =
           await Promise.all([
             this.getDbPool(),
             this.getEmailHashService(),
             this.getPiiEncryptionService(),
+            this.getAdminMapper(),
           ]);
         const rootAdminEmail = this.envString(AppEnv.BARKBANK_ROOT_ADMIN_EMAIL);
         if (!isValidEmail(rootAdminEmail)) {
@@ -178,6 +181,7 @@ export class AppFactory {
           dbPool,
           emailHashService,
           piiEncryptionService,
+          adminMapper,
           rootAdminEmail,
         });
         console.log("Created AdminActorFactory");
@@ -185,6 +189,24 @@ export class AppFactory {
       });
     }
     return this.promisedAdminActorFactory;
+  }
+
+  public getAdminMapper(): Promise<AdminMapper> {
+    if (this.promisedAdminMapper === null) {
+      this.promisedAdminMapper = new Promise(async (resolve) => {
+        const [emailHashService, piiEncryptionService] = await Promise.all([
+          this.getEmailHashService(),
+          this.getPiiEncryptionService(),
+        ]);
+        const mapper = new AdminMapper({
+          emailHashService,
+          piiEncryptionService,
+        });
+        console.log("Created AdminMapper");
+        resolve(mapper);
+      });
+    }
+    return this.promisedAdminMapper;
   }
 
   public getVetActorFactory(): Promise<VetActorFactory> {

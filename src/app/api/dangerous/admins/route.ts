@@ -1,4 +1,3 @@
-import { encryptAdminPii } from "@/lib/admin/admin-pii";
 import { AdminPii } from "@/lib/data/db-models";
 import APP from "@/lib/app";
 import { dbInsertAdmin } from "@/lib/data/db-admins";
@@ -8,13 +7,10 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(request: NextRequest): Promise<NextResponse> {
   const body = await request.json();
   const pii = body as AdminPii;
-  const emailHashService = await APP.getEmailHashService();
-  const piiEncryptionService = await APP.getPiiEncryptionService();
-  const adminHashedEmail = await emailHashService.getHashHex(pii.adminEmail);
-  const adminEncryptedPii = await encryptAdminPii(pii, piiEncryptionService);
+  const mapper = await APP.getAdminMapper();
+  const securePii = await mapper.mapAdminPiiToAdminSecurePii(pii);
   const spec: AdminSpec = {
-    adminHashedEmail,
-    adminEncryptedPii,
+    ...securePii,
     ...NO_ADMIN_PERMISSIONS,
   };
   const dbPool = await APP.getDbPool();

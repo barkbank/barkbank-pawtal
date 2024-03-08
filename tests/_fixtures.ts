@@ -1,5 +1,4 @@
 import { AdminActorConfig } from "@/lib/admin/admin-actor";
-import { encryptAdminPii } from "@/lib/admin/admin-pii";
 import {
   AdminPii,
   DogAntigenPresence,
@@ -87,6 +86,7 @@ export function getAdminActorFactoryConfig(
     dbPool: db,
     emailHashService: getEmailHashService(),
     piiEncryptionService: getPiiEncryptionService(),
+    adminMapper: getAdminMapper(),
     rootAdminEmail: "",
   };
   return { ...base, ...overrides };
@@ -131,14 +131,8 @@ export async function getHashedEmail(email: string): Promise<string> {
 export async function getAdminSecurePii(
   adminPii: AdminPii,
 ): Promise<AdminSecurePii> {
-  const adminEncryptedPii = await encryptAdminPii(
-    adminPii,
-    getPiiEncryptionService(),
-  );
-  const adminHashedEmail = await getEmailHashService().getHashHex(
-    adminPii.adminEmail,
-  );
-  return { adminHashedEmail, adminEncryptedPii };
+  const mapper = getAdminMapper();
+  return mapper.mapAdminPiiToAdminSecurePii(adminPii);
 }
 
 export async function adminSecurePii(idx: number): Promise<AdminSecurePii> {

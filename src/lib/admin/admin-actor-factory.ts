@@ -8,13 +8,14 @@ import {
   dbSelectAdminIdByAdminHashedEmail,
 } from "../data/db-admins";
 import { NO_ADMIN_PERMISSIONS, AdminSpec } from "../data/db-models";
-import { encryptAdminPii } from "./admin-pii";
 import { AdminPii } from "../data/db-models";
+import { AdminMapper } from "../data/admin-mapper";
 
 export type AdminActorFactoryConfig = {
   dbPool: Pool;
   emailHashService: HashService;
   piiEncryptionService: EncryptionService;
+  adminMapper: AdminMapper;
   rootAdminEmail: string;
 };
 
@@ -26,8 +27,13 @@ export class AdminActorFactory {
   }
 
   public async getAdminActor(adminEmail: string): Promise<AdminActor | null> {
-    const { dbPool, emailHashService, piiEncryptionService, rootAdminEmail } =
-      this.config;
+    const {
+      dbPool,
+      emailHashService,
+      piiEncryptionService,
+      adminMapper,
+      rootAdminEmail,
+    } = this.config;
     const adminHashedEmail = await emailHashService.getHashHex(adminEmail);
     const adminId = await dbSelectAdminIdByAdminHashedEmail(
       dbPool,
@@ -67,15 +73,9 @@ export class AdminActorFactory {
         adminName: "Root",
         adminPhoneNumber: "",
       };
-      const adminHashedEmail =
-        await emailHashService.getHashHex(rootAdminEmail);
-      const adminEncryptedPii = await encryptAdminPii(
-        pii,
-        piiEncryptionService,
-      );
+      const securePii = await adminMapper.mapAdminPiiToAdminSecurePii(pii);
       const spec: AdminSpec = {
-        adminHashedEmail,
-        adminEncryptedPii,
+        ...securePii,
         ...NO_ADMIN_PERMISSIONS,
         adminCanManageAdminAccounts: true,
       };
