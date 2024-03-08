@@ -2,18 +2,17 @@
 //
 // Terminology
 //
-// - SomeSpec: This refers to the set of data fields for Some type.
+// - SomeSpec: This refers to the record that gets inserted into the DB to make
+//   a record. If PII is involved, this would contain secured PII.
 //
 // - SomeGen: This refers to fields whose values become known after creation of
 //   record.
 //
-// - Some: This is the combination of SomeSpec & SomeGen, and if there are foreign keys,
-//   also those foreign keys. (See Dog, for example).
+// - SomeRecord: This is a full database record. (For Vet it is just Vet since
+//   there is no PII.)
 //
-
-// WIP: Update the "terminology"
-// WIP: Revise user models
-// WIP: Impl UserMapper
+// - Some: This sould be a full record with PII.
+//
 
 export type UserPii = {
   userName: string;
