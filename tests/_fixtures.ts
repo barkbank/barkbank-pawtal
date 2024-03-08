@@ -66,7 +66,6 @@ export function getVetMapper(): VetMapper {
 
 export function getDogMapper(): DogMapper {
   return new DogMapper({
-    emailHashService: getEmailHashService(),
     piiEncryptionService: getPiiEncryptionService(),
   });
 }

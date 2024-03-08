@@ -10,22 +10,16 @@ import {
 } from "./db-models";
 
 export class DogMapper {
-  private emailHashService: HashService;
   private piiEncryptionService: EncryptionService;
 
-  constructor(config: {
-    emailHashService: HashService;
-    piiEncryptionService: EncryptionService;
-  }) {
-    this.emailHashService = config.emailHashService;
+  constructor(config: { piiEncryptionService: EncryptionService }) {
     this.piiEncryptionService = config.piiEncryptionService;
   }
 
   public mapDogRecordToDogSpec(dogRecord: DogRecord): DogSpec {
-    const dogGen = this.mapDogRecordToDogGen(dogRecord);
     const dogSecureOii = this.mapDogRecordToDogSecureOii(dogRecord);
     const dogDetails = this.mapDogRecordToDogDetails(dogRecord);
-    return { ...dogGen, ...dogSecureOii, ...dogDetails };
+    return { ...dogSecureOii, ...dogDetails };
   }
 
   public mapDogRecordToDogGen(dogRecord: DogRecord): DogGen {
