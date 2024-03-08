@@ -15,8 +15,9 @@ export class UserMapper {
   }
 
   public mapUserRecordToUserSpec(userRecord: UserRecord): UserSpec {
-    const { userHashedEmail, userEncryptedPii } = userRecord;
-    return { userHashedEmail, userEncryptedPii };
+    const { userId, userCreationTime, userModificationTime, ...spec } =
+      userRecord;
+    return spec;
   }
 
   public mapUserRecordToUserGen(userRecord: UserRecord): UserGen {
