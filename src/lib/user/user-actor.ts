@@ -26,10 +26,12 @@ export class UserActor {
   }
 
   public async getOwnUserPii(): Promise<UserPii | null> {
-    const user = await this.getOwnUserRecord();
-    if (user === null) {
+    const record = await this.getOwnUserRecord();
+    if (record === null) {
       return null;
     }
-    return this.service.getUserPii(user);
+    const spec = this.service.getUserMapper().mapUserRecordToUserSpec(record);
+    const pii = await this.service.getUserMapper().mapUserSpecToUserPii(spec);
+    return pii;
   }
 }

@@ -1,6 +1,10 @@
 import { AdminActorConfig } from "@/lib/admin/admin-actor";
 import {
+  AdminPermissions,
   AdminPii,
+  AdminRecord,
+  AdminSecurePii,
+  AdminSpec,
   DogAntigenPresence,
   DogDetails,
   DogGender,
@@ -8,24 +12,18 @@ import {
   DogSecureOii,
   DogSpec,
   DogStatus,
-  YesNoUnknown,
-} from "@/lib/data/db-models";
-import { dbInsertAdmin, dbSelectAdmin } from "@/lib/data/db-admins";
-import {
-  AdminRecord,
-  AdminPermissions,
-  AdminSecurePii,
-  AdminSpec,
+  UserPii,
   UserRecord,
   UserSpec,
   Vet,
   VetSpec,
+  YesNoUnknown,
 } from "@/lib/data/db-models";
+import { dbInsertAdmin, dbSelectAdmin } from "@/lib/data/db-admins";
 import { Pool } from "pg";
 import { HarnessHashService, HarnessEncryptionService } from "./_harness";
 import { AdminActorFactoryConfig } from "@/lib/admin/admin-actor-factory";
 import { dbInsertUser, dbSelectUser } from "@/lib/data/db-users";
-import { UserPii } from "@/lib/data/db-models";
 import { VetActorFactoryConfig } from "@/lib/vet/vet-actor-factory";
 import { dbInsertVet, dbSelectVet } from "@/lib/data/db-vets";
 import { UserAccountService } from "@/lib/user/user-account-service";
@@ -34,8 +32,9 @@ import { EncryptionService } from "@/lib/services/encryption";
 import { AdminMapper } from "@/lib/data/admin-mapper";
 import { VetMapper } from "@/lib/data/vet-mapper";
 import { DogMapper } from "@/lib/data/dog-mapper";
-import { sprintf } from "sprintf-js";
 import { UserMapper } from "@/lib/data/user-mapper";
+import { DogRegistration, UserRegistration } from "@/lib/user/user-models";
+import { sprintf } from "sprintf-js";
 
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
@@ -162,11 +161,12 @@ export async function getUserAccountService(
     dbPool,
     emailHashService: getEmailHashService(),
     userMapper: getUserMapper(),
+    dogMapper: getDogMapper(),
   });
 }
 
 export async function insertUser(idx: number, db: Pool): Promise<UserRecord> {
-  const spec = await userSpec(idx);
+  const spec = await getUserSpec(idx);
   const gen = await dbInsertUser(db, spec);
   const user = await dbSelectUser(db, gen.userId);
   if (user === null) {
@@ -175,7 +175,7 @@ export async function insertUser(idx: number, db: Pool): Promise<UserRecord> {
   return user;
 }
 
-export async function userSpec(idx: number): Promise<UserSpec> {
+export async function getUserSpec(idx: number): Promise<UserSpec> {
   const pii = userPii(idx);
   const mapper = getUserMapper();
   return mapper.mapUserPiiToUserSpec(pii);
@@ -217,6 +217,46 @@ export function getVetSpec(idx: number): VetSpec {
 
 export function someEmail(idx: number): string {
   return `some${idx}@some.com`;
+}
+
+export function userRegistration(
+  idx: number,
+  overrides?: Partial<UserRegistration>,
+): UserRegistration {
+  const base: UserRegistration = {
+    userEmail: someEmail(idx),
+    userName: `Reg Junior The ${idx}`,
+    userPhoneNumber: `+65 ${81000000 + idx}`,
+  };
+  return { ...base, ...overrides };
+}
+
+export function dogRegistration(
+  idx: number,
+  overrides?: Partial<DogRegistration>,
+): DogRegistration {
+  const base: DogRegistration = {
+    dogName: `Ruffles-${idx}`,
+    dogBreed: `Breed${idx}`,
+    dogBirthday: getDogBirthday(idx),
+    dogGender: getDogGender(idx),
+    dogWeightKg: getDogWeightKg(idx),
+    dogDea1Point1: getDogAntigenPresence(idx),
+    dogEverPregnant: getDogEverPregnant(idx),
+    dogEverReceivedTransfusion: getYesNoUnknown(idx),
+    dogPreferredVetIdList: [],
+  };
+  return { ...base, ...overrides };
+}
+
+function getDogBirthday(idx: number): string {
+  const yearList = ["2020", "2021", "2022"];
+  const monthList = ["03", "04", "08", "09", "11"];
+  const dayList = ["07", "11", "13", "17", "19", "23", "29"];
+  const year = yearList[idx % yearList.length];
+  const month = monthList[idx % monthList.length];
+  const day = dayList[idx % dayList.length];
+  return `${year}-${month}-${day}`;
 }
 
 export async function getDogSpec(idx: number): Promise<DogSpec> {

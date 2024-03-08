@@ -6,14 +6,14 @@ import {
   dbUpdateUser,
 } from "@/lib/data/db-users";
 import { withDb } from "../_db_helpers";
-import { ensureTimePassed, getUserMapper, userSpec } from "../_fixtures";
+import { ensureTimePassed, getUserMapper, getUserSpec } from "../_fixtures";
 import { guaranteed } from "@/lib/bark-utils";
 
 describe("db-users", () => {
   describe("dbInsertUser", () => {
     it("should insert a new user and return UserGen", async () => {
       await withDb(async (db) => {
-        const userGen = await dbInsertUser(db, await userSpec(1));
+        const userGen = await dbInsertUser(db, await getUserSpec(1));
         expect(userGen.userCreationTime).toBeTruthy();
         expect(userGen.userModificationTime).toBeTruthy();
         expect(userGen.userModificationTime).toEqual(userGen.userCreationTime);
@@ -23,14 +23,14 @@ describe("db-users", () => {
   describe("dbSelectUser", () => {
     it("should return User", async () => {
       await withDb(async (db) => {
-        const userGen = await dbInsertUser(db, await userSpec(1));
+        const userGen = await dbInsertUser(db, await getUserSpec(1));
         const user = await dbSelectUser(db, userGen.userId);
         expect(user).not.toBeNull();
         expect(user?.userCreationTime).toEqual(userGen.userCreationTime);
         expect(user?.userModificationTime).toEqual(userGen.userCreationTime);
         const mapper = getUserMapper();
         const spec = mapper.mapUserRecordToUserSpec(guaranteed(user));
-        expect(spec).toMatchObject(userSpec(1));
+        expect(spec).toMatchObject(getUserSpec(1));
       });
     });
     it("should return null when person does not exist", async () => {
@@ -43,7 +43,7 @@ describe("db-users", () => {
   describe("dbSelectUserIdByHashedEmail", () => {
     it("should return user ID of the user matching the hashed email", async () => {
       await withDb(async (db) => {
-        const specIn = await userSpec(1);
+        const specIn = await getUserSpec(1);
         const userGen = await dbInsertUser(db, specIn);
         const userId = await dbSelectUserIdByHashedEmail(
           db,
@@ -62,8 +62,8 @@ describe("db-users", () => {
   describe("dbUpdateUser", () => {
     it("should update user details and modification time", async () => {
       await withDb(async (db) => {
-        const specIn1 = await userSpec(1);
-        const specIn2 = await userSpec(2);
+        const specIn1 = await getUserSpec(1);
+        const specIn2 = await getUserSpec(2);
         const gen1 = await dbInsertUser(db, specIn1);
         ensureTimePassed();
         const gen2 = await dbUpdateUser(db, gen1.userId, specIn2);
@@ -82,7 +82,7 @@ describe("db-users", () => {
   describe("dbDeleteUser", () => {
     it("should remove the user record", async () => {
       await withDb(async (db) => {
-        const userGen = await dbInsertUser(db, await userSpec(1));
+        const userGen = await dbInsertUser(db, await getUserSpec(1));
         const didDelete = await dbDeleteUser(db, userGen.userId);
         expect(didDelete).toBe(true);
         const user = await dbSelectUser(db, userGen.userId);

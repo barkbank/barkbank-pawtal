@@ -23,6 +23,32 @@ export async function dbInsertUser(
   return toCamelCaseRow(res.rows[0]);
 }
 
+export async function dbTryInsertUser(
+  ctx: DbContext,
+  userSpec: UserSpec,
+): Promise<UserGen | null> {
+  const sql = `
+  INSERT INTO users (
+    user_hashed_email,
+    user_encrypted_pii
+  )
+  VALUES ($1, $2)
+  ON CONFLICT (user_hashed_email) DO NOTHING
+  RETURNING
+    user_id,
+    user_creation_time,
+    user_modification_time
+  `;
+  const res = await dbQuery(ctx, sql, [
+    userSpec.userHashedEmail,
+    userSpec.userEncryptedPii,
+  ]);
+  if (res.rows.length !== 1) {
+    return null;
+  }
+  return toCamelCaseRow(res.rows[0]);
+}
+
 export async function dbUpdateUser(
   ctx: DbContext,
   userId: string,

@@ -22,6 +22,7 @@ import { isValidEmail } from "./bark-utils";
 import { UserAccountService } from "./user/user-account-service";
 import { UserMapper } from "./data/user-mapper";
 import { AdminMapper } from "./data/admin-mapper";
+import { DogMapper } from "./data/dog-mapper";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -38,6 +39,7 @@ export class AppFactory {
   private promisedUserActorFactory: Promise<UserActorFactory> | null = null;
   private promisedUserAccountService: Promise<UserAccountService> | null = null;
   private promisedUserMapper: Promise<UserMapper> | null = null;
+  private promisedDogMapper: Promise<DogMapper> | null = null;
 
   constructor(envs: NodeJS.Dict<string>) {
     this.envs = envs;
@@ -242,15 +244,18 @@ export class AppFactory {
   public getUserAccountService(): Promise<UserAccountService> {
     if (this.promisedUserAccountService === null) {
       this.promisedUserAccountService = new Promise(async (resolve) => {
-        const [dbPool, emailHashService, userMapper] = await Promise.all([
-          this.getDbPool(),
-          this.getEmailHashService(),
-          this.getUserMapper(),
-        ]);
+        const [dbPool, emailHashService, userMapper, dogMapper] =
+          await Promise.all([
+            this.getDbPool(),
+            this.getEmailHashService(),
+            this.getUserMapper(),
+            this.getDogMapper(),
+          ]);
         const service = new UserAccountService({
           dbPool,
           emailHashService,
           userMapper,
+          dogMapper,
         });
         console.log("Created UserAccountService");
         resolve(service);
@@ -275,6 +280,20 @@ export class AppFactory {
       });
     }
     return this.promisedUserMapper;
+  }
+
+  public getDogMapper(): Promise<DogMapper> {
+    if (this.promisedDogMapper === null) {
+      this.promisedDogMapper = new Promise(async (resolve) => {
+        const piiEncryptionService = await this.getPiiEncryptionService();
+        const mapper = new DogMapper({
+          piiEncryptionService,
+        });
+        console.log("Created DogMapper");
+        resolve(mapper);
+      });
+    }
+    return this.promisedDogMapper;
   }
 }
 

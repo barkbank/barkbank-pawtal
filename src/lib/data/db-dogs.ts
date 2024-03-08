@@ -1,6 +1,22 @@
 import { DbContext, dbQuery, toCamelCaseRow } from "./db-utils";
 import { DogRecord, DogGen, DogSpec } from "./db-models";
 
+const DOG_COLUMNS = [
+  "dog_id",
+  "dog_creation_time",
+  "dog_modification_time",
+  "user_id",
+  "dog_status",
+  "dog_encrypted_oii",
+  "dog_breed",
+  "dog_birthday",
+  "dog_gender",
+  "dog_weight_kg",
+  "dog_dea1_point1",
+  "dog_ever_pregnant",
+  "dog_ever_received_transfusion",
+];
+
 export async function dbInsertDog(
   ctx: DbContext,
   userId: string,
@@ -42,21 +58,7 @@ export async function dbSelectDog(
   dogId: string,
 ): Promise<DogRecord | null> {
   const sql = `
-    SELECT
-      user_id,
-      dog_status,
-      dog_encrypted_oii,
-      dog_breed,
-      dog_birthday,
-      dog_gender,
-      dog_weight_kg,
-      dog_dea1_point1,
-      dog_ever_pregnant,
-      dog_ever_received_transfusion,
-
-      dog_id,
-      dog_creation_time,
-      dog_modification_time
+    SELECT ${DOG_COLUMNS.join(", ")}
     FROM dogs
     WHERE dog_id = $1
   `;
@@ -65,6 +67,19 @@ export async function dbSelectDog(
     return toCamelCaseRow(res.rows[0]);
   }
   return null;
+}
+
+export async function dbSelectDogListByUserId(
+  ctx: DbContext,
+  userId: string,
+): Promise<DogRecord[]> {
+  const sql = `
+    SELECT ${DOG_COLUMNS.join(", ")}
+    FROM dogs
+    WHERE user_id = $1
+  `;
+  const res = await dbQuery(ctx, sql, [userId]);
+  return res.rows.map(toCamelCaseRow);
 }
 
 /**

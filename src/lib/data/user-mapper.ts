@@ -32,6 +32,14 @@ export class UserMapper {
     return { ...userGen, ...userPii };
   }
 
+  public async mapUserRecordToUserPii(
+    userRecord: UserRecord,
+  ): Promise<UserPii> {
+    const userSpec = this.mapUserRecordToUserSpec(userRecord);
+    const userPii = await this.mapUserSpecToUserPii(userSpec);
+    return userPii;
+  }
+
   public async mapUserSpecToUserPii(userSpec: UserSpec): Promise<UserPii> {
     const jsonEncoded = await this.piiEncryptionService.getDecryptedData(
       userSpec.userEncryptedPii,

@@ -10,6 +10,10 @@ export async function dbCommit(conn: PoolClient): Promise<void> {
   await conn.query("COMMIT");
 }
 
+export async function dbRollback(conn: PoolClient): Promise<void> {
+  await conn.query("ROLLBACK");
+}
+
 export async function dbRollbackAndRelease(conn: PoolClient): Promise<void> {
   await conn.query("ROLLBACK");
   conn.release();
