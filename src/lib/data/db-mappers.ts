@@ -1,6 +1,6 @@
-import { User, UserSpec } from "./db-models";
+import { UserRecord, UserSpec } from "./db-models";
 
-export function toUserSpec(user: User): UserSpec {
+export function toUserSpec(user: UserRecord): UserSpec {
   const { userId, userCreationTime, userModificationTime, ...spec } = user;
   return spec;
 }

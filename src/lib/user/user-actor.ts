@@ -1,4 +1,4 @@
-import { User } from "../data/db-models";
+import { UserRecord } from "../data/db-models";
 import { UserPii } from "../data/db-models";
 import { UserAccountService } from "./user-account-service";
 
@@ -21,7 +21,7 @@ export class UserActor {
     return this.userId;
   }
 
-  public getOwnUser(): Promise<User | null> {
+  public getOwnUser(): Promise<UserRecord | null> {
     return this.service.getUser(this.getUserId());
   }
 

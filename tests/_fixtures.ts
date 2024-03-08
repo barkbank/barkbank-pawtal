@@ -17,7 +17,7 @@ import {
   AdminPermissions,
   AdminSecurePii,
   AdminSpec,
-  User,
+  UserRecord,
   UserSpec,
   Vet,
   VetSpec,
@@ -157,7 +157,7 @@ export async function getUserAccountService(
   });
 }
 
-export async function insertUser(idx: number, db: Pool): Promise<User> {
+export async function insertUser(idx: number, db: Pool): Promise<UserRecord> {
   const spec = await userSpec(idx);
   const gen = await dbInsertUser(db, spec);
   const user = await dbSelectUser(db, gen.userId);

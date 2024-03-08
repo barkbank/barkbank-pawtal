@@ -1,7 +1,7 @@
 import { Pool } from "pg";
 import { HashService } from "../services/hash";
 import { EncryptionService } from "../services/encryption";
-import { User } from "../data/db-models";
+import { UserRecord } from "../data/db-models";
 import { dbSelectUser, dbSelectUserIdByHashedEmail } from "../data/db-users";
 import { decryptUserPii } from "./user-pii";
 import { UserPii } from "../data/db-models";
@@ -47,11 +47,11 @@ export class UserAccountService {
     return userId;
   }
 
-  public getUser(userId: string): Promise<User | null> {
+  public getUser(userId: string): Promise<UserRecord | null> {
     return dbSelectUser(this.getDbPool(), userId);
   }
 
-  public getUserPii(user: User): Promise<UserPii> {
+  public getUserPii(user: UserRecord): Promise<UserPii> {
     return decryptUserPii(
       user.userEncryptedPii,
       this.getPiiEncryptionService(),

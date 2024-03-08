@@ -32,7 +32,7 @@ export type UserGen = {
   userModificationTime: Date;
 };
 
-export type User = UserSpec & UserGen;
+export type UserRecord = UserSpec & UserGen;
 
 export enum YesNoUnknown {
   YES = "YES",
