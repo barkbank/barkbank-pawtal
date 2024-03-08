@@ -26,7 +26,6 @@ import { Pool } from "pg";
 import { HarnessHashService, HarnessEncryptionService } from "./_harness";
 import { AdminActorFactoryConfig } from "@/lib/admin/admin-actor-factory";
 import { dbInsertUser, dbSelectUser } from "@/lib/data/db-users";
-import { encryptUserPii } from "@/lib/user/user-pii";
 import { UserPii } from "@/lib/data/db-models";
 import { VetActorFactoryConfig } from "@/lib/vet/vet-actor-factory";
 import { dbInsertVet, dbSelectVet } from "@/lib/data/db-vets";
@@ -185,9 +184,8 @@ export async function insertUser(idx: number, db: Pool): Promise<UserRecord> {
 
 export async function userSpec(idx: number): Promise<UserSpec> {
   const pii = userPii(idx);
-  const userEncryptedPii = await encryptUserPii(pii, getPiiEncryptionService());
-  const userHashedEmail = await getEmailHashService().getHashHex(pii.userEmail);
-  return { userHashedEmail, userEncryptedPii };
+  const mapper = getUserMapper();
+  return mapper.mapUserPiiToUserSpec(pii);
 }
 
 export function userPii(idx: number): UserPii {

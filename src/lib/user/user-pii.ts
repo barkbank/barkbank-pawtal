@@ -1,15 +1,6 @@
 import { UserPii, DogOii } from "../data/db-models";
 import { EncryptionService } from "../services/encryption";
 
-export async function encryptUserPii(
-  pii: UserPii,
-  encryptionService: EncryptionService,
-): Promise<string> {
-  const data = JSON.stringify(pii);
-  const encryptedData = await encryptionService.getEncryptedData(data);
-  return encryptedData;
-}
-
 export async function decryptUserPii(
   userEncryptedPii: string,
   encryptionService: EncryptionService,
