@@ -21,12 +21,12 @@ export class UserActor {
     return this.userId;
   }
 
-  public getOwnUser(): Promise<UserRecord | null> {
+  public getOwnUserRecord(): Promise<UserRecord | null> {
     return this.service.getUserRecord(this.getUserId());
   }
 
-  public async getOwnPii(): Promise<UserPii | null> {
-    const user = await this.getOwnUser();
+  public async getOwnUserPii(): Promise<UserPii | null> {
+    const user = await this.getOwnUserRecord();
     if (user === null) {
       return null;
     }

@@ -11,7 +11,7 @@ export default async function Page() {
   if (!actor) {
     redirect(RoutePath.USER_LOGIN_PAGE);
   }
-  const ownPii: UserPii | null = await actor.getOwnPii();
+  const ownPii: UserPii | null = await actor.getOwnUserPii();
   if (!ownPii) {
     redirect(RoutePath.USER_LOGIN_PAGE);
   }
