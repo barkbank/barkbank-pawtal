@@ -63,9 +63,12 @@ export type DogOii = {
   dogName: string;
 };
 
-export type DogSpec = {
-  dogStatus: DogStatus;
+export type DogSecureOii = {
   dogEncryptedOii: string;
+};
+
+export type DogDetails = {
+  dogStatus: DogStatus;
   dogBreed: string;
   dogBirthday: string;
   dogGender: DogGender;
@@ -78,13 +81,21 @@ export type DogSpec = {
   dogEverReceivedTransfusion: YesNoUnknown;
 };
 
+export type DogSpec = DogSecureOii & DogDetails;
+
 export type DogGen = {
   dogId: string;
   dogCreationTime: Date;
   dogModificationTime: Date;
 };
 
-export type Dog = { userId: string } & DogSpec & DogGen;
+export type DogOwner = {
+  userId: string;
+};
+
+export type DogRecord = DogOwner & DogSecureOii & DogDetails & DogGen;
+
+export type Dog = DogOwner & DogOii & DogDetails & DogGen;
 
 export type AdminPii = {
   adminName: string;
