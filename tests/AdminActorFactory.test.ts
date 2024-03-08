@@ -5,11 +5,11 @@ import {
   insertAdmin,
   getAdminActorFactoryConfig,
   someEmail,
-  getAdminPersonalData,
+  getAdminSecurePii,
   getHashedEmail,
 } from "./_fixtures";
-import { AdminPii } from "@/lib/admin/admin-pii";
-import { AdminPersonalData, AdminSpec } from "@/lib/data/db-models";
+import { AdminPii } from "@/lib/data/db-models";
+import { AdminSecurePii, AdminSpec } from "@/lib/data/db-models";
 import {
   dbInsertAdmin,
   dbSelectAdminIdByAdminHashedEmail,
@@ -74,8 +74,8 @@ describe("AdminActorFactory", () => {
           adminName: "Adam",
           adminPhoneNumber: "87651234",
         };
-        const personalData: AdminPersonalData =
-          await getAdminPersonalData(existingPii);
+        const personalData: AdminSecurePii =
+          await getAdminSecurePii(existingPii);
         const spec: AdminSpec = {
           ...personalData,
           adminCanManageAdminAccounts: false,

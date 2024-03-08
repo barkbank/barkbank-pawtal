@@ -1,14 +1,14 @@
 import { Pool } from "pg";
 import { HashService } from "../services/hash";
-import { EncryptionService } from "../services/encryption";
-import { User } from "../data/db-models";
+import { UserRecord } from "../data/db-models";
 import { dbSelectUser, dbSelectUserIdByHashedEmail } from "../data/db-users";
-import { UserPii, decryptUserPii } from "./user-pii";
+import { UserPii } from "../data/db-models";
+import { UserMapper } from "../data/user-mapper";
 
 export type UserAccountServiceConfig = {
   dbPool: Pool;
   emailHashService: HashService;
-  piiEncryptionService: EncryptionService;
+  userMapper: UserMapper;
 };
 
 /**
@@ -24,18 +24,6 @@ export class UserAccountService {
     this.config = config;
   }
 
-  private getDbPool(): Pool {
-    return this.config.dbPool;
-  }
-
-  private getPiiEncryptionService(): EncryptionService {
-    return this.config.piiEncryptionService;
-  }
-
-  private getEmailHashService(): HashService {
-    return this.config.emailHashService;
-  }
-
   public async getUserIdByEmail(userEmail: string): Promise<string | null> {
     const userHashedEmail =
       await this.getEmailHashService().getHashHex(userEmail);
@@ -46,14 +34,24 @@ export class UserAccountService {
     return userId;
   }
 
-  public getUser(userId: string): Promise<User | null> {
+  public getUserRecord(userId: string): Promise<UserRecord | null> {
     return dbSelectUser(this.getDbPool(), userId);
   }
 
-  public getUserPii(user: User): Promise<UserPii> {
-    return decryptUserPii(
-      user.userEncryptedPii,
-      this.getPiiEncryptionService(),
-    );
+  public getUserPii(record: UserRecord): Promise<UserPii> {
+    const spec = this.getUserMapper().mapUserRecordToUserSpec(record);
+    return this.getUserMapper().mapUserSpecToUserPii(spec);
+  }
+
+  private getDbPool(): Pool {
+    return this.config.dbPool;
+  }
+
+  private getEmailHashService(): HashService {
+    return this.config.emailHashService;
+  }
+
+  private getUserMapper(): UserMapper {
+    return this.config.userMapper;
   }
 }

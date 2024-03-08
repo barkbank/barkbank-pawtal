@@ -10,7 +10,7 @@ export default async function Page() {
   if (actor === null) {
     redirect(RoutePath.ADMIN_LOGIN_PAGE);
   }
-  const ownAdmin = await actor.getOwnAdmin();
+  const ownAdmin = await actor.getOwnAdminRecord();
   const ownPii = await actor.getOwnPii();
   return (
     <>

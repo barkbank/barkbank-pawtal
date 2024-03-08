@@ -1,5 +1,5 @@
 import { DbContext, dbQuery, toCamelCaseRow } from "./db-utils";
-import { Dog, DogGen, DogSpec } from "./db-models";
+import { DogRecord, DogGen, DogSpec } from "./db-models";
 
 export async function dbInsertDog(
   ctx: DbContext,
@@ -40,7 +40,7 @@ export async function dbInsertDog(
 export async function dbSelectDog(
   ctx: DbContext,
   dogId: string,
-): Promise<Dog | null> {
+): Promise<DogRecord | null> {
   const sql = `
     SELECT
       user_id,

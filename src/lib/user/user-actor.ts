@@ -1,5 +1,5 @@
-import { User } from "../data/db-models";
-import { UserPii } from "./user-pii";
+import { UserRecord } from "../data/db-models";
+import { UserPii } from "../data/db-models";
 import { UserAccountService } from "./user-account-service";
 
 /**
@@ -21,12 +21,12 @@ export class UserActor {
     return this.userId;
   }
 
-  public getOwnUser(): Promise<User | null> {
-    return this.service.getUser(this.getUserId());
+  public getOwnUserRecord(): Promise<UserRecord | null> {
+    return this.service.getUserRecord(this.getUserId());
   }
 
-  public async getOwnPii(): Promise<UserPii | null> {
-    const user = await this.getOwnUser();
+  public async getOwnUserPii(): Promise<UserPii | null> {
+    const user = await this.getOwnUserRecord();
     if (user === null) {
       return null;
     }
