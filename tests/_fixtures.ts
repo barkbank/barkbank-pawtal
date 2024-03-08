@@ -23,6 +23,7 @@ import { dbInsertVet, dbSelectVet } from "@/lib/data/db-vets";
 import { UserAccountService } from "@/lib/user/user-account-service";
 import { HashService } from "@/lib/services/hash";
 import { EncryptionService } from "@/lib/services/encryption";
+import { AdminMapper } from "@/lib/data/admin-mapper";
 
 export function getEmailHashService(): HashService {
   return new HarnessHashService();
@@ -30,6 +31,13 @@ export function getEmailHashService(): HashService {
 
 export function getPiiEncryptionService(): EncryptionService {
   return new HarnessEncryptionService();
+}
+
+export function getAdminMapper(): AdminMapper {
+  return new AdminMapper({
+    emailHashService: getEmailHashService(),
+    piiEncryptionService: getPiiEncryptionService(),
+  });
 }
 
 export function getAdminActorFactoryConfig(

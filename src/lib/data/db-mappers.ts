@@ -1,13 +1,4 @@
-import {
-  Dog,
-  DogSpec,
-  User,
-  UserSpec,
-  AdminRecord,
-  AdminSpec,
-  Vet,
-  VetSpec,
-} from "./db-models";
+import { Dog, DogSpec, User, UserSpec, Vet, VetSpec } from "./db-models";
 
 export function toUserSpec(user: User): UserSpec {
   const { userId, userCreationTime, userModificationTime, ...spec } = user;
@@ -16,11 +7,6 @@ export function toUserSpec(user: User): UserSpec {
 
 export function toDogSpec(dog: Dog): DogSpec {
   const { userId, dogId, dogCreationTime, dogModificationTime, ...spec } = dog;
-  return spec;
-}
-
-export function toAdminSpec(admin: AdminRecord): AdminSpec {
-  const { adminId, adminCreationTime, adminModificationTime, ...spec } = admin;
   return spec;
 }
 
