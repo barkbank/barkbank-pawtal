@@ -2,7 +2,6 @@ import { dbQuery } from "@/lib/data/db-utils";
 import { withDb } from "./_db_helpers";
 import {
   dogRegistration,
-  getPiiEncryptionService,
   getUserAccountService,
   insertUser,
   insertVet,
@@ -197,11 +196,34 @@ describe("UserAccountService", () => {
     it("should support the creation of accounts with multiple dogs", async () => {
       await withDb(async (db) => {
         // WHEN createUserAccount is called with details about a user and three
-        // dogs; THEN a user account should be created for the user detailed;
-        // AND three dog records should be created; AND the owner of those dogs
-        // should be the created user account; AND the createUserAccount method
-        // should return True.
-        fail("WIP");
+        // dogs;
+        const vet6 = await insertVet(6, db);
+        const service = await getUserAccountService(db);
+        const userReg = userRegistration(8);
+        const dogReg1 = dogRegistration(1, {
+          dogPreferredVetIdList: [vet6.vetId],
+        });
+        const dogReg2 = dogRegistration(2, {
+          dogPreferredVetIdList: [vet6.vetId],
+        });
+        const dogReg3 = dogRegistration(3, {
+          dogPreferredVetIdList: [vet6.vetId],
+        });
+        const reg: Registration = {
+          user: userReg,
+          dogList: [dogReg1, dogReg2, dogReg3],
+        };
+        await service.createUserAccount(reg);
+
+        // THEN one user and three dog records should be inserted.
+        const resUsers = await dbQuery(db, `SELECT user_id FROM users`, []);
+        expect(resUsers.rows.length).toEqual(1);
+        const resDogs = await dbQuery(
+          db,
+          `SELECT 1 FROM dogs WHERE user_id = $1`,
+          [resUsers.rows[0].user_id],
+        );
+        expect(resDogs.rows.length).toEqual(3);
       });
     });
   });
