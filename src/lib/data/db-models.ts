@@ -11,6 +11,10 @@
 //   also those foreign keys. (See Dog, for example).
 //
 
+// WIP: Update the "terminology"
+// WIP: Revise user models
+// WIP: Impl UserMapper
+
 export type UserPii = {
   userName: string;
   userEmail: string;
