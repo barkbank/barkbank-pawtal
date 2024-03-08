@@ -24,6 +24,7 @@ import { UserAccountService } from "@/lib/user/user-account-service";
 import { HashService } from "@/lib/services/hash";
 import { EncryptionService } from "@/lib/services/encryption";
 import { AdminMapper } from "@/lib/data/admin-mapper";
+import { VetMapper } from "@/lib/data/vet-mapper";
 
 export function getEmailHashService(): HashService {
   return new HarnessHashService();
@@ -38,6 +39,10 @@ export function getAdminMapper(): AdminMapper {
     emailHashService: getEmailHashService(),
     piiEncryptionService: getPiiEncryptionService(),
   });
+}
+
+export function getVetMapper(): VetMapper {
+  return new VetMapper();
 }
 
 export function getAdminActorFactoryConfig(
@@ -166,7 +171,7 @@ export function getVetActorFactoryConfig(dbPool: Pool): VetActorFactoryConfig {
 }
 
 export async function insertVet(idx: number, dbPool: Pool): Promise<Vet> {
-  const spec = vetSpec(idx);
+  const spec = getVetSpec(idx);
   const gen = await dbInsertVet(dbPool, spec);
   const vet = await dbSelectVet(dbPool, gen.vetId);
   if (!vet) {
@@ -175,7 +180,7 @@ export async function insertVet(idx: number, dbPool: Pool): Promise<Vet> {
   return vet;
 }
 
-export function vetSpec(idx: number): VetSpec {
+export function getVetSpec(idx: number): VetSpec {
   return {
     vetName: `Vet ${idx}`,
     vetEmail: `vet${idx}@vet.com`,
