@@ -1,5 +1,5 @@
 import { DbContext, dbQuery, toCamelCaseRow } from "./db-utils";
-import { Dog, DogGen, DogSpec } from "./db-models";
+import { DogRecord, DogGen, DogSpec } from "./db-models";
 
 const DOG_COLUMNS = [
   "dog_id",
@@ -56,7 +56,7 @@ export async function dbInsertDog(
 export async function dbSelectDog(
   ctx: DbContext,
   dogId: string,
-): Promise<Dog | null> {
+): Promise<DogRecord | null> {
   const sql = `
     SELECT ${DOG_COLUMNS.join(", ")}
     FROM dogs
@@ -72,7 +72,7 @@ export async function dbSelectDog(
 export async function dbSelectDogListByUserId(
   ctx: DbContext,
   userId: string,
-): Promise<Dog[]> {
+): Promise<DogRecord[]> {
   const sql = `
     SELECT ${DOG_COLUMNS.join(", ")}
     FROM dogs

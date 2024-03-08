@@ -8,7 +8,7 @@ describe("UserActor", () => {
       const user = await insertUser(1, db);
       const service = await getUserAccountService(db);
       const actor = new UserActor(user.userId, service);
-      const ownUser = await actor.getOwnUser();
+      const ownUser = await actor.getOwnUserRecord();
       expect(ownUser).toEqual(user);
     });
   });
@@ -17,7 +17,7 @@ describe("UserActor", () => {
       const user = await insertUser(1, db);
       const service = await getUserAccountService(db);
       const actor = new UserActor(user.userId, service);
-      const ownPii = await actor.getOwnPii();
+      const ownPii = await actor.getOwnUserPii();
       expect(ownPii).toEqual(userPii(1));
     });
   });

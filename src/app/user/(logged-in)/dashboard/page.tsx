@@ -3,7 +3,7 @@
 import { BarkH1 } from "@/components/bark/bark-typography";
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
-import { UserPii } from "@/lib/user/user-models";
+import { UserPii } from "@/lib/data/db-models";
 import { redirect } from "next/navigation";
 
 export default async function Page() {
@@ -11,7 +11,7 @@ export default async function Page() {
   if (!actor) {
     redirect(RoutePath.USER_LOGIN_PAGE);
   }
-  const ownPii: UserPii | null = await actor.getOwnPii();
+  const ownPii: UserPii | null = await actor.getOwnUserPii();
   if (!ownPii) {
     redirect(RoutePath.USER_LOGIN_PAGE);
   }

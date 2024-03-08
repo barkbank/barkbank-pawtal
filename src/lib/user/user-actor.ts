@@ -1,5 +1,5 @@
-import { User } from "../data/db-models";
-import { UserPii } from "./user-models";
+import { UserRecord } from "../data/db-models";
+import { UserPii } from "../data/db-models";
 import { UserAccountService } from "./user-account-service";
 
 /**
@@ -21,15 +21,17 @@ export class UserActor {
     return this.userId;
   }
 
-  public getOwnUser(): Promise<User | null> {
-    return this.service.getUser(this.getUserId());
+  public getOwnUserRecord(): Promise<UserRecord | null> {
+    return this.service.getUserRecord(this.getUserId());
   }
 
-  public async getOwnPii(): Promise<UserPii | null> {
-    const user = await this.getOwnUser();
-    if (user === null) {
+  public async getOwnUserPii(): Promise<UserPii | null> {
+    const record = await this.getOwnUserRecord();
+    if (record === null) {
       return null;
     }
-    return this.service.getUserPii(user);
+    const spec = this.service.getUserMapper().mapUserRecordToUserSpec(record);
+    const pii = await this.service.getUserMapper().mapUserSpecToUserPii(spec);
+    return pii;
   }
 }

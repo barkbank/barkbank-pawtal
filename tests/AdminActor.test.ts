@@ -8,7 +8,7 @@ describe("AdminActor", () => {
       const admin = await insertAdmin(1, db);
       const config = getAdminActorConfig(db);
       const actor = new AdminActor(admin.adminId, config);
-      const ownAdmin = await actor.getOwnAdmin();
+      const ownAdmin = await actor.getOwnAdminRecord();
       expect(ownAdmin).toEqual(admin);
     });
   });
@@ -17,8 +17,8 @@ describe("AdminActor", () => {
       const admin = await insertAdmin(1, db);
       const config = getAdminActorConfig(db);
       const actor = new AdminActor(admin.adminId, config);
-      const promise1 = actor.getOwnAdmin();
-      const promise2 = actor.getOwnAdmin();
+      const promise1 = actor.getOwnAdminRecord();
+      const promise2 = actor.getOwnAdminRecord();
       const promises = await Promise.all([promise1, promise2]);
       expect(promises[0]).toBe(promises[1]);
     });

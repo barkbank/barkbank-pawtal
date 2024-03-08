@@ -1,17 +1,13 @@
-import { UserPii, encryptUserPii } from "@/lib/user/user-models";
+import { UserPii } from "@/lib/data/db-models";
 import APP from "@/lib/app";
 import { dbInsertUser } from "@/lib/data/db-users";
-import { UserSpec } from "@/lib/data/db-models";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest): Promise<NextResponse> {
   const body = await request.json();
   const pii = body as UserPii;
-  const emailHashService = await APP.getEmailHashService();
-  const piiEncryptionService = await APP.getPiiEncryptionService();
-  const userHashedEmail = await emailHashService.getHashHex(pii.userEmail);
-  const userEncryptedPii = await encryptUserPii(pii, piiEncryptionService);
-  const spec: UserSpec = { userHashedEmail, userEncryptedPii };
+  const mapper = await APP.getUserMapper();
+  const spec = await mapper.mapUserPiiToUserSpec(pii);
   const dbPool = await APP.getDbPool();
   const gen = await dbInsertUser(dbPool, spec);
   return NextResponse.json(gen);

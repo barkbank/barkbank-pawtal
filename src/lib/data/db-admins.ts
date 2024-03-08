@@ -1,5 +1,5 @@
 import { DbContext, dbQuery, toCamelCaseRow } from "./db-utils";
-import { Admin, AdminGen, AdminSpec } from "./db-models";
+import { AdminRecord, AdminGen, AdminSpec } from "./db-models";
 
 export async function dbInsertAdmin(
   ctx: DbContext,
@@ -31,7 +31,7 @@ export async function dbInsertAdmin(
 export async function dbSelectAdmin(
   ctx: DbContext,
   adminId: string,
-): Promise<Admin | null> {
+): Promise<AdminRecord | null> {
   const sql = `
     SELECT
       admin_hashed_email,

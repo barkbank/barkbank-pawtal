@@ -10,7 +10,7 @@ import {
   userRegistration,
 } from "./_fixtures";
 import { guaranteed } from "@/lib/bark-utils";
-import { Registration, encryptDogOii } from "@/lib/user/user-models";
+import { Registration } from "@/lib/user/user-models";
 import { DogStatus } from "@/lib/data/db-models";
 
 describe("UserAccountService", () => {
@@ -40,7 +40,7 @@ describe("UserAccountService", () => {
       });
     });
   });
-  describe("getUser", () => {
+  describe("getUserRecord", () => {
     it("should return the user matching the user ID", async () => {
       await withDb(async (db) => {
         // GIVEN an existing user;
@@ -48,7 +48,7 @@ describe("UserAccountService", () => {
 
         // WHEN getUser is called with the ID of that user;
         const service = await getUserAccountService(db);
-        const userOut = await service.getUser(userIn.userId);
+        const userOut = await service.getUserRecord(userIn.userId);
 
         // THEN the user record for that user should be returned.
         expect(userOut).toEqual(userIn);
@@ -58,25 +58,10 @@ describe("UserAccountService", () => {
       await withDb(async (db) => {
         // WHEN getUser is called with an ID that matches that of no user;
         const service = await getUserAccountService(db);
-        const userOut = await service.getUser("12345");
+        const userOut = await service.getUserRecord("12345");
 
         // THEN null should be returned.
         expect(userOut).toBeNull();
-      });
-    });
-  });
-  describe("getUserPii", () => {
-    it("should return the PII of the user", async () => {
-      await withDb(async (db) => {
-        // GIVEN a user record;
-        const rec = await insertUser(88, db);
-
-        // WHEN getUserPii is called with the record;
-        const service = await getUserAccountService(db);
-        const pii = await service.getUserPii(rec);
-
-        // THEN the PII from the record should be decrypted and returned.
-        expect(pii).toEqual(userPii(88));
       });
     });
   });
@@ -101,35 +86,35 @@ describe("UserAccountService", () => {
           userRegistration(8).userEmail,
         );
         expect(userId).not.toBeNull();
-        const user = await service.getUser(guaranteed(userId));
-        const userPii = await service.getUserPii(guaranteed(user));
+        const user = await service.getUserRecord(guaranteed(userId));
+        const userPii = await service
+          .getUserMapper()
+          .mapUserRecordToUserPii(guaranteed(user));
         expect(userPii).toMatchObject(userReg);
 
         // AND a dog record should be created for the one dog;
-        const dogList = await service.getUserDogs(guaranteed(userId));
-        expect(dogList.length).toEqual(1);
-        const dog = dogList[0];
+        const dogRecords = await service.getUserDogRecords(guaranteed(userId));
+        expect(dogRecords.length).toEqual(1);
+        const dogRecord = dogRecords[0];
+        const dogMapper = service.getDogMapper();
+        const dogDetails = dogMapper.mapDogRecordToDogDetails(dogRecord);
+        const dogSecureOii = dogMapper.mapDogRecordToDogSecureOii(dogRecord);
+        const dogOii = await dogMapper.mapDogSecureOiiToDogOii(dogSecureOii);
 
-        expect(dog.dogBreed).toEqual(dogReg.dogBreed);
-        expect(dog.dogBirthday).toEqual(dogReg.dogBirthday);
-        expect(dog.dogGender).toEqual(dogReg.dogGender);
-        expect(dog.dogWeightKg).toEqual(dogReg.dogWeightKg);
-        expect(dog.dogDea1Point1).toEqual(dogReg.dogDea1Point1);
-        expect(dog.dogEverPregnant).toEqual(dogReg.dogEverPregnant);
-        expect(dog.dogEverReceivedTransfusion).toEqual(
+        expect(dogDetails.dogBreed).toEqual(dogReg.dogBreed);
+        expect(dogDetails.dogBirthday).toEqual(dogReg.dogBirthday);
+        expect(dogDetails.dogGender).toEqual(dogReg.dogGender);
+        expect(dogDetails.dogWeightKg).toEqual(dogReg.dogWeightKg);
+        expect(dogDetails.dogDea1Point1).toEqual(dogReg.dogDea1Point1);
+        expect(dogDetails.dogEverPregnant).toEqual(dogReg.dogEverPregnant);
+        expect(dogDetails.dogEverReceivedTransfusion).toEqual(
           dogReg.dogEverReceivedTransfusion,
         );
-
-        expect(dog.dogStatus).toEqual(DogStatus.NEW_PROFILE);
-        expect(dog.dogEncryptedOii).toEqual(
-          await encryptDogOii(
-            { dogName: dogReg.dogName },
-            getPiiEncryptionService(),
-          ),
-        );
+        expect(dogDetails.dogStatus).toEqual(DogStatus.NEW_PROFILE);
+        expect(dogOii.dogName).toEqual(dogReg.dogName);
 
         // AND the owner of that dog should be the created user account;
-        expect(dog.userId).toEqual(userId);
+        expect(dogRecord.userId).toEqual(userId);
 
         // AND the createUserAccount method should return True;
         expect(result).toBe(true);
@@ -142,7 +127,7 @@ describe("UserAccountService", () => {
         );
         expect(dbRes2.rows.length).toEqual(1);
         expect(dbRes2.rows[0].user_id).toEqual(userId);
-        expect(dbRes2.rows[0].dog_id).toEqual(dog.dogId);
+        expect(dbRes2.rows[0].dog_id).toEqual(dogRecord.dogId);
         expect(dbRes2.rows[0].vet_id).toEqual(vet6.vetId);
       });
     });

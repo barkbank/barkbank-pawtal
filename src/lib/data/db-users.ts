@@ -1,5 +1,5 @@
 import { DbContext, dbQuery, toCamelCaseRow } from "./db-utils";
-import { User, UserGen, UserSpec } from "./db-models";
+import { UserRecord, UserGen, UserSpec } from "./db-models";
 
 export async function dbInsertUser(
   ctx: DbContext,
@@ -75,7 +75,7 @@ export async function dbUpdateUser(
 export async function dbSelectUser(
   ctx: DbContext,
   userId: string,
-): Promise<User | null> {
+): Promise<UserRecord | null> {
   const sql = `
   SELECT
     user_id,

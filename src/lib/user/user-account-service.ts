@@ -1,24 +1,33 @@
 import { Pool } from "pg";
 import { HashService } from "../services/hash";
-import { EncryptionService } from "../services/encryption";
-import { Dog, DogStatus, User } from "../data/db-models";
+import {
+  DogRecord,
+  DogSecureOii,
+  DogSpec,
+  DogStatus,
+  UserPii,
+} from "../data/db-models";
 import {
   dbSelectUser,
   dbSelectUserIdByHashedEmail,
   dbTryInsertUser,
 } from "../data/db-users";
-import { Registration, UserPii, encryptDogOii } from "./user-models";
+import { Registration } from "./user-models";
 import {
   dbInsertDog,
   dbInsertDogVetPreference,
   dbSelectDogListByUserId,
 } from "../data/db-dogs";
 import { dbBegin, dbCommit, dbRelease, dbRollback } from "../data/db-utils";
+import { UserRecord } from "../data/db-models";
+import { UserMapper } from "../data/user-mapper";
+import { DogMapper } from "../data/dog-mapper";
 
 export type UserAccountServiceConfig = {
   dbPool: Pool;
   emailHashService: HashService;
-  piiEncryptionService: EncryptionService;
+  userMapper: UserMapper;
+  dogMapper: DogMapper;
 };
 
 /**
@@ -44,60 +53,32 @@ export class UserAccountService {
     return userId;
   }
 
-  public getUser(userId: string): Promise<User | null> {
+  public getUserRecord(userId: string): Promise<UserRecord | null> {
     return dbSelectUser(this.getDbPool(), userId);
-  }
-
-  public getUserPii(user: User): Promise<UserPii> {
-    return this.decryptUserPii(user.userEncryptedPii);
   }
 
   public async createUserAccount(registration: Registration): Promise<boolean> {
     const conn = await this.getDbPool().connect();
     try {
       await dbBegin(conn);
-      const { userEmail, userName, userPhoneNumber } = registration.user;
-      const [userHashedEmail, userEncryptedPii] = await Promise.all([
-        this.getEmailHashService().getHashHex(userEmail),
-        this.encryptUserPii({
-          userEmail,
-          userName,
-          userPhoneNumber,
-        }),
-      ]);
-      const userSpec = { userHashedEmail, userEncryptedPii };
+      const userPii: UserPii = registration.user;
+      const userSpec = await this.getUserMapper().mapUserPiiToUserSpec(userPii);
       const userGen = await dbTryInsertUser(conn, userSpec);
       if (userGen === null) {
         await dbRollback(conn);
         return false;
       }
       for (const dogRegistration of registration.dogList) {
-        const {
-          dogName,
-          dogBreed,
-          dogBirthday,
-          dogGender,
-          dogWeightKg,
-          dogDea1Point1,
-          dogEverPregnant,
-          dogEverReceivedTransfusion,
-          dogPreferredVetIdList,
-        } = dogRegistration;
-        const dogEncryptedOii = await encryptDogOii(
-          { dogName },
-          this.getPiiEncryptionService(),
-        );
-        const dogGen = await dbInsertDog(conn, userGen.userId, {
-          dogBreed,
-          dogBirthday,
-          dogGender,
-          dogWeightKg,
-          dogDea1Point1,
-          dogEverPregnant,
-          dogEverReceivedTransfusion,
-          dogEncryptedOii,
+        const { dogName, dogPreferredVetIdList, ...dogDetails } =
+          dogRegistration;
+        const dogSecureOii: DogSecureOii =
+          await this.getDogMapper().mapDogOiiToDogSecureOii({ dogName });
+        const dogSpec: DogSpec = {
+          ...dogSecureOii,
+          ...dogDetails,
           dogStatus: DogStatus.NEW_PROFILE,
-        });
+        };
+        const dogGen = await dbInsertDog(conn, userGen.userId, dogSpec);
         for (const vetId of dogPreferredVetIdList) {
           await dbInsertDogVetPreference(conn, dogGen.dogId, vetId);
         }
@@ -112,7 +93,7 @@ export class UserAccountService {
     }
   }
 
-  public getUserDogs(userId: string): Promise<Dog[]> {
+  public getUserDogRecords(userId: string): Promise<DogRecord[]> {
     return dbSelectDogListByUserId(this.getDbPool(), userId);
   }
 
@@ -120,22 +101,15 @@ export class UserAccountService {
     return this.config.dbPool;
   }
 
-  private getPiiEncryptionService(): EncryptionService {
-    return this.config.piiEncryptionService;
-  }
-
   private getEmailHashService(): HashService {
     return this.config.emailHashService;
   }
 
-  private encryptUserPii(userPii: UserPii): Promise<string> {
-    const data = JSON.stringify(userPii);
-    return this.getPiiEncryptionService().getEncryptedData(data);
+  public getUserMapper(): UserMapper {
+    return this.config.userMapper;
   }
 
-  private async decryptUserPii(userEncryptedPii: string): Promise<UserPii> {
-    const service = this.getPiiEncryptionService();
-    const data = await service.getDecryptedData(userEncryptedPii);
-    return JSON.parse(data) as UserPii;
+  public getDogMapper(): DogMapper {
+    return this.config.dogMapper;
   }
 }
