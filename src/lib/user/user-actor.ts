@@ -22,7 +22,7 @@ export class UserActor {
   }
 
   public getOwnUser(): Promise<UserRecord | null> {
-    return this.service.getUser(this.getUserId());
+    return this.service.getUserRecord(this.getUserId());
   }
 
   public async getOwnPii(): Promise<UserPii | null> {

@@ -168,8 +168,8 @@ export async function getUserAccountService(
 ): Promise<UserAccountService> {
   return new UserAccountService({
     dbPool,
-    piiEncryptionService: getPiiEncryptionService(),
     emailHashService: getEmailHashService(),
+    userMapper: getUserMapper(),
   });
 }
 

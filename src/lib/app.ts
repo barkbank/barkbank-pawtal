@@ -20,6 +20,7 @@ import { UserActorFactory } from "./user/user-actor-factory";
 import { AppEnv } from "./app-env";
 import { isValidEmail } from "./bark-utils";
 import { UserAccountService } from "./user/user-account-service";
+import { UserMapper } from "./data/user-mapper";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -34,6 +35,7 @@ export class AppFactory {
   private promisedVetActorFactory: Promise<VetActorFactory> | null = null;
   private promisedUserActorFactory: Promise<UserActorFactory> | null = null;
   private promisedUserAccountService: Promise<UserAccountService> | null = null;
+  private promisedUserMapper: Promise<UserMapper> | null = null;
 
   constructor(envs: NodeJS.Dict<string>) {
     this.envs = envs;
@@ -162,9 +164,12 @@ export class AppFactory {
   public getAdminActorFactory(): Promise<AdminActorFactory> {
     if (this.promisedAdminActorFactory === null) {
       this.promisedAdminActorFactory = new Promise(async (resolve) => {
-        const dbPool = await this.getDbPool();
-        const emailHashService = await this.getEmailHashService();
-        const piiEncryptionService = await this.getPiiEncryptionService();
+        const [dbPool, emailHashService, piiEncryptionService] =
+          await Promise.all([
+            this.getDbPool(),
+            this.getEmailHashService(),
+            this.getPiiEncryptionService(),
+          ]);
         const rootAdminEmail = this.envString(AppEnv.BARKBANK_ROOT_ADMIN_EMAIL);
         if (!isValidEmail(rootAdminEmail)) {
           throw new Error("BARKBANK_ROOT_ADMIN_EMAIL is not a valid email");
@@ -185,8 +190,10 @@ export class AppFactory {
   public getVetActorFactory(): Promise<VetActorFactory> {
     if (this.promisedVetActorFactory === null) {
       this.promisedVetActorFactory = new Promise(async (resolve) => {
-        const dbPool = await this.getDbPool();
-        const piiEncryptionService = await this.getPiiEncryptionService();
+        const [dbPool, piiEncryptionService] = await Promise.all([
+          this.getDbPool(),
+          this.getPiiEncryptionService(),
+        ]);
         const factory = new VetActorFactory({
           dbPool,
           piiEncryptionService,
@@ -213,19 +220,39 @@ export class AppFactory {
   public getUserAccountService(): Promise<UserAccountService> {
     if (this.promisedUserAccountService === null) {
       this.promisedUserAccountService = new Promise(async (resolve) => {
-        const dbPool = await this.getDbPool();
-        const emailHashService = await this.getEmailHashService();
-        const piiEncryptionService = await this.getPiiEncryptionService();
+        const [dbPool, emailHashService, userMapper] = await Promise.all([
+          this.getDbPool(),
+          this.getEmailHashService(),
+          this.getUserMapper(),
+        ]);
         const service = new UserAccountService({
           dbPool,
           emailHashService,
-          piiEncryptionService,
+          userMapper,
         });
         console.log("Created UserAccountService");
         resolve(service);
       });
     }
     return this.promisedUserAccountService;
+  }
+
+  public getUserMapper(): Promise<UserMapper> {
+    if (this.promisedUserMapper === null) {
+      this.promisedUserMapper = new Promise(async (resolve) => {
+        const [emailHashService, piiEncryptionService] = await Promise.all([
+          this.getEmailHashService(),
+          this.getPiiEncryptionService(),
+        ]);
+        const mapper = new UserMapper({
+          emailHashService,
+          piiEncryptionService,
+        });
+        console.log("Created UserMapper");
+        resolve(mapper);
+      });
+    }
+    return this.promisedUserMapper;
   }
 }
 
