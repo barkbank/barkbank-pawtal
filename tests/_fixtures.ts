@@ -1,6 +1,16 @@
 import { AdminActorConfig } from "@/lib/admin/admin-actor";
 import { encryptAdminPii } from "@/lib/admin/admin-pii";
-import { AdminPii } from "@/lib/data/db-models";
+import {
+  AdminPii,
+  DogAntigenPresence,
+  DogDetails,
+  DogGender,
+  DogOii,
+  DogSecureOii,
+  DogSpec,
+  DogStatus,
+  YesNoUnknown,
+} from "@/lib/data/db-models";
 import { dbInsertAdmin, dbSelectAdmin } from "@/lib/data/db-admins";
 import {
   AdminRecord,
@@ -25,6 +35,8 @@ import { HashService } from "@/lib/services/hash";
 import { EncryptionService } from "@/lib/services/encryption";
 import { AdminMapper } from "@/lib/data/admin-mapper";
 import { VetMapper } from "@/lib/data/vet-mapper";
+import { DogMapper } from "@/lib/data/dog-mapper";
+import { sprintf } from "sprintf-js";
 
 export function getEmailHashService(): HashService {
   return new HarnessHashService();
@@ -43,6 +55,13 @@ export function getAdminMapper(): AdminMapper {
 
 export function getVetMapper(): VetMapper {
   return new VetMapper();
+}
+
+export function getDogMapper(): DogMapper {
+  return new DogMapper({
+    emailHashService: getEmailHashService(),
+    piiEncryptionService: getPiiEncryptionService(),
+  });
 }
 
 export function getAdminActorFactoryConfig(
@@ -191,4 +210,84 @@ export function getVetSpec(idx: number): VetSpec {
 
 export function someEmail(idx: number): string {
   return `some${idx}@some.com`;
+}
+
+export async function getDogSpec(idx: number): Promise<DogSpec> {
+  const dogDetails = await getDogDetails(idx);
+  const dogSecureOii = await getDogSecureOii(idx);
+  return { ...dogDetails, ...dogSecureOii };
+}
+
+export async function getDogSecureOii(idx: number): Promise<DogSecureOii> {
+  const mapper = getDogMapper();
+  const oii = await getDogOii(idx);
+  return mapper.mapDogOiiToDogSecureOii(oii);
+}
+
+export async function getDogDetails(idx: number): Promise<DogDetails> {
+  return {
+    dogStatus: getDogStatus(idx),
+    dogBreed: getDogBreed(idx),
+    dogBirthday: getBirthday(idx),
+    dogGender: getDogGender(idx),
+    dogWeightKg: getDogWeightKg(idx),
+    dogDea1Point1: getDogAntigenPresence(idx + 1 + 1),
+    dogEverPregnant: getDogEverPregnant(idx),
+    dogEverReceivedTransfusion: getYesNoUnknown(idx),
+  };
+}
+
+export async function getDogOii(idx: number): Promise<DogOii> {
+  return {
+    dogName: `DogName${idx}`,
+  };
+}
+
+function getBirthday(idx: number): string {
+  const baseYear = 2023;
+  const yearOffset = idx % 5;
+  const year = baseYear - yearOffset;
+  const monthOfYear = idx % 13;
+  const dayOfMonth = idx % 29;
+  return sprintf("%d-%02d-%02d", year, monthOfYear, dayOfMonth);
+}
+
+function getDogBreed(idx: number): string {
+  return `Breed${idx}`;
+}
+
+function getDogAntigenPresence(idx: number): DogAntigenPresence {
+  const presenceList: DogAntigenPresence[] = Object.values(DogAntigenPresence);
+  return presenceList[idx % presenceList.length];
+}
+
+function getDogGender(idx: number): DogGender {
+  const genderList: DogGender[] = Object.values(DogGender);
+  return genderList[idx % genderList.length];
+}
+
+function getDogWeightKg(idx: number): number | null {
+  const options: (number | null)[] = [null, 6, 12, 17, 22, 26, 31, 38];
+  return options[idx % options.length];
+}
+
+function getDogStatus(idx: number): DogStatus {
+  const statusList: DogStatus[] = Object.values(DogStatus);
+  return statusList[idx % statusList.length];
+}
+
+function getYesNoUnknown(idx: number): YesNoUnknown {
+  const responseList: YesNoUnknown[] = Object.values(YesNoUnknown);
+  return responseList[idx % responseList.length];
+}
+
+function getDogEverPregnant(idx: number): YesNoUnknown {
+  const gender = getDogGender(idx);
+  if (gender === DogGender.MALE) {
+    return YesNoUnknown.NO;
+  }
+  if (gender === DogGender.UNKNOWN) {
+    return YesNoUnknown.UNKNOWN;
+  }
+  return getYesNoUnknown(idx);
 }
