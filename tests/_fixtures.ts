@@ -37,6 +37,15 @@ import { AdminMapper } from "@/lib/data/admin-mapper";
 import { VetMapper } from "@/lib/data/vet-mapper";
 import { DogMapper } from "@/lib/data/dog-mapper";
 import { sprintf } from "sprintf-js";
+import { UserMapper } from "@/lib/data/user-mapper";
+
+export function ensureTimePassed(): void {
+  const t0 = new Date().getTime();
+  let t1 = new Date().getTime();
+  while (t0 === t1) {
+    t1 = new Date().getTime();
+  }
+}
 
 export function getEmailHashService(): HashService {
   return new HarnessHashService();
@@ -59,6 +68,13 @@ export function getVetMapper(): VetMapper {
 
 export function getDogMapper(): DogMapper {
   return new DogMapper({
+    emailHashService: getEmailHashService(),
+    piiEncryptionService: getPiiEncryptionService(),
+  });
+}
+
+export function getUserMapper(): UserMapper {
+  return new UserMapper({
     emailHashService: getEmailHashService(),
     piiEncryptionService: getPiiEncryptionService(),
   });
