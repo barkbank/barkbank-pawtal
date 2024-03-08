@@ -34,6 +34,8 @@ export type UserGen = {
 
 export type UserRecord = UserSpec & UserGen;
 
+export type User = UserPii & UserGen;
+
 export enum YesNoUnknown {
   YES = "YES",
   NO = "NO",
