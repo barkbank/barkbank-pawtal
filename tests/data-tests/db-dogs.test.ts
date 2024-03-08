@@ -11,12 +11,7 @@ import { withDb } from "../_db_helpers";
 import { guaranteed } from "@/lib/bark-utils";
 import { DogSpec } from "@/lib/data/db-models";
 import { Pool } from "pg";
-import {
-  getDogMapper,
-  getDogSpec,
-  getVetSpec,
-  insertUser
-} from "../_fixtures";
+import { getDogMapper, getDogSpec, getVetSpec, insertUser } from "../_fixtures";
 
 describe("db-dogs", () => {
   describe("dbInsertDog", () => {
