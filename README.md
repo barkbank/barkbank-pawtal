@@ -51,7 +51,7 @@ BARKBANK_DB_PORT=5800
 BARKBANK_DB_NAME=devdb
 BARKBANK_DB_USER=postgres
 BARKBANK_DB_PASSWORD=password
-BARKBANK_ROOT_ADMIN_EMAIL=alice@admin.com
+BARKBANK_ROOT_ADMIN_EMAIL=admin1@admin.com
 DANGEROUS_ENABLED=true
 DANGEROUS_CREDENTIALS=developer:password
 ```
@@ -66,9 +66,9 @@ Keep this terminal window handy. In the local deployment configured above, OTP e
 
 Run `make local-accounts` to create the following accounts in the local deployment:
 
-- Admin Account: alice@admin.com
-- User Account: bob@user.com
-- Vet Account: vincent@vet.com
+- Admin Accounts: admin1@admin.com, admin2@admin.com, admin3@admin.com
+- User Accounts: user1@user.com, user2@user.com, user3@user.com
+- Vet Accounts: vet1@vet.com, vet2@vet.com, vet3@vet.com
 
 ## Development
 
