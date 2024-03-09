@@ -42,7 +42,9 @@ function SideOption(props: { route: BarkSidebarRoute; currentPath: string }) {
         />
 
         {/* Label */}
-        <div className="w-full text-[14px]">{route.label}</div>
+        <div className="w-full text-[14px] font-[700] leading-[20px]">
+          {route.label}
+        </div>
       </div>
     </Link>
   );
