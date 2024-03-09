@@ -1,25 +1,41 @@
 "use server";
 
-import BarkNav, { BarkNavRoute } from "@/components/bark/bark-nav";
+import {
+  BarkSidebarLayout,
+  BarkSidebarRoute,
+} from "@/components/bark/bark-sidebar";
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
 
 export default async function Layout(props: { children: React.ReactNode }) {
   const actor = await getAuthenticatedUserActor();
-  if (!actor) {
+  if (actor === null) {
     redirect(RoutePath.USER_LOGIN_PAGE);
   }
-  const navRoutes: BarkNavRoute[] = [
+  const routes: BarkSidebarRoute[] = [
+    {
+      label: "Dashboard",
+      href: RoutePath.USER_DASHBOARD_PAGE,
+      iconSrc: "/dashboard.svg",
+      iconLightSrc: "/dashboard-light.svg",
+    },
     {
       label: "My Account",
       href: RoutePath.USER_MY_ACCOUNT_PAGE,
+      iconSrc: "/key.svg",
+      iconLightSrc: "/key-light.svg",
+    },
+    {
+      label: "Root 3",
+      href: RoutePath.ROOT,
+    },
+    {
+      label: "Logout",
+      href: RoutePath.LOGOUT_PAGE,
     },
   ];
   return (
-    <>
-      <BarkNav routes={navRoutes} />
-      <div className="p-3">{props.children}</div>
-    </>
+    <BarkSidebarLayout routes={routes}>{props.children}</BarkSidebarLayout>
   );
 }
