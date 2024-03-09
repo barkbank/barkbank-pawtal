@@ -17,6 +17,12 @@ describe("db-users", () => {
         expect(userGen.userCreationTime).toBeTruthy();
         expect(userGen.userModificationTime).toBeTruthy();
         expect(userGen.userModificationTime).toEqual(userGen.userCreationTime);
+
+        // Additional assertions to verify that the returned types are Dates.
+        expect(userGen.userCreationTime instanceof Date).toBe(true);
+        expect(userGen.userModificationTime instanceof Date).toBe(true);
+        const t = userGen.userCreationTime.getTime();
+        expect(typeof t).toEqual("number");
       });
     });
   });
