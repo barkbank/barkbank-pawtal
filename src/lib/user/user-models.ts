@@ -7,7 +7,7 @@ export type DogRegistration = {
   dogName: string;
 
   dogBreed: string;
-  dogBirthday: string;
+  dogBirthday: Date;
   dogGender: DogGender;
   dogWeightKg: number | null;
   dogDea1Point1: DogAntigenPresence;

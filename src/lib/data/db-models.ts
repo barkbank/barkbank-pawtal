@@ -75,7 +75,7 @@ export type DogSecureOii = {
 export type DogDetails = {
   dogStatus: DogStatus;
   dogBreed: string;
-  dogBirthday: string;
+  dogBirthday: Date;
   dogGender: DogGender;
   /**
    * Weight of the dog. It should either be a positive integer or null.

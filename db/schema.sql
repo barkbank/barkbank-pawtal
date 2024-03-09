@@ -53,10 +53,12 @@ CREATE TABLE dogs (
   dog_gender t_dog_gender NOT NULL,
   dog_dea1_point1 t_dog_antigen_presence NOT NULL,
   dog_modification_time TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  dog_birthday TEXT NOT NULL, -- YYYY-MM-DD format, 00 for absent DD and/or MM
   dog_ever_pregnant t_yes_no_unknown NOT NULL,
   dog_ever_received_transfusion t_yes_no_unknown NOT NULL,
   dog_weight_kg INTEGER, -- NULL means weight is not known.
+
+  -- TIMESTAMP WITH TIME ZONE so the Date in TypeScript isn't ambiguous.
+  dog_birthday TIMESTAMP WITH TIME ZONE NOT NULL,
 
   -- In PostgreSQL ``a check constraint is satisfied if the check expression
   -- evaluates to true or the null value. Since most expressions will evaluate
@@ -71,7 +73,6 @@ CREATE TABLE dogs (
   --
   CONSTRAINT dog_weight_kg_is_null_or_positive CHECK (dog_weight_kg IS NULL OR dog_weight_kg > 0),
 
-  CONSTRAINT dog_birthday_fmt CHECK (dog_birthday ~ '^\d{4}-\d{2}-\d{2}$'),
   CONSTRAINT dogs_fk_users FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE SET NULL,
   CONSTRAINT dogs_pk PRIMARY KEY (dog_id)
 );
