@@ -34,7 +34,7 @@ import { VetMapper } from "@/lib/data/vet-mapper";
 import { DogMapper } from "@/lib/data/dog-mapper";
 import { UserMapper } from "@/lib/data/user-mapper";
 import { DogRegistration, UserRegistration } from "@/lib/user/user-models";
-import { sprintf } from "sprintf-js";
+import { BARK_UTC } from "@/lib/bark-utils";
 
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
@@ -249,14 +249,11 @@ export function dogRegistration(
   return { ...base, ...overrides };
 }
 
-function getDogBirthday(idx: number): string {
-  const yearList = ["2020", "2021", "2022"];
-  const monthList = ["03", "04", "08", "09", "11"];
-  const dayList = ["07", "11", "13", "17", "19", "23", "29"];
-  const year = yearList[idx % yearList.length];
-  const month = monthList[idx % monthList.length];
-  const day = dayList[idx % dayList.length];
-  return `${year}-${month}-${day}`;
+function getDogBirthday(idx: number): Date {
+  const y = 2022 - (idx % 5);
+  const m = 1 + (idx % 11);
+  const d = 1 + (idx % 23);
+  return BARK_UTC.getDate(y, m, d);
 }
 
 export async function getDogSpec(idx: number): Promise<DogSpec> {
@@ -275,7 +272,7 @@ export async function getDogDetails(idx: number): Promise<DogDetails> {
   return {
     dogStatus: getDogStatus(idx),
     dogBreed: getDogBreed(idx),
-    dogBirthday: getBirthday(idx),
+    dogBirthday: getDogBirthday(idx),
     dogGender: getDogGender(idx),
     dogWeightKg: getDogWeightKg(idx),
     dogDea1Point1: getDogAntigenPresence(idx + 1 + 1),
@@ -288,15 +285,6 @@ export async function getDogOii(idx: number): Promise<DogOii> {
   return {
     dogName: `DogName${idx}`,
   };
-}
-
-function getBirthday(idx: number): string {
-  const baseYear = 2023;
-  const yearOffset = idx % 5;
-  const year = baseYear - yearOffset;
-  const monthOfYear = idx % 13;
-  const dayOfMonth = idx % 29;
-  return sprintf("%d-%02d-%02d", year, monthOfYear, dayOfMonth);
 }
 
 function getDogBreed(idx: number): string {
