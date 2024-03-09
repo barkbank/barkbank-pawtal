@@ -21,9 +21,13 @@ function doRequest(method, path, body, callback) {
       res.on("end", () => {
         try {
           const jsonData = JSON.parse(responseData);
-          callback(null, jsonData);
+          if (callback) {
+            callback(null, jsonData);
+          }
         } catch (error) {
-          callback(error);
+          if (callback) {
+            callback(error);
+          }
         }
       });
     },
@@ -34,20 +38,29 @@ function doRequest(method, path, body, callback) {
   req.end();
 }
 
+function getStandardCallbackFor(label) {
+  return (err, res) => {
+    if (err) {
+      console.error(`Fail: ${label}`, err);
+      return;
+    }
+    console.log(`Success: ${label}`, res);
+  };
+}
+
 function createAdmin(idx) {
   const email = `admin${idx}@admin.com`;
   const body = {
     adminEmail: email,
     adminName: `Adam The ${idx}`,
     adminPhoneNumber: `+65${80000000 + idx}`,
-  }
-  doRequest("POST", "/api/dangerous/admins", body, (err, res) => {
-    if (err) {
-      console.error(`Failed to create ${email}`, err);
-      return;
-    }
-    console.log(`Created ${email}`, res);
-  });
+  };
+  doRequest(
+    "POST",
+    "/api/dangerous/admins",
+    body,
+    getStandardCallbackFor(`Create ${email}`),
+  );
 }
 
 function createVet(idx) {
@@ -57,39 +70,65 @@ function createVet(idx) {
     vetName: `Vet Clinic ${idx}`,
     vetPhoneNumber: `+65${60000000 + idx}`,
     vetAddress: `${idx} Dog Park Drive`,
-  }
-  doRequest("POST", "/api/dangerous/vets", body, (err, res) => {
-    if (err) {
-      console.error(`Failed to create ${email}`, err);
-      return;
-    }
-    console.log(`Created ${email}`, res);
-  });
+  };
+  doRequest(
+    "POST",
+    "/api/dangerous/vets",
+    body,
+    getStandardCallbackFor(`Create ${email}`),
+  );
 }
 
 function userEmail(idx) {
   return `user${idx}@user.com`;
 }
 
-function createUser(idx) {
+function createUser(idx, callback) {
   const email = userEmail(idx);
   const body = {
     userEmail: email,
     userName: `Bob Name ${idx}`,
     userPhoneNumber: `+65${90000000 + idx}`,
-  }
-  doRequest("POST", "/api/dangerous/users", body, (err, res) => {
-    if (err) {
-      console.error(`Failed to create ${email}`, err);
-      return;
-    }
-    console.log(`Created ${email}`, res);
-  });
+  };
+  callback = callback || getStandardCallbackFor(`Create ${email}`);
+  doRequest("POST", "/api/dangerous/users", body, callback);
 }
 
+function createDog(idx) {
+  const email = userEmail(idx);
+  const body = {
+    userEmail: email,
+    dogOii: {
+      dogName: `Woofie${idx}`,
+    },
+    dogDetails: {
+      dogStatus: "NEW_PROFILE",
+      dogBreed: `Serbian Poodle Type ${idx}`,
+      dogBirthday: `2022-0${1 + (idx % 9)}-15`,
+      dogGender: "MALE",
+      dogWeightKg: null,
+      dogDea1Point1: "UNKNOWN",
+      dogEverPregnant: "NO",
+      dogEverReceivedTransfusion: "NO",
+    },
+  };
+  doRequest(
+    "POST",
+    "/api/dangerous/dogs",
+    body,
+    getStandardCallbackFor(`Create dog for ${email}`),
+  );
+}
 
 for (let i = 1; i <= 3; ++i) {
-  createAdmin(i);
-  createVet(i);
-  createUser(i);
+  const idx = i;
+  createAdmin(idx);
+  createVet(idx);
+  createUser(idx, (err, res) => {
+    if (err) {
+      console.error("Failed to create user ", idx);
+      return;
+    }
+    createDog(idx);
+  });
 }
