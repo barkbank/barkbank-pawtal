@@ -30,7 +30,7 @@ npm-install:
 # database.
 .PHONY: local-accounts
 local-accounts:
-	bash scripts/create_local_accounts.sh
+	npx node scripts/setup-dev-data.js
 
 # Reset the local dev database with the latest schema and recretes the
 # local accounts.
