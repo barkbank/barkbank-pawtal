@@ -1,10 +1,25 @@
 import { Pool } from "pg";
-import { AdminRecord } from "../data/db-models";
+import { AdminRecord, DogGender, YesNoUnknown } from "../data/db-models";
 import { HashService } from "../services/hash";
 import { EncryptionService } from "../services/encryption";
 import { dbSelectAdmin } from "../data/db-admins";
 import { decryptAdminPii } from "./admin-pii";
 import { AdminPii } from "../data/db-models";
+import { dbQuery, toCamelCaseRow } from "../data/db-utils";
+
+/**
+ * Profile record for completion
+ */
+export type DogProfile = {
+  dogId: string;
+  dogBreed: string;
+  dogGender: DogGender;
+  dogWeightKg: number | null;
+  dogBirthday: Date;
+  dogEverPregnant: YesNoUnknown;
+  dogEverReceivedTransfusion: YesNoUnknown;
+  dogCreationTime: Date;
+};
 
 export type AdminActorConfig = {
   dbPool: Pool;
@@ -80,5 +95,30 @@ export class AdminActor {
   public async canManageDonors(): Promise<boolean> {
     const admin = await this.getOwnAdminRecord();
     return admin ? admin.adminCanManageDonors : false;
+  }
+
+  public async getIncompleteProfileList(): Promise<DogProfile[]> {
+    const canManageDonors = await this.canManageDonors();
+    if (!canManageDonors) {
+      return [];
+    }
+    const sql = `
+      SELECT
+        dog_id,
+        dog_breed,
+        dog_gender,
+        dog_weight_kg,
+        dog_birthday,
+        dog_ever_pregnant,
+        dog_ever_received_transfusion,
+        dog_creation_time
+      FROM dogs
+      WHERE dog_weight_kg is NULL
+      OR dog_ever_pregnant = 'UNKNOWN'
+      OR dog_ever_received_transfusion = 'UNKNOWN'
+      ORDER BY dog_creation_time DESC
+    `;
+    const res = await dbQuery(this.getDbPool(), sql, []);
+    return res.rows.map(toCamelCaseRow);
   }
 }
