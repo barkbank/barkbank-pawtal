@@ -12,5 +12,9 @@ export default async function Page() {
     redirect(RoutePath.ADMIN_LOGIN_PAGE);
   }
   const profiles = await actor.getIncompleteProfileList();
-  return <IncompleteProfiles profiles={profiles} />;
+  return (
+    <>
+      <IncompleteProfiles profiles={profiles} />;
+    </>
+  );
 }

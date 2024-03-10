@@ -15,6 +15,65 @@ import clsx from "clsx";
 import { BARK_UTC } from "@/lib/bark-utils";
 import { DogGender, YesNoUnknown } from "@/lib/data/db-models";
 
+function DataRow(props: { profile: DogProfile }) {
+  const { profile } = props;
+  return (
+    <TableRow
+      className="cursor-pointer"
+      onClick={() => {
+        alert(JSON.stringify(profile, null, 2));
+      }}
+    >
+      <TableCell>{profile.dogId}</TableCell>
+      <TableCell
+        className={clsx({
+          "bg-orange-100": profile.dogBreed === "",
+        })}
+      >
+        {profile.dogBreed}
+      </TableCell>
+      <TableCell
+        className={clsx("text-center", {
+          "bg-orange-100": profile.dogGender === DogGender.UNKNOWN,
+        })}
+      >
+        {profile.dogGender}
+      </TableCell>
+      <TableCell
+        className={clsx("text-center", {
+          "bg-orange-100": profile.dogWeightKg === null,
+        })}
+      >
+        {profile.dogWeightKg !== null ? `${profile.dogWeightKg} KG` : "UNKNOWN"}
+      </TableCell>
+      <TableCell
+        className={clsx({
+          "bg-orange-100": profile.dogBirthday.getTime() === 0,
+        })}
+      >
+        {profile.dogBirthday.getTime() > 0
+          ? BARK_UTC.formatDate(profile.dogBirthday)
+          : ""}
+      </TableCell>
+      <TableCell
+        className={clsx("text-center", {
+          "bg-orange-100": profile.dogEverPregnant === YesNoUnknown.UNKNOWN,
+        })}
+      >
+        {profile.dogEverPregnant}
+      </TableCell>
+      <TableCell
+        className={clsx("text-center", {
+          "bg-orange-100":
+            profile.dogEverReceivedTransfusion === YesNoUnknown.UNKNOWN,
+        })}
+      >
+        {profile.dogEverReceivedTransfusion}
+      </TableCell>
+    </TableRow>
+  );
+}
+
 export function IncompleteProfiles(props: { profiles: DogProfile[] }) {
   const { profiles } = props;
   return (
@@ -37,68 +96,9 @@ export function IncompleteProfiles(props: { profiles: DogProfile[] }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {profiles.map((profile) => {
-              return (
-                <TableRow
-                  key={profile.dogId}
-                  className="cursor-pointer"
-                  onClick={() => {
-                    alert(JSON.stringify(profile, null, 2));
-                  }}
-                >
-                  <TableCell>{profile.dogId}</TableCell>
-                  <TableCell
-                    className={clsx({
-                      "bg-orange-100": profile.dogBreed === "",
-                    })}
-                  >
-                    {profile.dogBreed}
-                  </TableCell>
-                  <TableCell
-                    className={clsx("text-center", {
-                      "bg-orange-100": profile.dogGender === DogGender.UNKNOWN,
-                    })}
-                  >
-                    {profile.dogGender}
-                  </TableCell>
-                  <TableCell
-                    className={clsx("text-center", {
-                      "bg-orange-100": profile.dogWeightKg === null,
-                    })}
-                  >
-                    {profile.dogWeightKg !== null
-                      ? `${profile.dogWeightKg} KG`
-                      : "UNKNOWN"}
-                  </TableCell>
-                  <TableCell
-                    className={clsx({
-                      "bg-orange-100": profile.dogBirthday.getTime() === 0,
-                    })}
-                  >
-                    {profile.dogBirthday.getTime() > 0
-                      ? BARK_UTC.formatDate(profile.dogBirthday)
-                      : ""}
-                  </TableCell>
-                  <TableCell
-                    className={clsx("text-center", {
-                      "bg-orange-100":
-                        profile.dogEverPregnant === YesNoUnknown.UNKNOWN,
-                    })}
-                  >
-                    {profile.dogEverPregnant}
-                  </TableCell>
-                  <TableCell
-                    className={clsx("text-center", {
-                      "bg-orange-100":
-                        profile.dogEverReceivedTransfusion ===
-                        YesNoUnknown.UNKNOWN,
-                    })}
-                  >
-                    {profile.dogEverReceivedTransfusion}
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+            {profiles.map((profile) => (
+              <DataRow key={profile.dogId} profile={profile} />
+            ))}
           </TableBody>
         </Table>
       </div>
