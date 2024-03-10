@@ -115,7 +115,7 @@ export async function getAuthenticatedUserActor(): Promise<UserActor | null> {
   return getUserActorByEmail(session.email);
 }
 
-async function getLoggedInSession(): Promise<{
+export async function getLoggedInSession(): Promise<{
   email: string;
   accountType: AccountType;
 } | null> {
