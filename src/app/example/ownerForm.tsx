@@ -22,6 +22,7 @@ const FORM_SCHEMA = z.object({
   "terms-and-conditions": z.boolean().refine((value) => value === true, {
     message: "You must accept the disclaimer to proceed",
   }),
+  otp: z.string(),
   "otp-verified": z.boolean().refine((value) => value === true, {
     message: "You must verify your OTP to proceed",
   }),
@@ -37,6 +38,12 @@ export default function OwnerForm({
   const [otpSent, setOtpSent] = React.useState(false);
   const form = useForm<FormDataType>({
     resolver: zodResolver(FORM_SCHEMA),
+    defaultValues: {
+      name: "",
+      mobile: "",
+      email: "",
+      otp: "",
+    },
   });
 
   async function onSubmit(values: FormDataType) {
@@ -106,7 +113,11 @@ export default function OwnerForm({
                   <BarkFormButton
                     onClick={async () => {
                       console.log("verify otp");
-                      form.setValue("otp-verified", true);
+
+                      if (form.watch("otp") === "0000") {
+                        console.log("otp verified");
+                        form.setValue("otp-verified", true);
+                      }
                     }}
                   >
                     Verify OTP

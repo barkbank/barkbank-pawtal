@@ -38,10 +38,8 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
   });
 
   async function onSubmit() {
-    console.log(form.getValues());
-    // form.getValues()
     // ! Send the form data to the server.
-    // console.log(values);
+    console.log(form.getValues());
   }
 
   return (
@@ -49,7 +47,7 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
       <div className="w-full">
         <Stepper steps={steps} currentStep={currentStep} />
       </div>
-      {currentStep === 1 ? (
+      {currentStep === 0 ? (
         <PetForm
           onSubmitForm={(values) => {
             form.setValue("dog-name", values["dog-name"]);

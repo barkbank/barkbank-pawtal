@@ -42,7 +42,9 @@ export default function PetForm({
   const form = useForm<FormDataType>({
     resolver: zodResolver(FORM_SCHEMA),
     defaultValues: {
+      "dog-name": "",
       "dog-preferred-vets": [],
+      "dog-weight": "",
     },
   });
 
