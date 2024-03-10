@@ -10,6 +10,7 @@ import PetForm from "./petForm";
 import OwnerForm from "./ownerForm";
 import { BarkH4, BarkP } from "@/components/bark/bark-typography";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
 
 const steps = ["Tell us about your pet", "Add your details", "Enter Pawtal!"];
 
@@ -35,7 +36,7 @@ type FormDataType = z.infer<typeof FORM_SCHEMA>;
 
 export default function DonorForm({ breeds }: { breeds: Breed[] }) {
   const [currentStep, setCurrentStep] = React.useState(0);
-  const [complete, setComplete] = React.useState(false);
+  const [complete, setComplete] = React.useState(true);
   const form = useForm<FormDataType>({
     resolver: zodResolver(FORM_SCHEMA),
   });
@@ -49,24 +50,56 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
   return (
     <div>
       <div className="flex flex-col items-center gap-2">
-        <Image
-          src={"/orangeDogHouse.svg"}
-          alt="" // Decorative image so alt text is empty
-          height={100}
-          width={100}
-        />
+        <Image src={"/orangeDogHouse.svg"} alt="" height={100} width={100} />
         <BarkH4>Bark Bank Canine Blood Donation Pawtal</BarkH4>
       </div>
       <div className="mt-20">
-      <Stepper steps={steps} currentStep={currentStep} />
+        <Stepper steps={steps} currentStep={currentStep} />
       </div>
 
       {complete ? (
-        <BarkP>
-          Thank you for your information, your account has been created.
-          You&apos;ll be directed to your account shortly. If not, please log in
-          at www.pawtal.barkbank.co.
-        </BarkP>
+        <div className="text-center">
+          <BarkH4>
+            Thank you for your information, your account has been created.
+            You&apos;ll be directed to your account shortly. If not, please log
+            in at{" "}
+            <span className="hover:underline">
+              <a target="_blank" href="https://www.pawtal.barkbank.co">
+                www.pawtal.barkbank.co
+              </a>
+            </span>
+          </BarkH4>
+
+          <div className="mt-8 grid grid-cols-1 gap-20 md:grid-cols-3">
+            <div className="flex flex-col items-center text-center">
+              <Image src={"/checkMail.svg"} alt="" height={100} width={100} />
+              <BarkH4>Confirmation Email</BarkH4>
+              <BarkP>
+                An email confirmation will be sent to you shortly with the
+                details of your submission.
+              </BarkP>
+            </div>
+
+            <div className="flex flex-col items-center text-center">
+              <Image src={"/contactUs.svg"} alt="" height={100} width={100} />
+              <BarkH4>Upcoming Blood Profiling</BarkH4>
+              <BarkP>
+                Your preferred vet will contact you within the week to schedule
+                a blood profiling session for your dog.
+              </BarkP>
+            </div>
+
+            <div className="flex flex-col items-center text-center">
+              <Image src={"/email.svg"} alt="" height={100} width={100} />
+              <BarkH4>Contact Us</BarkH4>
+              <BarkP>
+                Feel free to reach out with any inquiries regarding your
+                registration by sending an email us at hello@barkbank.co.
+                We&apos;re here to assist!
+              </BarkP>
+            </div>
+          </div>
+        </div>
       ) : currentStep === 0 ? (
         <PetForm
           onSubmitForm={(values) => {
