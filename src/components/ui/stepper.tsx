@@ -5,9 +5,9 @@ function Stepper(props: { steps: string[]; currentStep: number }) {
   const { steps, currentStep } = props;
 
   const activeColor = (index: number) =>
-    currentStep >= index ? "bg-blue-500" : "bg-gray-300";
+    currentStep >= index ? "bg-red-500" : "bg-gray-300";
   const activeLineColor = (index: number) =>
-    currentStep > index ? "bg-blue-500" : "bg-gray-300";
+    currentStep > index ? "bg-red-500" : "bg-gray-300";
 
   const isFinalStep = (index: number) => index === steps.length - 1;
 

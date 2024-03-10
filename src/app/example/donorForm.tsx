@@ -8,6 +8,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import PetForm from "./petForm";
 import OwnerForm from "./ownerForm";
+import { BarkH4, BarkP } from "@/components/bark/bark-typography";
 
 const steps = ["Tell us about your pet", "Add your details", "Enter Pawtal!"];
 
@@ -33,6 +34,7 @@ type FormDataType = z.infer<typeof FORM_SCHEMA>;
 
 export default function DonorForm({ breeds }: { breeds: Breed[] }) {
   const [currentStep, setCurrentStep] = React.useState(0);
+  const [complete, setComplete] = React.useState(false);
   const form = useForm<FormDataType>({
     resolver: zodResolver(FORM_SCHEMA),
   });
@@ -40,14 +42,21 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
   async function onSubmit() {
     // ! Send the form data to the server.
     console.log(form.getValues());
+    setComplete(true);
   }
 
   return (
-    <>
-      <div className="w-full">
-        <Stepper steps={steps} currentStep={currentStep} />
-      </div>
-      {currentStep === 0 ? (
+    <div>
+      <BarkH4>Bark Bank Canine Blood Donation Pawtal</BarkH4>
+      <Stepper steps={steps} currentStep={currentStep} />
+
+      {complete ? (
+        <BarkP>
+          Thank you for your information, your account has been created. You&apos;ll
+          be directed to your account shortly. If not, please log in at
+          www.pawtal.barkbank.co.
+        </BarkP>
+      ) : currentStep === 0 ? (
         <PetForm
           onSubmitForm={(values) => {
             form.setValue("dog-name", values["dog-name"]);
@@ -83,6 +92,6 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
           }}
         />
       )}
-    </>
+    </div>
   );
 }
