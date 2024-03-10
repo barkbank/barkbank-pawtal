@@ -9,6 +9,7 @@ import { z } from "zod";
 import PetForm from "./petForm";
 import OwnerForm from "./ownerForm";
 import { BarkH4, BarkP } from "@/components/bark/bark-typography";
+import Image from "next/image";
 
 const steps = ["Tell us about your pet", "Add your details", "Enter Pawtal!"];
 
@@ -47,14 +48,24 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
 
   return (
     <div>
-      <BarkH4>Bark Bank Canine Blood Donation Pawtal</BarkH4>
+      <div className="flex flex-col items-center gap-2">
+        <Image
+          src={"/orangeDogHouse.svg"}
+          alt="" // Decorative image so alt text is empty
+          height={100}
+          width={100}
+        />
+        <BarkH4>Bark Bank Canine Blood Donation Pawtal</BarkH4>
+      </div>
+      <div className="mt-20">
       <Stepper steps={steps} currentStep={currentStep} />
+      </div>
 
       {complete ? (
         <BarkP>
-          Thank you for your information, your account has been created. You&apos;ll
-          be directed to your account shortly. If not, please log in at
-          www.pawtal.barkbank.co.
+          Thank you for your information, your account has been created.
+          You&apos;ll be directed to your account shortly. If not, please log in
+          at www.pawtal.barkbank.co.
         </BarkP>
       ) : currentStep === 0 ? (
         <PetForm
