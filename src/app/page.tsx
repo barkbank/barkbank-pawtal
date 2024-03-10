@@ -26,7 +26,7 @@ export default async function Page() {
         <BarkP>Please select one of the following login options.</BarkP>
         <ul>
           {loginOptions.map((opt) => (
-            <li className="mt-6">
+            <li className="mt-6" key={opt.label}>
               <Link key={opt.label} href={opt.href}>
                 <div className="flex h-24 w-48 items-center justify-center rounded-md bg-gray-200 hover:bg-gray-100">
                   <p className="text-xl">{opt.label}</p>
