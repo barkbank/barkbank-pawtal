@@ -1,6 +1,6 @@
 export class RoutePath {
   static readonly ROOT = "/";
-  static readonly LOGOUT_PAGE = "/api/auth/signout";
+  static readonly LOGOUT_PAGE = "/logout";
 
   static readonly USER_LOGIN_PAGE = "/user/login";
   static readonly USER_DASHBOARD_PAGE = "/user/dashboard";
