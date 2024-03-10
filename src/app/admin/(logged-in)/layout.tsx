@@ -1,6 +1,9 @@
 "use server";
 
-import BarkNav, { BarkNavRoute } from "@/components/bark/bark-nav";
+import {
+  BarkSidebarLayout,
+  BarkSidebarRoute,
+} from "@/components/bark/bark-sidebar";
 import { getAuthenticatedAdminActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
@@ -10,11 +13,31 @@ export default async function Layout(props: { children: React.ReactNode }) {
   if (actor === null) {
     redirect(RoutePath.ADMIN_LOGIN_PAGE);
   }
-  const navRoutes: BarkNavRoute[] = [];
+  const routes: BarkSidebarRoute[] = [
+    {
+      label: "Dashboard",
+      href: RoutePath.ADMIN_DASHBOARD_PAGE,
+      iconSrc: "/dashboard.svg",
+      iconLightSrc: "/dashboard-light.svg",
+    },
+    {
+      label: "Database",
+      href: RoutePath.ADMIN_DATABASE_PAGE,
+      iconSrc: "/database.svg",
+      iconLightSrc: "/database-light.svg",
+    },
+    {
+      label: "User Access",
+      href: RoutePath.ADMIN_USER_ACCESS_PAGE,
+      iconSrc: "/key.svg",
+      iconLightSrc: "/key-light.svg",
+    },
+    {
+      label: "Logout",
+      href: RoutePath.LOGOUT_PAGE,
+    },
+  ];
   return (
-    <>
-      <BarkNav routes={navRoutes} />
-      <div className="p-3">{props.children}</div>
-    </>
+    <BarkSidebarLayout routes={routes}>{props.children}</BarkSidebarLayout>
   );
 }
