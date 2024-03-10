@@ -1,19 +1,15 @@
 "use client";
 
-import {
-  BarkForm,
-  BarkFormCheckboxes,
-  BarkFormDatetimeInput,
-  BarkFormHeader,
-  BarkFormInput,
-  BarkFormRadioGroup,
-  BarkFormSelect,
-  BarkFormSubmitButton,
-} from "@/components/bark/bark-form";
+import { Stepper } from "@/components/ui/stepper";
 import { Breed } from "@/lib/services/breed";
 import { zodResolver } from "@hookform/resolvers/zod";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import PetForm from "./petForm";
+import OwnerForm from "./ownerForm";
+
+const steps = ["Tell us about your pet", "Add your details", "Enter Pawtal!"];
 
 const FORM_SCHEMA = z.object({
   name: z.string(),
@@ -36,187 +32,59 @@ const FORM_SCHEMA = z.object({
 type FormDataType = z.infer<typeof FORM_SCHEMA>;
 
 export default function DonorForm({ breeds }: { breeds: Breed[] }) {
+  const [currentStep, setCurrentStep] = React.useState(0);
   const form = useForm<FormDataType>({
     resolver: zodResolver(FORM_SCHEMA),
   });
 
-  async function onSubmit(values: FormDataType) {
+  async function onSubmit() {
+    console.log(form.getValues());
+    // form.getValues()
     // ! Send the form data to the server.
-    console.log(values);
+    // console.log(values);
   }
 
   return (
-    <BarkForm onSubmit={onSubmit} form={form}>
-      {/* Owner's detail */}
-      <BarkFormHeader>Owners Detail</BarkFormHeader>
-      <BarkFormInput
-        form={form}
-        label="How would you like to be addressed?"
-        name="name"
-      />
-      <BarkFormInput
-        form={form}
-        label="What number can we reach you on?"
-        name="mobile"
-      />
-      <BarkFormInput
-        form={form}
-        label="What’s your email address?"
-        name="email"
-        type="email"
-      />
+    <>
+      <div className="w-full">
+        <Stepper steps={steps} currentStep={currentStep} />
+      </div>
+      {currentStep === 1 ? (
+        <PetForm
+          onSubmitForm={(values) => {
+            form.setValue("dog-name", values["dog-name"]);
+            form.setValue("dog-breed", values["dog-breed"]);
+            form.setValue("dog-birthday", values["dog-birthday"]);
+            form.setValue("dog-sex", values["dog-sex"]);
+            form.setValue("dog-weight", values["dog-weight"]);
+            form.setValue("dog-blood-type", values["dog-blood-type"]);
+            form.setValue(
+              "dog-blood-transfusion-status",
+              values["dog-blood-transfusion-status"],
+            );
+            form.setValue("dog-pregnant-status", values["dog-pregnant-status"]);
+            form.setValue(
+              "dog-last-heartworm-vaccination",
+              values["dog-last-heartworm-vaccination"],
+            );
+            form.setValue("dog-last-donation", values["dog-last-donation"]);
+            form.setValue("dog-preferred-vets", values["dog-preferred-vets"]);
 
-      <BarkFormRadioGroup
-        form={form}
-        label="Are you currently based in Singapore?"
-        name="country-based"
-        layout="button"
-        options={[
-          { label: "Yes", value: "yes" },
-          {
-            label: "No",
-            value: "no",
-          },
-        ]}
-      />
-      {/* Owner's detail end */}
-
-      {/* Dog's detail */}
-      <BarkFormHeader>Dogs Details</BarkFormHeader>
-      <BarkFormInput
-        form={form}
-        label="What’s your dog’s name?"
-        name="dog-name"
-      />
-
-      <BarkFormSelect
-        form={form}
-        label="What’s your dog’s breed?"
-        name="dog-breed"
-        options={breeds.map((breed) => ({
-          label: breed.dog_breed,
-          value: breed.dog_breed,
-        }))}
-      />
-
-      <BarkFormDatetimeInput
-        form={form}
-        label="When is it’s birthday? (DD/MM/YYYY)"
-        name="dog-birthday"
-      />
-
-      <BarkFormRadioGroup
-        form={form}
-        label="What’s your dog’s sex?"
-        name="dog-sex"
-        layout="button"
-        options={[
-          { label: "Yes", value: "yes" },
-          {
-            label: "No",
-            value: "no",
-          },
-        ]}
-      />
-
-      <BarkFormInput
-        form={form}
-        label="What’s your dog’s weight?"
-        name="dog-weight"
-        type="number"
-      />
-
-      <BarkFormRadioGroup
-        form={form}
-        label="Do you know it’s blood type?"
-        name="dog-blood-type"
-        options={[
-          { label: "I don't know", value: "idk" },
-          {
-            label: "D.E.A 1.1 positive",
-            value: "dea1.1-positive",
-          },
-          {
-            label: "D.E.A 1.1 negative",
-            value: "dea1.1-negative",
-          },
-        ]}
-      />
-
-      <BarkFormRadioGroup
-        form={form}
-        label="Has it received blood transfusion before?"
-        name="dog-blood-transfusion-status"
-        layout="button"
-        options={[
-          { label: "I don't know", value: "idk" },
-          {
-            label: "Yes",
-            value: "yes",
-          },
-          {
-            label: "No",
-            value: "no",
-          },
-        ]}
-      />
-
-      <BarkFormRadioGroup
-        form={form}
-        label="Has your dog been pregnant before?"
-        name="dog-pregnant-status"
-        layout="button"
-        options={[
-          { label: "I don't know", value: "idk" },
-          {
-            label: "Yes",
-            value: "yes",
-          },
-          {
-            label: "No",
-            value: "no",
-          },
-        ]}
-      />
-
-      <BarkFormDatetimeInput
-        form={form}
-        label="When was it’s last blood donation? (DD/MM/YYYY)"
-        name="dog-last-heartworm-vaccination"
-        description="If applicable"
-      />
-
-      <BarkFormDatetimeInput
-        form={form}
-        label="When was it’s last blood donation? (DD/MM/YYYY)"
-        name="dog-last-donation"
-        description="If applicable"
-      />
-
-      <BarkFormCheckboxes
-        form={form}
-        label="Select your preferred vet for blood profiling test and blood donation"
-        name="dog-preferred-vets"
-        options={[
-          { label: "Vet A", value: "vet-a" },
-          {
-            label: "Vet B",
-            value: "vet-b",
-          },
-          {
-            label: "Vet C",
-            value: "vet-c",
-          },
-        ]}
-      />
-      {/* Dog's detail end */}
-
-      <BarkFormSubmitButton
-        disabled={!form.formState.isValid}
-        className="w-full"
-      >
-        Submit
-      </BarkFormSubmitButton>
-    </BarkForm>
+            setCurrentStep(currentStep + 1);
+          }}
+          breeds={breeds}
+        />
+      ) : (
+        <OwnerForm
+          onSubmitForm={(values) => {
+            form.setValue("name", values.name);
+            form.setValue("mobile", values.mobile);
+            form.setValue("email", values.email);
+            form.setValue("country-based", values["country-based"]);
+            onSubmit();
+          }}
+        />
+      )}
+    </>
   );
 }
