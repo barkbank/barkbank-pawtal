@@ -78,8 +78,9 @@ export function BarkFormInput(props: {
   type?: "text" | "password" | "number" | "email";
   placeholder?: string;
   description?: string;
+  children?: React.ReactNode;
 }) {
-  const { form, name, label, type, placeholder, description } = props;
+  const { form, name, label, type, placeholder, description, children } = props;
   return (
     <FormField
       control={form.control}
@@ -87,9 +88,14 @@ export function BarkFormInput(props: {
       render={({ field }) => (
         <FormItem className="mt-6">
           <FormLabel>{label}</FormLabel>
-          <FormControl>
-            <Input placeholder={placeholder} type={type} {...field} />
-          </FormControl>
+          <div className="flex items-end gap-2">
+            <div className="flex-grow">
+              <FormControl>
+                <Input placeholder={placeholder} type={type} {...field} />
+              </FormControl>
+            </div>
+            {children}
+          </div>
           {description && <FormDescription>{description}</FormDescription>}
           <FormMessage />
         </FormItem>
@@ -136,7 +142,6 @@ export function BarkFormDatetimeInput(props: {
                   mode="single"
                   selected={field.value}
                   onSelect={(v) => {
-                    console.log(v);
                     field.onChange(v);
                   }}
                   initialFocus
