@@ -4,6 +4,36 @@ import { Err, Ok, Result } from "../result";
 export interface EncryptionService {
   encrypt(data: string): Promise<Result<{ encryptedData: string }, string>>;
   decrypt(encryptedData: string): Promise<Result<{ data: string }, string>>;
+
+  getEncryptedData(data: string): Promise<string>;
+  getDecryptedData(encryptedData: string): Promise<string>;
+}
+
+abstract class ConvenientEncryptionService implements EncryptionService {
+  abstract encrypt(
+    data: string,
+  ): Promise<Result<{ encryptedData: string }, string>>;
+  abstract decrypt(
+    encryptedData: string,
+  ): Promise<Result<{ data: string }, string>>;
+
+  public async getEncryptedData(data: string): Promise<string> {
+    const { result, error } = await this.encrypt(data);
+    if (error !== undefined) {
+      throw new Error(error);
+    }
+    const { encryptedData } = result;
+    return encryptedData;
+  }
+
+  public async getDecryptedData(encryptedData: string): Promise<string> {
+    const { result, error } = await this.decrypt(encryptedData);
+    if (error !== undefined) {
+      throw new Error(error);
+    }
+    const { data } = result;
+    return data;
+  }
 }
 
 type Pbkdf2Params = {
@@ -34,7 +64,7 @@ const _BUFFER_ENCODING = "base64";
  * An implementation of EncryptionService that's based on a secret string and
  * PBKDF2. For production, consider AWS KMS.
  */
-export class SecretEncryptionService implements EncryptionService {
+export class SecretEncryptionService extends ConvenientEncryptionService {
   private secret: string;
   private params: {
     pbkdf2Params: Pbkdf2Params;
@@ -42,6 +72,7 @@ export class SecretEncryptionService implements EncryptionService {
   };
 
   public constructor(secret: string) {
+    super();
     this.secret = secret;
     this.params = {
       pbkdf2Params: {

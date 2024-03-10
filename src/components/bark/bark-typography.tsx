@@ -8,7 +8,7 @@ export function BarkH1(props: { children: React.ReactNode }) {
 
 export function BarkH2(props: { children: React.ReactNode }) {
   return (
-    <h1 className="scroll-m-20 border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0">
+    <h1 className="pb-2 text-3xl font-semibold tracking-tight lg:text-4xl">
       {props.children}
     </h1>
   );

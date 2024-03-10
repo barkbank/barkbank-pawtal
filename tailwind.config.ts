@@ -52,6 +52,14 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        brand: {
+          DEFAULT: "hsl(var(--brand-pink))",
+          light: "hsl(var(--brand-light-pink))",
+          white: "hsl(var(--brand-white))",
+        },
+        grey: {
+          DEFAULT: "hsl(var(--grey))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -71,6 +79,9 @@ const config = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      boxShadow: {
+        button: "var(--shadow-btn)",
       },
     },
   },
