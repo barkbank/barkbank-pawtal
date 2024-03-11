@@ -21,7 +21,14 @@ function DataRow(props: { profile: DogProfile }) {
     <TableRow
       className="cursor-pointer"
       onClick={() => {
-        alert(JSON.stringify(profile, null, 2));
+        const jsonEncoded = JSON.stringify(profile, null, 2);
+        const msg = `
+TODO: Something here containing dog name
+and owner contact details for the admin to reach out
+and update. In the meantime, here is a beautiful JSON:
+${jsonEncoded}
+`.trim();
+        alert(msg);
       }}
     >
       <TableCell>{profile.dogId}</TableCell>
