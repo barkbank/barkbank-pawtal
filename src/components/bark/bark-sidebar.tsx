@@ -26,7 +26,7 @@ function SideOption(props: { route: BarkSidebarRoute; currentPath: string }) {
     <Link href={route.href}>
       <div
         className={clsx(
-          "flex w-[200px] flex-col items-center justify-center gap-[7px] rounded-[20px] px-[20px] py-[16px]",
+          "flex w-[58px] flex-col items-center justify-center gap-[7px] rounded-[20px] px-[16px] py-[16px] lg:w-[200px] lg:px-[20px]",
           {
             "bg-brand text-brand-white": !isActive,
             "bg-brand-white text-brand": isActive,
@@ -39,10 +39,11 @@ function SideOption(props: { route: BarkSidebarRoute; currentPath: string }) {
           alt={`Icon for the ${route.label} option`}
           width={30}
           height={30}
+          className="h-[24px] w-[24px] lg:h-[30px] lg:w-[30px]"
         />
 
         {/* Label */}
-        <div className="w-full text-center text-[14px] font-[700] leading-[20px]">
+        <div className="hidden w-full text-center text-[14px] font-[700] leading-[20px] lg:block">
           {route.label}
         </div>
       </div>
@@ -58,7 +59,7 @@ export function BarkSidebarLayout(props: {
   return (
     <div className="flex flex-row">
       {/* Sidebar */}
-      <div className="flex min-h-screen w-[220px] flex-col items-center bg-brand py-[12px]">
+      <div className="flex min-h-screen w-[78px] flex-col items-center bg-brand px-[10px] py-[12px] lg:w-[220px]">
         {props.routes.map((route) => {
           return (
             <SideOption
