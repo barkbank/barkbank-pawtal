@@ -14,7 +14,7 @@ export default async function Page() {
   const profiles = await actor.getIncompleteProfileList();
   return (
     <>
-      <IncompleteProfiles profiles={profiles} />;
+      <IncompleteProfiles profiles={profiles} />
     </>
   );
 }
