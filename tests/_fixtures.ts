@@ -7,6 +7,7 @@ import {
   AdminSpec,
   DogAntigenPresence,
   DogDetails,
+  DogGen,
   DogGender,
   DogOii,
   DogSecureOii,
@@ -35,6 +36,8 @@ import { DogMapper } from "@/lib/data/dog-mapper";
 import { UserMapper } from "@/lib/data/user-mapper";
 import { DogRegistration, UserRegistration } from "@/lib/user/user-models";
 import { BARK_UTC } from "@/lib/bark-utils";
+import { DbContext } from "@/lib/data/db-utils";
+import { dbInsertDog } from "@/lib/data/db-dogs";
 
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
@@ -254,6 +257,16 @@ function getDogBirthday(idx: number): Date {
   const m = 1 + (idx % 11);
   const d = 1 + (idx % 23);
   return BARK_UTC.getDate(y, m, d);
+}
+
+export async function insertDog(
+  idx: number,
+  userId: string,
+  dbCtx: DbContext,
+): Promise<DogGen> {
+  const spec = await getDogSpec(idx);
+  const gen = await dbInsertDog(dbCtx, userId, spec);
+  return gen;
 }
 
 export async function getDogSpec(idx: number): Promise<DogSpec> {

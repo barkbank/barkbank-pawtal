@@ -1,6 +1,14 @@
 import { withDb } from "./_db_helpers";
 import { AdminActor } from "@/lib/admin/admin-actor";
-import { insertAdmin, getAdminActorConfig, adminPii } from "./_fixtures";
+import {
+  insertAdmin,
+  getAdminActorConfig,
+  adminPii,
+  insertUser,
+  insertDog,
+  getDogSpec,
+} from "./_fixtures";
+import { dbQuery } from "@/lib/data/db-utils";
 
 describe("AdminActor", () => {
   it("can retrieve its own actor data from the database", async () => {
@@ -110,6 +118,49 @@ describe("AdminActor", () => {
       const config = getAdminActorConfig(db);
       const actor = new AdminActor(admin.adminId, config);
       expect(await actor.canManageDonors()).toBe(true);
+    });
+  });
+  describe("getIncompleteProfileList", () => {
+    it("should return empty list when actor cannot manage donors", async () => {
+      await withDb(async (db) => {
+        const admin = await insertAdmin(1, db, {
+          adminCanManageDonors: false,
+        });
+        const config = getAdminActorConfig(db);
+        const actor = new AdminActor(admin.adminId, config);
+        const profileList = await actor.getIncompleteProfileList();
+        expect(profileList).toEqual([]);
+      });
+    });
+    it("should return profiles without weight", async () => {
+      await withDb(async (db) => {
+        const admin = await insertAdmin(1, db, {
+          adminCanManageDonors: true,
+        });
+        const userRec = await insertUser(1, db);
+        const dogGen = await insertDog(1, userRec.userId, db);
+        const res = await dbQuery(
+          db,
+          `UPDATE dogs SET dog_weight_kg = NULL WHERE dog_id = $1`,
+          [dogGen.dogId],
+        );
+        const config = getAdminActorConfig(db);
+        const actor = new AdminActor(admin.adminId, config);
+        const profileList = await actor.getIncompleteProfileList();
+        const dogSpec = await getDogSpec(1);
+        expect(profileList).toEqual([
+          {
+            dogId: dogGen.dogId,
+            dogBreed: dogSpec.dogBreed,
+            dogGender: dogSpec.dogGender,
+            dogWeightKg: null,
+            dogBirthday: dogSpec.dogBirthday,
+            dogEverPregnant: dogSpec.dogEverPregnant,
+            dogEverReceivedTransfusion: dogSpec.dogEverReceivedTransfusion,
+            dogCreationTime: dogGen.dogCreationTime,
+          },
+        ]);
+      });
     });
   });
 });
