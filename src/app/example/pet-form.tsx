@@ -25,8 +25,6 @@ const FORM_SCHEMA = z.object({
   "dog-blood-type": z.string(),
   "dog-blood-transfusion-status": z.string(),
   "dog-pregnant-status": z.string(),
-  "dog-last-heartworm-vaccination": z.date().optional().or(z.literal("")),
-  "dog-last-donation": z.date().optional().or(z.literal("")),
   "dog-preferred-vets": z.array(z.string()),
 });
 
@@ -152,20 +150,6 @@ export default function PetForm({
               value: "no",
             },
           ]}
-        />
-
-        <BarkFormDatetimeInput
-          form={form}
-          label="When was it’s last blood donation? (DD/MM/YYYY)"
-          name="dog-last-heartworm-vaccination"
-          description="If applicable"
-        />
-
-        <BarkFormDatetimeInput
-          form={form}
-          label="When was it’s last blood donation? (DD/MM/YYYY)"
-          name="dog-last-donation"
-          description="If applicable"
         />
 
         <BarkFormCheckboxes
