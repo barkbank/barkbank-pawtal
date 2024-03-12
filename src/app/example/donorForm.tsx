@@ -10,6 +10,7 @@ import PetForm from "./petForm";
 import OwnerForm from "./ownerForm";
 import { BarkH4, BarkP } from "@/components/bark/bark-typography";
 import Image from "next/image";
+import Link from "next/link";
 
 const FORM_SCHEMA = z.object({
   name: z.string(),
@@ -35,7 +36,7 @@ const steps = ["Tell us about your pet", "Add your details", "Enter Pawtal!"];
 const STEPS = { PET: 0, OWNER: 1, SUCCESS: 2 };
 
 export default function DonorForm({ breeds }: { breeds: Breed[] }) {
-  const [currentStep, setCurrentStep] = React.useState(STEPS.PET);
+  const [currentStep, setCurrentStep] = React.useState(STEPS.SUCCESS);
 
   const form = useForm<FormDataType>({
     resolver: zodResolver(FORM_SCHEMA),
@@ -99,9 +100,7 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
             You&apos;ll be directed to your account shortly. If not, please log
             in at{" "}
             <span className="hover:underline">
-              <a target="_blank" href="https://www.pawtal.barkbank.co">
-                www.pawtal.barkbank.co
-              </a>
+              <Link href="/bark/login">www.pawtal.barkbank.co</Link>
             </span>
           </BarkH4>
 
