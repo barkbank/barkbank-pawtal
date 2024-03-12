@@ -6,8 +6,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import PetForm from "./petForm";
-import OwnerForm from "./ownerForm";
+import PetForm from "./pet-form";
+import OwnerForm from "./owner-form";
 import { BarkH4, BarkP } from "@/components/bark/bark-typography";
 import Image from "next/image";
 import Link from "next/link";
@@ -36,7 +36,7 @@ const steps = ["Tell us about your pet", "Add your details", "Enter Pawtal!"];
 const STEPS = { PET: 0, OWNER: 1, SUCCESS: 2 };
 
 export default function DonorForm({ breeds }: { breeds: Breed[] }) {
-  const [currentStep, setCurrentStep] = React.useState(STEPS.SUCCESS);
+  const [currentStep, setCurrentStep] = React.useState(STEPS.PET);
 
   const form = useForm<FormDataType>({
     resolver: zodResolver(FORM_SCHEMA),
@@ -51,7 +51,7 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
   return (
     <div>
       <div className="flex flex-col items-center gap-2">
-        <Image src={"/orangeDogHouse.svg"} alt="" height={100} width={100} />
+        <Image src={"/orange-dog-house.svg"} alt="" height={100} width={100} />
         <BarkH4>Bark Bank Canine Blood Donation Pawtal</BarkH4>
       </div>
       <div className="mt-20">
@@ -106,7 +106,7 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
 
           <div className="mt-8 grid grid-cols-1 gap-20 md:grid-cols-3">
             <div className="flex flex-col items-center text-center">
-              <Image src={"/checkMail.svg"} alt="" height={100} width={100} />
+              <Image src={"/check-mail.svg"} alt="" height={100} width={100} />
               <BarkH4>Confirmation Email</BarkH4>
               <BarkP>
                 An email confirmation will be sent to you shortly with the
@@ -115,7 +115,7 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
             </div>
 
             <div className="flex flex-col items-center text-center">
-              <Image src={"/contactUs.svg"} alt="" height={100} width={100} />
+              <Image src={"/contact-us.svg"} alt="" height={100} width={100} />
               <BarkH4>Upcoming Blood Profiling</BarkH4>
               <BarkP>
                 Your preferred vet will contact you within the week to schedule
