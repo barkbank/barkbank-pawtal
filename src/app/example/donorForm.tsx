@@ -10,9 +10,6 @@ import PetForm from "./petForm";
 import OwnerForm from "./ownerForm";
 import { BarkH4, BarkP } from "@/components/bark/bark-typography";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
-
-const steps = ["Tell us about your pet", "Add your details", "Enter Pawtal!"];
 
 const FORM_SCHEMA = z.object({
   name: z.string(),
@@ -34,9 +31,12 @@ const FORM_SCHEMA = z.object({
 
 type FormDataType = z.infer<typeof FORM_SCHEMA>;
 
+const steps = ["Tell us about your pet", "Add your details", "Enter Pawtal!"];
+const STEPS = { PET: 0, OWNER: 1, SUCCESS: 2 };
+
 export default function DonorForm({ breeds }: { breeds: Breed[] }) {
-  const [currentStep, setCurrentStep] = React.useState(0);
-  const [complete, setComplete] = React.useState(true);
+  const [currentStep, setCurrentStep] = React.useState(STEPS.PET);
+
   const form = useForm<FormDataType>({
     resolver: zodResolver(FORM_SCHEMA),
   });
@@ -44,7 +44,7 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
   async function onSubmit() {
     // ! Send the form data to the server.
     console.log(form.getValues());
-    setComplete(true);
+    setCurrentStep(STEPS.SUCCESS);
   }
 
   return (
@@ -57,7 +57,42 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
         <Stepper steps={steps} currentStep={currentStep} />
       </div>
 
-      {complete ? (
+      {currentStep === STEPS.PET ? (
+        <PetForm
+          onSubmitForm={(values) => {
+            form.setValue("dog-name", values["dog-name"]);
+            form.setValue("dog-breed", values["dog-breed"]);
+            form.setValue("dog-birthday", values["dog-birthday"]);
+            form.setValue("dog-sex", values["dog-sex"]);
+            form.setValue("dog-weight", values["dog-weight"]);
+            form.setValue("dog-blood-type", values["dog-blood-type"]);
+            form.setValue(
+              "dog-blood-transfusion-status",
+              values["dog-blood-transfusion-status"],
+            );
+            form.setValue("dog-pregnant-status", values["dog-pregnant-status"]);
+            form.setValue(
+              "dog-last-heartworm-vaccination",
+              values["dog-last-heartworm-vaccination"],
+            );
+            form.setValue("dog-last-donation", values["dog-last-donation"]);
+            form.setValue("dog-preferred-vets", values["dog-preferred-vets"]);
+
+            setCurrentStep(currentStep + 1);
+          }}
+          breeds={breeds}
+        />
+      ) : currentStep === STEPS.OWNER ? (
+        <OwnerForm
+          onSubmitForm={(values) => {
+            form.setValue("name", values.name);
+            form.setValue("mobile", values.mobile);
+            form.setValue("email", values.email);
+            form.setValue("country-based", values["country-based"]);
+            onSubmit();
+          }}
+        />
+      ) : (
         <div className="text-center">
           <BarkH4>
             Thank you for your information, your account has been created.
@@ -100,41 +135,6 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
             </div>
           </div>
         </div>
-      ) : currentStep === 0 ? (
-        <PetForm
-          onSubmitForm={(values) => {
-            form.setValue("dog-name", values["dog-name"]);
-            form.setValue("dog-breed", values["dog-breed"]);
-            form.setValue("dog-birthday", values["dog-birthday"]);
-            form.setValue("dog-sex", values["dog-sex"]);
-            form.setValue("dog-weight", values["dog-weight"]);
-            form.setValue("dog-blood-type", values["dog-blood-type"]);
-            form.setValue(
-              "dog-blood-transfusion-status",
-              values["dog-blood-transfusion-status"],
-            );
-            form.setValue("dog-pregnant-status", values["dog-pregnant-status"]);
-            form.setValue(
-              "dog-last-heartworm-vaccination",
-              values["dog-last-heartworm-vaccination"],
-            );
-            form.setValue("dog-last-donation", values["dog-last-donation"]);
-            form.setValue("dog-preferred-vets", values["dog-preferred-vets"]);
-
-            setCurrentStep(currentStep + 1);
-          }}
-          breeds={breeds}
-        />
-      ) : (
-        <OwnerForm
-          onSubmitForm={(values) => {
-            form.setValue("name", values.name);
-            form.setValue("mobile", values.mobile);
-            form.setValue("email", values.email);
-            form.setValue("country-based", values["country-based"]);
-            onSubmit();
-          }}
-        />
       )}
     </div>
   );
