@@ -25,7 +25,7 @@ const FORM_SCHEMA = z.object({
   "dog-blood-type": z.string(),
   "dog-blood-transfusion-status": z.string(),
   "dog-pregnant-status": z.string(),
-  "dog-preferred-vets": z.array(z.string()),
+  "dog-preferred-vet": z.string(),
 });
 
 type FormDataType = z.infer<typeof FORM_SCHEMA>;
@@ -41,7 +41,6 @@ export default function PetForm({
     resolver: zodResolver(FORM_SCHEMA),
     defaultValues: {
       "dog-name": "",
-      "dog-preferred-vets": [],
       "dog-weight": "",
     },
   });
@@ -152,10 +151,10 @@ export default function PetForm({
           ]}
         />
 
-        <BarkFormCheckboxes
+        <BarkFormRadioGroup
           form={form}
           label="Select your preferred vet for blood profiling test and blood donation"
-          name="dog-preferred-vets"
+          name="dog-preferred-vet"
           options={[
             { label: "Vet A", value: "vet-a" },
             {

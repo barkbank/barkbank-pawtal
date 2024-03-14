@@ -25,7 +25,7 @@ const FORM_SCHEMA = z.object({
   "dog-blood-type": z.string(),
   "dog-blood-transfusion-status": z.string(),
   "dog-pregnant-status": z.string(),
-  "dog-preferred-vets": z.array(z.string()),
+  "dog-preferred-vet": z.string(),
 });
 
 type FormDataType = z.infer<typeof FORM_SCHEMA>;
@@ -70,7 +70,7 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
               values["dog-blood-transfusion-status"],
             );
             form.setValue("dog-pregnant-status", values["dog-pregnant-status"]);
-            form.setValue("dog-preferred-vets", values["dog-preferred-vets"]);
+            form.setValue("dog-preferred-vet", values["dog-preferred-vet"]);
 
             setCurrentStep(currentStep + 1);
           }}
