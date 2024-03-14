@@ -65,7 +65,8 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
             form.setValue("dogGender", values["dogGender"]);
             form.setValue(
               "dogWeightKg",
-              values["dogWeightKg"] === undefined
+              values["dogWeightKg"] === undefined ||
+                Number.isNaN(values["dogWeightKg"])
                 ? Number(values["dogWeightKg"])
                 : undefined,
             );
@@ -83,6 +84,8 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
             setCurrentStep(currentStep + 1);
           }}
           breeds={breeds}
+          onPreviousClick={() => {}}
+          previousLabel="Cancel"
         />
       ) : currentStep === STEPS.OWNER ? (
         <OwnerForm
@@ -93,6 +96,8 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
             form.setValue("countryBased", values["countryBased"]);
             onSubmit();
           }}
+          onPreviousClick={() => setCurrentStep(currentStep - 1)}
+          previousLabel="Back"
         />
       ) : (
         <div className="text-center">

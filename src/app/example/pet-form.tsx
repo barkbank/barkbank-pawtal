@@ -2,6 +2,7 @@
 
 import {
   BarkForm,
+  BarkFormButton,
   BarkFormDatetimeInput,
   BarkFormHeader,
   BarkFormInput,
@@ -36,9 +37,13 @@ type FormDataType = z.infer<typeof FORM_SCHEMA>;
 export default function PetForm({
   breeds,
   onSubmitForm,
+  onPreviousClick,
+  previousLabel = "Previous",
 }: {
   breeds: Breed[];
   onSubmitForm: (values: FormDataType) => void;
+  onPreviousClick?: () => void;
+  previousLabel?: string;
 }) {
   const form = useForm<FormDataType>({
     resolver: zodResolver(FORM_SCHEMA),
@@ -168,12 +173,24 @@ export default function PetForm({
             },
           ]}
         />
-        <BarkFormSubmitButton
-          // disabled={!form.formState.isValid}
-          className="w-full"
-        >
-          Next
-        </BarkFormSubmitButton>
+
+        <div className="flex gap-2">
+          {onPreviousClick && (
+            <BarkFormButton
+              onClick={async () => onPreviousClick()}
+              className="w-full"
+            >
+              {previousLabel}
+            </BarkFormButton>
+          )}
+
+          <BarkFormSubmitButton
+            disabled={!form.formState.isValid}
+            className="w-full"
+          >
+            Next
+          </BarkFormSubmitButton>
+        </div>
       </BarkForm>
     </>
   );

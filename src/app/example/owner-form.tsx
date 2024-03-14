@@ -23,17 +23,18 @@ const FORM_SCHEMA = z.object({
     message: "You must accept the disclaimer to proceed",
   }),
   otp: z.string(),
-  otpVerified: z.boolean().refine((value) => value === true, {
-    message: "You must verify your OTP to proceed",
-  }),
 });
 
 type FormDataType = z.infer<typeof FORM_SCHEMA>;
 
 export default function OwnerForm({
   onSubmitForm,
+  onPreviousClick,
+  previousLabel = "Previous",
 }: {
   onSubmitForm: (values: FormDataType) => void;
+  onPreviousClick?: () => void;
+  previousLabel?: string;
 }) {
   const [otpSent, setOtpSent] = React.useState(false);
   const form = useForm<FormDataType>({
@@ -95,11 +96,6 @@ export default function OwnerForm({
               name="otp"
               type="number"
               placeholder="Enter 0000 for testing purposes"
-              description={
-                form.watch("otpVerified")?.valueOf() === true
-                  ? "OTP verified!"
-                  : ""
-              }
             >
               {otpSent ? (
                 <>
@@ -109,18 +105,6 @@ export default function OwnerForm({
                     }}
                   >
                     Resend OTP
-                  </BarkFormButton>
-                  <BarkFormButton
-                    onClick={async () => {
-                      console.log("verify otp");
-
-                      if (form.watch("otp") === "0000") {
-                        console.log("otp verified");
-                        form.setValue("otpVerified", true);
-                      }
-                    }}
-                  >
-                    Verify OTP
                   </BarkFormButton>
                 </>
               ) : (
@@ -145,12 +129,23 @@ export default function OwnerForm({
         profiling and donation."
         />
 
-        <BarkFormSubmitButton
-          disabled={!form.formState.isValid}
-          className="w-full"
-        >
-          Submit
-        </BarkFormSubmitButton>
+        <div className="flex gap-2">
+          {onPreviousClick && (
+            <BarkFormButton
+              onClick={async () => onPreviousClick()}
+              className="w-full"
+            >
+              {previousLabel}
+            </BarkFormButton>
+          )}
+
+          <BarkFormSubmitButton
+            disabled={!form.formState.isValid}
+            className="w-full"
+          >
+            Submit
+          </BarkFormSubmitButton>
+        </div>
       </BarkForm>
     </>
   );
