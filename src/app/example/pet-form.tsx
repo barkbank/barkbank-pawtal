@@ -21,7 +21,10 @@ const FORM_SCHEMA = z.object({
   "dog-breed": z.string(),
   "dog-birthday": z.date(),
   "dog-sex": z.string(),
-  "dog-weight": z.number().optional().or(z.string().optional()),
+  "dog-weight": z
+    .string()
+    .optional()
+    .transform((v) => Number(v) || undefined),
   "dog-blood-type": z.string(),
   "dog-blood-transfusion-status": z.string(),
   "dog-pregnant-status": z.string(),
@@ -41,7 +44,7 @@ export default function PetForm({
     resolver: zodResolver(FORM_SCHEMA),
     defaultValues: {
       "dog-name": "",
-      "dog-weight": "",
+      "dog-weight": undefined,
     },
   });
 
@@ -166,7 +169,7 @@ export default function PetForm({
           ]}
         />
         <BarkFormSubmitButton
-          disabled={!form.formState.isValid}
+          // disabled={!form.formState.isValid}
           className="w-full"
         >
           Next

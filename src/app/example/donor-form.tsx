@@ -21,7 +21,7 @@ const FORM_SCHEMA = z.object({
   "dog-breed": z.string(),
   "dog-birthday": z.date(),
   "dog-sex": z.string(),
-  "dog-weight": z.string().regex(/^\d+(\.\d+)?$/),
+  "dog-weight": z.number(),
   "dog-blood-type": z.string(),
   "dog-blood-transfusion-status": z.string(),
   "dog-pregnant-status": z.string(),
@@ -63,7 +63,7 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
             form.setValue("dog-breed", values["dog-breed"]);
             form.setValue("dog-birthday", values["dog-birthday"]);
             form.setValue("dog-sex", values["dog-sex"]);
-            form.setValue("dog-weight", values["dog-weight"]);
+            form.setValue("dog-weight", Number(values["dog-weight"]));
             form.setValue("dog-blood-type", values["dog-blood-type"]);
             form.setValue(
               "dog-blood-transfusion-status",
