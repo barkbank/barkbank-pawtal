@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { Check } from "lucide-react";
 import React from "react";
 
 function Stepper(props: { steps: string[]; currentStep: number }) {
@@ -17,7 +18,17 @@ function Stepper(props: { steps: string[]; currentStep: number }) {
         {steps.map((_, i) => (
           <React.Fragment key={i}>
             <div className="flex flex-col items-center">
-              <div className={`h-6 w-6 rounded-full ${activeColor(i)}`}></div>
+              <div
+                className={`h-6 w-6 rounded-full ${activeColor(i)} flex items-center justify-center`}
+              >
+                <Check
+                  size={18}
+                  className={cn(
+                    "text-white",
+                    currentStep > i ? "block" : "hidden",
+                  )}
+                />
+              </div>
             </div>
             {isFinalStep(i) ? null : (
               <div className={`h-1 w-full ${activeLineColor(i)}`}></div>
@@ -28,10 +39,10 @@ function Stepper(props: { steps: string[]; currentStep: number }) {
       <div className="flex w-full items-start">
         {steps.map((step, i) => (
           <React.Fragment key={i}>
-            <div className="w-20">
+            <div>
               <p
                 className={cn(
-                  "text-sm",
+                  "w-28 text-sm",
                   i === 0
                     ? "text-left"
                     : i === steps.length - 1

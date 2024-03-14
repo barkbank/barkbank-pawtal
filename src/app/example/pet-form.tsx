@@ -49,7 +49,6 @@ export default function PetForm({
     resolver: zodResolver(FORM_SCHEMA),
     defaultValues: {
       dogName: "",
-      dogWeightKg: undefined,
     },
   });
 
