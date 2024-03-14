@@ -56,16 +56,6 @@ export default function OwnerForm({
     <>
       <BarkForm onSubmit={onSubmit} form={form}>
         <BarkFormHeader>Add your details</BarkFormHeader>
-        <BarkFormInput
-          form={form}
-          label="How would you like to be addressed?"
-          name="name"
-        />
-        <BarkFormInput
-          form={form}
-          label="What number can we reach you on?"
-          name="mobile"
-        />
 
         <BarkFormRadioGroup
           form={form}
@@ -79,6 +69,18 @@ export default function OwnerForm({
               value: "no",
             },
           ]}
+        />
+
+        <BarkFormInput
+          form={form}
+          label="How would you like to be addressed?"
+          name="name"
+        />
+
+        <BarkFormInput
+          form={form}
+          label="What number can we reach you on?"
+          name="mobile"
         />
 
         <BarkFormInput
