@@ -17,18 +17,18 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const FORM_SCHEMA = z.object({
-  "dog-name": z.string(),
-  "dog-breed": z.string(),
-  "dog-birthday": z.date(),
-  "dog-sex": z.string(),
-  "dog-weight": z
+  dogName: z.string(),
+  dogBreed: z.string(),
+  dogBirthday: z.date(),
+  dogGender: z.string(),
+  dogWeightKg: z
     .string()
     .optional()
     .transform((v) => Number(v) || undefined),
-  "dog-blood-type": z.string(),
-  "dog-blood-transfusion-status": z.string(),
-  "dog-pregnant-status": z.string(),
-  "dog-preferred-vet": z.string(),
+  dogDea1Point1: z.string(),
+  dogEverReceivedTransfusion: z.string(),
+  dogEverPregnant: z.string(),
+  dogPreferredVetIdList: z.string(),
 });
 
 type FormDataType = z.infer<typeof FORM_SCHEMA>;
@@ -43,8 +43,8 @@ export default function PetForm({
   const form = useForm<FormDataType>({
     resolver: zodResolver(FORM_SCHEMA),
     defaultValues: {
-      "dog-name": "",
-      "dog-weight": undefined,
+      dogName: "",
+      dogWeightKg: undefined,
     },
   });
 
@@ -61,13 +61,13 @@ export default function PetForm({
         <BarkFormInput
           form={form}
           label="What’s your dog’s name?"
-          name="dog-name"
+          name="dogName"
         />
 
         <BarkFormSelect
           form={form}
           label="What’s your dog’s breed?"
-          name="dog-breed"
+          name="dogBreed"
           options={breeds.map((breed) => ({
             label: breed.dog_breed,
             value: breed.dog_breed,
@@ -77,13 +77,13 @@ export default function PetForm({
         <BarkFormDatetimeInput
           form={form}
           label="When is it’s birthday? (DD/MM/YYYY)"
-          name="dog-birthday"
+          name="dogBirthday"
         />
 
         <BarkFormRadioGroup
           form={form}
           label="What’s your dog’s sex?"
-          name="dog-sex"
+          name="dogGender"
           layout="button"
           options={[
             { label: "Male", value: DogGender.MALE },
@@ -95,14 +95,14 @@ export default function PetForm({
         <BarkFormInput
           form={form}
           label="What’s your dog’s weight? (KG)"
-          name="dog-weight"
+          name="dogWeightKg"
           type="number"
         />
 
         <BarkFormRadioGroup
           form={form}
           label="Do you know it’s blood type?"
-          name="dog-blood-type"
+          name="dogDea1Point1"
           options={[
             { label: "I don't know", value: "idk" },
             {
@@ -119,7 +119,7 @@ export default function PetForm({
         <BarkFormRadioGroup
           form={form}
           label="Has it received blood transfusion before?"
-          name="dog-blood-transfusion-status"
+          name="dogEverReceivedTransfusion"
           layout="button"
           options={[
             { label: "I don't know", value: "idk" },
@@ -137,7 +137,7 @@ export default function PetForm({
         <BarkFormRadioGroup
           form={form}
           label="Has your dog been pregnant before?"
-          name="dog-pregnant-status"
+          name="dogEverPregnant"
           layout="button"
           options={[
             { label: "I don't know", value: "idk" },
@@ -155,7 +155,7 @@ export default function PetForm({
         <BarkFormRadioGroup
           form={form}
           label="Select your preferred vet for blood profiling test and blood donation"
-          name="dog-preferred-vet"
+          name="dogPreferredVetIdList"
           options={[
             { label: "Vet A", value: "vet-a" },
             {

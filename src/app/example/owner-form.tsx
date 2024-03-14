@@ -18,12 +18,12 @@ const FORM_SCHEMA = z.object({
   name: z.string(),
   mobile: z.string(),
   email: z.string().email(),
-  "country-based": z.string(),
-  "terms-and-conditions": z.boolean().refine((value) => value === true, {
+  countryBased: z.string(),
+  termsAndConditions: z.boolean().refine((value) => value === true, {
     message: "You must accept the disclaimer to proceed",
   }),
   otp: z.string(),
-  "otp-verified": z.boolean().refine((value) => value === true, {
+  otpVerified: z.boolean().refine((value) => value === true, {
     message: "You must verify your OTP to proceed",
   }),
 });
@@ -69,7 +69,7 @@ export default function OwnerForm({
         <BarkFormRadioGroup
           form={form}
           label="Are you currently based in Singapore?"
-          name="country-based"
+          name="countryBased"
           layout="button"
           options={[
             { label: "Yes", value: "yes" },
@@ -96,7 +96,7 @@ export default function OwnerForm({
               type="number"
               placeholder="Enter 0000 for testing purposes"
               description={
-                form.watch("otp-verified")?.valueOf() === true
+                form.watch("otpVerified")?.valueOf() === true
                   ? "OTP verified!"
                   : ""
               }
@@ -116,7 +116,7 @@ export default function OwnerForm({
 
                       if (form.watch("otp") === "0000") {
                         console.log("otp verified");
-                        form.setValue("otp-verified", true);
+                        form.setValue("otpVerified", true);
                       }
                     }}
                   >
@@ -140,7 +140,7 @@ export default function OwnerForm({
         <BarkFormSingleCheckbox
           form={form}
           label="Disclaimer"
-          name="terms-and-conditions"
+          name="termsAndConditions"
           optionLabel="By submitting this form, you agree to share your information with your preferred vets to schedule appointments for blood 
         profiling and donation."
         />

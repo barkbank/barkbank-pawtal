@@ -16,16 +16,16 @@ const FORM_SCHEMA = z.object({
   name: z.string(),
   mobile: z.string(),
   email: z.string().email(),
-  "country-based": z.string(),
-  "dog-name": z.string(),
-  "dog-breed": z.string(),
-  "dog-birthday": z.date(),
-  "dog-sex": z.string(),
-  "dog-weight": z.number(),
-  "dog-blood-type": z.string(),
-  "dog-blood-transfusion-status": z.string(),
-  "dog-pregnant-status": z.string(),
-  "dog-preferred-vet": z.string(),
+  countryBased: z.string(),
+  dogName: z.string(),
+  dogBreed: z.string(),
+  dogBirthday: z.date(),
+  dogGender: z.string(),
+  dogWeightKg: z.number().optional(),
+  dogDea1Point1: z.string(),
+  dogEverReceivedTransfusion: z.string(),
+  dogEverPregnant: z.string(),
+  dogPreferredVetIdList: z.string(),
 });
 
 type FormDataType = z.infer<typeof FORM_SCHEMA>;
@@ -59,18 +59,26 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
       {currentStep === STEPS.PET ? (
         <PetForm
           onSubmitForm={(values) => {
-            form.setValue("dog-name", values["dog-name"]);
-            form.setValue("dog-breed", values["dog-breed"]);
-            form.setValue("dog-birthday", values["dog-birthday"]);
-            form.setValue("dog-sex", values["dog-sex"]);
-            form.setValue("dog-weight", Number(values["dog-weight"]));
-            form.setValue("dog-blood-type", values["dog-blood-type"]);
+            form.setValue("dogName", values["dogName"]);
+            form.setValue("dogBreed", values["dogBreed"]);
+            form.setValue("dogBirthday", values["dogBirthday"]);
+            form.setValue("dogGender", values["dogGender"]);
             form.setValue(
-              "dog-blood-transfusion-status",
-              values["dog-blood-transfusion-status"],
+              "dogWeightKg",
+              values["dogWeightKg"] === undefined
+                ? Number(values["dogWeightKg"])
+                : undefined,
             );
-            form.setValue("dog-pregnant-status", values["dog-pregnant-status"]);
-            form.setValue("dog-preferred-vet", values["dog-preferred-vet"]);
+            form.setValue("dogDea1Point1", values["dogDea1Point1"]);
+            form.setValue(
+              "dogEverReceivedTransfusion",
+              values["dogEverReceivedTransfusion"],
+            );
+            form.setValue("dogEverPregnant", values["dogEverPregnant"]);
+            form.setValue(
+              "dogPreferredVetIdList",
+              values["dogPreferredVetIdList"],
+            );
 
             setCurrentStep(currentStep + 1);
           }}
@@ -82,7 +90,7 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
             form.setValue("name", values.name);
             form.setValue("mobile", values.mobile);
             form.setValue("email", values.email);
-            form.setValue("country-based", values["country-based"]);
+            form.setValue("countryBased", values["countryBased"]);
             onSubmit();
           }}
         />
