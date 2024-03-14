@@ -2,7 +2,6 @@
 
 import {
   BarkForm,
-  BarkFormCheckboxes,
   BarkFormDatetimeInput,
   BarkFormHeader,
   BarkFormInput,
@@ -22,7 +21,7 @@ const FORM_SCHEMA = z.object({
   "dog-breed": z.string(),
   "dog-birthday": z.date(),
   "dog-sex": z.string(),
-  "dog-weight": z.string().regex(/^\d+(\.\d+)?$/),
+  "dog-weight": z.number().optional().or(z.string().optional()),
   "dog-blood-type": z.string(),
   "dog-blood-transfusion-status": z.string(),
   "dog-pregnant-status": z.string(),
@@ -92,7 +91,7 @@ export default function PetForm({
 
         <BarkFormInput
           form={form}
-          label="What’s your dog’s weight?"
+          label="What’s your dog’s weight? (KG)"
           name="dog-weight"
           type="number"
         />
