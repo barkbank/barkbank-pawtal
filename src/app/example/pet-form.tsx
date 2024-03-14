@@ -10,6 +10,7 @@ import {
   BarkFormSelect,
   BarkFormSubmitButton,
 } from "@/components/bark/bark-form";
+import { DogGender } from "@/lib/data/db-models";
 import { Breed } from "@/lib/services/breed";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
@@ -83,11 +84,9 @@ export default function PetForm({
           name="dog-sex"
           layout="button"
           options={[
-            { label: "Yes", value: "yes" },
-            {
-              label: "No",
-              value: "no",
-            },
+            { label: "Male", value: DogGender.MALE },
+            { label: "Female", value: DogGender.FEMALE },
+            { label: "Unknown", value: DogGender.UNKNOWN },
           ]}
         />
 
