@@ -24,12 +24,15 @@ CREATE TABLE vets (
   CONSTRAINT vet_pk PRIMARY KEY (vet_id)
 );
 
+CREATE TYPE t_residency AS ENUM ('OTHER', 'SINGAPORE');
+
 CREATE TABLE users (
   user_id BIGSERIAL,
   user_creation_time TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   user_hashed_email TEXT NOT NULL,
   user_encrypted_pii TEXT NOT NULL,
   user_modification_time TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  user_residency t_residency NOT NULL,
   CONSTRAINT users_unique_user_hashed_email UNIQUE (user_hashed_email),
   CONSTRAINT users_pk PRIMARY KEY (user_id)
 );

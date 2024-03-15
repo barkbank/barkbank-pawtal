@@ -8,9 +8,10 @@ export async function dbInsertUser(
   const sql = `
   INSERT INTO users (
     user_hashed_email,
-    user_encrypted_pii
+    user_encrypted_pii,
+    user_residency
   )
-  VALUES ($1, $2)
+  VALUES ($1, $2, $3)
   RETURNING
     user_id,
     user_creation_time,
@@ -19,6 +20,7 @@ export async function dbInsertUser(
   const res = await dbQuery(ctx, sql, [
     userSpec.userHashedEmail,
     userSpec.userEncryptedPii,
+    userSpec.userResidency,
   ]);
   return toCamelCaseRow(res.rows[0]);
 }
@@ -30,9 +32,10 @@ export async function dbTryInsertUser(
   const sql = `
   INSERT INTO users (
     user_hashed_email,
-    user_encrypted_pii
+    user_encrypted_pii,
+    user_residency
   )
-  VALUES ($1, $2)
+  VALUES ($1, $2, $3)
   ON CONFLICT (user_hashed_email) DO NOTHING
   RETURNING
     user_id,
@@ -42,6 +45,7 @@ export async function dbTryInsertUser(
   const res = await dbQuery(ctx, sql, [
     userSpec.userHashedEmail,
     userSpec.userEncryptedPii,
+    userSpec.userResidency,
   ]);
   if (res.rows.length !== 1) {
     return null;
@@ -49,6 +53,7 @@ export async function dbTryInsertUser(
   return toCamelCaseRow(res.rows[0]);
 }
 
+// TODO: I do not think this will ever be useful. Consider removing.
 export async function dbUpdateUser(
   ctx: DbContext,
   userId: string,
@@ -57,7 +62,8 @@ export async function dbUpdateUser(
   const sql = `
   UPDATE users SET
     user_hashed_email = $2,
-    user_encrypted_pii = $3
+    user_encrypted_pii = $3,
+    user_residency = $4
   WHERE user_id = $1
   RETURNING
     user_id,
@@ -68,6 +74,7 @@ export async function dbUpdateUser(
     userId,
     userSpec.userHashedEmail,
     userSpec.userEncryptedPii,
+    userSpec.userResidency,
   ]);
   return toCamelCaseRow(res.rows[0]);
 }
@@ -82,7 +89,8 @@ export async function dbSelectUser(
     user_creation_time,
     user_modification_time,
     user_hashed_email,
-    user_encrypted_pii
+    user_encrypted_pii,
+    user_residency
   FROM users
   WHERE user_id = $1
   `;

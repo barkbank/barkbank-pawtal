@@ -31,7 +31,9 @@ export class UserActor {
       return null;
     }
     const spec = this.service.getUserMapper().mapUserRecordToUserSpec(record);
-    const pii = await this.service.getUserMapper().mapUserSpecToUserPii(spec);
+    const pii = await this.service
+      .getUserMapper()
+      .mapUserSecurePiiToUserPii(spec);
     return pii;
   }
 }

@@ -1,4 +1,9 @@
-import { DogAntigenPresence, DogGender, YesNoUnknown } from "../data/db-models";
+import {
+  DogAntigenPresence,
+  DogGender,
+  UserResidency,
+  YesNoUnknown,
+} from "../data/db-models";
 
 /**
  * Models the details about dogs that we collect from the registration form.
@@ -23,6 +28,7 @@ export type UserRegistration = {
   userName: string;
   userEmail: string;
   userPhoneNumber: string;
+  userResidency: UserResidency;
 };
 
 /**
