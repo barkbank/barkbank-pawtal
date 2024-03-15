@@ -9,6 +9,7 @@ export async function dbInsertUser(
   INSERT INTO users (
     user_hashed_email,
     user_encrypted_pii
+    -- WIP: Should insert user_resides_in_singapore in dbInsertUser
   )
   VALUES ($1, $2)
   RETURNING
@@ -31,6 +32,7 @@ export async function dbTryInsertUser(
   INSERT INTO users (
     user_hashed_email,
     user_encrypted_pii
+    -- WIP: Should insert user_resides_in_singapore in dbTryInsertUser
   )
   VALUES ($1, $2)
   ON CONFLICT (user_hashed_email) DO NOTHING
@@ -58,6 +60,7 @@ export async function dbUpdateUser(
   UPDATE users SET
     user_hashed_email = $2,
     user_encrypted_pii = $3
+    -- WIP: set user_resides_in_singapore in dbUpdateUser
   WHERE user_id = $1
   RETURNING
     user_id,
@@ -83,6 +86,7 @@ export async function dbSelectUser(
     user_modification_time,
     user_hashed_email,
     user_encrypted_pii
+    -- WIP: retrieve user_resides_in_singapore in dbSelectUser
   FROM users
   WHERE user_id = $1
   `;

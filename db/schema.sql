@@ -30,6 +30,7 @@ CREATE TABLE users (
   user_hashed_email TEXT NOT NULL,
   user_encrypted_pii TEXT NOT NULL,
   user_modification_time TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  -- WIP: New column in schema - user_resides_in_singapore BOOLEAN NOT NULL,
   CONSTRAINT users_unique_user_hashed_email UNIQUE (user_hashed_email),
   CONSTRAINT users_pk PRIMARY KEY (user_id)
 );

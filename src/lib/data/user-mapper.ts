@@ -40,6 +40,7 @@ export class UserMapper {
     return userPii;
   }
 
+  // WIP: This should map UserSecurePii to UserPii
   public async mapUserSpecToUserPii(userSpec: UserSpec): Promise<UserPii> {
     const jsonEncoded = await this.piiEncryptionService.getDecryptedData(
       userSpec.userEncryptedPii,
@@ -48,6 +49,7 @@ export class UserMapper {
     return pii;
   }
 
+  // WIP: This should map UserPii to UserSecurePii
   public async mapUserPiiToUserSpec(userPii: UserPii): Promise<UserSpec> {
     const jsonEncoded = JSON.stringify(userPii);
     const [userHashedEmail, userEncryptedPii] = await Promise.all([

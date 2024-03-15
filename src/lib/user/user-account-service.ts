@@ -35,6 +35,8 @@ export type UserAccountServiceConfig = {
  *
  * NOT responsible for authorisation of the operations. That responsibility
  * falls on the actors; i.e. UserActor, VetActor, and AdminActor.
+ *
+ * TODO: Remove UserAccountService move createUserAccount into a register user action.
  */
 export class UserAccountService {
   private config: UserAccountServiceConfig;

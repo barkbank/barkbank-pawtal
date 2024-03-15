@@ -20,9 +20,13 @@ export type UserPii = {
   userPhoneNumber: string;
 };
 
-export type UserSpec = {
+export type UserSecurePii = {
   userHashedEmail: string;
   userEncryptedPii: string;
+};
+
+export type UserSpec = UserSecurePii & {
+  // WIP: Add userResidesInSingapore to UserSpec. Boolean field.
 };
 
 export type UserGen = {
