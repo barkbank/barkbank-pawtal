@@ -15,6 +15,7 @@ test:
 	npm run test
 	bash scripts/testdb.sh testDbDown
 	bash scripts/test_minimal_process_env_usage.sh
+	bash scripts/test_no_wip_tasks_remaining.sh
 
 # Runs the local development server.
 .PHONY: run
@@ -43,3 +44,15 @@ reset: reset-local-database local-accounts
 .PHONY: reset-local-database
 reset-local-database:
 	bash scripts/reset-local-database.sh
+
+# Lists work-in-progress notes. These shouldn't be merged into
+# main. Use TODO if they should be worked on in another feature
+# branch.
+.PHONY: wip
+wip:
+	grep --color=always -R WIP src tests db
+
+# Lists TODO notes.
+.PHONY: todo
+todo:
+	grep --color=always -R TODO src tests db
