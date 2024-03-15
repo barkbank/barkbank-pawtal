@@ -53,6 +53,7 @@ export async function dbTryInsertUser(
   return toCamelCaseRow(res.rows[0]);
 }
 
+// TODO: I do not think this will ever be useful. Consider removing.
 export async function dbUpdateUser(
   ctx: DbContext,
   userId: string,
