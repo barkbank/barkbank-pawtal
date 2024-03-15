@@ -27,6 +27,7 @@ describe("db-users", () => {
     });
   });
   describe("dbSelectUser", () => {
+    // WIP: Test insert and select of user that does not reside in singapore
     it("should return User", async () => {
       await withDb(async (db) => {
         const userGen = await dbInsertUser(db, await getUserSpec(1));

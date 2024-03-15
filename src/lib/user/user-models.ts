@@ -23,6 +23,7 @@ export type UserRegistration = {
   userName: string;
   userEmail: string;
   userPhoneNumber: string;
+  userResidesInSingapore: boolean;
 };
 
 /**

@@ -85,7 +85,8 @@ export async function dbSelectUser(
     user_creation_time,
     user_modification_time,
     user_hashed_email,
-    user_encrypted_pii
+    user_encrypted_pii,
+    TRUE as user_resides_in_singapore
     -- WIP: retrieve user_resides_in_singapore in dbSelectUser
   FROM users
   WHERE user_id = $1

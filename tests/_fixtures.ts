@@ -181,7 +181,9 @@ export async function insertUser(idx: number, db: Pool): Promise<UserRecord> {
 export async function getUserSpec(idx: number): Promise<UserSpec> {
   const pii = userPii(idx);
   const mapper = getUserMapper();
-  return mapper.mapUserPiiToUserSpec(pii);
+  const securePii = await mapper.mapUserPiiToUserSecurePii(pii);
+  const userResidesInSingapore = true;
+  return { ...securePii, userResidesInSingapore };
 }
 
 export function userPii(idx: number): UserPii {

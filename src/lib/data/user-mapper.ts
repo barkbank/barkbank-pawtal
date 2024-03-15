@@ -1,6 +1,6 @@
 import { EncryptionService } from "../services/encryption";
 import { HashService } from "../services/hash";
-import { User, UserGen, UserPii, UserRecord, UserSpec } from "./db-models";
+import { User, UserGen, UserPii, UserRecord, UserSecurePii } from "./db-models";
 
 export class UserMapper {
   private emailHashService: HashService;
@@ -14,7 +14,7 @@ export class UserMapper {
     this.piiEncryptionService = config.piiEncryptionService;
   }
 
-  public mapUserRecordToUserSpec(userRecord: UserRecord): UserSpec {
+  public mapUserRecordToUserSpec(userRecord: UserRecord): UserSecurePii {
     const { userId, userCreationTime, userModificationTime, ...spec } =
       userRecord;
     return spec;
@@ -28,7 +28,7 @@ export class UserMapper {
   public async mapUserRecordToUser(userRecord: UserRecord): Promise<User> {
     const userGen = this.mapUserRecordToUserGen(userRecord);
     const userSpec = this.mapUserRecordToUserSpec(userRecord);
-    const userPii = await this.mapUserSpecToUserPii(userSpec);
+    const userPii = await this.mapUserSecurePiiToUserPii(userSpec);
     return { ...userGen, ...userPii };
   }
 
@@ -36,21 +36,23 @@ export class UserMapper {
     userRecord: UserRecord,
   ): Promise<UserPii> {
     const userSpec = this.mapUserRecordToUserSpec(userRecord);
-    const userPii = await this.mapUserSpecToUserPii(userSpec);
+    const userPii = await this.mapUserSecurePiiToUserPii(userSpec);
     return userPii;
   }
 
-  // WIP: This should map UserSecurePii to UserPii
-  public async mapUserSpecToUserPii(userSpec: UserSpec): Promise<UserPii> {
+  public async mapUserSecurePiiToUserPii(
+    userSecurePii: UserSecurePii,
+  ): Promise<UserPii> {
     const jsonEncoded = await this.piiEncryptionService.getDecryptedData(
-      userSpec.userEncryptedPii,
+      userSecurePii.userEncryptedPii,
     );
     const pii = JSON.parse(jsonEncoded) as UserPii;
     return pii;
   }
 
-  // WIP: This should map UserPii to UserSecurePii
-  public async mapUserPiiToUserSpec(userPii: UserPii): Promise<UserSpec> {
+  public async mapUserPiiToUserSecurePii(
+    userPii: UserPii,
+  ): Promise<UserSecurePii> {
     const jsonEncoded = JSON.stringify(userPii);
     const [userHashedEmail, userEncryptedPii] = await Promise.all([
       this.emailHashService.getHashHex(userPii.userEmail),

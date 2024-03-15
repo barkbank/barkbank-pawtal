@@ -26,7 +26,7 @@ export type UserSecurePii = {
 };
 
 export type UserSpec = UserSecurePii & {
-  // WIP: Add userResidesInSingapore to UserSpec. Boolean field.
+  userResidesInSingapore: boolean;
 };
 
 export type UserGen = {

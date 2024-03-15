@@ -6,6 +6,7 @@ import {
   DogSpec,
   DogStatus,
   UserPii,
+  UserSpec,
 } from "../data/db-models";
 import {
   dbSelectUser,
@@ -64,7 +65,12 @@ export class UserAccountService {
     try {
       await dbBegin(conn);
       const userPii: UserPii = registration.user;
-      const userSpec = await this.getUserMapper().mapUserPiiToUserSpec(userPii);
+      const securePii =
+        await this.getUserMapper().mapUserPiiToUserSecurePii(userPii);
+      const userSpec: UserSpec = {
+        ...securePii,
+        userResidesInSingapore: registration.user.userResidesInSingapore,
+      };
       const userGen = await dbTryInsertUser(conn, userSpec);
       if (userGen === null) {
         await dbRollback(conn);
