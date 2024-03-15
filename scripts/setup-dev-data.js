@@ -130,14 +130,25 @@ function userEmail(idx) {
   return `user${idx}@user.com`;
 }
 
+function getUserResidency(idx) {
+  const rng = getRng("getUserResidency", idx);
+  const p = rng();
+  if (p < 0.05) {
+    return "OTHER";
+  }
+  return "SINGAPORE";
+}
+
 function createUser(idx, callback) {
   const email = userEmail(idx);
   const nameIdx = nextInt(getRng("createUser", idx));
-  const body = {
+  const userPii = {
     userEmail: email,
     userName: getHumanName(nameIdx),
     userPhoneNumber: `+65${90000000 + idx}`,
   };
+  const userResidency = getUserResidency(idx);
+  const body = { userPii, userResidency };
   callback = callback || getStandardCallbackFor(`Create ${email}`);
   doRequest("POST", "/api/dangerous/users", body, callback);
 }
