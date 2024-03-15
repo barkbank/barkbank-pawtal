@@ -69,7 +69,7 @@ export class UserAccountService {
         await this.getUserMapper().mapUserPiiToUserSecurePii(userPii);
       const userSpec: UserSpec = {
         ...securePii,
-        userResidesInSingapore: registration.user.userResidesInSingapore,
+        userResidency: registration.user.userResidency,
       };
       const userGen = await dbTryInsertUser(conn, userSpec);
       if (userGen === null) {
