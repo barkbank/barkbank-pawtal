@@ -8,6 +8,7 @@ import {
 import { withDb } from "../_db_helpers";
 import { ensureTimePassed, getUserMapper, getUserSpec } from "../_fixtures";
 import { guaranteed } from "@/lib/bark-utils";
+import { UserResidencies } from "@/lib/data/db-models";
 
 describe("db-users", () => {
   describe("dbInsertUser", () => {
@@ -27,7 +28,6 @@ describe("db-users", () => {
     });
   });
   describe("dbSelectUser", () => {
-    // WIP: Test insert and select of user that does not reside in singapore
     it("should return User", async () => {
       await withDb(async (db) => {
         const userGen = await dbInsertUser(db, await getUserSpec(1));
@@ -38,6 +38,15 @@ describe("db-users", () => {
         const mapper = getUserMapper();
         const spec = mapper.mapUserRecordToUserSpec(guaranteed(user));
         expect(spec).toMatchObject(getUserSpec(1));
+      });
+    });
+    it("should return user that does not reside in singapore", async () => {
+      await withDb(async (db) => {
+        const specIn = await getUserSpec(188);
+        specIn.userResidency = UserResidencies.OTHER;
+        const userGen = await dbInsertUser(db, specIn);
+        const user = await dbSelectUser(db, userGen.userId);
+        expect(user?.userResidency).toEqual(UserResidencies.OTHER);
       });
     });
     it("should return null when person does not exist", async () => {
