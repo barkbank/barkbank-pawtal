@@ -25,8 +25,16 @@ export type UserSecurePii = {
   userEncryptedPii: string;
 };
 
+// https://dev.to/ivanzm123/dont-use-enums-in-typescript-they-are-very-dangerous-57bh
+export const UserResidencies = {
+  OTHER: "OTHER",
+  SINGAPORE: "SINGAPORE",
+} as const;
+export type UserResidency =
+  (typeof UserResidencies)[keyof typeof UserResidencies];
+
 export type UserSpec = UserSecurePii & {
-  userResidesInSingapore: boolean;
+  userResidency: UserResidency;
 };
 
 export type UserGen = {
@@ -39,6 +47,7 @@ export type UserRecord = UserSpec & UserGen;
 
 export type User = UserPii & UserGen;
 
+// TODO: Do not use enum - https://dev.to/ivanzm123/dont-use-enums-in-typescript-they-are-very-dangerous-57bh
 export enum YesNoUnknown {
   YES = "YES",
   NO = "NO",

@@ -15,6 +15,7 @@ import {
   DogStatus,
   UserPii,
   UserRecord,
+  UserResidencies,
   UserSpec,
   Vet,
   VetSpec,
@@ -182,8 +183,8 @@ export async function getUserSpec(idx: number): Promise<UserSpec> {
   const pii = userPii(idx);
   const mapper = getUserMapper();
   const securePii = await mapper.mapUserPiiToUserSecurePii(pii);
-  const userResidesInSingapore = true;
-  return { ...securePii, userResidesInSingapore };
+  const userResidency = UserResidencies.SINGAPORE;
+  return { ...securePii, userResidency };
 }
 
 export function userPii(idx: number): UserPii {
@@ -232,6 +233,7 @@ export function userRegistration(
     userEmail: someEmail(idx),
     userName: `Reg Junior The ${idx}`,
     userPhoneNumber: `+65 ${81000000 + idx}`,
+    userResidency: UserResidencies.SINGAPORE,
   };
   return { ...base, ...overrides };
 }
