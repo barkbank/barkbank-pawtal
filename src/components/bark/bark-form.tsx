@@ -238,7 +238,7 @@ export function BarkFormRadioGroup(props: {
               <RadioGroup
                 onValueChange={field.onChange}
                 defaultValue={field.value}
-                className="flex"
+                className="flex flex-col"
               >
                 {options.map((option) => (
                   <FormItem
