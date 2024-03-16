@@ -12,6 +12,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   const spec: AdminSpec = {
     ...securePii,
     ...NO_ADMIN_PERMISSIONS,
+    adminCanManageDonors: true,
   };
   const dbPool = await APP.getDbPool();
   const gen = await dbInsertAdmin(dbPool, spec);
