@@ -111,13 +111,11 @@ export default function BarkLoginForm(props: {
           </BarkFormParagraph>
         )}
         <BarkFormInput form={form} name="otp" label="Enter OTP" />
-        <div className="mt-6 flex w-full gap-x-4">
-          <Link href={RoutePath.ROOT}>
-            <Button variant="brandInverse" type="button">
-              Cancel
-            </Button>
-          </Link>
-          <BarkFormSubmitButton>Login</BarkFormSubmitButton>{" "}
+        <div className="flex w-full gap-x-4">
+          <BarkFormButton onClick={async () => router.push(RoutePath.ROOT)}>
+            Cancel
+          </BarkFormButton>
+          <BarkFormSubmitButton>Login</BarkFormSubmitButton>
         </div>
         <BarkFormError form={form} />
         {shouldShowLoginFailed && (
