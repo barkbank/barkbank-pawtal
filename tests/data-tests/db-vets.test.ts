@@ -30,7 +30,7 @@ describe("db-vets", () => {
         expect(vet?.vetModificationTime).toBeTruthy();
         expect(vet?.vetModificationTime).toEqual(vet?.vetCreationTime);
         const mapper = getVetMapper();
-        const specOut = mapper.mapVetToVetSpec(guaranteed(vet));
+        const specOut = mapper.toVetSpec(guaranteed(vet));
         expect(specOut).toMatchObject(specIn);
       });
     });
