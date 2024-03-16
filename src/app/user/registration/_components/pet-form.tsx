@@ -11,7 +11,11 @@ import {
   BarkFormSubmitButton,
 } from "@/components/bark/bark-form";
 import { isValidWeightKg } from "@/lib/bark-utils";
-import { DogGender } from "@/lib/data/db-models";
+import {
+  DogAntigenPresence,
+  DogGender,
+  YesNoUnknown,
+} from "@/lib/data/db-models";
 import { Breed } from "@/lib/services/breed";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -109,7 +113,6 @@ export default function PetForm(props: {
           options={[
             { label: "Male", value: DogGender.MALE },
             { label: "Female", value: DogGender.FEMALE },
-            { label: "Unknown", value: DogGender.UNKNOWN },
           ]}
         />
 
@@ -126,14 +129,17 @@ export default function PetForm(props: {
           label="Do you know it's blood type?"
           name="dogDea1Point1"
           options={[
-            { label: "I don't know", value: "idk" },
+            {
+              label: "I don't know",
+              value: DogAntigenPresence.UNKNOWN,
+            },
             {
               label: "D.E.A 1.1 positive",
-              value: "dea1.1-positive",
+              value: DogAntigenPresence.POSITIVE,
             },
             {
               label: "D.E.A 1.1 negative",
-              value: "dea1.1-negative",
+              value: DogAntigenPresence.NEGATIVE,
             },
           ]}
         />
@@ -144,14 +150,17 @@ export default function PetForm(props: {
           name="dogEverReceivedTransfusion"
           layout="button"
           options={[
-            { label: "I don't know", value: "idk" },
+            {
+              label: "I don't know",
+              value: YesNoUnknown.UNKNOWN,
+            },
             {
               label: "Yes",
-              value: "yes",
+              value: YesNoUnknown.YES,
             },
             {
               label: "No",
-              value: "no",
+              value: YesNoUnknown.NO,
             },
           ]}
         />
@@ -162,14 +171,17 @@ export default function PetForm(props: {
           name="dogEverPregnant"
           layout="button"
           options={[
-            { label: "I don't know", value: "idk" },
+            {
+              label: "I don't know",
+              value: YesNoUnknown.UNKNOWN,
+            },
             {
               label: "Yes",
-              value: "yes",
+              value: YesNoUnknown.YES,
             },
             {
               label: "No",
-              value: "no",
+              value: YesNoUnknown.NO,
             },
           ]}
         />
