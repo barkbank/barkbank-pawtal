@@ -1,13 +1,5 @@
 import { EncryptionService } from "../services/encryption";
-import { HashService } from "../services/hash";
-import {
-  DogDetails,
-  DogGen,
-  DogOii,
-  DogRecord,
-  DogSecureOii,
-  DogSpec,
-} from "./db-models";
+import { DogDetails, DogGen, DogOii, DogSecureOii, DogSpec } from "./db-models";
 
 export class DogMapper {
   private piiEncryptionService: EncryptionService;
@@ -19,6 +11,11 @@ export class DogMapper {
   public toDogOii(source: DogOii): DogOii {
     const { dogName } = source;
     return { dogName };
+  }
+
+  public toDogSecureOii(source: DogSecureOii): DogSecureOii {
+    const { dogEncryptedOii } = source;
+    return { dogEncryptedOii };
   }
 
   public toDogDetails(source: DogDetails): DogDetails {
@@ -44,43 +41,15 @@ export class DogMapper {
     };
   }
 
-  public mapDogRecordToDogSpec(dogRecord: DogRecord): DogSpec {
-    const dogSecureOii = this.mapDogRecordToDogSecureOii(dogRecord);
-    const dogDetails = this.mapDogRecordToDogDetails(dogRecord);
+  public toDogSpec(source: DogSpec): DogSpec {
+    const dogSecureOii = this.toDogSecureOii(source);
+    const dogDetails = this.toDogDetails(source);
     return { ...dogSecureOii, ...dogDetails };
   }
 
-  public mapDogRecordToDogGen(dogRecord: DogRecord): DogGen {
-    const { dogId, dogCreationTime, dogModificationTime } = dogRecord;
+  public toDogGen(source: DogGen): DogGen {
+    const { dogId, dogCreationTime, dogModificationTime } = source;
     return { dogId, dogCreationTime, dogModificationTime };
-  }
-
-  public mapDogRecordToDogSecureOii(dogRecord: DogRecord): DogSecureOii {
-    const { dogEncryptedOii } = dogRecord;
-    return { dogEncryptedOii };
-  }
-
-  public mapDogRecordToDogDetails(dogRecord: DogRecord): DogDetails {
-    const {
-      dogStatus,
-      dogBirthday,
-      dogBreed,
-      dogGender,
-      dogWeightKg,
-      dogDea1Point1,
-      dogEverPregnant,
-      dogEverReceivedTransfusion,
-    } = dogRecord;
-    return {
-      dogStatus,
-      dogBirthday,
-      dogBreed,
-      dogGender,
-      dogWeightKg,
-      dogDea1Point1,
-      dogEverPregnant,
-      dogEverReceivedTransfusion,
-    };
   }
 
   public async mapDogSecureOiiToDogOii(
