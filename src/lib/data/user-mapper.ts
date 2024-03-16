@@ -7,6 +7,7 @@ import {
   UserPii,
   UserRecord,
   UserSecurePii,
+  UserSpec,
 } from "./db-models";
 
 export class UserMapper {
@@ -41,10 +42,10 @@ export class UserMapper {
     return { userId, userCreationTime, userModificationTime };
   }
 
-  public mapUserRecordToUserSpec(userRecord: UserRecord): UserSecurePii {
-    const { userId, userCreationTime, userModificationTime, ...spec } =
-      userRecord;
-    return spec;
+  public toUserSpec(source: UserSpec): UserSpec {
+    const userSecurePii = this.toUserSecurePii(source);
+    const userDetails = this.toUserDetails(source);
+    return { ...userSecurePii, ...userDetails };
   }
 
   public async mapUserRecordToUser(userRecord: UserRecord): Promise<User> {
@@ -58,8 +59,8 @@ export class UserMapper {
   public async mapUserRecordToUserPii(
     userRecord: UserRecord,
   ): Promise<UserPii> {
-    const userSpec = this.mapUserRecordToUserSpec(userRecord);
-    const userPii = await this.mapUserSecurePiiToUserPii(userSpec);
+    const securePii = this.toUserSecurePii(userRecord);
+    const userPii = await this.mapUserSecurePiiToUserPii(securePii);
     return userPii;
   }
 
@@ -69,21 +70,15 @@ export class UserMapper {
     const jsonEncoded = await this.piiEncryptionService.getDecryptedData(
       userSecurePii.userEncryptedPii,
     );
-    const obj = JSON.parse(jsonEncoded);
-    const { userEmail, userName, userPhoneNumber } = obj;
-    const pii: UserPii = { userEmail, userName, userPhoneNumber };
-    return pii;
+    const obj = JSON.parse(jsonEncoded) as UserPii;
+    return this.toUserPii(obj);
   }
 
   public async mapUserPiiToUserSecurePii(
     userPii: UserPii,
   ): Promise<UserSecurePii> {
-    const { userEmail, userName, userPhoneNumber } = userPii;
-    const jsonEncoded = JSON.stringify({
-      userEmail,
-      userName,
-      userPhoneNumber,
-    });
+    const pii = this.toUserPii(userPii);
+    const jsonEncoded = JSON.stringify(pii);
     const [userHashedEmail, userEncryptedPii] = await Promise.all([
       this.emailHashService.getHashHex(userPii.userEmail),
       this.piiEncryptionService.getEncryptedData(jsonEncoded),

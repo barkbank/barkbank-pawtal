@@ -36,7 +36,7 @@ describe("db-users", () => {
         expect(user?.userCreationTime).toEqual(userGen.userCreationTime);
         expect(user?.userModificationTime).toEqual(userGen.userCreationTime);
         const mapper = getUserMapper();
-        const spec = mapper.mapUserRecordToUserSpec(guaranteed(user));
+        const spec = mapper.toUserSpec(guaranteed(user));
         expect(spec).toMatchObject(getUserSpec(1));
       });
     });
@@ -90,7 +90,7 @@ describe("db-users", () => {
         );
         const user = guaranteed(await dbSelectUser(db, gen1.userId));
         const mapper = getUserMapper();
-        const specOut = mapper.mapUserRecordToUserSpec(user);
+        const specOut = mapper.toUserSpec(user);
         expect(specOut).toEqual(specIn2);
       });
     });
