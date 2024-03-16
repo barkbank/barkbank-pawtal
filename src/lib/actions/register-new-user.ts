@@ -138,13 +138,10 @@ export class _RegistrationHandler {
     | { hasExistingUser: false; userGen: UserGen }
     | { hasExistingUser: true; userGen: null }
   > {
-    const { userEmail, userName, userPhoneNumber, userResidency } = request;
-    const securePii: UserSecurePii =
-      await this.config.userMapper.mapUserPiiToUserSecurePii({
-        userEmail,
-        userName,
-        userPhoneNumber,
-      });
+    const userDetails = this.config.userMapper.toUserDetails(request);
+    const userPii = this.config.userMapper.toUserPii(request);
+    const securePii =
+      await this.config.userMapper.mapUserPiiToUserSecurePii(userPii);
     const existingId = await dbSelectUserIdByHashedEmail(
       conn,
       securePii.userHashedEmail,
@@ -152,7 +149,7 @@ export class _RegistrationHandler {
     if (existingId !== null) {
       return { hasExistingUser: true, userGen: null };
     }
-    const spec: UserSpec = { ...securePii, userResidency };
+    const spec: UserSpec = { ...securePii, ...userDetails };
     const userGen = await dbInsertUser(conn, spec);
     return { hasExistingUser: false, userGen };
   }
@@ -162,30 +159,14 @@ export class _RegistrationHandler {
     request: RegistrationRequest,
     userId: string,
   ): Promise<DogGen> {
-    const {
-      dogName,
-      dogBreed,
-      dogBirthday,
-      dogGender,
-      dogWeightKg,
-      dogDea1Point1,
-      dogEverPregnant,
-      dogEverReceivedTransfusion,
-    } = request;
-    const dogOii: DogOii = { dogName };
+    const dogOii: DogOii = this.config.dogMapper.toDogOii(request);
+    const dogDetails: DogDetails = this.config.dogMapper.toDogDetails({
+      ...request,
+      dogStatus: DogStatus.NEW_PROFILE, // TODO: Remove dogStatus
+    });
     const secureOii: DogSecureOii =
       await this.config.dogMapper.mapDogOiiToDogSecureOii(dogOii);
-    const details: DogDetails = {
-      dogStatus: DogStatus.NEW_PROFILE, // TODO: Remove dogStatus
-      dogBreed,
-      dogBirthday,
-      dogGender,
-      dogWeightKg,
-      dogDea1Point1,
-      dogEverPregnant,
-      dogEverReceivedTransfusion,
-    };
-    const spec: DogSpec = { ...secureOii, ...details };
+    const spec: DogSpec = { ...secureOii, ...dogDetails };
     const gen = await dbInsertDog(conn, userId, spec);
     return gen;
   }
