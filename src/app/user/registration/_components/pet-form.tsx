@@ -6,6 +6,7 @@ import {
   BarkFormDateInput,
   BarkFormHeader,
   BarkFormInput,
+  BarkFormOption,
   BarkFormRadioGroup,
   BarkFormSelect,
   BarkFormSubmitButton,
@@ -41,6 +42,7 @@ type FormDataType = z.infer<typeof FORM_SCHEMA>;
 
 export default function PetForm(props: {
   breeds: Breed[];
+  vetOptions: BarkFormOption[];
   defaultValues: FormDataType;
   onSave: (values: FormDataType) => void;
   onPrev: () => void;
@@ -50,6 +52,7 @@ export default function PetForm(props: {
 }) {
   const {
     breeds,
+    vetOptions,
     defaultValues,
     onSave,
     onPrev,
@@ -180,22 +183,11 @@ export default function PetForm(props: {
             },
           ]}
         />
-        {/* TODO: Vet list should be provided by server component */}
         <BarkFormRadioGroup
           form={form}
           label="Select your preferred vet for blood profiling test and blood donation"
           name="dogPreferredVetId"
-          options={[
-            { label: "Vet A", value: "vet-a" },
-            {
-              label: "Vet B",
-              value: "vet-b",
-            },
-            {
-              label: "Vet C",
-              value: "vet-c",
-            },
-          ]}
+          options={vetOptions}
         />
 
         <div className="flex gap-2">

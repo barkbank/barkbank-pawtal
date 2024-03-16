@@ -8,11 +8,12 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import PetForm from "./pet-form";
 import OwnerForm from "./owner-form";
-import { BarkH1, BarkH4, BarkP } from "@/components/bark/bark-typography";
+import { BarkH4, BarkP } from "@/components/bark/bark-typography";
 import Image from "next/image";
 import Link from "next/link";
 import { RoutePath } from "@/lib/route-path";
 import { useRouter } from "next/navigation";
+import { BarkFormOption } from "@/components/bark/bark-form";
 
 const FORM_SCHEMA = z.object({
   dogName: z.string(),
@@ -38,7 +39,11 @@ type FormDataType = z.infer<typeof FORM_SCHEMA>;
 const steps = ["Tell us about your pet", "Add your details", "Enter Pawtal!"];
 const STEPS = { PET: 0, OWNER: 1, SUCCESS: 2 };
 
-export default function DonorForm({ breeds }: { breeds: Breed[] }) {
+export default function DonorForm(props: {
+  breeds: Breed[];
+  vetOptions: BarkFormOption[];
+}) {
+  const { breeds, vetOptions } = props;
   const router = useRouter();
   const [currentStep, setCurrentStep] = React.useState(STEPS.PET);
 
@@ -85,6 +90,7 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
       {currentStep === STEPS.PET && (
         <PetForm
           breeds={breeds}
+          vetOptions={vetOptions}
           defaultValues={form.getValues()}
           onSave={(values) => {
             form.setValue("dogName", values.dogName);
