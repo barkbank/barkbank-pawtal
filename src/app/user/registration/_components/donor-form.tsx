@@ -161,7 +161,7 @@ export default function DonorForm(props: {
             </div>
 
             <div className="flex flex-col items-center text-center">
-              <Image src={"/contact-us.svg"} alt="" height={100} width={100} />
+              <Image src={"/contact-us.svg"} alt="" height={101} width={100} />
               <BarkH4>Upcoming Blood Profiling</BarkH4>
               <BarkP>
                 Your preferred vet will contact you within the week to schedule
