@@ -5,8 +5,15 @@ import DonorForm from "./_components/donor-form";
 import { Pool } from "pg";
 import { BarkFormOption } from "@/components/bark/bark-form";
 import { dbQuery } from "@/lib/data/db-utils";
+import { AccountType, isLoggedIn } from "@/lib/auth";
+import { RoutePath } from "@/lib/route-path";
+import { redirect } from "next/navigation";
 
 export default async function Page() {
+  if (await isLoggedIn(AccountType.USER)) {
+    redirect(RoutePath.USER_DASHBOARD_PAGE);
+  }
+
   const [breedService, dbPool] = await Promise.all([
     APP.getBreedService(),
     APP.getDbPool(),
