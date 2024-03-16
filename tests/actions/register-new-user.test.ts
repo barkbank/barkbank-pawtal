@@ -1,10 +1,8 @@
 import { Pool } from "pg";
 import { withDb } from "../_db_helpers";
-import {
-  _RegistrationHandler,
-  _RegistrationHandlerConfig,
-  RegistrationRequest,
-} from "@/lib/actions/register-new-user";
+import { RegistrationRequest } from "@/lib/user/registration-handler";
+import { RegistrationHandlerConfig } from "@/lib/user/registration-handler";
+import { RegistrationHandler } from "@/lib/user/registration-handler";
 import {
   DogAntigenPresence,
   DogGender,
@@ -37,7 +35,7 @@ describe("_RegistrationHandler", () => {
 
       // WHEN
       const config = getConfig(dbPool);
-      const handler = new _RegistrationHandler(config);
+      const handler = new RegistrationHandler(config);
       const response = await handler.handle(request);
 
       // THEN
@@ -89,7 +87,7 @@ describe("_RegistrationHandler", () => {
 
       // WHEN
       const config = getConfig(dbPool);
-      const handler = new _RegistrationHandler(config);
+      const handler = new RegistrationHandler(config);
       const response = await handler.handle(request);
 
       // THEN
@@ -122,7 +120,7 @@ describe("_RegistrationHandler", () => {
 
       // WHEN
       const config = getConfig(dbPool);
-      const handler = new _RegistrationHandler(config);
+      const handler = new RegistrationHandler(config);
       const response = await handler.handle(request);
 
       // THEN
@@ -131,7 +129,7 @@ describe("_RegistrationHandler", () => {
   });
 });
 
-function getConfig(dbPool: Pool): _RegistrationHandlerConfig {
+function getConfig(dbPool: Pool): RegistrationHandlerConfig {
   return {
     dbPool,
     otpService: getOtpService(),

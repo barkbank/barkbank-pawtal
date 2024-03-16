@@ -1,10 +1,12 @@
+"use server";
+
 import APP from "@/lib/app";
 import DonorForm from "./_components/donor-form";
 import { Pool } from "pg";
 import { BarkFormOption } from "@/components/bark/bark-form";
 import { dbQuery } from "@/lib/data/db-utils";
 
-export default async function Example() {
+export default async function Page() {
   const [breedService, dbPool] = await Promise.all([
     APP.getBreedService(),
     APP.getDbPool(),

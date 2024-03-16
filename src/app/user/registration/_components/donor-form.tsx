@@ -14,6 +14,17 @@ import Link from "next/link";
 import { RoutePath } from "@/lib/route-path";
 import { useRouter } from "next/navigation";
 import { BarkFormOption } from "@/components/bark/bark-form";
+import { registerNewUser } from "@/lib/actions/register-new-user";
+import { RegistrationRequest } from "@/lib/user/registration-handler";
+import {
+  DogAntigenPresence,
+  DogGender,
+  UserResidency,
+  YesNoUnknown,
+} from "@/lib/data/db-models";
+import { BARK_UTC } from "@/lib/bark-utils";
+import { signIn } from "next-auth/react";
+import { AccountType } from "@/lib/auth";
 
 const FORM_SCHEMA = z.object({
   dogName: z.string(),
@@ -46,6 +57,10 @@ export default function DonorForm(props: {
   const { breeds, vetOptions } = props;
   const router = useRouter();
   const [currentStep, setCurrentStep] = React.useState(STEPS.PET);
+  // WIP: Forward the registration error into the forms
+  const [registrationError, setRegistrationError] = React.useState<
+    string | React.ReactNode
+  >("");
 
   const form = useForm<FormDataType>({
     resolver: zodResolver(FORM_SCHEMA),
@@ -68,9 +83,72 @@ export default function DonorForm(props: {
     },
   });
 
-  async function doRegistration() {
-    // WIP: Call registerNewUser here.
-    console.log(form.getValues());
+  function getRegistrationRequest(): RegistrationRequest {
+    const vals = form.getValues();
+    return {
+      emailOtp: vals.emailOtp,
+      userName: vals.userName,
+      userEmail: vals.userEmail,
+      userPhoneNumber: vals.userPhoneNumber,
+      userResidency: vals.userResidency as UserResidency,
+      dogName: vals.dogName,
+      dogBreed: vals.dogBreed,
+      dogBirthday: BARK_UTC.parseDate(vals.dogBirthday),
+      dogGender: vals.dogGender as DogGender,
+      dogWeightKg: vals.dogWeightKg === "" ? null : Number(vals.dogWeightKg),
+      dogDea1Point1: vals.dogDea1Point1 as DogAntigenPresence,
+      dogEverPregnant: vals.dogEverPregnant as YesNoUnknown,
+      dogEverReceivedTransfusion:
+        vals.dogEverReceivedTransfusion as YesNoUnknown,
+      dogPreferredVetId: vals.dogPreferredVetId,
+    };
+  }
+
+  async function doRegistration(): Promise<void> {
+    setRegistrationError("");
+    const req = getRegistrationRequest();
+    const res = await registerNewUser(req);
+    if (res === "STATUS_401_INVALID_OTP") {
+      setRegistrationError(
+        "The OTP submitted is invalid. Please request for another and try again.",
+      );
+      setCurrentStep(STEPS.OWNER);
+      return;
+    }
+    if (res === "STATUS_409_USER_EXISTS") {
+      setRegistrationError("An account already exists");
+      setCurrentStep(STEPS.OWNER);
+      return;
+    }
+    if (
+      res === "STATUS_500_INTERNAL_SERVER_ERROR" ||
+      res === "STATUS_503_DB_CONTENTION"
+    ) {
+      setRegistrationError(
+        "Oops! Something went wrong at the Pawtal! Please request for another OTP and try again.",
+      );
+      setCurrentStep(STEPS.OWNER);
+      return;
+    }
+    const result = await signIn("credentials", {
+      email: req.userEmail,
+      otp: req.emailOtp,
+      accountType: "USER",
+      redirect: false,
+    });
+    if (result === undefined || !result.ok) {
+      setRegistrationError(
+        <p>
+          "Account was created, but login failed. Please{" "}
+          <Link href={RoutePath.USER_LOGIN_PAGE}>CLICK HERE</Link> to login."
+        </p>,
+      );
+      setCurrentStep(STEPS.OWNER);
+      return;
+    }
+    setTimeout(() => {
+      router.push(RoutePath.USER_DASHBOARD_PAGE);
+    }, 5000);
     setCurrentStep(STEPS.SUCCESS);
   }
 
@@ -144,7 +222,7 @@ export default function DonorForm(props: {
           </BarkH4>
           <BarkP>
             If not, please{" "}
-            <Link className="hover:underline" href="/bark/login">
+            <Link className="hover:underline" href={RoutePath.USER_LOGIN_PAGE}>
               CLICK HERE
             </Link>{" "}
             to login.
