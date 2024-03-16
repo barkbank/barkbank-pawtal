@@ -32,7 +32,7 @@ describe("db-admins", () => {
         expect(admin?.adminModificationTime).toBeTruthy();
         expect(admin?.adminModificationTime).toEqual(admin?.adminCreationTime);
         const mapper = getAdminMapper();
-        const specOut = mapper.mapAdminRecordToAdminSpec(guaranteed(admin));
+        const specOut = mapper.toAdminSpec(guaranteed(admin));
         expect(specOut).toMatchObject(specIn);
       });
     });
