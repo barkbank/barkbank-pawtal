@@ -37,7 +37,7 @@ export type RegistrationRequest = {
   dogDea1Point1: DogAntigenPresence;
   dogEverPregnant: YesNoUnknown;
   dogEverReceivedTransfusion: YesNoUnknown;
-  dogPreferredVetIdList: string[];
+  dogPreferredVetId: string;
 };
 
 export type RegistrationResponse =
@@ -105,7 +105,7 @@ export class _RegistrationHandler {
         return "STATUS_409_USER_EXISTS";
       }
       const dogGen = await this.registerDog(conn, request, userGen.userId);
-      const allInserted = await this.registerVetPreferences(
+      const allInserted = await this.registerVetPreference(
         conn,
         request,
         dogGen.dogId,
@@ -190,22 +190,11 @@ export class _RegistrationHandler {
     return gen;
   }
 
-  private async registerVetPreferences(
+  private async registerVetPreference(
     conn: PoolClient,
     request: RegistrationRequest,
     dogId: string,
   ): Promise<boolean> {
-    const results = await Promise.all(
-      request.dogPreferredVetIdList.map((vetId) => {
-        return dbInsertDogVetPreference(conn, dogId, vetId);
-      }),
-    );
-    let numInsertions = 0;
-    for (const result of results) {
-      if (result) {
-        numInsertions += 1;
-      }
-    }
-    return numInsertions === request.dogPreferredVetIdList.length;
+    return dbInsertDogVetPreference(conn, dogId, request.dogPreferredVetId);
   }
 }

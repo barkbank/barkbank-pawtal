@@ -33,9 +33,7 @@ describe("_RegistrationHandler", () => {
     await withDb(async (dbPool) => {
       // GIVEN a standard request
       const preferredVet = await insertVet(42, dbPool);
-      const request = getRegistrationRequest({
-        dogPreferredVetIdList: [preferredVet.vetId],
-      });
+      const request = getRegistrationRequest(preferredVet.vetId);
 
       // WHEN
       const config = getConfig(dbPool);
@@ -85,8 +83,7 @@ describe("_RegistrationHandler", () => {
     await withDb(async (dbPool) => {
       // GIVEN a request with invalid OTP
       const preferredVet = await insertVet(42, dbPool);
-      const request = getRegistrationRequest({
-        dogPreferredVetIdList: [preferredVet.vetId],
+      const request = getRegistrationRequest(preferredVet.vetId, {
         emailOtp: HarnessOtpService.INVALID_OTP,
       });
 
@@ -119,8 +116,7 @@ describe("_RegistrationHandler", () => {
       const existingUser = await insertUser(86, dbPool);
       const existingUserPii =
         await getUserMapper().mapUserRecordToUserPii(existingUser);
-      const request = getRegistrationRequest({
-        dogPreferredVetIdList: [preferredVet.vetId],
+      const request = getRegistrationRequest(preferredVet.vetId, {
         userEmail: existingUserPii.userEmail,
       });
 
@@ -146,6 +142,7 @@ function getConfig(dbPool: Pool): _RegistrationHandlerConfig {
 }
 
 function getRegistrationRequest(
+  preferredVetId: string,
   overrides?: Partial<RegistrationRequest>,
 ): RegistrationRequest {
   const base: RegistrationRequest = {
@@ -162,7 +159,7 @@ function getRegistrationRequest(
     dogDea1Point1: DogAntigenPresence.NEGATIVE,
     dogEverPregnant: YesNoUnknown.NO,
     dogEverReceivedTransfusion: YesNoUnknown.NO,
-    dogPreferredVetIdList: [],
+    dogPreferredVetId: preferredVetId,
   };
   return { ...base, ...overrides };
 }
