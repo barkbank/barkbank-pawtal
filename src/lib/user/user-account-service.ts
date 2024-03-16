@@ -1,25 +1,8 @@
 import { Pool } from "pg";
 import { HashService } from "../services/hash";
-import {
-  DogRecord,
-  DogSecureOii,
-  DogSpec,
-  DogStatus,
-  UserPii,
-  UserSpec,
-} from "../data/db-models";
-import {
-  dbSelectUser,
-  dbSelectUserIdByHashedEmail,
-  dbTryInsertUser,
-} from "../data/db-users";
-import { Registration } from "./user-models";
-import {
-  dbInsertDog,
-  dbInsertDogVetPreference,
-  dbSelectDogListByUserId,
-} from "../data/db-dogs";
-import { dbBegin, dbCommit, dbRelease, dbRollback } from "../data/db-utils";
+import { DogRecord } from "../data/db-models";
+import { dbSelectUser, dbSelectUserIdByHashedEmail } from "../data/db-users";
+import { dbSelectDogListByUserId } from "../data/db-dogs";
 import { UserRecord } from "../data/db-models";
 import { UserMapper } from "../data/user-mapper";
 import { DogMapper } from "../data/dog-mapper";
@@ -58,48 +41,6 @@ export class UserAccountService {
 
   public getUserRecord(userId: string): Promise<UserRecord | null> {
     return dbSelectUser(this.getDbPool(), userId);
-  }
-
-  public async createUserAccount(registration: Registration): Promise<boolean> {
-    const conn = await this.getDbPool().connect();
-    try {
-      await dbBegin(conn);
-      const { userEmail, userName, userPhoneNumber } = registration.user;
-      const userPii: UserPii = { userEmail, userName, userPhoneNumber };
-      const securePii =
-        await this.getUserMapper().mapUserPiiToUserSecurePii(userPii);
-      const userSpec: UserSpec = {
-        ...securePii,
-        userResidency: registration.user.userResidency,
-      };
-      const userGen = await dbTryInsertUser(conn, userSpec);
-      if (userGen === null) {
-        await dbRollback(conn);
-        return false;
-      }
-      for (const dogRegistration of registration.dogList) {
-        const { dogName, dogPreferredVetIdList, ...dogDetails } =
-          dogRegistration;
-        const dogSecureOii: DogSecureOii =
-          await this.getDogMapper().mapDogOiiToDogSecureOii({ dogName });
-        const dogSpec: DogSpec = {
-          ...dogSecureOii,
-          ...dogDetails,
-          dogStatus: DogStatus.NEW_PROFILE,
-        };
-        const dogGen = await dbInsertDog(conn, userGen.userId, dogSpec);
-        for (const vetId of dogPreferredVetIdList) {
-          await dbInsertDogVetPreference(conn, dogGen.dogId, vetId);
-        }
-      }
-      await dbCommit(conn);
-      return true;
-    } catch {
-      await dbRollback(conn);
-      return false;
-    } finally {
-      await dbRelease(conn);
-    }
   }
 
   public getUserDogRecords(userId: string): Promise<DogRecord[]> {
