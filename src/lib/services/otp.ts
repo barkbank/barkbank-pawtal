@@ -17,7 +17,12 @@ export type OtpConfig = {
   otpHashService: HashService;
 };
 
-export class OtpService {
+export interface OtpService {
+  getCurrentOtp(value: string): Promise<string>;
+  getRecentOtps(value: string): Promise<string[]>;
+}
+
+export class OtpServiceImpl implements OtpService {
   private config: OtpConfig;
   private otpModulus: number;
 

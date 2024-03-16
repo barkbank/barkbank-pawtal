@@ -13,7 +13,7 @@ import {
   SecretEncryptionService,
 } from "./services/encryption";
 import { HashService, SecretHashService } from "./services/hash";
-import { OtpConfig, OtpService } from "./services/otp";
+import { OtpConfig, OtpService, OtpServiceImpl } from "./services/otp";
 import pg from "pg";
 import { VetActorFactory } from "./vet/vet-actor-factory";
 import { UserActorFactory } from "./user/user-actor-factory";
@@ -108,7 +108,7 @@ export class AppFactory {
           this.envString(AppEnv.BARKBANK_OTP_SECRET),
         ),
       };
-      this.promisedOtpService = Promise.resolve(new OtpService(config));
+      this.promisedOtpService = Promise.resolve(new OtpServiceImpl(config));
       console.log("Created OtpService");
     }
     return this.promisedOtpService;
