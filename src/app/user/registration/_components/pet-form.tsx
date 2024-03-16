@@ -3,7 +3,7 @@
 import {
   BarkForm,
   BarkFormButton,
-  BarkFormDatetimeInput,
+  BarkFormDateInput,
   BarkFormHeader,
   BarkFormInput,
   BarkFormRadioGroup,
@@ -24,12 +24,7 @@ import { z } from "zod";
 const FORM_SCHEMA = z.object({
   dogName: z.string().min(1, { message: "Name cannot be empty" }),
   dogBreed: z.string(),
-  dogBirthday: z
-    .date()
-    .nullable()
-    .refine((value) => value !== null, {
-      message: "Please fill in a birthday",
-    }),
+  dogBirthday: z.string().min(1, { message: "Please fill in a birthday" }),
   dogGender: z.string().min(1, { message: "Please select an option" }),
   dogWeightKg: z.string().refine(isValidWeightKg, {
     message: "Weight should be a positive whole number or left blank",
@@ -99,9 +94,9 @@ export default function PetForm(props: {
           }))}
         />
 
-        <BarkFormDatetimeInput
+        <BarkFormDateInput
           form={form}
-          label="When is it's birthday? (DD/MM/YYYY)"
+          label="When is it's birthday? (YYYY-MM-DD)"
           name="dogBirthday"
         />
 

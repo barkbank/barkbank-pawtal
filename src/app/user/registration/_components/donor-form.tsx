@@ -17,7 +17,7 @@ import { useRouter } from "next/navigation";
 const FORM_SCHEMA = z.object({
   dogName: z.string(),
   dogBreed: z.string(),
-  dogBirthday: z.date().nullable(),
+  dogBirthday: z.string(),
   dogGender: z.string(),
   dogWeightKg: z.string(),
   dogDea1Point1: z.string(),
@@ -47,7 +47,7 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
     defaultValues: {
       dogName: "",
       dogBreed: "",
-      dogBirthday: null,
+      dogBirthday: "",
       dogGender: "",
       dogWeightKg: "",
       dogDea1Point1: "",
