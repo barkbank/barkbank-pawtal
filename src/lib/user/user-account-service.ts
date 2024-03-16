@@ -64,7 +64,8 @@ export class UserAccountService {
     const conn = await this.getDbPool().connect();
     try {
       await dbBegin(conn);
-      const userPii: UserPii = registration.user;
+      const { userEmail, userName, userPhoneNumber } = registration.user;
+      const userPii: UserPii = { userEmail, userName, userPhoneNumber };
       const securePii =
         await this.getUserMapper().mapUserPiiToUserSecurePii(userPii);
       const userSpec: UserSpec = {

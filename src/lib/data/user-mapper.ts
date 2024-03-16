@@ -46,14 +46,21 @@ export class UserMapper {
     const jsonEncoded = await this.piiEncryptionService.getDecryptedData(
       userSecurePii.userEncryptedPii,
     );
-    const pii = JSON.parse(jsonEncoded) as UserPii;
+    const obj = JSON.parse(jsonEncoded);
+    const { userEmail, userName, userPhoneNumber } = obj;
+    const pii: UserPii = { userEmail, userName, userPhoneNumber };
     return pii;
   }
 
   public async mapUserPiiToUserSecurePii(
     userPii: UserPii,
   ): Promise<UserSecurePii> {
-    const jsonEncoded = JSON.stringify(userPii);
+    const { userEmail, userName, userPhoneNumber } = userPii;
+    const jsonEncoded = JSON.stringify({
+      userEmail,
+      userName,
+      userPhoneNumber,
+    });
     const [userHashedEmail, userEncryptedPii] = await Promise.all([
       this.emailHashService.getHashHex(userPii.userEmail),
       this.piiEncryptionService.getEncryptedData(jsonEncoded),

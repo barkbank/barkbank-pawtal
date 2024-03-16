@@ -86,10 +86,11 @@ describe("UserAccountService", () => {
         );
         expect(userId).not.toBeNull();
         const user = await service.getUserRecord(guaranteed(userId));
+        const { userResidency } = guaranteed(user);
         const userPii = await service
           .getUserMapper()
           .mapUserRecordToUserPii(guaranteed(user));
-        expect(userPii).toMatchObject(userReg);
+        expect({ ...userPii, userResidency }).toMatchObject(userReg);
 
         // AND a dog record should be created for the one dog;
         const dogRecords = await service.getUserDogRecords(guaranteed(userId));
