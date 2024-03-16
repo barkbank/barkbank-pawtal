@@ -13,9 +13,7 @@ import {
 } from "@/components/bark/bark-form";
 import { useState } from "react";
 import { SignInResponse, signIn } from "next-auth/react";
-import { redirect, useRouter, useSearchParams } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { RoutePath } from "@/lib/route-path";
 import { AccountType } from "@/lib/auth";
 import { sendLoginOtp } from "@/lib/actions/send-login-otp";
