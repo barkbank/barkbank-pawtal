@@ -131,7 +131,7 @@ export default function OwnerForm(props: {
 
         {registrationError && (
           // TODO: Make component for errors of this kind.
-          <div className="rounded-md mt-6 border-2 border-brand bg-red-100 text-rose-600 p-3 shadow-md">
+          <div className="mt-6 rounded-md border-2 border-brand bg-red-100 p-3 text-rose-600 shadow-md">
             {registrationError}
           </div>
         )}
