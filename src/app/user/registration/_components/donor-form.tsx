@@ -24,7 +24,7 @@ import {
 } from "@/lib/data/db-models";
 import { BARK_UTC } from "@/lib/bark-utils";
 import { signIn } from "next-auth/react";
-import { AccountType } from "@/lib/auth";
+import { Button } from "@/components/ui/button";
 
 const FORM_SCHEMA = z.object({
   dogName: z.string(),
@@ -57,7 +57,6 @@ export default function DonorForm(props: {
   const { breeds, vetOptions } = props;
   const router = useRouter();
   const [currentStep, setCurrentStep] = React.useState(STEPS.PET);
-  // WIP: Forward the registration error into the forms
   const [registrationError, setRegistrationError] = React.useState<
     string | React.ReactNode
   >("");
@@ -116,7 +115,12 @@ export default function DonorForm(props: {
       return;
     }
     if (res === "STATUS_409_USER_EXISTS") {
-      setRegistrationError("An account already exists");
+      setRegistrationError(
+        <p>
+          Account already exists. Please{" "}
+          <Link href={RoutePath.USER_LOGIN_PAGE}><span className="font-bold">CLICK HERE</span></Link> to login.
+        </p>,
+      );
       setCurrentStep(STEPS.OWNER);
       return;
     }
@@ -130,12 +134,16 @@ export default function DonorForm(props: {
       setCurrentStep(STEPS.OWNER);
       return;
     }
+
+    // Note: Provide string to accountType below. Using AccountType adds a
+    // dependency on auth.ts and its other imports.
     const result = await signIn("credentials", {
       email: req.userEmail,
       otp: req.emailOtp,
       accountType: "USER",
       redirect: false,
     });
+
     if (result === undefined || !result.ok) {
       setRegistrationError(
         <p>
@@ -146,9 +154,6 @@ export default function DonorForm(props: {
       setCurrentStep(STEPS.OWNER);
       return;
     }
-    setTimeout(() => {
-      router.push(RoutePath.USER_DASHBOARD_PAGE);
-    }, 5000);
     setCurrentStep(STEPS.SUCCESS);
   }
 
@@ -156,12 +161,12 @@ export default function DonorForm(props: {
     <div className="w-screen px-6 pb-24 pt-12 md:w-[800px]">
       <div className="flex flex-col items-center gap-2">
         <Image src={"/orange-dog-house.svg"} alt="" height={100} width={100} />
-        <div className="mt-4 text-center">
+        <div className="mt-6 text-center">
           <BarkH4>Bark Bank Canine Blood Donation Pawtal</BarkH4>
         </div>
         {/* <BarkH4>Bark Bank Canine Blood Donation Pawtal</BarkH4> */}
       </div>
-      <div className="stretch mt-20">
+      <div className="stretch mt-6">
         <Stepper steps={steps} currentStep={currentStep} />
       </div>
 
@@ -189,6 +194,7 @@ export default function DonorForm(props: {
             router.push(RoutePath.ROOT);
           }}
           onNext={() => {
+            setRegistrationError("");
             setCurrentStep(STEPS.OWNER);
           }}
           prevLabel="Cancel"
@@ -199,6 +205,7 @@ export default function DonorForm(props: {
       {currentStep === STEPS.OWNER && (
         <OwnerForm
           defaultValues={form.getValues()}
+          registrationError={registrationError}
           onSave={(values) => {
             form.setValue("userResidency", values.userResidency);
             form.setValue("userName", values.userName);
@@ -207,7 +214,11 @@ export default function DonorForm(props: {
             form.setValue("emailOtp", values.emailOtp);
             form.setValue("termsAndConditions", values.termsAndConditions);
           }}
-          onPrev={() => setCurrentStep(STEPS.PET)}
+          onPrev={() => {
+            setCurrentStep(STEPS.PET);
+            setRegistrationError("");
+            form.setValue("emailOtp", "");
+          }}
           onNext={doRegistration}
           prevLabel="Back"
           nextLabel="Submit"
@@ -215,20 +226,24 @@ export default function DonorForm(props: {
       )}
 
       {currentStep === STEPS.SUCCESS && (
-        <div className="text-center">
+        <div className="mt-6 text-center">
           <BarkH4>
             Thank you for your information, your account has been created.
-            You'll be directed to your account shortly.
           </BarkH4>
-          <BarkP>
-            If not, please{" "}
-            <Link className="hover:underline" href={RoutePath.USER_LOGIN_PAGE}>
-              CLICK HERE
-            </Link>{" "}
-            to login.
-          </BarkP>
+          <div className="mt-6">
+            <Button
+              variant="brand"
+              className="w-full p-6"
+              onClick={() => {
+                router.push(RoutePath.USER_DASHBOARD_PAGE);
+                router.refresh();
+              }}
+            >
+              Enter My Dashboard
+            </Button>
+          </div>
 
-          <div className="mt-8 grid grid-cols-1 gap-20 md:grid-cols-3">
+          <div className="mt-6 grid grid-cols-1 gap-20 md:grid-cols-3">
             <div className="flex flex-col items-center text-center">
               <Image src={"/check-mail.svg"} alt="" height={100} width={100} />
               <BarkH4>Confirmation Email</BarkH4>

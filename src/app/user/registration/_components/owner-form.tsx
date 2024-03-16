@@ -3,6 +3,7 @@
 import {
   BarkForm,
   BarkFormButton,
+  BarkFormError,
   BarkFormHeader,
   BarkFormInput,
   BarkFormParagraph,
@@ -33,13 +34,22 @@ type FormDataType = z.infer<typeof FORM_SCHEMA>;
 
 export default function OwnerForm(props: {
   defaultValues: FormDataType;
+  registrationError: string | React.ReactNode;
   onSave: (values: FormDataType) => void;
   onPrev: () => void;
   onNext: () => void;
   prevLabel: string;
   nextLabel: string;
 }) {
-  const { defaultValues, onSave, onNext, onPrev, nextLabel, prevLabel } = props;
+  const {
+    defaultValues,
+    registrationError,
+    onSave,
+    onNext,
+    onPrev,
+    nextLabel,
+    prevLabel,
+  } = props;
   const [recipientEmail, setRecipientEmail] = React.useState<string>("");
   const form = useForm<FormDataType>({
     resolver: zodResolver(FORM_SCHEMA),
@@ -118,6 +128,14 @@ export default function OwnerForm(props: {
           optionLabel="By submitting this form, you agree to share your information with your preferred vets to schedule appointments for blood 
         profiling and donation."
         />
+
+        {registrationError && (
+          // TODO: Make component for errors of this kind.
+          <div className="rounded-md mt-6 border-2 border-brand bg-red-100 text-rose-600 p-3 shadow-md">
+            {registrationError}
+          </div>
+        )}
+
         <div className="flex gap-2">
           <BarkFormButton onClick={onPrevClick} className="w-full">
             {prevLabel}
