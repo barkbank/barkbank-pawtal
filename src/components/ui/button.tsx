@@ -22,6 +22,10 @@ const buttonVariants = cva(
           "text-brand font-bold border-2 border-brand bg-brand-light hover:bg-brand hover:text-white w-[160px] shadow-button",
         brand:
           "text-white font-bold border-2 border-brand bg-brand hover:bg-brand-light hover:text-brand w-[160px] shadow-button",
+        brandSelectedChoice:
+          "bg-brand-selected-choice text-primary-foreground w-[160px]",
+        brandChoice:
+          "border border-input bg-background hover:bg-accent hover:text-accent-foreground w-[160px]",
       },
       size: {
         default: "h-10 px-4 py-2",

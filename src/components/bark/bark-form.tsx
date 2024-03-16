@@ -30,6 +30,7 @@ import { CalendarIcon, Check, ChevronsUpDown } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import React from "react";
+import { BARK_UTC } from "@/lib/bark-utils";
 
 export function BarkForm(props: {
   children: React.ReactNode;
@@ -104,7 +105,8 @@ export function BarkFormInput(props: {
   );
 }
 
-export function BarkFormDatetimeInput(props: {
+// Field value should be a YYYY-MM-DD string.
+export function BarkFormDateInput(props: {
   form: UseFormReturn<any>;
   name: string;
   label: string;
@@ -130,21 +132,25 @@ export function BarkFormDatetimeInput(props: {
                   )}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {field.value ? (
-                    format(field.value, "dd/MM/yy")
-                  ) : (
-                    <span>{placeholder}</span>
-                  )}
+                  {field.value ? field.value : <span>{placeholder}</span>}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0">
                 <Calendar
                   mode="single"
-                  selected={field.value}
+                  selected={BARK_UTC.parseDate(field.value)}
                   onSelect={(v) => {
-                    field.onChange(v);
+                    if (v === undefined) {
+                      field.onChange("");
+                    } else {
+                      const y = v.getFullYear();
+                      const m = v.getMonth() + 1;
+                      const d = v.getDate();
+                      const utcDate = BARK_UTC.getDate(y, m, d);
+                      field.onChange(BARK_UTC.formatDate(utcDate));
+                    }
                   }}
-                  initialFocus
+                  initialFocus={true}
                 />
               </PopoverContent>
             </Popover>
@@ -218,7 +224,11 @@ export function BarkFormRadioGroup(props: {
               <div className="flex space-x-2">
                 {options.map((option) => (
                   <Button
-                    variant={field.value === option.value ? "brand" : "outline"}
+                    variant={
+                      field.value === option.value
+                        ? "brandSelectedChoice"
+                        : "brandChoice"
+                    }
                     key={option.value}
                     type="button"
                     className="flex-grow"
@@ -234,7 +244,7 @@ export function BarkFormRadioGroup(props: {
               <RadioGroup
                 onValueChange={field.onChange}
                 defaultValue={field.value}
-                className="flex"
+                className="flex flex-col"
               >
                 {options.map((option) => (
                   <FormItem
