@@ -13,9 +13,7 @@ import {
 } from "@/components/bark/bark-form";
 import { useState } from "react";
 import { SignInResponse, signIn } from "next-auth/react";
-import { redirect, useRouter, useSearchParams } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
 import { RoutePath } from "@/lib/route-path";
 import { AccountType } from "@/lib/auth";
 import { sendLoginOtp } from "@/lib/actions/send-login-otp";
@@ -111,13 +109,11 @@ export default function BarkLoginForm(props: {
           </BarkFormParagraph>
         )}
         <BarkFormInput form={form} name="otp" label="Enter OTP" />
-        <div className="mt-6 flex w-full gap-x-4">
-          <Link href={RoutePath.ROOT}>
-            <Button variant="brandInverse" type="button">
-              Cancel
-            </Button>
-          </Link>
-          <BarkFormSubmitButton>Login</BarkFormSubmitButton>{" "}
+        <div className="flex w-full gap-x-4">
+          <BarkFormButton onClick={async () => router.push(RoutePath.ROOT)}>
+            Cancel
+          </BarkFormButton>
+          <BarkFormSubmitButton>Login</BarkFormSubmitButton>
         </div>
         <BarkFormError form={form} />
         {shouldShowLoginFailed && (
