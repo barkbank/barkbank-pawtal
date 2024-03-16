@@ -118,7 +118,10 @@ export default function DonorForm(props: {
       setRegistrationError(
         <p>
           Account already exists. Please{" "}
-          <Link href={RoutePath.USER_LOGIN_PAGE}><span className="font-bold">CLICK HERE</span></Link> to login.
+          <Link href={RoutePath.USER_LOGIN_PAGE}>
+            <span className="font-bold">CLICK HERE</span>
+          </Link>{" "}
+          to login.
         </p>,
       );
       setCurrentStep(STEPS.OWNER);
@@ -147,8 +150,8 @@ export default function DonorForm(props: {
     if (result === undefined || !result.ok) {
       setRegistrationError(
         <p>
-          "Account was created, but login failed. Please{" "}
-          <Link href={RoutePath.USER_LOGIN_PAGE}>CLICK HERE</Link> to login."
+          Account was created, but login failed. Please{" "}
+          <Link href={RoutePath.USER_LOGIN_PAGE}>CLICK HERE</Link> to login.
         </p>,
       );
       setCurrentStep(STEPS.OWNER);
@@ -267,8 +270,8 @@ export default function DonorForm(props: {
               <BarkH4>Contact Us</BarkH4>
               <BarkP>
                 Feel free to reach out with any inquiries regarding your
-                registration by sending an email us at hello@barkbank.co. We're
-                here to assist!
+                registration by sending an email us at hello@barkbank.co.
+                We&apos;re here to assist!
               </BarkP>
             </div>
           </div>

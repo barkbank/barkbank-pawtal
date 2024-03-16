@@ -16,6 +16,7 @@ test:
 	bash scripts/testdb.sh testDbDown
 	bash scripts/test_minimal_process_env_usage.sh
 	bash scripts/test_no_wip_tasks_remaining.sh
+	npm run lint
 
 # Runs the local development server.
 .PHONY: run
