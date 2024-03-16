@@ -17,6 +17,7 @@ import {
   getEmailHashService,
   getOtpService,
   getUserMapper,
+  insertUser,
   insertVet,
 } from "../_fixtures";
 import { dbSelectUser, dbSelectUserIdByHashedEmail } from "@/lib/data/db-users";
@@ -36,12 +37,12 @@ describe("_RegistrationHandler", () => {
         dogPreferredVetIdList: [preferredVet.vetId],
       });
 
-      // WHEN handle
+      // WHEN
       const config = getConfig(dbPool);
       const handler = new _RegistrationHandler(config);
       const response = await handler.handle(request);
 
-      // THEN the response should be STATUS_201_CREATED
+      // THEN
       expect(response).toEqual("STATUS_201_CREATED");
 
       // AND a user should be created
@@ -89,12 +90,12 @@ describe("_RegistrationHandler", () => {
         emailOtp: HarnessOtpService.INVALID_OTP,
       });
 
-      // WHEN handle
+      // WHEN
       const config = getConfig(dbPool);
       const handler = new _RegistrationHandler(config);
       const response = await handler.handle(request);
 
-      // THEN the response should be STATUS_401_INVALID_OTP
+      // THEN
       expect(response).toEqual("STATUS_401_INVALID_OTP");
 
       // AND no records created
@@ -113,8 +114,23 @@ describe("_RegistrationHandler", () => {
 
   it("should return STATUS_409_USER_EXISTS when user already exists", async () => {
     await withDb(async (dbPool) => {
+      // GIVEN a request for a user that already exists
+      const preferredVet = await insertVet(42, dbPool);
+      const existingUser = await insertUser(86, dbPool);
+      const existingUserPii =
+        await getUserMapper().mapUserRecordToUserPii(existingUser);
+      const request = getRegistrationRequest({
+        dogPreferredVetIdList: [preferredVet.vetId],
+        userEmail: existingUserPii.userEmail,
+      });
+
+      // WHEN
       const config = getConfig(dbPool);
-      fail("WIP: implement this test");
+      const handler = new _RegistrationHandler(config);
+      const response = await handler.handle(request);
+
+      // THEN
+      expect(response).toEqual("STATUS_409_USER_EXISTS");
     });
   });
 });

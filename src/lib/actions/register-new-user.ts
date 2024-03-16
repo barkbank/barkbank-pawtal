@@ -18,7 +18,7 @@ import {
 import { HashService } from "../services/hash";
 import { dbBegin, dbCommit, dbRelease, dbRollback } from "../data/db-utils";
 import { UserMapper } from "../data/user-mapper";
-import { dbInsertUser } from "../data/db-users";
+import { dbInsertUser, dbSelectUserIdByHashedEmail } from "../data/db-users";
 import { DogMapper } from "../data/dog-mapper";
 import { dbInsertDog, dbInsertDogVetPreference } from "../data/db-dogs";
 import { OtpService } from "../services/otp";
@@ -96,7 +96,14 @@ export class _RegistrationHandler {
     const conn = await this.config.dbPool.connect();
     try {
       await dbBegin(conn);
-      const userGen = await this.registerUser(conn, request);
+      const { hasExistingUser, userGen } = await this.registerUser(
+        conn,
+        request,
+      );
+      if (hasExistingUser) {
+        await dbRollback(conn);
+        return "STATUS_409_USER_EXISTS";
+      }
       const dogGen = await this.registerDog(conn, request, userGen.userId);
       const allInserted = await this.registerVetPreferences(
         conn,
@@ -127,7 +134,10 @@ export class _RegistrationHandler {
   private async registerUser(
     conn: PoolClient,
     request: RegistrationRequest,
-  ): Promise<UserGen> {
+  ): Promise<
+    | { hasExistingUser: false; userGen: UserGen }
+    | { hasExistingUser: true; userGen: null }
+  > {
     const { userEmail, userName, userPhoneNumber, userResidency } = request;
     const securePii: UserSecurePii =
       await this.config.userMapper.mapUserPiiToUserSecurePii({
@@ -135,9 +145,16 @@ export class _RegistrationHandler {
         userName,
         userPhoneNumber,
       });
+    const existingId = await dbSelectUserIdByHashedEmail(
+      conn,
+      securePii.userHashedEmail,
+    );
+    if (existingId !== null) {
+      return { hasExistingUser: true, userGen: null };
+    }
     const spec: UserSpec = { ...securePii, userResidency };
-    const gen = await dbInsertUser(conn, spec);
-    return gen;
+    const userGen = await dbInsertUser(conn, spec);
+    return { hasExistingUser: false, userGen };
   }
 
   private async registerDog(
