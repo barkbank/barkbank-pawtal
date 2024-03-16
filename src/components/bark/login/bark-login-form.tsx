@@ -84,7 +84,6 @@ export default function BarkLoginForm(props: {
       setShouldShowLoginFailed(true);
       return;
     }
-    console.log(result);
     const { ok } = result as SignInResponse;
     if (!ok) {
       setShouldShowLoginFailed(true);
