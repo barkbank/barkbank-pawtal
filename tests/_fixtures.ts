@@ -233,37 +233,6 @@ export function someEmail(idx: number): string {
   return `some${idx}@some.com`;
 }
 
-export function userRegistration(
-  idx: number,
-  overrides?: Partial<UserRegistration>,
-): UserRegistration {
-  const base: UserRegistration = {
-    userEmail: someEmail(idx),
-    userName: `Reg Junior The ${idx}`,
-    userPhoneNumber: `+65 ${81000000 + idx}`,
-    userResidency: UserResidencies.SINGAPORE,
-  };
-  return { ...base, ...overrides };
-}
-
-export function dogRegistration(
-  idx: number,
-  overrides?: Partial<DogRegistration>,
-): DogRegistration {
-  const base: DogRegistration = {
-    dogName: `Ruffles-${idx}`,
-    dogBreed: `Breed${idx}`,
-    dogBirthday: getDogBirthday(idx),
-    dogGender: getDogGender(idx),
-    dogWeightKg: getDogWeightKg(idx),
-    dogDea1Point1: getDogAntigenPresence(idx),
-    dogEverPregnant: getDogEverPregnant(idx),
-    dogEverReceivedTransfusion: getYesNoUnknown(idx),
-    dogPreferredVetIdList: [],
-  };
-  return { ...base, ...overrides };
-}
-
 function getDogBirthday(idx: number): Date {
   const y = 2022 - (idx % 5);
   const m = 1 + (idx % 11);
