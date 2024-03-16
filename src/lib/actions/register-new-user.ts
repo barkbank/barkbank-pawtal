@@ -21,8 +21,10 @@ import { UserMapper } from "../data/user-mapper";
 import { dbInsertUser } from "../data/db-users";
 import { DogMapper } from "../data/dog-mapper";
 import { dbInsertDog, dbInsertDogVetPreference } from "../data/db-dogs";
+import { OtpService } from "../services/otp";
 
 export type RegistrationRequest = {
+  emailOtp: string;
   userName: string;
   userEmail: string;
   userPhoneNumber: string;
@@ -48,14 +50,17 @@ export type RegistrationResponse =
 export async function registerNewUser(
   request: RegistrationRequest,
 ): Promise<RegistrationResponse> {
-  const [dbPool, emailHashService, userMapper, dogMapper] = await Promise.all([
-    APP.getDbPool(),
-    APP.getEmailHashService(),
-    APP.getUserMapper(),
-    APP.getDogMapper(),
-  ]);
+  const [dbPool, otpService, emailHashService, userMapper, dogMapper] =
+    await Promise.all([
+      APP.getDbPool(),
+      APP.getOtpService(),
+      APP.getEmailHashService(),
+      APP.getUserMapper(),
+      APP.getDogMapper(),
+    ]);
   const config: _RegistrationHandlerConfig = {
     dbPool,
+    otpService,
     emailHashService,
     userMapper,
     dogMapper,
@@ -70,6 +75,7 @@ export type _RegistrationHandlerConfig = {
   emailHashService: HashService;
   userMapper: UserMapper;
   dogMapper: DogMapper;
+  otpService: OtpService;
 };
 
 // Exported for testing
@@ -82,6 +88,11 @@ export class _RegistrationHandler {
   public async handle(
     request: RegistrationRequest,
   ): Promise<RegistrationResponse> {
+    const isValidOtp = await this.isValidOtp(request);
+    if (!isValidOtp) {
+      return "STATUS_401_INVALID_OTP";
+    }
+
     const conn = await this.config.dbPool.connect();
     try {
       await dbBegin(conn);
@@ -104,6 +115,13 @@ export class _RegistrationHandler {
     } finally {
       await dbRelease(conn);
     }
+  }
+
+  private async isValidOtp(request: RegistrationRequest): Promise<boolean> {
+    const { userEmail, emailOtp } = request;
+    const recentOtps: string[] =
+      await this.config.otpService.getRecentOtps(userEmail);
+    return recentOtps.includes(emailOtp);
   }
 
   private async registerUser(

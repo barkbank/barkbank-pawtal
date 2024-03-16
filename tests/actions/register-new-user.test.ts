@@ -15,6 +15,7 @@ import { BARK_UTC, guaranteed } from "@/lib/bark-utils";
 import {
   getDogMapper,
   getEmailHashService,
+  getOtpService,
   getUserMapper,
   insertVet,
 } from "../_fixtures";
@@ -23,6 +24,8 @@ import {
   dbSelectDogListByUserId,
   dbSelectPreferredVetIds,
 } from "@/lib/data/db-dogs";
+import { HarnessOtpService } from "../_harness";
+import { dbQuery } from "@/lib/data/db-utils";
 
 describe("_RegistrationHandler", () => {
   it("should return STATUS_201_CREATED when user account is successfully created", async () => {
@@ -79,8 +82,32 @@ describe("_RegistrationHandler", () => {
 
   it("should return STATUS_401_INVALID_OTP when OTP is invalid", async () => {
     await withDb(async (dbPool) => {
+      // GIVEN a request with invalid OTP
+      const preferredVet = await insertVet(42, dbPool);
+      const request = getRegistrationRequest({
+        dogPreferredVetIdList: [preferredVet.vetId],
+        emailOtp: HarnessOtpService.INVALID_OTP,
+      });
+
+      // WHEN handle
       const config = getConfig(dbPool);
-      fail("WIP: implement this test");
+      const handler = new _RegistrationHandler(config);
+      const response = await handler.handle(request);
+
+      // THEN the response should be STATUS_401_INVALID_OTP
+      expect(response).toEqual("STATUS_401_INVALID_OTP");
+
+      // AND no records created
+      const resUsers = await dbQuery(dbPool, `SELECT 1 FROM users`, []);
+      expect(resUsers.rows.length).toEqual(0);
+      const resDogs = await dbQuery(dbPool, "SELECT 1 FROM dogs", []);
+      expect(resDogs.rows.length).toEqual(0);
+      const resPrefs = await dbQuery(
+        dbPool,
+        "SELECT 1 FROM dog_vet_preferences",
+        [],
+      );
+      expect(resPrefs.rows.length).toEqual(0);
     });
   });
 
@@ -95,6 +122,7 @@ describe("_RegistrationHandler", () => {
 function getConfig(dbPool: Pool): _RegistrationHandlerConfig {
   return {
     dbPool,
+    otpService: getOtpService(),
     emailHashService: getEmailHashService(),
     userMapper: getUserMapper(),
     dogMapper: getDogMapper(),
@@ -105,6 +133,7 @@ function getRegistrationRequest(
   overrides?: Partial<RegistrationRequest>,
 ): RegistrationRequest {
   const base: RegistrationRequest = {
+    emailOtp: HarnessOtpService.CURRENT_OTP,
     userName: "John Chong",
     userEmail: "john@chong.org",
     userPhoneNumber: "98765432",

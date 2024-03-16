@@ -1,6 +1,7 @@
 import { Ok, Result } from "@/lib/result";
 import { EncryptionService } from "@/lib/services/encryption";
 import { HashService } from "@/lib/services/hash";
+import { OtpService } from "@/lib/services/otp";
 
 export class HarnessHashService implements HashService {
   public async digest(
@@ -35,5 +36,17 @@ export class HarnessEncryptionService implements EncryptionService {
     const i = "encrytped(".length;
     const j = encryptedData.length - 1;
     return encryptedData.slice(i, j);
+  }
+}
+
+export class HarnessOtpService implements OtpService {
+  static readonly CURRENT_OTP: string = "000000";
+  static readonly INVALID_OTP: string = "999999";
+  public async getCurrentOtp(value: string): Promise<string> {
+    return HarnessOtpService.CURRENT_OTP;
+  }
+
+  public async getRecentOtps(value: string): Promise<string[]> {
+    return [HarnessOtpService.CURRENT_OTP];
   }
 }
