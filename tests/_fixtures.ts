@@ -39,7 +39,6 @@ import { AdminMapper } from "@/lib/data/admin-mapper";
 import { VetMapper } from "@/lib/data/vet-mapper";
 import { DogMapper } from "@/lib/data/dog-mapper";
 import { UserMapper } from "@/lib/data/user-mapper";
-import { DogRegistration, UserRegistration } from "@/lib/user/user-models";
 import { BARK_UTC } from "@/lib/bark-utils";
 import { DbContext } from "@/lib/data/db-utils";
 import { dbInsertDog } from "@/lib/data/db-dogs";
