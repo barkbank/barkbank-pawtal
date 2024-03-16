@@ -66,6 +66,7 @@ export enum DogAntigenPresence {
   UNKNOWN = "UNKNOWN",
 }
 
+// TODO: Remove DogStatus
 export enum DogStatus {
   NEW_PROFILE = "NEW_PROFILE",
   AVAILABLE_FOR_SCHEDULING = "AVAILABLE_FOR_SCHEDULING",
@@ -86,6 +87,7 @@ export type DogSecureOii = {
 };
 
 export type DogDetails = {
+  // TODO: Remove dogStatus
   dogStatus: DogStatus;
   dogBreed: string;
   dogBirthday: Date;

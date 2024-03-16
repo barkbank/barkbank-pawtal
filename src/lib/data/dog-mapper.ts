@@ -16,6 +16,34 @@ export class DogMapper {
     this.piiEncryptionService = config.piiEncryptionService;
   }
 
+  public toDogOii(source: DogOii): DogOii {
+    const { dogName } = source;
+    return { dogName };
+  }
+
+  public toDogDetails(source: DogDetails): DogDetails {
+    const {
+      dogStatus,
+      dogBreed,
+      dogBirthday,
+      dogGender,
+      dogWeightKg,
+      dogDea1Point1,
+      dogEverPregnant,
+      dogEverReceivedTransfusion,
+    } = source;
+    return {
+      dogStatus,
+      dogBreed,
+      dogBirthday,
+      dogGender,
+      dogWeightKg,
+      dogDea1Point1,
+      dogEverPregnant,
+      dogEverReceivedTransfusion,
+    };
+  }
+
   public mapDogRecordToDogSpec(dogRecord: DogRecord): DogSpec {
     const dogSecureOii = this.mapDogRecordToDogSecureOii(dogRecord);
     const dogDetails = this.mapDogRecordToDogDetails(dogRecord);
@@ -61,11 +89,13 @@ export class DogMapper {
     const jsonEncoded = await this.piiEncryptionService.getDecryptedData(
       dogSecureOii.dogEncryptedOii,
     );
-    return JSON.parse(jsonEncoded) as DogOii;
+    const obj = JSON.parse(jsonEncoded) as DogOii;
+    return this.toDogOii(obj);
   }
 
   public async mapDogOiiToDogSecureOii(dogOii: DogOii): Promise<DogSecureOii> {
-    const jsonEncoded = JSON.stringify(dogOii);
+    const oii: DogOii = this.toDogOii(dogOii);
+    const jsonEncoded = JSON.stringify(oii);
     const dogEncryptedOii =
       await this.piiEncryptionService.getEncryptedData(jsonEncoded);
     return { dogEncryptedOii };

@@ -1,9 +1,9 @@
 import { Pool } from "pg";
 import { withDb } from "../_db_helpers";
 import {
+  _RegistrationHandler,
   _RegistrationHandlerConfig,
   RegistrationRequest,
-  _handleRegistration,
 } from "@/lib/actions/register-new-user";
 import {
   DogAntigenPresence,
@@ -12,16 +12,20 @@ import {
   YesNoUnknown,
 } from "@/lib/data/db-models";
 import { BARK_UTC, guaranteed } from "@/lib/bark-utils";
-import { getEmailHashService, getUserMapper, insertVet } from "../_fixtures";
-import { dbQuery } from "@/lib/data/db-utils";
+import {
+  getDogMapper,
+  getEmailHashService,
+  getUserMapper,
+  insertVet,
+} from "../_fixtures";
 import { dbSelectUser, dbSelectUserIdByHashedEmail } from "@/lib/data/db-users";
 import {
   dbSelectDogListByUserId,
   dbSelectPreferredVetIds,
 } from "@/lib/data/db-dogs";
 
-describe("_handleRegistration", () => {
-  it("should return OK when user account is successfully created", async () => {
+describe("_RegistrationHandler", () => {
+  it("should return STATUS_201_CREATED when user account is successfully created", async () => {
     await withDb(async (dbPool) => {
       // GIVEN a standard request
       const preferredVet = await insertVet(42, dbPool);
@@ -29,12 +33,13 @@ describe("_handleRegistration", () => {
         dogPreferredVetIdList: [preferredVet.vetId],
       });
 
-      // WHEN handleRegistration is called
+      // WHEN handle
       const config = getConfig(dbPool);
-      const response = await _handleRegistration(request, config);
+      const handler = new _RegistrationHandler(config);
+      const response = await handler.handle(request);
 
-      // THEN the response should be OK
-      expect(response).toEqual("OK");
+      // THEN the response should be STATUS_201_CREATED
+      expect(response).toEqual("STATUS_201_CREATED");
 
       // AND a user should be created
       const userHashedEmail = await config.emailHashService.getHashHex(
@@ -48,7 +53,7 @@ describe("_handleRegistration", () => {
         guaranteed(user),
       );
       expect(userPii.userEmail).toEqual(request.userEmail);
-      expect(userPii.userName).toEqual(request.userEmail);
+      expect(userPii.userName).toEqual(request.userName);
       expect(userPii.userPhoneNumber).toEqual(request.userPhoneNumber);
       expect(user?.userResidency).toEqual(request.userResidency);
 
@@ -71,13 +76,15 @@ describe("_handleRegistration", () => {
       expect(preferredVetIds).toEqual([preferredVet.vetId]);
     });
   });
-  it("should return ERR_INVALID_OTP when OTP is invalid", async () => {
+
+  it("should return STATUS_401_INVALID_OTP when OTP is invalid", async () => {
     await withDb(async (dbPool) => {
       const config = getConfig(dbPool);
       fail("WIP: implement this test");
     });
   });
-  it("should return ERR_USER_EXISTS when user already exists", async () => {
+
+  it("should return STATUS_409_USER_EXISTS when user already exists", async () => {
     await withDb(async (dbPool) => {
       const config = getConfig(dbPool);
       fail("WIP: implement this test");
@@ -86,7 +93,12 @@ describe("_handleRegistration", () => {
 });
 
 function getConfig(dbPool: Pool): _RegistrationHandlerConfig {
-  return { dbPool, emailHashService: getEmailHashService() };
+  return {
+    dbPool,
+    emailHashService: getEmailHashService(),
+    userMapper: getUserMapper(),
+    dogMapper: getDogMapper(),
+  };
 }
 
 function getRegistrationRequest(
