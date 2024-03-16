@@ -70,7 +70,7 @@ export default function DonorForm({ breeds }: { breeds: Breed[] }) {
   }
 
   return (
-    <div className="w-screen px-6 md:w-[800px]">
+    <div className="w-screen px-6 pb-24 pt-12 md:w-[800px]">
       <div className="flex flex-col items-center gap-2">
         <Image src={"/orange-dog-house.svg"} alt="" height={100} width={100} />
         <div className="mt-4 text-center">
