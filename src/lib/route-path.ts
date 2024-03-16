@@ -2,6 +2,7 @@ export class RoutePath {
   static readonly ROOT = "/";
   static readonly LOGOUT_PAGE = "/logout";
 
+  static readonly USER_REGISTRATION = "/user/registration";
   static readonly USER_LOGIN_PAGE = "/user/login";
   static readonly USER_DASHBOARD_PAGE = "/user/dashboard";
   static readonly USER_MY_ACCOUNT_PAGE = "/user/my-account";
