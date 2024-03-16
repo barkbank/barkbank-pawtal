@@ -10,6 +10,30 @@ export function guaranteed<T>(arg: T | undefined | null): T {
   return arg;
 }
 
+export function isValidWeightKg(weightKg: string): boolean {
+  const value = weightKg.trim();
+  if (value === "") {
+    return true;
+  }
+  const regex = /^\d+$/g;
+  return regex.test(value);
+}
+
+export function parseWeightKg(weightKg: string): number | null {
+  if (!isValidWeightKg(weightKg)) {
+    throw new Error(`Invalid weight string: ${weightKg}`);
+  }
+  const value = weightKg.trim();
+  if (value === "") {
+    return null;
+  }
+  const kg = Number(value);
+  if (kg < 1) {
+    throw new Error(`Invalid weight value: ${kg}`);
+  }
+  return kg;
+}
+
 export function isValidEmail(email: string): boolean {
   try {
     z.string().email().parse(email);

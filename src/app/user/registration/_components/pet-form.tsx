@@ -10,52 +10,68 @@ import {
   BarkFormSelect,
   BarkFormSubmitButton,
 } from "@/components/bark/bark-form";
+import { isValidWeightKg } from "@/lib/bark-utils";
 import { DogGender } from "@/lib/data/db-models";
 import { Breed } from "@/lib/services/breed";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const FORM_SCHEMA = z.object({
-  dogName: z.string(),
+  dogName: z.string().min(1, { message: "Name cannot be empty" }),
   dogBreed: z.string(),
-  dogBirthday: z.date(),
-  dogGender: z.string(),
-  dogWeightKg: z
+  dogBirthday: z
+    .date()
+    .nullable()
+    .refine((value) => value !== null, {
+      message: "Please fill in a birthday",
+    }),
+  dogGender: z.string().min(1, { message: "Please select an option" }),
+  dogWeightKg: z.string().refine(isValidWeightKg, {
+    message: "Weight should be a positive whole number or left blank",
+  }),
+  dogDea1Point1: z.string().min(1, { message: "Please select an option" }),
+  dogEverReceivedTransfusion: z
     .string()
-    .optional()
-    .transform((v) => Number(v) || undefined),
-  dogDea1Point1: z.string(),
-  dogEverReceivedTransfusion: z.string(),
-  dogEverPregnant: z.string(),
-  dogPreferredVetIdList: z.string(),
+    .min(1, { message: "Please select an option" }),
+  dogEverPregnant: z.string().min(1, { message: "Please select an option" }),
+  dogPreferredVetId: z.string().min(1, { message: "Please select an option" }),
 });
 
 type FormDataType = z.infer<typeof FORM_SCHEMA>;
 
-export default function PetForm({
-  breeds,
-  onSubmitForm,
-  onPreviousClick,
-  previousLabel = "Previous",
-}: {
+export default function PetForm(props: {
   breeds: Breed[];
-  onSubmitForm: (values: FormDataType) => void;
-  onPreviousClick?: () => void;
-  previousLabel?: string;
+  defaultValues: FormDataType;
+  onSave: (values: FormDataType) => void;
+  onPrev: () => void;
+  onNext: () => void;
+  prevLabel: string;
+  nextLabel: string;
 }) {
+  const {
+    breeds,
+    defaultValues,
+    onSave,
+    onPrev,
+    onNext,
+    prevLabel,
+    nextLabel,
+  } = props;
   const form = useForm<FormDataType>({
     resolver: zodResolver(FORM_SCHEMA),
-    defaultValues: {
-      dogName: "",
-    },
+    defaultValues,
   });
 
   async function onSubmit(values: FormDataType) {
-    // ! Send the form data to the server.
     console.log(values);
-    onSubmitForm(values);
+    onSave(values);
+    onNext();
+  }
+
+  async function onPrevClick() {
+    onSave(form.getValues());
+    onPrev();
   }
 
   return (
@@ -65,13 +81,13 @@ export default function PetForm({
 
         <BarkFormInput
           form={form}
-          label="What’s your dog’s name?"
+          label="What's your dog's name?"
           name="dogName"
         />
 
         <BarkFormSelect
           form={form}
-          label="What’s your dog’s breed?"
+          label="What's your dog's breed?"
           name="dogBreed"
           options={breeds.map((breed) => ({
             label: breed.dog_breed,
@@ -81,13 +97,13 @@ export default function PetForm({
 
         <BarkFormDatetimeInput
           form={form}
-          label="When is it’s birthday? (DD/MM/YYYY)"
+          label="When is it's birthday? (DD/MM/YYYY)"
           name="dogBirthday"
         />
 
         <BarkFormRadioGroup
           form={form}
-          label="What’s your dog’s sex?"
+          label="What's your dog's sex?"
           name="dogGender"
           layout="button"
           options={[
@@ -99,14 +115,15 @@ export default function PetForm({
 
         <BarkFormInput
           form={form}
-          label="What’s your dog’s weight? (KG)"
+          label="What's your dog's weight? (KG)"
+          description="Provide whole number weight or leave blank if unknown"
           name="dogWeightKg"
-          type="number"
+          type="text"
         />
 
         <BarkFormRadioGroup
           form={form}
-          label="Do you know it’s blood type?"
+          label="Do you know it's blood type?"
           name="dogDea1Point1"
           options={[
             { label: "I don't know", value: "idk" },
@@ -156,11 +173,11 @@ export default function PetForm({
             },
           ]}
         />
-
+        {/* TODO: Vet list should be provided by server component */}
         <BarkFormRadioGroup
           form={form}
           label="Select your preferred vet for blood profiling test and blood donation"
-          name="dogPreferredVetIdList"
+          name="dogPreferredVetId"
           options={[
             { label: "Vet A", value: "vet-a" },
             {
@@ -175,20 +192,12 @@ export default function PetForm({
         />
 
         <div className="flex gap-2">
-          {onPreviousClick && (
-            <BarkFormButton
-              onClick={async () => onPreviousClick()}
-              className="w-full"
-            >
-              {previousLabel}
-            </BarkFormButton>
-          )}
+          <BarkFormButton onClick={onPrevClick} className="w-full">
+            {prevLabel}
+          </BarkFormButton>
 
-          <BarkFormSubmitButton
-            disabled={!form.formState.isValid}
-            className="w-full"
-          >
-            Next
+          <BarkFormSubmitButton className="w-full">
+            {nextLabel}
           </BarkFormSubmitButton>
         </div>
       </BarkForm>
