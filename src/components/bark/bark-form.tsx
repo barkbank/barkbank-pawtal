@@ -218,7 +218,11 @@ export function BarkFormRadioGroup(props: {
               <div className="flex space-x-2">
                 {options.map((option) => (
                   <Button
-                    variant={field.value === option.value ? "brand" : "outline"}
+                    variant={
+                      field.value === option.value
+                        ? "brandSelectedChoice"
+                        : "brandChoice"
+                    }
                     key={option.value}
                     type="button"
                     className="flex-grow"
