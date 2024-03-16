@@ -33,9 +33,11 @@ export const UserResidencies = {
 export type UserResidency =
   (typeof UserResidencies)[keyof typeof UserResidencies];
 
-export type UserSpec = UserSecurePii & {
+export type UserDetails = {
   userResidency: UserResidency;
 };
+
+export type UserSpec = UserSecurePii & UserDetails;
 
 export type UserGen = {
   userId: string;
@@ -45,7 +47,7 @@ export type UserGen = {
 
 export type UserRecord = UserSpec & UserGen;
 
-export type User = UserPii & UserGen;
+export type User = UserPii & UserDetails & UserGen;
 
 // TODO: Do not use enum - https://dev.to/ivanzm123/dont-use-enums-in-typescript-they-are-very-dangerous-57bh
 export enum YesNoUnknown {
@@ -66,6 +68,7 @@ export enum DogAntigenPresence {
   UNKNOWN = "UNKNOWN",
 }
 
+// TODO: Remove DogStatus
 export enum DogStatus {
   NEW_PROFILE = "NEW_PROFILE",
   AVAILABLE_FOR_SCHEDULING = "AVAILABLE_FOR_SCHEDULING",
@@ -86,6 +89,7 @@ export type DogSecureOii = {
 };
 
 export type DogDetails = {
+  // TODO: Remove dogStatus
   dogStatus: DogStatus;
   dogBreed: string;
   dogBirthday: Date;

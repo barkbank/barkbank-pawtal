@@ -30,10 +30,6 @@ export class UserActor {
     if (record === null) {
       return null;
     }
-    const spec = this.service.getUserMapper().mapUserRecordToUserSpec(record);
-    const pii = await this.service
-      .getUserMapper()
-      .mapUserSecurePiiToUserPii(spec);
-    return pii;
+    return this.service.getUserMapper().mapUserRecordToUserPii(record);
   }
 }

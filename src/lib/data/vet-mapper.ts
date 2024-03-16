@@ -1,8 +1,8 @@
-import { Vet, VetGen, VetSpec } from "./db-models";
+import { VetGen, VetSpec } from "./db-models";
 
 export class VetMapper {
-  public mapVetToVetSpec(vet: Vet): VetSpec {
-    const { vetEmail, vetName, vetPhoneNumber, vetAddress } = vet;
+  public toVetSpec(source: VetSpec): VetSpec {
+    const { vetEmail, vetName, vetPhoneNumber, vetAddress } = source;
     return {
       vetEmail,
       vetName,
@@ -11,8 +11,8 @@ export class VetMapper {
     };
   }
 
-  public mapVetToVetGen(vet: Vet): VetGen {
-    const { vetId, vetCreationTime, vetModificationTime } = vet;
+  public toVetGen(source: VetGen): VetGen {
+    const { vetId, vetCreationTime, vetModificationTime } = source;
     return { vetId, vetCreationTime, vetModificationTime };
   }
 }

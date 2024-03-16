@@ -23,7 +23,11 @@ import {
 } from "@/lib/data/db-models";
 import { dbInsertAdmin, dbSelectAdmin } from "@/lib/data/db-admins";
 import { Pool } from "pg";
-import { HarnessHashService, HarnessEncryptionService } from "./_harness";
+import {
+  HarnessHashService,
+  HarnessEncryptionService,
+  HarnessOtpService,
+} from "./_harness";
 import { AdminActorFactoryConfig } from "@/lib/admin/admin-actor-factory";
 import { dbInsertUser, dbSelectUser } from "@/lib/data/db-users";
 import { VetActorFactoryConfig } from "@/lib/vet/vet-actor-factory";
@@ -39,6 +43,7 @@ import { DogRegistration, UserRegistration } from "@/lib/user/user-models";
 import { BARK_UTC } from "@/lib/bark-utils";
 import { DbContext } from "@/lib/data/db-utils";
 import { dbInsertDog } from "@/lib/data/db-dogs";
+import { OtpService } from "@/lib/services/otp";
 
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
@@ -54,6 +59,10 @@ export function getEmailHashService(): HashService {
 
 export function getPiiEncryptionService(): EncryptionService {
   return new HarnessEncryptionService();
+}
+
+export function getOtpService(): OtpService {
+  return new HarnessOtpService();
 }
 
 export function getAdminMapper(): AdminMapper {

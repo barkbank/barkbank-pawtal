@@ -126,7 +126,7 @@ describe("db-dogs", () => {
         expect(dog?.dogModificationTime).toEqual(dog?.dogCreationTime);
         expect(dog?.userId).toBe(user.userId);
         const mapper = getDogMapper();
-        const specOut = mapper.mapDogRecordToDogSpec(guaranteed(dog));
+        const specOut = mapper.toDogSpec(guaranteed(dog));
         expect(specOut).toMatchObject(specIn);
       });
     });

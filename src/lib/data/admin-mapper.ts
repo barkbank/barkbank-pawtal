@@ -22,26 +22,23 @@ export class AdminMapper {
     this.piiEncryptionService = config.piiEncryptionService;
   }
 
-  public mapAdminRecordToAdminSpec(record: AdminRecord): AdminSpec {
-    const { adminId, adminCreationTime, adminModificationTime, ...spec } =
-      record;
-    return spec;
+  public toAdminPii(source: AdminPii): AdminPii {
+    const { adminEmail, adminName, adminPhoneNumber } = source;
+    return { adminEmail, adminName, adminPhoneNumber };
   }
 
-  public mapAdminRecordToAdminSecurePii(record: AdminRecord): AdminSecurePii {
-    const { adminHashedEmail, adminEncryptedPii } = record;
+  public toAdminSecurePii(source: AdminSecurePii): AdminSecurePii {
+    const { adminHashedEmail, adminEncryptedPii } = source;
     return { adminHashedEmail, adminEncryptedPii };
   }
 
-  public mapAdminRecordToAdminPermissions(
-    record: AdminRecord,
-  ): AdminPermissions {
+  public toAdminPermissions(source: AdminPermissions): AdminPermissions {
     const {
       adminCanManageAdminAccounts,
       adminCanManageVetAccounts,
       adminCanManageUserAccounts,
       adminCanManageDonors,
-    } = record;
+    } = source;
     return {
       adminCanManageAdminAccounts,
       adminCanManageVetAccounts,
@@ -50,15 +47,21 @@ export class AdminMapper {
     };
   }
 
-  public mapAdminRecordToAdminGen(record: AdminRecord): AdminGen {
-    const { adminId, adminCreationTime, adminModificationTime } = record;
+  public toAdminSpec(source: AdminSpec): AdminSpec {
+    const securePii = this.toAdminSecurePii(source);
+    const permissions = this.toAdminPermissions(source);
+    return { ...securePii, ...permissions };
+  }
+
+  public toAdminGen(source: AdminGen): AdminGen {
+    const { adminId, adminCreationTime, adminModificationTime } = source;
     return { adminId, adminCreationTime, adminModificationTime };
   }
 
   public async mapAdminRecordToAdmin(record: AdminRecord): Promise<Admin> {
-    const adminSecurePii = this.mapAdminRecordToAdminSecurePii(record);
-    const adminPermissions = this.mapAdminRecordToAdminPermissions(record);
-    const adminGen = this.mapAdminRecordToAdminGen(record);
+    const adminSecurePii = this.toAdminSecurePii(record);
+    const adminPermissions = this.toAdminPermissions(record);
+    const adminGen = this.toAdminGen(record);
     const adminPii = await this.mapAdminSecurePiiToAdminPii(adminSecurePii);
     return { ...adminPii, ...adminPermissions, ...adminGen };
   }
@@ -70,13 +73,14 @@ export class AdminMapper {
       securePii.adminEncryptedPii,
     );
     const adminPii = JSON.parse(jsonEncoded) as AdminPii;
-    return adminPii;
+    return this.toAdminPii(adminPii);
   }
 
   public async mapAdminPiiToAdminSecurePii(
     adminPii: AdminPii,
   ): Promise<AdminSecurePii> {
-    const jsonEncoded = JSON.stringify(adminPii);
+    const pii = this.toAdminPii(adminPii);
+    const jsonEncoded = JSON.stringify(pii);
     const [adminHashedEmail, adminEncryptedPii] = await Promise.all([
       this.emailHashService.getHashHex(adminPii.adminEmail),
       this.piiEncryptionService.getEncryptedData(jsonEncoded),
