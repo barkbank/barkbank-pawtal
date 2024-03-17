@@ -1,5 +1,5 @@
 import { Pool } from "pg";
-import { withDb } from "../_db_helpers";
+import { withDb } from "./_db_helpers";
 import { RegistrationRequest } from "@/lib/user/registration-handler";
 import { RegistrationHandlerConfig } from "@/lib/user/registration-handler";
 import { RegistrationHandler } from "@/lib/user/registration-handler";
@@ -17,16 +17,16 @@ import {
   getUserMapper,
   insertUser,
   insertVet,
-} from "../_fixtures";
+} from "./_fixtures";
 import { dbSelectUser, dbSelectUserIdByHashedEmail } from "@/lib/data/db-users";
 import {
   dbSelectDogListByUserId,
   dbSelectPreferredVetIds,
 } from "@/lib/data/db-dogs";
-import { HarnessOtpService } from "../_harness";
+import { HarnessOtpService } from "./_harness";
 import { dbQuery } from "@/lib/data/db-utils";
 
-describe("_RegistrationHandler", () => {
+describe("RegistrationHandler", () => {
   it("should return STATUS_201_CREATED when user account is successfully created", async () => {
     await withDb(async (dbPool) => {
       // GIVEN a standard request

@@ -1,5 +1,5 @@
 import { Pool, PoolClient } from "pg";
-import { dbInsertDog, dbInsertDogVetPreference } from "../data/db-dogs";
+import { dbInsertDog, dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import {
   UserGen,
   UserSpec,
@@ -13,13 +13,13 @@ import {
   DogGender,
   UserResidency,
   YesNoUnknown,
-} from "../data/db-models";
-import { dbSelectUserIdByHashedEmail, dbInsertUser } from "../data/db-users";
-import { dbBegin, dbRollback, dbCommit, dbRelease } from "../data/db-utils";
-import { DogMapper } from "../data/dog-mapper";
-import { UserMapper } from "../data/user-mapper";
-import { HashService } from "../services/hash";
-import { OtpService } from "../services/otp";
+} from "@/lib/data/db-models";
+import { dbSelectUserIdByHashedEmail, dbInsertUser } from "@/lib/data/db-users";
+import { dbBegin, dbRollback, dbCommit, dbRelease } from "@/lib/data/db-utils";
+import { DogMapper } from "@/lib/data/dog-mapper";
+import { UserMapper } from "@/lib/data/user-mapper";
+import { HashService } from "@/lib/services/hash";
+import { OtpService } from "@/lib/services/otp";
 
 export type RegistrationHandlerConfig = {
   dbPool: Pool;
