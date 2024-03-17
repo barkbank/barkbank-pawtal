@@ -23,6 +23,7 @@ import { UserAccountService } from "./user/user-account-service";
 import { UserMapper } from "./data/user-mapper";
 import { AdminMapper } from "./data/admin-mapper";
 import { DogMapper } from "./data/dog-mapper";
+import { RegistrationHandler } from "./user/registration-handler";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -40,6 +41,8 @@ export class AppFactory {
   private promisedUserAccountService: Promise<UserAccountService> | null = null;
   private promisedUserMapper: Promise<UserMapper> | null = null;
   private promisedDogMapper: Promise<DogMapper> | null = null;
+  private promisedRegistrationHandler: Promise<RegistrationHandler> | null =
+    null;
 
   constructor(envs: NodeJS.Dict<string>) {
     this.envs = envs;
@@ -294,6 +297,31 @@ export class AppFactory {
       });
     }
     return this.promisedDogMapper;
+  }
+
+  public getRegistrationHandler(): Promise<RegistrationHandler> {
+    if (this.promisedRegistrationHandler === null) {
+      this.promisedRegistrationHandler = new Promise(async (resolve) => {
+        const [dbPool, otpService, emailHashService, userMapper, dogMapper] =
+          await Promise.all([
+            this.getDbPool(),
+            this.getOtpService(),
+            this.getEmailHashService(),
+            this.getUserMapper(),
+            this.getDogMapper(),
+          ]);
+        const handler = new RegistrationHandler({
+          dbPool,
+          otpService,
+          emailHashService,
+          userMapper,
+          dogMapper,
+        });
+        console.log("Created RegistrationHandler");
+        resolve(handler);
+      });
+    }
+    return this.promisedRegistrationHandler;
   }
 }
 
