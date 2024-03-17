@@ -201,6 +201,7 @@ export function BarkFormSingleCheckbox(props: {
 export type BarkFormOption = {
   value: string;
   label: string;
+  description?: string;
 };
 
 export function BarkFormRadioGroup(props: {
@@ -249,14 +250,19 @@ export function BarkFormRadioGroup(props: {
                 {options.map((option) => (
                   <FormItem
                     key={option.value}
-                    className="flex items-center space-x-3 space-y-0"
+                    className="flex items-start space-x-3 space-y-0"
                   >
                     <FormControl>
                       <RadioGroupItem value={option.value} />
                     </FormControl>
-                    <FormLabel className="font-normal">
-                      {option.label}
-                    </FormLabel>
+                    <div>
+                      <FormLabel className="font-normal">
+                        {option.label}
+                      </FormLabel>
+                      {!!option.description && (
+                        <FormDescription>{option.description}</FormDescription>
+                      )}
+                    </div>
                   </FormItem>
                 ))}
               </RadioGroup>

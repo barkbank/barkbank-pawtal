@@ -2,25 +2,38 @@
 
 import APP from "@/lib/app";
 import DonorForm from "./_components/donor-form";
-import { Pool } from "pg";
-import { BarkFormOption } from "@/components/bark/bark-form";
-import { dbQuery } from "@/lib/data/db-utils";
 import { AccountType, isLoggedIn } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
+import { getVetOptions } from "./_lib/get-vet-options";
+import { Breed } from "@/lib/services/breed";
+import { BarkFormOption } from "@/components/bark/bark-form";
 
 export default async function Page() {
   if (await isLoggedIn(AccountType.USER)) {
     redirect(RoutePath.USER_DASHBOARD_PAGE);
   }
 
-  const [breedService, dbPool] = await Promise.all([
-    APP.getBreedService(),
-    APP.getDbPool(),
-  ]);
+  async function getBreeds(): Promise<Breed[]> {
+    const service = await APP.getBreedService();
+    return service.getAllBreeds();
+  }
+
+  async function getVetFormOptions(): Promise<BarkFormOption[]> {
+    const dbPool = await APP.getDbPool();
+    const options = await getVetOptions(dbPool);
+    return options.map((opt) => {
+      return {
+        value: opt.vetId,
+        label: opt.vetName,
+        description: opt.vetAddress,
+      } as BarkFormOption;
+    });
+  }
+
   const [breeds, vetOptions] = await Promise.all([
-    breedService.getAllBreeds(),
-    loadVetFormOptions(dbPool),
+    getBreeds(),
+    getVetFormOptions(),
   ]);
 
   return (
@@ -28,20 +41,4 @@ export default async function Page() {
       <DonorForm breeds={breeds} vetOptions={vetOptions} />
     </main>
   );
-}
-
-// TODO: Leave this here or move it?
-async function loadVetFormOptions(dbPool: Pool): Promise<BarkFormOption[]> {
-  const sql = `
-    SELECT vet_id, vet_name, vet_address
-    FROM vets
-    ORDER BY vet_name
-  `;
-  const res = await dbQuery(dbPool, sql, []);
-  return res.rows.map((row) => {
-    return {
-      value: row.vet_id,
-      label: `${row.vet_name} — ${row.vet_address}`,
-    };
-  });
 }

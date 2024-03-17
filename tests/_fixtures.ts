@@ -220,13 +220,14 @@ export async function insertVet(idx: number, dbPool: Pool): Promise<Vet> {
   return vet;
 }
 
-export function getVetSpec(idx: number): VetSpec {
-  return {
+export function getVetSpec(idx: number, overrides?: Partial<VetSpec>): VetSpec {
+  const base: VetSpec = {
     vetName: `Vet ${idx}`,
     vetEmail: `vet${idx}@vet.com`,
     vetPhoneNumber: `+65 ${6000000 + idx}`,
     vetAddress: `${100 + idx} Dog Park Drive`,
   };
+  return { ...base, ...overrides };
 }
 
 export function someEmail(idx: number): string {
