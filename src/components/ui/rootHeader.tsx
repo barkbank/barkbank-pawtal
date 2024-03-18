@@ -3,8 +3,8 @@ import React from "react";
 
 import { CircleUser } from "lucide-react";
 import { RoutePath } from "@/lib/route-path";
-import { usePathname } from "next/navigation";
 import { getLoggedInSession } from "@/lib/auth";
+import Link from "next/link";
 
 const RootHeader = async () => {
   const session = await getLoggedInSession();
@@ -24,15 +24,15 @@ const RootHeader = async () => {
         </a>
 
         <div className="hidden gap-x-4 sm:flex sm:last:mr-10">
-          <a href="/">Home</a>
-          <a href={RoutePath.ABOUT_US}>About Us</a>
-          <a href={RoutePath.BE_A_DONOR}>Be a Donor</a>
-          <a href={RoutePath.ARTICLES}>Articles</a>
-          <a href={RoutePath.FAQ}>FAQ</a>
-          <a href={RoutePath.INFO}>Info</a>
-          <a href={`/${accountType?.toLowerCase()}/dashboard`}>
+          <Link href="/">Home</Link>
+          <Link href={RoutePath.ABOUT_US}>About Us</Link>
+          <Link href={RoutePath.BE_A_DONOR}>Be a Donor</Link>
+          <Link href={RoutePath.ARTICLES}>Articles</Link>
+          <Link href={RoutePath.FAQ}>FAQ</Link>
+          <Link href={RoutePath.INFO}>Info</Link>
+          <Link href={`/${accountType?.toLowerCase()}/dashboard`}>
             <CircleUser />
-          </a>
+          </Link>
         </div>
       </div>
     </nav>
