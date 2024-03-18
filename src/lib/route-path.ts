@@ -20,4 +20,10 @@ export class RoutePath {
   static readonly CONTACT_US = "/contact-us";
   static readonly PRIVACY_POLICY = "/privacy-policy";
   static readonly TERMS_AND_CONDITIONS = "/terms-and-conditions";
+
+  static readonly ARTICLES = "/articles";
+  static readonly ABOUT_US = "/about";
+  static readonly BE_A_DONOR = "/be-a-donor";
+  static readonly INFO = "/info";
+  static readonly FAQ = "/faq";
 }
