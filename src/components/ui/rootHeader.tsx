@@ -11,9 +11,9 @@ const RootHeader = async () => {
   const accountType = session?.accountType;
 
   return (
-    <nav>
-      <div className="sticky flex items-center justify-between border-b shadow-lg">
-        <a href="/">
+    <nav className="sticky top-0 z-10 bg-white">
+      <div className=" flex items-center justify-between border-b shadow-lg">
+        <Link href="/">
           <Image
             src="/bark-bank-logo.svg"
             alt="bark bank logo"
@@ -21,7 +21,7 @@ const RootHeader = async () => {
             height={60}
             className="ml-4 md:ml-10"
           />
-        </a>
+        </Link>
 
         <div className="hidden gap-x-4 sm:flex sm:last:mr-10">
           <Link href="/">Home</Link>
