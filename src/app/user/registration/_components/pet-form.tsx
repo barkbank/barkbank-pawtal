@@ -87,7 +87,8 @@ export default function PetForm(props: {
           name="dogName"
         />
 
-        <BarkFormSelect
+        {/* TODO: Make better autocomplete before using. */}
+        {/* <BarkFormSelect
           form={form}
           label="What's your dog's breed?"
           name="dogBreed"
@@ -95,6 +96,13 @@ export default function PetForm(props: {
             label: breed.dog_breed,
             value: breed.dog_breed,
           }))}
+        /> */}
+
+        <BarkFormInput
+          form={form}
+          label="What's your dog's breed?"
+          name="dogBreed"
+          type="text"
         />
 
         <BarkFormDateInput
