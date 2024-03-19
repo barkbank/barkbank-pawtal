@@ -129,6 +129,57 @@ describe("RegistrationHandler", () => {
   });
 });
 
+describe("RegistrationHandler without vet id", () => {
+  it("should return STATUS_201_CREATED when user account is successfully created", async () => {
+    await withDb(async (dbPool) => {
+      // GIVEN a standard request
+      const request = getRegistrationRequest(undefined);
+
+      // WHEN
+      const config = getConfig(dbPool);
+      const handler = new RegistrationHandler(config);
+      const response = await handler.handle(request);
+
+      // THEN
+      expect(response).toEqual("STATUS_201_CREATED");
+
+      // AND a user should be created
+      const userHashedEmail = await config.emailHashService.getHashHex(
+        request.userEmail,
+      );
+      const userId = await dbSelectUserIdByHashedEmail(dbPool, userHashedEmail);
+      expect(userId).not.toBeNull();
+      const user = await dbSelectUser(dbPool, guaranteed(userId));
+      expect(user).not.toBeNull();
+      const userPii = await getUserMapper().mapUserRecordToUserPii(
+        guaranteed(user),
+      );
+      expect(userPii.userEmail).toEqual(request.userEmail);
+      expect(userPii.userName).toEqual(request.userName);
+      expect(userPii.userPhoneNumber).toEqual(request.userPhoneNumber);
+      expect(user?.userResidency).toEqual(request.userResidency);
+
+      // AND a dog should be created
+      const dogs = await dbSelectDogListByUserId(dbPool, guaranteed(userId));
+      expect(dogs.length).toEqual(1);
+      const dog = dogs[0];
+      expect(dog.dogBreed).toEqual(request.dogBreed);
+      expect(dog.dogBirthday).toEqual(request.dogBirthday);
+      expect(dog.dogGender).toEqual(request.dogGender);
+      expect(dog.dogWeightKg).toEqual(request.dogWeightKg);
+      expect(dog.dogDea1Point1).toEqual(request.dogDea1Point1);
+      expect(dog.dogEverPregnant).toEqual(request.dogEverPregnant);
+      expect(dog.dogEverReceivedTransfusion).toEqual(
+        request.dogEverReceivedTransfusion,
+      );
+
+      // AND the preferred vet should be set.
+      const preferredVetIds = await dbSelectPreferredVetIds(dbPool, dog.dogId);
+      expect(preferredVetIds).toEqual([]);
+    });
+  });
+});
+
 function getConfig(dbPool: Pool): RegistrationHandlerConfig {
   return {
     dbPool,
@@ -140,7 +191,7 @@ function getConfig(dbPool: Pool): RegistrationHandlerConfig {
 }
 
 function getRegistrationRequest(
-  preferredVetId: string,
+  preferredVetId?: string,
   overrides?: Partial<RegistrationRequest>,
 ): RegistrationRequest {
   const base: RegistrationRequest = {
