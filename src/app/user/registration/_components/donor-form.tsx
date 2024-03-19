@@ -166,7 +166,6 @@ export default function DonorForm(props: {
         <div className="mt-6 text-center">
           <BarkH4>Bark Bank Canine Blood Donation Pawtal</BarkH4>
         </div>
-        {/* <BarkH4>Bark Bank Canine Blood Donation Pawtal</BarkH4> */}
       </div>
       <div className="stretch mt-6">
         <Stepper steps={steps} currentStep={currentStep} />
