@@ -43,7 +43,7 @@ export type RegistrationRequest = {
   dogDea1Point1: DogAntigenPresence;
   dogEverPregnant: YesNoUnknown;
   dogEverReceivedTransfusion: YesNoUnknown;
-  dogPreferredVetId: string;
+  dogPreferredVetId?: string;
 };
 
 export type RegistrationResponse =
@@ -150,6 +150,10 @@ export class RegistrationHandler {
     request: RegistrationRequest,
     dogId: string,
   ): Promise<boolean> {
+    if (request.dogPreferredVetId === undefined) {
+      return true;
+    }
+
     return dbInsertDogVetPreference(conn, dogId, request.dogPreferredVetId);
   }
 }

@@ -35,8 +35,7 @@ const FORM_SCHEMA = z.object({
   dogDea1Point1: z.string(),
   dogEverReceivedTransfusion: z.string(),
   dogEverPregnant: z.string(),
-  dogPreferredVetId: z.string(),
-
+  dogPreferredVetId: z.string().optional(),
   userResidency: z.string(),
   userName: z.string(),
   userPhoneNumber: z.string(),
@@ -72,7 +71,7 @@ export default function DonorForm(props: {
       dogDea1Point1: "",
       dogEverReceivedTransfusion: "",
       dogEverPregnant: "",
-      dogPreferredVetId: "",
+      dogPreferredVetId: vetOptions.length === 1 ? vetOptions[0].value : "",
       userResidency: "",
       userName: "",
       userPhoneNumber: "",
@@ -99,7 +98,7 @@ export default function DonorForm(props: {
       dogEverPregnant: vals.dogEverPregnant as YesNoUnknown,
       dogEverReceivedTransfusion:
         vals.dogEverReceivedTransfusion as YesNoUnknown,
-      dogPreferredVetId: vals.dogPreferredVetId,
+      dogPreferredVetId: vals.dogPreferredVetId ?? "",
     };
   }
 
