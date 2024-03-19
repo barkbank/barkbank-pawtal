@@ -25,7 +25,18 @@ import { z } from "zod";
 const FORM_SCHEMA = z.object({
   dogName: z.string().min(1, { message: "Name cannot be empty" }),
   dogBreed: z.string(),
-  dogBirthday: z.string().min(1, { message: "Please fill in a birthday" }),
+  dogBirthday: z
+    .string()
+    .min(1, { message: "Please fill in a birthday" })
+    .refine(
+      (value) => {
+        const regex = /^\d{4}-\d{2}-\d{2}$/;
+        return regex.test(value) && !isNaN(Date.parse(value));
+      },
+      {
+        message: "Birthday must be a valid date in the format YYYY-MM-DD",
+      },
+    ),
   dogGender: z.string().min(1, { message: "Please select an option" }),
   dogWeightKg: z.string().refine(isValidWeightKg, {
     message: "Weight should be a positive whole number or left blank",
