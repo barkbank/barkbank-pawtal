@@ -35,7 +35,7 @@ const FORM_SCHEMA = z.object({
     .string()
     .min(1, { message: "Please select an option" }),
   dogEverPregnant: z.string().min(1, { message: "Please select an option" }),
-  dogPreferredVetId: z.string().min(1, { message: "Please select an option" }),
+  dogPreferredVetId: z.string().optional(),
 });
 
 type FormDataType = z.infer<typeof FORM_SCHEMA>;
@@ -183,12 +183,15 @@ export default function PetForm(props: {
             },
           ]}
         />
-        <BarkFormRadioGroup
-          form={form}
-          label="Select your preferred vet for blood profiling test and blood donation"
-          name="dogPreferredVetId"
-          options={vetOptions}
-        />
+
+        {vetOptions.length > 1 && (
+          <BarkFormRadioGroup
+            form={form}
+            label="Select your preferred vet for blood profiling test and blood donation"
+            name="dogPreferredVetId"
+            options={vetOptions}
+          />
+        )}
 
         <div className="flex gap-2">
           <BarkFormButton onClick={onPrevClick} className="w-full">
