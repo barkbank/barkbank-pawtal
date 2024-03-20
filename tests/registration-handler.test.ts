@@ -173,7 +173,7 @@ describe("RegistrationHandler without vet id", () => {
         request.dogEverReceivedTransfusion,
       );
 
-      // AND the preferred vet should be set.
+      // AND NO preferred vet should be set as dog is not tagged with any preferred vet.
       const preferredVetIds = await dbSelectPreferredVetIds(dbPool, dog.dogId);
       expect(preferredVetIds).toEqual([]);
     });
