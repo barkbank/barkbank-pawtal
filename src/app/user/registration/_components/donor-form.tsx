@@ -71,7 +71,7 @@ export default function DonorForm(props: {
       dogDea1Point1: "",
       dogEverReceivedTransfusion: "",
       dogEverPregnant: "",
-      dogPreferredVetId: "",
+      dogPreferredVetId: undefined,
       userResidency: "",
       userName: "",
       userPhoneNumber: "",
