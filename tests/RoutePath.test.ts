@@ -1,3 +1,4 @@
+import { AccountType } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 
 describe("RoutePath", () => {
@@ -9,5 +10,27 @@ describe("RoutePath", () => {
   });
   it("should have a path for USER_EDIT_DOG(dogId)", () => {
     expect(RoutePath.USER_EDIT_DOG("123")).toBe("/user/dogs/123/edit");
+  });
+});
+
+describe("ACCOUNT_DASHBOARD", () => {
+  it("should have a path for ADMIN_DASHBOARD_PAGE", () => {
+    expect(RoutePath.ACCOUNT_DASHBOARD(AccountType.ADMIN)).toBe(
+      "/admin/dashboard",
+    );
+  });
+  it("should have a path for VET_DASHBOARD_PAGE", () => {
+    expect(RoutePath.ACCOUNT_DASHBOARD(AccountType.VET)).toBe("/vet/dashboard");
+  });
+  it("should have a path for USER_DASHBOARD_PAGE", () => {
+    expect(RoutePath.ACCOUNT_DASHBOARD(AccountType.USER)).toBe(
+      "/user/dashboard",
+    );
+  });
+  it("should have a path for ROOT", () => {
+    expect(RoutePath.ACCOUNT_DASHBOARD(undefined)).toBe("/");
+  });
+  it("should have a path for ROOT", () => {
+    expect(RoutePath.ACCOUNT_DASHBOARD("")).toBe("/");
   });
 });

@@ -29,7 +29,7 @@ const RootHeader = async () => {
         <Link href={RoutePath.ARTICLES}>Articles</Link>
         <Link href={RoutePath.FAQ}>FAQ</Link>
         <Link href={RoutePath.INFO}>Info</Link>
-        <Link href={`/${accountType?.toLowerCase()}/dashboard`}>
+        <Link href={RoutePath.ACCOUNT_DASHBOARD(accountType)}>
           <CircleUser />
         </Link>
       </div>

@@ -1,3 +1,5 @@
+import { AccountType } from "./auth";
+
 export class RoutePath {
   static readonly ROOT = "/";
   static readonly LOGOUT_PAGE = "/logout";
@@ -26,4 +28,17 @@ export class RoutePath {
   static readonly BE_A_DONOR = "/be-a-donor";
   static readonly INFO = "/info";
   static readonly FAQ = "/faq";
+
+  static readonly ACCOUNT_DASHBOARD = (accountType: string | undefined) => {
+    if (accountType === AccountType.ADMIN) {
+      return RoutePath.ADMIN_DASHBOARD_PAGE;
+    }
+    if (accountType === AccountType.VET) {
+      return RoutePath.VET_DASHBOARD_PAGE;
+    }
+    if (accountType === AccountType.USER) {
+      return RoutePath.USER_DASHBOARD_PAGE;
+    }
+    return "/";
+  };
 }
