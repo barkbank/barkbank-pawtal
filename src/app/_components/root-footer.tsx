@@ -1,5 +1,5 @@
 import React from "react";
-import { BarkNavRoute } from "../bark/bark-nav";
+import { BarkNavRoute } from "../../components/bark/bark-nav";
 import { RoutePath } from "@/lib/route-path";
 import Link from "next/link";
 

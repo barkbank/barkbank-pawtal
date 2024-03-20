@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
 import BarkAuthProvider from "@/components/bark/bark-auth";
-import RootHeader from "@/components/ui/rootHeader";
-import RootFooter from "@/components/ui/rootFooter";
+import RootHeader from "@/app/_components/root-header";
+import RootFooter from "@/app/_components/root-footer";
 
 const siteFont = Montserrat({ subsets: ["latin"] });
 
