@@ -35,8 +35,7 @@ const FORM_SCHEMA = z.object({
   dogDea1Point1: z.string(),
   dogEverReceivedTransfusion: z.string(),
   dogEverPregnant: z.string(),
-  dogPreferredVetId: z.string(),
-
+  dogPreferredVetId: z.string().optional(),
   userResidency: z.string(),
   userName: z.string(),
   userPhoneNumber: z.string(),
@@ -72,7 +71,7 @@ export default function DonorForm(props: {
       dogDea1Point1: "",
       dogEverReceivedTransfusion: "",
       dogEverPregnant: "",
-      dogPreferredVetId: "",
+      dogPreferredVetId: undefined,
       userResidency: "",
       userName: "",
       userPhoneNumber: "",
@@ -84,6 +83,7 @@ export default function DonorForm(props: {
 
   function getRegistrationRequest(): RegistrationRequest {
     const vals = form.getValues();
+
     return {
       emailOtp: vals.emailOtp,
       userName: vals.userName,
@@ -99,7 +99,12 @@ export default function DonorForm(props: {
       dogEverPregnant: vals.dogEverPregnant as YesNoUnknown,
       dogEverReceivedTransfusion:
         vals.dogEverReceivedTransfusion as YesNoUnknown,
-      dogPreferredVetId: vals.dogPreferredVetId,
+      // If there is only one vet, use that vet as the preferred vet,
+      // otherwise, use the value from the form.
+      // Vet id can be undefined.
+      dogPreferredVetId:
+        vals.dogPreferredVetId ??
+        (vetOptions.length === 1 ? vetOptions[0].value : undefined),
     };
   }
 
@@ -167,7 +172,6 @@ export default function DonorForm(props: {
         <div className="mt-6 text-center">
           <BarkH4>Bark Bank Canine Blood Donation Pawtal</BarkH4>
         </div>
-        {/* <BarkH4>Bark Bank Canine Blood Donation Pawtal</BarkH4> */}
       </div>
       <div className="stretch mt-6">
         <Stepper steps={steps} currentStep={currentStep} />

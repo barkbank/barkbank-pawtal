@@ -8,7 +8,6 @@ import {
   BarkFormInput,
   BarkFormOption,
   BarkFormRadioGroup,
-  BarkFormSelect,
   BarkFormSubmitButton,
 } from "@/components/bark/bark-form";
 import { isValidWeightKg } from "@/lib/bark-utils";
@@ -25,7 +24,18 @@ import { z } from "zod";
 const FORM_SCHEMA = z.object({
   dogName: z.string().min(1, { message: "Name cannot be empty" }),
   dogBreed: z.string(),
-  dogBirthday: z.string().min(1, { message: "Please fill in a birthday" }),
+  dogBirthday: z
+    .string()
+    .min(1, { message: "Please fill in a birthday" })
+    .refine(
+      (value) => {
+        const regex = /^\d{4}-\d{2}-\d{2}$/;
+        return regex.test(value) && !isNaN(Date.parse(value));
+      },
+      {
+        message: "Birthday must be a valid date in the format YYYY-MM-DD",
+      },
+    ),
   dogGender: z.string().min(1, { message: "Please select an option" }),
   dogWeightKg: z.string().refine(isValidWeightKg, {
     message: "Weight should be a positive whole number or left blank",
@@ -35,7 +45,7 @@ const FORM_SCHEMA = z.object({
     .string()
     .min(1, { message: "Please select an option" }),
   dogEverPregnant: z.string().min(1, { message: "Please select an option" }),
-  dogPreferredVetId: z.string().min(1, { message: "Please select an option" }),
+  dogPreferredVetId: z.string().optional(),
 });
 
 type FormDataType = z.infer<typeof FORM_SCHEMA>;
@@ -61,7 +71,15 @@ export default function PetForm(props: {
     nextLabel,
   } = props;
   const form = useForm<FormDataType>({
-    resolver: zodResolver(FORM_SCHEMA),
+    resolver: zodResolver(
+      FORM_SCHEMA.extend({
+        // Only if there are more than 1 vet options, we require the user to select one. Else vet will be predetermine.
+        dogPreferredVetId:
+          vetOptions.length <= 1
+            ? FORM_SCHEMA.shape.dogPreferredVetId
+            : z.string().min(1, { message: "Please select an option" }),
+      }),
+    ),
     defaultValues,
   });
 
@@ -87,7 +105,8 @@ export default function PetForm(props: {
           name="dogName"
         />
 
-        <BarkFormSelect
+        {/* TODO: Make better autocomplete before using. */}
+        {/* <BarkFormSelect
           form={form}
           label="What's your dog's breed?"
           name="dogBreed"
@@ -95,6 +114,13 @@ export default function PetForm(props: {
             label: breed.dog_breed,
             value: breed.dog_breed,
           }))}
+        /> */}
+
+        <BarkFormInput
+          form={form}
+          label="What's your dog's breed?"
+          name="dogBreed"
+          type="text"
         />
 
         <BarkFormDateInput
@@ -183,12 +209,15 @@ export default function PetForm(props: {
             },
           ]}
         />
-        <BarkFormRadioGroup
-          form={form}
-          label="Select your preferred vet for blood profiling test and blood donation"
-          name="dogPreferredVetId"
-          options={vetOptions}
-        />
+
+        {vetOptions.length > 1 && (
+          <BarkFormRadioGroup
+            form={form}
+            label="Select your preferred vet for blood profiling test and blood donation"
+            name="dogPreferredVetId"
+            options={vetOptions}
+          />
+        )}
 
         <div className="flex gap-2">
           <BarkFormButton onClick={onPrevClick} className="w-full">

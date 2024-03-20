@@ -114,6 +114,7 @@ export function BarkFormDateInput(props: {
   description?: string;
 }) {
   const { form, name, label, placeholder, description } = props;
+
   return (
     <FormField
       control={form.control}
@@ -123,18 +124,20 @@ export function BarkFormDateInput(props: {
           <FormLabel>{label}</FormLabel>
           <FormControl>
             <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant={"outline"}
-                  className={cn(
-                    "justify-start text-left font-normal",
-                    !field.value && "text-muted-foreground",
-                  )}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {field.value ? field.value : <span>{placeholder}</span>}
-                </Button>
-              </PopoverTrigger>
+              <div className="relative">
+                <Input placeholder={placeholder} type="text" {...field} />
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={"outline"}
+                    className={cn(
+                      "absolute right-0 top-[50%] translate-y-[-50%] rounded-l-none font-normal",
+                      !field.value && "text-muted-foreground",
+                    )}
+                  >
+                    <CalendarIcon className="h-4 w-4" />
+                  </Button>
+                </PopoverTrigger>
+              </div>
               <PopoverContent className="w-auto p-0">
                 <Calendar
                   mode="single"
