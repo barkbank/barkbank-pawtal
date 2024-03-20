@@ -1,3 +1,4 @@
+import { Url } from "next/dist/shared/lib/router/router";
 import { AccountType } from "./auth";
 
 export class RoutePath {
@@ -29,14 +30,14 @@ export class RoutePath {
   static readonly INFO = "/info";
   static readonly FAQ = "/faq";
 
-  static readonly ACCOUNT_DASHBOARD = (accountType: string | undefined) => {
-    if (accountType === AccountType.ADMIN) {
+  static readonly ACCOUNT_DASHBOARD = (accountType: Url) => {
+    if (accountType === "ADMIN") {
       return RoutePath.ADMIN_DASHBOARD_PAGE;
     }
-    if (accountType === AccountType.VET) {
+    if (accountType === "VET") {
       return RoutePath.VET_DASHBOARD_PAGE;
     }
-    if (accountType === AccountType.USER) {
+    if (accountType === "USER") {
       return RoutePath.USER_DASHBOARD_PAGE;
     }
     return "/";
