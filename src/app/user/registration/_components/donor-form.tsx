@@ -71,7 +71,7 @@ export default function DonorForm(props: {
       dogDea1Point1: "",
       dogEverReceivedTransfusion: "",
       dogEverPregnant: "",
-      dogPreferredVetId: vetOptions.length === 1 ? vetOptions[0].value : "",
+      dogPreferredVetId: "",
       userResidency: "",
       userName: "",
       userPhoneNumber: "",
@@ -83,6 +83,7 @@ export default function DonorForm(props: {
 
   function getRegistrationRequest(): RegistrationRequest {
     const vals = form.getValues();
+
     return {
       emailOtp: vals.emailOtp,
       userName: vals.userName,
@@ -98,7 +99,12 @@ export default function DonorForm(props: {
       dogEverPregnant: vals.dogEverPregnant as YesNoUnknown,
       dogEverReceivedTransfusion:
         vals.dogEverReceivedTransfusion as YesNoUnknown,
-      dogPreferredVetId: vals.dogPreferredVetId ?? "",
+      // If there is only one vet, use that vet as the preferred vet,
+      // otherwise, use the value from the form.
+      // Vet id can be undefined.
+      dogPreferredVetId:
+        vals.dogPreferredVetId ??
+        (vetOptions.length === 1 ? vetOptions[0].value : undefined),
     };
   }
 
