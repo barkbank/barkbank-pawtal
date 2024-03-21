@@ -1,4 +1,4 @@
-import { AccountType } from "@/lib/auth";
+import { AccountType } from "@/lib/auth-models";
 import { RoutePath } from "@/lib/route-path";
 
 describe("RoutePath", () => {
