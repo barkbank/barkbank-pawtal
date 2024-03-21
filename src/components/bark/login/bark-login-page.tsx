@@ -3,12 +3,12 @@
 import { isLoggedIn } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { BarkH1, BarkH2 } from "@/components/bark/bark-typography";
-import { AccountType } from "@/lib/auth";
 import BarkLoginForm from "./bark-login-form";
 import { BarkNavRoute } from "../bark-nav";
 import { RoutePath } from "@/lib/route-path";
 import Link from "next/link";
 import Image from "next/image";
+import { AccountType } from "@/lib/auth-models";
 
 export default async function BarkLoginPage(props: {
   title: string;
