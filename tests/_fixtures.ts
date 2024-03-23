@@ -31,7 +31,6 @@ import { AdminActorFactoryConfig } from "@/lib/admin/admin-actor-factory";
 import { dbInsertUser, dbSelectUser } from "@/lib/data/db-users";
 import { VetActorFactoryConfig } from "@/lib/vet/vet-actor-factory";
 import { dbInsertVet, dbSelectVet } from "@/lib/data/db-vets";
-import { UserAccountService } from "@/lib/user/user-account-service";
 import { HashService } from "@/lib/services/hash";
 import { EncryptionService } from "@/lib/services/encryption";
 import { AdminMapper } from "@/lib/data/admin-mapper";
@@ -42,6 +41,8 @@ import { BARK_UTC } from "@/lib/bark-utils";
 import { DbContext } from "@/lib/data/db-utils";
 import { dbInsertDog } from "@/lib/data/db-dogs";
 import { OtpService } from "@/lib/services/otp";
+import { UserActorConfig } from "@/lib/user/user-actor";
+import { UserActorFactoryConfig } from "@/lib/user/user-actor-factory";
 
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
@@ -85,6 +86,23 @@ export function getUserMapper(): UserMapper {
     emailHashService: getEmailHashService(),
     piiEncryptionService: getPiiEncryptionService(),
   });
+}
+
+export function getUserActorConfig(dbPool: Pool): UserActorConfig {
+  return {
+    dbPool,
+    userMapper: getUserMapper(),
+    dogMapper: getDogMapper(),
+  };
+}
+
+export function getUserActorFactoryConfig(
+  dbPool: Pool,
+): UserActorFactoryConfig {
+  return {
+    dbPool,
+    emailHashService: getEmailHashService(),
+  };
 }
 
 export function getAdminActorFactoryConfig(
@@ -163,17 +181,6 @@ export function adminPii(idx: number): AdminPii {
     adminName: `Admin ${idx}`,
     adminPhoneNumber: `+65 ${10000000 + idx}`,
   };
-}
-
-export async function getUserAccountService(
-  dbPool: Pool,
-): Promise<UserAccountService> {
-  return new UserAccountService({
-    dbPool,
-    emailHashService: getEmailHashService(),
-    userMapper: getUserMapper(),
-    dogMapper: getDogMapper(),
-  });
 }
 
 export async function insertUser(idx: number, db: Pool): Promise<UserRecord> {

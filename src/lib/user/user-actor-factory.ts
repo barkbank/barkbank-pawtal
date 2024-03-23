@@ -1,24 +1,32 @@
-import { UserActor } from "./user-actor";
-import { UserAccountService } from "./user-account-service";
+import { UserActor, UserActorConfig } from "./user-actor";
+import { HashService } from "../services/hash";
+import { Pool } from "pg";
+import { dbSelectUserIdByHashedEmail } from "../data/db-users";
+
+export type UserActorFactoryConfig = {
+  dbPool: Pool;
+  emailHashService: HashService;
+};
 
 /**
  * Responsible for creating user actors
- *
- * NOTE: Including a getUserActor in UserAccountService would introduce a
- * circular dependency because UserActor depends on UserAccountService.
  */
 export class UserActorFactory {
-  private service: UserAccountService;
+  private config: UserActorFactoryConfig;
+  private actorConfig: UserActorConfig;
 
-  constructor(service: UserAccountService) {
-    this.service = service;
+  constructor(config: UserActorFactoryConfig, actorConfig: UserActorConfig) {
+    this.config = config;
+    this.actorConfig = actorConfig;
   }
 
   public async getUserActor(userEmail: string): Promise<UserActor | null> {
-    const userId = await this.service.getUserIdByEmail(userEmail);
+    const { dbPool, emailHashService } = this.config;
+    const userHashedEmail = await emailHashService.getHashHex(userEmail);
+    const userId = await dbSelectUserIdByHashedEmail(dbPool, userHashedEmail);
     if (userId === null) {
       return null;
     }
-    return new UserActor(userId, this.service);
+    return new UserActor(userId, this.actorConfig);
   }
 }

@@ -1,6 +1,15 @@
+import { Pool } from "pg";
 import { UserRecord } from "../data/db-models";
 import { UserPii } from "../data/db-models";
-import { UserAccountService } from "./user-account-service";
+import { UserMapper } from "../data/user-mapper";
+import { DogMapper } from "../data/dog-mapper";
+import { dbSelectUser } from "../data/db-users";
+
+export type UserActorConfig = {
+  dbPool: Pool;
+  userMapper: UserMapper;
+  dogMapper: DogMapper;
+};
 
 /**
  * Actor for user accounts
@@ -10,19 +19,21 @@ import { UserAccountService } from "./user-account-service";
  */
 export class UserActor {
   private userId: string;
-  private service: UserAccountService;
+  private config: UserActorConfig;
 
-  constructor(userId: string, service: UserAccountService) {
+  constructor(userId: string, config: UserActorConfig) {
     this.userId = userId;
-    this.service = service;
+    this.config = config;
   }
 
   public getUserId(): string {
     return this.userId;
   }
 
-  public getOwnUserRecord(): Promise<UserRecord | null> {
-    return this.service.getUserRecord(this.getUserId());
+  public async getOwnUserRecord(): Promise<UserRecord | null> {
+    const { dbPool } = this.config;
+    const record = await dbSelectUser(dbPool, this.getUserId());
+    return record;
   }
 
   public async getOwnUserPii(): Promise<UserPii | null> {
@@ -30,6 +41,7 @@ export class UserActor {
     if (record === null) {
       return null;
     }
-    return this.service.getUserMapper().mapUserRecordToUserPii(record);
+    const { userMapper } = this.config;
+    return userMapper.mapUserRecordToUserPii(record);
   }
 }
