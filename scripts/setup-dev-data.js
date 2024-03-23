@@ -362,7 +362,6 @@ function createDog(idx) {
       dogName: getDogName(idx),
     },
     dogDetails: {
-      dogStatus: "NEW_PROFILE",
       dogBreed: getDogBreed(idx),
       dogBirthday: getBirthday(idx),
       dogGender: getGender(idx),
