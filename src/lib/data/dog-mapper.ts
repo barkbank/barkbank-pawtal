@@ -20,7 +20,6 @@ export class DogMapper {
 
   public toDogDetails(source: DogDetails): DogDetails {
     const {
-      dogStatus,
       dogBreed,
       dogBirthday,
       dogGender,
@@ -30,7 +29,6 @@ export class DogMapper {
       dogEverReceivedTransfusion,
     } = source;
     return {
-      dogStatus,
       dogBreed,
       dogBirthday,
       dogGender,
