@@ -124,6 +124,7 @@ describe("UserActor", () => {
         const { userActor } = await getScenario(dbPool, USER_IDX);
         const details: DogDetails = await getDogDetails(DOG_IDX, {
           dogEverPregnant: YesNoUnknown.YES,
+          dogWeightKg: 15,
         });
         const secureOii: DogSecureOii = await getDogSecureOii(DOG_IDX);
         const spec: DogSpec = { ...details, ...secureOii };
@@ -139,6 +140,7 @@ describe("UserActor", () => {
         const { userActor } = await getScenario(dbPool, USER_IDX);
         const details: DogDetails = await getDogDetails(DOG_IDX, {
           dogEverReceivedTransfusion: YesNoUnknown.YES,
+          dogWeightKg: 15,
         });
         const secureOii: DogSecureOii = await getDogSecureOii(DOG_IDX);
         const spec: DogSpec = { ...details, ...secureOii };

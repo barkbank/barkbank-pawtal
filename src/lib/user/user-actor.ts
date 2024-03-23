@@ -55,10 +55,10 @@ export class UserActor {
       dog_id as "dogId",
       dog_encrypted_oii as "dogEncryptedOii",
       CASE
-        WHEN dog_breed = '' AND dog_weight_kg IS NULL THEN $2
-        WHEN dog_weight_kg < 20 THEN $4
         WHEN dog_ever_pregnant = 'YES' THEN $5
         WHEN dog_ever_received_transfusion = 'YES' THEN $5
+        WHEN dog_breed = '' AND dog_weight_kg IS NULL THEN $2
+        WHEN dog_weight_kg < 20 THEN $4
         ELSE $3
       END as "dogStatus"
     FROM dogs
