@@ -13,7 +13,7 @@ import {
 } from "@/components/bark/bark-form";
 import { sendLoginOtp } from "@/lib/actions/send-login-otp";
 import { isValidEmail } from "@/lib/bark-utils";
-import { UserResidencies } from "@/lib/data/db-models";
+import { USER_RESIDENCY } from "@/lib/data/db-models";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -89,8 +89,8 @@ export default function OwnerForm(props: {
           name="userResidency"
           layout="button"
           options={[
-            { label: "Yes", value: UserResidencies.SINGAPORE },
-            { label: "No", value: UserResidencies.OTHER },
+            { label: "Yes", value: USER_RESIDENCY.SINGAPORE },
+            { label: "No", value: USER_RESIDENCY.OTHER },
           ]}
         />
         <BarkFormInput

@@ -6,7 +6,7 @@ import { RegistrationHandler } from "@/lib/user/registration-handler";
 import {
   DogAntigenPresence,
   DogGender,
-  UserResidencies,
+  USER_RESIDENCY,
   YesNoUnknown,
 } from "@/lib/data/db-models";
 import { BARK_UTC, guaranteed } from "@/lib/bark-utils";
@@ -199,7 +199,7 @@ function getRegistrationRequest(
     userName: "John Chong",
     userEmail: "john@chong.org",
     userPhoneNumber: "98765432",
-    userResidency: UserResidencies.SINGAPORE,
+    userResidency: USER_RESIDENCY.SINGAPORE,
     dogName: "Tarik",
     dogBreed: "Teh",
     dogBirthday: BARK_UTC.getDate(2019, 7, 4),

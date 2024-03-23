@@ -14,7 +14,7 @@ import {
   DogSpec,
   UserPii,
   UserRecord,
-  UserResidencies,
+  USER_RESIDENCY,
   UserSpec,
   Vet,
   VetSpec,
@@ -201,7 +201,7 @@ export async function getUserSpec(idx: number): Promise<UserSpec> {
   const pii = userPii(idx);
   const mapper = getUserMapper();
   const securePii = await mapper.mapUserPiiToUserSecurePii(pii);
-  const userResidency = UserResidencies.SINGAPORE;
+  const userResidency = USER_RESIDENCY.SINGAPORE;
   return { ...securePii, userResidency };
 }
 
@@ -273,8 +273,11 @@ export async function getDogSecureOii(idx: number): Promise<DogSecureOii> {
   return mapper.mapDogOiiToDogSecureOii(oii);
 }
 
-export async function getDogDetails(idx: number): Promise<DogDetails> {
-  return {
+export async function getDogDetails(
+  idx: number,
+  overrides?: Partial<DogDetails>,
+): Promise<DogDetails> {
+  const base = {
     dogBreed: getDogBreed(idx),
     dogBirthday: getDogBirthday(idx),
     dogGender: getDogGender(idx),
@@ -283,6 +286,7 @@ export async function getDogDetails(idx: number): Promise<DogDetails> {
     dogEverPregnant: getDogEverPregnant(idx),
     dogEverReceivedTransfusion: getYesNoUnknown(idx),
   };
+  return { ...base, ...overrides };
 }
 
 export async function getDogOii(idx: number): Promise<DogOii> {
