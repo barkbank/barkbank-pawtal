@@ -12,7 +12,6 @@ import {
   DogOii,
   DogSecureOii,
   DogSpec,
-  DogStatus,
   UserPii,
   UserRecord,
   UserResidencies,
@@ -265,7 +264,6 @@ export async function getDogSecureOii(idx: number): Promise<DogSecureOii> {
 
 export async function getDogDetails(idx: number): Promise<DogDetails> {
   return {
-    dogStatus: getDogStatus(idx),
     dogBreed: getDogBreed(idx),
     dogBirthday: getDogBirthday(idx),
     dogGender: getDogGender(idx),
@@ -299,11 +297,6 @@ function getDogGender(idx: number): DogGender {
 function getDogWeightKg(idx: number): number | null {
   const options: (number | null)[] = [null, 6, 12, 17, 22, 26, 31, 38];
   return options[idx % options.length];
-}
-
-function getDogStatus(idx: number): DogStatus {
-  const statusList: DogStatus[] = Object.values(DogStatus);
-  return statusList[idx % statusList.length];
 }
 
 function getYesNoUnknown(idx: number): YesNoUnknown {

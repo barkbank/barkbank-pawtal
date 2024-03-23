@@ -68,18 +68,6 @@ export enum DogAntigenPresence {
   UNKNOWN = "UNKNOWN",
 }
 
-// TODO: Remove DogStatus
-export enum DogStatus {
-  NEW_PROFILE = "NEW_PROFILE",
-  AVAILABLE_FOR_SCHEDULING = "AVAILABLE_FOR_SCHEDULING",
-  AVAILABLE_FOR_DONATION = "AVAILABLE_FOR_DONATION",
-  SCHEDULED_BY_VET = "SCHEDULED_BY_VET",
-  AGE_COOLDOWN = "AGE_COOLDOWN",
-  DONATION_COOLDOWN = "DONATION_COOLDOWN",
-  MEDICAL_COOLDOWN = "MEDICAL_COOLDOWN",
-  PERMANENTLY_INELIGIBLE = "PERMANENTLY_INELIGIBLE",
-}
-
 export type DogOii = {
   dogName: string;
 };
@@ -89,8 +77,6 @@ export type DogSecureOii = {
 };
 
 export type DogDetails = {
-  // TODO: Remove dogStatus
-  dogStatus: DogStatus;
   dogBreed: string;
   dogBirthday: Date;
   dogGender: DogGender;
