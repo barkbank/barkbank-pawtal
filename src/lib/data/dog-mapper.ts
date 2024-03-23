@@ -2,10 +2,10 @@ import { EncryptionService } from "../services/encryption";
 import { DogDetails, DogGen, DogOii, DogSecureOii, DogSpec } from "./db-models";
 
 export class DogMapper {
-  private piiEncryptionService: EncryptionService;
+  private oiiEncryptionService: EncryptionService;
 
-  constructor(config: { piiEncryptionService: EncryptionService }) {
-    this.piiEncryptionService = config.piiEncryptionService;
+  constructor(config: { oiiEncryptionService: EncryptionService }) {
+    this.oiiEncryptionService = config.oiiEncryptionService;
   }
 
   public toDogOii(source: DogOii): DogOii {
@@ -53,7 +53,7 @@ export class DogMapper {
   public async mapDogSecureOiiToDogOii(
     dogSecureOii: DogSecureOii,
   ): Promise<DogOii> {
-    const jsonEncoded = await this.piiEncryptionService.getDecryptedData(
+    const jsonEncoded = await this.oiiEncryptionService.getDecryptedData(
       dogSecureOii.dogEncryptedOii,
     );
     const obj = JSON.parse(jsonEncoded) as DogOii;
@@ -64,7 +64,7 @@ export class DogMapper {
     const oii: DogOii = this.toDogOii(dogOii);
     const jsonEncoded = JSON.stringify(oii);
     const dogEncryptedOii =
-      await this.piiEncryptionService.getEncryptedData(jsonEncoded);
+      await this.oiiEncryptionService.getEncryptedData(jsonEncoded);
     return { dogEncryptedOii };
   }
 }

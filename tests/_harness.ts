@@ -15,6 +15,10 @@ export class HarnessHashService implements HashService {
 }
 
 export class HarnessEncryptionService implements EncryptionService {
+  private secret: string;
+  public constructor(secret: string) {
+    this.secret = secret;
+  }
   public async encrypt(
     data: string,
   ): Promise<Result<{ encryptedData: string }, string>> {
@@ -30,12 +34,17 @@ export class HarnessEncryptionService implements EncryptionService {
     });
   }
   public async getEncryptedData(data: string): Promise<string> {
-    return `encrypted(${data})`;
+    return JSON.stringify({
+      secret: this.secret,
+      data,
+    });
   }
   public async getDecryptedData(encryptedData: string): Promise<string> {
-    const i = "encrytped(".length;
-    const j = encryptedData.length - 1;
-    return encryptedData.slice(i, j);
+    const obj = JSON.parse(encryptedData);
+    if (obj.secret !== this.secret) {
+      throw new Error(`Failed to decrypt: ${encryptedData}`);
+    }
+    return obj.data;
   }
 }
 
