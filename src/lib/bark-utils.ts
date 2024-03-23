@@ -15,23 +15,23 @@ export function isValidWeightKg(weightKg: string): boolean {
   if (value === "") {
     return true;
   }
-  const regex = /^\d+$/g;
-  return regex.test(value);
+  const regex = /^\d+(\.\d+)?$/;
+  if (!regex.test(value)) {
+    return false;
+  }
+  const numericalValue = Number(value);
+  return numericalValue > 0;
 }
 
 export function parseWeightKg(weightKg: string): number | null {
   if (!isValidWeightKg(weightKg)) {
-    throw new Error(`Invalid weight string: ${weightKg}`);
+    throw new Error(`Invalid weight: ${weightKg}`);
   }
   const value = weightKg.trim();
   if (value === "") {
     return null;
   }
-  const kg = Number(value);
-  if (kg < 1) {
-    throw new Error(`Invalid weight value: ${kg}`);
-  }
-  return kg;
+  return Number(value);
 }
 
 export function isValidEmail(email: string): boolean {
