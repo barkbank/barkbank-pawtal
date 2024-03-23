@@ -58,7 +58,7 @@ CREATE TABLE dogs (
   dog_modification_time TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
   dog_ever_pregnant t_yes_no_unknown NOT NULL,
   dog_ever_received_transfusion t_yes_no_unknown NOT NULL,
-  dog_weight_kg INTEGER, -- NULL means weight is not known.
+  dog_weight_kg REAL, -- NULL means weight is not known.
 
   -- TIMESTAMP WITH TIME ZONE so the Date in TypeScript isn't ambiguous.
   dog_birthday TIMESTAMP WITH TIME ZONE NOT NULL,

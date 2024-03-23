@@ -38,7 +38,7 @@ const FORM_SCHEMA = z.object({
     ),
   dogGender: z.string().min(1, { message: "Please select an option" }),
   dogWeightKg: z.string().refine(isValidWeightKg, {
-    message: "Weight should be a positive whole number or left blank",
+    message: "Weight should be a positive number or left blank",
   }),
   dogDea1Point1: z.string().min(1, { message: "Please select an option" }),
   dogEverReceivedTransfusion: z

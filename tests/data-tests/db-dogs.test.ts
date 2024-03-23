@@ -43,6 +43,16 @@ describe("db-dogs", () => {
         expect(dog?.dogWeightKg).toBeNull();
       });
     });
+    it("should allow insertion of float weight", async () => {
+      await withDb(async (db) => {
+        const user = await insertUser(8, db);
+        const specIn: Record<string, any> = await getDogSpec(1);
+        specIn.dogWeightKg = 17.5; // Can insert floats
+        const dogGen = await dbInsertDog(db, user.userId, specIn as DogSpec);
+        const dog = await dbSelectDog(db, dogGen.dogId);
+        expect(dog?.dogWeightKg).toEqual(17.5);
+      });
+    });
   });
   describe("dbInsertDog Data Validation", () => {
     const originalLogFn = console.error;
@@ -81,13 +91,6 @@ describe("db-dogs", () => {
       await withDb(async (db) => {
         const spec: Record<string, any> = await getDogSpec(1);
         spec.dogBirthday = "2020-06"; // Correct should be padded like '2020-06-00'
-        await expectErrorWhenInserting(spec, db);
-      });
-    });
-    it("should not allow insertion of float weight", async () => {
-      await withDb(async (db) => {
-        const spec: Record<string, any> = await getDogSpec(1);
-        spec.dogWeightKg = 17.5; // Cannot insert floats
         await expectErrorWhenInserting(spec, db);
       });
     });
