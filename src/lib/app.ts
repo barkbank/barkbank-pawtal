@@ -16,14 +16,17 @@ import { HashService, SecretHashService } from "./services/hash";
 import { OtpConfig, OtpService, OtpServiceImpl } from "./services/otp";
 import pg from "pg";
 import { VetActorFactory } from "./vet/vet-actor-factory";
-import { UserActorFactory } from "./user/user-actor-factory";
+import {
+  UserActorFactory,
+  UserActorFactoryConfig,
+} from "./user/user-actor-factory";
 import { AppEnv } from "./app-env";
 import { isValidEmail } from "./bark-utils";
-import { UserAccountService } from "./user/user-account-service";
 import { UserMapper } from "./data/user-mapper";
 import { AdminMapper } from "./data/admin-mapper";
 import { DogMapper } from "./data/dog-mapper";
 import { RegistrationHandler } from "./user/registration-handler";
+import { UserActorConfig } from "./user/user-actor";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -38,7 +41,6 @@ export class AppFactory {
   private promisedAdminMapper: Promise<AdminMapper> | null = null;
   private promisedVetActorFactory: Promise<VetActorFactory> | null = null;
   private promisedUserActorFactory: Promise<UserActorFactory> | null = null;
-  private promisedUserAccountService: Promise<UserAccountService> | null = null;
   private promisedUserMapper: Promise<UserMapper> | null = null;
   private promisedDogMapper: Promise<DogMapper> | null = null;
   private promisedRegistrationHandler: Promise<RegistrationHandler> | null =
@@ -235,18 +237,6 @@ export class AppFactory {
   public getUserActorFactory(): Promise<UserActorFactory> {
     if (this.promisedUserActorFactory === null) {
       this.promisedUserActorFactory = new Promise(async (resolve) => {
-        const service = await this.getUserAccountService();
-        const factory = new UserActorFactory(service);
-        console.log("Created UserActorFactory");
-        resolve(factory);
-      });
-    }
-    return this.promisedUserActorFactory;
-  }
-
-  public getUserAccountService(): Promise<UserAccountService> {
-    if (this.promisedUserAccountService === null) {
-      this.promisedUserAccountService = new Promise(async (resolve) => {
         const [dbPool, emailHashService, userMapper, dogMapper] =
           await Promise.all([
             this.getDbPool(),
@@ -254,17 +244,17 @@ export class AppFactory {
             this.getUserMapper(),
             this.getDogMapper(),
           ]);
-        const service = new UserAccountService({
+        const factoryConfig: UserActorFactoryConfig = {
           dbPool,
           emailHashService,
-          userMapper,
-          dogMapper,
-        });
-        console.log("Created UserAccountService");
-        resolve(service);
+        };
+        const actorConfig: UserActorConfig = { dbPool, userMapper, dogMapper };
+        const factory = new UserActorFactory(factoryConfig, actorConfig);
+        console.log("Created UserActorFactory");
+        resolve(factory);
       });
     }
-    return this.promisedUserAccountService;
+    return this.promisedUserActorFactory;
   }
 
   public getUserMapper(): Promise<UserMapper> {
