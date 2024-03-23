@@ -35,6 +35,8 @@ export class AppFactory {
   private promisedPiiHashService: Promise<HashService> | null = null;
   private promisedPiiEncryptionService: Promise<EncryptionService> | null =
     null;
+  private promisedOiiEncryptionService: Promise<EncryptionService> | null =
+    null;
   private promisedBreedService: Promise<BreedService> | null = null;
   private promisedDbPool: Promise<pg.Pool> | null = null;
   private promisedAdminActorFactory: Promise<AdminActorFactory> | null = null;
@@ -136,7 +138,7 @@ export class AppFactory {
     return this.promisedPiiHashService;
   }
 
-  public getPiiEncryptionService(): Promise<EncryptionService> {
+  private getPiiEncryptionService(): Promise<EncryptionService> {
     if (this.promisedPiiEncryptionService === null) {
       this.promisedPiiEncryptionService = Promise.resolve(
         new SecretEncryptionService(this.envString(AppEnv.BARKBANK_PII_SECRET)),
@@ -144,6 +146,16 @@ export class AppFactory {
       console.log("Created PiiEncryptionService");
     }
     return this.promisedPiiEncryptionService;
+  }
+
+  private getOiiEncryptionService(): Promise<EncryptionService> {
+    if (this.promisedOiiEncryptionService === null) {
+      this.promisedOiiEncryptionService = Promise.resolve(
+        new SecretEncryptionService(this.envString(AppEnv.BARKBANK_OII_SECRET)),
+      );
+      console.log("Created OiiEncryptionService");
+    }
+    return this.promisedOiiEncryptionService;
   }
 
   public getBreedService(): Promise<BreedService> {
@@ -278,9 +290,9 @@ export class AppFactory {
   public getDogMapper(): Promise<DogMapper> {
     if (this.promisedDogMapper === null) {
       this.promisedDogMapper = new Promise(async (resolve) => {
-        const piiEncryptionService = await this.getPiiEncryptionService();
+        const oiiEncryptionService = await this.getOiiEncryptionService();
         const mapper = new DogMapper({
-          piiEncryptionService,
+          oiiEncryptionService,
         });
         console.log("Created DogMapper");
         resolve(mapper);

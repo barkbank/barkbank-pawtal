@@ -57,7 +57,11 @@ export function getEmailHashService(): HashService {
 }
 
 export function getPiiEncryptionService(): EncryptionService {
-  return new HarnessEncryptionService();
+  return new HarnessEncryptionService("pii-secret");
+}
+
+export function getOiiEncryptionService(): EncryptionService {
+  return new HarnessEncryptionService("oii-secret");
 }
 
 export function getOtpService(): OtpService {
@@ -77,7 +81,7 @@ export function getVetMapper(): VetMapper {
 
 export function getDogMapper(): DogMapper {
   return new DogMapper({
-    piiEncryptionService: getPiiEncryptionService(),
+    oiiEncryptionService: getOiiEncryptionService(),
   });
 }
 
