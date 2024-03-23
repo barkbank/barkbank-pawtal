@@ -44,7 +44,6 @@ CREATE TYPE t_dog_antigen_presence AS ENUM ('POSITIVE', 'NEGATIVE', 'UNKNOWN');
 CREATE TABLE dogs (
   dog_id BIGSERIAL,
   dog_creation_time TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  dog_status TEXT NOT NULL,
 
   -- User ID is nullable, allowing User records to be deleted while leaving
   -- behind Dog records. This way records used to track dog related activities

@@ -6,7 +6,6 @@ const DOG_COLUMNS = [
   "dog_creation_time",
   "dog_modification_time",
   "user_id",
-  "dog_status",
   "dog_encrypted_oii",
   "dog_breed",
   "dog_birthday",
@@ -25,7 +24,6 @@ export async function dbInsertDog(
   const sql = `
     INSERT INTO dogs (
       user_id,
-      dog_status,
       dog_encrypted_oii,
       dog_breed,
       dog_birthday,
@@ -35,12 +33,11 @@ export async function dbInsertDog(
       dog_ever_pregnant,
       dog_ever_received_transfusion
     )
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
     RETURNING dog_id, dog_creation_time, dog_modification_time
   `;
   const res = await dbQuery(ctx, sql, [
     userId,
-    dogSpec.dogStatus,
     dogSpec.dogEncryptedOii,
     dogSpec.dogBreed,
     dogSpec.dogBirthday,

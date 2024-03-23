@@ -6,7 +6,6 @@ import {
   DogGen,
   DogOii,
   DogDetails,
-  DogStatus,
   DogSecureOii,
   DogSpec,
   DogAntigenPresence,
@@ -134,10 +133,7 @@ export class RegistrationHandler {
     userId: string,
   ): Promise<DogGen> {
     const dogOii: DogOii = this.config.dogMapper.toDogOii(request);
-    const dogDetails: DogDetails = this.config.dogMapper.toDogDetails({
-      ...request,
-      dogStatus: DogStatus.NEW_PROFILE, // TODO: Remove dogStatus
-    });
+    const dogDetails: DogDetails = this.config.dogMapper.toDogDetails(request);
     const secureOii: DogSecureOii =
       await this.config.dogMapper.mapDogOiiToDogSecureOii(dogOii);
     const spec: DogSpec = { ...secureOii, ...dogDetails };
