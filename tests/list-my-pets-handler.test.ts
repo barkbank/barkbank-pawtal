@@ -18,7 +18,7 @@ import {
   insertDog,
   insertUser,
 } from "./_fixtures";
-import { ListMyPetsHandler } from "@/lib/user/list-my-pets-handler";
+import { ListMyPetsHandler } from "@/lib/user/handlers/list-my-pets-handler";
 import { dbInsertDog } from "@/lib/data/db-dogs";
 import { DOG_STATUS } from "@/lib/bark-models";
 

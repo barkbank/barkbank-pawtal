@@ -1,11 +1,11 @@
 import { DogStatus } from "../bark-models";
 
-export type DogListItem = {
+export type MyDog = {
   dogId: string;
   dogName: string;
   dogStatus: DogStatus;
 };
 
-export type DogList = {
-  dogs: DogListItem[];
+export type ListMyPetsResponse = {
+  dogs: MyDog[];
 };

@@ -1,18 +1,9 @@
 import { Pool } from "pg";
-import { DOG_STATUS, DogStatus } from "../bark-models";
-import { UserActor } from "./user-actor";
-import { DogMapper } from "../data/dog-mapper";
-import { dbQuery } from "../data/db-utils";
-
-type MyDog = {
-  dogId: string;
-  dogName: string;
-  dogStatus: DogStatus;
-};
-
-export type ListMyPetsResponse = {
-  dogs: MyDog[];
-};
+import { DOG_STATUS } from "../../bark-models";
+import { UserActor } from "../user-actor";
+import { DogMapper } from "../../data/dog-mapper";
+import { dbQuery } from "../../data/db-utils";
+import { ListMyPetsResponse, MyDog } from "../user-models";
 
 type Config = {
   dbPool: Pool;

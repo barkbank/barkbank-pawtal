@@ -2,10 +2,8 @@
 
 import APP from "@/lib/app";
 import { getAuthenticatedUserActor } from "@/lib/auth";
-import {
-  ListMyPetsHandler,
-  ListMyPetsResponse,
-} from "@/lib/user/list-my-pets-handler";
+import { ListMyPetsHandler } from "@/lib/user/handlers/list-my-pets-handler";
+import { ListMyPetsResponse } from "../user-models";
 
 /**
  * @returns ListMyPetsResponse if logged in, null if not logged in.
