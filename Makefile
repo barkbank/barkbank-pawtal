@@ -57,3 +57,7 @@ wip:
 .PHONY: todo
 todo:
 	grep --color=always -R TODO src tests db
+
+.PHONY: storybook
+storybook:
+	npm run storybook
