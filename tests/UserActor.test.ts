@@ -124,6 +124,9 @@ describe("UserActor", () => {
         const { userActor } = await getScenario(dbPool, USER_IDX);
         const details: DogDetails = await getDogDetails(DOG_IDX, {
           dogEverPregnant: YesNoUnknown.YES,
+
+          // Use an underweight example to test that PERMANENTLY_INELIGIBLE is
+          // selected over INELIGIBLE.
           dogWeightKg: 15,
         });
         const secureOii: DogSecureOii = await getDogSecureOii(DOG_IDX);
@@ -140,6 +143,9 @@ describe("UserActor", () => {
         const { userActor } = await getScenario(dbPool, USER_IDX);
         const details: DogDetails = await getDogDetails(DOG_IDX, {
           dogEverReceivedTransfusion: YesNoUnknown.YES,
+
+          // Use an underweight example to test that PERMANENTLY_INELIGIBLE is
+          // selected over INELIGIBLE.
           dogWeightKg: 15,
         });
         const secureOii: DogSecureOii = await getDogSecureOii(DOG_IDX);
