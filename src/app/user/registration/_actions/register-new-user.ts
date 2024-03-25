@@ -4,7 +4,7 @@ import APP from "@/lib/app";
 import {
   RegistrationRequest,
   RegistrationResponse,
-} from "@/lib/user/registration-handler";
+} from "@/lib/handlers/registration-handler";
 
 export async function registerNewUser(
   request: RegistrationRequest,
