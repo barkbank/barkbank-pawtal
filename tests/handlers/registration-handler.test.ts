@@ -1,12 +1,12 @@
 import { Pool } from "pg";
-import { withDb } from "./_db_helpers";
-import { RegistrationRequest } from "@/lib/user/registration-handler";
-import { RegistrationHandlerConfig } from "@/lib/user/registration-handler";
-import { RegistrationHandler } from "@/lib/user/registration-handler";
+import { withDb } from "../_db_helpers";
+import { RegistrationRequest } from "@/lib/handlers/registration-handler";
+import { RegistrationHandlerConfig } from "@/lib/handlers/registration-handler";
+import { RegistrationHandler } from "@/lib/handlers/registration-handler";
 import {
   DogAntigenPresence,
   DogGender,
-  UserResidencies,
+  USER_RESIDENCY,
   YesNoUnknown,
 } from "@/lib/data/db-models";
 import { BARK_UTC, guaranteed } from "@/lib/bark-utils";
@@ -17,13 +17,13 @@ import {
   getUserMapper,
   insertUser,
   insertVet,
-} from "./_fixtures";
+} from "../_fixtures";
 import { dbSelectUser, dbSelectUserIdByHashedEmail } from "@/lib/data/db-users";
 import {
   dbSelectDogListByUserId,
   dbSelectPreferredVetIds,
 } from "@/lib/data/db-dogs";
-import { HarnessOtpService } from "./_harness";
+import { HarnessOtpService } from "../_harness";
 import { dbQuery } from "@/lib/data/db-utils";
 
 describe("RegistrationHandler", () => {
@@ -199,7 +199,7 @@ function getRegistrationRequest(
     userName: "John Chong",
     userEmail: "john@chong.org",
     userPhoneNumber: "98765432",
-    userResidency: UserResidencies.SINGAPORE,
+    userResidency: USER_RESIDENCY.SINGAPORE,
     dogName: "Tarik",
     dogBreed: "Teh",
     dogBirthday: BARK_UTC.getDate(2019, 7, 4),

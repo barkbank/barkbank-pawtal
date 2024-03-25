@@ -1,5 +1,10 @@
 import { z } from "zod";
 
+/**
+ * Use this to define "enums".
+ */
+export type ObjectValues<T> = T[keyof T];
+
 export function guaranteed<T>(arg: T | undefined | null): T {
   if (arg === undefined) {
     throw Error("arg is undefined");

@@ -25,7 +25,7 @@ import { isValidEmail } from "./bark-utils";
 import { UserMapper } from "./data/user-mapper";
 import { AdminMapper } from "./data/admin-mapper";
 import { DogMapper } from "./data/dog-mapper";
-import { RegistrationHandler } from "./user/registration-handler";
+import { RegistrationHandler } from "./handlers/registration-handler";
 import { UserActorConfig } from "./user/user-actor";
 
 export class AppFactory {

@@ -14,6 +14,8 @@
 // - Some: This sould be a full record with PII.
 //
 
+import { ObjectValues } from "../bark-utils";
+
 export type UserPii = {
   userName: string;
   userEmail: string;
@@ -26,12 +28,12 @@ export type UserSecurePii = {
 };
 
 // https://dev.to/ivanzm123/dont-use-enums-in-typescript-they-are-very-dangerous-57bh
-export const UserResidencies = {
+export const USER_RESIDENCY = {
   OTHER: "OTHER",
   SINGAPORE: "SINGAPORE",
 } as const;
-export type UserResidency =
-  (typeof UserResidencies)[keyof typeof UserResidencies];
+
+export type UserResidency = ObjectValues<typeof USER_RESIDENCY>;
 
 export type UserDetails = {
   userResidency: UserResidency;

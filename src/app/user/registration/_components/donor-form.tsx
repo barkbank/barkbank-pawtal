@@ -15,7 +15,7 @@ import { RoutePath } from "@/lib/route-path";
 import { useRouter } from "next/navigation";
 import { BarkFormOption } from "@/components/bark/bark-form";
 import { registerNewUser } from "@/app/user/registration/_actions/register-new-user";
-import { RegistrationRequest } from "@/lib/user/registration-handler";
+import { RegistrationRequest } from "@/lib/handlers/registration-handler";
 import {
   DogAntigenPresence,
   DogGender,
