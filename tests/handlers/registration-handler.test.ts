@@ -1,5 +1,5 @@
 import { Pool } from "pg";
-import { withDb } from "./_db_helpers";
+import { withDb } from "../_db_helpers";
 import { RegistrationRequest } from "@/lib/handlers/registration-handler";
 import { RegistrationHandlerConfig } from "@/lib/handlers/registration-handler";
 import { RegistrationHandler } from "@/lib/handlers/registration-handler";
@@ -17,13 +17,13 @@ import {
   getUserMapper,
   insertUser,
   insertVet,
-} from "./_fixtures";
+} from "../_fixtures";
 import { dbSelectUser, dbSelectUserIdByHashedEmail } from "@/lib/data/db-users";
 import {
   dbSelectDogListByUserId,
   dbSelectPreferredVetIds,
 } from "@/lib/data/db-dogs";
-import { HarnessOtpService } from "./_harness";
+import { HarnessOtpService } from "../_harness";
 import { dbQuery } from "@/lib/data/db-utils";
 
 describe("RegistrationHandler", () => {
