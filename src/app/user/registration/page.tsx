@@ -2,7 +2,8 @@
 
 import APP from "@/lib/app";
 import DonorForm from "./_components/donor-form";
-import { AccountType, isLoggedIn } from "@/lib/auth";
+import { AccountType } from "@/lib/auth-models";
+import { isLoggedIn } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
 import { getVetOptions } from "./_lib/get-vet-options";

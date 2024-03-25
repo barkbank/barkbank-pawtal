@@ -1,3 +1,6 @@
+import { Url } from "next/dist/shared/lib/router/router";
+import { AccountType } from "./auth-models";
+
 export class RoutePath {
   static readonly ROOT = "/";
   static readonly LOGOUT_PAGE = "/logout";
@@ -20,4 +23,23 @@ export class RoutePath {
   static readonly CONTACT_US = "/contact-us";
   static readonly PRIVACY_POLICY = "/privacy-policy";
   static readonly TERMS_AND_CONDITIONS = "/terms-and-conditions";
+
+  static readonly ARTICLES = "/articles";
+  static readonly ABOUT_US = "/about";
+  static readonly BE_A_DONOR = "/be-a-donor";
+  static readonly INFO = "/info";
+  static readonly FAQ = "/faq";
+
+  static readonly ACCOUNT_DASHBOARD = (accountType: Url) => {
+    if (accountType === AccountType.ADMIN) {
+      return RoutePath.ADMIN_DASHBOARD_PAGE;
+    }
+    if (accountType === AccountType.VET) {
+      return RoutePath.VET_DASHBOARD_PAGE;
+    }
+    if (accountType === AccountType.USER) {
+      return RoutePath.USER_DASHBOARD_PAGE;
+    }
+    return "/";
+  };
 }

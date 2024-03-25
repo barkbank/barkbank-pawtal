@@ -1,7 +1,7 @@
 "use server";
 
 import { RoutePath } from "@/lib/route-path";
-import { AccountType } from "@/lib/auth";
+import { AccountType } from "@/lib/auth-models";
 import BarkLoginPage from "@/components/bark/login/bark-login-page";
 
 export default async function Page() {
@@ -14,3 +14,4 @@ export default async function Page() {
     />
   );
 }
+//
