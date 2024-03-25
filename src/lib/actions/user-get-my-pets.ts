@@ -3,9 +3,9 @@
 import APP from "@/lib/app";
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { ListMyPetsHandler } from "@/lib/user/handlers/list-my-pets-handler";
-import { ListMyPetsResponse } from "../user/user-models";
+import { ListMyPetsResponse } from "../models/user-models";
 import { Err, Ok, Result } from "../result";
-import { ERR_401_NO_ACTOR, ERR_500_SERVER_ERROR } from "../action-errors";
+import { ERR_401_NO_ACTOR, ERR_500_SERVER_ERROR } from "./action-errors";
 
 export async function userGetMyPets(): Promise<
   Result<

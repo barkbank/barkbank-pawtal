@@ -1,9 +1,9 @@
 import { Pool } from "pg";
-import { DOG_STATUS } from "../../bark-models";
+import { DOG_STATUS } from "../../models/bark-models";
 import { UserActor } from "../user-actor";
 import { DogMapper } from "../../data/dog-mapper";
 import { dbQuery } from "../../data/db-utils";
-import { ListMyPetsResponse, MyDog } from "../user-models";
+import { ListMyPetsResponse, MyDog } from "../../models/user-models";
 
 type Config = {
   dbPool: Pool;

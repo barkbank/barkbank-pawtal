@@ -1,4 +1,4 @@
-import { DogStatus } from "../bark-models";
+import { DogStatus } from "./bark-models";
 
 export type MyDog = {
   dogId: string;

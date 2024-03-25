@@ -20,7 +20,7 @@ import {
 } from "./_fixtures";
 import { ListMyPetsHandler } from "@/lib/user/handlers/list-my-pets-handler";
 import { dbInsertDog } from "@/lib/data/db-dogs";
-import { DOG_STATUS } from "@/lib/bark-models";
+import { DOG_STATUS } from "@/lib/models/bark-models";
 
 describe("ListMyPetsHandler", () => {
   const USER_IDX = 71;
