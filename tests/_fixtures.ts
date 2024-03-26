@@ -38,11 +38,17 @@ import { VetMapper } from "@/lib/data/vet-mapper";
 import { DogMapper } from "@/lib/data/dog-mapper";
 import { UserMapper } from "@/lib/data/user-mapper";
 import { BARK_UTC } from "@/lib/bark-utils";
-import { DbContext } from "@/lib/data/db-utils";
+import { DbContext, dbQuery } from "@/lib/data/db-utils";
 import { dbInsertDog } from "@/lib/data/db-dogs";
 import { OtpService } from "@/lib/services/otp";
 import { UserActorConfig } from "@/lib/user/user-actor";
 import { UserActorFactoryConfig } from "@/lib/user/user-actor-factory";
+import {
+  CALL_OUTCOME,
+  CallOutcome,
+  POS_NEG_NIL,
+  REPORTED_INELIGIBILITY,
+} from "@/lib/models/bark-models";
 
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
@@ -62,6 +68,11 @@ export function getPiiEncryptionService(): EncryptionService {
 
 export function getOiiEncryptionService(): EncryptionService {
   return new HarnessEncryptionService("oii-secret");
+}
+
+export function getGeneralEncryptionService(): EncryptionService {
+  // For reasons and notes
+  return new HarnessEncryptionService("general");
 }
 
 export function getOtpService(): OtpService {
@@ -328,4 +339,82 @@ function getDogEverPregnant(idx: number): YesNoUnknown {
     return YesNoUnknown.UNKNOWN;
   }
   return getYesNoUnknown(idx);
+}
+
+export async function insertCall(
+  dbPool: Pool,
+  dogId: string,
+  vetId: string,
+  callOutcome: CallOutcome,
+  optOutReason?: string,
+): Promise<{ callId: string }> {
+  const encryptedReason =
+    optOutReason === undefined
+      ? ""
+      : await getGeneralEncryptionService().getEncryptedData(optOutReason);
+  const res1 = await dbQuery(
+    dbPool,
+    `
+    insert into calls (
+      dog_id,
+      vet_id,
+      call_outcome,
+      encrypted_opt_out_reason
+    )
+    values ($1, $2, $3, $4)
+    returning call_id
+    `,
+    [dogId, vetId, callOutcome, encryptedReason],
+  );
+  const callId = res1.rows[0].call_id;
+  return { callId };
+}
+
+export async function insertReport(
+  dbPool: Pool,
+  callId: string,
+): Promise<{ reportId: string }> {
+  const currentTs = new Date().getTime();
+  const visitTs = currentTs - 24 * 60 * 60 * 1000;
+  const visitTime = new Date(visitTs);
+  const dogWeightKg = 25;
+  const dogBodyConditioningScore = 5;
+  const dogHeartworm = POS_NEG_NIL.NIL;
+  const dogDea1Point1 = POS_NEG_NIL.NIL;
+  const dogReportedIneligibility = REPORTED_INELIGIBILITY.NIL;
+  const encryptedIneligibilityReason = "";
+  const ineligibilityExpiryTime = null;
+  const res1 = await dbQuery(
+    dbPool,
+    `
+    insert into reports (
+      call_id,
+      visit_time,
+      dog_weight_kg,
+      dog_body_conditioning_score,
+      dog_heartworm,
+      dog_dea1_point1,
+      dog_reported_ineligibility,
+      encrypted_ineligibility_reason,
+      ineligibility_expiry_time
+    )
+    values ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+    returning report_id
+    `,
+    [
+      callId,
+      visitTime,
+      dogWeightKg,
+      dogBodyConditioningScore,
+      dogHeartworm,
+      dogDea1Point1,
+      dogReportedIneligibility,
+      encryptedIneligibilityReason,
+      ineligibilityExpiryTime,
+    ],
+  );
+  const reportId: string = res1.rows[0].report_id;
+  return {
+    reportId,
+  };
 }
