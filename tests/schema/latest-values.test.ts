@@ -39,7 +39,7 @@ describe("latest_values", () => {
   describe("latest_user_residency", () => {
     it("should be the residency of each dog's owner", async () => {
       await withDb(async (dbPool) => {
-        const { userId, dogId } = await initUserAndDog(dbPool);
+        const { userId } = await initUserAndDog(dbPool);
         await dbQuery(
           dbPool,
           `update users set user_residency = $2 where user_id = $1`,
@@ -51,6 +51,25 @@ describe("latest_values", () => {
           [userId],
         );
         expect(res.rows[0].latest_user_residency).toEqual(USER_RESIDENCY.OTHER);
+      });
+    });
+  });
+
+  describe("latest_dog_weight_kg", () => {
+    it("should be NULL when NULL in dogs and there are no reports", async () => {
+      await withDb(async (dbPool) => {
+        const { dogId } = await initUserAndDog(dbPool);
+        await dbQuery(
+          dbPool,
+          `update dogs set dog_weight_kg=NULL where dog_id = $1`,
+          [dogId],
+        );
+        const res = await dbQuery(
+          dbPool,
+          `select latest_dog_weight_kg from latest_values where dog_id = $1`,
+          [dogId],
+        );
+        expect(res.rows[0].latest_dog_weight_kg).toBeNull();
       });
     });
   });
