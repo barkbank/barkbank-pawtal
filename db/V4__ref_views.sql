@@ -1,25 +1,17 @@
 CREATE VIEW latest_values AS (
     WITH
-    mReports as (
-        SELECT
-            tReport.*,
-            tCall.dog_id,
-            tCall.vet_id
-        FROM reports as tReport
-        LEFT JOIN calls as tCall on tReport.call_id = tCall.call_id
-    ),
     mLatestVisitTimes as (
         SELECT
             dog_id,
             MAX(visit_time) as latest_visit_time
-        FROM mReports
+        FROM reports
         GROUP BY dog_id
     ),
     mLatestReports as (
         SELECT
             tReport.*
         FROM mLatestVisitTimes as tLatest
-        LEFT JOIN mReports as tReport on (
+        LEFT JOIN reports as tReport on (
             tLatest.dog_id = tReport.dog_id
             AND tLatest.latest_visit_time = tReport.visit_time
         )

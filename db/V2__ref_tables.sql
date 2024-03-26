@@ -114,6 +114,11 @@ CREATE TABLE reports (
   dog_reported_ineligibility t_reported_ineligibility NOT NULL,
   encrypted_ineligibility_reason TEXT NOT NULL,
   ineligibility_expiry_time TIMESTAMP WITH TIME ZONE,
+  dog_id BIGINT NOT NULL,
+  vet_id BIGINT NOT NULL,
   CONSTRAINT reports_fk_calls FOREIGN KEY (call_id) REFERENCES calls (call_id) ON DELETE RESTRICT,
+  CONSTRAINT reports_fk_dogs FOREIGN KEY (dog_id) REFERENCES dogs (dog_id) ON DELETE RESTRICT,
+  CONSTRAINT reports_fk_vets FOREIGN KEY (vet_id) REFERENCES vets (vet_id) ON DELETE RESTRICT,
+  CONSTRAINT reports_unique_dog_visit_time UNIQUE (dog_id, visit_time),
   CONSTRAINT reports_pk PRIMARY KEY (report_id)
 );

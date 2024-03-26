@@ -389,6 +389,8 @@ export async function insertReport(
     `
     insert into reports (
       call_id,
+      dog_id,
+      vet_id,
       visit_time,
       dog_weight_kg,
       dog_body_conditioning_score,
@@ -398,7 +400,12 @@ export async function insertReport(
       encrypted_ineligibility_reason,
       ineligibility_expiry_time
     )
-    values ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+    values (
+      $1,
+      (SELECT dog_id FROM calls WHERE call_id = $1),
+      (SELECT vet_id FROM calls WHERE call_id = $1),
+      $2, $3, $4, $5, $6, $7, $8, $9
+    )
     returning report_id
     `,
     [
