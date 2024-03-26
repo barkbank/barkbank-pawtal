@@ -99,6 +99,22 @@ describe("latest_values", () => {
         expect(res.rows[0].latest_dog_weight_kg).toEqual(11.11);
       });
     });
+    it("should be the value in dogs when there are no reports, in this case NULL", async () => {
+      await withDb(async (dbPool) => {
+        const { dogId } = await initDog(dbPool);
+        await dbQuery(
+          dbPool,
+          `update dogs set dog_weight_kg=NULL where dog_id = $1`,
+          [dogId],
+        );
+        const res = await dbQuery(
+          dbPool,
+          `select latest_dog_weight_kg from latest_values where dog_id = $1`,
+          [dogId],
+        );
+        expect(res.rows[0].latest_dog_weight_kg).toBeNull();
+      });
+    });
     it("should be the value from the latest report", async () => {
       await withDb(async (dbPool) => {
         const { dogId, vetId } = await initDog(dbPool);
