@@ -57,3 +57,8 @@ wip:
 .PHONY: todo
 todo:
 	grep --color=always -R TODO src tests db
+
+# Diff local schema and barkbank-schemas
+.PHONY: schema-diff
+schema-diff:
+	diff --color=always db ../barkbank-schema/schema

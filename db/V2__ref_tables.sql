@@ -24,8 +24,6 @@ CREATE TABLE vets (
   CONSTRAINT vet_pk PRIMARY KEY (vet_id)
 );
 
-CREATE TYPE t_residency AS ENUM ('OTHER', 'SINGAPORE');
-
 CREATE TABLE users (
   user_id BIGSERIAL,
   user_creation_time TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -36,10 +34,6 @@ CREATE TABLE users (
   CONSTRAINT users_unique_user_hashed_email UNIQUE (user_hashed_email),
   CONSTRAINT users_pk PRIMARY KEY (user_id)
 );
-
-CREATE TYPE t_yes_no_unknown AS ENUM ('YES', 'NO', 'UNKNOWN');
-CREATE TYPE t_dog_gender AS ENUM ('MALE', 'FEMALE', 'UNKNOWN');
-CREATE TYPE t_dog_antigen_presence AS ENUM ('POSITIVE', 'NEGATIVE', 'UNKNOWN');
 
 CREATE TABLE dogs (
   dog_id BIGSERIAL,
@@ -95,53 +89,31 @@ CREATE TABLE dog_vet_preferences (
   CONSTRAINT dog_vet_preferences_pk PRIMARY KEY (dog_id, vet_id)
 );
 
--- ------------------------------------------------------------
--- # Triggers
+CREATE TABLE calls (
+  call_id BIGSERIAL,
+  call_creation_time TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  vet_id BIGINT NOT NULL,
+  dog_id BIGINT NOT NULL,
+  call_outcome t_call_outcome NOT NULL,
+  encrypted_opt_out_reason TEXT NOT NULL,
+  CONSTRAINT calls_fk_vets FOREIGN KEY (vet_id) REFERENCES vets (vet_id) ON DELETE RESTRICT,
+  CONSTRAINT calls_fk_dogs FOREIGN KEY (dog_id) REFERENCES dogs (dog_id) ON DELETE RESTRICT,
+  CONSTRAINT calls_pk PRIMARY KEY (call_id)
+);
 
-CREATE FUNCTION update_admin_modification_time()
-RETURNS TRIGGER AS $$
-BEGIN
-    NEW.admin_modification_time = CURRENT_TIMESTAMP;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER update_admin_modification_time_trigger
-BEFORE UPDATE ON admins
-FOR EACH ROW EXECUTE FUNCTION update_admin_modification_time();
-
-CREATE FUNCTION update_user_modification_time()
-RETURNS TRIGGER AS $$
-BEGIN
-    NEW.user_modification_time = CURRENT_TIMESTAMP;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER update_user_modification_time_trigger
-BEFORE UPDATE ON users
-FOR EACH ROW EXECUTE FUNCTION update_user_modification_time();
-
-CREATE FUNCTION update_vet_modification_time()
-RETURNS TRIGGER AS $$
-BEGIN
-    NEW.vet_modification_time = CURRENT_TIMESTAMP;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER update_vet_modification_time_trigger
-BEFORE UPDATE ON vets
-FOR EACH ROW EXECUTE FUNCTION update_vet_modification_time();
-
-CREATE FUNCTION update_dog_modification_time()
-RETURNS TRIGGER AS $$
-BEGIN
-    NEW.dog_modification_time = CURRENT_TIMESTAMP;
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER update_dog_modification_time_trigger
-BEFORE UPDATE ON dogs
-FOR EACH ROW EXECUTE FUNCTION update_dog_modification_time();
+CREATE TABLE reports (
+  report_id BIGSERIAL,
+  report_creation_time TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  report_modification_time TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  call_id BIGINT NOT NULL,
+  visit_time TIMESTAMP WITH TIME ZONE NOT NULL,
+  dog_weight_kg REAL NOT NULL,
+  dog_body_conditioning_score INTEGER NOT NULL,
+  dog_heartworm t_pos_neg_nil NOT NULL,
+  dog_dea1_point1 t_pos_neg_nil NOT NULL,
+  dog_reported_ineligibility t_reported_ineligibility NOT NULL,
+  encrypted_ineligibility_reason TEXT NOT NULL,
+  ineligibility_expiry_time TIMESTAMP WITH TIME ZONE,
+  CONSTRAINT reports_fk_calls FOREIGN KEY (call_id) REFERENCES calls (call_id) ON DELETE RESTRICT,
+  CONSTRAINT reports_pk PRIMARY KEY (report_id)
+);
