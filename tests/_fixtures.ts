@@ -19,6 +19,9 @@ import {
   Vet,
   VetSpec,
   YesNoUnknown,
+  DbReport,
+  DbReportSpec,
+  DbReportGen,
 } from "@/lib/data/db-models";
 import { dbInsertAdmin, dbSelectAdmin } from "@/lib/data/db-admins";
 import { Pool } from "pg";
@@ -49,6 +52,7 @@ import {
   POS_NEG_NIL,
   REPORTED_INELIGIBILITY,
 } from "@/lib/models/bark-models";
+import { dbInsertReport } from "@/lib/data/db-reports";
 
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
@@ -373,55 +377,23 @@ export async function insertCall(
 export async function insertReport(
   dbPool: Pool,
   callId: string,
-): Promise<{ reportId: string }> {
+  overrides?: Partial<DbReportSpec>,
+): Promise<DbReportGen> {
   const currentTs = new Date().getTime();
   const visitTs = currentTs - 24 * 60 * 60 * 1000;
   const visitTime = new Date(visitTs);
-  const dogWeightKg = 25;
-  const dogBodyConditioningScore = 5;
-  const dogHeartworm = POS_NEG_NIL.NIL;
-  const dogDea1Point1 = POS_NEG_NIL.NIL;
-  const dogReportedIneligibility = REPORTED_INELIGIBILITY.NIL;
-  const encryptedIneligibilityReason = "";
-  const ineligibilityExpiryTime = null;
-  const res1 = await dbQuery(
-    dbPool,
-    `
-    insert into reports (
-      call_id,
-      dog_id,
-      vet_id,
-      visit_time,
-      dog_weight_kg,
-      dog_body_conditioning_score,
-      dog_heartworm,
-      dog_dea1_point1,
-      dog_reported_ineligibility,
-      encrypted_ineligibility_reason,
-      ineligibility_expiry_time
-    )
-    values (
-      $1,
-      (SELECT dog_id FROM calls WHERE call_id = $1),
-      (SELECT vet_id FROM calls WHERE call_id = $1),
-      $2, $3, $4, $5, $6, $7, $8, $9
-    )
-    returning report_id
-    `,
-    [
-      callId,
-      visitTime,
-      dogWeightKg,
-      dogBodyConditioningScore,
-      dogHeartworm,
-      dogDea1Point1,
-      dogReportedIneligibility,
-      encryptedIneligibilityReason,
-      ineligibilityExpiryTime,
-    ],
-  );
-  const reportId: string = res1.rows[0].report_id;
-  return {
-    reportId,
+  const base: DbReportSpec = {
+    callId: callId,
+    visitTime: visitTime,
+    dogWeightKg: 20,
+    dogBodyConditioningScore: 5,
+    dogHeartworm: POS_NEG_NIL.NIL,
+    dogDea1Point1: POS_NEG_NIL.NIL,
+    dogReportedIneligibility: REPORTED_INELIGIBILITY.NIL,
+    encryptedIneligibilityReason: "",
+    ineligibilityExpiryTime: null,
   };
+  const spec = { ...base, ...overrides };
+  const gen = await dbInsertReport(dbPool, spec);
+  return gen;
 }

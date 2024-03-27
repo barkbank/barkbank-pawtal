@@ -138,4 +138,9 @@ describe("latest_values", () => {
       });
     });
   });
+  describe("latest_dog_body_conditioning_score", () => {
+    it("should be the score from the latest report", async () => {
+      await withDb(async (dbPool) => {});
+    });
+  });
 });

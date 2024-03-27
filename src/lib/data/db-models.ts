@@ -15,6 +15,7 @@
 //
 
 import { ObjectValues } from "../bark-utils";
+import { PosNegNil, ReportedIneligibility } from "../models/bark-models";
 
 export type UserPii = {
   userName: string;
@@ -158,3 +159,25 @@ export type VetGen = {
 };
 
 export type Vet = VetSpec & VetGen;
+
+export type DbReportSpec = {
+  callId: string;
+  visitTime: Date;
+  dogWeightKg: number;
+  dogBodyConditioningScore: number;
+  dogHeartworm: PosNegNil;
+  dogDea1Point1: PosNegNil;
+  dogReportedIneligibility: ReportedIneligibility;
+  encryptedIneligibilityReason: string;
+  ineligibilityExpiryTime: Date | null;
+};
+
+export type DbReportGen = {
+  reportId: string;
+  dogId: string;
+  vetId: string;
+  reportCreationTime: Date;
+  reportModificationTime: Date;
+};
+
+export type DbReport = DbReportSpec & DbReportGen;
