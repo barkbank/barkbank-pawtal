@@ -13,9 +13,14 @@ import {
   DogSpec,
   USER_RESIDENCY,
   UserSpec,
+  YesNoUnknown,
 } from "@/lib/data/db-models";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
-import { CALL_OUTCOME, SERVICE_STATUS } from "@/lib/models/bark-models";
+import {
+  CALL_OUTCOME,
+  PROFILE_STATUS,
+  SERVICE_STATUS,
+} from "@/lib/models/bark-models";
 
 describe("dog_statuses view", () => {
   const USER_IDX = 84;
@@ -104,6 +109,81 @@ describe("dog_statuses view", () => {
           [dogId],
         );
         expect(res.rows[0].service_status).toEqual(SERVICE_STATUS.UNAVAILABLE);
+      });
+    });
+  });
+
+  describe("profile_status", () => {
+    it("should be COMPLETE when breed, weight, and histories are known", async () => {
+      await withDb(async (dbPool) => {
+        const { dogId } = await initDog(dbPool, {
+          dogSpec: {
+            dogBreed: "Test Dog",
+            dogWeightKg: 18,
+            dogEverPregnant: YesNoUnknown.NO,
+            dogEverReceivedTransfusion: YesNoUnknown.NO,
+          },
+        });
+        const res = await dbQuery(
+          dbPool,
+          `select profile_status from dog_statuses where dog_id = $1`,
+          [dogId],
+        );
+        expect(res.rows[0].profile_status).toEqual(PROFILE_STATUS.COMPLETE);
+      });
+    });
+    it("should be INCOMPLETE when breed and weight are unknown", async () => {
+      await withDb(async (dbPool) => {
+        const { dogId } = await initDog(dbPool, {
+          dogSpec: {
+            dogBreed: "",
+            dogWeightKg: null,
+            dogEverPregnant: YesNoUnknown.NO,
+            dogEverReceivedTransfusion: YesNoUnknown.NO,
+          },
+        });
+        const res = await dbQuery(
+          dbPool,
+          `select profile_status from dog_statuses where dog_id = $1`,
+          [dogId],
+        );
+        expect(res.rows[0].profile_status).toEqual(PROFILE_STATUS.INCOMPLETE);
+      });
+    });
+    it("should be INCOMPLETE when pregnancy history is unkonwn", async () => {
+      await withDb(async (dbPool) => {
+        const { dogId } = await initDog(dbPool, {
+          dogSpec: {
+            dogBreed: "Test Dog",
+            dogWeightKg: 18,
+            dogEverPregnant: YesNoUnknown.UNKNOWN,
+            dogEverReceivedTransfusion: YesNoUnknown.NO,
+          },
+        });
+        const res = await dbQuery(
+          dbPool,
+          `select profile_status from dog_statuses where dog_id = $1`,
+          [dogId],
+        );
+        expect(res.rows[0].profile_status).toEqual(PROFILE_STATUS.INCOMPLETE);
+      });
+    });
+    it("should be INCOMPLETE when transfusion history is unkonwn", async () => {
+      await withDb(async (dbPool) => {
+        const { dogId } = await initDog(dbPool, {
+          dogSpec: {
+            dogBreed: "Test Dog",
+            dogWeightKg: 18,
+            dogEverPregnant: YesNoUnknown.NO,
+            dogEverReceivedTransfusion: YesNoUnknown.UNKNOWN,
+          },
+        });
+        const res = await dbQuery(
+          dbPool,
+          `select profile_status from dog_statuses where dog_id = $1`,
+          [dogId],
+        );
+        expect(res.rows[0].profile_status).toEqual(PROFILE_STATUS.INCOMPLETE);
       });
     });
   });
