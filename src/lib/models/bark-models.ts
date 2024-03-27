@@ -39,3 +39,28 @@ export const SERVICE_STATUS = {
 } as const;
 
 export type ServiceStatus = ObjectValues<typeof SERVICE_STATUS>;
+
+export const MEDICAL_STATUS = {
+  UNKNOWN: "UNKNOWN",
+  PERMANENTLY_INELIGIBLE: "PERMANENTLY_INELIGIBLE",
+  TEMPORARILY_INELIGIBLE: "TEMPORARILY_INELIGIBLE",
+  ELIGIBLE: "ELIGIBLE",
+} as const;
+
+export type MedicalStatus = ObjectValues<typeof MEDICAL_STATUS>;
+
+export const PARTICIPATION_STATUS = {
+  OPTED_OUT: "OPTED_OUT",
+  PAUSED: "PAUSED",
+  PARTICIPATING: "PARTICIPATING",
+} as const;
+
+export type ParticipatingStatus = ObjectValues<typeof PARTICIPATION_STATUS>;
+
+export const SCHEDULING_STATUS = {
+  PENDING_APPOINTMENT: "PENDING_APPOINTMENT",
+  PENDING_REPORT: "PENDING_REPORT",
+  UNAVAILABLE: "UNAVAILABLE",
+} as const;
+
+export type SchedulingStatus = ObjectValues<typeof SCHEDULING_STATUS>;
