@@ -52,6 +52,7 @@ CREATE VIEW latest_values AS (
     SELECT
         tDog.dog_id,
         tUser.user_id,
+        -- WIP: latest_user_residency may not be necessary.
         tUser.user_residency as latest_user_residency,
         COALESCE(tLatest.dog_weight_kg, tDog.dog_weight_kg) as latest_dog_weight_kg,
         tLatest.dog_body_conditioning_score as latest_dog_body_conditioning_score,
