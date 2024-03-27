@@ -15,7 +15,12 @@ import {
   UserSpec,
 } from "@/lib/data/db-models";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
-import { CALL_OUTCOME } from "@/lib/models/bark-models";
+import { CALL_OUTCOME, POS_NEG_NIL } from "@/lib/models/bark-models";
+import {
+  DEFAULT_DATE_TIME_FORMAT,
+  SINGAPORE_TIME_ZONE,
+  parseDateTime,
+} from "@/lib/bark-time";
 
 describe("latest_values", () => {
   const USER_IDX = 84;
@@ -163,6 +168,52 @@ describe("latest_values", () => {
           [dogId],
         );
         expect(res.rows[0].latest_dog_body_conditioning_score).toBeNull();
+      });
+    });
+  });
+  describe("latest_dog_heartworm", () => {
+    it("should be NIL when no reports", async () => {
+      await withDb(async (dbPool) => {
+        const { dogId } = await initDog(dbPool);
+        const res = await dbQuery(
+          dbPool,
+          `select latest_dog_heartworm from latest_values where dog_id = $1`,
+          [dogId],
+        );
+        expect(res.rows[0].latest_dog_heartworm).toEqual(POS_NEG_NIL.NIL);
+      });
+    });
+    it("should be the most recent non-NIL value from reports", async () => {
+      await withDb(async (dbPool) => {
+        const { dogId, vetId } = await initDog(dbPool);
+        // GIVEN tested on 15 Oct 2023
+        await addReport(dbPool, dogId, vetId, {
+          reportSpec: {
+            visitTime: parseDateTime("2023-10-15 15:30", {
+              format: DEFAULT_DATE_TIME_FORMAT,
+              timeZone: SINGAPORE_TIME_ZONE,
+            }),
+            dogHeartworm: POS_NEG_NIL.NEGATIVE,
+          },
+        });
+        // BUT not tested on 2 Feb 2024
+        await addReport(dbPool, dogId, vetId, {
+          reportSpec: {
+            visitTime: parseDateTime("2024-02-02 09:35", {
+              format: DEFAULT_DATE_TIME_FORMAT,
+              timeZone: SINGAPORE_TIME_ZONE,
+            }),
+            dogHeartworm: POS_NEG_NIL.NIL, // Did not test
+          },
+        });
+        // WHEN latest_dog_heartworm is retrieved
+        const res = await dbQuery(
+          dbPool,
+          `select latest_dog_heartworm from latest_values where dog_id = $1`,
+          [dogId],
+        );
+        // THEN it should be the value from 15 Oct 2023
+        expect(res.rows[0].latest_dog_heartworm).toEqual(POS_NEG_NIL.NEGATIVE);
       });
     });
   });
