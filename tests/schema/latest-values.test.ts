@@ -10,6 +10,7 @@ import {
 import { dbQuery } from "@/lib/data/db-utils";
 import {
   DbReportSpec,
+  DogAntigenPresence,
   DogSpec,
   USER_RESIDENCY,
   UserSpec,
@@ -214,6 +215,73 @@ describe("latest_values", () => {
         );
         // THEN it should be the value from 15 Oct 2023
         expect(res.rows[0].latest_dog_heartworm).toEqual(POS_NEG_NIL.NEGATIVE);
+      });
+    });
+  });
+  describe("latest_dog_dea1_point1", () => {
+    it("should be NIL when no reports and UNKNOWN in dog profile", async () => {
+      await withDb(async (dbPool) => {
+        const { dogId } = await initDog(dbPool, {
+          dogSpec: { dogDea1Point1: DogAntigenPresence.UNKNOWN },
+        });
+        const res = await dbQuery(
+          dbPool,
+          `select latest_dog_dea1_point1 from latest_values where dog_id = $1`,
+          [dogId],
+        );
+        expect(res.rows[0].latest_dog_dea1_point1).toEqual(POS_NEG_NIL.NIL);
+      });
+    });
+    it("should be POSITIVE when no reports and POSITIVE in dog profile", async () => {
+      await withDb(async (dbPool) => {
+        const { dogId } = await initDog(dbPool, {
+          dogSpec: { dogDea1Point1: DogAntigenPresence.POSITIVE },
+        });
+        const res = await dbQuery(
+          dbPool,
+          `select latest_dog_dea1_point1 from latest_values where dog_id = $1`,
+          [dogId],
+        );
+        expect(res.rows[0].latest_dog_dea1_point1).toEqual(
+          POS_NEG_NIL.POSITIVE,
+        );
+      });
+    });
+    it("should be the most recent non-NIL value from reports", async () => {
+      await withDb(async (dbPool) => {
+        const { dogId, vetId } = await initDog(dbPool, {
+          dogSpec: { dogDea1Point1: DogAntigenPresence.POSITIVE },
+        });
+        // GIVEN tested on 15 Oct 2023
+        await addReport(dbPool, dogId, vetId, {
+          reportSpec: {
+            visitTime: parseDateTime("2023-10-15 15:30", {
+              format: DEFAULT_DATE_TIME_FORMAT,
+              timeZone: SINGAPORE_TIME_ZONE,
+            }),
+            dogDea1Point1: POS_NEG_NIL.NEGATIVE,
+          },
+        });
+        // BUT not tested on 2 Feb 2024
+        await addReport(dbPool, dogId, vetId, {
+          reportSpec: {
+            visitTime: parseDateTime("2024-02-02 09:35", {
+              format: DEFAULT_DATE_TIME_FORMAT,
+              timeZone: SINGAPORE_TIME_ZONE,
+            }),
+            dogDea1Point1: POS_NEG_NIL.NIL, // Did not test
+          },
+        });
+        // WHEN latest_dog_dea1_point1 is retrieved
+        const res = await dbQuery(
+          dbPool,
+          `select latest_dog_dea1_point1 from latest_values where dog_id = $1`,
+          [dogId],
+        );
+        // THEN it should be the value from 15 Oct 2023
+        expect(res.rows[0].latest_dog_dea1_point1).toEqual(
+          POS_NEG_NIL.NEGATIVE,
+        );
       });
     });
   });
