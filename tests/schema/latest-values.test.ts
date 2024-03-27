@@ -8,7 +8,12 @@ import {
   insertVet,
 } from "../_fixtures";
 import { dbQuery } from "@/lib/data/db-utils";
-import { USER_RESIDENCY } from "@/lib/data/db-models";
+import {
+  DbReportSpec,
+  DogSpec,
+  USER_RESIDENCY,
+  UserSpec,
+} from "@/lib/data/db-models";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import { CALL_OUTCOME } from "@/lib/models/bark-models";
 
@@ -25,10 +30,14 @@ describe("latest_values", () => {
 
   async function initDog(
     dbPool: Pool,
+    overrides?: {
+      userSpec?: Partial<UserSpec>;
+      dogSpec?: Partial<DogSpec>;
+    },
   ): Promise<{ userId: string; dogId: string; vetId: string }> {
-    const userRecord = await insertUser(USER_IDX, dbPool);
+    const userRecord = await insertUser(USER_IDX, dbPool, overrides?.userSpec);
     const userId = userRecord.userId;
-    const dogGen = await insertDog(DOG_IDX, userId, dbPool);
+    const dogGen = await insertDog(DOG_IDX, userId, dbPool, overrides?.dogSpec);
     const dogId = dogGen.dogId;
     const vet = await insertVet(VET_IDX, dbPool);
     const vetId = vet.vetId;
@@ -40,6 +49,9 @@ describe("latest_values", () => {
     dbPool: Pool,
     dogId: string,
     vetId: string,
+    overrides?: {
+      reportSpec?: Partial<DbReportSpec>;
+    },
   ): Promise<{ reportId: string }> {
     const { callId } = await insertCall(
       dbPool,
@@ -47,7 +59,11 @@ describe("latest_values", () => {
       vetId,
       CALL_OUTCOME.APPOINTMENT,
     );
-    const { reportId } = await insertReport(dbPool, callId);
+    const { reportId } = await insertReport(
+      dbPool,
+      callId,
+      overrides?.reportSpec,
+    );
     return { reportId };
   }
 
@@ -66,12 +82,9 @@ describe("latest_values", () => {
   describe("latest_user_residency", () => {
     it("should be the residency of each dog's owner", async () => {
       await withDb(async (dbPool) => {
-        const { userId } = await initDog(dbPool);
-        await dbQuery(
-          dbPool,
-          `update users set user_residency = $2 where user_id = $1`,
-          [userId, USER_RESIDENCY.OTHER],
-        );
+        const { userId } = await initDog(dbPool, {
+          userSpec: { userResidency: USER_RESIDENCY.OTHER },
+        });
         const res = await dbQuery(
           dbPool,
           `select latest_user_residency from latest_values where user_id = $1`,
@@ -85,12 +98,9 @@ describe("latest_values", () => {
   describe("latest_dog_weight_kg", () => {
     it("should be the value in dogs when there are no reports", async () => {
       await withDb(async (dbPool) => {
-        const { dogId } = await initDog(dbPool);
-        await dbQuery(
-          dbPool,
-          `update dogs set dog_weight_kg=11.11 where dog_id = $1`,
-          [dogId],
-        );
+        const { dogId } = await initDog(dbPool, {
+          dogSpec: { dogWeightKg: 11.11 },
+        });
         const res = await dbQuery(
           dbPool,
           `select latest_dog_weight_kg from latest_values where dog_id = $1`,
@@ -101,12 +111,9 @@ describe("latest_values", () => {
     });
     it("should be the value in dogs when there are no reports, in this case NULL", async () => {
       await withDb(async (dbPool) => {
-        const { dogId } = await initDog(dbPool);
-        await dbQuery(
-          dbPool,
-          `update dogs set dog_weight_kg=NULL where dog_id = $1`,
-          [dogId],
-        );
+        const { dogId } = await initDog(dbPool, {
+          dogSpec: { dogWeightKg: null },
+        });
         const res = await dbQuery(
           dbPool,
           `select latest_dog_weight_kg from latest_values where dog_id = $1`,
@@ -117,18 +124,12 @@ describe("latest_values", () => {
     });
     it("should be the value from the latest report", async () => {
       await withDb(async (dbPool) => {
-        const { dogId, vetId } = await initDog(dbPool);
-        await dbQuery(
-          dbPool,
-          `update dogs set dog_weight_kg=11.11 where dog_id = $1`,
-          [dogId],
-        );
-        const { reportId } = await addReport(dbPool, dogId, vetId);
-        await dbQuery(
-          dbPool,
-          `update reports set dog_weight_kg=22.22 where report_id = $1`,
-          [reportId],
-        );
+        const { dogId, vetId } = await initDog(dbPool, {
+          dogSpec: { dogWeightKg: 11.11 },
+        });
+        await addReport(dbPool, dogId, vetId, {
+          reportSpec: { dogWeightKg: 22.22 },
+        });
         const res = await dbQuery(
           dbPool,
           `select latest_dog_weight_kg from latest_values where dog_id = $1`,
@@ -140,7 +141,29 @@ describe("latest_values", () => {
   });
   describe("latest_dog_body_conditioning_score", () => {
     it("should be the score from the latest report", async () => {
-      await withDb(async (dbPool) => {});
+      await withDb(async (dbPool) => {
+        const { dogId, vetId } = await initDog(dbPool);
+        await addReport(dbPool, dogId, vetId, {
+          reportSpec: { dogBodyConditioningScore: 5 },
+        });
+        const res = await dbQuery(
+          dbPool,
+          `select latest_dog_body_conditioning_score from latest_values where dog_id = $1`,
+          [dogId],
+        );
+        expect(res.rows[0].latest_dog_body_conditioning_score).toEqual(5);
+      });
+    });
+    it("should be null when no reports", async () => {
+      await withDb(async (dbPool) => {
+        const { dogId } = await initDog(dbPool);
+        const res = await dbQuery(
+          dbPool,
+          `select latest_dog_body_conditioning_score from latest_values where dog_id = $1`,
+          [dogId],
+        );
+        expect(res.rows[0].latest_dog_body_conditioning_score).toBeNull();
+      });
     });
   });
 });

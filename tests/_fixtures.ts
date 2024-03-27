@@ -19,7 +19,6 @@ import {
   Vet,
   VetSpec,
   YesNoUnknown,
-  DbReport,
   DbReportSpec,
   DbReportGen,
 } from "@/lib/data/db-models";
@@ -47,7 +46,6 @@ import { OtpService } from "@/lib/services/otp";
 import { UserActorConfig } from "@/lib/user/user-actor";
 import { UserActorFactoryConfig } from "@/lib/user/user-actor-factory";
 import {
-  CALL_OUTCOME,
   CallOutcome,
   POS_NEG_NIL,
   REPORTED_INELIGIBILITY,
@@ -202,8 +200,13 @@ export function adminPii(idx: number): AdminPii {
   };
 }
 
-export async function insertUser(idx: number, db: Pool): Promise<UserRecord> {
-  const spec = await getUserSpec(idx);
+export async function insertUser(
+  idx: number,
+  db: Pool,
+  overrides?: Partial<UserSpec>,
+): Promise<UserRecord> {
+  const base = await getUserSpec(idx);
+  const spec = { ...base, ...overrides };
   const gen = await dbInsertUser(db, spec);
   const user = await dbSelectUser(db, gen.userId);
   if (user === null) {
@@ -270,8 +273,10 @@ export async function insertDog(
   idx: number,
   userId: string,
   dbCtx: DbContext,
+  overrides?: Partial<DogSpec>,
 ): Promise<DogGen> {
-  const spec = await getDogSpec(idx);
+  const base = await getDogSpec(idx);
+  const spec = { ...base, ...overrides };
   const gen = await dbInsertDog(dbCtx, userId, spec);
   return gen;
 }
@@ -385,8 +390,8 @@ export async function insertReport(
   const base: DbReportSpec = {
     callId: callId,
     visitTime: visitTime,
-    dogWeightKg: 20,
-    dogBodyConditioningScore: 5,
+    dogWeightKg: 1,
+    dogBodyConditioningScore: 1,
     dogHeartworm: POS_NEG_NIL.NIL,
     dogDea1Point1: POS_NEG_NIL.NIL,
     dogReportedIneligibility: REPORTED_INELIGIBILITY.NIL,

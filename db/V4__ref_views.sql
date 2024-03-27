@@ -22,10 +22,11 @@ CREATE VIEW latest_values AS (
         tUser.user_id,
         tUser.user_residency as latest_user_residency,
         CASE
-            WHEN tLatestReport.dog_weight_kg IS NOT NULL THEN tLatestReport.dog_weight_kg
+            WHEN tLatest.dog_weight_kg IS NOT NULL THEN tLatest.dog_weight_kg
             ELSE tDog.dog_weight_kg
-        END as latest_dog_weight_kg
+        END as latest_dog_weight_kg,
+        tLatest.dog_body_conditioning_score as latest_dog_body_conditioning_score
     FROM dogs as tDog
     LEFT JOIN users as tUser on tDog.user_id = tUser.user_id
-    LEFT JOIN mLatestReports as tLatestReport on tDog.dog_id = tLatestReport.dog_id
+    LEFT JOIN mLatestReports as tLatest on tDog.dog_id = tLatest.dog_id
 );
