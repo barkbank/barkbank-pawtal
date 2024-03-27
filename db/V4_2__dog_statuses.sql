@@ -1,10 +1,20 @@
 CREATE VIEW dog_statuses AS (
+    WITH
+    mServiceStatuses as (
+        SELECT
+            user_id,
+            CASE
+                WHEN user_residency = 'SINGAPORE' THEN 'AVAILABLE'::t_service_status
+                ELSE 'UNAVAILABLE'::t_service_status
+            END as service_status
+        FROM users
+    ),
+    mTail as (SELECT 1)
+
     SELECT
-        tLatest.dog_id,
-        tLatest.user_id,
-        CASE
-            WHEN tLatest.latest_user_residency = 'SINGAPORE' THEN 'AVAILABLE'::t_service_status
-            ELSE 'UNAVAILABLE'::t_service_status
-        END as service_status
-    FROM latest_values as tLatest
+        tDog.dog_id,
+        tDog.user_id,
+        tService.service_status
+    FROM dogs as tDog
+    LEFT JOIN mServiceStatuses as tService on tDog.user_id = tService.user_id
 );

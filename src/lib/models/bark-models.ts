@@ -32,3 +32,10 @@ export const REPORTED_INELIGIBILITY = {
 } as const;
 
 export type ReportedIneligibility = ObjectValues<typeof REPORTED_INELIGIBILITY>;
+
+export const SERVICE_STATUS = {
+  AVAILABLE: "AVAILABLE",
+  UNAVAILABLE: "UNAVAILABLE",
+} as const;
+
+export type ServiceStatus = ObjectValues<typeof SERVICE_STATUS>;
