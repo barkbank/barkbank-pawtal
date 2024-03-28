@@ -4,6 +4,7 @@ import { utcToZonedTime, zonedTimeToUtc } from "date-fns-tz";
 export const UTC = "UTC";
 export const SINGAPORE_TIME_ZONE = "Asia/Singapore";
 export const NEW_YORK_TIME_ZONE = "America/New_York";
+export const DEFAULT_DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm";
 
 export type DateTimeOptions = {
   /**
@@ -14,7 +15,7 @@ export type DateTimeOptions = {
 };
 
 const DEFAULT_DATE_TIME_OPTIONS: DateTimeOptions = {
-  format: "yyyy-MM-dd HH:mm",
+  format: DEFAULT_DATE_TIME_FORMAT,
   timeZone: UTC,
 } as const;
 

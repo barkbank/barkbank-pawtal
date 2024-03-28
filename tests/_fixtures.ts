@@ -19,6 +19,8 @@ import {
   Vet,
   VetSpec,
   YesNoUnknown,
+  DbReportSpec,
+  DbReportGen,
 } from "@/lib/data/db-models";
 import { dbInsertAdmin, dbSelectAdmin } from "@/lib/data/db-admins";
 import { Pool } from "pg";
@@ -38,11 +40,17 @@ import { VetMapper } from "@/lib/data/vet-mapper";
 import { DogMapper } from "@/lib/data/dog-mapper";
 import { UserMapper } from "@/lib/data/user-mapper";
 import { BARK_UTC } from "@/lib/bark-utils";
-import { DbContext } from "@/lib/data/db-utils";
+import { DbContext, dbQuery } from "@/lib/data/db-utils";
 import { dbInsertDog } from "@/lib/data/db-dogs";
 import { OtpService } from "@/lib/services/otp";
 import { UserActorConfig } from "@/lib/user/user-actor";
 import { UserActorFactoryConfig } from "@/lib/user/user-actor-factory";
+import {
+  CallOutcome,
+  POS_NEG_NIL,
+  REPORTED_INELIGIBILITY,
+} from "@/lib/models/bark-models";
+import { dbInsertReport } from "@/lib/data/db-reports";
 
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
@@ -62,6 +70,11 @@ export function getPiiEncryptionService(): EncryptionService {
 
 export function getOiiEncryptionService(): EncryptionService {
   return new HarnessEncryptionService("oii-secret");
+}
+
+export function getGeneralEncryptionService(): EncryptionService {
+  // For reasons and notes
+  return new HarnessEncryptionService("general");
 }
 
 export function getOtpService(): OtpService {
@@ -187,8 +200,13 @@ export function adminPii(idx: number): AdminPii {
   };
 }
 
-export async function insertUser(idx: number, db: Pool): Promise<UserRecord> {
-  const spec = await getUserSpec(idx);
+export async function insertUser(
+  idx: number,
+  db: Pool,
+  overrides?: Partial<UserSpec>,
+): Promise<UserRecord> {
+  const base = await getUserSpec(idx);
+  const spec = { ...base, ...overrides };
   const gen = await dbInsertUser(db, spec);
   const user = await dbSelectUser(db, gen.userId);
   if (user === null) {
@@ -255,8 +273,10 @@ export async function insertDog(
   idx: number,
   userId: string,
   dbCtx: DbContext,
+  overrides?: Partial<DogSpec>,
 ): Promise<DogGen> {
-  const spec = await getDogSpec(idx);
+  const base = await getDogSpec(idx);
+  const spec = { ...base, ...overrides };
   const gen = await dbInsertDog(dbCtx, userId, spec);
   return gen;
 }
@@ -328,4 +348,57 @@ function getDogEverPregnant(idx: number): YesNoUnknown {
     return YesNoUnknown.UNKNOWN;
   }
   return getYesNoUnknown(idx);
+}
+
+export async function insertCall(
+  dbPool: Pool,
+  dogId: string,
+  vetId: string,
+  callOutcome: CallOutcome,
+  optOutReason?: string,
+): Promise<{ callId: string }> {
+  const encryptedReason =
+    optOutReason === undefined
+      ? ""
+      : await getGeneralEncryptionService().getEncryptedData(optOutReason);
+  const res1 = await dbQuery(
+    dbPool,
+    `
+    insert into calls (
+      dog_id,
+      vet_id,
+      call_outcome,
+      encrypted_opt_out_reason
+    )
+    values ($1, $2, $3, $4)
+    returning call_id
+    `,
+    [dogId, vetId, callOutcome, encryptedReason],
+  );
+  const callId = res1.rows[0].call_id;
+  return { callId };
+}
+
+export async function insertReport(
+  dbPool: Pool,
+  callId: string,
+  overrides?: Partial<DbReportSpec>,
+): Promise<DbReportGen> {
+  const currentTs = new Date().getTime();
+  const visitTs = currentTs - 24 * 60 * 60 * 1000;
+  const visitTime = new Date(visitTs);
+  const base: DbReportSpec = {
+    callId: callId,
+    visitTime: visitTime,
+    dogWeightKg: 1,
+    dogBodyConditioningScore: 1,
+    dogHeartworm: POS_NEG_NIL.NIL,
+    dogDea1Point1: POS_NEG_NIL.NIL,
+    dogReportedIneligibility: REPORTED_INELIGIBILITY.NIL,
+    encryptedIneligibilityReason: "",
+    ineligibilityExpiryTime: null,
+  };
+  const spec = { ...base, ...overrides };
+  const gen = await dbInsertReport(dbPool, spec);
+  return gen;
 }

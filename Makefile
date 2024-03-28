@@ -1,7 +1,7 @@
 # Default command. It installs npm packages, if any, runs the code
 # formatter, and then runs the unit tests.
 .PHONY: default
-default: npm-install fmt test
+default: npm-install fmt test schema-diff
 
 # Runs the code formatter
 .PHONY: fmt
@@ -57,3 +57,8 @@ wip:
 .PHONY: todo
 todo:
 	grep --color=always -R TODO src tests db
+
+# Diff local schema and barkbank-schemas
+.PHONY: schema-diff
+schema-diff:
+	[ ! -d ../barkbank-schema ] || diff --color=always db ../barkbank-schema/schema

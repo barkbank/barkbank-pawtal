@@ -13,11 +13,16 @@ function getPoolConfig(dbName?: string): pg.PoolConfig {
   };
 }
 
-async function getSchema(): Promise<string> {
+async function readFile(filePath: string): Promise<string> {
   const rootDir = path.dirname(path.resolve(process.cwd(), "package.json"));
-  const filePath = path.resolve(rootDir, "db/schema.sql");
-  const fileContent = fs.readFileSync(filePath, "utf-8");
+  const absPath = path.resolve(rootDir, filePath);
+  const fileContent = fs.readFileSync(absPath, "utf-8");
   return fileContent;
+}
+
+async function migrate(db: pg.Pool, filePath: string): Promise<void> {
+  const dbSchema = await readFile(filePath);
+  await db.query(dbSchema);
 }
 
 const getDbName = (() => {
@@ -47,8 +52,11 @@ async function dropDatabase(dbName: string): Promise<void> {
 export async function withDb(testBody: (db: pg.Pool) => Promise<void>) {
   const dbName = await createDatabase();
   const db = new pg.Pool(getPoolConfig(dbName));
-  const dbSchema = await getSchema();
-  await db.query(dbSchema);
+  await migrate(db, "db/V1__ref_types.sql");
+  await migrate(db, "db/V2__ref_tables.sql");
+  await migrate(db, "db/V3__ref_triggers.sql");
+  await migrate(db, "db/V4__ref_latest_values.sql");
+  await migrate(db, "db/V5__ref_dog_statuses.sql");
   try {
     await testBody(db);
   } finally {
