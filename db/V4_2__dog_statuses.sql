@@ -45,6 +45,13 @@ CREATE VIEW dog_statuses AS (
                 ) THEN 'UNKNOWN'::t_medical_status
                 WHEN tLatest.latest_dog_weight_kg < 20.0 THEN 'TEMPORARILY_INELIGIBLE'::t_medical_status
                 WHEN tLatest.latest_dog_age_months < 12 THEN 'TEMPORARILY_INELIGIBLE'::t_medical_status
+                WHEN (
+                    tLatest.latest_dog_heartworm_result = 'POSITIVE'
+                    AND tLatest.latest_dog_heartworm_observation_time IS NOT NULL
+                    AND (
+                        CURRENT_TIMESTAMP - tLatest.latest_dog_heartworm_observation_time
+                    ) < INTERVAL '6 months'
+                ) THEN 'TEMPORARILY_INELIGIBLE'::t_medical_status
                 ELSE 'ELIGIBLE'::t_medical_status
             END as medical_status
         FROM dogs as tDog

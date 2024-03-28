@@ -17,7 +17,12 @@ CREATE VIEW latest_values AS (
     mLatestHeartwormReports as (
         SELECT
             tReport.dog_id,
-            tReport.dog_heartworm
+            tReport.dog_heartworm as latest_dog_heartworm_result,
+            CASE
+                WHEN tReport.dog_heartworm = 'POSITIVE'
+                THEN tReport.visit_time
+                ELSE NULL
+            END as latest_dog_heartworm_observation_time
         FROM (
             SELECT
                 dog_id,
@@ -93,7 +98,8 @@ CREATE VIEW latest_values AS (
         tUser.user_residency as latest_user_residency,
         COALESCE(tLatest.dog_weight_kg, tDog.dog_weight_kg) as latest_dog_weight_kg,
         tLatest.dog_body_conditioning_score as latest_dog_body_conditioning_score,
-        COALESCE(tHeartworm.dog_heartworm, 'NIL') as latest_dog_heartworm,
+        COALESCE(tHeartworm.latest_dog_heartworm_result, 'NIL') as latest_dog_heartworm_result,
+        tHeartworm.latest_dog_heartworm_observation_time,
         CASE
             WHEN tDea1Point1.dog_dea1_point1 IS NOT NULL THEN tDea1Point1.dog_dea1_point1
             WHEN tDog.dog_dea1_point1 = 'POSITIVE' THEN 'POSITIVE'::t_pos_neg_nil

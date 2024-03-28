@@ -19,6 +19,7 @@ import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import {
   CALL_OUTCOME,
   MEDICAL_STATUS,
+  POS_NEG_NIL,
   PROFILE_STATUS,
   REPORTED_INELIGIBILITY,
   SERVICE_STATUS,
@@ -192,7 +193,9 @@ describe("dog_statuses view", () => {
   });
 
   describe("medical_status", () => {
+    const ts = new Date().getTime();
     const ELIGIBLE_SPEC: Partial<DogSpec> = {
+      dogBirthday: new Date(ts - 5 * 365 * DAYS),
       dogBreed: "Big Dog",
       dogWeightKg: 25,
       dogEverPregnant: YesNoUnknown.NO,
@@ -257,8 +260,9 @@ describe("dog_statuses view", () => {
         const { dogId, vetId } = await initDog(dbPool, {
           dogSpec: ELIGIBLE_SPEC,
         });
-        addReport(dbPool, dogId, vetId, {
+        await addReport(dbPool, dogId, vetId, {
           reportSpec: {
+            dogWeightKg: 25,
             dogReportedIneligibility:
               REPORTED_INELIGIBILITY.PERMANENTLY_INELIGIBLE,
           },
@@ -364,8 +368,49 @@ describe("dog_statuses view", () => {
       // TODO: Defer because it is not designed how vaccination information would be captured.
       await withDb(async (dbPool) => {});
     });
-    it("WIP: should be TEMPORARILY_INELIGIBLE if it tested positive for heartworm within the last 6 months", async () => {
-      await withDb(async (dbPool) => {});
+    it("should be TEMPORARILY_INELIGIBLE if it tested positive for heartworm within the last 6 months", async () => {
+      const ts = new Date().getTime();
+      await withDb(async (dbPool) => {
+        const { dogId, vetId } = await initDog(dbPool, {
+          dogSpec: ELIGIBLE_SPEC,
+        });
+        await addReport(dbPool, dogId, vetId, {
+          reportSpec: {
+            dogWeightKg: 25,
+            visitTime: new Date(ts - 5 * 30 * DAYS),
+            dogHeartworm: POS_NEG_NIL.POSITIVE,
+          },
+        });
+        const res = await dbQuery(
+          dbPool,
+          `select medical_status from dog_statuses where dog_id = $1`,
+          [dogId],
+        );
+        expect(res.rows[0].medical_status).toEqual(
+          MEDICAL_STATUS.TEMPORARILY_INELIGIBLE,
+        );
+      });
+    });
+    it("should be ELIGIBLE if it tested positive for heartworm more than 6 months ago", async () => {
+      const ts = new Date().getTime();
+      await withDb(async (dbPool) => {
+        const { dogId, vetId } = await initDog(dbPool, {
+          dogSpec: ELIGIBLE_SPEC,
+        });
+        await addReport(dbPool, dogId, vetId, {
+          reportSpec: {
+            dogWeightKg: 25,
+            visitTime: new Date(ts - 8 * 30 * DAYS),
+            dogHeartworm: POS_NEG_NIL.POSITIVE,
+          },
+        });
+        const res = await dbQuery(
+          dbPool,
+          `select medical_status from dog_statuses where dog_id = $1`,
+          [dogId],
+        );
+        expect(res.rows[0].medical_status).toEqual(MEDICAL_STATUS.ELIGIBLE);
+      });
     });
     it("WIP: should be TEMPORARILY_INELIGIBLE if a report said so", async () => {
       await withDb(async (dbPool) => {});

@@ -176,16 +176,18 @@ describe("latest_values", () => {
       });
     });
   });
-  describe("latest_dog_heartworm", () => {
+  describe("latest_dog_heartworm_result", () => {
     it("should be NIL when no reports", async () => {
       await withDb(async (dbPool) => {
         const { dogId } = await initDog(dbPool);
         const res = await dbQuery(
           dbPool,
-          `select latest_dog_heartworm from latest_values where dog_id = $1`,
+          `select latest_dog_heartworm_result from latest_values where dog_id = $1`,
           [dogId],
         );
-        expect(res.rows[0].latest_dog_heartworm).toEqual(POS_NEG_NIL.NIL);
+        expect(res.rows[0].latest_dog_heartworm_result).toEqual(
+          POS_NEG_NIL.NIL,
+        );
       });
     });
     it("should be the most recent non-NIL value from reports", async () => {
@@ -211,14 +213,16 @@ describe("latest_values", () => {
             dogHeartworm: POS_NEG_NIL.NIL, // Did not test
           },
         });
-        // WHEN latest_dog_heartworm is retrieved
+        // WHEN latest_dog_heartworm_result is retrieved
         const res = await dbQuery(
           dbPool,
-          `select latest_dog_heartworm from latest_values where dog_id = $1`,
+          `select latest_dog_heartworm_result from latest_values where dog_id = $1`,
           [dogId],
         );
         // THEN it should be the value from 15 Oct 2023
-        expect(res.rows[0].latest_dog_heartworm).toEqual(POS_NEG_NIL.NEGATIVE);
+        expect(res.rows[0].latest_dog_heartworm_result).toEqual(
+          POS_NEG_NIL.NEGATIVE,
+        );
       });
     });
   });
