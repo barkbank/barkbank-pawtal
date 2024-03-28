@@ -52,6 +52,10 @@ CREATE VIEW dog_statuses AS (
                         CURRENT_TIMESTAMP - tLatest.latest_dog_heartworm_observation_time
                     ) < INTERVAL '6 months'
                 ) THEN 'TEMPORARILY_INELIGIBLE'::t_medical_status
+                WHEN (
+                    tLatest.latest_dog_reported_ineligibility = 'TEMPORARY_INELIGIBLE'
+                    AND CURRENT_TIMESTAMP < tLatest.latest_ineligibility_expiry_time
+                ) THEN 'TEMPORARILY_INELIGIBLE'::t_medical_status
                 ELSE 'ELIGIBLE'::t_medical_status
             END as medical_status
         FROM dogs as tDog

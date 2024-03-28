@@ -201,6 +201,13 @@ describe("dog_statuses view", () => {
       dogEverPregnant: YesNoUnknown.NO,
       dogEverReceivedTransfusion: YesNoUnknown.NO,
     };
+    const ELIGIBLE_REPORT: Partial<DbReportSpec> = {
+      dogWeightKg: 25,
+      dogBodyConditioningScore: 5,
+      dogDea1Point1: POS_NEG_NIL.NIL,
+      dogHeartworm: POS_NEG_NIL.NIL,
+      dogReportedIneligibility: REPORTED_INELIGIBILITY.NIL,
+    };
     it("should be PERMANENTLY_INELIGIBLE if dog was ever pregnant", async () => {
       await withDb(async (dbPool) => {
         const { dogId } = await initDog(dbPool, {
@@ -262,7 +269,7 @@ describe("dog_statuses view", () => {
         });
         await addReport(dbPool, dogId, vetId, {
           reportSpec: {
-            dogWeightKg: 25,
+            ...ELIGIBLE_REPORT,
             dogReportedIneligibility:
               REPORTED_INELIGIBILITY.PERMANENTLY_INELIGIBLE,
           },
@@ -376,7 +383,7 @@ describe("dog_statuses view", () => {
         });
         await addReport(dbPool, dogId, vetId, {
           reportSpec: {
-            dogWeightKg: 25,
+            ...ELIGIBLE_REPORT,
             visitTime: new Date(ts - 5 * 30 * DAYS),
             dogHeartworm: POS_NEG_NIL.POSITIVE,
           },
@@ -399,7 +406,7 @@ describe("dog_statuses view", () => {
         });
         await addReport(dbPool, dogId, vetId, {
           reportSpec: {
-            dogWeightKg: 25,
+            ...ELIGIBLE_REPORT,
             visitTime: new Date(ts - 8 * 30 * DAYS),
             dogHeartworm: POS_NEG_NIL.POSITIVE,
           },
@@ -412,8 +419,51 @@ describe("dog_statuses view", () => {
         expect(res.rows[0].medical_status).toEqual(MEDICAL_STATUS.ELIGIBLE);
       });
     });
-    it("WIP: should be TEMPORARILY_INELIGIBLE if a report said so", async () => {
-      await withDb(async (dbPool) => {});
+    it("should be TEMPORARILY_INELIGIBLE if indicated by latest report and the expiry time has not lapsed", async () => {
+      const ts = new Date().getTime();
+      await withDb(async (dbPool) => {
+        const { dogId, vetId } = await initDog(dbPool, {
+          dogSpec: ELIGIBLE_SPEC,
+        });
+        await addReport(dbPool, dogId, vetId, {
+          reportSpec: {
+            ...ELIGIBLE_REPORT,
+            dogReportedIneligibility:
+              REPORTED_INELIGIBILITY.TEMPORARY_INELIGIBLE,
+            ineligibilityExpiryTime: new Date(ts + 7 * DAYS),
+          },
+        });
+        const res = await dbQuery(
+          dbPool,
+          `select medical_status from dog_statuses where dog_id = $1`,
+          [dogId],
+        );
+        expect(res.rows[0].medical_status).toEqual(
+          MEDICAL_STATUS.TEMPORARILY_INELIGIBLE,
+        );
+      });
+    });
+    it("should be ELIGIBLE if the temporary ineligibility period has lapsed", async () => {
+      const ts = new Date().getTime();
+      await withDb(async (dbPool) => {
+        const { dogId, vetId } = await initDog(dbPool, {
+          dogSpec: ELIGIBLE_SPEC,
+        });
+        await addReport(dbPool, dogId, vetId, {
+          reportSpec: {
+            ...ELIGIBLE_REPORT,
+            dogReportedIneligibility:
+              REPORTED_INELIGIBILITY.TEMPORARY_INELIGIBLE,
+            ineligibilityExpiryTime: new Date(ts - 1 * DAYS),
+          },
+        });
+        const res = await dbQuery(
+          dbPool,
+          `select medical_status from dog_statuses where dog_id = $1`,
+          [dogId],
+        );
+        expect(res.rows[0].medical_status).toEqual(MEDICAL_STATUS.ELIGIBLE);
+      });
     });
     it("should be ELIGIBLE if none of the above", async () => {
       await withDb(async (dbPool) => {

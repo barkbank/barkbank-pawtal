@@ -100,6 +100,8 @@ CREATE VIEW latest_values AS (
         tLatest.dog_body_conditioning_score as latest_dog_body_conditioning_score,
         COALESCE(tHeartworm.latest_dog_heartworm_result, 'NIL') as latest_dog_heartworm_result,
         tHeartworm.latest_dog_heartworm_observation_time,
+        tLatest.dog_reported_ineligibility as latest_dog_reported_ineligibility,
+        tLatest.ineligibility_expiry_time as latest_ineligibility_expiry_time,
         CASE
             WHEN tDea1Point1.dog_dea1_point1 IS NOT NULL THEN tDea1Point1.dog_dea1_point1
             WHEN tDog.dog_dea1_point1 = 'POSITIVE' THEN 'POSITIVE'::t_pos_neg_nil
