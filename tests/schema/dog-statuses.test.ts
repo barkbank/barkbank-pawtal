@@ -286,8 +286,21 @@ describe("dog_statuses view", () => {
         expect(res.rows[0].medical_status).toEqual(MEDICAL_STATUS.UNKNOWN);
       });
     });
-    it("WIP: should be UNKNOWN if blood transfusion history is unknown", async () => {
-      await withDb(async (dbPool) => {});
+    it("should be UNKNOWN if blood transfusion history is unknown", async () => {
+      await withDb(async (dbPool) => {
+        const { dogId } = await initDog(dbPool, {
+          dogSpec: {
+            ...ELIGIBLE_SPEC,
+            dogEverReceivedTransfusion: YesNoUnknown.UNKNOWN,
+          },
+        });
+        const res = await dbQuery(
+          dbPool,
+          `select medical_status from dog_statuses where dog_id = $1`,
+          [dogId],
+        );
+        expect(res.rows[0].medical_status).toEqual(MEDICAL_STATUS.UNKNOWN);
+      });
     });
     it("WIP: should be UNKNOWN if both breed and weight are unknown", async () => {
       await withDb(async (dbPool) => {});
