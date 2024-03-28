@@ -31,6 +31,7 @@ CREATE VIEW dog_statuses AS (
             CASE
                 WHEN tDog.dog_ever_pregnant = 'YES' THEN 'PERMANENTLY_INELIGIBLE'::t_medical_status
                 WHEN tDog.dog_ever_received_transfusion = 'YES' THEN 'PERMANENTLY_INELIGIBLE'::t_medical_status
+                WHEN tLatest.latest_dog_age_months >= 12 * 8 THEN 'PERMANENTLY_INELIGIBLE'::t_medical_status
                 ELSE 'ELIGIBLE'::t_medical_status
             END as medical_status
         FROM dogs as tDog

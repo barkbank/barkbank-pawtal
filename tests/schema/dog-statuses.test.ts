@@ -27,6 +27,7 @@ describe("dog_statuses view", () => {
   const USER_IDX = 84;
   const DOG_IDX = 42;
   const VET_IDX = 71;
+  const DAYS = 86400000;
 
   async function initUserOnly(dbPool: Pool): Promise<{ userId: string }> {
     const userRecord = await insertUser(USER_IDX, dbPool);
@@ -229,8 +230,26 @@ describe("dog_statuses view", () => {
         );
       });
     });
-    it("WIP: should be PERMANENTLY_INELIGIBLE if dog is over 8 years old", async () => {
-      await withDb(async (dbPool) => {});
+    it("should be PERMANENTLY_INELIGIBLE if dog is 8 years or older", async () => {
+      await withDb(async (dbPool) => {
+        const ts = new Date().getTime();
+        const { dogId } = await initDog(dbPool, {
+          dogSpec: {
+            ...ELIGIBLE_SPEC,
+            // +2 days to account for 2 leap years in 8 years.
+            // +1 to accomodate tz differences depending on when the test is run.
+            dogBirthday: new Date(ts - (8 * 365 + 2 + 1) * DAYS),
+          },
+        });
+        const res = await dbQuery(
+          dbPool,
+          `select medical_status from dog_statuses where dog_id = $1`,
+          [dogId],
+        );
+        expect(res.rows[0].medical_status).toEqual(
+          MEDICAL_STATUS.PERMANENTLY_INELIGIBLE,
+        );
+      });
     });
     it("WIP: should be PERMANENTLY_INELIGIBLE if there is a medical report that said so", async () => {
       await withDb(async (dbPool) => {});
