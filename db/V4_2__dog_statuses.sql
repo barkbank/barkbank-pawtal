@@ -43,6 +43,7 @@ CREATE VIEW dog_statuses AS (
                 WHEN (
                     tDog.dog_breed = '' AND tLatest.latest_dog_weight_kg IS NULL
                 ) THEN 'UNKNOWN'::t_medical_status
+                WHEN tLatest.latest_dog_weight_kg < 20.0 THEN 'TEMPORARILY_INELIGIBLE'::t_medical_status
                 ELSE 'ELIGIBLE'::t_medical_status
             END as medical_status
         FROM dogs as tDog

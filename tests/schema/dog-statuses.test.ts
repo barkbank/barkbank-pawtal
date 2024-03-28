@@ -319,8 +319,23 @@ describe("dog_statuses view", () => {
         expect(res.rows[0].medical_status).toEqual(MEDICAL_STATUS.UNKNOWN);
       });
     });
-    it("WIP: should be TEMPORARILY_INELIGIBLE if dog is underweight", async () => {
-      await withDb(async (dbPool) => {});
+    it("should be TEMPORARILY_INELIGIBLE if dog is underweight (less than 20 KG)", async () => {
+      await withDb(async (dbPool) => {
+        const { dogId } = await initDog(dbPool, {
+          dogSpec: {
+            ...ELIGIBLE_SPEC,
+            dogWeightKg: 19.9,
+          },
+        });
+        const res = await dbQuery(
+          dbPool,
+          `select medical_status from dog_statuses where dog_id = $1`,
+          [dogId],
+        );
+        expect(res.rows[0].medical_status).toEqual(
+          MEDICAL_STATUS.TEMPORARILY_INELIGIBLE,
+        );
+      });
     });
     it("WIP: should be TEMPORARILY_INELIGIBLE is less than 1 year old", async () => {
       await withDb(async (dbPool) => {});
