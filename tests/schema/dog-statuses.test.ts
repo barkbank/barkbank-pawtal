@@ -20,6 +20,7 @@ import {
   CALL_OUTCOME,
   MEDICAL_STATUS,
   PROFILE_STATUS,
+  REPORTED_INELIGIBILITY,
   SERVICE_STATUS,
 } from "@/lib/models/bark-models";
 
@@ -251,8 +252,26 @@ describe("dog_statuses view", () => {
         );
       });
     });
-    it("WIP: should be PERMANENTLY_INELIGIBLE if there is a medical report that said so", async () => {
-      await withDb(async (dbPool) => {});
+    it("should be PERMANENTLY_INELIGIBLE if there is a medical report that said so", async () => {
+      await withDb(async (dbPool) => {
+        const { dogId, vetId } = await initDog(dbPool, {
+          dogSpec: ELIGIBLE_SPEC,
+        });
+        addReport(dbPool, dogId, vetId, {
+          reportSpec: {
+            dogReportedIneligibility:
+              REPORTED_INELIGIBILITY.PERMANENTLY_INELIGIBLE,
+          },
+        });
+        const res = await dbQuery(
+          dbPool,
+          `select medical_status from dog_statuses where dog_id = $1`,
+          [dogId],
+        );
+        expect(res.rows[0].medical_status).toEqual(
+          MEDICAL_STATUS.PERMANENTLY_INELIGIBLE,
+        );
+      });
     });
     it("WIP: should be UNKNOWN if pregnancy status is unknown", async () => {
       await withDb(async (dbPool) => {});
