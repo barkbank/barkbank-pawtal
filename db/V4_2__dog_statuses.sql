@@ -40,6 +40,9 @@ CREATE VIEW dog_statuses AS (
                 ) THEN 'PERMANENTLY_INELIGIBLE'::t_medical_status
                 WHEN tDog.dog_ever_pregnant = 'UNKNOWN' THEN 'UNKNOWN'::t_medical_status
                 WHEN tDog.dog_ever_received_transfusion = 'UNKNOWN' THEN 'UNKNOWN'::t_medical_status
+                WHEN (
+                    tDog.dog_breed = '' AND tLatest.latest_dog_weight_kg IS NULL
+                ) THEN 'UNKNOWN'::t_medical_status
                 ELSE 'ELIGIBLE'::t_medical_status
             END as medical_status
         FROM dogs as tDog
