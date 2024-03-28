@@ -54,20 +54,27 @@ export function isValidEmail(email: string): boolean {
  * because the dog will turn 2 only on 8 Oct 2022.
  */
 export function getAgeYears(fromTime: Date, toTime: Date): number {
-  let age = toTime.getUTCFullYear() - fromTime.getUTCFullYear();
-  if (fromTime.getUTCMonth() < toTime.getUTCMonth()) {
-    return age;
+  const ageYears = toTime.getUTCFullYear() - fromTime.getUTCFullYear();
+  if (toTime.getUTCMonth() < fromTime.getUTCMonth()) {
+    return ageYears - 1;
   }
-  if (fromTime.getUTCMonth() > toTime.getUTCMonth()) {
-    return age - 1;
+  if (toTime.getUTCMonth() > fromTime.getUTCMonth()) {
+    return ageYears;
   }
-  if (fromTime.getUTCDate() < toTime.getUTCDate()) {
-    return age;
+  if (toTime.getUTCDate() < fromTime.getUTCDate()) {
+    return ageYears - 1;
   }
-  if (fromTime.getUTCDate() > toTime.getUTCDate()) {
-    return age - 1;
+  return ageYears;
+}
+
+export function getAgeMonths(fromTime: Date, toTime: Date): number {
+  const dy = toTime.getUTCFullYear() - fromTime.getUTCFullYear();
+  const dm = toTime.getUTCMonth() - fromTime.getUTCMonth();
+  const ageMonths = dy * 12 + dm;
+  if (toTime.getUTCDate() < fromTime.getUTCDate()) {
+    return ageMonths - 1;
   }
-  return age;
+  return ageMonths;
 }
 
 export const BARK_UTC = {

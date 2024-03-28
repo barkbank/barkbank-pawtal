@@ -62,13 +62,13 @@ CREATE VIEW latest_values AS (
             FROM dogs
         )
 
+        -- b_ is birthday and c_ is current.
         SELECT
             dog_id,
             CASE
                 WHEN c_month < b_month THEN c_year - b_year - 1
                 WHEN c_month > b_month THEN c_year - b_year
                 WHEN c_day < b_day THEN c_year - b_year - 1
-                WHEN c_day > b_day THEN c_year - b_year
                 ELSE c_year - b_year
             END as latest_dog_age_years
         FROM mDateParts
