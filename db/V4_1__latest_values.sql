@@ -108,7 +108,7 @@ CREATE VIEW latest_values AS (
             WHEN tDog.dog_dea1_point1 = 'NEGATIVE' THEN 'NEGATIVE'::t_pos_neg_nil
             ELSE 'NIL'::t_pos_neg_nil
         END as latest_dog_dea1_point1,
-        tAge.latest_dog_age_years,
+        tAge.latest_dog_age_years, -- WIP: Is this necessary? Months are better.
         tAge.latest_dog_age_months
     FROM dogs as tDog
     LEFT JOIN users as tUser on tDog.user_id = tUser.user_id

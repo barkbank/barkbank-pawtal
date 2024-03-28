@@ -76,6 +76,7 @@ CREATE VIEW dog_statuses AS (
         tProfile.profile_status,
         tMedical.medical_status,
         tParticipation.participation_status
+        -- WIP: scheduling_status
     FROM dogs as tDog
     LEFT JOIN mServiceStatuses as tService on tDog.user_id = tService.user_id
     LEFT JOIN mProfileStatuses as tProfile on tDog.dog_id = tProfile.dog_id
