@@ -337,8 +337,24 @@ describe("dog_statuses view", () => {
         );
       });
     });
-    it("WIP: should be TEMPORARILY_INELIGIBLE is less than 1 year old", async () => {
-      await withDb(async (dbPool) => {});
+    it("should be TEMPORARILY_INELIGIBLE is less than 1 year old", async () => {
+      await withDb(async (dbPool) => {
+        const ts = new Date().getTime();
+        const { dogId } = await initDog(dbPool, {
+          dogSpec: {
+            ...ELIGIBLE_SPEC,
+            dogBirthday: new Date(ts - 364 * DAYS),
+          },
+        });
+        const res = await dbQuery(
+          dbPool,
+          `select medical_status from dog_statuses where dog_id = $1`,
+          [dogId],
+        );
+        expect(res.rows[0].medical_status).toEqual(
+          MEDICAL_STATUS.TEMPORARILY_INELIGIBLE,
+        );
+      });
     });
     it("WIP: should be TEMPORARILY_INELIGIBLE if it donated blood recently (3 months)", async () => {
       await withDb(async (dbPool) => {});
