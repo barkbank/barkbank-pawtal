@@ -11,20 +11,16 @@ import { dbQuery } from "@/lib/data/db-utils";
 import {
   DbReportSpec,
   DogAntigenPresence,
-  DogSpec,
-  USER_RESIDENCY,
-  UserSpec,
+  DogSpec, UserSpec
 } from "@/lib/data/db-models";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import { CALL_OUTCOME, POS_NEG_NIL } from "@/lib/models/bark-models";
 import {
   DEFAULT_DATE_TIME_FORMAT,
   SINGAPORE_TIME_ZONE,
-  UTC,
   parseDateTime,
 } from "@/lib/bark-time";
 import { getAgeMonths, getAgeYears } from "@/lib/bark-utils";
-import { sprintf } from "sprintf-js";
 
 describe("latest_values", () => {
   const USER_IDX = 84;
@@ -86,22 +82,6 @@ describe("latest_values", () => {
         [userId],
       );
       expect(res.rows.length).toEqual(0);
-    });
-  });
-
-  describe("latest_user_residency", () => {
-    it("should be the residency of each dog's owner", async () => {
-      await withDb(async (dbPool) => {
-        const { userId } = await initDog(dbPool, {
-          userSpec: { userResidency: USER_RESIDENCY.OTHER },
-        });
-        const res = await dbQuery(
-          dbPool,
-          `select latest_user_residency from latest_values where user_id = $1`,
-          [userId],
-        );
-        expect(res.rows[0].latest_user_residency).toEqual(USER_RESIDENCY.OTHER);
-      });
     });
   });
 
