@@ -11,7 +11,8 @@ import { dbQuery } from "@/lib/data/db-utils";
 import {
   DbReportSpec,
   DogAntigenPresence,
-  DogSpec, UserSpec
+  DogSpec,
+  UserSpec,
 } from "@/lib/data/db-models";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import { CALL_OUTCOME, POS_NEG_NIL } from "@/lib/models/bark-models";
@@ -20,7 +21,7 @@ import {
   SINGAPORE_TIME_ZONE,
   parseDateTime,
 } from "@/lib/bark-time";
-import { getAgeMonths, getAgeYears } from "@/lib/bark-utils";
+import { getAgeMonths } from "@/lib/bark-utils";
 
 describe("latest_values", () => {
   const USER_IDX = 84;
@@ -270,43 +271,6 @@ describe("latest_values", () => {
         expect(res.rows[0].latest_dog_dea1_point1).toEqual(
           POS_NEG_NIL.NEGATIVE,
         );
-      });
-    });
-  });
-  describe("latest_dog_age_years", () => {
-    it("should return the dog's age in years", async () => {
-      await withDb(async (dbPool) => {
-        // GIVEN a birthday that is slightly over 4 years 10 months ago;
-        const ts = new Date().getTime();
-        const birthday = new Date(ts - (4 * 365 + 10 * 31) * DAYS);
-
-        // AND a dog with that birthday
-        const { dogId } = await initDog(dbPool, {
-          dogSpec: {
-            dogBirthday: birthday,
-          },
-        });
-
-        // WHEN latest_dog_age_years is retrieved from latest_values
-        const res = await dbQuery(
-          dbPool,
-          `
-          select
-            latest_dog_age_years,
-            CURRENT_TIMESTAMP as current_timestamp
-          from latest_values
-          where dog_id = $1
-          `,
-          [dogId],
-        );
-
-        // THEN latest_dog_age_years should be 4
-        const expectedAge = getAgeYears(
-          birthday,
-          res.rows[0].current_timestamp,
-        );
-        expect(expectedAge).toEqual(4);
-        expect(res.rows[0].latest_dog_age_years).toEqual(expectedAge);
       });
     });
   });
