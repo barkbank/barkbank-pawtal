@@ -27,9 +27,13 @@ CREATE VIEW dog_statuses AS (
     ),
     mMedicalStatuses as (
         SELECT
-            dog_id,
-            'ELIGIBLE'::t_medical_status as medical_status
-        FROM latest_values as tLatest
+            tDog.dog_id,
+            CASE
+                WHEN tDog.dog_ever_pregnant = 'YES' THEN 'PERMANENTLY_INELIGIBLE'::t_medical_status
+                ELSE 'ELIGIBLE'::t_medical_status
+            END as medical_status
+        FROM dogs as tDog
+        LEFT JOIN latest_values as tLatest on tDog.dog_id = tLatest.dog_id
     )
 
     SELECT

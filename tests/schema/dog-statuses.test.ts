@@ -190,8 +190,26 @@ describe("dog_statuses view", () => {
   });
 
   describe("medical_status", () => {
-    it("WIP: should be PERMANENTLY_INELIGIBLE if dog was ever pregnant", async () => {
-      await withDb(async (dbPool) => {});
+    const ELIGIBLE_SPEC: Partial<DogSpec> = {
+      dogBreed: "Big Dog",
+      dogWeightKg: 25,
+      dogEverPregnant: YesNoUnknown.NO,
+      dogEverReceivedTransfusion: YesNoUnknown.NO,
+    };
+    it("should be PERMANENTLY_INELIGIBLE if dog was ever pregnant", async () => {
+      await withDb(async (dbPool) => {
+        const { dogId } = await initDog(dbPool, {
+          dogSpec: { ...ELIGIBLE_SPEC, dogEverPregnant: YesNoUnknown.YES },
+        });
+        const res = await dbQuery(
+          dbPool,
+          `select medical_status from dog_statuses where dog_id = $1`,
+          [dogId],
+        );
+        expect(res.rows[0].medical_status).toEqual(
+          MEDICAL_STATUS.PERMANENTLY_INELIGIBLE,
+        );
+      });
     });
     it("WIP: should be PERMANENTLY_INELIGIBLE if dog has ever received blood", async () => {
       await withDb(async (dbPool) => {});
@@ -232,12 +250,7 @@ describe("dog_statuses view", () => {
     it("should be ELIGIBLE if none of the above", async () => {
       await withDb(async (dbPool) => {
         const { dogId } = await initDog(dbPool, {
-          dogSpec: {
-            dogBreed: "Big Dog",
-            dogWeightKg: 25,
-            dogEverPregnant: YesNoUnknown.NO,
-            dogEverReceivedTransfusion: YesNoUnknown.NO,
-          },
+          dogSpec: ELIGIBLE_SPEC,
         });
         const res = await dbQuery(
           dbPool,
