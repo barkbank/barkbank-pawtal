@@ -211,8 +211,23 @@ describe("dog_statuses view", () => {
         );
       });
     });
-    it("WIP: should be PERMANENTLY_INELIGIBLE if dog has ever received blood", async () => {
-      await withDb(async (dbPool) => {});
+    it("should be PERMANENTLY_INELIGIBLE if dog has ever received blood", async () => {
+      await withDb(async (dbPool) => {
+        const { dogId } = await initDog(dbPool, {
+          dogSpec: {
+            ...ELIGIBLE_SPEC,
+            dogEverReceivedTransfusion: YesNoUnknown.YES,
+          },
+        });
+        const res = await dbQuery(
+          dbPool,
+          `select medical_status from dog_statuses where dog_id = $1`,
+          [dogId],
+        );
+        expect(res.rows[0].medical_status).toEqual(
+          MEDICAL_STATUS.PERMANENTLY_INELIGIBLE,
+        );
+      });
     });
     it("WIP: should be PERMANENTLY_INELIGIBLE if dog is over 8 years old", async () => {
       await withDb(async (dbPool) => {});
