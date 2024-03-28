@@ -60,6 +60,13 @@ CREATE VIEW dog_statuses AS (
             END as medical_status
         FROM dogs as tDog
         LEFT JOIN latest_values as tLatest on tDog.dog_id = tLatest.dog_id
+    ),
+    mParticipationStatuses as (
+        SELECT
+            dog_id,
+            -- TODO: Assume PARTICIPATING until we have the fields in dogs table for indicating otherwise.
+            'PARTICIPATING'::t_participation_status as participation_status
+        FROM dogs
     )
 
     SELECT
@@ -67,9 +74,11 @@ CREATE VIEW dog_statuses AS (
         tDog.user_id,
         tService.service_status,
         tProfile.profile_status,
-        tMedical.medical_status
+        tMedical.medical_status,
+        tParticipation.participation_status
     FROM dogs as tDog
     LEFT JOIN mServiceStatuses as tService on tDog.user_id = tService.user_id
     LEFT JOIN mProfileStatuses as tProfile on tDog.dog_id = tProfile.dog_id
     LEFT JOIN mMedicalStatuses as tMedical on tDog.dog_id = tMedical.dog_id
+    LEFT JOIN mParticipationStatuses as tParticipation on tDog.dog_id = tParticipation.dog_id
 );
