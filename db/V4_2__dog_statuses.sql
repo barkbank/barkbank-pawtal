@@ -38,6 +38,7 @@ CREATE VIEW dog_statuses AS (
                     WHERE dog_id = tDog.dog_id
                     AND dog_reported_ineligibility = 'PERMANENTLY_INELIGIBLE'::t_reported_ineligibility
                 ) THEN 'PERMANENTLY_INELIGIBLE'::t_medical_status
+                WHEN tDog.dog_ever_pregnant = 'UNKNOWN' THEN 'UNKNOWN'::t_medical_status
                 ELSE 'ELIGIBLE'::t_medical_status
             END as medical_status
         FROM dogs as tDog
