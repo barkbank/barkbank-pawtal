@@ -356,10 +356,12 @@ describe("dog_statuses view", () => {
         );
       });
     });
-    it("WIP: should be TEMPORARILY_INELIGIBLE if it donated blood recently (3 months)", async () => {
+    it("TODO: should be TEMPORARILY_INELIGIBLE if it donated blood recently (3 months)", async () => {
+      // TODO: Defer because it is not designed how donation information would be caputred.
       await withDb(async (dbPool) => {});
     });
-    it("WIP: should be TEMPORARILY_INELIGIBLE if it was vaccinated recently (2 weeks)", async () => {
+    it("TODO: should be TEMPORARILY_INELIGIBLE if it was vaccinated recently (2 weeks)", async () => {
+      // TODO: Defer because it is not designed how vaccination information would be captured.
       await withDb(async (dbPool) => {});
     });
     it("WIP: should be TEMPORARILY_INELIGIBLE if it tested positive for heartworm within the last 6 months", async () => {
