@@ -48,6 +48,28 @@ export function isValidEmail(email: string): boolean {
   }
 }
 
+/**
+ * Calculate year age in the way that humans do it. For example, if a dog's
+ * birthday is 8 Oct 2020, then on 7 Oct 2022 the age is expected to be 1
+ * because the dog will turn 2 only on 8 Oct 2022.
+ */
+export function getAgeYears(fromTime: Date, toTime: Date): number {
+  let age = toTime.getUTCFullYear() - fromTime.getUTCFullYear();
+  if (fromTime.getUTCMonth() < toTime.getUTCMonth()) {
+    return age;
+  }
+  if (fromTime.getUTCMonth() > toTime.getUTCMonth()) {
+    return age - 1;
+  }
+  if (fromTime.getUTCDate() < toTime.getUTCDate()) {
+    return age;
+  }
+  if (fromTime.getUTCDate() > toTime.getUTCDate()) {
+    return age - 1;
+  }
+  return age;
+}
+
 export const BARK_UTC = {
   getDate: (year: number, month: number, day: number) => {
     return new Date(Date.UTC(year, month - 1, day));

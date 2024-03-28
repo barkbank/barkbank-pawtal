@@ -47,6 +47,31 @@ CREATE VIEW latest_values AS (
             tLatest.dog_id = tReport.dog_id
             AND tLatest.latest_visit_time = tReport.visit_time
         )
+    ),
+    mAgeCalculations as (
+        WITH
+        mDateParts as (
+            SELECT
+                dog_id,
+                EXTRACT(YEAR FROM dog_birthday) as b_year,
+                EXTRACT(MONTH FROM dog_birthday) as b_month,
+                EXTRACT(DAY FROM dog_birthday) as b_day,
+                EXTRACT(YEAR FROM CURRENT_TIMESTAMP) as c_year,
+                EXTRACT(MONTH FROM CURRENT_TIMESTAMP) as c_month,
+                EXTRACT(DAY FROM CURRENT_TIMESTAMP) as c_day
+            FROM dogs
+        )
+
+        SELECT
+            dog_id,
+            CASE
+                WHEN c_month < b_month THEN c_year - b_year - 1
+                WHEN c_month > b_month THEN c_year - b_year
+                WHEN c_day < b_day THEN c_year - b_year - 1
+                WHEN c_day > b_day THEN c_year - b_year
+                ELSE c_year - b_year
+            END as latest_dog_age_years
+        FROM mDateParts
     )
 
     SELECT
@@ -62,10 +87,12 @@ CREATE VIEW latest_values AS (
             WHEN tDog.dog_dea1_point1 = 'POSITIVE' THEN 'POSITIVE'::t_pos_neg_nil
             WHEN tDog.dog_dea1_point1 = 'NEGATIVE' THEN 'NEGATIVE'::t_pos_neg_nil
             ELSE 'NIL'::t_pos_neg_nil
-        END as latest_dog_dea1_point1
+        END as latest_dog_dea1_point1,
+        tAge.latest_dog_age_years::integer
     FROM dogs as tDog
     LEFT JOIN users as tUser on tDog.user_id = tUser.user_id
     LEFT JOIN mLatestReports as tLatest on tDog.dog_id = tLatest.dog_id
     LEFT JOIN mLatestHeartwormReports as tHeartworm on tDog.dog_id = tHeartworm.dog_id
     LEFT JOIN mLatestDea1Point1 as tDea1Point1 on tDog.dog_id = tDea1Point1.dog_id
+    LEFT JOIN mAgeCalculations as tAge on tDog.dog_id = tAge.dog_id
 );
