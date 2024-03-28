@@ -18,6 +18,7 @@ import {
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import {
   CALL_OUTCOME,
+  MEDICAL_STATUS,
   PROFILE_STATUS,
   SERVICE_STATUS,
 } from "@/lib/models/bark-models";
@@ -184,6 +185,66 @@ describe("dog_statuses view", () => {
           [dogId],
         );
         expect(res.rows[0].profile_status).toEqual(PROFILE_STATUS.INCOMPLETE);
+      });
+    });
+  });
+
+  describe("medical_status", () => {
+    it("WIP: should be PERMANENTLY_INELIGIBLE if dog was ever pregnant", async () => {
+      await withDb(async (dbPool) => {});
+    });
+    it("WIP: should be PERMANENTLY_INELIGIBLE if dog has ever received blood", async () => {
+      await withDb(async (dbPool) => {});
+    });
+    it("WIP: should be PERMANENTLY_INELIGIBLE if dog is over 8 years old", async () => {
+      await withDb(async (dbPool) => {});
+    });
+    it("WIP: should be PERMANENTLY_INELIGIBLE if there is a medical report that said so", async () => {
+      await withDb(async (dbPool) => {});
+    });
+    it("WIP: should be UNKNOWN if pregnancy status is unknown", async () => {
+      await withDb(async (dbPool) => {});
+    });
+    it("WIP: should be UNKNOWN if blood transfusion history is unknown", async () => {
+      await withDb(async (dbPool) => {});
+    });
+    it("WIP: should be UNKNOWN if both breed and weight are unknown", async () => {
+      await withDb(async (dbPool) => {});
+    });
+    it("WIP: should be TEMPORARILY_INELIGIBLE if dog is underweight", async () => {
+      await withDb(async (dbPool) => {});
+    });
+    it("WIP: should be TEMPORARILY_INELIGIBLE is less than 1 year old", async () => {
+      await withDb(async (dbPool) => {});
+    });
+    it("WIP: should be TEMPORARILY_INELIGIBLE if it donated blood recently (3 months)", async () => {
+      await withDb(async (dbPool) => {});
+    });
+    it("WIP: should be TEMPORARILY_INELIGIBLE if it was vaccinated recently (2 weeks)", async () => {
+      await withDb(async (dbPool) => {});
+    });
+    it("WIP: should be TEMPORARILY_INELIGIBLE if it tested positive for heartworm within the last 6 months", async () => {
+      await withDb(async (dbPool) => {});
+    });
+    it("WIP: should be TEMPORARILY_INELIGIBLE if a report said so", async () => {
+      await withDb(async (dbPool) => {});
+    });
+    it("should be ELIGIBLE if none of the above", async () => {
+      await withDb(async (dbPool) => {
+        const { dogId } = await initDog(dbPool, {
+          dogSpec: {
+            dogBreed: "Big Dog",
+            dogWeightKg: 25,
+            dogEverPregnant: YesNoUnknown.NO,
+            dogEverReceivedTransfusion: YesNoUnknown.NO,
+          },
+        });
+        const res = await dbQuery(
+          dbPool,
+          `select medical_status from dog_statuses where dog_id = $1`,
+          [dogId],
+        );
+        expect(res.rows[0].medical_status).toEqual(MEDICAL_STATUS.ELIGIBLE);
       });
     });
   });

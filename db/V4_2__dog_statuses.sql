@@ -25,14 +25,21 @@ CREATE VIEW dog_statuses AS (
         FROM dogs as tDog
         LEFT JOIN latest_values as tLatest on tDog.dog_id = tLatest.dog_id
     ),
-    mTail as (SELECT 1)
+    mMedicalStatuses as (
+        SELECT
+            dog_id,
+            'ELIGIBLE'::t_medical_status as medical_status
+        FROM latest_values as tLatest
+    )
 
     SELECT
         tDog.dog_id,
         tDog.user_id,
         tService.service_status,
-        tProfile.profile_status
+        tProfile.profile_status,
+        tMedical.medical_status
     FROM dogs as tDog
     LEFT JOIN mServiceStatuses as tService on tDog.user_id = tService.user_id
     LEFT JOIN mProfileStatuses as tProfile on tDog.dog_id = tProfile.dog_id
+    LEFT JOIN mMedicalStatuses as tMedical on tDog.dog_id = tMedical.dog_id
 );
