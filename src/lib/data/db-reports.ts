@@ -27,6 +27,8 @@ export async function dbInsertReport(
   )
   returning
     report_id as "reportId",
+    dog_id as "dogId",
+    vet_id as "vetId",
     report_creation_time as "reportCreationTime",
     report_modification_time as "reportModificationTime"
   `;
