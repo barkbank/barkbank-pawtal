@@ -71,6 +71,9 @@ Run `make local-accounts` to create the following accounts in the local deployme
 - User Accounts: user1@user.com, user2@user.com, user3@user.com, ... (99 users)
 - Vet Accounts: vet1@vet.com, vet2@vet.com, vet3@vet.com
 
+The number of dogs created for a user is that user's index modulo 5.
+So user1 to user4 will get 1, 2, 3, and 4 dogs respectively, while user5 will get 0 dogs.
+
 ## Development
 
 ### First, run `make` to ensure everything works
