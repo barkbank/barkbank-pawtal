@@ -5,7 +5,7 @@ export const IMG_PATH = {
   EMAIL: "/images/email.svg",
   ORANGE_DOG_HOUSE: "/images/orange-dog-house.svg",
   PAW_PRINT: "/images/paw-print.svg",
-  PURPLE_DOG_HOUSE: "/images/purpleDogHouse.svg",
+  PURPLE_DOG_HOUSE: "/images/purple-dog-house.svg",
   SIDEBAR_DASHBOARD_LIGHT: "/images/dashboard-light.svg",
   SIDEBAR_DASHBOARD: "/images/dashboard.svg",
   SIDEBAR_DATABASE_LIGHT: "/images/database-light.svg",
