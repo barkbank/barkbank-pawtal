@@ -66,7 +66,12 @@ todo:
 schema-diff:
 	[ ! -d $(BARKBANK_SCHEMA_DIR) ] || diff --color=always db $(BARKBANK_SCHEMA_DIR)/schema
 
-# Copy the schema from barkbank-schema into barkbank-pawtal
+# Sync the schema from barkbank-schema into barkbank-pawtal
 .PHONY: schema-recv
 schema-recv:
 	rsync -avz $(BARKBANK_SCHEMA_DIR)/schema/ db/
+
+# Sync the schema from barkbank-pawtal into barkbank-schema
+.PHONY: schema-send
+schema-send:
+	rsync -avz db/ $(BARKBANK_SCHEMA_DIR)/schema/
