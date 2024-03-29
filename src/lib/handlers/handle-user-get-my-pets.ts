@@ -14,7 +14,8 @@ export async function handleUserGetMyPets(args: {
   mUserDogs as (
     SELECT
       dog_id,
-      dog_encrypted_oii
+      dog_encrypted_oii,
+      dog_gender
     FROM dogs
     WHERE user_id = $1
   ),
@@ -37,6 +38,7 @@ export async function handleUserGetMyPets(args: {
   SELECT
     tDog.dog_id as "dogId",
     tDog.dog_encrypted_oii as "dogEncryptedOii",
+    tDog.dog_gender as "dogGender",
     tStatus.profile_status as "dogProfileStatus",
     tStatus.medical_status as "dogMedicalStatus",
     COALESCE(tAppointment.appointments, json_build_array()) as "dogAppointments"
@@ -47,13 +49,19 @@ export async function handleUserGetMyPets(args: {
   const res = await dbQuery(dbPool, sql, [userId]);
   const dogs = await Promise.all(
     res.rows.map(async (row) => {
-      const { dogId, dogProfileStatus, dogMedicalStatus, dogAppointments } =
-        row;
+      const {
+        dogId,
+        dogProfileStatus,
+        dogGender,
+        dogMedicalStatus,
+        dogAppointments,
+      } = row;
       const secureOii = dogMapper.toDogSecureOii(row);
       const { dogName } = await dogMapper.mapDogSecureOiiToDogOii(secureOii);
       const myDog: MyDog = {
         dogId,
         dogName,
+        dogGender,
         dogProfileStatus,
         dogMedicalStatus,
         dogAppointments,

@@ -1,4 +1,4 @@
-import { MedicalStatus, ProfileStatus } from "../data/db-enums";
+import { DogGender, MedicalStatus, ProfileStatus } from "../data/db-enums";
 
 export type MyDogAppointment = {
   callId: string;
@@ -9,6 +9,7 @@ export type MyDogAppointment = {
 export type MyDog = {
   dogId: string;
   dogName: string;
+  dogGender: DogGender;
   dogProfileStatus: ProfileStatus;
   dogMedicalStatus: MedicalStatus;
   dogAppointments: MyDogAppointment[];
