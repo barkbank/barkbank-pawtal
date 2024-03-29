@@ -1,5 +1,7 @@
 export const IMG_PATH = {
   BARK_BANK_LOGO: "/images/bark-bank-logo.svg",
+  BORDER_COLLIE_DOG_AVATAR: "/images/border-collie-dog-avatar.svg",
+  BROWN_DOG_AVATAR: "/images/brown-dog-avatar.svg",
   CHECK_MAIL: "/images/check-mail.svg",
   CONTACT_US: "/images/contact-us.svg",
   EMAIL: "/images/email.svg",
@@ -10,8 +12,8 @@ export const IMG_PATH = {
   SIDEBAR_DASHBOARD: "/images/dashboard.svg",
   SIDEBAR_DATABASE_LIGHT: "/images/database-light.svg",
   SIDEBAR_DATABASE: "/images/database.svg",
-  SIDEBAR_DOG: "/images/dog.svg",
   SIDEBAR_DOG_LIGHT: "/images/dog-light.svg",
+  SIDEBAR_DOG: "/images/dog.svg",
   SIDEBAR_KEY_LIGHT: "/images/key-light.svg",
   SIDEBAR_KEY: "/images/key.svg",
   SIDEBAR_SQUARE_LIGHT: "/images/square-light.svg",
