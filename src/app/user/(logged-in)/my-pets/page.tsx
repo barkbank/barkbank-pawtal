@@ -89,32 +89,40 @@ function DogCard(props: { dog: MyDog; cardIdx: number; isLastCard: boolean }) {
           },
         )}
       >
+        {/* Left Side Avatar */}
         <Image
           src={imgSrc}
           alt="Generic dog avatar for dog details"
           width={100}
           height={100}
         />
-        <div className="w-96">
+
+        {/* Right Side Details */}
+        <div>
+          {/* Dog Name across the details */}
           <div className="text-grey-100 text-lg font-bold leading-9">
             {dog.dogName}
           </div>
-          <div>
-            <StatusBlock dog={dog} />
+
+          {/* Details and Buttons below */}
+          <div className="flex flex-row gap-5">
+            <div className="w-96">
+              <StatusBlock dog={dog} />
+            </div>
+            <div>
+              {dog.dogProfileStatus === PROFILE_STATUS.COMPLETE && (
+                <div className="flex flex-row gap-3">
+                  <Button variant="brandInverse">Edit</Button>
+                  <Button variant="brandInverse">View</Button>
+                </div>
+              )}
+              {dog.dogProfileStatus === PROFILE_STATUS.INCOMPLETE && (
+                <div className="flex flex-row gap-3">
+                  <Button variant="brand">Complete Profile</Button>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-        <div>
-          {dog.dogProfileStatus === PROFILE_STATUS.COMPLETE && (
-            <div className="flex flex-row gap-3">
-              <Button variant="brandInverse">Edit</Button>
-              <Button variant="brandInverse">View</Button>
-            </div>
-          )}
-          {dog.dogProfileStatus === PROFILE_STATUS.INCOMPLETE && (
-            <div className="flex flex-row gap-3">
-              <Button variant="brand">Complete Profile</Button>
-            </div>
-          )}
         </div>
       </div>
     </>
