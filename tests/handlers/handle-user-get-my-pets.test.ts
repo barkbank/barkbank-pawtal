@@ -1,11 +1,7 @@
 import { Pool } from "pg";
 import { withDb } from "../_db_helpers";
-import {
-  DogDetails,
-  DogSecureOii,
-  DogSpec,
-  YesNoUnknown,
-} from "@/lib/data/db-models";
+import { DogDetails, DogSecureOii, DogSpec } from "@/lib/data/db-models";
+import { YesNoUnknown } from "@/lib/data/db-enums";
 import {
   getDogDetails,
   getDogMapper,
@@ -16,7 +12,7 @@ import {
 } from "../_fixtures";
 import { handleUserGetMyPets } from "@/lib/handlers/handle-user-get-my-pets";
 import { dbInsertDog } from "@/lib/data/db-dogs";
-import { DOG_STATUS } from "@/lib/models/bark-models";
+import { DOG_STATUS } from "@/lib/data/db-enums";
 import { DogMapper } from "@/lib/data/dog-mapper";
 
 describe("handleUserGetMyPets", () => {

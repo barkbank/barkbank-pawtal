@@ -8,14 +8,10 @@ import {
   insertVet,
 } from "../_fixtures";
 import { dbQuery } from "@/lib/data/db-utils";
-import {
-  DbReportSpec,
-  DogAntigenPresence,
-  DogSpec,
-  UserSpec,
-} from "@/lib/data/db-models";
+import { DbReportSpec, DogSpec, UserSpec } from "@/lib/data/db-models";
+import { DogAntigenPresence } from "@/lib/data/db-enums";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
-import { CALL_OUTCOME, POS_NEG_NIL } from "@/lib/models/bark-models";
+import { CALL_OUTCOME, POS_NEG_NIL } from "@/lib/data/db-enums";
 import {
   DEFAULT_DATE_TIME_FORMAT,
   SINGAPORE_TIME_ZONE,

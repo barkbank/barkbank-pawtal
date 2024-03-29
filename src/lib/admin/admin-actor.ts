@@ -1,5 +1,6 @@
 import { Pool } from "pg";
-import { AdminRecord, DogGender, YesNoUnknown } from "../data/db-models";
+import { AdminRecord } from "../data/db-models";
+import { DogGender, YesNoUnknown } from "../data/db-enums";
 import { HashService } from "../services/hash";
 import { EncryptionService } from "../services/encryption";
 import { dbSelectAdmin } from "../data/db-admins";

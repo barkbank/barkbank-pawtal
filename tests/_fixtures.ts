@@ -5,25 +5,27 @@ import {
   AdminRecord,
   AdminSecurePii,
   AdminSpec,
-  DogAntigenPresence,
   DogDetails,
   DogGen,
-  DogGender,
   DogOii,
   DogSecureOii,
   DogSpec,
   UserPii,
   UserRecord,
-  USER_RESIDENCY,
   UserSpec,
   Vet,
   VetSpec,
-  YesNoUnknown,
   DbReportSpec,
   DbReportGen,
   DbCallSpec,
   DbCallGen,
 } from "@/lib/data/db-models";
+import {
+  DogAntigenPresence,
+  DogGender,
+  YesNoUnknown,
+} from "@/lib/data/db-enums";
+import { USER_RESIDENCY } from "@/lib/data/db-enums";
 import { dbInsertAdmin, dbSelectAdmin } from "@/lib/data/db-admins";
 import { Pool } from "pg";
 import {
@@ -51,7 +53,7 @@ import {
   CallOutcome,
   POS_NEG_NIL,
   REPORTED_INELIGIBILITY,
-} from "@/lib/models/bark-models";
+} from "@/lib/data/db-enums";
 import { dbInsertReport } from "@/lib/data/db-reports";
 import { dbInsertCall } from "@/lib/data/db-calls";
 

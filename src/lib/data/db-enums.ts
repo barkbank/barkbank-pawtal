@@ -71,3 +71,28 @@ export const SCHEDULING_STATUS = {
 } as const;
 
 export type SchedulingStatus = ObjectValues<typeof SCHEDULING_STATUS>;
+
+export const USER_RESIDENCY = {
+  OTHER: "OTHER",
+  SINGAPORE: "SINGAPORE",
+} as const;
+
+export type UserResidency = ObjectValues<typeof USER_RESIDENCY>;
+
+export enum YesNoUnknown {
+  YES = "YES",
+  NO = "NO",
+  UNKNOWN = "UNKNOWN",
+}
+
+export enum DogGender {
+  MALE = "MALE",
+  FEMALE = "FEMALE",
+  UNKNOWN = "UNKNOWN",
+}
+
+export enum DogAntigenPresence {
+  POSITIVE = "POSITIVE",
+  NEGATIVE = "NEGATIVE",
+  UNKNOWN = "UNKNOWN",
+}
