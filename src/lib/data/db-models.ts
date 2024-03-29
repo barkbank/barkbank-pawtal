@@ -15,7 +15,11 @@
 //
 
 import { ObjectValues } from "../bark-utils";
-import { CallOutcome, PosNegNil, ReportedIneligibility } from "../models/bark-models";
+import {
+  CallOutcome,
+  PosNegNil,
+  ReportedIneligibility,
+} from "../models/bark-models";
 
 export type UserPii = {
   userName: string;
@@ -165,12 +169,12 @@ export type DbCallSpec = {
   dogId: string;
   callOutcome: CallOutcome;
   encryptedOptOutReason: string;
-}
+};
 
 export type DbCallGen = {
   callId: string;
   callCreationTime: Date;
-}
+};
 
 export type DbCall = DbCallSpec & DbCallGen;
 

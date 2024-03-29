@@ -21,6 +21,8 @@ import {
   YesNoUnknown,
   DbReportSpec,
   DbReportGen,
+  DbCallSpec,
+  DbCallGen,
 } from "@/lib/data/db-models";
 import { dbInsertAdmin, dbSelectAdmin } from "@/lib/data/db-admins";
 import { Pool } from "pg";
@@ -51,6 +53,7 @@ import {
   REPORTED_INELIGIBILITY,
 } from "@/lib/models/bark-models";
 import { dbInsertReport } from "@/lib/data/db-reports";
+import { dbInsertCall } from "@/lib/data/db-calls";
 
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
@@ -356,27 +359,19 @@ export async function insertCall(
   vetId: string,
   callOutcome: CallOutcome,
   optOutReason?: string,
-): Promise<{ callId: string }> {
-  const encryptedReason =
+): Promise<DbCallGen> {
+  const encryptedOptOutReason =
     optOutReason === undefined
       ? ""
       : await getGeneralEncryptionService().getEncryptedData(optOutReason);
-  const res1 = await dbQuery(
-    dbPool,
-    `
-    insert into calls (
-      dog_id,
-      vet_id,
-      call_outcome,
-      encrypted_opt_out_reason
-    )
-    values ($1, $2, $3, $4)
-    returning call_id
-    `,
-    [dogId, vetId, callOutcome, encryptedReason],
-  );
-  const callId = res1.rows[0].call_id;
-  return { callId };
+  const spec: DbCallSpec = {
+    dogId,
+    vetId,
+    callOutcome,
+    encryptedOptOutReason,
+  };
+  const gen = await dbInsertCall(dbPool, spec);
+  return gen;
 }
 
 export async function insertReport(
