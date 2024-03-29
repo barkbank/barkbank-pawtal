@@ -5,6 +5,7 @@ import {
   BarkSidebarRoute,
 } from "@/components/bark/bark-sidebar";
 import { getAuthenticatedUserActor } from "@/lib/auth";
+import { IMG_PATH } from "@/lib/image-path";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
 
@@ -17,14 +18,14 @@ export default async function Layout(props: { children: React.ReactNode }) {
     {
       label: "My Pets",
       href: RoutePath.USER_MY_PETS,
-      iconSrc: "/dog.svg",
-      iconLightSrc: "/dog-light.svg",
+      iconSrc: IMG_PATH.SIDEBAR_DOG,
+      iconLightSrc: IMG_PATH.SIDEBAR_DOG_LIGHT,
     },
     {
       label: "My Account",
       href: RoutePath.USER_MY_ACCOUNT_PAGE,
-      iconSrc: "/key.svg",
-      iconLightSrc: "/key-light.svg",
+      iconSrc: IMG_PATH.SIDEBAR_KEY,
+      iconLightSrc: IMG_PATH.SIDEBAR_KEY_LIGHT,
     },
     {
       label: "Logout",

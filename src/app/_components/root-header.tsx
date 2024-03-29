@@ -5,6 +5,7 @@ import { CircleUser } from "lucide-react";
 import { RoutePath } from "@/lib/route-path";
 import { getLoggedInSession } from "@/lib/auth";
 import Link from "next/link";
+import { IMG_PATH } from "@/lib/image-path";
 
 const RootHeader = async () => {
   const session = await getLoggedInSession();
@@ -14,7 +15,7 @@ const RootHeader = async () => {
     <nav className="sticky top-0 z-10 flex h-[72px] items-center justify-between border-b bg-white shadow-lg">
       <Link href={RoutePath.ROOT}>
         <Image
-          src="/bark-bank-logo.svg"
+          src={IMG_PATH.BARK_BANK_LOGO}
           alt="bark bank logo"
           width={60}
           height={60}
