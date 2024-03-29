@@ -1,9 +1,10 @@
-import { DogStatus } from "../data/db-enums";
+import { MedicalStatus, ProfileStatus } from "../data/db-enums";
 
 export type MyDog = {
   dogId: string;
   dogName: string;
-  dogStatus: DogStatus;
+  dogProfileStatus: ProfileStatus;
+  dogMedicalStatus: MedicalStatus;
 };
 
 export type ListMyPetsResponse = {

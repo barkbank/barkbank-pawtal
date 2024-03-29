@@ -12,34 +12,25 @@ export async function handleUserGetMyPets(args: {
   const { userId, dbPool, dogMapper } = args;
   const sql = `
   SELECT
-    dog_id as "dogId",
-    dog_encrypted_oii as "dogEncryptedOii",
-    CASE
-      WHEN dog_ever_pregnant = 'YES' THEN $5
-      WHEN dog_ever_received_transfusion = 'YES' THEN $5
-      WHEN dog_breed = '' AND dog_weight_kg IS NULL THEN $2
-      WHEN dog_weight_kg < 20 THEN $4
-      ELSE $3
-    END as "dogStatus"
-  FROM dogs
-  WHERE user_id = $1
+    tDog.dog_id as "dogId",
+    tDog.dog_encrypted_oii as "dogEncryptedOii",
+    tStatus.profile_status as "dogProfileStatus",
+    tStatus.medical_status as "dogMedicalStatus"
+  FROM dogs as tDog
+  LEFT JOIN dog_statuses as tStatus on tDog.dog_id = tStatus.dog_id
+  WHERE tDog.user_id = $1
   `;
-  const res = await dbQuery(dbPool, sql, [
-    userId,
-    DOG_STATUS.INCOMPLETE,
-    DOG_STATUS.ELIGIBLE,
-    DOG_STATUS.INELIGIBLE,
-    DOG_STATUS.PERMANENTLY_INELIGIBLE,
-  ]);
+  const res = await dbQuery(dbPool, sql, [userId]);
   const dogs = await Promise.all(
     res.rows.map(async (row) => {
-      const { dogId, dogStatus } = row;
+      const { dogId, dogProfileStatus, dogMedicalStatus } = row;
       const secureOii = dogMapper.toDogSecureOii(row);
-      const oii = await dogMapper.mapDogSecureOiiToDogOii(secureOii);
+      const { dogName } = await dogMapper.mapDogSecureOiiToDogOii(secureOii);
       return {
         dogId,
-        dogName: oii.dogName,
-        dogStatus,
+        dogName,
+        dogProfileStatus,
+        dogMedicalStatus,
       } as MyDog;
     }),
   );
