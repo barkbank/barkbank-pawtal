@@ -12,7 +12,7 @@ import {
   BarkFormSubmitButton,
 } from "@/components/bark/bark-form";
 import { sendLoginOtp } from "@/lib/actions/send-login-otp";
-import { isValidEmail } from "@/lib/bark-utils";
+import { isValidEmail } from "@/lib/utilities/bark-utils";
 import { USER_RESIDENCY } from "@/lib/data/db-enums";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";

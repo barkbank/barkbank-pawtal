@@ -30,7 +30,7 @@ import { CalendarIcon, Check, ChevronsUpDown } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import React from "react";
-import { BARK_UTC } from "@/lib/bark-utils";
+import { BARK_UTC } from "@/lib/utilities/bark-utils";
 
 export function BarkForm(props: {
   children: React.ReactNode;

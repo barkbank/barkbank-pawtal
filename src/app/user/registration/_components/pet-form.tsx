@@ -10,7 +10,7 @@ import {
   BarkFormRadioGroup,
   BarkFormSubmitButton,
 } from "@/components/bark/bark-form";
-import { isValidWeightKg } from "@/lib/bark-utils";
+import { isValidWeightKg } from "@/lib/utilities/bark-utils";
 import {
   DogAntigenPresence,
   DogGender,
