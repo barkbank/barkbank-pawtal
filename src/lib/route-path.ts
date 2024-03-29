@@ -1,4 +1,3 @@
-import { Url } from "next/dist/shared/lib/router/router";
 import { AccountType } from "./auth-models";
 
 export class RoutePath {
