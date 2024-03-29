@@ -1,6 +1,5 @@
 "use server";
 
-import { BarkH1 } from "@/components/bark/bark-typography";
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
@@ -38,7 +37,7 @@ function StatusBlock(props: { dog: MyDog }) {
         <BarkStatusProfileIncomplete />
         <div className={clsx(typographyClasses, "italic text-[#DC362E]")}>
           Please complete your dog's profile to enable donation eligibility
-          assessmenet.
+          assessment.
         </div>
       </div>
     );
@@ -65,9 +64,9 @@ function StatusBlock(props: { dog: MyDog }) {
   }
   return (
     <div>
-      <BarkStatusEligible />
       <div className={clsx(typographyClasses)}>
-        {dog.dogName} is eligible for blood donation. Perhaps.
+        Profile Status is {dog.dogProfileStatus} and Medical Status is{" "}
+        {dog.dogMedicalStatus}.
       </div>
     </div>
   );
