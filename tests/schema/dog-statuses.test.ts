@@ -429,7 +429,7 @@ describe("dog_statuses view", () => {
           reportSpec: {
             ...ELIGIBLE_REPORT,
             dogReportedIneligibility:
-              REPORTED_INELIGIBILITY.TEMPORARY_INELIGIBLE,
+              REPORTED_INELIGIBILITY.TEMPORARILY_INELIGIBLE,
             ineligibilityExpiryTime: new Date(ts + 7 * DAYS),
           },
         });
@@ -453,7 +453,7 @@ describe("dog_statuses view", () => {
           reportSpec: {
             ...ELIGIBLE_REPORT,
             dogReportedIneligibility:
-              REPORTED_INELIGIBILITY.TEMPORARY_INELIGIBLE,
+              REPORTED_INELIGIBILITY.TEMPORARILY_INELIGIBLE,
             ineligibilityExpiryTime: new Date(ts - 1 * DAYS),
           },
         });
