@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import clsx from "clsx";
+import { IMG_PATH } from "@/lib/image-path";
 
 export type BarkSidebarRoute = {
   label: string;
@@ -17,9 +18,9 @@ function SideOption(props: { route: BarkSidebarRoute; currentPath: string }) {
   const isActive = route.href.startsWith(currentPath);
   const iconSrc = (() => {
     if (isActive) {
-      return route.iconSrc || "/square.svg";
+      return route.iconSrc || IMG_PATH.SIDEBAR_SQUARE;
     } else {
-      return route.iconLightSrc || "/square-light.svg";
+      return route.iconLightSrc || IMG_PATH.SIDEBAR_SQUARE_LIGHT;
     }
   })();
   return (

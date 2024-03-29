@@ -1,0 +1,17 @@
+export const IMG_PATH = {
+  BARK_BANK_LOGO: "/bark-bank-logo.svg",
+  CHECK_MAIL: "/check-mail.svg",
+  CONTACT_US: "/contact-us.svg",
+  EMAIL: "/email.svg",
+  ORANGE_DOG_HOUSE: "/orange-dog-house.svg",
+  PAW_PRINT: "/pawPrint.svg",
+  PURPLE_DOG_HOUSE: "/purpleDogHouse.svg",
+  SIDEBAR_DASHBOARD_LIGHT: "/dashboard-light.svg",
+  SIDEBAR_DASHBOARD: "/dashboard.svg",
+  SIDEBAR_DATABASE_LIGHT: "/database-light.svg",
+  SIDEBAR_DATABASE: "/database.svg",
+  SIDEBAR_KEY_LIGHT: "/key-light.svg",
+  SIDEBAR_KEY: "/key.svg",
+  SIDEBAR_SQUARE_LIGHT: "/square-light.svg",
+  SIDEBAR_SQUARE: "/square.svg",
+} as const;

@@ -25,6 +25,7 @@ import { UserResidency } from "@/lib/data/db-enums";
 import { BARK_UTC } from "@/lib/utilities/bark-time";
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
+import { IMG_PATH } from "@/lib/image-path";
 
 const FORM_SCHEMA = z.object({
   dogName: z.string(),
@@ -168,7 +169,7 @@ export default function DonorForm(props: {
   return (
     <div className="w-screen px-6 pb-24 pt-12 md:w-[800px]">
       <div className="flex flex-col items-center gap-2">
-        <Image src={"/orange-dog-house.svg"} alt="" height={100} width={100} />
+        <Image src={IMG_PATH.ORANGE_DOG_HOUSE} alt="" height={100} width={100} />
         <div className="mt-6 text-center">
           <BarkH4>Bark Bank Canine Blood Donation Pawtal</BarkH4>
         </div>
@@ -252,7 +253,7 @@ export default function DonorForm(props: {
 
           <div className="mt-6 grid grid-cols-1 gap-20 md:grid-cols-3">
             <div className="flex flex-col items-center text-center">
-              <Image src={"/check-mail.svg"} alt="" height={100} width={100} />
+              <Image src={IMG_PATH.CHECK_MAIL} alt="" height={100} width={100} />
               <BarkH4>Confirmation Email</BarkH4>
               <BarkP>
                 An email confirmation will be sent to you shortly with the
@@ -261,7 +262,7 @@ export default function DonorForm(props: {
             </div>
 
             <div className="flex flex-col items-center text-center">
-              <Image src={"/contact-us.svg"} alt="" height={101} width={100} />
+              <Image src={IMG_PATH.CONTACT_US} alt="" height={101} width={100} />
               <BarkH4>Upcoming Blood Profiling</BarkH4>
               <BarkP>
                 Your preferred vet will contact you within the week to schedule
@@ -270,7 +271,7 @@ export default function DonorForm(props: {
             </div>
 
             <div className="flex flex-col items-center text-center">
-              <Image src={"/email.svg"} alt="" height={100} width={100} />
+              <Image src={IMG_PATH.EMAIL} alt="" height={100} width={100} />
               <BarkH4>Contact Us</BarkH4>
               <BarkP>
                 Feel free to reach out with any inquiries regarding your
