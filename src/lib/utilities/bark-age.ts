@@ -26,4 +26,3 @@ export function getAgeMonths(fromTime: Date, toTime: Date): number {
   }
   return ageMonths;
 }
-
