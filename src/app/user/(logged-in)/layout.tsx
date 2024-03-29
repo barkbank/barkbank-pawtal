@@ -21,20 +21,10 @@ export default async function Layout(props: { children: React.ReactNode }) {
       iconLightSrc: "/dashboard-light.svg",
     },
     {
-      label: "Dashboard",
-      href: RoutePath.USER_DASHBOARD_PAGE,
-      iconSrc: "/dashboard.svg",
-      iconLightSrc: "/dashboard-light.svg",
-    },
-    {
       label: "My Account",
       href: RoutePath.USER_MY_ACCOUNT_PAGE,
       iconSrc: "/key.svg",
       iconLightSrc: "/key-light.svg",
-    },
-    {
-      label: "Root 3",
-      href: RoutePath.ROOT,
     },
     {
       label: "Logout",
