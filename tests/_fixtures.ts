@@ -379,8 +379,18 @@ export async function insertReport(
   callId: string,
   overrides?: Partial<DbReportSpec>,
 ): Promise<DbReportGen> {
+  const spec = getDbReportSpec(callId, overrides);
+  const gen = await dbInsertReport(dbPool, spec);
+  return gen;
+}
+
+export function getDbReportSpec(
+  callId: string,
+  overrides?: Partial<DbReportSpec>,
+): DbReportSpec {
   const currentTs = new Date().getTime();
-  const visitTs = currentTs - 24 * 60 * 60 * 1000;
+  const millisInOneDay = 24 * 60 * 60 * 1000;
+  const visitTs = currentTs - millisInOneDay;
   const visitTime = new Date(visitTs);
   const base: DbReportSpec = {
     callId: callId,
@@ -393,7 +403,5 @@ export async function insertReport(
     encryptedIneligibilityReason: "",
     ineligibilityExpiryTime: null,
   };
-  const spec = { ...base, ...overrides };
-  const gen = await dbInsertReport(dbPool, spec);
-  return gen;
+  return { ...base, ...overrides };
 }
