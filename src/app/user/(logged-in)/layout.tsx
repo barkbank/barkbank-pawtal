@@ -17,8 +17,8 @@ export default async function Layout(props: { children: React.ReactNode }) {
     {
       label: "My Pets",
       href: RoutePath.USER_MY_PETS,
-      iconSrc: "/dashboard.svg",
-      iconLightSrc: "/dashboard-light.svg",
+      iconSrc: "/dog.svg",
+      iconLightSrc: "/dog-light.svg",
     },
     {
       label: "My Account",
