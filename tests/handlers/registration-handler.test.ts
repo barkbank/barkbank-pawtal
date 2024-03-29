@@ -6,9 +6,9 @@ import { RegistrationHandler } from "@/lib/handlers/registration-handler";
 import {
   DogAntigenPresence,
   DogGender,
-  USER_RESIDENCY,
   YesNoUnknown,
 } from "@/lib/data/db-models";
+import { USER_RESIDENCY } from "@/lib/data/db-enums";
 import { BARK_UTC, guaranteed } from "@/lib/bark-utils";
 import {
   getDogMapper,

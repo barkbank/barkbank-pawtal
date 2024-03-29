@@ -10,9 +10,9 @@ import {
   DogSpec,
   DogAntigenPresence,
   DogGender,
-  UserResidency,
   YesNoUnknown,
 } from "@/lib/data/db-models";
+import { UserResidency } from "../data/db-enums";
 import { dbSelectUserIdByHashedEmail, dbInsertUser } from "@/lib/data/db-users";
 import { dbBegin, dbRollback, dbCommit, dbRelease } from "@/lib/data/db-utils";
 import { DogMapper } from "@/lib/data/dog-mapper";

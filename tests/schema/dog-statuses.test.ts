@@ -11,10 +11,10 @@ import { dbQuery } from "@/lib/data/db-utils";
 import {
   DbReportSpec,
   DogSpec,
-  USER_RESIDENCY,
   UserSpec,
   YesNoUnknown,
 } from "@/lib/data/db-models";
+import { USER_RESIDENCY } from "@/lib/data/db-enums";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import {
   CALL_OUTCOME,
@@ -23,7 +23,7 @@ import {
   PROFILE_STATUS,
   REPORTED_INELIGIBILITY,
   SERVICE_STATUS,
-} from "@/lib/models/bark-models";
+} from "@/lib/data/db-enums";
 
 describe("dog_statuses view", () => {
   const USER_IDX = 84;

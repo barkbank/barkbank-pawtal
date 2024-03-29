@@ -19,9 +19,9 @@ import { RegistrationRequest } from "@/lib/handlers/registration-handler";
 import {
   DogAntigenPresence,
   DogGender,
-  UserResidency,
   YesNoUnknown,
 } from "@/lib/data/db-models";
+import { UserResidency } from "@/lib/data/db-enums";
 import { BARK_UTC } from "@/lib/bark-utils";
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";

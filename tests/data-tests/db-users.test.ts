@@ -8,7 +8,7 @@ import {
 import { withDb } from "../_db_helpers";
 import { ensureTimePassed, getUserMapper, getUserSpec } from "../_fixtures";
 import { guaranteed } from "@/lib/bark-utils";
-import { USER_RESIDENCY } from "@/lib/data/db-models";
+import { USER_RESIDENCY } from "@/lib/data/db-enums";
 
 describe("db-users", () => {
   describe("dbInsertUser", () => {

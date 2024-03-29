@@ -16,7 +16,7 @@ import {
 } from "../_fixtures";
 import { handleUserGetMyPets } from "@/lib/handlers/handle-user-get-my-pets";
 import { dbInsertDog } from "@/lib/data/db-dogs";
-import { DOG_STATUS } from "@/lib/models/bark-models";
+import { DOG_STATUS } from "@/lib/data/db-enums";
 import { DogMapper } from "@/lib/data/dog-mapper";
 
 describe("handleUserGetMyPets", () => {

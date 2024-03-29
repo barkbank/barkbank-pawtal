@@ -1,4 +1,5 @@
-import { UserPii, UserResidency } from "@/lib/data/db-models";
+import { UserPii } from "@/lib/data/db-models";
+import { UserResidency } from "@/lib/data/db-enums";
 import APP from "@/lib/app";
 import { dbInsertUser } from "@/lib/data/db-users";
 import { NextRequest, NextResponse } from "next/server";

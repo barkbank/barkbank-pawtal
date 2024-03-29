@@ -1,5 +1,5 @@
 import { Pool } from "pg";
-import { DOG_STATUS } from "../models/bark-models";
+import { DOG_STATUS } from "../data/db-enums";
 import { DogMapper } from "../data/dog-mapper";
 import { dbQuery } from "../data/db-utils";
 import { MyDog } from "../models/user-models";

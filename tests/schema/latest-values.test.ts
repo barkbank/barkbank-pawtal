@@ -15,7 +15,7 @@ import {
   UserSpec,
 } from "@/lib/data/db-models";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
-import { CALL_OUTCOME, POS_NEG_NIL } from "@/lib/models/bark-models";
+import { CALL_OUTCOME, POS_NEG_NIL } from "@/lib/data/db-enums";
 import {
   DEFAULT_DATE_TIME_FORMAT,
   SINGAPORE_TIME_ZONE,

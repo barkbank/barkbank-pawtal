@@ -7,7 +7,7 @@ import {
   insertUser,
   insertVet,
 } from "../_fixtures";
-import { CALL_OUTCOME } from "@/lib/models/bark-models";
+import { CALL_OUTCOME } from "@/lib/data/db-enums";
 import { dbInsertReport } from "@/lib/data/db-reports";
 
 describe("dbInsertReport", () => {

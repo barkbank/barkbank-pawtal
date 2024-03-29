@@ -71,3 +71,10 @@ export const SCHEDULING_STATUS = {
 } as const;
 
 export type SchedulingStatus = ObjectValues<typeof SCHEDULING_STATUS>;
+
+export const USER_RESIDENCY = {
+  OTHER: "OTHER",
+  SINGAPORE: "SINGAPORE",
+} as const;
+
+export type UserResidency = ObjectValues<typeof USER_RESIDENCY>;
