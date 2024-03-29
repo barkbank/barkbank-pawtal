@@ -26,12 +26,14 @@ export async function handleUserGetMyPets(args: {
       const { dogId, dogProfileStatus, dogMedicalStatus } = row;
       const secureOii = dogMapper.toDogSecureOii(row);
       const { dogName } = await dogMapper.mapDogSecureOiiToDogOii(secureOii);
-      return {
+      const myDog: MyDog = {
         dogId,
         dogName,
         dogProfileStatus,
         dogMedicalStatus,
-      } as MyDog;
+        appointment: null,
+      };
+      return myDog;
     }),
   );
   return dogs;
