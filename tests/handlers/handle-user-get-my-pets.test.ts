@@ -1,11 +1,7 @@
 import { Pool } from "pg";
 import { withDb } from "../_db_helpers";
-import {
-  DogDetails,
-  DogSecureOii,
-  DogSpec,
-  YesNoUnknown,
-} from "@/lib/data/db-models";
+import { DogDetails, DogSecureOii, DogSpec } from "@/lib/data/db-models";
+import { YesNoUnknown } from "@/lib/data/db-enums";
 import {
   getDogDetails,
   getDogMapper,

@@ -5,10 +5,8 @@ import {
   AdminRecord,
   AdminSecurePii,
   AdminSpec,
-  DogAntigenPresence,
   DogDetails,
   DogGen,
-  DogGender,
   DogOii,
   DogSecureOii,
   DogSpec,
@@ -17,12 +15,16 @@ import {
   UserSpec,
   Vet,
   VetSpec,
-  YesNoUnknown,
   DbReportSpec,
   DbReportGen,
   DbCallSpec,
   DbCallGen,
 } from "@/lib/data/db-models";
+import {
+  DogAntigenPresence,
+  DogGender,
+  YesNoUnknown,
+} from "@/lib/data/db-enums";
 import { USER_RESIDENCY } from "@/lib/data/db-enums";
 import { dbInsertAdmin, dbSelectAdmin } from "@/lib/data/db-admins";
 import { Pool } from "pg";

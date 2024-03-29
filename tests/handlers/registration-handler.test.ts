@@ -7,7 +7,7 @@ import {
   DogAntigenPresence,
   DogGender,
   YesNoUnknown,
-} from "@/lib/data/db-models";
+} from "@/lib/data/db-enums";
 import { USER_RESIDENCY } from "@/lib/data/db-enums";
 import { BARK_UTC, guaranteed } from "@/lib/bark-utils";
 import {

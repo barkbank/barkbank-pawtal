@@ -8,12 +8,8 @@ import {
   insertVet,
 } from "../_fixtures";
 import { dbQuery } from "@/lib/data/db-utils";
-import {
-  DbReportSpec,
-  DogSpec,
-  UserSpec,
-  YesNoUnknown,
-} from "@/lib/data/db-models";
+import { DbReportSpec, DogSpec, UserSpec } from "@/lib/data/db-models";
+import { YesNoUnknown } from "@/lib/data/db-enums";
 import { USER_RESIDENCY } from "@/lib/data/db-enums";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import {

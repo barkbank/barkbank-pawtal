@@ -14,6 +14,7 @@
 // - Some: This sould be a full record with PII.
 //
 
+import { DogGender, DogAntigenPresence, YesNoUnknown } from "./db-enums";
 import { UserResidency } from "./db-enums";
 import { CallOutcome, PosNegNil, ReportedIneligibility } from "./db-enums";
 
@@ -43,25 +44,6 @@ export type UserGen = {
 export type UserRecord = UserSpec & UserGen;
 
 export type User = UserPii & UserDetails & UserGen;
-
-// TODO: Do not use enum - https://dev.to/ivanzm123/dont-use-enums-in-typescript-they-are-very-dangerous-57bh
-export enum YesNoUnknown {
-  YES = "YES",
-  NO = "NO",
-  UNKNOWN = "UNKNOWN",
-}
-
-export enum DogGender {
-  MALE = "MALE",
-  FEMALE = "FEMALE",
-  UNKNOWN = "UNKNOWN",
-}
-
-export enum DogAntigenPresence {
-  POSITIVE = "POSITIVE",
-  NEGATIVE = "NEGATIVE",
-  UNKNOWN = "UNKNOWN",
-}
 
 export type DogOii = {
   dogName: string;

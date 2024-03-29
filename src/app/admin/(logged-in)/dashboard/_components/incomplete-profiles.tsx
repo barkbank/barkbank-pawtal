@@ -13,7 +13,7 @@ import {
 import { DogProfile } from "@/lib/admin/admin-actor";
 import clsx from "clsx";
 import { BARK_UTC } from "@/lib/bark-utils";
-import { DogGender, YesNoUnknown } from "@/lib/data/db-models";
+import { DogGender, YesNoUnknown } from "@/lib/data/db-enums";
 
 function DataRow(props: { profile: DogProfile }) {
   const { profile } = props;

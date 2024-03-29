@@ -15,7 +15,7 @@ import {
   DogAntigenPresence,
   DogGender,
   YesNoUnknown,
-} from "@/lib/data/db-models";
+} from "@/lib/data/db-enums";
 import { Breed } from "@/lib/services/breed";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
