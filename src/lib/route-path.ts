@@ -12,7 +12,7 @@ export class RoutePath {
   static readonly USER_VIEW_DOG = (dogId: string) => `/user/dogs/${dogId}`;
   static readonly USER_EDIT_DOG = (dogId: string) => `/user/dogs/${dogId}/edit`;
 
-  static readonly USER_DEFAULT_LOGGED_IN_PAGE = RoutePath.USER_MY_PETS
+  static readonly USER_DEFAULT_LOGGED_IN_PAGE = RoutePath.USER_MY_PETS;
 
   static readonly VET_LOGIN_PAGE = "/vet/login";
   static readonly VET_DASHBOARD_PAGE = "/vet/dashboard";
@@ -32,7 +32,9 @@ export class RoutePath {
   static readonly INFO = "/info";
   static readonly FAQ = "/faq";
 
-  static readonly ACCOUNT_DASHBOARD = (accountType: Url) => {
+  static readonly ACCOUNT_DASHBOARD = (
+    accountType: AccountType | undefined,
+  ) => {
     if (accountType === AccountType.ADMIN) {
       return RoutePath.ADMIN_DASHBOARD_PAGE;
     }
@@ -42,6 +44,6 @@ export class RoutePath {
     if (accountType === AccountType.USER) {
       return RoutePath.USER_DEFAULT_LOGGED_IN_PAGE;
     }
-    return "/";
+    return RoutePath.ROOT;
   };
 }
