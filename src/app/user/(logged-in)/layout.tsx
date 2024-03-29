@@ -15,6 +15,12 @@ export default async function Layout(props: { children: React.ReactNode }) {
   }
   const routes: BarkSidebarRoute[] = [
     {
+      label: "My Pets",
+      href: RoutePath.USER_MY_PETS,
+      iconSrc: "/dashboard.svg",
+      iconLightSrc: "/dashboard-light.svg",
+    },
+    {
       label: "Dashboard",
       href: RoutePath.USER_DASHBOARD_PAGE,
       iconSrc: "/dashboard.svg",
