@@ -4,12 +4,7 @@ import APP from "./app";
 import { AdminActor } from "./admin/admin-actor";
 import { VetActor } from "./vet/vet-actor";
 import { UserActor } from "./user/user-actor";
-
-export enum AccountType {
-  USER = "USER",
-  VET = "VET",
-  ADMIN = "ADMIN",
-}
+import { AccountType } from "./auth-models";
 
 export const NEXT_AUTH_OPTIONS: NextAuthOptions = {
   providers: [
