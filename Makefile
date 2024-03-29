@@ -3,6 +3,9 @@
 .PHONY: default
 default: npm-install fmt test schema-diff
 
+# Vars
+BARKBANK_SCHEMA_DIR=../barkbank-schema
+
 # Runs the code formatter
 .PHONY: fmt
 fmt:
@@ -61,4 +64,9 @@ todo:
 # Diff local schema and barkbank-schemas
 .PHONY: schema-diff
 schema-diff:
-	[ ! -d ../barkbank-schema ] || diff --color=always db ../barkbank-schema/schema
+	[ ! -d $(BARKBANK_SCHEMA_DIR) ] || diff --color=always db $(BARKBANK_SCHEMA_DIR)/schema
+
+# Copy the schema from barkbank-schema into barkbank-pawtal
+.PHONY: schema-recv
+schema-recv:
+	rsync -avz $(BARKBANK_SCHEMA_DIR)/schema/ db/
