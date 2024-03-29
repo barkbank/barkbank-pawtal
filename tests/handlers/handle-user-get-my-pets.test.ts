@@ -1,23 +1,11 @@
 import { Pool } from "pg";
 import { withDb } from "../_db_helpers";
-import { DogDetails, DogSecureOii, DogSpec } from "@/lib/data/db-models";
-import { YesNoUnknown } from "@/lib/data/db-enums";
-import {
-  getDogDetails,
-  getDogMapper,
-  getDogOii,
-  getDogSecureOii,
-  insertDog,
-  insertUser,
-} from "../_fixtures";
+import { getDogMapper, getDogOii, insertDog, insertUser } from "../_fixtures";
 import { handleUserGetMyPets } from "@/lib/handlers/handle-user-get-my-pets";
-import { dbInsertDog } from "@/lib/data/db-dogs";
-import { DOG_STATUS } from "@/lib/data/db-enums";
 import { DogMapper } from "@/lib/data/dog-mapper";
 
 describe("handleUserGetMyPets", () => {
   const USER_IDX = 71;
-  const DOG_IDX = 64;
 
   async function getScenario(
     dbPool: Pool,
@@ -34,7 +22,7 @@ describe("handleUserGetMyPets", () => {
     userId: string;
   }> {
     const userRecord = await insertUser(userIdx, dbPool);
-    const dogGens = await Promise.all(
+    await Promise.all(
       (options?.dogIndices ?? []).map((dogIdx) =>
         insertDog(dogIdx, userRecord.userId, dbPool),
       ),
