@@ -16,6 +16,7 @@ import {
   BarkStatusTemporarilyIneligible,
 } from "@/components/bark/bark-status";
 import clsx from "clsx";
+import { Button } from "@/components/ui/button";
 
 function StatusBlock(props: { dog: MyDog }) {
   const { dog } = props;
@@ -36,7 +37,7 @@ function StatusBlock(props: { dog: MyDog }) {
       <div>
         <BarkStatusProfileIncomplete />
         <div className={clsx(typographyClasses, "italic text-[#DC362E]")}>
-          Please complete your dog's profile to enable donation eligibility
+          Please complete your dog&apos;s profile to enable donation eligibility
           assessment.
         </div>
       </div>
@@ -130,7 +131,9 @@ export default async function Page() {
           />
         ))}
       </div>
-      <div>WIP: Add Pet Button</div>
+      <Button className="w-full" variant="brandInverse">
+        Add Pet
+      </Button>
     </>
   );
 }
