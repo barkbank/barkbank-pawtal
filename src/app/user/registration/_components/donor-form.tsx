@@ -242,7 +242,7 @@ export default function DonorForm(props: {
               variant="brand"
               className="w-full p-6"
               onClick={() => {
-                router.push(RoutePath.USER_DASHBOARD_PAGE);
+                router.push(RoutePath.USER_DEFAULT_LOGGED_IN_PAGE);
                 router.refresh();
               }}
             >

@@ -9,7 +9,7 @@ export default async function Page() {
     <BarkLoginPage
       title={"User Login"}
       accountType={AccountType.USER}
-      successPath={RoutePath.USER_DASHBOARD_PAGE}
+      successPath={RoutePath.USER_DEFAULT_LOGGED_IN_PAGE}
       logoSrc="/orange-dog-house.svg"
     />
   );
