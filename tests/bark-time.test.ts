@@ -3,7 +3,7 @@ import {
   SINGAPORE_TIME_ZONE,
   formatDateTime,
   parseDateTime,
-} from "@/lib/bark-time";
+} from "@/lib/utilities/bark-time";
 import { parseISO } from "date-fns";
 
 describe("bark-time parseDateTime", () => {

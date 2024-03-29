@@ -1,5 +1,5 @@
 import { SecretEncryptionService } from "@/lib/services/encryption";
-import { guaranteed } from "@/lib/bark-utils";
+import { guaranteed } from "@/lib/utilities/bark-utils";
 
 describe("SecretEncryptionService", () => {
   it("should decrypt encrypted data back to original data", async () => {

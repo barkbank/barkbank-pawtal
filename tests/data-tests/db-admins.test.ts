@@ -4,7 +4,7 @@ import {
   dbSelectAdminIdByAdminHashedEmail,
 } from "@/lib/data/db-admins";
 import { withDb } from "../_db_helpers";
-import { guaranteed } from "@/lib/bark-utils";
+import { guaranteed } from "@/lib/utilities/bark-utils";
 import { adminSpec, getAdminMapper } from "../_fixtures";
 
 describe("db-admins", () => {

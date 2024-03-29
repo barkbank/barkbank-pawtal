@@ -22,7 +22,7 @@ import {
   YesNoUnknown,
 } from "@/lib/data/db-enums";
 import { UserResidency } from "@/lib/data/db-enums";
-import { BARK_UTC } from "@/lib/bark-utils";
+import { BARK_UTC } from "@/lib/utilities/bark-time";
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 

@@ -45,3 +45,15 @@ export function formatDateTime(
   const dateTimeString = format(zonedTime, opts.format);
   return dateTimeString;
 }
+
+export const BARK_UTC = {
+  getDate: (year: number, month: number, day: number) => {
+    return new Date(Date.UTC(year, month - 1, day));
+  },
+  parseDate: (yyyy_mm_dd: string) => {
+    return new Date(`${yyyy_mm_dd}T00:00:00Z`);
+  },
+  formatDate: (utcDate: Date) => {
+    return utcDate.toISOString().split("T")[0];
+  },
+};

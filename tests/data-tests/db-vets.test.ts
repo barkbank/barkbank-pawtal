@@ -4,7 +4,7 @@ import {
   dbSelectVetIdByEmail,
 } from "@/lib/data/db-vets";
 import { withDb } from "../_db_helpers";
-import { guaranteed } from "@/lib/bark-utils";
+import { guaranteed } from "@/lib/utilities/bark-utils";
 import { getVetMapper, getVetSpec } from "../_fixtures";
 
 describe("db-vets", () => {

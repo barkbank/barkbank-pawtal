@@ -21,7 +21,7 @@ import {
   UserActorFactoryConfig,
 } from "./user/user-actor-factory";
 import { AppEnv } from "./app-env";
-import { isValidEmail } from "./bark-utils";
+import { isValidEmail } from "./utilities/bark-utils";
 import { UserMapper } from "./data/user-mapper";
 import { AdminMapper } from "./data/admin-mapper";
 import { DogMapper } from "./data/dog-mapper";
