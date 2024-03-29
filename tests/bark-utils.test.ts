@@ -1,5 +1,5 @@
 import { parseDateTime } from "@/lib/utilities/bark-time";
-import { BARK_UTC } from "@/lib/utilities/bark-utils";
+import { BARK_UTC } from "@/lib/utilities/bark-time";
 import { getAgeMonths } from "@/lib/utilities/bark-age";
 import { getAgeYears } from "@/lib/utilities/bark-age";
 

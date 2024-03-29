@@ -9,7 +9,8 @@ import {
   YesNoUnknown,
 } from "@/lib/data/db-enums";
 import { USER_RESIDENCY } from "@/lib/data/db-enums";
-import { BARK_UTC, guaranteed } from "@/lib/utilities/bark-utils";
+import { guaranteed } from "@/lib/utilities/bark-utils";
+import { BARK_UTC } from "@/lib/utilities/bark-time";
 import {
   getDogMapper,
   getEmailHashService,
