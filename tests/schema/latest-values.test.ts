@@ -17,7 +17,7 @@ import {
   SINGAPORE_TIME_ZONE,
   parseDateTime,
 } from "@/lib/utilities/bark-time";
-import { getAgeMonths } from "@/lib/utilities/bark-utils";
+import { getAgeMonths } from "@/lib/utilities/bark-age";
 
 describe("latest_values", () => {
   const USER_IDX = 84;

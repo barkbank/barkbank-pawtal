@@ -1,4 +1,4 @@
-import { ObjectValues } from "../utilities/bark-utils";
+import { ObjectValues } from "../utilities/object-values";
 
 export const DOG_STATUS = {
   INCOMPLETE: "INCOMPLETE",
