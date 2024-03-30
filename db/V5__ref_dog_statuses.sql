@@ -64,8 +64,18 @@ CREATE VIEW dog_statuses AS (
     mParticipationStatuses as (
         SELECT
             dog_id,
-            -- TODO: Assume PARTICIPATING until we have the fields in dogs table for indicating otherwise.
-            'PARTICIPATING'::t_participation_status as participation_status
+            CASE
+                WHEN dog_participation_status <> 'PAUSED' THEN dog_participation_status
+                WHEN dog_pause_expiry_time IS NULL THEN 'PARTICIPATING'::t_participation_status
+                WHEN CURRENT_TIMESTAMP < dog_pause_expiry_time THEN 'PAUSED'::t_participation_status
+                ELSE 'PARTICIPATING'::t_participation_status
+            END as participation_status,
+            CASE
+                WHEN dog_participation_status <> 'PAUSED' THEN NULL
+                WHEN dog_pause_expiry_time IS NULL THEN NULL
+                WHEN CURRENT_TIMESTAMP < dog_pause_expiry_time THEN dog_pause_expiry_time
+                ELSE NULL
+            END as participation_pause_expiry_time
         FROM dogs
     )
 
@@ -75,7 +85,8 @@ CREATE VIEW dog_statuses AS (
         tService.service_status,
         tProfile.profile_status,
         tMedical.medical_status,
-        tParticipation.participation_status
+        tParticipation.participation_status,
+        tParticipation.participation_pause_expiry_time
     FROM dogs as tDog
     LEFT JOIN mServiceStatuses as tService on tDog.user_id = tService.user_id
     LEFT JOIN mProfileStatuses as tProfile on tDog.dog_id = tProfile.dog_id

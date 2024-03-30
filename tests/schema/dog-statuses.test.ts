@@ -9,7 +9,7 @@ import {
 } from "../_fixtures";
 import { dbQuery } from "@/lib/data/db-utils";
 import { DbReportSpec, DogSpec, UserSpec } from "@/lib/data/db-models";
-import { YesNoUnknown } from "@/lib/data/db-enums";
+import { PARTICIPATION_STATUS, YesNoUnknown } from "@/lib/data/db-enums";
 import { USER_RESIDENCY } from "@/lib/data/db-enums";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import {
@@ -472,6 +472,132 @@ describe("dog_statuses view", () => {
           [dogId],
         );
         expect(res.rows[0].medical_status).toEqual(MEDICAL_STATUS.ELIGIBLE);
+      });
+    });
+  });
+
+  describe("participation_status", () => {
+    it("should be PARTICIPATING when indicated as such in dog record", async () => {
+      await withDb(async (dbPool) => {
+        const { dogId } = await initDog(dbPool);
+        await dbQuery(
+          dbPool,
+          `
+          update dogs set
+            dog_participation_status='PARTICIPATING',
+            dog_pause_expiry_time=(CURRENT_TIMESTAMP + INTERVAL '12 days')
+          where dog_id = $1
+          `,
+          [dogId],
+        );
+        const res = await dbQuery(
+          dbPool,
+          `
+          select
+            participation_status,
+            participation_pause_expiry_time
+          from dog_statuses
+          where dog_id = $1
+          `,
+          [dogId],
+        );
+        expect(res.rows[0].participation_status).toEqual(
+          PARTICIPATION_STATUS.PARTICIPATING,
+        );
+        expect(res.rows[0].participation_pause_expiry_time).toBeNull();
+      });
+    });
+    it("should be PAUSED when indicated as such in dog record and expiry time is in the future", async () => {
+      await withDb(async (dbPool) => {
+        const { dogId } = await initDog(dbPool);
+        await dbQuery(
+          dbPool,
+          `
+          update dogs set
+            dog_participation_status='PAUSED',
+            dog_pause_expiry_time=(CURRENT_TIMESTAMP + INTERVAL '12 days')
+          where dog_id = $1
+          `,
+          [dogId],
+        );
+        const res = await dbQuery(
+          dbPool,
+          `
+            select
+              participation_status,
+              participation_pause_expiry_time
+            from dog_statuses
+            where dog_id = $1
+            `,
+          [dogId],
+        );
+        expect(res.rows[0].participation_status).toEqual(
+          PARTICIPATION_STATUS.PAUSED,
+        );
+        expect(res.rows[0].participation_pause_expiry_time).not.toBeNull();
+        expect(res.rows[0].participation_pause_expiry_time > new Date()).toBe(
+          true,
+        );
+      });
+    });
+    it("should be PARTICIPATING when indicated as PAUSED, but expiry time is in the past", async () => {
+      await withDb(async (dbPool) => {
+        const { dogId } = await initDog(dbPool);
+        await dbQuery(
+          dbPool,
+          `
+          update dogs set
+            dog_participation_status='PAUSED',
+            dog_pause_expiry_time=(CURRENT_TIMESTAMP - INTERVAL '1 days')
+          where dog_id = $1
+          `,
+          [dogId],
+        );
+        const res = await dbQuery(
+          dbPool,
+          `
+            select
+              participation_status,
+              participation_pause_expiry_time
+            from dog_statuses
+            where dog_id = $1
+            `,
+          [dogId],
+        );
+        expect(res.rows[0].participation_status).toEqual(
+          PARTICIPATION_STATUS.PARTICIPATING,
+        );
+        expect(res.rows[0].participation_pause_expiry_time).toBeNull();
+      });
+    });
+    it("should be OPTED_OUT when indicated as such in dog record", async () => {
+      await withDb(async (dbPool) => {
+        const { dogId } = await initDog(dbPool);
+        await dbQuery(
+          dbPool,
+          `
+          update dogs set
+            dog_participation_status='OPTED_OUT',
+            dog_pause_expiry_time=(CURRENT_TIMESTAMP + INTERVAL '3 days')
+          where dog_id = $1
+          `,
+          [dogId],
+        );
+        const res = await dbQuery(
+          dbPool,
+          `
+          select
+            participation_status,
+            participation_pause_expiry_time
+          from dog_statuses
+          where dog_id = $1
+          `,
+          [dogId],
+        );
+        expect(res.rows[0].participation_status).toEqual(
+          PARTICIPATION_STATUS.OPTED_OUT,
+        );
+        expect(res.rows[0].participation_pause_expiry_time).toBeNull();
       });
     });
   });
