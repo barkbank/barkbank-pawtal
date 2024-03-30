@@ -205,46 +205,57 @@ function getHumanName(idx) {
 
 function getDogName(idx) {
   const maleDogNames = [
-    "Max",
+    "Bailey",
+    "Bear",
+    "Bentley",
     "Buddy",
     "Charlie",
-    "Jack",
     "Cooper",
-    "Rocky",
-    "Toby",
-    "Bear",
     "Duke",
-    "Teddy",
-    "Bailey",
-    "Oliver",
+    "Jack",
+    "Max",
     "Milo",
-    "Bentley",
+    "Oliver",
+    "Peter",
+    "Rocky",
+    "Teddy",
+    "Toby",
     "Zeus",
   ];
   const femaleDogNames = [
     "Bella",
-    "Lucy",
-    "Daisy",
-    "Luna",
-    "Molly",
-    "Sadie",
-    "Lola",
-    "Sophie",
     "Chloe",
+    "Daisy",
     "Lily",
-    "Ruby",
-    "Rosie",
+    "Lola",
+    "Lucy",
+    "Luna",
     "Maggie",
-    "Zoe",
+    "Molly",
+    "Olive",
+    "Rosie",
+    "Ruby",
+    "Sadie",
+    "Sophie",
     "Stella",
+    "Zoe",
   ];
   const rng = getRng("getDogName", idx);
-  const k = nextInt(rng);
+  const k1 = nextInt(rng);
+  const k2 = nextInt(rng);
   const gender = getGender(idx);
   if (gender === "MALE") {
-    return maleDogNames[k % maleDogNames.length];
+    return (
+      maleDogNames[k1 % maleDogNames.length] +
+      " " +
+      maleDogNames[k2 % maleDogNames.length]
+    );
   }
-  return femaleDogNames[k % femaleDogNames.length];
+  return (
+    femaleDogNames[k1 % femaleDogNames.length] +
+    " " +
+    femaleDogNames[k2 % femaleDogNames.length]
+  );
 }
 
 function getDogBreed(idx) {
@@ -354,8 +365,7 @@ function getWeightKg(idx) {
   return Math.floor(minWeightKg + rng() * (maxWeightKg - minWeightKg));
 }
 
-function createDog(idx) {
-  const email = userEmail(idx);
+function createDog(email, idx) {
   const body = {
     userEmail: email,
     dogOii: {
@@ -386,13 +396,18 @@ for (let i = 1; i <= 3; ++i) {
   createVet(idx);
 }
 
-for (let i = 1; i < 100; ++i) {
+for (let i = 1; i <= 99; ++i) {
   const idx = i;
   createUser(idx, (err, res) => {
     if (err) {
       console.error("Failed to create user ", idx);
       return;
     }
-    createDog(idx);
+    const email = userEmail(idx);
+    const offset = idx * 1000;
+    const numDogs = idx % 5;
+    for (let j = 1; j <= numDogs; ++j) {
+      createDog(email, offset + j);
+    }
   });
 }

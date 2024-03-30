@@ -1,5 +1,4 @@
 import { Pool } from "pg";
-import { DOG_STATUS } from "../data/db-enums";
 import { DogMapper } from "../data/dog-mapper";
 import { dbQuery } from "../data/db-utils";
 import { MyDog } from "../models/user-models";
@@ -11,36 +10,66 @@ export async function handleUserGetMyPets(args: {
 }): Promise<MyDog[]> {
   const { userId, dbPool, dogMapper } = args;
   const sql = `
+  WITH
+  mUserDogs as (
+    SELECT
+      dog_id,
+      dog_encrypted_oii,
+      dog_gender
+    FROM dogs
+    WHERE user_id = $1
+  ),
+  mAppointmentsPendingReport as (
+    SELECT
+      tDog.dog_id,
+      json_agg(json_build_object(
+        'callId', tCall.call_id,
+        'vetId', tVet.vet_id,
+        'vetName', tVet.vet_name
+      )) as appointments
+    FROM mUserDogs as tDog
+    LEFT JOIN calls as tCall on tDog.dog_id = tCall.dog_id
+    LEFT JOIN reports as tReport on tCall.call_id = tReport.call_id
+    LEFT JOIN vets as tVet on tCall.vet_id = tVet.vet_id
+    WHERE tCall.call_outcome = 'APPOINTMENT'
+    AND tReport.report_id IS NULL
+    GROUP BY tDog.dog_id
+  )
   SELECT
-    dog_id as "dogId",
-    dog_encrypted_oii as "dogEncryptedOii",
-    CASE
-      WHEN dog_ever_pregnant = 'YES' THEN $5
-      WHEN dog_ever_received_transfusion = 'YES' THEN $5
-      WHEN dog_breed = '' AND dog_weight_kg IS NULL THEN $2
-      WHEN dog_weight_kg < 20 THEN $4
-      ELSE $3
-    END as "dogStatus"
-  FROM dogs
-  WHERE user_id = $1
+    tDog.dog_id as "dogId",
+    tDog.dog_encrypted_oii as "dogEncryptedOii",
+    tDog.dog_gender as "dogGender",
+    tStatus.service_status as "dogServiceStatus",
+    tStatus.profile_status as "dogProfileStatus",
+    tStatus.medical_status as "dogMedicalStatus",
+    COALESCE(tAppointment.appointments, json_build_array()) as "dogAppointments"
+  FROM mUserDogs as tDog
+  LEFT JOIN dog_statuses as tStatus on tDog.dog_id = tStatus.dog_id
+  LEFT JOIN mAppointmentsPendingReport as tAppointment on tDog.dog_id = tAppointment.dog_id
   `;
-  const res = await dbQuery(dbPool, sql, [
-    userId,
-    DOG_STATUS.INCOMPLETE,
-    DOG_STATUS.ELIGIBLE,
-    DOG_STATUS.INELIGIBLE,
-    DOG_STATUS.PERMANENTLY_INELIGIBLE,
-  ]);
+  const res = await dbQuery(dbPool, sql, [userId]);
   const dogs = await Promise.all(
     res.rows.map(async (row) => {
-      const { dogId, dogStatus } = row;
-      const secureOii = dogMapper.toDogSecureOii(row);
-      const oii = await dogMapper.mapDogSecureOiiToDogOii(secureOii);
-      return {
+      const {
         dogId,
-        dogName: oii.dogName,
-        dogStatus,
-      } as MyDog;
+        dogGender,
+        dogServiceStatus,
+        dogProfileStatus,
+        dogMedicalStatus,
+        dogAppointments,
+      } = row;
+      const secureOii = dogMapper.toDogSecureOii(row);
+      const { dogName } = await dogMapper.mapDogSecureOiiToDogOii(secureOii);
+      const myDog: MyDog = {
+        dogId,
+        dogName,
+        dogGender,
+        dogServiceStatus,
+        dogProfileStatus,
+        dogMedicalStatus,
+        dogAppointments,
+      };
+      return myDog;
     }),
   );
   return dogs;

@@ -73,7 +73,7 @@ export function BarkSidebarLayout(props: {
       </div>
 
       {/* Content */}
-      <div className="w-full flex-1 p-3">{props.children}</div>
+      <div className="w-full flex-1 px-[40px] py-[20px]">{props.children}</div>
     </div>
   );
 }

@@ -169,7 +169,12 @@ export default function DonorForm(props: {
   return (
     <div className="w-screen px-6 pb-24 pt-12 md:w-[800px]">
       <div className="flex flex-col items-center gap-2">
-        <Image src={IMG_PATH.ORANGE_DOG_HOUSE} alt="" height={100} width={100} />
+        <Image
+          src={IMG_PATH.ORANGE_DOG_HOUSE}
+          alt=""
+          height={100}
+          width={100}
+        />
         <div className="mt-6 text-center">
           <BarkH4>Bark Bank Canine Blood Donation Pawtal</BarkH4>
         </div>
@@ -243,7 +248,7 @@ export default function DonorForm(props: {
               variant="brand"
               className="w-full p-6"
               onClick={() => {
-                router.push(RoutePath.USER_DASHBOARD_PAGE);
+                router.push(RoutePath.USER_DEFAULT_LOGGED_IN_PAGE);
                 router.refresh();
               }}
             >
@@ -253,7 +258,12 @@ export default function DonorForm(props: {
 
           <div className="mt-6 grid grid-cols-1 gap-20 md:grid-cols-3">
             <div className="flex flex-col items-center text-center">
-              <Image src={IMG_PATH.CHECK_MAIL} alt="" height={100} width={100} />
+              <Image
+                src={IMG_PATH.CHECK_MAIL}
+                alt=""
+                height={100}
+                width={100}
+              />
               <BarkH4>Confirmation Email</BarkH4>
               <BarkP>
                 An email confirmation will be sent to you shortly with the
@@ -262,7 +272,12 @@ export default function DonorForm(props: {
             </div>
 
             <div className="flex flex-col items-center text-center">
-              <Image src={IMG_PATH.CONTACT_US} alt="" height={101} width={100} />
+              <Image
+                src={IMG_PATH.CONTACT_US}
+                alt=""
+                height={101}
+                width={100}
+              />
               <BarkH4>Upcoming Blood Profiling</BarkH4>
               <BarkP>
                 Your preferred vet will contact you within the week to schedule

@@ -12,7 +12,7 @@ import { BarkFormOption } from "@/components/bark/bark-form";
 
 export default async function Page() {
   if (await isLoggedIn(AccountType.USER)) {
-    redirect(RoutePath.USER_DASHBOARD_PAGE);
+    redirect(RoutePath.USER_DEFAULT_LOGGED_IN_PAGE);
   }
 
   async function getBreeds(): Promise<Breed[]> {

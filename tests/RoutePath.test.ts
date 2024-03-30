@@ -13,26 +13,23 @@ describe("RoutePath", () => {
   });
 
   describe("ACCOUNT_DASHBOARD ", () => {
-    it("should have a path for ADMIN_DASHBOARD_PAGE", () => {
+    it("should have a path for ADMIN accounts", () => {
       expect(RoutePath.ACCOUNT_DASHBOARD(AccountType.ADMIN)).toBe(
-        "/admin/dashboard",
+        RoutePath.ADMIN_DASHBOARD_PAGE,
       );
     });
-    it("should have a path for VET_DASHBOARD_PAGE", () => {
+    it("should have a path for VET accounts", () => {
       expect(RoutePath.ACCOUNT_DASHBOARD(AccountType.VET)).toBe(
-        "/vet/dashboard",
+        RoutePath.VET_DASHBOARD_PAGE,
       );
     });
-    it("should have a path for USER_DASHBOARD_PAGE", () => {
+    it("should have a path for USER accounts", () => {
       expect(RoutePath.ACCOUNT_DASHBOARD(AccountType.USER)).toBe(
-        "/user/dashboard",
+        RoutePath.USER_DEFAULT_LOGGED_IN_PAGE,
       );
     });
-    it("should have a path for ROOT", () => {
-      expect(RoutePath.ACCOUNT_DASHBOARD("")).toBe("/");
-    });
-    it("should default to root", () => {
-      expect(RoutePath.ACCOUNT_DASHBOARD("UNKNOWN")).toBe("/");
+    it("should default to root when undefined", () => {
+      expect(RoutePath.ACCOUNT_DASHBOARD(undefined)).toBe(RoutePath.ROOT);
     });
   });
 });

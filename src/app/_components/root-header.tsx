@@ -13,7 +13,7 @@ const RootHeader = async () => {
 
   return (
     <nav className="sticky top-0 z-10 flex h-[72px] items-center justify-between border-b bg-white shadow-lg">
-      <Link href="/">
+      <Link href={RoutePath.ROOT}>
         <Image
           src={IMG_PATH.BARK_BANK_LOGO}
           alt="bark bank logo"
@@ -24,13 +24,13 @@ const RootHeader = async () => {
       </Link>
 
       <div className="hidden gap-x-8 sm:flex sm:last:mr-8">
-        <Link href="/">Home</Link>
+        <Link href={RoutePath.ROOT}>Home</Link>
         <Link href={RoutePath.ABOUT_US}>About Us</Link>
         <Link href={RoutePath.BE_A_DONOR}>Be a Donor</Link>
         <Link href={RoutePath.ARTICLES}>Articles</Link>
         <Link href={RoutePath.FAQ}>FAQ</Link>
         <Link href={RoutePath.INFO}>Info</Link>
-        <Link href={RoutePath.ACCOUNT_DASHBOARD(accountType ?? "")}>
+        <Link href={RoutePath.ACCOUNT_DASHBOARD(accountType)}>
           <CircleUser />
         </Link>
       </div>

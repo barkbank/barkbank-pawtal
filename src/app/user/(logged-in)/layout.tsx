@@ -16,20 +16,16 @@ export default async function Layout(props: { children: React.ReactNode }) {
   }
   const routes: BarkSidebarRoute[] = [
     {
-      label: "Dashboard",
-      href: RoutePath.USER_DASHBOARD_PAGE,
-      iconSrc: IMG_PATH.SIDEBAR_DASHBOARD,
-      iconLightSrc: IMG_PATH.SIDEBAR_DASHBOARD_LIGHT,
+      label: "My Pets",
+      href: RoutePath.USER_MY_PETS,
+      iconSrc: IMG_PATH.SIDEBAR_DOG,
+      iconLightSrc: IMG_PATH.SIDEBAR_DOG_LIGHT,
     },
     {
       label: "My Account",
       href: RoutePath.USER_MY_ACCOUNT_PAGE,
       iconSrc: IMG_PATH.SIDEBAR_KEY,
       iconLightSrc: IMG_PATH.SIDEBAR_KEY_LIGHT,
-    },
-    {
-      label: "Root 3",
-      href: RoutePath.ROOT,
     },
     {
       label: "Logout",
