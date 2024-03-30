@@ -9,7 +9,7 @@ import {
   insertUser,
   insertVet,
 } from "../_fixtures";
-import { handleUserGetMyPets } from "@/lib/handlers/handle-user-get-my-pets";
+import { handleUserGetMyPets } from "@/lib/user/actions/handle-user-get-my-pets";
 import { DogMapper } from "@/lib/data/dog-mapper";
 import { CALL_OUTCOME } from "@/lib/data/db-enums";
 import { guaranteed } from "@/lib/utilities/bark-utils";

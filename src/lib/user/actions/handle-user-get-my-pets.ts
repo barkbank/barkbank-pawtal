@@ -1,7 +1,7 @@
 import { Pool } from "pg";
-import { DogMapper } from "../data/dog-mapper";
-import { dbQuery } from "../data/db-utils";
-import { MyDog } from "../models/user-models";
+import { DogMapper } from "../../data/dog-mapper";
+import { dbQuery } from "../../data/db-utils";
+import { MyDog } from "../../models/user-models";
 
 export async function handleUserGetMyPets(args: {
   userId: string;

@@ -3,7 +3,7 @@
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
-import { handleUserGetMyPets } from "@/lib/handlers/handle-user-get-my-pets";
+import { handleUserGetMyPets } from "@/lib/user/actions/handle-user-get-my-pets";
 import APP from "@/lib/app";
 import { MyDog } from "@/lib/models/user-models";
 import Image from "next/image";
