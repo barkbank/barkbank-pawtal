@@ -1,5 +1,5 @@
 import { UserPii, UserSecurePii } from "@/lib/data/db-models";
-import { getPiiEncryptionService, getUserMapper } from "./_fixtures";
+import { getPiiEncryptionService, getUserMapper } from "../_fixtures";
 
 describe("UserMapper", () => {
   describe("mapUserPiiToUserSecurePii", () => {

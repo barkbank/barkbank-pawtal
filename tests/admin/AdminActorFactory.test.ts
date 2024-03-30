@@ -1,5 +1,5 @@
 import { AdminActorFactory } from "@/lib/admin/admin-actor-factory";
-import { withDb } from "./_db_helpers";
+import { withDb } from "../_db_helpers";
 import {
   adminPii,
   insertAdmin,
@@ -7,7 +7,7 @@ import {
   someEmail,
   getAdminSecurePii,
   getHashedEmail,
-} from "./_fixtures";
+} from "../_fixtures";
 import { AdminPii } from "@/lib/data/db-models";
 import { AdminSecurePii, AdminSpec } from "@/lib/data/db-models";
 import {
