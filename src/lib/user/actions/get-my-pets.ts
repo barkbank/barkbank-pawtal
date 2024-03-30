@@ -3,7 +3,7 @@ import { DogMapper } from "../../data/dog-mapper";
 import { dbQuery } from "../../data/db-utils";
 import { MyDog } from "../../models/user-models";
 
-export async function handleUserGetMyPets(args: {
+export async function getMyPets(args: {
   userId: string;
   dbPool: Pool;
   dogMapper: DogMapper;

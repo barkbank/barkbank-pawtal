@@ -3,7 +3,7 @@
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
-import { handleUserGetMyPets } from "@/lib/user/actions/handle-user-get-my-pets";
+import { getMyPets } from "@/lib/user/actions/get-my-pets";
 import APP from "@/lib/app";
 import { MyDog } from "@/lib/models/user-models";
 import Image from "next/image";
@@ -254,7 +254,7 @@ export default async function Page() {
   if (!actor) {
     redirect(RoutePath.USER_LOGIN_PAGE);
   }
-  const dogs = await handleUserGetMyPets({
+  const dogs = await getMyPets({
     userId: actor.getUserId(),
     dbPool: await APP.getDbPool(),
     dogMapper: await APP.getDogMapper(),

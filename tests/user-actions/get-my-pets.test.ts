@@ -9,12 +9,12 @@ import {
   insertUser,
   insertVet,
 } from "../_fixtures";
-import { handleUserGetMyPets } from "@/lib/user/actions/handle-user-get-my-pets";
+import { getMyPets } from "@/lib/user/actions/get-my-pets";
 import { DogMapper } from "@/lib/data/dog-mapper";
 import { CALL_OUTCOME } from "@/lib/data/db-enums";
 import { guaranteed } from "@/lib/utilities/bark-utils";
 
-describe("handleUserGetMyPets", () => {
+describe("getMyPets", () => {
   const dogMapper = getDogMapper();
 
   function getArgs(
@@ -32,7 +32,7 @@ describe("handleUserGetMyPets", () => {
     await withDb(async (dbPool) => {
       const { userId } = await insertUser(34, dbPool);
       const args = getArgs(userId, dbPool);
-      const dogs = await handleUserGetMyPets(args);
+      const dogs = await getMyPets(args);
       expect(dogs).toEqual([]);
     });
   });
@@ -42,7 +42,7 @@ describe("handleUserGetMyPets", () => {
       await insertDog(2, userId, dbPool);
       await insertDog(3, userId, dbPool);
       const args = getArgs(userId, dbPool);
-      const dogs = await handleUserGetMyPets(args);
+      const dogs = await getMyPets(args);
       const receivedName = dogs.map((dog) => dog.dogName);
       const expectedNames = await Promise.all(
         [2, 3].map(async (idx) => {
@@ -65,7 +65,7 @@ describe("handleUserGetMyPets", () => {
         CALL_OUTCOME.APPOINTMENT,
       );
       const args = getArgs(userId, dbPool);
-      const dogs = await handleUserGetMyPets(args);
+      const dogs = await getMyPets(args);
       expect(guaranteed(dogs[0].dogAppointments[0]).vetName).toEqual(vetName);
     });
   });
@@ -82,7 +82,7 @@ describe("handleUserGetMyPets", () => {
       );
       const { reportId } = await insertReport(dbPool, callId);
       const args = getArgs(userId, dbPool);
-      const dogs = await handleUserGetMyPets(args);
+      const dogs = await getMyPets(args);
       expect(dogs[0].dogAppointments).toEqual([]);
     });
   });
