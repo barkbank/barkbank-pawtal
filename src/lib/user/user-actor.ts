@@ -26,6 +26,13 @@ export class UserActor {
     this.config = config;
   }
 
+  public getParams(): UserActorConfig & { userId: string } {
+    return {
+      ...this.config,
+      userId: this.userId,
+    };
+  }
+
   public getUserId(): string {
     return this.userId;
   }

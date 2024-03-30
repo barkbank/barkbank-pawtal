@@ -1,14 +1,9 @@
-import { Pool } from "pg";
-import { DogMapper } from "../../data/dog-mapper";
 import { dbQuery } from "../../data/db-utils";
 import { MyDog } from "../../models/user-models";
+import { UserActor } from "../user-actor";
 
-export async function getMyPets(args: {
-  userId: string;
-  dbPool: Pool;
-  dogMapper: DogMapper;
-}): Promise<MyDog[]> {
-  const { userId, dbPool, dogMapper } = args;
+export async function getMyPets(actor: UserActor): Promise<MyDog[]> {
+  const { userId, dbPool, dogMapper } = actor.getParams();
   const sql = `
   WITH
   mUserDogs as (
