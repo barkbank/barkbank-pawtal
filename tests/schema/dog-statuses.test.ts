@@ -485,7 +485,7 @@ describe("dog_statuses view", () => {
           `
           update dogs set
             dog_participation_status='PARTICIPATING',
-            dog_pause_expiry_time=(CURRENT_TIMESTAMP + INTERVAL '12 days')
+            dog_pause_expiry_time=NULL
           where dog_id = $1
           `,
           [dogId],
@@ -578,7 +578,7 @@ describe("dog_statuses view", () => {
           `
           update dogs set
             dog_participation_status='OPTED_OUT',
-            dog_pause_expiry_time=(CURRENT_TIMESTAMP + INTERVAL '3 days')
+            dog_pause_expiry_time=NULL
           where dog_id = $1
           `,
           [dogId],

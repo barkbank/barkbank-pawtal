@@ -56,6 +56,10 @@ CREATE TABLE dogs (
   dog_participation_status t_participation_status NOT NULL DEFAULT 'PARTICIPATING',
   dog_pause_expiry_time TIMESTAMP WITH TIME ZONE DEFAULT NULL,
   CONSTRAINT dog_weight_kg_is_null_or_positive CHECK (dog_weight_kg IS NULL OR dog_weight_kg > 0),
+  CONSTRAINT dog_participation_check CHECK (
+    (dog_participation_status <> 'PAUSED' AND dog_pause_expiry_time IS NULL)
+    OR (dog_participation_status = 'PAUSED' AND dog_pause_expiry_time IS NOT NULL)
+  ),
   CONSTRAINT dogs_fk_users FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE SET NULL,
   CONSTRAINT dogs_pk PRIMARY KEY (dog_id)
 );
