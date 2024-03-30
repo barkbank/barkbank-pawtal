@@ -10,6 +10,7 @@ import Image from "next/image";
 import { IMG_PATH } from "@/lib/image-path";
 import { DogGender, MEDICAL_STATUS, PROFILE_STATUS } from "@/lib/data/db-enums";
 import {
+  BarkStatusAwaitingReport,
   BarkStatusEligible,
   BarkStatusIneligible,
   BarkStatusProfileIncomplete,
@@ -18,57 +19,106 @@ import {
 import clsx from "clsx";
 import { Button } from "@/components/ui/button";
 
+function StatusMessage(props: {
+  children: React.ReactNode;
+  variant?: "red-italic";
+}) {
+  const { children, variant } = props;
+  return (
+    <div
+      className={clsx("mt-2 text-sm leading-5", {
+        "italic text-[#DC362E]": variant === "red-italic",
+      })}
+    >
+      {children}
+    </div>
+  );
+}
+
 function StatusBlock(props: { dog: MyDog }) {
   const { dog } = props;
-  const typographyClasses = "leading-5 text-sm mt-2";
-  if (dog.dogMedicalStatus === MEDICAL_STATUS.PERMANENTLY_INELIGIBLE) {
+  const { dogName, dogProfileStatus, dogMedicalStatus, dogAppointments } = dog;
+  if (dogAppointments.length === 1) {
+    const { vetName } = dogAppointments[0];
     return (
-      <div className="mt-2">
-        <BarkStatusIneligible />
-        <div className={clsx(typographyClasses)}>
-          {dog.dogName} does not meet the necessary criteria for blood donation.
-          Thank you for your interest!
-        </div>
+      <div>
+        <BarkStatusAwaitingReport />
+        <StatusMessage>
+          A veterinary appointment for {dogName} with {vetName} is on record.
+        </StatusMessage>
       </div>
     );
   }
-  if (dog.dogProfileStatus === PROFILE_STATUS.INCOMPLETE) {
+  if (dogAppointments.length > 1) {
+    return (
+      <div>
+        <BarkStatusAwaitingReport />
+        <StatusMessage>
+          <p>{dogName} has appointments with the following vets:</p>
+          <ul>
+            {dogAppointments.map((appointment) => (
+              <li key={appointment.vetId} className="list-inside list-disc">
+                {appointment.vetName}
+              </li>
+            ))}
+          </ul>
+        </StatusMessage>
+      </div>
+    );
+  }
+  if (dogMedicalStatus === MEDICAL_STATUS.PERMANENTLY_INELIGIBLE) {
+    return (
+      <div>
+        <BarkStatusIneligible />
+        <StatusMessage>
+          {dogName} does not meet the necessary criteria for blood donation.
+          Thank you for your interest!
+        </StatusMessage>
+      </div>
+    );
+  }
+  if (dogProfileStatus === PROFILE_STATUS.INCOMPLETE) {
     return (
       <div>
         <BarkStatusProfileIncomplete />
-        <div className={clsx(typographyClasses, "italic text-[#DC362E]")}>
+        <StatusMessage variant="red-italic">
           Please complete your dog&apos;s profile to enable donation eligibility
           assessment.
-        </div>
+        </StatusMessage>
       </div>
     );
   }
-  if (dog.dogMedicalStatus === MEDICAL_STATUS.TEMPORARILY_INELIGIBLE) {
+  if (dogMedicalStatus === MEDICAL_STATUS.TEMPORARILY_INELIGIBLE) {
     return (
       <div>
         <BarkStatusTemporarilyIneligible />
-        <div className={clsx(typographyClasses)}>
-          {dog.dogName} does not meet the necessary criteria for blood donation.
-        </div>
+        <StatusMessage>
+          {dogName} does not meet the necessary criteria for blood donation.
+        </StatusMessage>
       </div>
     );
   }
-  if (dog.dogMedicalStatus === MEDICAL_STATUS.ELIGIBLE) {
+  if (dogMedicalStatus === MEDICAL_STATUS.ELIGIBLE) {
     return (
       <div>
         <BarkStatusEligible />
-        <div className={clsx(typographyClasses)}>
-          {dog.dogName} is eligible for blood donation.
-        </div>
+        <StatusMessage>
+          {dogName} is eligible for blood donation. Your preferred vet will
+          reachout to make an appointment.
+        </StatusMessage>
       </div>
     );
   }
+  // Logically it should not be possible to get to this part. However, if it
+  // does, we will mention that the status is eligible, but we will not mention
+  // vet appointments.
+  console.log(
+    `unexpected dog status. profile::${dogProfileStatus} medical::${dogMedicalStatus}`,
+  );
   return (
     <div>
-      <div className={clsx(typographyClasses)}>
-        Profile Status is {dog.dogProfileStatus} and Medical Status is{" "}
-        {dog.dogMedicalStatus}.
-      </div>
+      <BarkStatusEligible />
+      <StatusMessage>{dogName} is eligible for blood donation.</StatusMessage>
     </div>
   );
 }
@@ -105,7 +155,7 @@ function DogCard(props: { dog: MyDog; cardIdx: number; isLastCard: boolean }) {
           </div>
 
           {/* Details and Buttons below */}
-          <div className="flex flex-row gap-5">
+          <div className="mt-2 flex flex-row gap-5">
             <div className="w-96">
               <StatusBlock dog={dog} />
             </div>

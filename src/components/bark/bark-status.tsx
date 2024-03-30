@@ -63,12 +63,30 @@ export function BarkStatusIneligible() {
   );
 }
 
+// TODO: Is BarkStatusEligibilityAssessmentUnderway used?
+//
+// Context: Now that eligibility is assessed at query time there is no scenario
+// where this occurs. That said, since it is part of the design system, we'll
+// leave it in here as part of the available bark-components until it is clearer
+// what to do with this.
+//
 export function BarkStatusEligibilityAssessmentUnderway() {
   return (
     <GenericStatus
-      imgSrc={IMG_PATH.CIRCLE_GREY_CROSS}
+      imgSrc={IMG_PATH.CIRCLE_YELLOW_CHECKLIST}
       imgAlt="Icon indicating on-going eligibility assessmenet"
       statusLabel="Eligibility Assessment Underway"
+      statusColor="text-[#FFBE5C]"
+    />
+  );
+}
+
+export function BarkStatusAwaitingReport() {
+  return (
+    <GenericStatus
+      imgSrc={IMG_PATH.CIRCLE_YELLOW_CHECKLIST}
+      imgAlt="Icon indicating a report is being awaited upon"
+      statusLabel="Awaiting Report"
       statusColor="text-[#FFBE5C]"
     />
   );
