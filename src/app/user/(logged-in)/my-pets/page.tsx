@@ -28,7 +28,10 @@ import {
 } from "@/components/bark/bark-status";
 import clsx from "clsx";
 import { Button } from "@/components/ui/button";
-import { StatusSet, mapStatusSetToHighlightedStatus } from "@/lib/data/status-mapper";
+import {
+  StatusSet,
+  mapStatusSetToHighlightedStatus,
+} from "@/lib/data/status-mapper";
 
 function toStatusSet(dog: MyDog): StatusSet {
   const statusSet: StatusSet = {
