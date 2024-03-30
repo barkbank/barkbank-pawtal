@@ -147,6 +147,23 @@ function StatusBlock(props: { dog: MyDog }) {
   );
 }
 
+function ActionBlock(props: { dog: MyDog }) {
+  const { dogProfileStatus } = props.dog;
+  if (dogProfileStatus === PROFILE_STATUS.INCOMPLETE) {
+    return (
+      <div className="flex flex-row gap-3">
+        <Button variant="brand">Complete Profile</Button>
+      </div>
+    );
+  }
+  return (
+    <div className="flex flex-row gap-3">
+      <Button variant="brandInverse">Edit</Button>
+      <Button variant="brandInverse">View</Button>
+    </div>
+  );
+}
+
 function DogCard(props: { dog: MyDog; cardIdx: number; isLastCard: boolean }) {
   const { dog, cardIdx, isLastCard } = props;
   const imgSrc =
@@ -184,17 +201,7 @@ function DogCard(props: { dog: MyDog; cardIdx: number; isLastCard: boolean }) {
               <StatusBlock dog={dog} />
             </div>
             <div>
-              {dog.dogProfileStatus === PROFILE_STATUS.COMPLETE && (
-                <div className="flex flex-row gap-3">
-                  <Button variant="brandInverse">Edit</Button>
-                  <Button variant="brandInverse">View</Button>
-                </div>
-              )}
-              {dog.dogProfileStatus === PROFILE_STATUS.INCOMPLETE && (
-                <div className="flex flex-row gap-3">
-                  <Button variant="brand">Complete Profile</Button>
-                </div>
-              )}
+              <ActionBlock dog={dog} />
             </div>
           </div>
         </div>
