@@ -1,5 +1,5 @@
 import { dbQuery } from "../../data/db-utils";
-import { MyDog } from "../../models/user-models";
+import { MyDog } from "../user-models";
 import { UserActor } from "../user-actor";
 
 export async function getMyPets(actor: UserActor): Promise<MyDog[]> {

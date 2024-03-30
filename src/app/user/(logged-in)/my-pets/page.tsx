@@ -4,7 +4,7 @@ import { getAuthenticatedUserActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
 import { getMyPets } from "@/lib/user/actions/get-my-pets";
-import { MyDog } from "@/lib/models/user-models";
+import { MyDog } from "@/lib/user/user-models";
 import Image from "next/image";
 import { IMG_PATH } from "@/lib/image-path";
 import {
