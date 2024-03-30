@@ -1,8 +1,8 @@
 import { Pool } from "pg";
 import { withDb } from "../_db_helpers";
-import { RegistrationRequest } from "@/lib/handlers/registration-handler";
-import { RegistrationHandlerConfig } from "@/lib/handlers/registration-handler";
-import { RegistrationHandler } from "@/lib/handlers/registration-handler";
+import { RegistrationRequest } from "@/lib/services/registration-handler";
+import { RegistrationHandlerConfig } from "@/lib/services/registration-handler";
+import { RegistrationHandler } from "@/lib/services/registration-handler";
 import {
   DogAntigenPresence,
   DogGender,

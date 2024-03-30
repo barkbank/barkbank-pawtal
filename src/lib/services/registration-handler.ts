@@ -50,6 +50,8 @@ export type RegistrationResponse =
   | "STATUS_500_INTERNAL_SERVER_ERROR"
   | "STATUS_503_DB_CONTENTION";
 
+// WIP: rename to RegistrationService and move into lib/services/registration
+// WIP: delete the lib/handlers directory
 export class RegistrationHandler {
   private config: RegistrationHandlerConfig;
   constructor(config: RegistrationHandlerConfig) {
