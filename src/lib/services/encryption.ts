@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import { Err, Ok, Result } from "../result";
+import { Err, Ok, Result } from "../utilities/result";
 
 export interface EncryptionService {
   encrypt(data: string): Promise<Result<{ encryptedData: string }, string>>;

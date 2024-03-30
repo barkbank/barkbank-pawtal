@@ -1,5 +1,5 @@
 import crypto from "crypto";
-import { Ok, Result } from "../result";
+import { Ok, Result } from "../utilities/result";
 
 export interface HashService {
   digest(data: string): Promise<Result<{ hashHex: string }, string>>;

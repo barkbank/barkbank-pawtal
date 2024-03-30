@@ -1,5 +1,5 @@
 import nodemailer from "nodemailer";
-import { Err, Ok, Result } from "../result";
+import { Err, Ok, Result } from "../utilities/result";
 
 export type EmailContact = {
   email: string;
