@@ -52,12 +52,34 @@ export function BarkStatusTemporarilyIneligible() {
   );
 }
 
+export function BarkStatusParticipationPaused() {
+  return (
+    <GenericStatus
+      imgSrc={IMG_PATH.CIRCLE_BLUE_PAUSE}
+      imgAlt="Icon indicating paused participation status"
+      statusLabel="Paused"
+      statusColor="text-[#3798F0]"
+    />
+  );
+}
+
 export function BarkStatusIneligible() {
   return (
     <GenericStatus
       imgSrc={IMG_PATH.CIRCLE_GREY_CROSS}
       imgAlt="Icon indicating ineligible"
       statusLabel="Ineligible"
+      statusColor="text-[#777679]"
+    />
+  );
+}
+
+export function BarkStatusParticipationOptedOut() {
+  return (
+    <GenericStatus
+      imgSrc={IMG_PATH.CIRCLE_GREY_CROSS}
+      imgAlt="Icon indicating opt-out participation status"
+      statusLabel="Opted-Out"
       statusColor="text-[#777679]"
     />
   );

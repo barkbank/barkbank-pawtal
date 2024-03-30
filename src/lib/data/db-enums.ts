@@ -62,7 +62,7 @@ export const PARTICIPATION_STATUS = {
   PARTICIPATING: "PARTICIPATING",
 } as const;
 
-export type ParticipatingStatus = ObjectValues<typeof PARTICIPATION_STATUS>;
+export type ParticipationStatus = ObjectValues<typeof PARTICIPATION_STATUS>;
 
 export const SCHEDULING_STATUS = {
   PENDING_APPOINTMENT: "PENDING_APPOINTMENT",

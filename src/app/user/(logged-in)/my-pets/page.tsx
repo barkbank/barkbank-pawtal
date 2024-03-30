@@ -11,19 +11,36 @@ import { IMG_PATH } from "@/lib/image-path";
 import {
   DogGender,
   MEDICAL_STATUS,
+  PARTICIPATION_STATUS,
   PROFILE_STATUS,
+  SCHEDULING_STATUS,
   SERVICE_STATUS,
 } from "@/lib/data/db-enums";
 import {
   BarkStatusAwaitingReport,
   BarkStatusEligible,
   BarkStatusIneligible,
+  BarkStatusParticipationOptedOut,
+  BarkStatusParticipationPaused,
   BarkStatusProfileIncomplete,
   BarkStatusServiceUnavailable,
   BarkStatusTemporarilyIneligible,
 } from "@/components/bark/bark-status";
 import clsx from "clsx";
 import { Button } from "@/components/ui/button";
+import { StatusSet, mapStatusSetToHighlightedStatus } from "@/lib/data/status-mapper";
+
+function toStatusSet(dog: MyDog): StatusSet {
+  const statusSet: StatusSet = {
+    serviceStatus: dog.dogServiceStatus,
+    profileStatus: dog.dogProfileStatus,
+    medicalStatus: dog.dogMedicalStatus,
+    numPendingReports: dog.dogAppointments.length,
+    // TODO: once we have pause and opt-out we should update this.
+    participationStatus: PARTICIPATION_STATUS.PARTICIPATING,
+  };
+  return statusSet;
+}
 
 function StatusMessage(props: {
   children: React.ReactNode;
@@ -43,15 +60,11 @@ function StatusMessage(props: {
 
 function StatusBlock(props: { dog: MyDog }) {
   const { dog } = props;
-  const {
-    dogName,
-    dogServiceStatus,
-    dogProfileStatus,
-    dogMedicalStatus,
-    dogAppointments,
-  } = dog;
+  const statusSet = toStatusSet(dog);
+  const highlightedStatus = mapStatusSetToHighlightedStatus(statusSet);
+  const { dogName, dogAppointments } = dog;
 
-  if (dogServiceStatus === SERVICE_STATUS.UNAVAILABLE) {
+  if (highlightedStatus === SERVICE_STATUS.UNAVAILABLE) {
     return (
       <div>
         <BarkStatusServiceUnavailable />
@@ -62,35 +75,57 @@ function StatusBlock(props: { dog: MyDog }) {
       </div>
     );
   }
-  if (dogAppointments.length === 1) {
-    const { vetName } = dogAppointments[0];
+  if (highlightedStatus === SCHEDULING_STATUS.PENDING_REPORT) {
+    if (dogAppointments.length === 1) {
+      const { vetName } = dogAppointments[0];
+      return (
+        <div>
+          <BarkStatusAwaitingReport />
+          <StatusMessage>
+            A veterinary appointment for {dogName} with {vetName} is on record.
+          </StatusMessage>
+        </div>
+      );
+    } else {
+      return (
+        <div>
+          <BarkStatusAwaitingReport />
+          <StatusMessage>
+            <p>{dogName} has appointments with the following vets:</p>
+            <ul>
+              {dogAppointments.map((appointment) => (
+                <li key={appointment.vetId} className="list-inside list-disc">
+                  {appointment.vetName}
+                </li>
+              ))}
+            </ul>
+          </StatusMessage>
+        </div>
+      );
+    }
+  }
+  if (highlightedStatus === PARTICIPATION_STATUS.OPTED_OUT) {
     return (
       <div>
-        <BarkStatusAwaitingReport />
+        <BarkStatusParticipationOptedOut />
         <StatusMessage>
-          A veterinary appointment for {dogName} with {vetName} is on record.
+          {dogName} is not participating in the Bark Bank programme.
         </StatusMessage>
       </div>
     );
   }
-  if (dogAppointments.length > 1) {
+  if (highlightedStatus === PARTICIPATION_STATUS.PAUSED) {
     return (
       <div>
-        <BarkStatusAwaitingReport />
+        <BarkStatusParticipationPaused />
         <StatusMessage>
-          <p>{dogName} has appointments with the following vets:</p>
-          <ul>
-            {dogAppointments.map((appointment) => (
-              <li key={appointment.vetId} className="list-inside list-disc">
-                {appointment.vetName}
-              </li>
-            ))}
-          </ul>
+          Your dog&apos;s participation in the Bark Bank programme is currently
+          paused.
         </StatusMessage>
       </div>
     );
   }
-  if (dogMedicalStatus === MEDICAL_STATUS.PERMANENTLY_INELIGIBLE) {
+  if (highlightedStatus === MEDICAL_STATUS.PERMANENTLY_INELIGIBLE) {
     return (
       <div>
         <BarkStatusIneligible />
@@ -101,7 +136,7 @@ function StatusBlock(props: { dog: MyDog }) {
       </div>
     );
   }
-  if (dogProfileStatus === PROFILE_STATUS.INCOMPLETE) {
+  if (highlightedStatus === PROFILE_STATUS.INCOMPLETE) {
     return (
       <div>
         <BarkStatusProfileIncomplete />
@@ -112,7 +147,7 @@ function StatusBlock(props: { dog: MyDog }) {
       </div>
     );
   }
-  if (dogMedicalStatus === MEDICAL_STATUS.TEMPORARILY_INELIGIBLE) {
+  if (highlightedStatus === MEDICAL_STATUS.TEMPORARILY_INELIGIBLE) {
     return (
       <div>
         <BarkStatusTemporarilyIneligible />
@@ -122,7 +157,7 @@ function StatusBlock(props: { dog: MyDog }) {
       </div>
     );
   }
-  if (dogMedicalStatus === MEDICAL_STATUS.ELIGIBLE) {
+  if (highlightedStatus === MEDICAL_STATUS.ELIGIBLE) {
     return (
       <div>
         <BarkStatusEligible />
@@ -137,7 +172,7 @@ function StatusBlock(props: { dog: MyDog }) {
   // does, we will mention that the status is eligible, but we will not mention
   // vet appointments.
   console.log(
-    `unexpected dog status. profile::${dogProfileStatus} medical::${dogMedicalStatus}`,
+    `unexpected dog status. StatusSet = ${JSON.stringify(statusSet)} HighlightedStatus = ${highlightedStatus}`,
   );
   return (
     <div>
@@ -148,8 +183,9 @@ function StatusBlock(props: { dog: MyDog }) {
 }
 
 function ActionBlock(props: { dog: MyDog }) {
-  const { dogProfileStatus } = props.dog;
-  if (dogProfileStatus === PROFILE_STATUS.INCOMPLETE) {
+  const { dog } = props;
+  const highlightedStatus = mapStatusSetToHighlightedStatus(toStatusSet(dog));
+  if (highlightedStatus === PROFILE_STATUS.INCOMPLETE) {
     return (
       <div className="flex flex-row gap-3">
         <Button variant="brand">Complete Profile</Button>
