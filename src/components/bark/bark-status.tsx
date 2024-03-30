@@ -63,6 +63,17 @@ export function BarkStatusIneligible() {
   );
 }
 
+export function BarkStatusServiceUnavailable() {
+  return (
+    <GenericStatus
+      imgSrc={IMG_PATH.CIRCLE_GREY_CROSS}
+      imgAlt="Icon indicating service is unavailable in the region user resides"
+      statusLabel="Service Unavailable"
+      statusColor="text-[#777679]"
+    />
+  );
+}
+
 // TODO: Is BarkStatusEligibilityAssessmentUnderway used?
 //
 // Context: Now that eligibility is assessed at query time there is no scenario

@@ -39,6 +39,7 @@ export async function handleUserGetMyPets(args: {
     tDog.dog_id as "dogId",
     tDog.dog_encrypted_oii as "dogEncryptedOii",
     tDog.dog_gender as "dogGender",
+    tStatus.service_status as "dogServiceStatus",
     tStatus.profile_status as "dogProfileStatus",
     tStatus.medical_status as "dogMedicalStatus",
     COALESCE(tAppointment.appointments, json_build_array()) as "dogAppointments"
@@ -51,8 +52,9 @@ export async function handleUserGetMyPets(args: {
     res.rows.map(async (row) => {
       const {
         dogId,
-        dogProfileStatus,
         dogGender,
+        dogServiceStatus,
+        dogProfileStatus,
         dogMedicalStatus,
         dogAppointments,
       } = row;
@@ -62,6 +64,7 @@ export async function handleUserGetMyPets(args: {
         dogId,
         dogName,
         dogGender,
+        dogServiceStatus,
         dogProfileStatus,
         dogMedicalStatus,
         dogAppointments,

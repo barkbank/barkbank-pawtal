@@ -8,12 +8,18 @@ import APP from "@/lib/app";
 import { MyDog } from "@/lib/models/user-models";
 import Image from "next/image";
 import { IMG_PATH } from "@/lib/image-path";
-import { DogGender, MEDICAL_STATUS, PROFILE_STATUS } from "@/lib/data/db-enums";
+import {
+  DogGender,
+  MEDICAL_STATUS,
+  PROFILE_STATUS,
+  SERVICE_STATUS,
+} from "@/lib/data/db-enums";
 import {
   BarkStatusAwaitingReport,
   BarkStatusEligible,
   BarkStatusIneligible,
   BarkStatusProfileIncomplete,
+  BarkStatusServiceUnavailable,
   BarkStatusTemporarilyIneligible,
 } from "@/components/bark/bark-status";
 import clsx from "clsx";
@@ -37,7 +43,25 @@ function StatusMessage(props: {
 
 function StatusBlock(props: { dog: MyDog }) {
   const { dog } = props;
-  const { dogName, dogProfileStatus, dogMedicalStatus, dogAppointments } = dog;
+  const {
+    dogName,
+    dogServiceStatus,
+    dogProfileStatus,
+    dogMedicalStatus,
+    dogAppointments,
+  } = dog;
+
+  if (dogServiceStatus === SERVICE_STATUS.UNAVAILABLE) {
+    return (
+      <div>
+        <BarkStatusServiceUnavailable />
+        <StatusMessage>
+          Sorry, Bark Bank services are not available in your region. Thank you
+          for your support!
+        </StatusMessage>
+      </div>
+    );
+  }
   if (dogAppointments.length === 1) {
     const { vetName } = dogAppointments[0];
     return (
