@@ -18,7 +18,7 @@ import { UserMapper } from "@/lib/data/user-mapper";
 import { HashService } from "@/lib/services/hash";
 import { OtpService } from "@/lib/services/otp";
 
-export type RegistrationHandlerConfig = {
+export type RegistrationServiceConfig = {
   dbPool: Pool;
   emailHashService: HashService;
   userMapper: UserMapper;
@@ -50,9 +50,9 @@ export type RegistrationResponse =
   | "STATUS_500_INTERNAL_SERVER_ERROR"
   | "STATUS_503_DB_CONTENTION";
 
-export class RegistrationHandler {
-  private config: RegistrationHandlerConfig;
-  constructor(config: RegistrationHandlerConfig) {
+export class RegistrationService {
+  private config: RegistrationServiceConfig;
+  constructor(config: RegistrationServiceConfig) {
     this.config = config;
   }
 

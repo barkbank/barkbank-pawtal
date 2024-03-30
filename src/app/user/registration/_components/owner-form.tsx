@@ -11,7 +11,7 @@ import {
   BarkFormSingleCheckbox,
   BarkFormSubmitButton,
 } from "@/components/bark/bark-form";
-import { sendLoginOtp } from "@/lib/actions/send-login-otp";
+import { sendLoginOtp } from "@/lib/server-actions/send-login-otp";
 import { isValidEmail } from "@/lib/utilities/bark-utils";
 import { USER_RESIDENCY } from "@/lib/data/db-enums";
 import { zodResolver } from "@hookform/resolvers/zod";

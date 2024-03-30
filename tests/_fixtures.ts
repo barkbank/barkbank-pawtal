@@ -47,7 +47,7 @@ import { BARK_UTC } from "@/lib/utilities/bark-time";
 import { DbContext, dbQuery } from "@/lib/data/db-utils";
 import { dbInsertDog } from "@/lib/data/db-dogs";
 import { OtpService } from "@/lib/services/otp";
-import { UserActorConfig } from "@/lib/user/user-actor";
+import { UserActor, UserActorConfig } from "@/lib/user/user-actor";
 import { UserActorFactoryConfig } from "@/lib/user/user-actor-factory";
 import {
   CallOutcome,
@@ -108,6 +108,10 @@ export function getUserMapper(): UserMapper {
     emailHashService: getEmailHashService(),
     piiEncryptionService: getPiiEncryptionService(),
   });
+}
+
+export function getUserActor(dbPool: Pool, userId: string): UserActor {
+  return new UserActor(userId, getUserActorConfig(dbPool));
 }
 
 export function getUserActorConfig(dbPool: Pool): UserActorConfig {

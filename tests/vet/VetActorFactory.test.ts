@@ -1,6 +1,6 @@
 import { VetActorFactory } from "@/lib/vet/vet-actor-factory";
-import { withDb } from "./_db_helpers";
-import { insertVet, getVetActorFactoryConfig, getVetSpec } from "./_fixtures";
+import { withDb } from "../_db_helpers";
+import { insertVet, getVetActorFactoryConfig, getVetSpec } from "../_fixtures";
 
 describe("VetActorFactory", () => {
   describe("getVetActor", () => {

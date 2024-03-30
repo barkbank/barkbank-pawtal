@@ -4,11 +4,11 @@ import APP from "@/lib/app";
 import {
   RegistrationRequest,
   RegistrationResponse,
-} from "@/lib/handlers/registration-handler";
+} from "@/lib/services/registration";
 
 export async function registerNewUser(
   request: RegistrationRequest,
 ): Promise<RegistrationResponse> {
-  const handler = await APP.getRegistrationHandler();
-  return handler.handle(request);
+  const service = await APP.getRegistrationService();
+  return service.handle(request);
 }

@@ -1,11 +1,11 @@
-import { withDb } from "./_db_helpers";
+import { withDb } from "../_db_helpers";
 import { UserActor } from "@/lib/user/user-actor";
 import {
   getUserActorConfig,
   insertDog,
   insertUser,
   userPii,
-} from "./_fixtures";
+} from "../_fixtures";
 import { Pool } from "pg";
 import { DogGen, UserRecord } from "@/lib/data/db-models";
 

@@ -1,4 +1,4 @@
-import { withDb } from "./_db_helpers";
+import { withDb } from "../_db_helpers";
 import { AdminActor } from "@/lib/admin/admin-actor";
 import {
   insertAdmin,
@@ -7,7 +7,7 @@ import {
   insertUser,
   insertDog,
   getDogSpec,
-} from "./_fixtures";
+} from "../_fixtures";
 import { dbQuery } from "@/lib/data/db-utils";
 
 describe("AdminActor", () => {

@@ -1,38 +1,23 @@
-import { Pool } from "pg";
 import { withDb } from "../_db_helpers";
 import {
-  getDogMapper,
   getDogOii,
+  getUserActor,
   insertCall,
   insertDog,
   insertReport,
   insertUser,
   insertVet,
 } from "../_fixtures";
-import { handleUserGetMyPets } from "@/lib/handlers/handle-user-get-my-pets";
-import { DogMapper } from "@/lib/data/dog-mapper";
+import { getMyPets } from "@/lib/user/actions/get-my-pets";
 import { CALL_OUTCOME } from "@/lib/data/db-enums";
 import { guaranteed } from "@/lib/utilities/bark-utils";
 
-describe("handleUserGetMyPets", () => {
-  const dogMapper = getDogMapper();
-
-  function getArgs(
-    userId: string,
-    dbPool: Pool,
-  ): {
-    userId: string;
-    dbPool: Pool;
-    dogMapper: DogMapper;
-  } {
-    return { userId, dbPool, dogMapper };
-  }
-
+describe("getMyPets", () => {
   it("should return empty list when user has no dogs", async () => {
     await withDb(async (dbPool) => {
       const { userId } = await insertUser(34, dbPool);
-      const args = getArgs(userId, dbPool);
-      const dogs = await handleUserGetMyPets(args);
+      const actor = getUserActor(dbPool, userId);
+      const dogs = await getMyPets(actor);
       expect(dogs).toEqual([]);
     });
   });
@@ -41,8 +26,8 @@ describe("handleUserGetMyPets", () => {
       const { userId } = await insertUser(1, dbPool);
       await insertDog(2, userId, dbPool);
       await insertDog(3, userId, dbPool);
-      const args = getArgs(userId, dbPool);
-      const dogs = await handleUserGetMyPets(args);
+      const actor = getUserActor(dbPool, userId);
+      const dogs = await getMyPets(actor);
       const receivedName = dogs.map((dog) => dog.dogName);
       const expectedNames = await Promise.all(
         [2, 3].map(async (idx) => {
@@ -64,8 +49,8 @@ describe("handleUserGetMyPets", () => {
         vetId,
         CALL_OUTCOME.APPOINTMENT,
       );
-      const args = getArgs(userId, dbPool);
-      const dogs = await handleUserGetMyPets(args);
+      const actor = getUserActor(dbPool, userId);
+      const dogs = await getMyPets(actor);
       expect(guaranteed(dogs[0].dogAppointments[0]).vetName).toEqual(vetName);
     });
   });
@@ -81,8 +66,8 @@ describe("handleUserGetMyPets", () => {
         CALL_OUTCOME.APPOINTMENT,
       );
       const { reportId } = await insertReport(dbPool, callId);
-      const args = getArgs(userId, dbPool);
-      const dogs = await handleUserGetMyPets(args);
+      const actor = getUserActor(dbPool, userId);
+      const dogs = await getMyPets(actor);
       expect(dogs[0].dogAppointments).toEqual([]);
     });
   });

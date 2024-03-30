@@ -1,11 +1,11 @@
 import { UserActorFactory } from "@/lib/user/user-actor-factory";
-import { withDb } from "./_db_helpers";
+import { withDb } from "../_db_helpers";
 import {
   userPii,
   insertUser,
   getUserActorFactoryConfig,
   getUserActorConfig,
-} from "./_fixtures";
+} from "../_fixtures";
 
 describe("UserActorFactory", () => {
   describe("getUserActor", () => {

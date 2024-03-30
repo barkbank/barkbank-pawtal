@@ -1,8 +1,8 @@
 import { Pool } from "pg";
 import { withDb } from "../_db_helpers";
-import { RegistrationRequest } from "@/lib/handlers/registration-handler";
-import { RegistrationHandlerConfig } from "@/lib/handlers/registration-handler";
-import { RegistrationHandler } from "@/lib/handlers/registration-handler";
+import { RegistrationRequest } from "@/lib/services/registration";
+import { RegistrationServiceConfig } from "@/lib/services/registration";
+import { RegistrationService } from "@/lib/services/registration";
 import {
   DogAntigenPresence,
   DogGender,
@@ -36,7 +36,7 @@ describe("RegistrationHandler", () => {
 
       // WHEN
       const config = getConfig(dbPool);
-      const handler = new RegistrationHandler(config);
+      const handler = new RegistrationService(config);
       const response = await handler.handle(request);
 
       // THEN
@@ -88,7 +88,7 @@ describe("RegistrationHandler", () => {
 
       // WHEN
       const config = getConfig(dbPool);
-      const handler = new RegistrationHandler(config);
+      const handler = new RegistrationService(config);
       const response = await handler.handle(request);
 
       // THEN
@@ -121,7 +121,7 @@ describe("RegistrationHandler", () => {
 
       // WHEN
       const config = getConfig(dbPool);
-      const handler = new RegistrationHandler(config);
+      const handler = new RegistrationService(config);
       const response = await handler.handle(request);
 
       // THEN
@@ -138,7 +138,7 @@ describe("RegistrationHandler without vet id", () => {
 
       // WHEN
       const config = getConfig(dbPool);
-      const handler = new RegistrationHandler(config);
+      const handler = new RegistrationService(config);
       const response = await handler.handle(request);
 
       // THEN
@@ -181,7 +181,7 @@ describe("RegistrationHandler without vet id", () => {
   });
 });
 
-function getConfig(dbPool: Pool): RegistrationHandlerConfig {
+function getConfig(dbPool: Pool): RegistrationServiceConfig {
   return {
     dbPool,
     otpService: getOtpService(),

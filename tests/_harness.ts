@@ -1,4 +1,4 @@
-import { Ok, Result } from "@/lib/result";
+import { Ok, Result } from "@/lib/utilities/result";
 import { EncryptionService } from "@/lib/services/encryption";
 import { HashService } from "@/lib/services/hash";
 import { OtpService } from "@/lib/services/otp";

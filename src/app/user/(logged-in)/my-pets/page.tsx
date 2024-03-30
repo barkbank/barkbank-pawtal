@@ -3,9 +3,8 @@
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
-import { handleUserGetMyPets } from "@/lib/handlers/handle-user-get-my-pets";
-import APP from "@/lib/app";
-import { MyDog } from "@/lib/models/user-models";
+import { getMyPets } from "@/lib/user/actions/get-my-pets";
+import { MyDog } from "@/lib/user/user-models";
 import Image from "next/image";
 import { IMG_PATH } from "@/lib/image-path";
 import {
@@ -28,7 +27,10 @@ import {
 } from "@/components/bark/bark-status";
 import clsx from "clsx";
 import { Button } from "@/components/ui/button";
-import { StatusSet, mapStatusSetToHighlightedStatus } from "@/lib/data/status-mapper";
+import {
+  StatusSet,
+  mapStatusSetToHighlightedStatus,
+} from "@/lib/data/status-mapper";
 
 function toStatusSet(dog: MyDog): StatusSet {
   const statusSet: StatusSet = {
@@ -251,11 +253,7 @@ export default async function Page() {
   if (!actor) {
     redirect(RoutePath.USER_LOGIN_PAGE);
   }
-  const dogs = await handleUserGetMyPets({
-    userId: actor.getUserId(),
-    dbPool: await APP.getDbPool(),
-    dogMapper: await APP.getDogMapper(),
-  });
+  const dogs = await getMyPets(actor);
   return (
     <>
       <div>

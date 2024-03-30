@@ -25,7 +25,7 @@ import { isValidEmail } from "./utilities/bark-utils";
 import { UserMapper } from "./data/user-mapper";
 import { AdminMapper } from "./data/admin-mapper";
 import { DogMapper } from "./data/dog-mapper";
-import { RegistrationHandler } from "./handlers/registration-handler";
+import { RegistrationService } from "./services/registration";
 import { UserActorConfig } from "./user/user-actor";
 
 export class AppFactory {
@@ -45,7 +45,7 @@ export class AppFactory {
   private promisedUserActorFactory: Promise<UserActorFactory> | null = null;
   private promisedUserMapper: Promise<UserMapper> | null = null;
   private promisedDogMapper: Promise<DogMapper> | null = null;
-  private promisedRegistrationHandler: Promise<RegistrationHandler> | null =
+  private promisedRegistrationService: Promise<RegistrationService> | null =
     null;
 
   constructor(envs: NodeJS.Dict<string>) {
@@ -301,9 +301,9 @@ export class AppFactory {
     return this.promisedDogMapper;
   }
 
-  public getRegistrationHandler(): Promise<RegistrationHandler> {
-    if (this.promisedRegistrationHandler === null) {
-      this.promisedRegistrationHandler = new Promise(async (resolve) => {
+  public getRegistrationService(): Promise<RegistrationService> {
+    if (this.promisedRegistrationService === null) {
+      this.promisedRegistrationService = new Promise(async (resolve) => {
         const [dbPool, otpService, emailHashService, userMapper, dogMapper] =
           await Promise.all([
             this.getDbPool(),
@@ -312,7 +312,7 @@ export class AppFactory {
             this.getUserMapper(),
             this.getDogMapper(),
           ]);
-        const handler = new RegistrationHandler({
+        const handler = new RegistrationService({
           dbPool,
           otpService,
           emailHashService,
@@ -323,7 +323,7 @@ export class AppFactory {
         resolve(handler);
       });
     }
-    return this.promisedRegistrationHandler;
+    return this.promisedRegistrationService;
   }
 }
 
