@@ -1,5 +1,4 @@
-import crypto from 'crypto';
-
+import crypto from "crypto";
 
 class QueryTracker {
   private key: string;
@@ -30,28 +29,27 @@ class QueryTracker {
       count: this.getCount(),
       averageLatency: this.getAverageLatency(),
       totalLatency: this.getTotalLatency(),
-    }
+    };
   }
 
   private getCount(): number {
     return this.callCount;
   }
 
-  private getAverageLatency() : number | undefined {
+  private getAverageLatency(): number | undefined {
     if (this.callCount === 0) {
       return undefined;
     }
     return this.latencySum / this.callCount;
   }
 
-  private getTotalLatency() : number {
+  private getTotalLatency(): number {
     return this.latencySum;
   }
 }
 
-
 export class SlowQueryService {
-  private trackers: Record<string, QueryTracker>
+  private trackers: Record<string, QueryTracker>;
   private maxLatency: number = 0;
   private maxTotalLatency: number = 0;
 
@@ -66,7 +64,7 @@ export class SlowQueryService {
   public submit(sql: string, latency: number) {
     const tracker = this.getQueryTracker(sql);
     tracker.record(latency);
-    const {key, count, averageLatency, totalLatency} = tracker.getStats();
+    const { key, count, averageLatency, totalLatency } = tracker.getStats();
     const labels = [];
     if (latency > this.maxLatency) {
       labels.push("SLOWEST");
@@ -76,7 +74,16 @@ export class SlowQueryService {
       labels.push("MOST_IMPACT");
       this.maxTotalLatency = totalLatency;
     }
-    console.log(JSON.stringify({key, latency, count, averageLatency, totalLatency, labels}));
+    console.log(
+      JSON.stringify({
+        key,
+        latency,
+        count,
+        averageLatency,
+        totalLatency,
+        labels,
+      }),
+    );
     if (labels.length > 0) {
       console.log(`sql: ${sql}`);
     }

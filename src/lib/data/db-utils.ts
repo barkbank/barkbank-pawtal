@@ -26,7 +26,11 @@ export async function dbRelease(conn: PoolClient): Promise<void> {
 
 const _SLOW_QUERY_SINGLETON = new SlowQueryService();
 
-async function timedDbQuery(ctx: DbContext, sql: string, params: any[]): Promise<QueryResult<any>> {
+async function timedDbQuery(
+  ctx: DbContext,
+  sql: string,
+  params: any[],
+): Promise<QueryResult<any>> {
   try {
     const t0 = _SLOW_QUERY_SINGLETON.getTs();
     const res = await ctx.query(sql, params);
