@@ -1,5 +1,4 @@
 import crypto from 'crypto';
-import { guaranteed } from '../utilities/bark-utils';
 
 
 class QueryTracker {
@@ -23,12 +22,14 @@ class QueryTracker {
     sql: string;
     count: number;
     averageLatency: number | undefined;
+    totalLatency: number;
   } {
     return {
       key: this.key,
       sql: this.sql,
       count: this.getCount(),
       averageLatency: this.getAverageLatency(),
+      totalLatency: this.getTotalLatency(),
     }
   }
 
@@ -51,8 +52,6 @@ class QueryTracker {
 
 export class SlowQueryService {
   private trackers: Record<string, QueryTracker>
-  private queryCount: number = 0;
-  private totalLatency: number = 0;
   private maxLatency: number = 0;
   private maxTotalLatency: number = 0;
 
@@ -65,31 +64,22 @@ export class SlowQueryService {
   }
 
   public submit(sql: string, latency: number) {
-    this.queryCount += 1;
-    this.totalLatency += latency;
     const tracker = this.getQueryTracker(sql);
     tracker.record(latency);
-    const {key, count, averageLatency} = tracker.getStats();
+    const {key, count, averageLatency, totalLatency} = tracker.getStats();
     const labels = [];
     if (latency > this.maxLatency) {
       labels.push("SLOWEST");
       this.maxLatency = latency;
     }
-    if (tracker.getTotalLatency() > this.maxTotalLatency) {
+    if (totalLatency > this.maxTotalLatency) {
       labels.push("MOST_IMPACT");
-      this.maxTotalLatency = tracker.getTotalLatency();
+      this.maxTotalLatency = totalLatency;
     }
-    console.log(JSON.stringify({key, latency, count, averageLatency, labels}));
+    console.log(JSON.stringify({key, latency, count, averageLatency, totalLatency, labels}));
     if (labels.length > 0) {
       console.log(`sql: ${sql}`);
     }
-  }
-
-  private getAverageLatency(): number | undefined {
-    if (this.queryCount === 0) {
-      return undefined;
-    }
-    return this.totalLatency / this.queryCount;
   }
 
   private getQueryTracker(sql: string): QueryTracker {
