@@ -33,18 +33,18 @@ class QueryTracker {
     }
   }
 
-  public getCount(): number {
+  private getCount(): number {
     return this.callCount;
   }
 
-  public getAverageLatency() : number | undefined {
+  private getAverageLatency() : number | undefined {
     if (this.callCount === 0) {
       return undefined;
     }
     return this.latencySum / this.callCount;
   }
 
-  public getTotalLatency() : number {
+  private getTotalLatency() : number {
     return this.latencySum;
   }
 }
