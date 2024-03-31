@@ -1,4 +1,5 @@
 import { Pool, PoolClient, QueryResult } from "pg";
+import { SlowQueryService } from "./db-slow-query";
 
 export type DbContext = Pool | PoolClient;
 
@@ -23,11 +24,33 @@ export async function dbRelease(conn: PoolClient): Promise<void> {
   conn.release();
 }
 
+const _SLOW_QUERY_SINGLETON = new SlowQueryService();
+
+async function timedDbQuery(
+  ctx: DbContext,
+  sql: string,
+  params: any[],
+): Promise<QueryResult<any>> {
+  try {
+    const t0 = _SLOW_QUERY_SINGLETON.getTs();
+    const res = await ctx.query(sql, params);
+    const t1 = _SLOW_QUERY_SINGLETON.getTs();
+    _SLOW_QUERY_SINGLETON.submit(sql, t1 - t0);
+    return res;
+  } catch (error) {
+    console.error(`SQL: ${sql}`, error);
+    throw error;
+  }
+}
+
 export async function dbQuery(
   ctx: DbContext,
   sql: string,
   params: any[],
 ): Promise<QueryResult<any>> {
+  if (process.env.NODE_ENV === "development") {
+    return timedDbQuery(ctx, sql, params);
+  }
   try {
     return await ctx.query(sql, params);
   } catch (error) {
