@@ -1,10 +1,14 @@
 import crypto from "crypto";
 
-class QueryTracker {
+function rounded(value: number): number {
+  return Math.round(100 * value) / 100;
+}
+
+class QueryFamily {
   private key: string;
   private sql: string;
-  private latencySum: number = 0;
-  private callCount: number = 0;
+  private familyAccumulatedLatency: number = 0;
+  private familyCount: number = 0;
 
   constructor(key: string, sql: string) {
     this.key = key;
@@ -12,75 +16,75 @@ class QueryTracker {
   }
 
   public record(latency: number) {
-    this.latencySum += latency;
-    this.callCount += 1;
+    this.familyAccumulatedLatency += latency;
+    this.familyCount += 1;
   }
 
   public getStats(): {
     key: string;
-    sql: string;
-    count: number;
-    averageLatency: number | undefined;
-    totalLatency: number;
+    familyCount: number;
+    familyAverageLatency: number | undefined;
+    familyAccumulatedLatency: number;
   } {
+    const key = this.key;
+    const familyCount = this.familyCount;
+    const familyAccumulatedLatency = this.familyAccumulatedLatency;
+    const familyAverageLatency =
+      familyCount > 0
+        ? rounded(familyAccumulatedLatency / familyCount)
+        : undefined;
     return {
-      key: this.key,
-      sql: this.sql,
-      count: this.getCount(),
-      averageLatency: this.getAverageLatency(),
-      totalLatency: this.getTotalLatency(),
+      key,
+      familyCount,
+      familyAverageLatency,
+      familyAccumulatedLatency,
     };
-  }
-
-  private getCount(): number {
-    return this.callCount;
-  }
-
-  private getAverageLatency(): number | undefined {
-    if (this.callCount === 0) {
-      return undefined;
-    }
-    return this.latencySum / this.callCount;
-  }
-
-  private getTotalLatency(): number {
-    return this.latencySum;
   }
 }
 
 export class SlowQueryService {
-  private trackers: Record<string, QueryTracker>;
+  private queryFamilies: Record<string, QueryFamily>;
+  private totalAccumulatedLatency: number = 0;
   private maxLatency: number = 0;
-  private maxTotalLatency: number = 0;
+  private maxFamilyAccumulatedLatency: number = 0;
 
   constructor() {
-    this.trackers = {};
+    this.queryFamilies = {};
   }
 
   public getTs() {
     return new Date().getTime();
   }
 
-  public submit(sql: string, latency: number) {
-    const tracker = this.getQueryTracker(sql);
-    tracker.record(latency);
-    const { key, count, averageLatency, totalLatency } = tracker.getStats();
+  public submit(sql: string, currentLatency: number) {
+    const family = this.getQueryFamily(sql);
+    family.record(currentLatency);
+    this.totalAccumulatedLatency += currentLatency;
+
+    const { key, familyCount, familyAverageLatency, familyAccumulatedLatency } =
+      family.getStats();
+    const totalAccumulatedLatency = this.totalAccumulatedLatency;
     const labels = [];
-    if (latency > this.maxLatency) {
+    if (currentLatency > this.maxLatency) {
       labels.push("SLOWEST");
-      this.maxLatency = latency;
+      this.maxLatency = currentLatency;
     }
-    if (totalLatency > this.maxTotalLatency) {
+    if (familyAccumulatedLatency > this.maxFamilyAccumulatedLatency) {
       labels.push("MOST_IMPACT");
-      this.maxTotalLatency = totalLatency;
+      this.maxFamilyAccumulatedLatency = familyAccumulatedLatency;
     }
+
     console.log(
       JSON.stringify({
         key,
-        latency,
-        count,
-        averageLatency,
-        totalLatency,
+        currentLatency,
+        familyCount,
+        familyAverageLatency,
+        familyAccumulatedLatency,
+        totalAccumulatedLatency,
+        percentageOfTotal: rounded(
+          familyAccumulatedLatency / totalAccumulatedLatency,
+        ),
         labels,
       }),
     );
@@ -89,13 +93,13 @@ export class SlowQueryService {
     }
   }
 
-  private getQueryTracker(sql: string): QueryTracker {
+  private getQueryFamily(sql: string): QueryFamily {
     const key = this.digest(sql);
-    if (!(key in this.trackers)) {
-      const tracker = new QueryTracker(key, sql);
-      this.trackers[key] = tracker;
+    if (!(key in this.queryFamilies)) {
+      const family = new QueryFamily(key, sql);
+      this.queryFamilies[key] = family;
     }
-    return this.trackers[key];
+    return this.queryFamilies[key];
   }
 
   private digest(sql: string): string {
