@@ -26,6 +26,7 @@ import { BARK_UTC } from "@/lib/utilities/bark-time";
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { IMG_PATH } from "@/lib/image-path";
+import { AccountType } from "@/lib/auth-models";
 
 const FORM_SCHEMA = z.object({
   dogName: z.string(),
@@ -144,12 +145,10 @@ export default function DonorForm(props: {
       return;
     }
 
-    // Note: Provide string to accountType below. Using AccountType adds a
-    // dependency on auth.ts and its other imports.
     const result = await signIn("credentials", {
       email: req.userEmail,
       otp: req.emailOtp,
-      accountType: "USER",
+      accountType: AccountType.USER,
       redirect: false,
     });
 
