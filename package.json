@@ -27,6 +27,7 @@
     "cmdk": "^0.2.1",
     "date-fns": "^2.30.0",
     "date-fns-tz": "^2.0.1",
+    "lru-cache": "^10.2.0",
     "lucide-react": "^0.331.0",
     "next": "14.1.0",
     "next-auth": "^4.24.6",
