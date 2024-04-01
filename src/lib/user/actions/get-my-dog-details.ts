@@ -50,8 +50,8 @@ export async function getMyDogDetails(
     tDog.dog_breed as "dogBreed",
     tDog.dog_birthday as "dogBirthday",
     tDog.dog_gender as "dogGender",
-    tDog.dog_weight_kg as "dogWeightKg",
-    tDog.dog_dea1_point1 as "dogDea1Point1",
+    tLatest.latest_dog_weight_kg as "dogWeightKg",
+    tLatest.latest_dog_dea1_point1 as "dogDea1Point1",
     tDog.dog_ever_pregnant as "dogEverPregnant",
     tDog.dog_ever_received_transfusion as "dogEverReceivedTransfusion",
     COALESCE(tReport.dog_reports, json_build_array()) as "dogReports",
@@ -66,6 +66,7 @@ export async function getMyDogDetails(
   LEFT JOIN dog_statuses as tStatus on tDog.dog_id = tStatus.dog_id
   LEFT JOIN mNumPendingReports as tPending on tDog.dog_id = tPending.num_pending_reports
   LEFT JOIN mReports as tReport on tDog.dog_id = tReport.dog_id
+  LEFT JOIN latest_values as tLatest on tDog.dog_id = tLatest.dog_id
   `;
   const res = await dbQuery(dbPool, sql, [dogId, userId]);
   if (res.rows.length === 0) {

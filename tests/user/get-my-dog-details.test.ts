@@ -12,7 +12,11 @@ import {
   insertVet,
 } from "../_fixtures";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
-import { CALL_OUTCOME } from "@/lib/data/db-enums";
+import {
+  CALL_OUTCOME,
+  DogAntigenPresence,
+  POS_NEG_NIL,
+} from "@/lib/data/db-enums";
 import {
   DEFAULT_DATE_TIME_FORMAT,
   SINGAPORE_TIME_ZONE,
@@ -121,6 +125,36 @@ describe("getMyDogDetails", () => {
       expect(details?.dogReports[0].visitTime).toEqual(visitTime);
       expect(details?.dogReports[0].vetId).toEqual(vetId);
       expect(details?.dogReports[0].vetName).toEqual(getVetSpec(8).vetName);
+    });
+  });
+  it("should use the latest values available", async () => {
+    await withDb(async (dbPool) => {
+      // GIVEN
+      const { userId } = await insertUser(6, dbPool);
+      const { dogId } = await insertDog(7, userId, dbPool, {
+        dogWeightKg: 20,
+        dogDea1Point1: DogAntigenPresence.UNKNOWN,
+      });
+      const { vetId } = await insertVet(8, dbPool);
+      await dbInsertDogVetPreference(dbPool, dogId, vetId);
+      const { callId } = await insertCall(
+        dbPool,
+        dogId,
+        vetId,
+        CALL_OUTCOME.APPOINTMENT,
+      );
+      const { reportId } = await insertReport(dbPool, callId, {
+        dogWeightKg: 25,
+        dogDea1Point1: POS_NEG_NIL.POSITIVE,
+      });
+
+      // WHEN
+      const actor = getUserActor(dbPool, userId);
+      const details = await getMyDogDetails(actor, dogId);
+
+      // THEN
+      expect(details?.dogWeightKg).toEqual(25);
+      expect(details?.dogDea1Point1).toEqual(DogAntigenPresence.POSITIVE);
     });
   });
 });
