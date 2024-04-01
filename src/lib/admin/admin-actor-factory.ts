@@ -10,6 +10,7 @@ import {
 import { NO_ADMIN_PERMISSIONS, AdminSpec } from "../data/db-models";
 import { AdminPii } from "../data/db-models";
 import { AdminMapper } from "../data/admin-mapper";
+import { LRUCache } from "lru-cache";
 
 export type AdminActorFactoryConfig = {
   dbPool: Pool;
@@ -21,9 +22,11 @@ export type AdminActorFactoryConfig = {
 
 export class AdminActorFactory {
   private config: AdminActorFactoryConfig;
+  private idCache: LRUCache<string, string>;
 
   constructor(config: AdminActorFactoryConfig) {
     this.config = config;
+    this.idCache = new LRUCache({ max: 10 });
   }
 
   public async getAdminActor(adminEmail: string): Promise<AdminActor | null> {
@@ -35,10 +38,7 @@ export class AdminActorFactory {
       rootAdminEmail,
     } = this.config;
     const adminHashedEmail = await emailHashService.getHashHex(adminEmail);
-    const adminId = await dbSelectAdminIdByAdminHashedEmail(
-      dbPool,
-      adminHashedEmail,
-    );
+    const adminId = await this.getAdminIdByHashedEmail(adminHashedEmail);
     const config: AdminActorConfig = {
       dbPool,
       emailHashService,
@@ -84,5 +84,24 @@ export class AdminActorFactory {
       return new AdminActor(gen.adminId, config);
     }
     throw new Error("BUG - Unhandled case");
+  }
+
+  private async getAdminIdByHashedEmail(
+    adminHashedEmail: string,
+  ): Promise<string | null> {
+    const cachedAdminId = this.idCache.get(adminHashedEmail);
+    if (cachedAdminId !== undefined) {
+      return cachedAdminId;
+    }
+    const { dbPool } = this.config;
+    const adminId = await dbSelectAdminIdByAdminHashedEmail(
+      dbPool,
+      adminHashedEmail,
+    );
+    if (adminId === null) {
+      return null;
+    }
+    this.idCache.set(adminHashedEmail, adminId);
+    return adminId;
   }
 }
