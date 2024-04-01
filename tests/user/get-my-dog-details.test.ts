@@ -4,15 +4,20 @@ import {
   getDogOii,
   getDogSpec,
   getUserActor,
+  getVetSpec,
   insertCall,
   insertDog,
   insertReport,
   insertUser,
   insertVet,
 } from "../_fixtures";
-import { dbQuery } from "@/lib/data/db-utils";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import { CALL_OUTCOME } from "@/lib/data/db-enums";
+import {
+  DEFAULT_DATE_TIME_FORMAT,
+  SINGAPORE_TIME_ZONE,
+  parseDateTime,
+} from "@/lib/utilities/bark-time";
 
 describe("getMyDogDetails", () => {
   it("should return null when user does not own the dog requested", async () => {
@@ -100,7 +105,11 @@ describe("getMyDogDetails", () => {
         vetId,
         CALL_OUTCOME.APPOINTMENT,
       );
-      const { reportId } = await insertReport(dbPool, callId);
+      const visitTime = parseDateTime("2023-04-01 15:30", {
+        format: DEFAULT_DATE_TIME_FORMAT,
+        timeZone: SINGAPORE_TIME_ZONE,
+      });
+      const { reportId } = await insertReport(dbPool, callId, { visitTime });
 
       // WHEN
       const actor = getUserActor(dbPool, userId);
@@ -109,7 +118,9 @@ describe("getMyDogDetails", () => {
       // THEN
       expect(details?.numPendingReports).toEqual(0);
       expect(details?.dogReports[0].reportId).toEqual(reportId);
+      expect(details?.dogReports[0].visitTime).toEqual(visitTime);
       expect(details?.dogReports[0].vetId).toEqual(vetId);
+      expect(details?.dogReports[0].vetName).toEqual(getVetSpec(8).vetName);
     });
   });
 });

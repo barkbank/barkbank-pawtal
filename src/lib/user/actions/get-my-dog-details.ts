@@ -1,6 +1,6 @@
 import { dbQuery } from "@/lib/data/db-utils";
 import { UserActor } from "../user-actor";
-import { MyDogDetails } from "../user-models";
+import { MyDogDetails, MyDogReport } from "../user-models";
 
 export async function getMyDogDetails(
   actor: UserActor,
@@ -25,6 +25,22 @@ export async function getMyDogDetails(
       AND tCall.call_outcome = 'APPOINTMENT'
     )
     LEFT JOIN reports as tReport on tCall.call_id = tReport.call_id
+    WHERE tCall.call_id IS NOT NULL
+    AND tReport.report_id IS NULL
+    GROUP BY tDog.dog_id
+  ),
+  mReports as (
+    SELECT
+      tDog.dog_id,
+      json_agg(json_build_object(
+        'reportId', tReport.report_id::text,
+        'visitTime', tReport.visit_time::text,
+        'vetId', tVet.vet_id::text,
+        'vetName', tVet.vet_name
+      )) as dog_reports
+    FROM mUserDog as tDog
+    LEFT JOIN reports as tReport on tDog.dog_id = tReport.dog_id
+    LEFT JOIN vets as tVet on tReport.vet_id = tVet.vet_id
     WHERE tReport.report_id IS NOT NULL
     GROUP BY tDog.dog_id
   )
@@ -38,7 +54,7 @@ export async function getMyDogDetails(
     tDog.dog_dea1_point1 as "dogDea1Point1",
     tDog.dog_ever_pregnant as "dogEverPregnant",
     tDog.dog_ever_received_transfusion as "dogEverReceivedTransfusion",
-    json_build_array() as "dogReports", -- WIP: add test case with dogReports
+    COALESCE(tReport.dog_reports, json_build_array()) as "dogReports",
 
     tStatus.profile_status as "profileStatus",
     tStatus.medical_status as "medicalStatus",
@@ -49,6 +65,7 @@ export async function getMyDogDetails(
     FROM mUserDog as tDog
   LEFT JOIN dog_statuses as tStatus on tDog.dog_id = tStatus.dog_id
   LEFT JOIN mNumPendingReports as tPending on tDog.dog_id = tPending.num_pending_reports
+  LEFT JOIN mReports as tReport on tDog.dog_id = tReport.dog_id
   `;
   const res = await dbQuery(dbPool, sql, [dogId, userId]);
   if (res.rows.length === 0) {
@@ -63,7 +80,7 @@ export async function getMyDogDetails(
     dogDea1Point1,
     dogEverPregnant,
     dogEverReceivedTransfusion,
-    dogReports,
+    dogReports: rawDogReports,
 
     profileStatus,
     medicalStatus,
@@ -74,6 +91,22 @@ export async function getMyDogDetails(
   const { dogName } = await dogMapper.mapDogSecureOiiToDogOii({
     dogEncryptedOii,
   });
+  const dogReports: MyDogReport[] = rawDogReports.map(
+    (raw: {
+      reportId: string;
+      visitTime: string;
+      vetId: string;
+      vetName: string;
+    }) => {
+      const report: MyDogReport = {
+        reportId: raw.reportId,
+        visitTime: new Date(raw.visitTime),
+        vetId: raw.vetId,
+        vetName: raw.vetName,
+      };
+      return report;
+    },
+  );
   const details: MyDogDetails = {
     dogId,
     dogName,
