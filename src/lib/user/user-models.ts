@@ -20,7 +20,3 @@ export type MyDog = {
   dogServiceStatus: ServiceStatus;
   dogAppointments: MyDogAppointment[];
 };
-
-export type ListMyPetsResponse = {
-  dogs: MyDog[];
-};
