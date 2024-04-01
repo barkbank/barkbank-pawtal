@@ -1,6 +1,7 @@
 import { UserActor } from "../user-actor";
+import { MyDogDetails } from "../user-models";
 
-export function getMyDogDetails(
+export async function getMyDogDetails(
   actor: UserActor,
   dogId: string,
 ): Promise<MyDogDetails | null> {
