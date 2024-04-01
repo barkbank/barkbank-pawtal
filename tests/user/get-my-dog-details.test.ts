@@ -74,7 +74,7 @@ describe("getMyDogDetails", () => {
       });
     });
   });
-  it("should return number of pending appointments", async () => {
+  it("should return number of pending reports", async () => {
     await withDb(async (dbPool) => {
       // GIVEN
       const { userId } = await insertUser(6, dbPool);
