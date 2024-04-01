@@ -1,9 +1,11 @@
 import {
+  DogAntigenPresence,
   DogGender,
-  MedicalStatus,
-  ProfileStatus,
+  MedicalStatus, ProfileStatus,
   ServiceStatus,
+  YesNoUnknown
 } from "../data/db-enums";
+import { HighlightedStatus } from "../data/status-mapper";
 
 export type MyDogAppointment = {
   callId: string;
@@ -19,4 +21,17 @@ export type MyDog = {
   dogMedicalStatus: MedicalStatus;
   dogServiceStatus: ServiceStatus;
   dogAppointments: MyDogAppointment[];
+};
+
+export type MyDogDetails = {
+  dogId: string;
+  dogName: string;
+  dogBreed: string;
+  dogBirthday: Date;
+  dogGender: DogGender;
+  dogWeight: number | null;
+  dogDea1Point1: DogAntigenPresence;
+  dogEverPregnant: YesNoUnknown;
+  dogEverReceivedTransfusion: YesNoUnknown;
+  dogHighlightedStatus: HighlightedStatus;
 };
