@@ -62,7 +62,7 @@ export async function getMyDogDetails(
     tStatus.participation_status as "participationStatus",
     COALESCE(tPending.num_pending_reports, 0)::integer as "numPendingReports"
 
-    FROM mUserDog as tDog
+  FROM mUserDog as tDog
   LEFT JOIN dog_statuses as tStatus on tDog.dog_id = tStatus.dog_id
   LEFT JOIN mNumPendingReports as tPending on tDog.dog_id = tPending.num_pending_reports
   LEFT JOIN mReports as tReport on tDog.dog_id = tReport.dog_id
