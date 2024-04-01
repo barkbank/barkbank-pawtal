@@ -4,10 +4,15 @@ import {
   getDogOii,
   getDogSpec,
   getUserActor,
+  insertCall,
   insertDog,
+  insertReport,
   insertUser,
+  insertVet,
 } from "../_fixtures";
 import { dbQuery } from "@/lib/data/db-utils";
+import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
+import { CALL_OUTCOME } from "@/lib/data/db-enums";
 
 describe("getMyDogDetails", () => {
   it("should return null when user does not own the dog requested", async () => {
@@ -58,6 +63,53 @@ describe("getMyDogDetails", () => {
 
         dogReports: [],
       });
+    });
+  });
+  it("should return number of pending appointments", async () => {
+    await withDb(async (dbPool) => {
+      // GIVEN
+      const { userId } = await insertUser(6, dbPool);
+      const { dogId } = await insertDog(7, userId, dbPool);
+      const { vetId } = await insertVet(8, dbPool);
+      await dbInsertDogVetPreference(dbPool, dogId, vetId);
+      const { callId } = await insertCall(
+        dbPool,
+        dogId,
+        vetId,
+        CALL_OUTCOME.APPOINTMENT,
+      );
+
+      // WHEN
+      const actor = getUserActor(dbPool, userId);
+      const details = await getMyDogDetails(actor, dogId);
+
+      // THEN
+      expect(details?.numPendingReports).toEqual(1);
+    });
+  });
+  it("should return summary information of medical reports received", async () => {
+    await withDb(async (dbPool) => {
+      // GIVEN
+      const { userId } = await insertUser(6, dbPool);
+      const { dogId } = await insertDog(7, userId, dbPool);
+      const { vetId } = await insertVet(8, dbPool);
+      await dbInsertDogVetPreference(dbPool, dogId, vetId);
+      const { callId } = await insertCall(
+        dbPool,
+        dogId,
+        vetId,
+        CALL_OUTCOME.APPOINTMENT,
+      );
+      const { reportId } = await insertReport(dbPool, callId);
+
+      // WHEN
+      const actor = getUserActor(dbPool, userId);
+      const details = await getMyDogDetails(actor, dogId);
+
+      // THEN
+      expect(details?.numPendingReports).toEqual(0);
+      expect(details?.dogReports[0].reportId).toEqual(reportId);
+      expect(details?.dogReports[0].vetId).toEqual(vetId);
     });
   });
 });
