@@ -52,7 +52,7 @@ const HeaderItems = ({ accountType }: { accountType?: AccountType }) => {
         </Collapsible.Content>
       </Collapsible.Root>
 
-      <div className="hidden gap-x-8 sm:flex sm:last:mr-8">
+      <div className="hidden gap-x-8 md:flex md:last:mr-8">
         <Link href={RoutePath.ROOT}>Home</Link>
         <Link href={RoutePath.ABOUT_US}>About Us</Link>
         <Link href={RoutePath.BE_A_DONOR}>Be a Donor</Link>
