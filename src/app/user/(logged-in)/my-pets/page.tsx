@@ -38,8 +38,7 @@ function toStatusSet(dog: MyDog): StatusSet {
     profileStatus: dog.dogProfileStatus,
     medicalStatus: dog.dogMedicalStatus,
     numPendingReports: dog.dogAppointments.length,
-    // TODO: once we have pause and opt-out we should update this.
-    participationStatus: PARTICIPATION_STATUS.PARTICIPATING,
+    participationStatus: dog.dogParticipationStatus,
   };
   return statusSet;
 }
