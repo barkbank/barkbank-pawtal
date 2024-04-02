@@ -22,6 +22,7 @@ export type MyDog = {
   dogProfileStatus: ProfileStatus;
   dogMedicalStatus: MedicalStatus;
   dogServiceStatus: ServiceStatus;
+  dogParticipationStatus: ParticipationStatus;
   dogAppointments: MyDogAppointment[];
 };
 

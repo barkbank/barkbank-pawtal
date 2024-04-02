@@ -37,6 +37,7 @@ export async function getMyPets(actor: UserActor): Promise<MyDog[]> {
     tStatus.service_status as "dogServiceStatus",
     tStatus.profile_status as "dogProfileStatus",
     tStatus.medical_status as "dogMedicalStatus",
+    tStatus.participation_status as "dogParticipationStatus",
     COALESCE(tAppointment.appointments, json_build_array()) as "dogAppointments"
   FROM mUserDogs as tDog
   LEFT JOIN dog_statuses as tStatus on tDog.dog_id = tStatus.dog_id
@@ -51,6 +52,7 @@ export async function getMyPets(actor: UserActor): Promise<MyDog[]> {
         dogServiceStatus,
         dogProfileStatus,
         dogMedicalStatus,
+        dogParticipationStatus,
         dogAppointments,
       } = row;
       const secureOii = dogMapper.toDogSecureOii(row);
@@ -62,6 +64,7 @@ export async function getMyPets(actor: UserActor): Promise<MyDog[]> {
         dogServiceStatus,
         dogProfileStatus,
         dogMedicalStatus,
+        dogParticipationStatus,
         dogAppointments,
       };
       return myDog;
