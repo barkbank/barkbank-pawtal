@@ -13,7 +13,7 @@ import {
   dbInsertDogVetPreference,
 } from "@/lib/data/db-dogs";
 
-type Result =
+type Response =
   | "OK_UPDATED"
   | "ERROR_REPORT_EXISTS"
   | "ERROR_UNAUTHORIZED"
@@ -28,7 +28,7 @@ type Context = {
 export async function updateMyDogRegistration(
   actor: UserActor,
   update: MyDogRegistrationUpdate,
-): Promise<Result> {
+): Promise<Response> {
   const { dbPool } = actor.getParams();
   const ctx: Context = { actor, update };
   const conn = await dbPool.connect();
