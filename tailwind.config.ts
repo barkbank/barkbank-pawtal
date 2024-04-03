@@ -60,6 +60,7 @@ const config = {
         },
         grey: {
           DEFAULT: "hsl(var(--grey))",
+          "60": "hsl(var(--grey-60))",
         },
       },
       borderRadius: {
