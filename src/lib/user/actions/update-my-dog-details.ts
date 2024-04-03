@@ -4,8 +4,8 @@ import { MyDogDetailsUpdate } from "../user-models";
 type Response =
   | "OK_UPDATED"
   | "ERROR_UNAUTHORIZED"
-  | "ERROR_MISSING_REPORT"
   | "ERROR_MISSING_DOG"
+  | "ERROR_MISSING_REPORT"
   | "FAILURE_DB_UPDATE";
 
 export async function updateMyDogDetails(
