@@ -1,7 +1,7 @@
 import { MyDogDetailsUpdate } from "@/lib/user/user-models";
 import { withDb } from "../_db_helpers";
 import { PARTICIPATION_STATUS, YesNoUnknown } from "@/lib/data/db-enums";
-import { getUserActor, insertUser } from "../_fixtures";
+import { getUserActor, insertDog, insertUser } from "../_fixtures";
 import { updateMyDogDetails } from "@/lib/user/actions/update-my-dog-details";
 
 describe("updateMyDogDetails", () => {
@@ -9,7 +9,17 @@ describe("updateMyDogDetails", () => {
     await withDb(async (dbPool) => {});
   });
   it("should return ERROR_UNAUTHORIZED when user does not own the dog", async () => {
-    await withDb(async (dbPool) => {});
+    await withDb(async (dbPool) => {
+      const u1 = await insertUser(1, dbPool);
+      const d1 = await insertDog(1, u1.userId, dbPool);
+
+      // WHEN u2 tries to update u1's dog
+      const u2 = await insertUser(2, dbPool);
+      const update = detailsUpdate(d1.dogId);
+      const actor = getUserActor(dbPool, u2.userId);
+      const res = await updateMyDogDetails(actor, update);
+      expect(res).toEqual("ERROR_UNAUTHORIZED");
+    });
   });
   it("should return ERROR_MISSING_REPORT when dog does not have an existing report", async () => {
     await withDb(async (dbPool) => {});
