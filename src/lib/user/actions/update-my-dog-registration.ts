@@ -103,7 +103,8 @@ async function updateDogFields(
     dogName,
   });
   const sql = `
-  UPDATE dogs SET
+  UPDATE dogs
+  SET
     dog_encrypted_oii = $2,
     dog_breed = $3,
     dog_birthday = $4,
