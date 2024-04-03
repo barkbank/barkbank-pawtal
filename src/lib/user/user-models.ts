@@ -61,5 +61,5 @@ export type MyDogRegistrationUpdate = {
   dogPreferredVetId: string | null;
   dogParticipationStatus: ParticipationStatus;
   // TODO: dogPauseEndReason: string; When the schema supports it
-  dogPauseDurationWeeks: number | null;
+  dogPauseExpiryTime: Date | null;
 };
