@@ -1,4 +1,10 @@
-import { dbBegin, dbCommit, dbQuery, dbRelease } from "@/lib/data/db-utils";
+import {
+  dbBegin,
+  dbCommit,
+  dbQuery,
+  dbRelease,
+  dbRollback,
+} from "@/lib/data/db-utils";
 import { UserActor } from "../user-actor";
 import { MyDogRegistrationUpdate } from "../user-models";
 import { PoolClient } from "pg";
@@ -44,6 +50,7 @@ export async function updateMyDogRegistration(
     await dbCommit(conn);
     return "OK_UPDATED";
   } finally {
+    await dbRollback(conn);
     await dbRelease(conn);
   }
 }
