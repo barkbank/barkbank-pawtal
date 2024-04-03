@@ -8,6 +8,10 @@ import {
   dbRelease,
   dbRollback,
 } from "@/lib/data/db-utils";
+import {
+  dbDeleteDogVetPreferences,
+  dbInsertDogVetPreference,
+} from "@/lib/data/db-dogs";
 
 type Response =
   | "OK_UPDATED"
@@ -38,6 +42,11 @@ export async function updateMyDogDetails(
     if (resCheckReports !== "OK") {
       return resCheckReports;
     }
+    const resUpdate = await updateDogFields(conn, ctx);
+    if (resUpdate !== "OK") {
+      return resUpdate;
+    }
+    await updateVetPreference(conn, ctx);
     await dbCommit(conn);
     return "OK_UPDATED";
   } finally {
@@ -79,6 +88,65 @@ async function checkExistingReport(
   const { numReports } = res.rows[0];
   if (numReports === 0) {
     return "ERROR_MISSING_REPORT";
+  }
+  return "OK";
+}
+
+async function updateDogFields(
+  conn: PoolClient,
+  ctx: Context,
+): Promise<"OK" | "FAILURE_DB_UPDATE"> {
+  const { actor, update } = ctx;
+  const { dogMapper } = actor.getParams();
+  const {
+    dogId,
+    dogName,
+    dogWeightKg,
+    dogEverPregnant,
+    dogEverReceivedTransfusion,
+    dogParticipationStatus,
+    dogPauseExpiryTime,
+  } = update;
+  const { dogEncryptedOii } = await dogMapper.mapDogOiiToDogSecureOii({
+    dogName,
+  });
+  const sql = `
+  UPDATE dogs
+  SET
+    dog_encrypted_oii = $2,
+    dog_weight_kg = $3,
+    dog_ever_pregnant = $4,
+    dog_ever_received_transfusion = $5,
+    dog_participation_status = $6,
+    dog_pause_expiry_time = $7
+  WHERE
+    dog_id = $1
+  RETURNING 1
+  `;
+  const res = await dbQuery(conn, sql, [
+    dogId,
+    dogEncryptedOii,
+    dogWeightKg,
+    dogEverPregnant,
+    dogEverReceivedTransfusion,
+    dogParticipationStatus,
+    dogPauseExpiryTime,
+  ]);
+  if (res.rows.length !== 1) {
+    return "FAILURE_DB_UPDATE";
+  }
+  return "OK";
+}
+
+async function updateVetPreference(
+  conn: PoolClient,
+  ctx: Context,
+): Promise<"OK"> {
+  const { update } = ctx;
+  const { dogId, dogPreferredVetId: vetId } = update;
+  await dbDeleteDogVetPreferences(conn, dogId);
+  if (vetId !== null) {
+    await dbInsertDogVetPreference(conn, dogId, vetId);
   }
   return "OK";
 }
