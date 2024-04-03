@@ -22,7 +22,14 @@ describe("updateMyDogDetails", () => {
     });
   });
   it("should return ERROR_MISSING_REPORT when dog does not have an existing report", async () => {
-    await withDb(async (dbPool) => {});
+    await withDb(async (dbPool) => {
+      const u1 = await insertUser(1, dbPool);
+      const d1 = await insertDog(1, u1.userId, dbPool);
+      const update = detailsUpdate(d1.dogId);
+      const actor = getUserActor(dbPool, u1.userId);
+      const res = await updateMyDogDetails(actor, update);
+      expect(res).toEqual("ERROR_MISSING_REPORT");
+    });
   });
   it("should return ERROR_MISSING_DOG dog not found", async () => {
     await withDb(async (dbPool) => {

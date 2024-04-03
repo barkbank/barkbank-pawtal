@@ -78,7 +78,7 @@ async function checkExistingReport(
   ctx: Context,
 ): Promise<"OK" | "ERROR_REPORT_EXISTS"> {
   const { update } = ctx;
-  const sql = `SELECT COUNT(1) as "numReports" FROM reports WHERE dog_id = $1`;
+  const sql = `SELECT COUNT(1)::integer as "numReports" FROM reports WHERE dog_id = $1`;
   const res = await dbQuery(conn, sql, [update.dogId]);
   const { numReports } = res.rows[0];
   if (numReports > 0) {

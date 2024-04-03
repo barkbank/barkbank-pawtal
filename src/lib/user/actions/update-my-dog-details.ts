@@ -34,6 +34,10 @@ export async function updateMyDogDetails(
     if (resOwnership !== "OK") {
       return resOwnership;
     }
+    const resCheckReports = await checkExistingReport(conn, ctx);
+    if (resCheckReports !== "OK") {
+      return resCheckReports;
+    }
     await dbCommit(conn);
     return "OK_UPDATED";
   } finally {
@@ -56,6 +60,25 @@ async function checkOwnership(
   const isOwner = actor.getUserId() === ownerUserId;
   if (!isOwner) {
     return "ERROR_UNAUTHORIZED";
+  }
+  return "OK";
+}
+
+async function checkExistingReport(
+  conn: PoolClient,
+  ctx: Context,
+): Promise<"OK" | "ERROR_MISSING_REPORT"> {
+  const { update } = ctx;
+  const { dogId } = update;
+  const sql = `
+  SELECT COUNT(1)::integer as "numReports"
+  FROM reports
+  WHERE dog_id = $1
+  `;
+  const res = await dbQuery(conn, sql, [dogId]);
+  const { numReports } = res.rows[0];
+  if (numReports === 0) {
+    return "ERROR_MISSING_REPORT";
   }
   return "OK";
 }
