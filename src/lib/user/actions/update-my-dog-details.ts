@@ -1,7 +1,13 @@
 import { PoolClient } from "pg";
 import { UserActor } from "../user-actor";
 import { MyDogDetailsUpdate } from "../user-models";
-import { dbBegin, dbCommit, dbQuery, dbRelease, dbRollback } from "@/lib/data/db-utils";
+import {
+  dbBegin,
+  dbCommit,
+  dbQuery,
+  dbRelease,
+  dbRollback,
+} from "@/lib/data/db-utils";
 
 type Response =
   | "OK_UPDATED"
