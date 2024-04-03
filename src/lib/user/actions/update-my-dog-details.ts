@@ -1,3 +1,6 @@
+import { PoolClient } from "pg";
+import { UserActor } from "../user-actor";
+import { MyDogDetailsUpdate } from "../user-models";
 import {
   dbBegin,
   dbCommit,
@@ -5,9 +8,6 @@ import {
   dbRelease,
   dbRollback,
 } from "@/lib/data/db-utils";
-import { UserActor } from "../user-actor";
-import { MyDogRegistrationUpdate } from "../user-models";
-import { PoolClient } from "pg";
 import {
   dbDeleteDogVetPreferences,
   dbInsertDogVetPreference,
@@ -15,38 +15,38 @@ import {
 
 type Response =
   | "OK_UPDATED"
-  | "ERROR_REPORT_EXISTS"
   | "ERROR_UNAUTHORIZED"
   | "ERROR_MISSING_DOG"
+  | "ERROR_MISSING_REPORT"
   | "FAILURE_DB_UPDATE";
 
 type Context = {
   actor: UserActor;
-  update: MyDogRegistrationUpdate;
+  update: MyDogDetailsUpdate;
 };
 
-export async function updateMyDogRegistration(
+export async function updateMyDogDetails(
   actor: UserActor,
-  update: MyDogRegistrationUpdate,
+  update: MyDogDetailsUpdate,
 ): Promise<Response> {
-  const { dbPool } = actor.getParams();
   const ctx: Context = { actor, update };
+  const { dbPool } = actor.getParams();
   const conn = await dbPool.connect();
   try {
     await dbBegin(conn);
-    const ownershipCheck = await checkOwnership(conn, ctx);
-    if (ownershipCheck !== "OK") {
-      return ownershipCheck;
+    const resOwnership = await checkOwnership(conn, ctx);
+    if (resOwnership !== "OK") {
+      return resOwnership;
     }
-    const reportCheck = await checkExistingReport(conn, ctx);
-    if (reportCheck !== "OK") {
-      return reportCheck;
+    const resCheckReports = await checkExistingReport(conn, ctx);
+    if (resCheckReports !== "OK") {
+      return resCheckReports;
     }
-    const updateFields = await updateDogFields(conn, ctx);
-    if (updateFields !== "OK") {
-      return updateFields;
+    const resUpdate = await updateDogFields(conn, ctx);
+    if (resUpdate !== "OK") {
+      return resUpdate;
     }
-    updateVetPreference(conn, ctx);
+    await updateVetPreference(conn, ctx);
     await dbCommit(conn);
     return "OK_UPDATED";
   } finally {
@@ -76,13 +76,18 @@ async function checkOwnership(
 async function checkExistingReport(
   conn: PoolClient,
   ctx: Context,
-): Promise<"OK" | "ERROR_REPORT_EXISTS"> {
+): Promise<"OK" | "ERROR_MISSING_REPORT"> {
   const { update } = ctx;
-  const sql = `SELECT COUNT(1)::integer as "numReports" FROM reports WHERE dog_id = $1`;
-  const res = await dbQuery(conn, sql, [update.dogId]);
+  const { dogId } = update;
+  const sql = `
+  SELECT COUNT(1)::integer as "numReports"
+  FROM reports
+  WHERE dog_id = $1
+  `;
+  const res = await dbQuery(conn, sql, [dogId]);
   const { numReports } = res.rows[0];
-  if (numReports > 0) {
-    return "ERROR_REPORT_EXISTS";
+  if (numReports === 0) {
+    return "ERROR_MISSING_REPORT";
   }
   return "OK";
 }
@@ -96,11 +101,7 @@ async function updateDogFields(
   const {
     dogId,
     dogName,
-    dogBreed,
-    dogBirthday,
-    dogGender,
     dogWeightKg,
-    dogDea1Point1,
     dogEverPregnant,
     dogEverReceivedTransfusion,
     dogParticipationStatus,
@@ -113,15 +114,11 @@ async function updateDogFields(
   UPDATE dogs
   SET
     dog_encrypted_oii = $2,
-    dog_breed = $3,
-    dog_birthday = $4,
-    dog_gender = $5,
-    dog_weight_kg = $6,
-    dog_dea1_point1 = $7,
-    dog_ever_pregnant = $8,
-    dog_ever_received_transfusion = $9,
-    dog_participation_status = $10,
-    dog_pause_expiry_time = $11
+    dog_weight_kg = $3,
+    dog_ever_pregnant = $4,
+    dog_ever_received_transfusion = $5,
+    dog_participation_status = $6,
+    dog_pause_expiry_time = $7
   WHERE
     dog_id = $1
   RETURNING 1
@@ -129,11 +126,7 @@ async function updateDogFields(
   const res = await dbQuery(conn, sql, [
     dogId,
     dogEncryptedOii,
-    dogBreed,
-    dogBirthday,
-    dogGender,
     dogWeightKg,
-    dogDea1Point1,
     dogEverPregnant,
     dogEverReceivedTransfusion,
     dogParticipationStatus,

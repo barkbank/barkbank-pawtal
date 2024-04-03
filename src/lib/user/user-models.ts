@@ -63,3 +63,15 @@ export type MyDogRegistrationUpdate = {
   // TODO: dogPauseEndReason: string; When the schema supports it
   dogPauseExpiryTime: Date | null;
 };
+
+export type MyDogDetailsUpdate = {
+  dogId: string;
+  dogName: string;
+  dogWeightKg: number | null;
+  dogEverPregnant: YesNoUnknown;
+  dogEverReceivedTransfusion: YesNoUnknown;
+  dogPreferredVetId: string | null;
+  dogParticipationStatus: ParticipationStatus;
+  // TODO: dogPauseEndReason: string; When the schema supports it
+  dogPauseExpiryTime: Date | null;
+};
