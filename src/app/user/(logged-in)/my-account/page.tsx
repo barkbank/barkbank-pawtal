@@ -77,12 +77,14 @@ export default async function Page() {
       </div>
       <div className="flex gap-3">
         <Link
-          className={buttonVariants({ variant: "brand" })}
+          className={`h-[60px] ${buttonVariants({ variant: "brand" })}`}
           href={"/user/my-account/edit"}
         >
           Edit
         </Link>
-        <Button variant={"brandInverse"}>Delete</Button>
+        <Button className="h-[60px]" variant={"brandInverse"}>
+          Delete
+        </Button>
       </div>
     </main>
   );
