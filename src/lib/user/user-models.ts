@@ -49,6 +49,7 @@ export type MyDogDetails = StatusSet & {
 };
 
 export type MyDogRegistrationUpdate = {
+  dogId: string;
   dogName: string;
   dogBreed: string;
   dogBirthday: Date;
