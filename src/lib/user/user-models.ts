@@ -67,15 +67,11 @@ export type MyDogRegistrationUpdate = {
 export type MyDogDetailsUpdate = {
   dogId: string;
   dogName: string;
-  dogBreed: string;
-  dogBirthday: Date;
-  dogGender: DogGender;
   dogWeightKg: number | null;
-  dogDea1Point1: DogAntigenPresence;
   dogEverPregnant: YesNoUnknown;
   dogEverReceivedTransfusion: YesNoUnknown;
   dogPreferredVetId: string | null;
   dogParticipationStatus: ParticipationStatus;
   // TODO: dogPauseEndReason: string; When the schema supports it
   dogPauseExpiryTime: Date | null;
-}
+};
