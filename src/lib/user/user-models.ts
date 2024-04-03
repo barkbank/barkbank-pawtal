@@ -47,3 +47,18 @@ export type MyDogDetails = StatusSet & {
 
   dogReports: MyDogReport[];
 };
+
+export type MyDogRegistrationUpdate = {
+  dogName: string;
+  dogBreed: string;
+  dogBirthday: Date;
+  dogGender: DogGender;
+  dogWeightKg: number | null;
+  dogDea1Point1: DogAntigenPresence;
+  dogEverPregnant: YesNoUnknown;
+  dogEverReceivedTransfusion: YesNoUnknown;
+  dogPreferredVetId: string | null;
+  dogParticipationStatus: ParticipationStatus;
+  // TODO: dogPauseEndReason: string; When there is column for it.
+  dogPauseDurationWeeks: number | null;
+};
