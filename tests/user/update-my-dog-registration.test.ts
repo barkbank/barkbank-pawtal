@@ -1,21 +1,53 @@
 import { updateMyDogRegistration } from "@/lib/user/actions/update-my-dog-registration";
 import { withDb } from "../_db_helpers";
-import { getUserActor, insertDog, insertUser } from "../_fixtures";
+import {
+  getUserActor,
+  insertCall,
+  insertDog,
+  insertReport,
+  insertUser,
+  insertVet,
+} from "../_fixtures";
 import { MyDogRegistrationUpdate } from "@/lib/user/user-models";
 import { UTC_DATE_OPTION, parseDateTime } from "@/lib/utilities/bark-time";
 import {
+  CALL_OUTCOME,
   DogAntigenPresence,
   DogGender,
   PARTICIPATION_STATUS,
   YesNoUnknown,
 } from "@/lib/data/db-enums";
+import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 
 describe("updateMyDogRegistration", () => {
   it("should return OK_UPDATED when update was successful", async () => {
     await withDb(async (dbPool) => {});
   });
   it("should return ERROR_REPORT_EXISTS when there is an existing report for the dog", async () => {
-    await withDb(async (dbPool) => {});
+    await withDb(async (dbPool) => {
+      // GIVEN users u1 with dog d1 with report
+      const u1 = await insertUser(1, dbPool);
+      const d1 = await insertDog(1, u1.userId, dbPool);
+      const v1 = await insertVet(1, dbPool);
+      await dbInsertDogVetPreference(dbPool, d1.dogId, v1.vetId);
+      const c1 = await insertCall(
+        dbPool,
+        d1.dogId,
+        v1.vetId,
+        CALL_OUTCOME.APPOINTMENT,
+      );
+      const r1 = await insertReport(dbPool, c1.callId);
+
+      // WHEN
+      const actor1 = getUserActor(dbPool, u1.userId);
+      const res = await updateMyDogRegistration(
+        actor1,
+        registrationUpdate(d1.dogId),
+      );
+
+      // THEN
+      expect(res).toEqual("ERROR_REPORT_EXISTS");
+    });
   });
   it("should return ERROR_UNAUTHORIZED when the user is not the dog owner", async () => {
     await withDb(async (dbPool) => {

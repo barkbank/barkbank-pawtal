@@ -23,15 +23,19 @@ export async function updateMyDogRegistration(
   const conn = await dbPool.connect();
   try {
     await dbBegin(conn);
-    const ownershipResult = await checkOwnership(conn, ctx);
-    if (ownershipResult != "OK") {
-      return ownershipResult;
+    const ownershipCheck = await checkOwnership(conn, ctx);
+    if (ownershipCheck != "OK") {
+      return ownershipCheck;
+    }
+    const reportCheck = await checkExistingReport(conn, ctx);
+    if (reportCheck != "OK") {
+      return reportCheck;
     }
     await dbCommit(conn);
+    return "OK_UPDATED";
   } finally {
     await dbRelease(conn);
   }
-  return "OK_UPDATED";
 }
 
 async function checkOwnership(
@@ -48,6 +52,20 @@ async function checkOwnership(
   const isOwner = actor.getUserId() === ownerUserId;
   if (!isOwner) {
     return "ERROR_UNAUTHORIZED";
+  }
+  return "OK";
+}
+
+async function checkExistingReport(
+  conn: PoolClient,
+  ctx: Context,
+): Promise<"OK" | "ERROR_REPORT_EXISTS"> {
+  const { actor, update } = ctx;
+  const sql = `SELECT COUNT(1) as "numReports" FROM reports WHERE dog_id = $1`;
+  const res = await dbQuery(conn, sql, [update.dogId]);
+  const { numReports } = res.rows[0];
+  if (numReports > 0) {
+    return "ERROR_REPORT_EXISTS";
   }
   return "OK";
 }
