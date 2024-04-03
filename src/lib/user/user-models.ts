@@ -7,7 +7,7 @@ import {
   ServiceStatus,
   YesNoUnknown,
 } from "../data/db-enums";
-import { HighlightedStatus, StatusSet } from "../data/status-mapper";
+import { StatusSet } from "../data/status-mapper";
 
 export type MyDogAppointment = {
   callId: string;
@@ -60,6 +60,6 @@ export type MyDogRegistrationUpdate = {
   dogEverReceivedTransfusion: YesNoUnknown;
   dogPreferredVetId: string | null;
   dogParticipationStatus: ParticipationStatus;
-  // TODO: dogPauseEndReason: string; When there is column for it.
+  // TODO: dogPauseEndReason: string; When the schema supports it
   dogPauseDurationWeeks: number | null;
 };

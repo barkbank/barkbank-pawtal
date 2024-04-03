@@ -19,6 +19,11 @@ const DEFAULT_DATE_TIME_OPTIONS: DateTimeOptions = {
   timeZone: UTC,
 } as const;
 
+export const UTC_DATE_OPTION: DateTimeOptions = {
+  format: "yyyy-MM-dd",
+  timeZone: UTC,
+} as const;
+
 /**
  * @param dateTimeString Date time string to parse
  * @param options Options for parsing the string
