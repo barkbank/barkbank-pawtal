@@ -22,6 +22,8 @@ export default async function Page() {
 
   const { userName, userEmail, userPhoneNumber } = ownPii;
 
+  const userId = await actor.getUserId();
+
   return (
     <main className="flex flex-col gap-6">
       <BarkH1>My Account Details</BarkH1>
@@ -71,7 +73,7 @@ export default async function Page() {
       <div>
         <p className="text-sm font-bold">User ID Number</p>
         {/* TODO: Update with data */}
-        <p>{"<TO BE UPDATED>"}</p>
+        <p>{userId}</p>
       </div>
       <div className="flex gap-3">
         <Link
