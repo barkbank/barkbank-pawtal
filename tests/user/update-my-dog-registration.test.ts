@@ -25,13 +25,18 @@ import { dbBegin, dbQuery, dbRelease } from "@/lib/data/db-utils";
 describe("updateMyDogRegistration", () => {
   it("should return OK_UPDATED when update was successful", async () => {
     await withDb(async (dbPool) => {
-      // GIVEN users u1 with dog d1
+      // GIVEN users u1 with dog d1 and preferred vet v1
       const u1 = await insertUser(1, dbPool);
       const d1 = await insertDog(1, u1.userId, dbPool);
+      const v1 = await insertVet(1, dbPool);
+      await dbInsertDogVetPreference(dbPool, d1.dogId, v1.vetId);
 
       // WHEN
+      const v2 = await insertVet(2, dbPool);
       const actor1 = getUserActor(dbPool, u1.userId);
-      const update = registrationUpdate(d1.dogId);
+      const update = registrationUpdate(d1.dogId, {
+        dogPreferredVetId: v2.vetId,
+      });
       const res = await updateMyDogRegistration(actor1, update);
 
       // THEN
@@ -104,8 +109,11 @@ describe("updateMyDogRegistration", () => {
   });
 });
 
-function registrationUpdate(dogId: string): MyDogRegistrationUpdate {
-  const update: MyDogRegistrationUpdate = {
+function registrationUpdate(
+  dogId: string,
+  overrides?: Partial<MyDogRegistrationUpdate>,
+): MyDogRegistrationUpdate {
+  const base: MyDogRegistrationUpdate = {
     dogId,
     dogName: "updated name",
     dogBreed: "updated breed",
@@ -120,7 +128,7 @@ function registrationUpdate(dogId: string): MyDogRegistrationUpdate {
     // TODO: dogPauseEndReason: string; When the schema supports it
     dogPauseExpiryTime: null,
   };
-  return update;
+  return { ...base, ...overrides };
 }
 
 async function reconstructUpdateFromDb(
@@ -192,6 +200,9 @@ async function fetchDogPreferredVetId(
   const res = await dbQuery(conn, sql, [dogId]);
   if (res.rows.length === 0) {
     return { dogPreferredVetId: null };
+  }
+  if (res.rows.length > 1) {
+    return { dogPreferredVetId: "MORE_THAN_ONE" };
   }
   const { dogPreferredVetId } = res.rows[0];
   return { dogPreferredVetId };
