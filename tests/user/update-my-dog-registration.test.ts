@@ -37,6 +37,22 @@ describe("updateMyDogRegistration", () => {
       expect(res).toEqual("ERROR_UNAUTHORIZED");
     });
   });
+  it("should return ERROR_MISSING_DOG when the dog does not exist", async () => {
+    await withDb(async (dbPool) => {
+      // GIVEN users u1 with no dog
+      const u1 = await insertUser(1, dbPool);
+
+      // WHEN u1 attempts to update dog that does not exist
+      const actor1 = getUserActor(dbPool, u1.userId);
+      const res = await updateMyDogRegistration(
+        actor1,
+        registrationUpdate("123"),
+      );
+
+      // THEN
+      expect(res).toEqual("ERROR_MISSING_DOG");
+    });
+  });
 });
 
 function registrationUpdate(dogId: string): MyDogRegistrationUpdate {

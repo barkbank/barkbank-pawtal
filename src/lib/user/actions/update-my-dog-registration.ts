@@ -3,7 +3,11 @@ import { UserActor } from "../user-actor";
 import { MyDogRegistrationUpdate } from "../user-models";
 import { PoolClient } from "pg";
 
-type Result = "OK_UPDATED" | "ERROR_REPORT_EXISTS" | "ERROR_UNAUTHORIZED";
+type Result =
+  | "OK_UPDATED"
+  | "ERROR_REPORT_EXISTS"
+  | "ERROR_UNAUTHORIZED"
+  | "ERROR_MISSING_DOG";
 
 type Context = {
   actor: UserActor;
@@ -19,9 +23,9 @@ export async function updateMyDogRegistration(
   const conn = await dbPool.connect();
   try {
     await dbBegin(conn);
-    const { isOwner } = await checkOwner(conn, ctx);
-    if (!isOwner) {
-      return "ERROR_UNAUTHORIZED";
+    const ownershipResult = await checkOwnership(conn, ctx);
+    if (ownershipResult != "OK") {
+      return ownershipResult;
     }
     await dbCommit(conn);
   } finally {
@@ -30,17 +34,20 @@ export async function updateMyDogRegistration(
   return "OK_UPDATED";
 }
 
-async function checkOwner(
+async function checkOwnership(
   conn: PoolClient,
   ctx: Context,
-): Promise<{ isOwner: boolean }> {
+): Promise<"OK" | "ERROR_MISSING_DOG" | "ERROR_UNAUTHORIZED"> {
   const { actor, update } = ctx;
   const sql = `SELECT user_id as "ownerUserId" FROM dogs WHERE dog_id = $1`;
   const res = await dbQuery(conn, sql, [update.dogId]);
   if (res.rows.length === 0) {
-    return { isOwner: false };
+    return "ERROR_MISSING_DOG";
   }
   const { ownerUserId } = res.rows[0];
   const isOwner = actor.getUserId() === ownerUserId;
-  return { isOwner };
+  if (!isOwner) {
+    return "ERROR_UNAUTHORIZED";
+  }
+  return "OK";
 }
