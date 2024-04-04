@@ -1,5 +1,6 @@
 import { DbContext, dbQuery, toCamelCaseRow } from "./db-utils";
 import { DogRecord, DogGen, DogSpec } from "./db-models";
+import { ParticipationStatus } from "./db-enums";
 
 const DOG_COLUMNS = [
   "dog_id",
@@ -132,4 +133,26 @@ export async function dbSelectPreferredVetIds(
   `;
   const res = await dbQuery(ctx, sql, [dogId]);
   return res.rows.map((row) => row.vet_id);
+}
+
+export async function dbUpdateDogParticipation(
+  dbCtx: DbContext,
+  dogId: string,
+  participationStatus: ParticipationStatus,
+  pauseExpiryTime?: Date,
+): Promise<boolean> {
+  const sql = `
+  UPDATE dogs
+  SET
+    dog_participation_status = $2,
+    dog_pause_expiry_time = $3
+  WHERE dog_id = $1
+  RETURNING 1
+  `;
+  const res = await dbQuery(dbCtx, sql, [
+    dogId,
+    participationStatus,
+    pauseExpiryTime ?? null,
+  ]);
+  return res.rows.length === 1;
 }
