@@ -41,19 +41,23 @@ describe("getMyDogDetails", () => {
   });
   it("should return dog details when user owns the dog requested", async () => {
     await withDb(async (dbPool) => {
-      // Given that user1 owns dog1
-      const { userId: userId1 } = await insertUser(1, dbPool);
-      const { dogId: dogId1 } = await insertDog(1, userId1, dbPool);
+      // Given that u1 owns dog d1
+      const u1 = await insertUser(1, dbPool);
+      const d1 = await insertDog(1, u1.userId, dbPool);
+
+      // and the preferred vet is v1
+      const v1 = await insertVet(1, dbPool);
+      await dbInsertDogVetPreference(dbPool, d1.dogId, v1.vetId);
 
       // When user1 requests for details pertaining to dog1
-      const actor1 = getUserActor(dbPool, userId1);
-      const dogDetails = await getMyDogDetails(actor1, dogId1);
+      const actor = getUserActor(dbPool, u1.userId);
+      const dogDetails = await getMyDogDetails(actor, d1.dogId);
 
       // Then dog details should be returned
       const spec = await getDogSpec(1);
       const oii = await getDogOii(1);
       expect(dogDetails).toEqual({
-        dogId: dogId1,
+        dogId: d1.dogId,
 
         serviceStatus: "AVAILABLE",
         profileStatus: "COMPLETE",
@@ -69,6 +73,10 @@ describe("getMyDogDetails", () => {
         dogDea1Point1: spec.dogDea1Point1,
         dogEverPregnant: spec.dogEverPregnant,
         dogEverReceivedTransfusion: spec.dogEverReceivedTransfusion,
+
+        dogPreferredVetId: v1.vetId,
+        dogParticipationStatus: "PARTICIPATING",
+        dogPauseExpiryTime: null,
 
         dogReports: [],
       });
