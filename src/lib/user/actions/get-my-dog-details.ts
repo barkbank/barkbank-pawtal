@@ -43,6 +43,13 @@ export async function getMyDogDetails(
     LEFT JOIN vets as tVet on tReport.vet_id = tVet.vet_id
     WHERE tReport.report_id IS NOT NULL
     GROUP BY tDog.dog_id
+  ),
+  mPreferredVet as (
+    SELECT dog_id, vet_id
+    FROM dog_vet_preferences
+    WHERE dog_id = $1
+    ORDER BY preference_creation_time DESC
+    LIMIT 1
   )
 
   SELECT
@@ -54,7 +61,10 @@ export async function getMyDogDetails(
     tLatest.latest_dog_dea1_point1 as "dogDea1Point1",
     tDog.dog_ever_pregnant as "dogEverPregnant",
     tDog.dog_ever_received_transfusion as "dogEverReceivedTransfusion",
-    COALESCE(tReport.dog_reports, json_build_array()) as "dogReports",
+    COALESCE(tReport.dog_reports, json_build_array()) as "jsonDogReports",
+    tStatus.participation_status as "dogParticipationStatus",
+    tStatus.participation_pause_expiry_time as "dogPauseExpiryTime",
+    tPref.vet_id as "dogPreferredVetId",
 
     tStatus.profile_status as "profileStatus",
     tStatus.medical_status as "medicalStatus",
@@ -67,32 +77,17 @@ export async function getMyDogDetails(
   LEFT JOIN mNumPendingReports as tPending on tDog.dog_id = tPending.num_pending_reports
   LEFT JOIN mReports as tReport on tDog.dog_id = tReport.dog_id
   LEFT JOIN latest_values as tLatest on tDog.dog_id = tLatest.dog_id
+  LEFT JOIN mPreferredVet as tPref on tDog.dog_id = tPref.dog_id
   `;
   const res = await dbQuery(dbPool, sql, [dogId, userId]);
   if (res.rows.length === 0) {
     return null;
   }
-  const {
-    dogEncryptedOii,
-    dogBreed,
-    dogBirthday,
-    dogGender,
-    dogWeightKg,
-    dogDea1Point1,
-    dogEverPregnant,
-    dogEverReceivedTransfusion,
-    dogReports: rawDogReports,
-
-    profileStatus,
-    medicalStatus,
-    serviceStatus,
-    participationStatus,
-    numPendingReports,
-  } = res.rows[0];
+  const { dogEncryptedOii, jsonDogReports, ...otherFields } = res.rows[0];
   const { dogName } = await dogMapper.mapDogSecureOiiToDogOii({
     dogEncryptedOii,
   });
-  const dogReports: MyDogReport[] = rawDogReports.map(
+  const dogReports: MyDogReport[] = jsonDogReports.map(
     (raw: {
       reportId: string;
       visitTime: string;
@@ -111,20 +106,8 @@ export async function getMyDogDetails(
   const details: MyDogDetails = {
     dogId,
     dogName,
-    dogBreed,
-    dogBirthday,
-    dogGender,
-    dogWeightKg,
-    dogDea1Point1,
-    dogEverPregnant,
-    dogEverReceivedTransfusion,
     dogReports,
-
-    profileStatus,
-    medicalStatus,
-    serviceStatus,
-    participationStatus,
-    numPendingReports,
+    ...otherFields,
   };
   return details;
 }
