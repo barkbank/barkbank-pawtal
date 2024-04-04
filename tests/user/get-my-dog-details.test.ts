@@ -26,7 +26,7 @@ import {
   SINGAPORE_TIME_ZONE,
   parseDateTime,
 } from "@/lib/utilities/bark-time";
-import { MILLIS_PER_DAY, MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
+import { MILLIS_PER_DAY } from "@/lib/utilities/bark-millis";
 
 describe("getMyDogDetails", () => {
   it("should return null when user does not own the dog requested", async () => {
