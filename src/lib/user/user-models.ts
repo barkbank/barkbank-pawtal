@@ -44,6 +44,10 @@ export type MyDogDetails = StatusSet & {
   dogDea1Point1: DogAntigenPresence;
   dogEverPregnant: YesNoUnknown;
   dogEverReceivedTransfusion: YesNoUnknown;
+  dogPreferredVetId: string | null;
+  dogParticipationStatus: ParticipationStatus;
+  // TODO: dogPauseEndReason: string; When the schema supports it
+  dogPauseExpiryTime: Date | null;
 
   dogReports: MyDogReport[];
 };
