@@ -26,7 +26,7 @@ import {
   SINGAPORE_TIME_ZONE,
   parseDateTime,
 } from "@/lib/utilities/bark-time";
-import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
+import { MILLIS_PER_DAY, MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
 
 describe("getMyDogDetails", () => {
   it("should return null when user does not own the dog requested", async () => {
@@ -54,8 +54,10 @@ describe("getMyDogDetails", () => {
       const v1 = await insertVet(1, dbPool);
       await dbInsertDogVetPreference(dbPool, d1.dogId, v1.vetId);
 
-      // and participation is paused for two weeks.
-      const pauseExpiryTime = new Date(Date.now() + 2 * MILLIS_PER_WEEK);
+      // and participation has a pause that expired yesterday (so the expected
+      // participation status returned should be PARTICIPATING and the pause
+      // expiry time should be null despite these values)
+      const pauseExpiryTime = new Date(Date.now() - MILLIS_PER_DAY);
       await dbUpdateDogParticipation(
         dbPool,
         d1.dogId,
@@ -76,7 +78,7 @@ describe("getMyDogDetails", () => {
         serviceStatus: "AVAILABLE",
         profileStatus: "COMPLETE",
         medicalStatus: "TEMPORARILY_INELIGIBLE",
-        participationStatus: "PAUSED",
+        participationStatus: "PARTICIPATING",
         numPendingReports: 0,
 
         dogName: oii.dogName,
@@ -89,8 +91,8 @@ describe("getMyDogDetails", () => {
         dogEverReceivedTransfusion: spec.dogEverReceivedTransfusion,
 
         dogPreferredVetId: v1.vetId,
-        dogParticipationStatus: "PAUSED",
-        dogPauseExpiryTime: pauseExpiryTime,
+        dogParticipationStatus: "PARTICIPATING",
+        dogPauseExpiryTime: null,
 
         dogReports: [],
       });
