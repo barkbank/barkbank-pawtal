@@ -9,6 +9,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 import Image from "next/image";
 import { IMG_PATH } from "@/lib/image-path";
+import { getMyLatestCall } from "@/lib/user/actions/get-my-latest-call";
 
 export default async function Page() {
   const actor = await getAuthenticatedUserActor();
@@ -22,7 +23,8 @@ export default async function Page() {
 
   const { userName, userEmail, userPhoneNumber } = ownPii;
 
-  const userId = await actor.getUserId();
+  const userId = actor.getUserId();
+  const latestCall = (await getMyLatestCall(actor))?.callCreationTime;
 
   return (
     <main className="flex flex-col gap-6">
@@ -31,13 +33,13 @@ export default async function Page() {
       <div>
         <div className="mb-[7px] flex flex-col gap-[7px]">
           <BarkH4>{userName}</BarkH4>
-          <p className="text-grey-60 text-xs">
+          <p className="text-xs text-grey-60">
             {/* TODO: Update with data */}
             Account created on: {"<TO BE UPDATED>"}
           </p>
           {/* TODO: Update with data */}
-          <p className="text-grey-60 text-xs">
-            Last contacted: {"<TO BE UPDATED>"}
+          <p className="text-xs text-grey-60">
+            Last contacted: {latestCall ? `${latestCall}` : "N.A"}
           </p>
         </div>
         <div className="flex flex-col gap-2">
