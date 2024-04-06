@@ -1,5 +1,9 @@
 import { Pool } from "pg";
-import { AdminRecord } from "../data/db-models";
+import {
+  AdminPermissions,
+  AdminRecord,
+  NO_ADMIN_PERMISSIONS,
+} from "../data/db-models";
 import { DogGender, YesNoUnknown } from "../data/db-enums";
 import { HashService } from "../services/hash";
 import { EncryptionService } from "../services/encryption";
@@ -7,10 +11,13 @@ import { dbSelectAdmin } from "../data/db-admins";
 import { decryptAdminPii } from "./admin-pii";
 import { AdminPii } from "../data/db-models";
 import { dbQuery, toCamelCaseRow } from "../data/db-utils";
+import { DogMapper } from "../data/dog-mapper";
+import { UserMapper } from "../data/user-mapper";
 
 /**
  * Profile record for completion
  */
+// TODO: remove this
 export type DogProfile = {
   dogId: string;
   dogBreed: string;
@@ -26,6 +33,8 @@ export type AdminActorConfig = {
   dbPool: Pool;
   emailHashService: HashService;
   piiEncryptionService: EncryptionService;
+  userMapper: UserMapper;
+  dogMapper: DogMapper;
 };
 
 /**
@@ -39,6 +48,37 @@ export class AdminActor {
   constructor(adminId: string, config: AdminActorConfig) {
     this.adminId = adminId;
     this.config = config;
+  }
+
+  public getParams(): {
+    adminId: string;
+    dbPool: Pool;
+    emailHashService: HashService;
+    piiEncryptionService: EncryptionService;
+    userMapper: UserMapper;
+    dogMapper: DogMapper;
+  } {
+    return { adminId: this.adminId, ...this.config };
+  }
+
+  public async getPermissions(): Promise<AdminPermissions> {
+    const record = await this.getOwnAdminRecord();
+    if (record === null) {
+      return NO_ADMIN_PERMISSIONS;
+    }
+    const {
+      adminCanManageAdminAccounts,
+      adminCanManageVetAccounts,
+      adminCanManageUserAccounts,
+      adminCanManageDonors,
+    } = record;
+    const permissions: AdminPermissions = {
+      adminCanManageAdminAccounts,
+      adminCanManageVetAccounts,
+      adminCanManageUserAccounts,
+      adminCanManageDonors,
+    };
+    return permissions;
   }
 
   public getAdminId(): string {
@@ -98,6 +138,7 @@ export class AdminActor {
     return admin ? admin.adminCanManageDonors : false;
   }
 
+  // TODO: remove this
   public async getIncompleteProfileList(): Promise<DogProfile[]> {
     const canManageDonors = await this.canManageDonors();
     if (!canManageDonors) {

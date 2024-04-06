@@ -1,4 +1,7 @@
-import { AdminActorFactory } from "./admin/admin-actor-factory";
+import {
+  AdminActorFactory,
+  AdminActorFactoryConfig,
+} from "./admin/admin-actor-factory";
 import { BreedService } from "./services/breed";
 import {
   EmailContact,
@@ -27,6 +30,7 @@ import { AdminMapper } from "./data/admin-mapper";
 import { DogMapper } from "./data/dog-mapper";
 import { RegistrationService } from "./services/registration";
 import { UserActorConfig } from "./user/user-actor";
+import { AdminActorConfig } from "./admin/admin-actor";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -185,24 +189,40 @@ export class AppFactory {
   public getAdminActorFactory(): Promise<AdminActorFactory> {
     if (this.promisedAdminActorFactory === null) {
       this.promisedAdminActorFactory = new Promise(async (resolve) => {
-        const [dbPool, emailHashService, piiEncryptionService, adminMapper] =
-          await Promise.all([
-            this.getDbPool(),
-            this.getEmailHashService(),
-            this.getPiiEncryptionService(),
-            this.getAdminMapper(),
-          ]);
+        const [
+          dbPool,
+          emailHashService,
+          piiEncryptionService,
+          adminMapper,
+          dogMapper,
+          userMapper,
+        ] = await Promise.all([
+          this.getDbPool(),
+          this.getEmailHashService(),
+          this.getPiiEncryptionService(),
+          this.getAdminMapper(),
+          this.getDogMapper(),
+          this.getUserMapper(),
+        ]);
         const rootAdminEmail = this.envString(AppEnv.BARKBANK_ROOT_ADMIN_EMAIL);
         if (!isValidEmail(rootAdminEmail)) {
           throw new Error("BARKBANK_ROOT_ADMIN_EMAIL is not a valid email");
         }
-        const factory = new AdminActorFactory({
+        const factoryConfig: AdminActorFactoryConfig = {
           dbPool,
           emailHashService,
           piiEncryptionService,
           adminMapper,
           rootAdminEmail,
-        });
+        };
+        const actorConfig: AdminActorConfig = {
+          dbPool,
+          emailHashService,
+          piiEncryptionService,
+          userMapper,
+          dogMapper,
+        };
+        const factory = new AdminActorFactory(factoryConfig, actorConfig);
         console.log("Created AdminActorFactory");
         resolve(factory);
       });

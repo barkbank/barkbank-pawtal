@@ -18,7 +18,8 @@ import { registerNewUser } from "@/app/user/registration/_actions/register-new-u
 import { RegistrationRequest } from "@/lib/services/registration";
 import {
   DogAntigenPresence,
-  DogGender, YesNoUnknown
+  DogGender,
+  YesNoUnknown,
 } from "@/lib/data/db-enums";
 import { UserResidency } from "@/lib/data/db-enums";
 import { BARK_UTC } from "@/lib/utilities/bark-time";
