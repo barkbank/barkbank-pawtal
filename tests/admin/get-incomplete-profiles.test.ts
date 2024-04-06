@@ -114,7 +114,25 @@ describe("getIncompleteProfiles", () => {
     });
   });
   it("should only return profiles with profile status INCOMPLETE", async () => {
-    await withDb(async (dbPool) => {});
+    await withDb(async (dbPool) => {
+      const p1 = await insertIncompleteProfile(1, dbPool);
+      const p2 = await insertCompleteProfile(2, dbPool); // <-- complete
+      const p3 = await insertIncompleteProfile(3, dbPool);
+      const { adminId } = await insertAdmin(1, dbPool, {
+        adminCanManageDonors: true,
+      });
+      const actor = getAdminActor(dbPool, adminId);
+      const { result } = await getIncompleteProfiles(actor, {
+        limit: 99,
+        offset: 0,
+      });
+      expect(result !== undefined).toBe(true);
+      const profiles = guaranteed(result);
+      expect(profiles.length).toEqual(2);
+      expect(profiles[0].dogId).toEqual(p1.dogId);
+      // should excluded p2 because it's complete
+      expect(profiles[1].dogId).toEqual(p3.dogId);
+    });
   });
   it("should only exclude profiles that are not PARTICIPATING", async () => {
     await withDb(async (dbPool) => {});
@@ -148,6 +166,21 @@ async function insertIncompleteProfile(
     dogBreed: "",
     dogEverPregnant: YES_NO_UNKNOWN.UNKNOWN,
     dogEverReceivedTransfusion: YES_NO_UNKNOWN.UNKNOWN,
+  });
+  await setDogCreationTime(idx, dogId, dbPool);
+  return { userId, dogId };
+}
+
+async function insertCompleteProfile(
+  idx: number,
+  dbPool: Pool,
+): Promise<{ userId: string; dogId: string }> {
+  const { userId } = await insertUser(idx, dbPool);
+  const { dogId } = await insertDog(idx, userId, dbPool, {
+    dogWeightKg: 28,
+    dogBreed: "Lion Dog",
+    dogEverPregnant: YES_NO_UNKNOWN.NO,
+    dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
   });
   await setDogCreationTime(idx, dogId, dbPool);
   return { userId, dogId };
