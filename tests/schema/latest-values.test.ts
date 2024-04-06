@@ -9,7 +9,7 @@ import {
 } from "../_fixtures";
 import { dbQuery } from "@/lib/data/db-utils";
 import { DbReportSpec, DogSpec, UserSpec } from "@/lib/data/db-models";
-import { DogAntigenPresence } from "@/lib/data/db-enums";
+import { DOG_ANTIGEN_PRESENCE } from "@/lib/data/db-enums";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import { CALL_OUTCOME, POS_NEG_NIL } from "@/lib/data/db-enums";
 import {
@@ -207,7 +207,7 @@ describe("latest_values", () => {
     it("should be NIL when no reports and UNKNOWN in dog profile", async () => {
       await withDb(async (dbPool) => {
         const { dogId } = await initDog(dbPool, {
-          dogSpec: { dogDea1Point1: DogAntigenPresence.UNKNOWN },
+          dogSpec: { dogDea1Point1: DOG_ANTIGEN_PRESENCE.UNKNOWN },
         });
         const res = await dbQuery(
           dbPool,
@@ -220,7 +220,7 @@ describe("latest_values", () => {
     it("should be POSITIVE when no reports and POSITIVE in dog profile", async () => {
       await withDb(async (dbPool) => {
         const { dogId } = await initDog(dbPool, {
-          dogSpec: { dogDea1Point1: DogAntigenPresence.POSITIVE },
+          dogSpec: { dogDea1Point1: DOG_ANTIGEN_PRESENCE.POSITIVE },
         });
         const res = await dbQuery(
           dbPool,
@@ -235,7 +235,7 @@ describe("latest_values", () => {
     it("should be the most recent non-NIL value from reports", async () => {
       await withDb(async (dbPool) => {
         const { dogId, vetId } = await initDog(dbPool, {
-          dogSpec: { dogDea1Point1: DogAntigenPresence.POSITIVE },
+          dogSpec: { dogDea1Point1: DOG_ANTIGEN_PRESENCE.POSITIVE },
         });
         // GIVEN tested on 15 Oct 2023
         await addReport(dbPool, dogId, vetId, {

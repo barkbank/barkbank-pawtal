@@ -79,20 +79,26 @@ export const USER_RESIDENCY = {
 
 export type UserResidency = ObjectValues<typeof USER_RESIDENCY>;
 
-export enum YesNoUnknown {
-  YES = "YES",
-  NO = "NO",
-  UNKNOWN = "UNKNOWN",
-}
+export const YES_NO_UNKNOWN = {
+  YES: "YES",
+  NO: "NO",
+  UNKNOWN: "UNKNOWN",
+} as const;
 
-export enum DogGender {
-  MALE = "MALE",
-  FEMALE = "FEMALE",
-  UNKNOWN = "UNKNOWN",
-}
+export type YesNoUnknown = ObjectValues<typeof YES_NO_UNKNOWN>;
 
-export enum DogAntigenPresence {
-  POSITIVE = "POSITIVE",
-  NEGATIVE = "NEGATIVE",
-  UNKNOWN = "UNKNOWN",
-}
+export const DOG_GENDER = {
+  MALE: "MALE",
+  FEMALE: "FEMALE",
+  UNKNOWN: "UNKNOWN",
+} as const;
+
+export type DogGender = ObjectValues<typeof DOG_GENDER>;
+
+export const DOG_ANTIGEN_PRESENCE = {
+  POSITIVE: "POSITIVE",
+  NEGATIVE: "NEGATIVE",
+  UNKNOWN: "UNKNOWN",
+} as const;
+
+export type DogAntigenPresence = ObjectValues<typeof DOG_ANTIGEN_PRESENCE>;

@@ -3,7 +3,7 @@ import { withDb } from "../_db_helpers";
 import {
   CALL_OUTCOME,
   PARTICIPATION_STATUS,
-  YesNoUnknown,
+  YES_NO_UNKNOWN,
 } from "@/lib/data/db-enums";
 import {
   getDogMapper,
@@ -92,8 +92,8 @@ function detailsUpdate(
     dogId,
     dogName: "updated name",
     dogWeightKg: 50,
-    dogEverPregnant: YesNoUnknown.NO,
-    dogEverReceivedTransfusion: YesNoUnknown.NO,
+    dogEverPregnant: YES_NO_UNKNOWN.NO,
+    dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
     dogPreferredVetId: null,
     dogParticipationStatus: PARTICIPATION_STATUS.PARTICIPATING,
     // TODO: dogPauseEndReason: string; When the schema supports it

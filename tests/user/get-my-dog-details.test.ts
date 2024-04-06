@@ -17,7 +17,7 @@ import {
 } from "@/lib/data/db-dogs";
 import {
   CALL_OUTCOME,
-  DogAntigenPresence,
+  DOG_ANTIGEN_PRESENCE,
   PARTICIPATION_STATUS,
   POS_NEG_NIL,
 } from "@/lib/data/db-enums";
@@ -157,7 +157,7 @@ describe("getMyDogDetails", () => {
       const { userId } = await insertUser(6, dbPool);
       const { dogId } = await insertDog(7, userId, dbPool, {
         dogWeightKg: 20,
-        dogDea1Point1: DogAntigenPresence.UNKNOWN,
+        dogDea1Point1: DOG_ANTIGEN_PRESENCE.UNKNOWN,
       });
       const { vetId } = await insertVet(8, dbPool);
       await dbInsertDogVetPreference(dbPool, dogId, vetId);
@@ -178,7 +178,7 @@ describe("getMyDogDetails", () => {
 
       // THEN
       expect(details?.dogWeightKg).toEqual(25);
-      expect(details?.dogDea1Point1).toEqual(DogAntigenPresence.POSITIVE);
+      expect(details?.dogDea1Point1).toEqual(DOG_ANTIGEN_PRESENCE.POSITIVE);
     });
   });
 });

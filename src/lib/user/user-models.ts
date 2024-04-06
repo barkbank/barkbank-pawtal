@@ -1,11 +1,11 @@
 import {
   DogAntigenPresence,
-  DogGender,
   MedicalStatus,
   ParticipationStatus,
   ProfileStatus,
   ServiceStatus,
   YesNoUnknown,
+  DogGender,
 } from "../data/db-enums";
 import { StatusSet } from "../data/status-mapper";
 
