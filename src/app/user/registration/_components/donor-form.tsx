@@ -17,9 +17,9 @@ import { BarkFormOption } from "@/components/bark/bark-form";
 import { registerNewUser } from "@/app/user/registration/_actions/register-new-user";
 import { RegistrationRequest } from "@/lib/services/registration";
 import {
-  DogAntigenPresence,
-  DogGender,
-  YesNoUnknown,
+  DOG_ANTIGEN_PRESENCE,
+  DOG_GENDER,
+  YES_NO_UNKNOWN,
 } from "@/lib/data/db-enums";
 import { UserResidency } from "@/lib/data/db-enums";
 import { BARK_UTC } from "@/lib/utilities/bark-time";
@@ -95,12 +95,12 @@ export default function DonorForm(props: {
       dogName: vals.dogName,
       dogBreed: vals.dogBreed,
       dogBirthday: BARK_UTC.parseDate(vals.dogBirthday),
-      dogGender: vals.dogGender as DogGender,
+      dogGender: vals.dogGender as DOG_GENDER,
       dogWeightKg: vals.dogWeightKg === "" ? null : Number(vals.dogWeightKg),
-      dogDea1Point1: vals.dogDea1Point1 as DogAntigenPresence,
-      dogEverPregnant: vals.dogEverPregnant as YesNoUnknown,
+      dogDea1Point1: vals.dogDea1Point1 as DOG_ANTIGEN_PRESENCE,
+      dogEverPregnant: vals.dogEverPregnant as YES_NO_UNKNOWN,
       dogEverReceivedTransfusion:
-        vals.dogEverReceivedTransfusion as YesNoUnknown,
+        vals.dogEverReceivedTransfusion as YES_NO_UNKNOWN,
       // If there is only one vet, use that vet as the preferred vet,
       // otherwise, use the value from the form.
       // Vet id can be undefined.

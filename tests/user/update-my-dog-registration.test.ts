@@ -13,10 +13,10 @@ import { MyDogRegistrationUpdate } from "@/lib/user/user-models";
 import { UTC_DATE_OPTION, parseDateTime } from "@/lib/utilities/bark-time";
 import {
   CALL_OUTCOME,
-  DogAntigenPresence,
-  DogGender,
+  DOG_ANTIGEN_PRESENCE,
+  DOG_GENDER,
   PARTICIPATION_STATUS,
-  YesNoUnknown,
+  YES_NO_UNKNOWN,
 } from "@/lib/data/db-enums";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import { Pool, PoolClient } from "pg";
@@ -118,11 +118,11 @@ function registrationUpdate(
     dogName: "updated name",
     dogBreed: "updated breed",
     dogBirthday: parseDateTime("1970-01-01", UTC_DATE_OPTION),
-    dogGender: DogGender.MALE,
+    dogGender: DOG_GENDER.MALE,
     dogWeightKg: 50,
-    dogDea1Point1: DogAntigenPresence.UNKNOWN,
-    dogEverPregnant: YesNoUnknown.NO,
-    dogEverReceivedTransfusion: YesNoUnknown.NO,
+    dogDea1Point1: DOG_ANTIGEN_PRESENCE.UNKNOWN,
+    dogEverPregnant: YES_NO_UNKNOWN.NO,
+    dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
     dogPreferredVetId: null,
     dogParticipationStatus: PARTICIPATION_STATUS.PARTICIPATING,
     // TODO: dogPauseEndReason: string; When the schema supports it

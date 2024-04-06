@@ -14,12 +14,7 @@
 // - Some: This sould be a full record with PII.
 //
 
-import {
-  DogGender,
-  DogAntigenPresence,
-  YesNoUnknown,
-  ParticipationStatus,
-} from "./db-enums";
+import { DogAntigenPresence, DogGender, YesNoUnknown } from "./db-enums";
 import { UserResidency } from "./db-enums";
 import { CallOutcome, PosNegNil, ReportedIneligibility } from "./db-enums";
 

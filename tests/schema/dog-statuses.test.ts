@@ -9,7 +9,7 @@ import {
 } from "../_fixtures";
 import { dbQuery } from "@/lib/data/db-utils";
 import { DbReportSpec, DogSpec, UserSpec } from "@/lib/data/db-models";
-import { PARTICIPATION_STATUS, YesNoUnknown } from "@/lib/data/db-enums";
+import { PARTICIPATION_STATUS, YES_NO_UNKNOWN } from "@/lib/data/db-enums";
 import { USER_RESIDENCY } from "@/lib/data/db-enums";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import {
@@ -120,8 +120,8 @@ describe("dog_statuses view", () => {
           dogSpec: {
             dogBreed: "Test Dog",
             dogWeightKg: 18,
-            dogEverPregnant: YesNoUnknown.NO,
-            dogEverReceivedTransfusion: YesNoUnknown.NO,
+            dogEverPregnant: YES_NO_UNKNOWN.NO,
+            dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
           },
         });
         const res = await dbQuery(
@@ -138,8 +138,8 @@ describe("dog_statuses view", () => {
           dogSpec: {
             dogBreed: "",
             dogWeightKg: null,
-            dogEverPregnant: YesNoUnknown.NO,
-            dogEverReceivedTransfusion: YesNoUnknown.NO,
+            dogEverPregnant: YES_NO_UNKNOWN.NO,
+            dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
           },
         });
         const res = await dbQuery(
@@ -156,8 +156,8 @@ describe("dog_statuses view", () => {
           dogSpec: {
             dogBreed: "Test Dog",
             dogWeightKg: 18,
-            dogEverPregnant: YesNoUnknown.UNKNOWN,
-            dogEverReceivedTransfusion: YesNoUnknown.NO,
+            dogEverPregnant: YES_NO_UNKNOWN.UNKNOWN,
+            dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
           },
         });
         const res = await dbQuery(
@@ -174,8 +174,8 @@ describe("dog_statuses view", () => {
           dogSpec: {
             dogBreed: "Test Dog",
             dogWeightKg: 18,
-            dogEverPregnant: YesNoUnknown.NO,
-            dogEverReceivedTransfusion: YesNoUnknown.UNKNOWN,
+            dogEverPregnant: YES_NO_UNKNOWN.NO,
+            dogEverReceivedTransfusion: YES_NO_UNKNOWN.UNKNOWN,
           },
         });
         const res = await dbQuery(
@@ -194,8 +194,8 @@ describe("dog_statuses view", () => {
       dogBirthday: new Date(ts - 5 * 365 * DAYS),
       dogBreed: "Big Dog",
       dogWeightKg: 25,
-      dogEverPregnant: YesNoUnknown.NO,
-      dogEverReceivedTransfusion: YesNoUnknown.NO,
+      dogEverPregnant: YES_NO_UNKNOWN.NO,
+      dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
     };
     const ELIGIBLE_REPORT: Partial<DbReportSpec> = {
       dogWeightKg: 25,
@@ -207,7 +207,7 @@ describe("dog_statuses view", () => {
     it("should be PERMANENTLY_INELIGIBLE if dog was ever pregnant", async () => {
       await withDb(async (dbPool) => {
         const { dogId } = await initDog(dbPool, {
-          dogSpec: { ...ELIGIBLE_SPEC, dogEverPregnant: YesNoUnknown.YES },
+          dogSpec: { ...ELIGIBLE_SPEC, dogEverPregnant: YES_NO_UNKNOWN.YES },
         });
         const res = await dbQuery(
           dbPool,
@@ -224,7 +224,7 @@ describe("dog_statuses view", () => {
         const { dogId } = await initDog(dbPool, {
           dogSpec: {
             ...ELIGIBLE_SPEC,
-            dogEverReceivedTransfusion: YesNoUnknown.YES,
+            dogEverReceivedTransfusion: YES_NO_UNKNOWN.YES,
           },
         });
         const res = await dbQuery(
@@ -283,7 +283,10 @@ describe("dog_statuses view", () => {
     it("should be UNKNOWN if pregnancy status is unknown", async () => {
       await withDb(async (dbPool) => {
         const { dogId } = await initDog(dbPool, {
-          dogSpec: { ...ELIGIBLE_SPEC, dogEverPregnant: YesNoUnknown.UNKNOWN },
+          dogSpec: {
+            ...ELIGIBLE_SPEC,
+            dogEverPregnant: YES_NO_UNKNOWN.UNKNOWN,
+          },
         });
         const res = await dbQuery(
           dbPool,
@@ -298,7 +301,7 @@ describe("dog_statuses view", () => {
         const { dogId } = await initDog(dbPool, {
           dogSpec: {
             ...ELIGIBLE_SPEC,
-            dogEverReceivedTransfusion: YesNoUnknown.UNKNOWN,
+            dogEverReceivedTransfusion: YES_NO_UNKNOWN.UNKNOWN,
           },
         });
         const res = await dbQuery(

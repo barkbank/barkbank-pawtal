@@ -4,9 +4,9 @@ import { RegistrationRequest } from "@/lib/services/registration";
 import { RegistrationServiceConfig } from "@/lib/services/registration";
 import { RegistrationService } from "@/lib/services/registration";
 import {
-  DogAntigenPresence,
-  DogGender,
-  YesNoUnknown,
+  DOG_ANTIGEN_PRESENCE,
+  DOG_GENDER,
+  YES_NO_UNKNOWN,
 } from "@/lib/data/db-enums";
 import { USER_RESIDENCY } from "@/lib/data/db-enums";
 import { guaranteed } from "@/lib/utilities/bark-utils";
@@ -204,11 +204,11 @@ function getRegistrationRequest(
     dogName: "Tarik",
     dogBreed: "Teh",
     dogBirthday: BARK_UTC.getDate(2019, 7, 4),
-    dogGender: DogGender.MALE,
+    dogGender: DOG_GENDER.MALE,
     dogWeightKg: 23,
-    dogDea1Point1: DogAntigenPresence.NEGATIVE,
-    dogEverPregnant: YesNoUnknown.NO,
-    dogEverReceivedTransfusion: YesNoUnknown.NO,
+    dogDea1Point1: DOG_ANTIGEN_PRESENCE.NEGATIVE,
+    dogEverPregnant: YES_NO_UNKNOWN.NO,
+    dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
     dogPreferredVetId: preferredVetId,
   };
   return { ...base, ...overrides };
