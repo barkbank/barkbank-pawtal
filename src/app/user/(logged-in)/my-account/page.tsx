@@ -10,20 +10,24 @@ import Link from "next/link";
 import Image from "next/image";
 import { IMG_PATH } from "@/lib/image-path";
 import { getMyLatestCall } from "@/lib/user/actions/get-my-latest-call";
+import { getMyAccount } from "@/lib/user/actions/get-my-account";
 
 export default async function Page() {
   const actor = await getAuthenticatedUserActor();
   if (!actor) {
     redirect(RoutePath.USER_LOGIN_PAGE);
   }
-  const ownPii: UserPii | null = await actor.getOwnUserPii();
-  if (!ownPii) {
+  const account = await getMyAccount(actor);
+  if (!account) {
     redirect(RoutePath.USER_LOGIN_PAGE);
   }
+  const {
+    userId,
+    userCreationTime,
+    userResidency,
+    ownPii: { userName, userEmail, userPhoneNumber },
+  } = account;
 
-  const { userName, userEmail, userPhoneNumber } = ownPii;
-
-  const userId = actor.getUserId();
   const latestCall = (await getMyLatestCall(actor))?.callCreationTime;
 
   return (
@@ -33,9 +37,9 @@ export default async function Page() {
       <div>
         <div className="mb-[7px] flex flex-col gap-[7px]">
           <BarkH4>{userName}</BarkH4>
+          {/* TODO: Update with data */}
           <p className="text-xs text-grey-60">
-            {/* TODO: Update with data */}
-            Account created on: {"<TO BE UPDATED>"}
+            Account created on: {userCreationTime.toString()}
           </p>
           {/* TODO: Update with data */}
           <p className="text-xs text-grey-60">
@@ -50,7 +54,7 @@ export default async function Page() {
               height={20}
               alt="location marker icon"
             />
-            Singpapore
+            {userResidency}
           </p>
           <p className="flex items-center gap-[10px]">
             <Image
