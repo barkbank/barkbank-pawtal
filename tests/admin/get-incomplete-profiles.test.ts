@@ -17,6 +17,7 @@ import {
 import {
   DEFAULT_DATE_TIME_FORMAT,
   SINGAPORE_TIME_ZONE,
+  UTC_DATE_OPTION,
   parseDateTime,
 } from "@/lib/utilities/bark-time";
 import { MILLIS_PER_DAY, MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
@@ -172,6 +173,7 @@ async function getExpectedProfile(
     dogId,
     dogName,
     dogGender: DOG_GENDER.MALE,
+    dogBirthday: parseDateTime("2020-03-03", UTC_DATE_OPTION),
     dogWeightKg: null,
     dogBreed: "",
     dogEverPregnant: YES_NO_UNKNOWN.UNKNOWN,
@@ -186,6 +188,7 @@ async function insertIncompleteProfile(
   const { userId } = await insertUser(idx, dbPool);
   const { dogId } = await insertDog(idx, userId, dbPool, {
     dogGender: DOG_GENDER.MALE,
+    dogBirthday: parseDateTime("2020-03-03", UTC_DATE_OPTION),
     dogWeightKg: null,
     dogBreed: "",
     dogEverPregnant: YES_NO_UNKNOWN.UNKNOWN,
@@ -202,6 +205,7 @@ async function insertCompleteProfile(
   const { userId } = await insertUser(idx, dbPool);
   const { dogId } = await insertDog(idx, userId, dbPool, {
     dogGender: DOG_GENDER.MALE,
+    dogBirthday: parseDateTime("2020-03-03", UTC_DATE_OPTION),
     dogWeightKg: 28,
     dogBreed: "Lion Dog",
     dogEverPregnant: YES_NO_UNKNOWN.NO,

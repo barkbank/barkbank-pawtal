@@ -5,6 +5,7 @@ export type IncompleteProfile = {
   dogId: string;
   dogName: string;
   dogGender: DogGender;
+  dogBirthday: Date;
   dogBreed: string;
   dogWeightKg: number | null;
   dogEverPregnant: YesNoUnknown;

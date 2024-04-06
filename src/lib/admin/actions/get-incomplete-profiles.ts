@@ -33,6 +33,7 @@ export async function getIncompleteProfiles(
     tDog.dog_id as "dogId",
     tDog.dog_encrypted_oii as "dogEncryptedOii",
     tDog.dog_gender as "dogGender",
+    tDog.dog_birthday as "dogBirthday",
     tDog.dog_breed as "dogBreed",
     tDog.dog_weight_kg as "dogWeightKg",
     tDog.dog_ever_pregnant as "dogEverPregnant",
