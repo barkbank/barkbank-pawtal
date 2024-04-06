@@ -1,16 +1,18 @@
 "use server";
 
-import { BarkH1, BarkH4 } from "@/components/bark/bark-typography";
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
-import { UserPii } from "@/lib/data/db-models";
 import { redirect } from "next/navigation";
 import { Button, buttonVariants } from "@/components/ui/button";
-import Link from "next/link";
-import Image from "next/image";
 import { IMG_PATH } from "@/lib/image-path";
 import { getMyLatestCall } from "@/lib/user/actions/get-my-latest-call";
 import { getMyAccount } from "@/lib/user/actions/get-my-account";
+import { format, formatDistanceStrict } from "date-fns";
+import { BarkH1, BarkH4 } from "@/components/bark/bark-typography";
+import Link from "next/link";
+import Image from "next/image";
+
+import { capitalize } from "lodash";
 
 export default async function Page() {
   const actor = await getAuthenticatedUserActor();
@@ -28,7 +30,12 @@ export default async function Page() {
     ownPii: { userName, userEmail, userPhoneNumber },
   } = account;
 
-  const latestCall = (await getMyLatestCall(actor))?.callCreationTime;
+  let latestCall = (await getMyLatestCall(actor))?.callCreationTime;
+  const latestCallText = latestCall
+    ? formatDistanceStrict(latestCall, new Date(), { addSuffix: true })
+    : "N.A";
+
+  const userCreationTimeText = format(userCreationTime, "dd MMM yyyy");
 
   return (
     <main className="flex flex-col gap-6">
@@ -39,11 +46,11 @@ export default async function Page() {
           <BarkH4>{userName}</BarkH4>
           {/* TODO: Update with data */}
           <p className="text-xs text-grey-60">
-            Account created on: {userCreationTime.toString()}
+            Account created on: {userCreationTimeText}
           </p>
           {/* TODO: Update with data */}
           <p className="text-xs text-grey-60">
-            Last contacted: {latestCall ? `${latestCall}` : "N.A"}
+            Last contacted: {latestCallText}
           </p>
         </div>
         <div className="flex flex-col gap-2">
@@ -54,7 +61,7 @@ export default async function Page() {
               height={20}
               alt="location marker icon"
             />
-            {userResidency}
+            {capitalize(userResidency)}
           </p>
           <p className="flex items-center gap-[10px]">
             <Image
@@ -78,7 +85,6 @@ export default async function Page() {
       </div>
       <div>
         <p className="text-sm font-bold">User ID Number</p>
-        {/* TODO: Update with data */}
         <p>{userId}</p>
       </div>
       <div className="flex gap-3">
