@@ -2,7 +2,7 @@ import { Ok, Result } from "@/lib/utilities/result";
 import { AdminActor } from "../admin-actor";
 import { IncompleteProfile } from "../admin-models";
 
-type Errors = "ERROR_UNAUTHORIZED";
+type ErrorCode = "ERROR_UNAUTHORIZED";
 
 export async function getIncompleteProfiles(
   actor: AdminActor,
@@ -10,6 +10,6 @@ export async function getIncompleteProfiles(
     limit: number;
     offset: number;
   },
-): Promise<Result<IncompleteProfile[], Errors>> {
+): Promise<Result<IncompleteProfile[], ErrorCode>> {
   return Ok([]);
 }

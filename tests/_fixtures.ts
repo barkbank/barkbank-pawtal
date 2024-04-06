@@ -1,4 +1,4 @@
-import { AdminActorConfig } from "@/lib/admin/admin-actor";
+import { AdminActor, AdminActorConfig } from "@/lib/admin/admin-actor";
 import {
   AdminPermissions,
   AdminPii,
@@ -151,6 +151,11 @@ export function getAdminActorConfig(db: Pool): AdminActorConfig {
     emailHashService: getEmailHashService(),
     piiEncryptionService: getPiiEncryptionService(),
   };
+}
+
+export function getAdminActor(dbPool: Pool, adminId: string): AdminActor {
+  const config = getAdminActorConfig(dbPool);
+  return new AdminActor(adminId, config);
 }
 
 export async function insertAdmin(
