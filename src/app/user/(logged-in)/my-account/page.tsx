@@ -44,11 +44,9 @@ export default async function Page() {
       <div>
         <div className="mb-[7px] flex flex-col gap-[7px]">
           <BarkH4>{userName}</BarkH4>
-          {/* TODO: Update with data */}
           <p className="text-xs text-grey-60">
             Account created on: {userCreationTimeText}
           </p>
-          {/* TODO: Update with data */}
           <p className="text-xs text-grey-60">
             Last contacted: {latestCallText}
           </p>
