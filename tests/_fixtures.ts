@@ -21,7 +21,7 @@ import {
   DbCallGen,
 } from "@/lib/data/db-models";
 import {
-  DogAntigenPresence,
+  DOG_ANTIGEN_PRESENCE,
   DOG_GENDER,
   YES_NO_UNKNOWN,
 } from "@/lib/data/db-enums";
@@ -328,8 +328,9 @@ function getDogBreed(idx: number): string {
   return `Breed${idx}`;
 }
 
-function getDogAntigenPresence(idx: number): DogAntigenPresence {
-  const presenceList: DogAntigenPresence[] = Object.values(DogAntigenPresence);
+function getDogAntigenPresence(idx: number): DOG_ANTIGEN_PRESENCE {
+  const presenceList: DOG_ANTIGEN_PRESENCE[] =
+    Object.values(DOG_ANTIGEN_PRESENCE);
   return presenceList[idx % presenceList.length];
 }
 

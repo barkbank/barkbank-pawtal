@@ -95,8 +95,10 @@ export const DOG_GENDER = {
 
 export type DogGender = ObjectValues<typeof DOG_GENDER>;
 
-export enum DogAntigenPresence {
-  POSITIVE = "POSITIVE",
-  NEGATIVE = "NEGATIVE",
-  UNKNOWN = "UNKNOWN",
-}
+export const DOG_ANTIGEN_PRESENCE = {
+  POSITIVE: "POSITIVE",
+  NEGATIVE: "NEGATIVE",
+  UNKNOWN: "UNKNOWN",
+} as const;
+
+export type DogAntigenPresence = ObjectValues<typeof DOG_ANTIGEN_PRESENCE>;

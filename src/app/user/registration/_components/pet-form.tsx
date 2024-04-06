@@ -12,7 +12,7 @@ import {
 } from "@/components/bark/bark-form";
 import { isValidWeightKg } from "@/lib/utilities/bark-utils";
 import {
-  DogAntigenPresence,
+  DOG_ANTIGEN_PRESENCE,
   DOG_GENDER,
   YES_NO_UNKNOWN,
 } from "@/lib/data/db-enums";
@@ -155,15 +155,15 @@ export default function PetForm(props: {
           options={[
             {
               label: "I don't know",
-              value: DogAntigenPresence.UNKNOWN,
+              value: DOG_ANTIGEN_PRESENCE.UNKNOWN,
             },
             {
               label: "D.E.A 1.1 positive",
-              value: DogAntigenPresence.POSITIVE,
+              value: DOG_ANTIGEN_PRESENCE.POSITIVE,
             },
             {
               label: "D.E.A 1.1 negative",
-              value: DogAntigenPresence.NEGATIVE,
+              value: DOG_ANTIGEN_PRESENCE.NEGATIVE,
             },
           ]}
         />

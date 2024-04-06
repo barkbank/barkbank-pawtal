@@ -17,7 +17,7 @@ import { BarkFormOption } from "@/components/bark/bark-form";
 import { registerNewUser } from "@/app/user/registration/_actions/register-new-user";
 import { RegistrationRequest } from "@/lib/services/registration";
 import {
-  DogAntigenPresence,
+  DOG_ANTIGEN_PRESENCE,
   DOG_GENDER,
   YES_NO_UNKNOWN,
 } from "@/lib/data/db-enums";
@@ -97,7 +97,7 @@ export default function DonorForm(props: {
       dogBirthday: BARK_UTC.parseDate(vals.dogBirthday),
       dogGender: vals.dogGender as DOG_GENDER,
       dogWeightKg: vals.dogWeightKg === "" ? null : Number(vals.dogWeightKg),
-      dogDea1Point1: vals.dogDea1Point1 as DogAntigenPresence,
+      dogDea1Point1: vals.dogDea1Point1 as DOG_ANTIGEN_PRESENCE,
       dogEverPregnant: vals.dogEverPregnant as YES_NO_UNKNOWN,
       dogEverReceivedTransfusion:
         vals.dogEverReceivedTransfusion as YES_NO_UNKNOWN,

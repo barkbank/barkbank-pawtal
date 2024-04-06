@@ -13,7 +13,7 @@ import { MyDogRegistrationUpdate } from "@/lib/user/user-models";
 import { UTC_DATE_OPTION, parseDateTime } from "@/lib/utilities/bark-time";
 import {
   CALL_OUTCOME,
-  DogAntigenPresence,
+  DOG_ANTIGEN_PRESENCE,
   DOG_GENDER,
   PARTICIPATION_STATUS,
   YES_NO_UNKNOWN,
@@ -120,7 +120,7 @@ function registrationUpdate(
     dogBirthday: parseDateTime("1970-01-01", UTC_DATE_OPTION),
     dogGender: DOG_GENDER.MALE,
     dogWeightKg: 50,
-    dogDea1Point1: DogAntigenPresence.UNKNOWN,
+    dogDea1Point1: DOG_ANTIGEN_PRESENCE.UNKNOWN,
     dogEverPregnant: YES_NO_UNKNOWN.NO,
     dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
     dogPreferredVetId: null,
