@@ -16,7 +16,7 @@ import {
   DogAntigenPresence,
   DogGender,
   PARTICIPATION_STATUS,
-  YesNoUnknown,
+  YES_NO_UNKNOWN,
 } from "@/lib/data/db-enums";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import { Pool, PoolClient } from "pg";
@@ -121,8 +121,8 @@ function registrationUpdate(
     dogGender: DogGender.MALE,
     dogWeightKg: 50,
     dogDea1Point1: DogAntigenPresence.UNKNOWN,
-    dogEverPregnant: YesNoUnknown.NO,
-    dogEverReceivedTransfusion: YesNoUnknown.NO,
+    dogEverPregnant: YES_NO_UNKNOWN.NO,
+    dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
     dogPreferredVetId: null,
     dogParticipationStatus: PARTICIPATION_STATUS.PARTICIPATING,
     // TODO: dogPauseEndReason: string; When the schema supports it

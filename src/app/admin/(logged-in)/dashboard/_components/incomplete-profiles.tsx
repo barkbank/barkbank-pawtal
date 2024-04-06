@@ -13,7 +13,7 @@ import {
 import { DogProfile } from "@/lib/admin/admin-actor";
 import clsx from "clsx";
 import { BARK_UTC } from "@/lib/utilities/bark-time";
-import { DogGender, YesNoUnknown } from "@/lib/data/db-enums";
+import { DogGender, YES_NO_UNKNOWN } from "@/lib/data/db-enums";
 
 function DataRow(props: { profile: DogProfile }) {
   const { profile } = props;
@@ -64,7 +64,7 @@ ${jsonEncoded}
       </TableCell>
       <TableCell
         className={clsx("text-center", {
-          "bg-orange-100": profile.dogEverPregnant === YesNoUnknown.UNKNOWN,
+          "bg-orange-100": profile.dogEverPregnant === YES_NO_UNKNOWN.UNKNOWN,
         })}
       >
         {profile.dogEverPregnant}
@@ -72,7 +72,7 @@ ${jsonEncoded}
       <TableCell
         className={clsx("text-center", {
           "bg-orange-100":
-            profile.dogEverReceivedTransfusion === YesNoUnknown.UNKNOWN,
+            profile.dogEverReceivedTransfusion === YES_NO_UNKNOWN.UNKNOWN,
         })}
       >
         {profile.dogEverReceivedTransfusion}

@@ -79,11 +79,13 @@ export const USER_RESIDENCY = {
 
 export type UserResidency = ObjectValues<typeof USER_RESIDENCY>;
 
-export enum YesNoUnknown {
-  YES = "YES",
-  NO = "NO",
-  UNKNOWN = "UNKNOWN",
-}
+export const YES_NO_UNKNOWN = {
+  YES: "YES",
+  NO: "NO",
+  UNKNOWN: "UNKNOWN",
+} as const;
+
+export type YesNoUnknown = ObjectValues<typeof YES_NO_UNKNOWN>;
 
 export enum DogGender {
   MALE = "MALE",

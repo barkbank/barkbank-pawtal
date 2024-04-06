@@ -14,7 +14,7 @@ import { isValidWeightKg } from "@/lib/utilities/bark-utils";
 import {
   DogAntigenPresence,
   DogGender,
-  YesNoUnknown,
+  YES_NO_UNKNOWN,
 } from "@/lib/data/db-enums";
 import { Breed } from "@/lib/services/breed";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -176,15 +176,15 @@ export default function PetForm(props: {
           options={[
             {
               label: "I don't know",
-              value: YesNoUnknown.UNKNOWN,
+              value: YES_NO_UNKNOWN.UNKNOWN,
             },
             {
               label: "Yes",
-              value: YesNoUnknown.YES,
+              value: YES_NO_UNKNOWN.YES,
             },
             {
               label: "No",
-              value: YesNoUnknown.NO,
+              value: YES_NO_UNKNOWN.NO,
             },
           ]}
         />
@@ -197,15 +197,15 @@ export default function PetForm(props: {
           options={[
             {
               label: "I don't know",
-              value: YesNoUnknown.UNKNOWN,
+              value: YES_NO_UNKNOWN.UNKNOWN,
             },
             {
               label: "Yes",
-              value: YesNoUnknown.YES,
+              value: YES_NO_UNKNOWN.YES,
             },
             {
               label: "No",
-              value: YesNoUnknown.NO,
+              value: YES_NO_UNKNOWN.NO,
             },
           ]}
         />

@@ -6,7 +6,7 @@ import { RegistrationService } from "@/lib/services/registration";
 import {
   DogAntigenPresence,
   DogGender,
-  YesNoUnknown,
+  YES_NO_UNKNOWN,
 } from "@/lib/data/db-enums";
 import { USER_RESIDENCY } from "@/lib/data/db-enums";
 import { guaranteed } from "@/lib/utilities/bark-utils";
@@ -207,8 +207,8 @@ function getRegistrationRequest(
     dogGender: DogGender.MALE,
     dogWeightKg: 23,
     dogDea1Point1: DogAntigenPresence.NEGATIVE,
-    dogEverPregnant: YesNoUnknown.NO,
-    dogEverReceivedTransfusion: YesNoUnknown.NO,
+    dogEverPregnant: YES_NO_UNKNOWN.NO,
+    dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
     dogPreferredVetId: preferredVetId,
   };
   return { ...base, ...overrides };
