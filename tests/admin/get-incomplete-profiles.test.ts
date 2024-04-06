@@ -5,7 +5,9 @@ import { getIncompleteProfiles } from "@/lib/admin/actions/get-incomplete-profil
 describe("getIncompleteProfiles", () => {
   it("should return ERROR_UNAUTHORIZED when admin does not have donor management permissions", async () => {
     await withDb(async (dbPool) => {
-      const { adminId } = await insertAdmin(1, dbPool);
+      const { adminId } = await insertAdmin(1, dbPool, {
+        adminCanManageDonors: false,
+      });
       const actor = getAdminActor(dbPool, adminId);
       const { error } = await getIncompleteProfiles(actor, {
         offset: 0,

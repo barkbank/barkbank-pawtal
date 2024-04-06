@@ -1,4 +1,4 @@
-import { Ok, Result } from "@/lib/utilities/result";
+import { Err, Ok, Result } from "@/lib/utilities/result";
 import { AdminActor } from "../admin-actor";
 import { IncompleteProfile } from "../admin-models";
 
@@ -11,5 +11,9 @@ export async function getIncompleteProfiles(
     offset: number;
   },
 ): Promise<Result<IncompleteProfile[], ErrorCode>> {
+  const canManageDonors = await actor.canManageDonors();
+  if (!canManageDonors) {
+    return Err("ERROR_UNAUTHORIZED");
+  }
   return Ok([]);
 }
