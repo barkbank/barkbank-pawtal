@@ -10,15 +10,16 @@ import {
 } from "../_fixtures";
 import { getIncompleteProfiles } from "@/lib/admin/actions/get-incomplete-profiles";
 import { Pool } from "pg";
-import { YES_NO_UNKNOWN } from "@/lib/data/db-enums";
+import { PARTICIPATION_STATUS, YES_NO_UNKNOWN } from "@/lib/data/db-enums";
 import {
   DEFAULT_DATE_TIME_FORMAT,
   SINGAPORE_TIME_ZONE,
   parseDateTime,
 } from "@/lib/utilities/bark-time";
-import { MILLIS_PER_DAY } from "@/lib/utilities/bark-millis";
+import { MILLIS_PER_DAY, MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
 import { guaranteed } from "@/lib/utilities/bark-utils";
 import { IncompleteProfile } from "@/lib/admin/admin-models";
+import { dbUpdateDogParticipation } from "@/lib/data/db-dogs";
 
 describe("getIncompleteProfiles", () => {
   it("should return ERROR_UNAUTHORIZED when admin does not have donor management permissions", async () => {
@@ -135,7 +136,25 @@ describe("getIncompleteProfiles", () => {
     });
   });
   it("should only exclude profiles that are not PARTICIPATING", async () => {
-    await withDb(async (dbPool) => {});
+    await withDb(async (dbPool) => {
+      const p1 = await insertIncompleteProfile(1, dbPool);
+      const p2 = await insertPausedProfile(2, dbPool); // <-- not participating
+      const p3 = await insertIncompleteProfile(3, dbPool);
+      const { adminId } = await insertAdmin(1, dbPool, {
+        adminCanManageDonors: true,
+      });
+      const actor = getAdminActor(dbPool, adminId);
+      const { result } = await getIncompleteProfiles(actor, {
+        limit: 99,
+        offset: 0,
+      });
+      expect(result !== undefined).toBe(true);
+      const profiles = guaranteed(result);
+      expect(profiles.length).toEqual(2);
+      expect(profiles[0].dogId).toEqual(p1.dogId);
+      // should excluded p2 because it's paused
+      expect(profiles[1].dogId).toEqual(p3.dogId);
+    });
   });
 });
 
@@ -183,6 +202,28 @@ async function insertCompleteProfile(
     dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
   });
   await setDogCreationTime(idx, dogId, dbPool);
+  return { userId, dogId };
+}
+
+async function insertPausedProfile(
+  idx: number,
+  dbPool: Pool,
+): Promise<{ userId: string; dogId: string }> {
+  const { userId } = await insertUser(idx, dbPool);
+  const { dogId } = await insertDog(idx, userId, dbPool, {
+    dogWeightKg: null,
+    dogBreed: "",
+    dogEverPregnant: YES_NO_UNKNOWN.UNKNOWN,
+    dogEverReceivedTransfusion: YES_NO_UNKNOWN.UNKNOWN,
+  });
+  await setDogCreationTime(idx, dogId, dbPool);
+  const nextWeek = new Date(Date.now() + MILLIS_PER_WEEK);
+  await dbUpdateDogParticipation(
+    dbPool,
+    dogId,
+    PARTICIPATION_STATUS.PAUSED,
+    nextWeek,
+  );
   return { userId, dogId };
 }
 

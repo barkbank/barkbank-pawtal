@@ -26,6 +26,7 @@ export async function getIncompleteProfiles(
       dog_id
     FROM dog_statuses as tStatus
     WHERE profile_status = 'INCOMPLETE'
+    AND participation_status = 'PARTICIPATING'
   ),
   mProfiles as (
     SELECT
