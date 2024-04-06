@@ -11,6 +11,8 @@ import { dbSelectAdmin } from "../data/db-admins";
 import { decryptAdminPii } from "./admin-pii";
 import { AdminPii } from "../data/db-models";
 import { dbQuery, toCamelCaseRow } from "../data/db-utils";
+import { DogMapper } from "../data/dog-mapper";
+import { UserMapper } from "../data/user-mapper";
 
 /**
  * Profile record for completion
@@ -31,6 +33,8 @@ export type AdminActorConfig = {
   dbPool: Pool;
   emailHashService: HashService;
   piiEncryptionService: EncryptionService;
+  userMapper: UserMapper;
+  dogMapper: DogMapper;
 };
 
 /**
@@ -51,6 +55,8 @@ export class AdminActor {
     dbPool: Pool;
     emailHashService: HashService;
     piiEncryptionService: EncryptionService;
+    userMapper: UserMapper;
+    dogMapper: DogMapper;
   } {
     return { adminId: this.adminId, ...this.config };
   }

@@ -2,6 +2,8 @@ import { DbContext, dbQuery } from "@/lib/data/db-utils";
 import { withDb } from "../_db_helpers";
 import {
   getAdminActor,
+  getDogOii,
+  getDogSpec,
   insertAdmin,
   insertDog,
   insertUser,
@@ -16,6 +18,7 @@ import {
 } from "@/lib/utilities/bark-time";
 import { MILLIS_PER_DAY } from "@/lib/utilities/bark-millis";
 import { guaranteed } from "@/lib/utilities/bark-utils";
+import { IncompleteProfile } from "@/lib/admin/admin-models";
 
 describe("getIncompleteProfiles", () => {
   it("should return ERROR_UNAUTHORIZED when admin does not have donor management permissions", async () => {
@@ -29,6 +32,22 @@ describe("getIncompleteProfiles", () => {
         limit: 99,
       });
       expect(error).toEqual("ERROR_UNAUTHORIZED");
+    });
+  });
+  it("should return profile fields", async () => {
+    await withDb(async (dbPool) => {
+      const { userId, dogId } = await insertIncompleteProfile(1, dbPool);
+      const { adminId } = await insertAdmin(1, dbPool, {
+        adminCanManageDonors: true,
+      });
+      const actor = getAdminActor(dbPool, adminId);
+      const { result } = await getIncompleteProfiles(actor, {
+        offset: 0,
+        limit: 99,
+      });
+      const profile = guaranteed(result)[0];
+      const expected = await getExpectedProfile(1, userId, dogId);
+      expect(profile).toEqual(expected);
     });
   });
   it("should order profiles by creation time, oldest first", async () => {
@@ -65,6 +84,23 @@ describe("getIncompleteProfiles", () => {
     await withDb(async (dbPool) => {});
   });
 });
+
+async function getExpectedProfile(
+  idx: number,
+  userId: string,
+  dogId: string,
+): Promise<IncompleteProfile> {
+  const { dogName } = await getDogOii(idx);
+  return {
+    userId,
+    dogId,
+    dogName,
+    dogWeightKg: null,
+    dogBreed: "",
+    dogEverPregnant: YES_NO_UNKNOWN.UNKNOWN,
+    dogEverReceivedTransfusion: YES_NO_UNKNOWN.UNKNOWN,
+  };
+}
 
 async function insertIncompleteProfile(
   idx: number,

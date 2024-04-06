@@ -153,6 +153,8 @@ export function getAdminActorConfig(db: Pool): AdminActorConfig {
     dbPool: db,
     emailHashService: getEmailHashService(),
     piiEncryptionService: getPiiEncryptionService(),
+    userMapper: getUserMapper(),
+    dogMapper: getDogMapper(),
   };
 }
 
