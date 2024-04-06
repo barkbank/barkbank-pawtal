@@ -41,17 +41,17 @@ export default async function Page() {
     <main className="flex flex-col gap-6">
       <BarkH1>My Account Details</BarkH1>
 
-      <div>
+      <div className="flex flex-col gap-2">
         <div className="mb-[7px] flex flex-col gap-[7px]">
           <BarkH4>{userName}</BarkH4>
-          <p className="text-xs text-grey-60">
+          <p className="text-xs italic text-grey-60">
             Account created on: {userCreationTimeText}
           </p>
-          <p className="text-xs text-grey-60">
+          <p className="text-xs italic text-grey-60">
             Last contacted: {latestCallText}
           </p>
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3">
           <p className="flex items-center gap-[10px]">
             <Image
               src={IMG_PATH.LOCATION_MARKER}
@@ -81,7 +81,7 @@ export default async function Page() {
           </p>
         </div>
       </div>
-      <div>
+      <div className="flex flex-col gap-1">
         <p className="text-sm font-bold">User ID Number</p>
         <p>{userId}</p>
       </div>
