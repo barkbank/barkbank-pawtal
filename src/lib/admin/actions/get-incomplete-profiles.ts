@@ -6,6 +6,9 @@ import { DogMapper } from "@/lib/data/dog-mapper";
 
 type ErrorCode = "ERROR_UNAUTHORIZED";
 
+/**
+ * @returns List of participating dog profiles that are incomplete.
+ */
 export async function getIncompleteProfiles(
   actor: AdminActor,
   params: {
