@@ -139,7 +139,7 @@ describe("getIncompleteProfiles", () => {
       expect(profiles[1].dogId).toEqual(p3.dogId);
     });
   });
-  it("should only exclude profiles that are not PARTICIPATING", async () => {
+  it("should exclude profiles that are not PARTICIPATING", async () => {
     await withDb(async (dbPool) => {
       const p1 = await insertIncompleteProfile(1, dbPool);
       const p2 = await insertPausedProfile(2, dbPool); // <-- not participating
