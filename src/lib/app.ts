@@ -218,7 +218,7 @@ export class AppFactory {
         const actorConfig: AdminActorConfig = {
           dbPool,
           emailHashService,
-          piiEncryptionService,
+          adminMapper,
           userMapper,
           dogMapper,
         };

@@ -5,17 +5,16 @@ import {
   NO_ADMIN_PERMISSIONS,
 } from "../data/db-models";
 import { HashService } from "../services/hash";
-import { EncryptionService } from "../services/encryption";
 import { dbSelectAdmin } from "../data/db-admins";
-import { decryptAdminPii } from "./admin-pii";
 import { AdminPii } from "../data/db-models";
 import { DogMapper } from "../data/dog-mapper";
 import { UserMapper } from "../data/user-mapper";
+import { AdminMapper } from "../data/admin-mapper";
 
 export type AdminActorConfig = {
   dbPool: Pool;
   emailHashService: HashService;
-  piiEncryptionService: EncryptionService;
+  adminMapper: AdminMapper;
   userMapper: UserMapper;
   dogMapper: DogMapper;
 };
@@ -37,7 +36,7 @@ export class AdminActor {
     adminId: string;
     dbPool: Pool;
     emailHashService: HashService;
-    piiEncryptionService: EncryptionService;
+    adminMapper: AdminMapper;
     userMapper: UserMapper;
     dogMapper: DogMapper;
   } {
@@ -68,23 +67,13 @@ export class AdminActor {
     return this.adminId;
   }
 
-  private getDbPool(): Pool {
-    return this.config.dbPool;
-  }
-
-  private getPiiEncryptionService(): EncryptionService {
-    return this.config.piiEncryptionService;
-  }
-
   public getOwnAdminRecord(): Promise<AdminRecord | null> {
     // Caches own admin. It is safe to do this because a new AdminActor is
     // created on every server request as part of session validation; starting
     // from getAuthenticatedAdminActor to new AdminActor in AdminActorFactory.
+    const { dbPool, adminId } = this.getParams();
     if (this.promisedAdminRecord === null) {
-      this.promisedAdminRecord = dbSelectAdmin(
-        this.getDbPool(),
-        this.getAdminId(),
-      );
+      this.promisedAdminRecord = dbSelectAdmin(dbPool, adminId);
     }
     return this.promisedAdminRecord;
   }
@@ -94,11 +83,10 @@ export class AdminActor {
     if (admin === null) {
       return null;
     }
-    const pii = await decryptAdminPii(
-      admin.adminEncryptedPii,
-      this.getPiiEncryptionService(),
-    );
-    return pii;
+    const { adminMapper } = this.getParams();
+    const securePii = adminMapper.toAdminSecurePii(admin);
+    const adminPii = await adminMapper.mapAdminSecurePiiToAdminPii(securePii);
+    return adminPii;
   }
 
   public async canManageAdminAccounts(): Promise<boolean> {
