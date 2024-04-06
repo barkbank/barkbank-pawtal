@@ -1,7 +1,6 @@
 import { AdminActor, AdminActorConfig } from "./admin-actor";
 import { HashService } from "../services/hash";
 import { Pool } from "pg";
-import { EncryptionService } from "../services/encryption";
 import {
   dbGrantCanManageAdminAccounts,
   dbInsertAdmin,
@@ -15,7 +14,6 @@ import { LRUCache } from "lru-cache";
 export type AdminActorFactoryConfig = {
   dbPool: Pool;
   emailHashService: HashService;
-  piiEncryptionService: EncryptionService;
   adminMapper: AdminMapper;
   rootAdminEmail: string;
 };
@@ -32,13 +30,8 @@ export class AdminActorFactory {
   }
 
   public async getAdminActor(adminEmail: string): Promise<AdminActor | null> {
-    const {
-      dbPool,
-      emailHashService,
-      piiEncryptionService,
-      adminMapper,
-      rootAdminEmail,
-    } = this.config;
+    const { dbPool, emailHashService, adminMapper, rootAdminEmail } =
+      this.config;
     const adminHashedEmail = await emailHashService.getHashHex(adminEmail);
     const adminId = await this.getAdminIdByHashedEmail(adminHashedEmail);
     if (adminId === null && adminEmail !== rootAdminEmail) {
