@@ -18,6 +18,7 @@ export async function getIncompleteProfiles(
     return Err("ERROR_UNAUTHORIZED");
   }
   const { dbPool, dogMapper } = actor.getParams();
+  const { offset, limit } = params;
   const sql = `
   WITH
   mStatuses as (
@@ -39,11 +40,13 @@ export async function getIncompleteProfiles(
     LEFT JOIN latest_values as tLatest on tStatus.dog_id = tLatest.dog_id
     LEFT JOIN dogs as tDog on tStatus.dog_id = tDog.dog_id
     ORDER BY tDog.dog_creation_time ASC
+    LIMIT $1
+    OFFSET $2
   )
 
   SELECT * FROM mProfiles
   `;
-  const res = await dbQuery(dbPool, sql, []);
+  const res = await dbQuery(dbPool, sql, [limit, offset]);
   const futureProfiles: Promise<IncompleteProfile>[] = res.rows.map((row) => {
     return rowToIncompleteProfile(row, dogMapper);
   });

@@ -28,8 +28,8 @@ describe("getIncompleteProfiles", () => {
       });
       const actor = getAdminActor(dbPool, adminId);
       const { error } = await getIncompleteProfiles(actor, {
-        offset: 0,
         limit: 99,
+        offset: 0,
       });
       expect(error).toEqual("ERROR_UNAUTHORIZED");
     });
@@ -42,8 +42,8 @@ describe("getIncompleteProfiles", () => {
       });
       const actor = getAdminActor(dbPool, adminId);
       const { result } = await getIncompleteProfiles(actor, {
-        offset: 0,
         limit: 99,
+        offset: 0,
       });
       const profile = guaranteed(result)[0];
       const expected = await getExpectedProfile(1, userId, dogId);
@@ -60,8 +60,8 @@ describe("getIncompleteProfiles", () => {
       });
       const actor = getAdminActor(dbPool, adminId);
       const { result } = await getIncompleteProfiles(actor, {
-        offset: 0,
         limit: 99,
+        offset: 0,
       });
       expect(result !== undefined).toBe(true);
       const profiles = guaranteed(result);
@@ -72,10 +72,46 @@ describe("getIncompleteProfiles", () => {
     });
   });
   it("should limit number of profiles returned by the specified amount", async () => {
-    await withDb(async (dbPool) => {});
+    await withDb(async (dbPool) => {
+      const p1 = await insertIncompleteProfile(1, dbPool);
+      const p2 = await insertIncompleteProfile(2, dbPool);
+      const p3 = await insertIncompleteProfile(3, dbPool);
+      const { adminId } = await insertAdmin(1, dbPool, {
+        adminCanManageDonors: true,
+      });
+      const actor = getAdminActor(dbPool, adminId);
+      const { result } = await getIncompleteProfiles(actor, {
+        limit: 2,
+        offset: 0,
+      });
+      expect(result !== undefined).toBe(true);
+      const profiles = guaranteed(result);
+      expect(profiles.length).toEqual(2);
+      expect(profiles[0].dogId).toEqual(p1.dogId);
+      expect(profiles[1].dogId).toEqual(p2.dogId);
+      // p3 should be excluded.
+    });
   });
   it("should return profiles starting from the specified offset", async () => {
-    await withDb(async (dbPool) => {});
+    await withDb(async (dbPool) => {
+      const p1 = await insertIncompleteProfile(1, dbPool);
+      const p2 = await insertIncompleteProfile(2, dbPool);
+      const p3 = await insertIncompleteProfile(3, dbPool);
+      const { adminId } = await insertAdmin(1, dbPool, {
+        adminCanManageDonors: true,
+      });
+      const actor = getAdminActor(dbPool, adminId);
+      const { result } = await getIncompleteProfiles(actor, {
+        limit: 2,
+        offset: 1,
+      });
+      expect(result !== undefined).toBe(true);
+      const profiles = guaranteed(result);
+      expect(profiles.length).toEqual(2);
+      // p1 should be excluded
+      expect(profiles[0].dogId).toEqual(p2.dogId);
+      expect(profiles[1].dogId).toEqual(p3.dogId);
+    });
   });
   it("should only return profiles with profile status INCOMPLETE", async () => {
     await withDb(async (dbPool) => {});
