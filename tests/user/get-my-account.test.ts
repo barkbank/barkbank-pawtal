@@ -25,4 +25,11 @@ describe("getMyAccount", () => {
       expect(ownPii.userPhoneNumber).toEqual("+65 10000001");
     });
   });
+  it("should return null if the user does not exist", async () => {
+    await withDb(async (dbPool) => {
+      const actor = getUserActor(dbPool, "non-existent-user-id");
+      const account = await getMyAccount(actor);
+      expect(account).toBeNull();
+    });
+  });
 });

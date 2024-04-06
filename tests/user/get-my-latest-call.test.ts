@@ -16,7 +16,7 @@ describe("getMyLatestCall", () => {
       const { dogId } = await insertDog(1, userId, dbPool);
       await insertCall(dbPool, dogId, vetId, "DECLINED");
       await insertCall(dbPool, dogId, vetId, "OPT_OUT");
-      await insertCall(dbPool, dogId, vetId, "APPOINTMENT"); // Should return this
+      await insertCall(dbPool, dogId, vetId, "APPOINTMENT");
 
       const call = await getMyLatestCall(getUserActor(dbPool, userId));
 
