@@ -108,12 +108,10 @@ async function insertPausedProfile(
   });
   await setDogCreationTime(idx, dogId, dbPool);
   const nextWeek = new Date(Date.now() + MILLIS_PER_WEEK);
-  await dbUpdateDogParticipation(
-    dbPool,
-    dogId,
-    PARTICIPATION_STATUS.PAUSED,
-    nextWeek,
-  );
+  await dbUpdateDogParticipation(dbPool, dogId, {
+    participationStatus: PARTICIPATION_STATUS.PAUSED,
+    pauseExpiryTime: nextWeek,
+  });
   return { userId, dogId };
 }
 

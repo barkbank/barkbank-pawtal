@@ -58,12 +58,10 @@ describe("getMyDogDetails", () => {
       // participation status returned should be PARTICIPATING and the pause
       // expiry time should be null despite these values)
       const pauseExpiryTime = new Date(Date.now() - MILLIS_PER_DAY);
-      await dbUpdateDogParticipation(
-        dbPool,
-        d1.dogId,
-        PARTICIPATION_STATUS.PAUSED,
+      await dbUpdateDogParticipation(dbPool, d1.dogId, {
+        participationStatus: PARTICIPATION_STATUS.PAUSED,
         pauseExpiryTime,
-      );
+      });
 
       // When user1 requests for details pertaining to dog1
       const actor = getUserActor(dbPool, u1.userId);

@@ -138,14 +138,19 @@ export async function dbSelectPreferredVetIds(
 export async function dbUpdateDogParticipation(
   dbCtx: DbContext,
   dogId: string,
-  participationStatus: ParticipationStatus,
-  pauseExpiryTime?: Date,
+  args: {
+    participationStatus: ParticipationStatus;
+    pauseExpiryTime?: Date;
+    encryptedReason?: string;
+  },
 ): Promise<boolean> {
+  const { participationStatus, pauseExpiryTime, encryptedReason } = args;
   const sql = `
   UPDATE dogs
   SET
     dog_participation_status = $2,
-    dog_pause_expiry_time = $3
+    dog_pause_expiry_time = $3,
+    dog_encrypted_reason = $4
   WHERE dog_id = $1
   RETURNING 1
   `;
@@ -153,6 +158,7 @@ export async function dbUpdateDogParticipation(
     dogId,
     participationStatus,
     pauseExpiryTime ?? null,
+    encryptedReason ?? "",
   ]);
   return res.rows.length === 1;
 }
