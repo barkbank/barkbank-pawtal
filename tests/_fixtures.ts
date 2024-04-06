@@ -23,7 +23,10 @@ import {
 import {
   DOG_ANTIGEN_PRESENCE,
   DOG_GENDER,
+  DogAntigenPresence,
+  DogGender,
   YES_NO_UNKNOWN,
+  YesNoUnknown,
 } from "@/lib/data/db-enums";
 import { USER_RESIDENCY } from "@/lib/data/db-enums";
 import { dbInsertAdmin, dbSelectAdmin } from "@/lib/data/db-admins";
@@ -333,14 +336,14 @@ function getDogBreed(idx: number): string {
   return `Breed${idx}`;
 }
 
-function getDogAntigenPresence(idx: number): DOG_ANTIGEN_PRESENCE {
-  const presenceList: DOG_ANTIGEN_PRESENCE[] =
+function getDogAntigenPresence(idx: number): DogAntigenPresence {
+  const presenceList: DogAntigenPresence[] =
     Object.values(DOG_ANTIGEN_PRESENCE);
   return presenceList[idx % presenceList.length];
 }
 
-function getDogGender(idx: number): DOG_GENDER {
-  const genderList: DOG_GENDER[] = Object.values(DOG_GENDER);
+function getDogGender(idx: number): DogGender {
+  const genderList: DogGender[] = Object.values(DOG_GENDER);
   return genderList[idx % genderList.length];
 }
 
@@ -349,12 +352,12 @@ function getDogWeightKg(idx: number): number | null {
   return options[idx % options.length];
 }
 
-function getYesNoUnknown(idx: number): YES_NO_UNKNOWN {
-  const responseList: YES_NO_UNKNOWN[] = Object.values(YES_NO_UNKNOWN);
+function getYesNoUnknown(idx: number): YesNoUnknown {
+  const responseList: YesNoUnknown[] = Object.values(YES_NO_UNKNOWN);
   return responseList[idx % responseList.length];
 }
 
-function getDogEverPregnant(idx: number): YES_NO_UNKNOWN {
+function getDogEverPregnant(idx: number): YesNoUnknown {
   const gender = getDogGender(idx);
   if (gender === DOG_GENDER.MALE) {
     return YES_NO_UNKNOWN.NO;
