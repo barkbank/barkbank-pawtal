@@ -27,25 +27,22 @@ export async function getIncompleteProfiles(
     FROM dog_statuses as tStatus
     WHERE profile_status = 'INCOMPLETE'
     AND participation_status = 'PARTICIPATING'
-  ),
-  mProfiles as (
-    SELECT
-      tDog.user_id as "userId",
-      tDog.dog_id as "dogId",
-      tDog.dog_encrypted_oii as "dogEncryptedOii",
-      tDog.dog_breed as "dogBreed",
-      tDog.dog_weight_kg as "dogWeightKg",
-      tDog.dog_ever_pregnant as "dogEverPregnant",
-      tDog.dog_ever_received_transfusion as "dogEverReceivedTransfusion"
-    FROM mStatuses as tStatus
-    LEFT JOIN latest_values as tLatest on tStatus.dog_id = tLatest.dog_id
-    LEFT JOIN dogs as tDog on tStatus.dog_id = tDog.dog_id
-    ORDER BY tDog.dog_creation_time ASC
-    LIMIT $1
-    OFFSET $2
   )
-
-  SELECT * FROM mProfiles
+  SELECT
+    tDog.user_id as "userId",
+    tDog.dog_id as "dogId",
+    tDog.dog_encrypted_oii as "dogEncryptedOii",
+    tDog.dog_gender as "dogGender",
+    tDog.dog_breed as "dogBreed",
+    tDog.dog_weight_kg as "dogWeightKg",
+    tDog.dog_ever_pregnant as "dogEverPregnant",
+    tDog.dog_ever_received_transfusion as "dogEverReceivedTransfusion"
+  FROM mStatuses as tStatus
+  LEFT JOIN latest_values as tLatest on tStatus.dog_id = tLatest.dog_id
+  LEFT JOIN dogs as tDog on tStatus.dog_id = tDog.dog_id
+  ORDER BY tDog.dog_creation_time ASC
+  LIMIT $1
+  OFFSET $2
   `;
   const res = await dbQuery(dbPool, sql, [limit, offset]);
   const futureProfiles: Promise<IncompleteProfile>[] = res.rows.map((row) => {
