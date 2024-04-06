@@ -4,30 +4,13 @@ import {
   AdminRecord,
   NO_ADMIN_PERMISSIONS,
 } from "../data/db-models";
-import { DogGender, YesNoUnknown } from "../data/db-enums";
 import { HashService } from "../services/hash";
 import { EncryptionService } from "../services/encryption";
 import { dbSelectAdmin } from "../data/db-admins";
 import { decryptAdminPii } from "./admin-pii";
 import { AdminPii } from "../data/db-models";
-import { dbQuery, toCamelCaseRow } from "../data/db-utils";
 import { DogMapper } from "../data/dog-mapper";
 import { UserMapper } from "../data/user-mapper";
-
-/**
- * Profile record for completion
- */
-// TODO: remove this
-export type DogProfile = {
-  dogId: string;
-  dogBreed: string;
-  dogGender: DogGender;
-  dogWeightKg: number | null;
-  dogBirthday: Date;
-  dogEverPregnant: YesNoUnknown;
-  dogEverReceivedTransfusion: YesNoUnknown;
-  dogCreationTime: Date;
-};
 
 export type AdminActorConfig = {
   dbPool: Pool;
