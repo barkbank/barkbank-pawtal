@@ -1,10 +1,6 @@
 import { withDb } from "../_db_helpers";
 import { AdminActor } from "@/lib/admin/admin-actor";
-import {
-  insertAdmin,
-  getAdminActorConfig,
-  adminPii
-} from "../_fixtures";
+import { insertAdmin, getAdminActorConfig, adminPii } from "../_fixtures";
 
 describe("AdminActor", () => {
   it("can retrieve its own actor data from the database", async () => {

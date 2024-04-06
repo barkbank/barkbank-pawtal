@@ -137,30 +137,4 @@ export class AdminActor {
     const admin = await this.getOwnAdminRecord();
     return admin ? admin.adminCanManageDonors : false;
   }
-
-  // TODO: remove this
-  public async getIncompleteProfileList(): Promise<DogProfile[]> {
-    const canManageDonors = await this.canManageDonors();
-    if (!canManageDonors) {
-      return [];
-    }
-    const sql = `
-      SELECT
-        dog_id,
-        dog_breed,
-        dog_gender,
-        dog_weight_kg,
-        dog_birthday,
-        dog_ever_pregnant,
-        dog_ever_received_transfusion,
-        dog_creation_time
-      FROM dogs
-      WHERE dog_weight_kg is NULL
-      OR dog_ever_pregnant = 'UNKNOWN'
-      OR dog_ever_received_transfusion = 'UNKNOWN'
-      ORDER BY dog_creation_time DESC
-    `;
-    const res = await dbQuery(this.getDbPool(), sql, []);
-    return res.rows.map(toCamelCaseRow);
-  }
 }
