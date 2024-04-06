@@ -141,7 +141,6 @@ export function getAdminActorFactoryConfig(
   const base: AdminActorFactoryConfig = {
     dbPool: db,
     emailHashService: getEmailHashService(),
-    piiEncryptionService: getPiiEncryptionService(),
     adminMapper: getAdminMapper(),
     rootAdminEmail: "",
   };
@@ -152,7 +151,7 @@ export function getAdminActorConfig(db: Pool): AdminActorConfig {
   return {
     dbPool: db,
     emailHashService: getEmailHashService(),
-    piiEncryptionService: getPiiEncryptionService(),
+    adminMapper: getAdminMapper(),
     userMapper: getUserMapper(),
     dogMapper: getDogMapper(),
   };

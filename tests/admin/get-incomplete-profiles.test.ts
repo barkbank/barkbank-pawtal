@@ -9,10 +9,15 @@ import {
 } from "../_fixtures";
 import { getIncompleteProfiles } from "@/lib/admin/actions/get-incomplete-profiles";
 import { Pool } from "pg";
-import { PARTICIPATION_STATUS, YES_NO_UNKNOWN } from "@/lib/data/db-enums";
+import {
+  DOG_GENDER,
+  PARTICIPATION_STATUS,
+  YES_NO_UNKNOWN,
+} from "@/lib/data/db-enums";
 import {
   DEFAULT_DATE_TIME_FORMAT,
   SINGAPORE_TIME_ZONE,
+  UTC_DATE_OPTION,
   parseDateTime,
 } from "@/lib/utilities/bark-time";
 import { MILLIS_PER_DAY, MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
@@ -167,6 +172,8 @@ async function getExpectedProfile(
     userId,
     dogId,
     dogName,
+    dogGender: DOG_GENDER.MALE,
+    dogBirthday: parseDateTime("2020-03-03", UTC_DATE_OPTION),
     dogWeightKg: null,
     dogBreed: "",
     dogEverPregnant: YES_NO_UNKNOWN.UNKNOWN,
@@ -180,6 +187,8 @@ async function insertIncompleteProfile(
 ): Promise<{ userId: string; dogId: string }> {
   const { userId } = await insertUser(idx, dbPool);
   const { dogId } = await insertDog(idx, userId, dbPool, {
+    dogGender: DOG_GENDER.MALE,
+    dogBirthday: parseDateTime("2020-03-03", UTC_DATE_OPTION),
     dogWeightKg: null,
     dogBreed: "",
     dogEverPregnant: YES_NO_UNKNOWN.UNKNOWN,
@@ -195,6 +204,8 @@ async function insertCompleteProfile(
 ): Promise<{ userId: string; dogId: string }> {
   const { userId } = await insertUser(idx, dbPool);
   const { dogId } = await insertDog(idx, userId, dbPool, {
+    dogGender: DOG_GENDER.MALE,
+    dogBirthday: parseDateTime("2020-03-03", UTC_DATE_OPTION),
     dogWeightKg: 28,
     dogBreed: "Lion Dog",
     dogEverPregnant: YES_NO_UNKNOWN.NO,
