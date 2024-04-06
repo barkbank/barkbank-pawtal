@@ -13,7 +13,7 @@ import {
 import { isValidWeightKg } from "@/lib/utilities/bark-utils";
 import {
   DogAntigenPresence,
-  DogGender,
+  DOG_GENDER,
   YES_NO_UNKNOWN,
 } from "@/lib/data/db-enums";
 import { Breed } from "@/lib/services/breed";
@@ -135,8 +135,8 @@ export default function PetForm(props: {
           name="dogGender"
           layout="button"
           options={[
-            { label: "Male", value: DogGender.MALE },
-            { label: "Female", value: DogGender.FEMALE },
+            { label: "Male", value: DOG_GENDER.MALE },
+            { label: "Female", value: DOG_GENDER.FEMALE },
           ]}
         />
 

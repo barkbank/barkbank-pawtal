@@ -9,7 +9,7 @@ import {
   DogSecureOii,
   DogSpec,
 } from "@/lib/data/db-models";
-import { DogAntigenPresence, DogGender, YesNoUnknown } from "../data/db-enums";
+import { DogAntigenPresence, YesNoUnknown, DogGender } from "../data/db-enums";
 import { UserResidency } from "../data/db-enums";
 import { dbSelectUserIdByHashedEmail, dbInsertUser } from "@/lib/data/db-users";
 import { dbBegin, dbRollback, dbCommit, dbRelease } from "@/lib/data/db-utils";

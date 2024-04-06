@@ -8,7 +8,7 @@ import { MyDog } from "@/lib/user/user-models";
 import Image from "next/image";
 import { IMG_PATH } from "@/lib/image-path";
 import {
-  DogGender,
+  DOG_GENDER,
   MEDICAL_STATUS,
   PARTICIPATION_STATUS,
   PROFILE_STATUS,
@@ -204,7 +204,7 @@ function ActionBlock(props: { dog: MyDog }) {
 function DogCard(props: { dog: MyDog; cardIdx: number; isLastCard: boolean }) {
   const { dog, cardIdx, isLastCard } = props;
   const imgSrc =
-    dog.dogGender === DogGender.MALE
+    dog.dogGender === DOG_GENDER.MALE
       ? IMG_PATH.BROWN_DOG_AVATAR
       : IMG_PATH.BORDER_COLLIE_DOG_AVATAR;
   return (

@@ -18,7 +18,7 @@ import { registerNewUser } from "@/app/user/registration/_actions/register-new-u
 import { RegistrationRequest } from "@/lib/services/registration";
 import {
   DogAntigenPresence,
-  DogGender,
+  DOG_GENDER,
   YES_NO_UNKNOWN,
 } from "@/lib/data/db-enums";
 import { UserResidency } from "@/lib/data/db-enums";
@@ -95,7 +95,7 @@ export default function DonorForm(props: {
       dogName: vals.dogName,
       dogBreed: vals.dogBreed,
       dogBirthday: BARK_UTC.parseDate(vals.dogBirthday),
-      dogGender: vals.dogGender as DogGender,
+      dogGender: vals.dogGender as DOG_GENDER,
       dogWeightKg: vals.dogWeightKg === "" ? null : Number(vals.dogWeightKg),
       dogDea1Point1: vals.dogDea1Point1 as DogAntigenPresence,
       dogEverPregnant: vals.dogEverPregnant as YES_NO_UNKNOWN,

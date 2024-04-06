@@ -5,7 +5,7 @@ import { RegistrationServiceConfig } from "@/lib/services/registration";
 import { RegistrationService } from "@/lib/services/registration";
 import {
   DogAntigenPresence,
-  DogGender,
+  DOG_GENDER,
   YES_NO_UNKNOWN,
 } from "@/lib/data/db-enums";
 import { USER_RESIDENCY } from "@/lib/data/db-enums";
@@ -204,7 +204,7 @@ function getRegistrationRequest(
     dogName: "Tarik",
     dogBreed: "Teh",
     dogBirthday: BARK_UTC.getDate(2019, 7, 4),
-    dogGender: DogGender.MALE,
+    dogGender: DOG_GENDER.MALE,
     dogWeightKg: 23,
     dogDea1Point1: DogAntigenPresence.NEGATIVE,
     dogEverPregnant: YES_NO_UNKNOWN.NO,

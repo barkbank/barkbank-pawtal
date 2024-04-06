@@ -87,11 +87,13 @@ export const YES_NO_UNKNOWN = {
 
 export type YesNoUnknown = ObjectValues<typeof YES_NO_UNKNOWN>;
 
-export enum DogGender {
-  MALE = "MALE",
-  FEMALE = "FEMALE",
-  UNKNOWN = "UNKNOWN",
-}
+export const DOG_GENDER = {
+  MALE: "MALE",
+  FEMALE: "FEMALE",
+  UNKNOWN: "UNKNOWN",
+} as const;
+
+export type DogGender = ObjectValues<typeof DOG_GENDER>;
 
 export enum DogAntigenPresence {
   POSITIVE = "POSITIVE",

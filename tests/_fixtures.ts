@@ -22,7 +22,7 @@ import {
 } from "@/lib/data/db-models";
 import {
   DogAntigenPresence,
-  DogGender,
+  DOG_GENDER,
   YES_NO_UNKNOWN,
 } from "@/lib/data/db-enums";
 import { USER_RESIDENCY } from "@/lib/data/db-enums";
@@ -333,8 +333,8 @@ function getDogAntigenPresence(idx: number): DogAntigenPresence {
   return presenceList[idx % presenceList.length];
 }
 
-function getDogGender(idx: number): DogGender {
-  const genderList: DogGender[] = Object.values(DogGender);
+function getDogGender(idx: number): DOG_GENDER {
+  const genderList: DOG_GENDER[] = Object.values(DOG_GENDER);
   return genderList[idx % genderList.length];
 }
 
@@ -350,10 +350,10 @@ function getYesNoUnknown(idx: number): YES_NO_UNKNOWN {
 
 function getDogEverPregnant(idx: number): YES_NO_UNKNOWN {
   const gender = getDogGender(idx);
-  if (gender === DogGender.MALE) {
+  if (gender === DOG_GENDER.MALE) {
     return YES_NO_UNKNOWN.NO;
   }
-  if (gender === DogGender.UNKNOWN) {
+  if (gender === DOG_GENDER.UNKNOWN) {
     return YES_NO_UNKNOWN.UNKNOWN;
   }
   return getYesNoUnknown(idx);

@@ -14,7 +14,7 @@ import { UTC_DATE_OPTION, parseDateTime } from "@/lib/utilities/bark-time";
 import {
   CALL_OUTCOME,
   DogAntigenPresence,
-  DogGender,
+  DOG_GENDER,
   PARTICIPATION_STATUS,
   YES_NO_UNKNOWN,
 } from "@/lib/data/db-enums";
@@ -118,7 +118,7 @@ function registrationUpdate(
     dogName: "updated name",
     dogBreed: "updated breed",
     dogBirthday: parseDateTime("1970-01-01", UTC_DATE_OPTION),
-    dogGender: DogGender.MALE,
+    dogGender: DOG_GENDER.MALE,
     dogWeightKg: 50,
     dogDea1Point1: DogAntigenPresence.UNKNOWN,
     dogEverPregnant: YES_NO_UNKNOWN.NO,
