@@ -17,7 +17,7 @@ import { UserMapper } from "../data/user-mapper";
 /**
  * Profile record for completion
  */
-// WIP: move this into admin-models or remove?
+// TODO: remove this
 export type DogProfile = {
   dogId: string;
   dogBreed: string;
@@ -138,7 +138,7 @@ export class AdminActor {
     return admin ? admin.adminCanManageDonors : false;
   }
 
-  // WIP: remove this
+  // TODO: remove this
   public async getIncompleteProfileList(): Promise<DogProfile[]> {
     const canManageDonors = await this.canManageDonors();
     if (!canManageDonors) {

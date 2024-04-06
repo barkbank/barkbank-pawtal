@@ -1,9 +1,8 @@
-import { DbContext, dbQuery } from "@/lib/data/db-utils";
+import { dbQuery } from "@/lib/data/db-utils";
 import { withDb } from "../_db_helpers";
 import {
   getAdminActor,
   getDogOii,
-  getDogSpec,
   insertAdmin,
   insertDog,
   insertUser,
