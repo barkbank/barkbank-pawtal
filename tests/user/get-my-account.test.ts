@@ -14,15 +14,15 @@ describe("getMyAccount", () => {
         userId: user_id,
         userCreationTime,
         userResidency,
-        ownPii,
+        userEmail,
+        userPhoneNumber,
       } = account!;
 
       expect(user_id).toEqual(userId);
       expect(userCreationTime).toBeDefined();
-      expect(ownPii.userEmail).toEqual("user1@user.com");
-      expect(ownPii.userName).toEqual("User 1");
+      expect(userEmail).toEqual("user1@user.com");
       expect(userResidency).toEqual(USER_RESIDENCY.SINGAPORE);
-      expect(ownPii.userPhoneNumber).toEqual("+65 10000001");
+      expect(userPhoneNumber).toEqual("+65 10000001");
     });
   });
   it("should return null if the user does not exist", async () => {
