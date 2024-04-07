@@ -7,12 +7,13 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { IMG_PATH } from "@/lib/image-path";
 import { getMyLatestCall } from "@/lib/user/actions/get-my-latest-call";
 import { getMyAccount } from "@/lib/user/actions/get-my-account";
-import { format, formatDistanceStrict } from "date-fns";
+import { formatDistanceStrict } from "date-fns";
 import { BarkH1, BarkH4 } from "@/components/bark/bark-typography";
 import Link from "next/link";
 import Image from "next/image";
 
 import { capitalize } from "lodash";
+import { formatDateTime, SINGAPORE_TIME_ZONE } from "@/lib/utilities/bark-time";
 
 export default async function Page() {
   const actor = await getAuthenticatedUserActor();
@@ -36,7 +37,10 @@ export default async function Page() {
     ? formatDistanceStrict(latestCall, new Date(), { addSuffix: true })
     : "N.A";
 
-  const userCreationTimeText = format(userCreationTime, "dd MMM yyyy");
+  const userCreationTimeText = formatDateTime(userCreationTime, {
+    format: "dd MMM yyyy",
+    timeZone: SINGAPORE_TIME_ZONE,
+  });
 
   return (
     <main className="flex flex-col gap-6">
