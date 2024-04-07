@@ -27,6 +27,9 @@ export async function getMyLatestCall(
   }
 
   const { userId, userLastContactedTime } = res.rows[0];
+  if (userLastContactedTime === null) {
+    return null;
+  }
 
   return {
     userId,

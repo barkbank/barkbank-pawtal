@@ -34,7 +34,7 @@ describe("getMyLatestCall", () => {
       const call = await getMyLatestCall(getUserActor(dbPool, userId));
 
       expect(
-        currentTime.getTime() - call?.userLastContactedTime.getTime()!,
+        currentTime.getTime() - call?.userLastContactedTime?.getTime()!,
       ).toBeLessThan(1000);
     });
   });
@@ -56,7 +56,7 @@ describe("getMyLatestCall", () => {
       const call = await getMyLatestCall(getUserActor(dbPool, userId));
 
       expect(
-        currentTime.getTime() - call?.userLastContactedTime.getTime()!,
+        currentTime.getTime() - call?.userLastContactedTime?.getTime()!,
       ).toBeLessThan(1000);
     });
   });
