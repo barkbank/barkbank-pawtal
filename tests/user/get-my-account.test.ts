@@ -10,20 +10,12 @@ describe("getMyAccount", () => {
       const actor = getUserActor(dbPool, userId);
       const account = await getMyAccount(actor);
 
-      const {
-        userId: user_id,
-        userCreationTime,
-        userResidency,
-        userName,
-        userEmail,
-        userPhoneNumber,
-      } = account!;
+      const { userName, userEmail, userPhoneNumber, ...otherFields } = account!;
 
-      expect(user_id).toEqual(userId);
-      expect(userCreationTime).toBeDefined();
+      expect(otherFields.userCreationTime).toBeDefined();
       expect(userName).toEqual("User 1");
       expect(userEmail).toEqual("user1@user.com");
-      expect(userResidency).toEqual(USER_RESIDENCY.SINGAPORE);
+      expect(otherFields.userResidency).toEqual(USER_RESIDENCY.SINGAPORE);
       expect(userPhoneNumber).toEqual("+65 10000001");
     });
   });

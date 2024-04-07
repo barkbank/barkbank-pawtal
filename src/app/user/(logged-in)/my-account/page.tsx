@@ -24,7 +24,6 @@ export default async function Page() {
     redirect(RoutePath.USER_LOGIN_PAGE);
   }
   const {
-    userId,
     userCreationTime,
     userResidency,
     userName,
@@ -85,7 +84,7 @@ export default async function Page() {
       </div>
       <div className="flex flex-col gap-1">
         <p className="text-sm font-bold">User ID Number</p>
-        <p>{userId}</p>
+        <p>{actor.getUserId()}</p>
       </div>
       <div className="flex gap-3">
         <Link

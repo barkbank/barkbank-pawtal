@@ -5,11 +5,10 @@ import { MyAccount } from "../user-models";
 export async function getMyAccount(
   actor: UserActor,
 ): Promise<MyAccount | null> {
-  const { userId: user_id, dbPool, userMapper } = actor.getParams();
+  const { userId, dbPool, userMapper } = actor.getParams();
 
   const sql = `
   SELECT
-    user_id as "userId",
     user_creation_time as "userCreationTime",
     user_hashed_email as "userHashedEmail",
     user_encrypted_pii as "userEncryptedPii",
@@ -19,17 +18,11 @@ export async function getMyAccount(
   WHERE 
     user_id = $1
   `;
-  const res = await dbQuery(dbPool, sql, [user_id]);
+  const res = await dbQuery(dbPool, sql, [userId]);
   if (res.rows.length === 0) {
     return null;
   }
-  const {
-    userId,
-    userCreationTime,
-    userHashedEmail,
-    userEncryptedPii,
-    userResidency,
-  } = res.rows[0];
+  const { userHashedEmail, userEncryptedPii, ...otherFields } = res.rows[0];
 
   const { userName, userEmail, userPhoneNumber } =
     await userMapper.mapUserSecurePiiToUserPii({
@@ -38,11 +31,9 @@ export async function getMyAccount(
     });
 
   return {
-    userId,
-    userCreationTime,
-    userResidency,
     userName,
     userEmail,
     userPhoneNumber,
+    ...otherFields,
   };
 }
