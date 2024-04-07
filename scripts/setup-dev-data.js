@@ -1,41 +1,42 @@
 const http = require("http");
 
-function doRequest(method, path, body, callback) {
-  const req = http.request(
-    {
-      hostname: "localhost",
-      port: 3000,
-      path: path,
-      method: method,
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: "Basic ZGV2ZWxvcGVyOnBhc3N3b3Jk",
+function doRequest(method, path, body) {
+  return new Promise((resolve, reject) => {
+    const req = http.request(
+      {
+        hostname: "localhost",
+        port: 3000,
+        path: path,
+        method: method,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Basic ZGV2ZWxvcGVyOnBhc3N3b3Jk",
+        },
       },
-    },
-    (res) => {
-      let responseData = "";
-      res.on("data", (chunk) => {
-        responseData += chunk;
-      });
+      (res) => {
+        let responseData = "";
+        res.on("data", (chunk) => {
+          responseData += chunk;
+        });
+        res.on("end", () => {
+          try {
+            const jsonData = JSON.parse(responseData);
+            resolve(jsonData);
+          } catch (error) {
+            reject(error);
+          }
+        });
+      },
+    );
+    if (body) {
+      req.write(JSON.stringify(body));
+    }
+    req.end();
+  });
+}
 
-      res.on("end", () => {
-        try {
-          const jsonData = JSON.parse(responseData);
-          if (callback) {
-            callback(null, jsonData);
-          }
-        } catch (error) {
-          if (callback) {
-            callback(error);
-          }
-        }
-      });
-    },
-  );
-  if (body) {
-    req.write(JSON.stringify(body));
-  }
-  req.end();
+function doQuery(sql, args) {
+  return doRequest("POST", "/api/dangerous/sql", { sql, args });
 }
 
 // https://stackoverflow.com/a/47593316
@@ -102,12 +103,10 @@ function createAdmin(idx) {
     adminName: getHumanName(nameIdx),
     adminPhoneNumber: `+65${80000000 + idx}`,
   };
-  doRequest(
-    "POST",
-    "/api/dangerous/admins",
-    body,
-    getStandardCallbackFor(`Create ${email}`),
-  );
+  return doRequest("POST", "/api/dangerous/admins", body).then((res) => {
+    console.log(`Created admin: ${email}`);
+    return res;
+  });
 }
 
 function createVet(idx) {
@@ -118,12 +117,10 @@ function createVet(idx) {
     vetPhoneNumber: `+65${60000000 + idx}`,
     vetAddress: `${idx} Dog Park Drive`,
   };
-  doRequest(
-    "POST",
-    "/api/dangerous/vets",
-    body,
-    getStandardCallbackFor(`Create ${email}`),
-  );
+  return doRequest("POST", "/api/dangerous/vets", body).then((res) => {
+    console.log(`Created vet: ${email}`);
+    return res;
+  });
 }
 
 function userEmail(idx) {
@@ -149,8 +146,10 @@ function createUser(idx, callback) {
   };
   const userResidency = getUserResidency(idx);
   const body = { userPii, userResidency };
-  callback = callback || getStandardCallbackFor(`Create ${email}`);
-  doRequest("POST", "/api/dangerous/users", body, callback);
+  return doRequest("POST", "/api/dangerous/users", body).then((res) => {
+    console.log(`Created user: ${email}`);
+    return res;
+  });
 }
 
 function getFirstName(idx) {
@@ -206,11 +205,13 @@ function getHumanName(idx) {
 function getDogName(idx) {
   const maleDogNames = [
     "Bailey",
+    "Barkus",
     "Bear",
     "Bentley",
     "Buddy",
     "Charlie",
     "Cooper",
+    "Dingo",
     "Duke",
     "Jack",
     "Max",
@@ -220,10 +221,13 @@ function getDogName(idx) {
     "Rocky",
     "Teddy",
     "Toby",
+    "Woofus",
     "Zeus",
   ];
   const femaleDogNames = [
+    "Aurora",
     "Bella",
+    "Carol",
     "Chloe",
     "Daisy",
     "Lily",
@@ -238,6 +242,7 @@ function getDogName(idx) {
     "Sadie",
     "Sophie",
     "Stella",
+    "Vella",
     "Zoe",
   ];
   const rng = getRng("getDogName", idx);
@@ -381,33 +386,49 @@ function createDog(email, idx) {
       dogEverReceivedTransfusion: getEverReceivedTransfusion(idx),
     },
   };
-  doRequest("POST", "/api/dangerous/dogs", body, (err, res) => {
-    if (err) {
-      console.error(`Failed to create dog for ${email}`, body, err);
-      return;
-    }
-    console.log(`Create dog for ${email}`, body, res);
+  return doRequest("POST", "/api/dangerous/dogs", body).then((res) => {
+    console.log(
+      `Created idx=${idx} dogId ${res.dogId} for user ${email} named ${body.dogOii.dogName}`,
+    );
+    return res;
   });
 }
 
-for (let i = 1; i <= 3; ++i) {
-  const idx = i;
-  createAdmin(idx);
-  createVet(idx);
+/**
+ * @returns [1, 2, 3, ..., n]
+ */
+function irange(n) {
+  return Array.from(Array(n).keys()).map((i) => i + 1);
 }
 
-for (let i = 1; i <= 99; ++i) {
-  const idx = i;
-  createUser(idx, (err, res) => {
-    if (err) {
-      console.error("Failed to create user ", idx);
-      return;
-    }
-    const email = userEmail(idx);
-    const offset = idx * 1000;
-    const numDogs = idx % 5;
-    for (let j = 1; j <= numDogs; ++j) {
-      createDog(email, offset + j);
-    }
-  });
+function main() {
+  const numAdmins = 3;
+  const numVets = 3;
+  const numUsers = 10;
+  const maxDogsPerUser = 5;
+
+  Promise.resolve()
+    .then(() => doQuery(`delete from dogs`, []))
+    .then(() => doQuery(`delete from users`, []))
+    .then(() => doQuery(`delete from vets`, []))
+    .then(() => doQuery(`delete from admins`, []))
+    .then(() => Promise.all(irange(numAdmins).map(createAdmin)))
+    .then(() => Promise.all(irange(numVets).map(createVet)))
+    .then(() =>
+      Promise.all(
+        irange(numUsers).map((idx) => {
+          return createUser(idx).then(() => {
+            const email = userEmail(idx);
+            const offset = idx * maxDogsPerUser;
+            const numDogs = idx % (maxDogsPerUser + 1);
+            return Promise.all(
+              irange(numDogs).map((j) => createDog(email, offset + j))
+            );
+          });
+        }),
+      ),
+    )
+    .then(() => console.log("Done"));
 }
+
+main();
