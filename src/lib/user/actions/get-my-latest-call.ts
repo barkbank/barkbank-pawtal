@@ -1,54 +1,35 @@
-import { DbCall, Dog } from "@/lib/data/db-models";
 import { UserActor } from "../user-actor";
 import { dbQuery } from "@/lib/data/db-utils";
+import { MyLastContactedTime } from "../user-models";
 
 export async function getMyLatestCall(
   actor: UserActor,
-): Promise<DbCall | null> {
-  const { userId, dbPool, dogMapper } = actor.getParams();
+): Promise<MyLastContactedTime | null> {
+  const { userId: user_id, dbPool } = actor.getParams();
 
   const sql = `
-  WITH
-  mUserDogs as (
-      SELECT 
-        dog_id
-      FROM dogs
-      WHERE user_id = $1
-  ),
-  mUserCalls as (
-    SELECT 
-      *
-    FROM calls
-    WHERE dog_id IN (SELECT dog_id FROM mUserDogs)
-  )
   SELECT
-    *
-  FROM mUserCalls 
-  ORDER BY call_creation_time DESC
-  LIMIT 1
+    tUser.user_id as "userId",
+    MAX(tCall.call_creation_time) as "userLastContactedTime"
+  FROM
+    users as tUser
+  LEFT JOIN dogs as tDog on tUser.user_id = tDog.user_id
+  LEFT JOIN calls as tCall on tDog.dog_id = tCall.dog_id
+  WHERE
+    tUser.user_id = $1
+  GROUP BY tUser.user_id
   `;
 
-  const res = await dbQuery(dbPool, sql, [userId]);
+  const res = await dbQuery(dbPool, sql, [user_id]);
 
   if (res.rows.length === 0) {
     return null;
   }
 
-  const {
-    call_id: callId,
-    call_creation_time: callCreationTime,
-    vet_id: vetId,
-    dog_id: dogId,
-    call_outcome: callOutcome,
-    ecnrypted_opt_out_reason: encryptedOptOutReason,
-  } = res.rows[0];
+  const { userId, userLastContactedTime } = res.rows[0];
 
   return {
-    callId,
-    callCreationTime,
-    vetId,
-    dogId,
-    callOutcome,
-    encryptedOptOutReason,
+    userId,
+    userLastContactedTime,
   };
 }

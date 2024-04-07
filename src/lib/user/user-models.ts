@@ -54,3 +54,8 @@ export type MyAccount = {
   userEmail: string;
   userPhoneNumber: string;
 };
+
+export type MyLastContactedTime = {
+  userId: string;
+  userLastContactedTime: Date;
+};

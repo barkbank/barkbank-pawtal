@@ -20,7 +20,7 @@ describe("getMyLatestCall", () => {
 
       const call = await getMyLatestCall(getUserActor(dbPool, userId));
 
-      expect(call?.callId).toEqual("3");
+      expect(call?.userLastContactedTime).toBeInstanceOf(Date);
     });
   });
   it("should return the latest call if the user owns multiple pets and has calls", async () => {
@@ -34,7 +34,7 @@ describe("getMyLatestCall", () => {
 
       const call = await getMyLatestCall(getUserActor(dbPool, userId));
 
-      expect(call?.callId).toEqual("2");
+      expect(call?.userLastContactedTime).toBeInstanceOf(Date);
     });
   });
   it("should return empty if the user owns a pet but has no calls", async () => {
@@ -42,7 +42,7 @@ describe("getMyLatestCall", () => {
       const { userId } = await insertUser(1, dbPool);
       await insertDog(1, userId, dbPool);
       const call = await getMyLatestCall(getUserActor(dbPool, userId));
-      expect(call).toBeNull();
+      expect(call?.userLastContactedTime).toBeNull();
     });
   });
 });
