@@ -14,12 +14,14 @@ describe("getMyAccount", () => {
         userId: user_id,
         userCreationTime,
         userResidency,
+        userName,
         userEmail,
         userPhoneNumber,
       } = account!;
 
       expect(user_id).toEqual(userId);
       expect(userCreationTime).toBeDefined();
+      expect(userName).toEqual("User 1");
       expect(userEmail).toEqual("user1@user.com");
       expect(userResidency).toEqual(USER_RESIDENCY.SINGAPORE);
       expect(userPhoneNumber).toEqual("+65 10000001");

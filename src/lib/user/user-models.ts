@@ -50,6 +50,7 @@ export type MyDogDetails = StatusSet & {
 export type MyAccount = {
   userId: string;
   userCreationTime: Date;
+  userName: string;
   userResidency: string;
   userEmail: string;
   userPhoneNumber: string;

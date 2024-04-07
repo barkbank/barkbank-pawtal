@@ -27,10 +27,12 @@ export default async function Page() {
     userId,
     userCreationTime,
     userResidency,
-    ownPii: { userName, userEmail, userPhoneNumber },
+    userName,
+    userEmail,
+    userPhoneNumber,
   } = account;
 
-  let latestCall = (await getMyLatestCall(actor))?.callCreationTime;
+  let latestCall = (await getMyLatestCall(actor))?.userLastContactedTime;
   const latestCallText = latestCall
     ? formatDistanceStrict(latestCall, new Date(), { addSuffix: true })
     : "N.A";

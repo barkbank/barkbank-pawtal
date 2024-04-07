@@ -31,7 +31,7 @@ export async function getMyAccount(
     userResidency,
   } = res.rows[0];
 
-  const { userEmail, userPhoneNumber } =
+  const { userName, userEmail, userPhoneNumber } =
     await userMapper.mapUserSecurePiiToUserPii({
       userHashedEmail,
       userEncryptedPii,
@@ -41,6 +41,7 @@ export async function getMyAccount(
     userId,
     userCreationTime,
     userResidency,
+    userName,
     userEmail,
     userPhoneNumber,
   };
