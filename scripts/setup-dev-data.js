@@ -409,7 +409,7 @@ function irange(n) {
 function main() {
   const numAdmins = 3;
   const numVets = 3;
-  const numUsers = 10;
+  const numUsers = 99;
   const maxDogsPerUser = 5;
   const userIdxToUserId = {};
   const vetIdxToVetId = {};
