@@ -390,7 +390,12 @@ function createDog(email, idx) {
     console.log(
       `Created idx=${idx} dogId ${res.dogId} for user ${email} named ${body.dogOii.dogName}`,
     );
-    return res;
+    return {
+      userEmail: body.userEmail,
+      ...body.dogOii,
+      ...body.dogDetails,
+      ...res,
+    };
   });
 }
 
@@ -406,28 +411,93 @@ function main() {
   const numVets = 3;
   const numUsers = 10;
   const maxDogsPerUser = 5;
+  const userIdxToUserId = {};
+  const vetIdxToVetId = {};
+  const dogIdToDog = {};
+
+  function createAdminAccounts() {
+    return Promise.all(irange(numAdmins).map(createAdmin));
+  }
+
+  function createVetAccounts() {
+    return Promise.all(
+      irange(numVets).map((vetIdx) => {
+        return createVet(vetIdx).then((vet) => {
+          vetIdxToVetId[vetIdx] = vet.vetId;
+        });
+      }),
+    );
+  }
+
+  function createUserAccountsAndDogs() {
+    return Promise.all(
+      irange(numUsers).map((idx) => {
+        return createUser(idx).then((user) => {
+          const { userId } = user;
+          userIdxToUserId[idx] = userId;
+          const email = userEmail(idx);
+          const offset = idx * maxDogsPerUser;
+          const numDogs = idx % (maxDogsPerUser + 1);
+          return Promise.all(
+            irange(numDogs).map((j) =>
+              createDog(email, offset + j).then((dog) => {
+                dogIdToDog[dog.dogId] = dog;
+                return dog;
+              }),
+            ),
+          );
+        });
+      }),
+    );
+  }
+
+  function addVetPreferences() {
+    return Promise.all(
+      irange(numUsers).map((userIdx) => {
+        const rng = getRng("choose a vet", userIdx);
+        const vetIdx = (nextInt(rng) % numVets) + 1;
+        const userId = userIdxToUserId[userIdx];
+        const vetId = vetIdxToVetId[vetIdx];
+        return Promise.resolve()
+          .then(() =>
+            doQuery(`select dog_id as "dogId" from dogs where user_id = $1`, [
+              userId,
+            ]),
+          )
+          .then((res) =>
+            Promise.all(
+              res.rows.map((row) => {
+                const { dogId } = row;
+                return doQuery(
+                  `
+                  insert into dog_vet_preferences (user_id, vet_id, dog_id)
+                  values ($1, $2, $3)
+                  `,
+                  [userId, vetId, dogId],
+                ).then((res) => {
+                  const dog = dogIdToDog[dogId];
+                  const { dogName } = dog;
+                  console.log(
+                    `dogId ${dogId} prefers vetId ${vetId} - ${dogName}`,
+                  );
+                  return res;
+                });
+              }),
+            ),
+          );
+      }),
+    );
+  }
 
   Promise.resolve()
     .then(() => doQuery(`delete from dogs`, []))
     .then(() => doQuery(`delete from users`, []))
     .then(() => doQuery(`delete from vets`, []))
     .then(() => doQuery(`delete from admins`, []))
-    .then(() => Promise.all(irange(numAdmins).map(createAdmin)))
-    .then(() => Promise.all(irange(numVets).map(createVet)))
-    .then(() =>
-      Promise.all(
-        irange(numUsers).map((idx) => {
-          return createUser(idx).then(() => {
-            const email = userEmail(idx);
-            const offset = idx * maxDogsPerUser;
-            const numDogs = idx % (maxDogsPerUser + 1);
-            return Promise.all(
-              irange(numDogs).map((j) => createDog(email, offset + j))
-            );
-          });
-        }),
-      ),
-    )
+    .then(createAdminAccounts)
+    .then(createVetAccounts)
+    .then(createUserAccountsAndDogs)
+    .then(addVetPreferences)
     .then(() => console.log("Done"));
 }
 
