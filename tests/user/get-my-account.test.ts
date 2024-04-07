@@ -27,7 +27,7 @@ describe("getMyAccount", () => {
   });
   it("should return null if the user does not exist", async () => {
     await withDb(async (dbPool) => {
-      const actor = getUserActor(dbPool, "non-existent-user-id");
+      const actor = getUserActor(dbPool, "99999999");
       const account = await getMyAccount(actor);
       expect(account).toBeNull();
     });
