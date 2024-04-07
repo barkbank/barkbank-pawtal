@@ -46,3 +46,11 @@ export type MyDogDetails = StatusSet & {
 
   dogReports: MyDogReport[];
 };
+
+export type MyAccount = {
+  userId: string;
+  userCreationTime: Date;
+  userResidency: string;
+  userEmail: string;
+  userPhoneNumber: string;
+};
