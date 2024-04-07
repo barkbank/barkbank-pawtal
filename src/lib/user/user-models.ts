@@ -58,5 +58,5 @@ export type MyAccount = {
 
 export type MyLastContactedTime = {
   userId: string;
-  userLastContactedTime: Date;
+  userLastContactedTime: Date | null;
 };
