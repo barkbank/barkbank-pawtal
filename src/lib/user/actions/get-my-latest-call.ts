@@ -5,7 +5,7 @@ import { MyLastContactedTime } from "../user-models";
 export async function getMyLatestCall(
   actor: UserActor,
 ): Promise<MyLastContactedTime | null> {
-  const { userId: user_id, dbPool } = actor.getParams();
+  const { userId, dbPool } = actor.getParams();
 
   const sql = `
   SELECT
@@ -20,19 +20,15 @@ export async function getMyLatestCall(
   GROUP BY tUser.user_id
   `;
 
-  const res = await dbQuery(dbPool, sql, [user_id]);
+  const res = await dbQuery(dbPool, sql, [userId]);
 
   if (res.rows.length === 0) {
     return null;
   }
 
-  const { userId, userLastContactedTime } = res.rows[0];
-  if (userLastContactedTime === null) {
-    return null;
-  }
+  const { userLastContactedTime } = res.rows[0];
 
   return {
-    userId,
     userLastContactedTime,
   };
 }
