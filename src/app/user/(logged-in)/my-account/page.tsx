@@ -93,7 +93,10 @@ export default async function Page() {
       <div className="flex gap-3">
         <Link
           className={`h-[60px] ${buttonVariants({ variant: "brand" })}`}
-          href={RoutePath.USER_MY_ACCOUNT_EDIT}
+          href={{
+            pathname: RoutePath.USER_MY_ACCOUNT_EDIT,
+            query: { userName, userPhoneNumber, userResidency },
+          }}
         >
           Edit
         </Link>
