@@ -28,7 +28,7 @@ type FormDataType = z.infer<typeof FORM_SCHEMA>;
 export default function BarkLoginForm(props: {
   accountType: AccountType;
   successPath: string;
-  noAccountErrorMessage: string;
+  noAccountErrorMessage: string | React.ReactNode;
 }) {
   const { accountType, successPath, noAccountErrorMessage } = props;
   const router = useRouter();
@@ -37,7 +37,9 @@ export default function BarkLoginForm(props: {
     hasErrorInQueryString,
   );
   const [recipientEmail, setRecipientEmail] = useState("");
-  const [emailOtpError, setEmailOtpError] = useState("");
+  const [emailOtpError, setEmailOtpError] = useState<string | React.ReactNode>(
+    "",
+  );
   const form = useForm<FormDataType>({
     resolver: zodResolver(FORM_SCHEMA),
     defaultValues: {
