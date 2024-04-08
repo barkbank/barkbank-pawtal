@@ -61,7 +61,7 @@ export default function BarkLoginForm(props: {
     form.clearErrors("otp");
     const validEmail = validateEmail(email);
     if (validEmail) {
-      await sendLoginOtp(validEmail);
+      await sendLoginOtp({emailAddress: validEmail, accountType});
       // Do not show errors to user here so that this doesn't become an
       // interface for querying our database.
       setRecipientEmail(validEmail);
