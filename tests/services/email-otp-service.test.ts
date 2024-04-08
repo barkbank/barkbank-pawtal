@@ -7,16 +7,31 @@ describe("EmailOtpService::sendOtp", () => {
   it("should return NO_ACCOUNT when email is not an existing user account", async () => {
     await withDb(async (dbPool) => {
       const service = getEmailOtpService(dbPool);
+      const res = await service.sendOtp({
+        emailAddress: "nouser@user.com",
+        accountType: AccountType.USER,
+      });
+      expect(res).toEqual("NO_ACCOUNT");
     });
   });
   it("should return NO_ACCOUNT when email is not an existing vet account", async () => {
     await withDb(async (dbPool) => {
       const service = getEmailOtpService(dbPool);
+      const res = await service.sendOtp({
+        emailAddress: "novet@vet.com",
+        accountType: AccountType.VET,
+      });
+      expect(res).toEqual("NO_ACCOUNT");
     });
   });
   it("should return NO_ACCOUNT when email is not an existing admin account", async () => {
     await withDb(async (dbPool) => {
       const service = getEmailOtpService(dbPool);
+      const res = await service.sendOtp({
+        emailAddress: "noadmin@admin.com",
+        accountType: AccountType.ADMIN,
+      });
+      expect(res).toEqual("NO_ACCOUNT");
     });
   });
   it("should return SEND_FAILED when email failed to send", async () => {

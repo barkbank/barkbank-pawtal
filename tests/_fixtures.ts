@@ -105,6 +105,7 @@ export function getEmailOtpService(
 ): EmailOtpService {
   const base: EmailOtpServiceConfig = {
     dbPool,
+    emailHashService: getEmailHashService(),
     otpService: getOtpService(),
     emailService: getEmailService(),
   };
