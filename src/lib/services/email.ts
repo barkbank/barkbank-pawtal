@@ -14,11 +14,11 @@ export type Email = {
   bodyHtml?: string;
 };
 
-export interface EmailSender {
+export interface EmailService {
   sendEmail: (email: Email) => Promise<Result<true, "FAILED">>;
 }
 
-export class PassthroughEmailSender implements EmailSender {
+export class PassthroughEmailService implements EmailService {
   public async sendEmail(email: Email): Promise<Result<true, "FAILED">> {
     console.log("PassthroughEmailTransport::sendEmail:", email);
     return Ok(true);
@@ -32,7 +32,7 @@ export type SmtpConfig = {
   smtpPassword: string;
 };
 
-export class NodemailerEmailSender implements EmailSender {
+export class NodemailerEmailService implements EmailService {
   private transport: nodemailer.Transporter;
 
   public constructor(config: SmtpConfig) {

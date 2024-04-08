@@ -5,9 +5,9 @@ import {
 import { BreedService } from "./services/breed";
 import {
   EmailContact,
-  EmailSender,
-  NodemailerEmailSender,
-  PassthroughEmailSender,
+  EmailService,
+  NodemailerEmailService,
+  PassthroughEmailService,
   SmtpConfig,
 } from "./services/email";
 import {
@@ -33,7 +33,7 @@ import { AdminActorConfig } from "./admin/admin-actor";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
-  private promisedEmailService: Promise<EmailSender> | null = null;
+  private promisedEmailService: Promise<EmailService> | null = null;
   private promisedOtpService: Promise<OtpService> | null = null;
   private promisedPiiHashService: Promise<HashService> | null = null;
   private promisedPiiEncryptionService: Promise<EncryptionService> | null =
@@ -79,12 +79,12 @@ export class AppFactory {
     return "development";
   }
 
-  public getEmailService(): Promise<EmailSender> {
+  public getEmailService(): Promise<EmailService> {
     if (this.promisedEmailService === null) {
-      this.promisedEmailService = new Promise<EmailSender>((resolve) => {
+      this.promisedEmailService = new Promise<EmailService>((resolve) => {
         if (this.envString(AppEnv.BARKBANK_SMTP_HOST) === "") {
-          resolve(new PassthroughEmailSender());
-          console.log("Created PassthroughEmailSender as EmailService");
+          resolve(new PassthroughEmailService());
+          console.log("Created PassthroughEmailService as EmailService");
           return;
         }
 
@@ -94,8 +94,8 @@ export class AppFactory {
           smtpUser: this.envString(AppEnv.BARKBANK_SMTP_USER),
           smtpPassword: this.envString(AppEnv.BARKBANK_SMTP_PASSWORD),
         };
-        resolve(new NodemailerEmailSender(config));
-        console.log("Created NodemailerEmailSender as EmailService");
+        resolve(new NodemailerEmailService(config));
+        console.log("Created NodemailerEmailService as EmailService");
         return;
       });
     }
