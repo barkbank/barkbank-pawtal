@@ -81,28 +81,24 @@ export class AppFactory {
   }
 
   public getEmailService(): Promise<EmailSender> {
-    const self = this;
-
-    function resolveEmailSender(): EmailSender {
-      if (self.envString(AppEnv.BARKBANK_SMTP_HOST) === "") {
-        console.log("Using PassthroughEmailSender");
-        return new PassthroughEmailSender();
-      }
-      const config: SmtpConfig = {
-        smtpHost: self.envString(AppEnv.BARKBANK_SMTP_HOST),
-        smtpPort: self.envInteger(AppEnv.BARKBANK_SMTP_PORT),
-        smtpUser: self.envString(AppEnv.BARKBANK_SMTP_USER),
-        smtpPassword: self.envString(AppEnv.BARKBANK_SMTP_PASSWORD),
-      };
-      console.log("Using NodemailerEmailSender");
-      return new NodemailerEmailSender(config);
-    }
-
     if (this.promisedEmailService === null) {
-      this.promisedEmailService = Promise.resolve(
-        new EmailService(resolveEmailSender()),
-      );
-      console.log("Created EmailService");
+      this.promisedEmailService = new Promise<EmailSender>((resolve) => {
+        if (this.envString(AppEnv.BARKBANK_SMTP_HOST) === "") {
+          resolve(new PassthroughEmailSender());
+          console.log("Created PassthroughEmailSender as EmailService");
+          return;
+        }
+
+        const config: SmtpConfig = {
+          smtpHost: this.envString(AppEnv.BARKBANK_SMTP_HOST),
+          smtpPort: this.envInteger(AppEnv.BARKBANK_SMTP_PORT),
+          smtpUser: this.envString(AppEnv.BARKBANK_SMTP_USER),
+          smtpPassword: this.envString(AppEnv.BARKBANK_SMTP_PASSWORD),
+        };
+        resolve(new NodemailerEmailSender(config));
+        console.log("Created NodemailerEmailSender as EmailService");
+        return;
+      });
     }
     return this.promisedEmailService;
   }
