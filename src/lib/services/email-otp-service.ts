@@ -1,18 +1,17 @@
-import { Pool } from "pg";
 import { Email, EmailContact, EmailService } from "./email";
 import { OtpService } from "./otp";
 import { AccountType } from "../auth-models";
-import { HashService } from "./hash";
-import { dbSelectVetIdByEmail } from "../data/db-vets";
-import { dbSelectUserIdByHashedEmail } from "../data/db-users";
-import { dbSelectAdminIdByAdminHashedEmail } from "../data/db-admins";
+import { UserActorFactory } from "../user/user-actor-factory";
+import { VetActorFactory } from "../vet/vet-actor-factory";
+import { AdminActorFactory } from "../admin/admin-actor-factory";
 
 export type EmailOtpServiceConfig = {
-  dbPool: Pool;
-  emailHashService: HashService;
   emailService: EmailService;
   otpService: OtpService;
   sender: EmailContact;
+  userActorFactory: UserActorFactory;
+  vetActorFactory: VetActorFactory;
+  adminActorFactory: AdminActorFactory;
 };
 
 type Request = {
@@ -73,32 +72,27 @@ export class EmailOtpService {
   private async checkUserAccountExists(
     request: Request,
   ): Promise<"OK" | "NO_ACCOUNT"> {
-    const { dbPool, emailHashService } = this.config;
+    const { userActorFactory } = this.config;
     const { emailAddress } = request;
-    const hashedEmail = await emailHashService.getHashHex(emailAddress);
-    const userId = await dbSelectUserIdByHashedEmail(dbPool, hashedEmail);
-    return userId !== null ? "OK" : "NO_ACCOUNT";
+    const actor = await userActorFactory.getUserActor(emailAddress);
+    return actor === null ? "NO_ACCOUNT" : "OK";
   }
 
   private async checkVetAccountExists(
     request: Request,
   ): Promise<"OK" | "NO_ACCOUNT"> {
-    const { dbPool } = this.config;
+    const { vetActorFactory } = this.config;
     const { emailAddress } = request;
-    const vetId = await dbSelectVetIdByEmail(dbPool, emailAddress);
-    return vetId !== null ? "OK" : "NO_ACCOUNT";
+    const actor = await vetActorFactory.getVetActor(emailAddress);
+    return actor === null ? "NO_ACCOUNT" : "OK";
   }
 
   private async checkAdminAccountExists(
     request: Request,
   ): Promise<"OK" | "NO_ACCOUNT"> {
-    const { dbPool, emailHashService } = this.config;
+    const { adminActorFactory } = this.config;
     const { emailAddress } = request;
-    const hashedEmail = await emailHashService.getHashHex(emailAddress);
-    const adminId = await dbSelectAdminIdByAdminHashedEmail(
-      dbPool,
-      hashedEmail,
-    );
-    return adminId !== null ? "OK" : "NO_ACCOUNT";
+    const actor = await adminActorFactory.getAdminActor(emailAddress);
+    return actor === null ? "NO_ACCOUNT" : "OK";
   }
 }

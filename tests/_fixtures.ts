@@ -37,9 +37,15 @@ import {
   HarnessOtpService,
   HarnessEmailService,
 } from "./_harness";
-import { AdminActorFactoryConfig } from "@/lib/admin/admin-actor-factory";
+import {
+  AdminActorFactory,
+  AdminActorFactoryConfig,
+} from "@/lib/admin/admin-actor-factory";
 import { dbInsertUser, dbSelectUser } from "@/lib/data/db-users";
-import { VetActorFactoryConfig } from "@/lib/vet/vet-actor-factory";
+import {
+  VetActorFactory,
+  VetActorFactoryConfig,
+} from "@/lib/vet/vet-actor-factory";
 import { dbInsertVet, dbSelectVet } from "@/lib/data/db-vets";
 import { HashService } from "@/lib/services/hash";
 import { EncryptionService } from "@/lib/services/encryption";
@@ -52,7 +58,10 @@ import { DbContext } from "@/lib/data/db-utils";
 import { dbInsertDog } from "@/lib/data/db-dogs";
 import { OtpService } from "@/lib/services/otp";
 import { UserActor, UserActorConfig } from "@/lib/user/user-actor";
-import { UserActorFactoryConfig } from "@/lib/user/user-actor-factory";
+import {
+  UserActorFactory,
+  UserActorFactoryConfig,
+} from "@/lib/user/user-actor-factory";
 import {
   CallOutcome,
   POS_NEG_NIL,
@@ -104,14 +113,15 @@ export function getEmailOtpService(
   configOverrides?: Partial<EmailOtpServiceConfig>,
 ): EmailOtpService {
   const base: EmailOtpServiceConfig = {
-    dbPool,
-    emailHashService: getEmailHashService(),
     otpService: getOtpService(),
     emailService: getEmailService(),
     sender: {
       email: "otp@test.com",
       name: "OTP Test",
     },
+    userActorFactory: getUserActorFactory(dbPool),
+    vetActorFactory: getVetActorFactory(dbPool),
+    adminActorFactory: getAdminActorFactory(dbPool),
   };
   const config = { ...base, ...configOverrides };
   return new EmailOtpService(config);
@@ -162,6 +172,13 @@ export function getUserActorFactoryConfig(
   };
 }
 
+export function getUserActorFactory(dbPool: Pool) {
+  return new UserActorFactory(
+    getUserActorFactoryConfig(dbPool),
+    getUserActorConfig(dbPool),
+  );
+}
+
 export function getAdminActorFactoryConfig(
   db: Pool,
   overrides?: Partial<AdminActorFactoryConfig>,
@@ -183,6 +200,13 @@ export function getAdminActorConfig(db: Pool): AdminActorConfig {
     userMapper: getUserMapper(),
     dogMapper: getDogMapper(),
   };
+}
+
+export function getAdminActorFactory(dbPool: Pool) {
+  return new AdminActorFactory(
+    getAdminActorFactoryConfig(dbPool),
+    getAdminActorConfig(dbPool),
+  );
 }
 
 export function getAdminActor(dbPool: Pool, adminId: string): AdminActor {
@@ -282,6 +306,10 @@ export function getVetActorFactoryConfig(dbPool: Pool): VetActorFactoryConfig {
     dbPool,
     piiEncryptionService: getPiiEncryptionService(),
   };
+}
+
+export function getVetActorFactory(dbPool: Pool): VetActorFactory {
+  return new VetActorFactory(getVetActorFactoryConfig(dbPool));
 }
 
 export async function insertVet(idx: number, dbPool: Pool): Promise<Vet> {

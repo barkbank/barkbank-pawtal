@@ -136,20 +136,28 @@ export class AppFactory {
     if (this.promisedEmailOtpService === null) {
       this.promisedEmailOtpService = new Promise<EmailOtpService>(
         async (resolve) => {
-          const [dbPool, emailHashService, otpService, emailService, sender] =
-            await Promise.all([
-              this.getDbPool(),
-              this.getEmailHashService(),
-              this.getOtpService(),
-              this.getEmailService(),
-              this.getSenderForOtpEmail(),
-            ]);
-          const config: EmailOtpServiceConfig = {
-            dbPool,
-            emailHashService,
+          const [
             otpService,
             emailService,
             sender,
+            userActorFactory,
+            vetActorFactory,
+            adminActorFactory,
+          ] = await Promise.all([
+            this.getOtpService(),
+            this.getEmailService(),
+            this.getSenderForOtpEmail(),
+            this.getUserActorFactory(),
+            this.getVetActorFactory(),
+            this.getAdminActorFactory(),
+          ]);
+          const config: EmailOtpServiceConfig = {
+            otpService,
+            emailService,
+            sender,
+            userActorFactory,
+            vetActorFactory,
+            adminActorFactory,
           };
           const service = new EmailOtpService(config);
           resolve(service);
