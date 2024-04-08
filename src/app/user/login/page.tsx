@@ -12,6 +12,7 @@ export default async function Page() {
       accountType={AccountType.USER}
       successPath={RoutePath.USER_DEFAULT_LOGGED_IN_PAGE}
       logoSrc={IMG_PATH.ORANGE_DOG_HOUSE}
+      noAccountErrorMessage="User account does not exist"
     />
   );
 }

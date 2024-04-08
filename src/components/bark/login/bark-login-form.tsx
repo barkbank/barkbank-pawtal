@@ -28,8 +28,9 @@ type FormDataType = z.infer<typeof FORM_SCHEMA>;
 export default function BarkLoginForm(props: {
   accountType: AccountType;
   successPath: string;
+  noAccountErrorMessage: string;
 }) {
-  const { accountType, successPath } = props;
+  const { accountType, successPath, noAccountErrorMessage } = props;
   const router = useRouter();
   const hasErrorInQueryString = useSearchParams().get("error") !== null;
   const [shouldShowLoginFailed, setShouldShowLoginFailed] = useState(
@@ -68,7 +69,7 @@ export default function BarkLoginForm(props: {
         setEmailOtpError("");
       } else if (res === "NO_ACCOUNT") {
         setRecipientEmail("");
-        setEmailOtpError("No account");
+        setEmailOtpError(noAccountErrorMessage);
       } else {
         setRecipientEmail("");
         setEmailOtpError("Failed to send OTP email");

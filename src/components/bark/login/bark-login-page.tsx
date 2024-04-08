@@ -12,8 +12,9 @@ export default async function BarkLoginPage(props: {
   accountType: AccountType;
   successPath: string;
   logoSrc: string;
+  noAccountErrorMessage: string;
 }) {
-  const { title, accountType, successPath, logoSrc } = props;
+  const { title, accountType, successPath, logoSrc, noAccountErrorMessage } = props;
   if (await isLoggedIn(accountType)) {
     redirect(successPath);
   }
@@ -34,7 +35,7 @@ export default async function BarkLoginPage(props: {
         </div>
         <div className="mx-auto max-w-[1100px] sm:w-[36rem] sm:px-6 sm:py-10 md:w-full ">
           <BarkH2>{title}</BarkH2>
-          <BarkLoginForm accountType={accountType} successPath={successPath} />
+          <BarkLoginForm accountType={accountType} successPath={successPath} noAccountErrorMessage={noAccountErrorMessage} />
         </div>
       </div>
     </>
