@@ -30,6 +30,10 @@ import { DogMapper } from "./data/dog-mapper";
 import { RegistrationService } from "./services/registration";
 import { UserActorConfig } from "./user/user-actor";
 import { AdminActorConfig } from "./admin/admin-actor";
+import {
+  EmailOtpService,
+  EmailOtpServiceConfig,
+} from "./services/email-otp-service";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -50,6 +54,7 @@ export class AppFactory {
   private promisedDogMapper: Promise<DogMapper> | null = null;
   private promisedRegistrationService: Promise<RegistrationService> | null =
     null;
+  private promisedEmailOtpService: Promise<EmailOtpService> | null = null;
 
   constructor(envs: NodeJS.Dict<string>) {
     this.envs = envs;
@@ -125,6 +130,34 @@ export class AppFactory {
       email: this.envString(AppEnv.BARKBANK_OTP_SENDER_EMAIL),
       name: this.envOptionalString(AppEnv.BARKBANK_OTP_SENDER_NAME),
     });
+  }
+
+  public getEmailOtpService(): Promise<EmailOtpService> {
+    if (this.promisedEmailOtpService === null) {
+      this.promisedEmailOtpService = new Promise<EmailOtpService>(
+        async (resolve) => {
+          const [dbPool, emailHashService, otpService, emailService, sender] =
+            await Promise.all([
+              this.getDbPool(),
+              this.getEmailHashService(),
+              this.getOtpService(),
+              this.getEmailService(),
+              this.getSenderForOtpEmail(),
+            ]);
+          const config: EmailOtpServiceConfig = {
+            dbPool,
+            emailHashService,
+            otpService,
+            emailService,
+            sender,
+          };
+          const service = new EmailOtpService(config);
+          resolve(service);
+          console.log("Created EmailOtpService");
+        },
+      );
+    }
+    return this.promisedEmailOtpService;
   }
 
   public getEmailHashService(): Promise<HashService> {
