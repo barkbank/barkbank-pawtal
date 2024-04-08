@@ -6,7 +6,6 @@ import { BreedService } from "./services/breed";
 import {
   EmailContact,
   EmailSender,
-  EmailService,
   NodemailerEmailSender,
   PassthroughEmailSender,
   SmtpConfig,

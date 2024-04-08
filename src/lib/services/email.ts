@@ -71,15 +71,3 @@ export class NodemailerEmailSender implements EmailSender {
     return contact.email;
   }
 }
-
-export class EmailService implements EmailSender {
-  private transport: EmailSender;
-
-  public constructor(transport: EmailSender) {
-    this.transport = transport;
-  }
-
-  public async sendEmail(email: Email): Promise<Result<true, "FAILED">> {
-    return this.transport.sendEmail(email);
-  }
-}
