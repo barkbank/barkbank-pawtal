@@ -1,5 +1,5 @@
 import { Pool } from "pg";
-import { EmailService } from "./email";
+import { Email, EmailContact, EmailService } from "./email";
 import { OtpService } from "./otp";
 import { AccountType } from "../auth-models";
 import { HashService } from "./hash";
@@ -12,7 +12,7 @@ export type EmailOtpServiceConfig = {
   emailHashService: HashService;
   emailService: EmailService;
   otpService: OtpService;
-  senderEmail: string;
+  sender: EmailContact;
 };
 
 type Request = {
@@ -33,6 +33,20 @@ export class EmailOtpService {
     const accountCheck = await this.checkAccountExists(request);
     if (accountCheck !== "OK") {
       return accountCheck;
+    }
+    const { otpService, sender, emailService } = this.config;
+    const { emailAddress } = request;
+    const otp = await otpService.getCurrentOtp(emailAddress);
+    const email: Email = {
+      sender,
+      recipient: { email: emailAddress },
+      subject: "Bark Bank OTP",
+      bodyText: `Your Bark Bank OTP is ${otp}`,
+      bodyHtml: `<p>Your Bark Bank OTP is <b>${otp}</b></p>`,
+    };
+    const { error } = await emailService.sendEmail(email);
+    if (error !== undefined) {
+      return "SEND_FAILED";
     }
     return "OK";
   }

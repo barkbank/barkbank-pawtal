@@ -60,8 +60,9 @@ describe("EmailOtpService::sendOtp", () => {
       });
       expect(res).toEqual("OK");
       expect(emailService.emails.length).toEqual(1);
-      expect(emailService.emails[0].recipient).toEqual(userEmail);
-      expect(emailService.emails[0].sender).toEqual("otp@barkbank.co");
+      expect(emailService.emails[0].recipient.email).toEqual(userEmail);
+      expect(emailService.emails[0].sender.email).toEqual("otp@test.com");
+      expect(emailService.emails[0].sender.name).toEqual("OTP Test");
     });
   });
 });

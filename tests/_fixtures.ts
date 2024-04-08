@@ -108,7 +108,10 @@ export function getEmailOtpService(
     emailHashService: getEmailHashService(),
     otpService: getOtpService(),
     emailService: getEmailService(),
-    senderEmail: "otp@barkbank.co",
+    sender: {
+      email: "otp@test.com",
+      name: "OTP Test",
+    },
   };
   const config = { ...base, ...configOverrides };
   return new EmailOtpService(config);
