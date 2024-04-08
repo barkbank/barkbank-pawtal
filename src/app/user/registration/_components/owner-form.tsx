@@ -60,7 +60,7 @@ export default function OwnerForm(props: {
     const { userEmail } = form.getValues();
     form.clearErrors("emailOtp");
     if (isValidEmail(userEmail)) {
-      await sendLoginOtp({emailAddress: userEmail, accountType: null});
+      await sendLoginOtp({ emailAddress: userEmail, accountType: null });
       setRecipientEmail(userEmail);
       form.clearErrors("userEmail");
     } else {

@@ -36,6 +36,7 @@ export default function BarkLoginForm(props: {
     hasErrorInQueryString,
   );
   const [recipientEmail, setRecipientEmail] = useState("");
+  const [emailOtpError, setEmailOtpError] = useState("");
   const form = useForm<FormDataType>({
     resolver: zodResolver(FORM_SCHEMA),
     defaultValues: {
@@ -61,10 +62,17 @@ export default function BarkLoginForm(props: {
     form.clearErrors("otp");
     const validEmail = validateEmail(email);
     if (validEmail) {
-      await sendLoginOtp({emailAddress: validEmail, accountType});
-      // Do not show errors to user here so that this doesn't become an
-      // interface for querying our database.
-      setRecipientEmail(validEmail);
+      const res = await sendLoginOtp({ emailAddress: validEmail, accountType });
+      if (res === "OK") {
+        setRecipientEmail(validEmail);
+        setEmailOtpError("");
+      } else if (res === "NO_ACCOUNT") {
+        setRecipientEmail("");
+        setEmailOtpError("No account");
+      } else {
+        setRecipientEmail("");
+        setEmailOtpError("Failed to send OTP email");
+      }
     } else {
       setRecipientEmail("");
     }
@@ -106,6 +114,11 @@ export default function BarkLoginForm(props: {
           <BarkFormParagraph>
             An OTP has been sent to {recipientEmail}
           </BarkFormParagraph>
+        )}
+        {emailOtpError !== "" && (
+          <h4 className="mt-6 scroll-m-20 text-xl font-semibold tracking-tight text-red-600">
+            {emailOtpError}
+          </h4>
         )}
         <BarkFormInput form={form} name="otp" label="Enter OTP" />
         <div className="flex w-full gap-x-4">
