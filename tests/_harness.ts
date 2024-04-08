@@ -62,7 +62,9 @@ export class HarnessOtpService implements OtpService {
 }
 
 export class HarnessEmailService implements EmailService {
+  public emails: Email[] = [];
   public async sendEmail(email: Email): Promise<Result<true, "FAILED">> {
+    this.emails.push(email);
     return Ok(true);
   }
 }

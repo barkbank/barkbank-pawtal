@@ -12,6 +12,7 @@ export type EmailOtpServiceConfig = {
   emailHashService: HashService;
   emailService: EmailService;
   otpService: OtpService;
+  senderEmail: string;
 };
 
 type Request = {

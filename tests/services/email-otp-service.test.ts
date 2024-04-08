@@ -1,7 +1,7 @@
 import { AccountType } from "@/lib/auth-models";
 import { withDb } from "../_db_helpers";
 import { getEmailOtpService, insertUser, userPii } from "../_fixtures";
-import { HarnessFailureEmailService } from "../_harness";
+import { HarnessEmailService, HarnessFailureEmailService } from "../_harness";
 
 describe("EmailOtpService::sendOtp", () => {
   it("should return NO_ACCOUNT when email is not an existing user account", async () => {
@@ -50,7 +50,8 @@ describe("EmailOtpService::sendOtp", () => {
   });
   it("should return OK when email was sent", async () => {
     await withDb(async (dbPool) => {
-      const service = getEmailOtpService(dbPool);
+      const emailService = new HarnessEmailService();
+      const service = getEmailOtpService(dbPool, { emailService });
       await insertUser(7, dbPool);
       const { userEmail } = userPii(7);
       const res = await service.sendOtp({
@@ -58,6 +59,9 @@ describe("EmailOtpService::sendOtp", () => {
         accountType: AccountType.USER,
       });
       expect(res).toEqual("OK");
+      expect(emailService.emails.length).toEqual(1);
+      expect(emailService.emails[0].recipient).toEqual(userEmail);
+      expect(emailService.emails[0].sender).toEqual("otp@barkbank.co");
     });
   });
 });
