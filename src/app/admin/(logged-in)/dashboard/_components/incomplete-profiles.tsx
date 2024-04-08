@@ -10,12 +10,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { DogProfile } from "@/lib/admin/admin-actor";
 import clsx from "clsx";
 import { BARK_UTC } from "@/lib/utilities/bark-time";
-import { DogGender, YesNoUnknown } from "@/lib/data/db-enums";
+import { DOG_GENDER, YES_NO_UNKNOWN } from "@/lib/data/db-enums";
+import { IncompleteProfile } from "@/lib/admin/admin-models";
 
-function DataRow(props: { profile: DogProfile }) {
+function DataRow(props: { profile: IncompleteProfile }) {
   const { profile } = props;
   return (
     <TableRow
@@ -41,7 +41,7 @@ ${jsonEncoded}
       </TableCell>
       <TableCell
         className={clsx("text-center", {
-          "bg-orange-100": profile.dogGender === DogGender.UNKNOWN,
+          "bg-orange-100": profile.dogGender === DOG_GENDER.UNKNOWN,
         })}
       >
         {profile.dogGender}
@@ -64,7 +64,7 @@ ${jsonEncoded}
       </TableCell>
       <TableCell
         className={clsx("text-center", {
-          "bg-orange-100": profile.dogEverPregnant === YesNoUnknown.UNKNOWN,
+          "bg-orange-100": profile.dogEverPregnant === YES_NO_UNKNOWN.UNKNOWN,
         })}
       >
         {profile.dogEverPregnant}
@@ -72,7 +72,7 @@ ${jsonEncoded}
       <TableCell
         className={clsx("text-center", {
           "bg-orange-100":
-            profile.dogEverReceivedTransfusion === YesNoUnknown.UNKNOWN,
+            profile.dogEverReceivedTransfusion === YES_NO_UNKNOWN.UNKNOWN,
         })}
       >
         {profile.dogEverReceivedTransfusion}
@@ -81,7 +81,7 @@ ${jsonEncoded}
   );
 }
 
-export function IncompleteProfiles(props: { profiles: DogProfile[] }) {
+export function IncompleteProfiles(props: { profiles: IncompleteProfile[] }) {
   const { profiles } = props;
   return (
     <>

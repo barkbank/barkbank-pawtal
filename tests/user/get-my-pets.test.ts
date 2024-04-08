@@ -9,8 +9,9 @@ import {
   insertVet,
 } from "../_fixtures";
 import { getMyPets } from "@/lib/user/actions/get-my-pets";
-import { CALL_OUTCOME } from "@/lib/data/db-enums";
+import { CALL_OUTCOME, PARTICIPATION_STATUS } from "@/lib/data/db-enums";
 import { guaranteed } from "@/lib/utilities/bark-utils";
+import { dbQuery } from "@/lib/data/db-utils";
 
 describe("getMyPets", () => {
   it("should return empty list when user has no dogs", async () => {
@@ -69,6 +70,50 @@ describe("getMyPets", () => {
       const actor = getUserActor(dbPool, userId);
       const dogs = await getMyPets(actor);
       expect(dogs[0].dogAppointments).toEqual([]);
+    });
+  });
+  it("should return PAUSED dog when pause has not expired", async () => {
+    await withDb(async (dbPool) => {
+      const { userId } = await insertUser(1, dbPool);
+      const { dogId } = await insertDog(2, userId, dbPool);
+      const tomorrow = new Date(Date.now() + 86400 * 1000);
+      await dbQuery(
+        dbPool,
+        `
+        update dogs set
+          dog_participation_status = 'PAUSED',
+          dog_pause_expiry_time = $2
+        where dog_id = $1
+        `,
+        [dogId, tomorrow],
+      );
+      const actor = getUserActor(dbPool, userId);
+      const dogs = await getMyPets(actor);
+      expect(dogs[0].dogParticipationStatus).toEqual(
+        PARTICIPATION_STATUS.PAUSED,
+      );
+    });
+  });
+  it("should return PARTICIPATING dog when pause has expired", async () => {
+    await withDb(async (dbPool) => {
+      const { userId } = await insertUser(1, dbPool);
+      const { dogId } = await insertDog(2, userId, dbPool);
+      const yesterday = new Date(Date.now() - 86400 * 1000);
+      await dbQuery(
+        dbPool,
+        `
+        update dogs set
+          dog_participation_status = 'PAUSED',
+          dog_pause_expiry_time = $2
+        where dog_id = $1
+        `,
+        [dogId, yesterday],
+      );
+      const actor = getUserActor(dbPool, userId);
+      const dogs = await getMyPets(actor);
+      expect(dogs[0].dogParticipationStatus).toEqual(
+        PARTICIPATION_STATUS.PARTICIPATING,
+      );
     });
   });
 });

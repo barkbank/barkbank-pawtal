@@ -8,7 +8,7 @@ import { MyDog } from "@/lib/user/user-models";
 import Image from "next/image";
 import { IMG_PATH } from "@/lib/image-path";
 import {
-  DogGender,
+  DOG_GENDER,
   MEDICAL_STATUS,
   PARTICIPATION_STATUS,
   PROFILE_STATUS,
@@ -38,8 +38,7 @@ function toStatusSet(dog: MyDog): StatusSet {
     profileStatus: dog.dogProfileStatus,
     medicalStatus: dog.dogMedicalStatus,
     numPendingReports: dog.dogAppointments.length,
-    // TODO: once we have pause and opt-out we should update this.
-    participationStatus: PARTICIPATION_STATUS.PARTICIPATING,
+    participationStatus: dog.dogParticipationStatus,
   };
   return statusSet;
 }
@@ -205,18 +204,15 @@ function ActionBlock(props: { dog: MyDog }) {
 function DogCard(props: { dog: MyDog; cardIdx: number; isLastCard: boolean }) {
   const { dog, cardIdx, isLastCard } = props;
   const imgSrc =
-    dog.dogGender === DogGender.MALE
+    dog.dogGender === DOG_GENDER.MALE
       ? IMG_PATH.BROWN_DOG_AVATAR
       : IMG_PATH.BORDER_COLLIE_DOG_AVATAR;
   return (
     <>
       <div
-        className={clsx(
-          "mx-5 mt-[40px] flex flex-row gap-5 px-[40px] pb-[40px]",
-          {
-            "border-b border-solid border-[#A5A4A6]": !isLastCard,
-          },
-        )}
+        className={clsx("mt-4 flex flex-row gap-5 pb-4 md:mx-5 md:px-4", {
+          "border-b border-solid border-[#A5A4A6]": !isLastCard,
+        })}
       >
         {/* Left Side Avatar */}
         <Image
@@ -224,20 +220,31 @@ function DogCard(props: { dog: MyDog; cardIdx: number; isLastCard: boolean }) {
           alt="Generic dog avatar for dog details"
           width={100}
           height={100}
+          className="hidden md:block"
         />
 
         {/* Right Side Details */}
         <div>
           {/* Dog Name across the details */}
-          <div className="text-grey-100 text-lg font-bold leading-9">
-            {dog.dogName}
+          <div>
+            <Image
+              src={imgSrc}
+              alt="Generic dog avatar for dog details"
+              width={100}
+              height={100}
+              className="md:hidden"
+            />
+            <div className="text-grey-100 text-lg font-bold leading-9">
+              {dog.dogName}
+            </div>
           </div>
 
           {/* Details and Buttons below */}
-          <div className="mt-2 flex flex-row gap-5">
-            <div className="w-96">
+          <div className="mt-2 flex flex-col gap-5 md:flex-row">
+            <div className="min-w-40 max-w-96">
               <StatusBlock dog={dog} />
             </div>
+
             <div>
               <ActionBlock dog={dog} />
             </div>

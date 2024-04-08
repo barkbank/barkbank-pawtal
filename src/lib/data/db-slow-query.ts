@@ -53,7 +53,7 @@ export class SlowQueryService {
   }
 
   public getTs() {
-    return new Date().getTime();
+    return Date.now();
   }
 
   public submit(sql: string, currentLatency: number) {

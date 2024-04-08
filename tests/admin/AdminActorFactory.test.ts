@@ -7,6 +7,7 @@ import {
   someEmail,
   getAdminSecurePii,
   getHashedEmail,
+  getAdminActorConfig,
 } from "../_fixtures";
 import { AdminPii } from "@/lib/data/db-models";
 import { AdminSecurePii, AdminSpec } from "@/lib/data/db-models";
@@ -24,7 +25,10 @@ describe("AdminActorFactory", () => {
         const pii = adminPii(1);
 
         // WHEN called with that accounts email;
-        const factory = new AdminActorFactory(getAdminActorFactoryConfig(db));
+        const factory = new AdminActorFactory(
+          getAdminActorFactoryConfig(db),
+          getAdminActorConfig(db),
+        );
         const actor = await factory.getAdminActor(pii.adminEmail);
 
         // THEN an admin actor should be returned; AND the actor's admin ID
@@ -43,7 +47,8 @@ describe("AdminActorFactory", () => {
         const factoryConfig = getAdminActorFactoryConfig(db, {
           rootAdminEmail,
         });
-        const factory = new AdminActorFactory(factoryConfig);
+        const actorConfig = getAdminActorConfig(db);
+        const factory = new AdminActorFactory(factoryConfig, actorConfig);
         const actor = await factory.getAdminActor(rootAdminEmail);
 
         // THEN an admin account should be created for the email; AND the
@@ -89,7 +94,8 @@ describe("AdminActorFactory", () => {
         const factoryConfig = getAdminActorFactoryConfig(db, {
           rootAdminEmail,
         });
-        const factory = new AdminActorFactory(factoryConfig);
+        const actorConfig = getAdminActorConfig(db);
+        const factory = new AdminActorFactory(factoryConfig, actorConfig);
         const actor = await factory.getAdminActor(rootAdminEmail);
 
         // THEN an actor should be returned for the existing account; AND the
@@ -120,6 +126,7 @@ describe("AdminActorFactory", () => {
         await insertAdmin(1, db);
         const factory = new AdminActorFactory(
           getAdminActorFactoryConfig(db, { rootAdminEmail }),
+          getAdminActorConfig(db),
         );
         await factory.getAdminActor(adminPii(1).adminEmail);
 

@@ -1,4 +1,4 @@
-import { AdminActorConfig } from "@/lib/admin/admin-actor";
+import { AdminActor, AdminActorConfig } from "@/lib/admin/admin-actor";
 import {
   AdminPermissions,
   AdminPii,
@@ -21,8 +21,11 @@ import {
   DbCallGen,
 } from "@/lib/data/db-models";
 import {
+  DOG_ANTIGEN_PRESENCE,
+  DOG_GENDER,
   DogAntigenPresence,
   DogGender,
+  YES_NO_UNKNOWN,
   YesNoUnknown,
 } from "@/lib/data/db-enums";
 import { USER_RESIDENCY } from "@/lib/data/db-enums";
@@ -44,7 +47,7 @@ import { VetMapper } from "@/lib/data/vet-mapper";
 import { DogMapper } from "@/lib/data/dog-mapper";
 import { UserMapper } from "@/lib/data/user-mapper";
 import { BARK_UTC } from "@/lib/utilities/bark-time";
-import { DbContext, dbQuery } from "@/lib/data/db-utils";
+import { DbContext } from "@/lib/data/db-utils";
 import { dbInsertDog } from "@/lib/data/db-dogs";
 import { OtpService } from "@/lib/services/otp";
 import { UserActor, UserActorConfig } from "@/lib/user/user-actor";
@@ -138,7 +141,6 @@ export function getAdminActorFactoryConfig(
   const base: AdminActorFactoryConfig = {
     dbPool: db,
     emailHashService: getEmailHashService(),
-    piiEncryptionService: getPiiEncryptionService(),
     adminMapper: getAdminMapper(),
     rootAdminEmail: "",
   };
@@ -149,8 +151,15 @@ export function getAdminActorConfig(db: Pool): AdminActorConfig {
   return {
     dbPool: db,
     emailHashService: getEmailHashService(),
-    piiEncryptionService: getPiiEncryptionService(),
+    adminMapper: getAdminMapper(),
+    userMapper: getUserMapper(),
+    dogMapper: getDogMapper(),
   };
+}
+
+export function getAdminActor(dbPool: Pool, adminId: string): AdminActor {
+  const config = getAdminActorConfig(dbPool);
+  return new AdminActor(adminId, config);
 }
 
 export async function insertAdmin(
@@ -329,12 +338,13 @@ function getDogBreed(idx: number): string {
 }
 
 function getDogAntigenPresence(idx: number): DogAntigenPresence {
-  const presenceList: DogAntigenPresence[] = Object.values(DogAntigenPresence);
+  const presenceList: DogAntigenPresence[] =
+    Object.values(DOG_ANTIGEN_PRESENCE);
   return presenceList[idx % presenceList.length];
 }
 
 function getDogGender(idx: number): DogGender {
-  const genderList: DogGender[] = Object.values(DogGender);
+  const genderList: DogGender[] = Object.values(DOG_GENDER);
   return genderList[idx % genderList.length];
 }
 
@@ -344,17 +354,17 @@ function getDogWeightKg(idx: number): number | null {
 }
 
 function getYesNoUnknown(idx: number): YesNoUnknown {
-  const responseList: YesNoUnknown[] = Object.values(YesNoUnknown);
+  const responseList: YesNoUnknown[] = Object.values(YES_NO_UNKNOWN);
   return responseList[idx % responseList.length];
 }
 
 function getDogEverPregnant(idx: number): YesNoUnknown {
   const gender = getDogGender(idx);
-  if (gender === DogGender.MALE) {
-    return YesNoUnknown.NO;
+  if (gender === DOG_GENDER.MALE) {
+    return YES_NO_UNKNOWN.NO;
   }
-  if (gender === DogGender.UNKNOWN) {
-    return YesNoUnknown.UNKNOWN;
+  if (gender === DOG_GENDER.UNKNOWN) {
+    return YES_NO_UNKNOWN.UNKNOWN;
   }
   return getYesNoUnknown(idx);
 }

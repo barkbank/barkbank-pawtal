@@ -1,13 +1,25 @@
 import {
   DogAntigenPresence,
-  DogGender,
   MedicalStatus,
   ParticipationStatus,
   ProfileStatus,
   ServiceStatus,
   YesNoUnknown,
+  DogGender,
 } from "../data/db-enums";
-import { HighlightedStatus, StatusSet } from "../data/status-mapper";
+import { StatusSet } from "../data/status-mapper";
+
+export type MyAccount = {
+  userCreationTime: Date;
+  userName: string;
+  userResidency: string;
+  userEmail: string;
+  userPhoneNumber: string;
+};
+
+export type MyLastContactedTime = {
+  userLastContactedTime: Date | null;
+}
 
 export type MyDogAppointment = {
   callId: string;
@@ -22,6 +34,7 @@ export type MyDog = {
   dogProfileStatus: ProfileStatus;
   dogMedicalStatus: MedicalStatus;
   dogServiceStatus: ServiceStatus;
+  dogParticipationStatus: ParticipationStatus;
   dogAppointments: MyDogAppointment[];
 };
 
@@ -43,18 +56,38 @@ export type MyDogDetails = StatusSet & {
   dogDea1Point1: DogAntigenPresence;
   dogEverPregnant: YesNoUnknown;
   dogEverReceivedTransfusion: YesNoUnknown;
+  dogPreferredVetId: string | null;
+  dogParticipationStatus: ParticipationStatus;
+  // TODO: dogPauseEndReason: string; When the schema supports it
+  dogPauseExpiryTime: Date | null;
 
   dogReports: MyDogReport[];
 };
 
-export type MyAccount = {
-  userCreationTime: Date;
-  userName: string;
-  userResidency: string;
-  userEmail: string;
-  userPhoneNumber: string;
+export type MyDogRegistrationUpdate = {
+  dogId: string;
+  dogName: string;
+  dogBreed: string;
+  dogBirthday: Date;
+  dogGender: DogGender;
+  dogWeightKg: number | null;
+  dogDea1Point1: DogAntigenPresence;
+  dogEverPregnant: YesNoUnknown;
+  dogEverReceivedTransfusion: YesNoUnknown;
+  dogPreferredVetId: string | null;
+  dogParticipationStatus: ParticipationStatus;
+  // TODO: dogPauseEndReason: string; When the schema supports it
+  dogPauseExpiryTime: Date | null;
 };
 
-export type MyLastContactedTime = {
-  userLastContactedTime: Date | null;
+export type MyDogDetailsUpdate = {
+  dogId: string;
+  dogName: string;
+  dogWeightKg: number | null;
+  dogEverPregnant: YesNoUnknown;
+  dogEverReceivedTransfusion: YesNoUnknown;
+  dogPreferredVetId: string | null;
+  dogParticipationStatus: ParticipationStatus;
+  // TODO: dogPauseEndReason: string; When the schema supports it
+  dogPauseExpiryTime: Date | null;
 };

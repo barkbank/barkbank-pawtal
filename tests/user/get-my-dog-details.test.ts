@@ -11,10 +11,14 @@ import {
   insertUser,
   insertVet,
 } from "../_fixtures";
-import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
+import {
+  dbInsertDogVetPreference,
+  dbUpdateDogParticipation,
+} from "@/lib/data/db-dogs";
 import {
   CALL_OUTCOME,
-  DogAntigenPresence,
+  DOG_ANTIGEN_PRESENCE,
+  PARTICIPATION_STATUS,
   POS_NEG_NIL,
 } from "@/lib/data/db-enums";
 import {
@@ -22,6 +26,7 @@ import {
   SINGAPORE_TIME_ZONE,
   parseDateTime,
 } from "@/lib/utilities/bark-time";
+import { MILLIS_PER_DAY } from "@/lib/utilities/bark-millis";
 
 describe("getMyDogDetails", () => {
   it("should return null when user does not own the dog requested", async () => {
@@ -41,19 +46,32 @@ describe("getMyDogDetails", () => {
   });
   it("should return dog details when user owns the dog requested", async () => {
     await withDb(async (dbPool) => {
-      // Given that user1 owns dog1
-      const { userId: userId1 } = await insertUser(1, dbPool);
-      const { dogId: dogId1 } = await insertDog(1, userId1, dbPool);
+      // Given that u1 owns dog d1
+      const u1 = await insertUser(1, dbPool);
+      const d1 = await insertDog(1, u1.userId, dbPool);
+
+      // and the preferred vet is v1
+      const v1 = await insertVet(1, dbPool);
+      await dbInsertDogVetPreference(dbPool, d1.dogId, v1.vetId);
+
+      // and participation has a pause that expired yesterday (so the expected
+      // participation status returned should be PARTICIPATING and the pause
+      // expiry time should be null despite these values)
+      const pauseExpiryTime = new Date(Date.now() - MILLIS_PER_DAY);
+      await dbUpdateDogParticipation(dbPool, d1.dogId, {
+        participationStatus: PARTICIPATION_STATUS.PAUSED,
+        pauseExpiryTime,
+      });
 
       // When user1 requests for details pertaining to dog1
-      const actor1 = getUserActor(dbPool, userId1);
-      const dogDetails = await getMyDogDetails(actor1, dogId1);
+      const actor = getUserActor(dbPool, u1.userId);
+      const dogDetails = await getMyDogDetails(actor, d1.dogId);
 
       // Then dog details should be returned
       const spec = await getDogSpec(1);
       const oii = await getDogOii(1);
       expect(dogDetails).toEqual({
-        dogId: dogId1,
+        dogId: d1.dogId,
 
         serviceStatus: "AVAILABLE",
         profileStatus: "COMPLETE",
@@ -69,6 +87,10 @@ describe("getMyDogDetails", () => {
         dogDea1Point1: spec.dogDea1Point1,
         dogEverPregnant: spec.dogEverPregnant,
         dogEverReceivedTransfusion: spec.dogEverReceivedTransfusion,
+
+        dogPreferredVetId: v1.vetId,
+        dogParticipationStatus: "PARTICIPATING",
+        dogPauseExpiryTime: null,
 
         dogReports: [],
       });
@@ -133,7 +155,7 @@ describe("getMyDogDetails", () => {
       const { userId } = await insertUser(6, dbPool);
       const { dogId } = await insertDog(7, userId, dbPool, {
         dogWeightKg: 20,
-        dogDea1Point1: DogAntigenPresence.UNKNOWN,
+        dogDea1Point1: DOG_ANTIGEN_PRESENCE.UNKNOWN,
       });
       const { vetId } = await insertVet(8, dbPool);
       await dbInsertDogVetPreference(dbPool, dogId, vetId);
@@ -154,7 +176,7 @@ describe("getMyDogDetails", () => {
 
       // THEN
       expect(details?.dogWeightKg).toEqual(25);
-      expect(details?.dogDea1Point1).toEqual(DogAntigenPresence.POSITIVE);
+      expect(details?.dogDea1Point1).toEqual(DOG_ANTIGEN_PRESENCE.POSITIVE);
     });
   });
 });
