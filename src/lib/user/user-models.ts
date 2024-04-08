@@ -19,7 +19,7 @@ export type MyAccount = {
 
 export type MyLastContactedTime = {
   userLastContactedTime: Date | null;
-}
+};
 
 export type MyDogAppointment = {
   callId: string;
