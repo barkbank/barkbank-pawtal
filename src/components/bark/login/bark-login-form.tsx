@@ -17,6 +17,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { RoutePath } from "@/lib/route-path";
 import { sendLoginOtp } from "@/lib/server-actions/send-login-otp";
 import { AccountType } from "@/lib/auth-models";
+import { FormMessage } from "@/components/ui/form";
 
 const FORM_SCHEMA = z.object({
   email: z.string().email(),
@@ -119,9 +120,9 @@ export default function BarkLoginForm(props: {
           </BarkFormParagraph>
         )}
         {emailOtpError !== "" && (
-          <h4 className="mt-6 scroll-m-20 text-xl font-semibold tracking-tight text-red-600">
+          <FormMessage className="mt-6 text-red-500">
             {emailOtpError}
-          </h4>
+          </FormMessage>
         )}
         <BarkFormInput form={form} name="otp" label="Enter OTP" />
         <div className="flex w-full gap-x-4">
@@ -132,9 +133,7 @@ export default function BarkLoginForm(props: {
         </div>
         <BarkFormError form={form} />
         {shouldShowLoginFailed && (
-          <h4 className="mt-6 scroll-m-20 text-xl font-semibold tracking-tight text-red-600">
-            Login Failed
-          </h4>
+          <FormMessage className="mt-6 text-red-500">Login Failed</FormMessage>
         )}
       </BarkForm>
     </>

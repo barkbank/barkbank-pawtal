@@ -16,10 +16,10 @@ export default async function Page() {
       noAccountErrorMessage={
         <>
           User account does not exist. Click{" "}
-          <Link href={RoutePath.USER_REGISTRATION} className="text-blue-700">
+          <Link href={RoutePath.USER_REGISTRATION} className="text-blue-400">
             here
           </Link>{" "}
-          to register.
+          to create an account.
         </>
       }
     />
