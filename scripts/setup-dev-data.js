@@ -489,7 +489,41 @@ function main() {
     );
   }
 
+  function addAppointment(userIdx) {
+    const userId = userIdxToUserId[userIdx];
+    const sql = `
+      WITH
+      mInsertion as (
+        INSERT INTO calls (
+          dog_id,
+          vet_id,
+          call_outcome,
+          encrypted_opt_out_reason
+        )
+        SELECT
+          dog_id,
+          vet_id,
+          'APPOINTMENT' as call_outcome,
+          '' as encrypted_opt_out_reason
+        FROM dog_vet_preferences
+        WHERE user_id = $1
+        ORDER BY dog_id ASC
+        LIMIT 1
+        RETURNING *
+      )
+      SELECT * FROM mInsertion
+			`;
+    return doQuery(sql, [userId]).then((res) => {
+      console.log("Created appointment:", {
+        userIdx,
+        userId,
+        call: res.rows[0],
+      });
+    });
+  }
+
   Promise.resolve()
+    .then(() => doQuery(`delete from calls`, []))
     .then(() => doQuery(`delete from dogs`, []))
     .then(() => doQuery(`delete from users`, []))
     .then(() => doQuery(`delete from vets`, []))
@@ -498,6 +532,10 @@ function main() {
     .then(createVetAccounts)
     .then(createUserAccountsAndDogs)
     .then(addVetPreferences)
+    .then(() => {
+      // Create appointments for the first 3 users.
+      return Promise.all(irange(3).map(addAppointment));
+    })
     .then(() => console.log("Done"));
 }
 
