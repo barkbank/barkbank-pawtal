@@ -34,7 +34,7 @@ import { AdminActorConfig } from "./admin/admin-actor";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
-  private promisedEmailService: Promise<EmailService> | null = null;
+  private promisedEmailService: Promise<EmailSender> | null = null;
   private promisedOtpService: Promise<OtpService> | null = null;
   private promisedPiiHashService: Promise<HashService> | null = null;
   private promisedPiiEncryptionService: Promise<EncryptionService> | null =
@@ -80,7 +80,7 @@ export class AppFactory {
     return "development";
   }
 
-  public getEmailService(): Promise<EmailService> {
+  public getEmailService(): Promise<EmailSender> {
     const self = this;
 
     function resolveEmailSender(): EmailSender {
