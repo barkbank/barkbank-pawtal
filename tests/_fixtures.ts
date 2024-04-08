@@ -35,6 +35,7 @@ import {
   HarnessHashService,
   HarnessEncryptionService,
   HarnessOtpService,
+  HarnessEmailService,
 } from "./_harness";
 import { AdminActorFactoryConfig } from "@/lib/admin/admin-actor-factory";
 import { dbInsertUser, dbSelectUser } from "@/lib/data/db-users";
@@ -59,6 +60,11 @@ import {
 } from "@/lib/data/db-enums";
 import { dbInsertReport } from "@/lib/data/db-reports";
 import { dbInsertCall } from "@/lib/data/db-calls";
+import { EmailService } from "@/lib/services/email";
+import {
+  EmailOtpService,
+  EmailOtpServiceConfig,
+} from "@/lib/services/email-otp-service";
 
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
@@ -87,6 +93,23 @@ export function getGeneralEncryptionService(): EncryptionService {
 
 export function getOtpService(): OtpService {
   return new HarnessOtpService();
+}
+
+export function getEmailService(): EmailService {
+  return new HarnessEmailService();
+}
+
+export function getEmailOtpService(
+  dbPool: Pool,
+  configOverrides?: Partial<EmailOtpServiceConfig>,
+): EmailOtpService {
+  const base: EmailOtpServiceConfig = {
+    dbPool,
+    otpService: getOtpService(),
+    emailService: getEmailService(),
+  };
+  const config = { ...base, ...configOverrides };
+  return new EmailOtpService(config);
 }
 
 export function getAdminMapper(): AdminMapper {
