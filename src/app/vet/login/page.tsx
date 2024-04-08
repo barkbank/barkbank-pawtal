@@ -12,6 +12,7 @@ export default async function Page() {
       accountType={AccountType.VET}
       successPath={RoutePath.VET_DASHBOARD_PAGE}
       logoSrc={IMG_PATH.PAW_PRINT}
+      noAccountErrorMessage="Vet account does not exist"
     />
   );
 }

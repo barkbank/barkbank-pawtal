@@ -1,7 +1,8 @@
-import { Ok, Result } from "@/lib/utilities/result";
+import { Err, Ok, Result } from "@/lib/utilities/result";
 import { EncryptionService } from "@/lib/services/encryption";
 import { HashService } from "@/lib/services/hash";
 import { OtpService } from "@/lib/services/otp";
+import { Email, EmailService } from "@/lib/services/email";
 
 export class HarnessHashService implements HashService {
   public async digest(
@@ -57,5 +58,19 @@ export class HarnessOtpService implements OtpService {
 
   public async getRecentOtps(value: string): Promise<string[]> {
     return [HarnessOtpService.CURRENT_OTP];
+  }
+}
+
+export class HarnessEmailService implements EmailService {
+  public emails: Email[] = [];
+  public async sendEmail(email: Email): Promise<Result<true, "FAILED">> {
+    this.emails.push(email);
+    return Ok(true);
+  }
+}
+
+export class HarnessFailureEmailService implements EmailService {
+  public async sendEmail(email: Email): Promise<Result<true, "FAILED">> {
+    return Err("FAILED");
   }
 }

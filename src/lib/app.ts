@@ -5,10 +5,9 @@ import {
 import { BreedService } from "./services/breed";
 import {
   EmailContact,
-  EmailSender,
   EmailService,
-  NodemailerEmailSender,
-  PassthroughEmailSender,
+  NodemailerEmailService,
+  PassthroughEmailService,
   SmtpConfig,
 } from "./services/email";
 import {
@@ -31,6 +30,10 @@ import { DogMapper } from "./data/dog-mapper";
 import { RegistrationService } from "./services/registration";
 import { UserActorConfig } from "./user/user-actor";
 import { AdminActorConfig } from "./admin/admin-actor";
+import {
+  EmailOtpService,
+  EmailOtpServiceConfig,
+} from "./services/email-otp-service";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -51,6 +54,7 @@ export class AppFactory {
   private promisedDogMapper: Promise<DogMapper> | null = null;
   private promisedRegistrationService: Promise<RegistrationService> | null =
     null;
+  private promisedEmailOtpService: Promise<EmailOtpService> | null = null;
 
   constructor(envs: NodeJS.Dict<string>) {
     this.envs = envs;
@@ -81,28 +85,24 @@ export class AppFactory {
   }
 
   public getEmailService(): Promise<EmailService> {
-    const self = this;
-
-    function resolveEmailSender(): EmailSender {
-      if (self.envString(AppEnv.BARKBANK_SMTP_HOST) === "") {
-        console.log("Using PassthroughEmailSender");
-        return new PassthroughEmailSender();
-      }
-      const config: SmtpConfig = {
-        smtpHost: self.envString(AppEnv.BARKBANK_SMTP_HOST),
-        smtpPort: self.envInteger(AppEnv.BARKBANK_SMTP_PORT),
-        smtpUser: self.envString(AppEnv.BARKBANK_SMTP_USER),
-        smtpPassword: self.envString(AppEnv.BARKBANK_SMTP_PASSWORD),
-      };
-      console.log("Using NodemailerEmailSender");
-      return new NodemailerEmailSender(config);
-    }
-
     if (this.promisedEmailService === null) {
-      this.promisedEmailService = Promise.resolve(
-        new EmailService(resolveEmailSender()),
-      );
-      console.log("Created EmailService");
+      this.promisedEmailService = new Promise<EmailService>((resolve) => {
+        if (this.envString(AppEnv.BARKBANK_SMTP_HOST) === "") {
+          resolve(new PassthroughEmailService());
+          console.log("Created PassthroughEmailService as EmailService");
+          return;
+        }
+
+        const config: SmtpConfig = {
+          smtpHost: this.envString(AppEnv.BARKBANK_SMTP_HOST),
+          smtpPort: this.envInteger(AppEnv.BARKBANK_SMTP_PORT),
+          smtpUser: this.envString(AppEnv.BARKBANK_SMTP_USER),
+          smtpPassword: this.envString(AppEnv.BARKBANK_SMTP_PASSWORD),
+        };
+        resolve(new NodemailerEmailService(config));
+        console.log("Created NodemailerEmailService as EmailService");
+        return;
+      });
     }
     return this.promisedEmailService;
   }
@@ -130,6 +130,42 @@ export class AppFactory {
       email: this.envString(AppEnv.BARKBANK_OTP_SENDER_EMAIL),
       name: this.envOptionalString(AppEnv.BARKBANK_OTP_SENDER_NAME),
     });
+  }
+
+  public getEmailOtpService(): Promise<EmailOtpService> {
+    if (this.promisedEmailOtpService === null) {
+      this.promisedEmailOtpService = new Promise<EmailOtpService>(
+        async (resolve) => {
+          const [
+            otpService,
+            emailService,
+            sender,
+            userActorFactory,
+            vetActorFactory,
+            adminActorFactory,
+          ] = await Promise.all([
+            this.getOtpService(),
+            this.getEmailService(),
+            this.getSenderForOtpEmail(),
+            this.getUserActorFactory(),
+            this.getVetActorFactory(),
+            this.getAdminActorFactory(),
+          ]);
+          const config: EmailOtpServiceConfig = {
+            otpService,
+            emailService,
+            sender,
+            userActorFactory,
+            vetActorFactory,
+            adminActorFactory,
+          };
+          const service = new EmailOtpService(config);
+          resolve(service);
+          console.log("Created EmailOtpService");
+        },
+      );
+    }
+    return this.promisedEmailOtpService;
   }
 
   public getEmailHashService(): Promise<HashService> {
