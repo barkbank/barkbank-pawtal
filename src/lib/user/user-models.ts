@@ -9,6 +9,18 @@ import {
 } from "../data/db-enums";
 import { StatusSet } from "../data/status-mapper";
 
+export type MyAccount = {
+  userCreationTime: Date;
+  userName: string;
+  userResidency: string;
+  userEmail: string;
+  userPhoneNumber: string;
+};
+
+export type MyLastContactedTime = {
+  userLastContactedTime: Date | null;
+};
+
 export type MyDogAppointment = {
   callId: string;
   vetId: string;

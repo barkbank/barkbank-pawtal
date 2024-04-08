@@ -23,4 +23,7 @@ export const IMG_PATH = {
   SIDEBAR_KEY: "/images/key.svg",
   SIDEBAR_SQUARE_LIGHT: "/images/square-light.svg",
   SIDEBAR_SQUARE: "/images/square.svg",
+  LETTER: "/images/letter.svg",
+  LOCATION_MARKER: "/images/location-marker.svg",
+  PHONE: "/images/phone.svg",
 } as const;
