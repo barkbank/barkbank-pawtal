@@ -34,6 +34,17 @@ describe("EmailOtpService::sendOtp", () => {
       expect(res).toEqual("NO_ACCOUNT");
     });
   });
+  it("should return OK when account type is null", async () => {
+    // This is for the registration flow.
+    await withDb(async (dbPool) => {
+      const service = getEmailOtpService(dbPool);
+      const res = await service.sendOtp({
+        emailAddress: "newuser@user.com",
+        accountType: null,
+      });
+      expect(res).toEqual("OK");
+    });
+  });
   it("should return SEND_FAILED when email failed to send", async () => {
     await withDb(async (dbPool) => {
       const service = getEmailOtpService(dbPool, {

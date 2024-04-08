@@ -17,7 +17,7 @@ export type EmailOtpServiceConfig = {
 
 type Request = {
   emailAddress: string;
-  accountType: AccountType;
+  accountType: AccountType | null;
 };
 
 type ResponseCode = "OK" | "NO_ACCOUNT" | "SEND_FAILED";
@@ -63,6 +63,9 @@ export class EmailOtpService {
     }
     if (accountType === AccountType.ADMIN) {
       return this.checkAdminAccountExists(request);
+    }
+    if (accountType === null) {
+      return "OK";
     }
     return "NO_ACCOUNT";
   }
