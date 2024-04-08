@@ -9,8 +9,6 @@ export async function sendLoginOtp(args: {
   emailAddress: string;
   accountType: AccountType | null;
 }): Promise<ResponseCode> {
-  const { emailAddress, accountType } = args;
   const emailOtpService = await APP.getEmailOtpService();
-  const res = await emailOtpService.sendOtp({ emailAddress, accountType });
-  return res;
+  return emailOtpService.sendOtp(args);
 }
