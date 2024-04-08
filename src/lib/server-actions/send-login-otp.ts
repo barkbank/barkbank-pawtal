@@ -5,8 +5,6 @@ import { AccountType } from "../auth-models";
 
 type ResponseCode = "OK" | "NO_ACCOUNT" | "SEND_FAILED";
 
-// WIP: the business logic should be in an OtpEmailService.
-// - it should be constructed from otp service, email service, and sender for otp email.
 export async function sendLoginOtp(args: {
   emailAddress: string;
   accountType: AccountType | null;
