@@ -3,6 +3,8 @@
 import APP from "@/lib/app";
 import { Email } from "@/lib/services/email";
 
+// WIP: the business logic should be in an OtpEmailService.
+// - it should be constructed from otp service, email service, and sender for otp email.
 export async function sendLoginOtp(emailAddress: string): Promise<void> {
   console.log("Sending OTP to", emailAddress);
   const emailService = await APP.getEmailService();
