@@ -3,6 +3,7 @@ import { withDb } from "../_db_helpers";
 import {
   getDogOii,
   getDogSpec,
+  getEncryptedText,
   getUserActor,
   getVetSpec,
   insertCall,
@@ -61,6 +62,7 @@ describe("getMyDogDetails", () => {
       await dbUpdateDogParticipation(dbPool, d1.dogId, {
         participationStatus: PARTICIPATION_STATUS.PAUSED,
         pauseExpiryTime,
+        encryptedReason: await getEncryptedText("just because"),
       });
 
       // When user1 requests for details pertaining to dog1
@@ -90,10 +92,41 @@ describe("getMyDogDetails", () => {
 
         dogPreferredVetId: v1.vetId,
         dogParticipationStatus: "PARTICIPATING",
+        dogNonParticipationReason: "",
         dogPauseExpiryTime: null,
 
         dogReports: [],
       });
+    });
+  });
+  it("should return decrypted participation reason", async () => {
+    await withDb(async (dbPool) => {
+      // Given that u1 owns dog d1
+      const u1 = await insertUser(1, dbPool);
+      const d1 = await insertDog(1, u1.userId, dbPool);
+
+      // and the preferred vet is v1
+      const v1 = await insertVet(1, dbPool);
+      await dbInsertDogVetPreference(dbPool, d1.dogId, v1.vetId);
+
+      // and participation is opted out with a reason.
+      const pauseExpiryTime = new Date(Date.now() - MILLIS_PER_DAY);
+      await dbUpdateDogParticipation(dbPool, d1.dogId, {
+        participationStatus: PARTICIPATION_STATUS.OPTED_OUT,
+        encryptedReason: await getEncryptedText("goodbye"),
+      });
+
+      // When user1 requests for details pertaining to dog1
+      const actor = getUserActor(dbPool, u1.userId);
+      const dogDetails = await getMyDogDetails(actor, d1.dogId);
+
+      // Then dog participation status should be opted out;
+      expect(dogDetails?.dogParticipationStatus).toEqual(
+        PARTICIPATION_STATUS.OPTED_OUT,
+      );
+
+      // And reason should be goodbye
+      expect(dogDetails?.dogNonParticipationReason).toEqual("goodbye");
     });
   });
   it("should return number of pending reports", async () => {

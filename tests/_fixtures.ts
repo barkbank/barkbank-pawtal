@@ -100,6 +100,10 @@ export function getTextEncryptionService(): EncryptionService {
   return new HarnessEncryptionService("text-secret");
 }
 
+export async function getEncryptedText(text: string): Promise<string> {
+  return getTextEncryptionService().getEncryptedData(text);
+}
+
 export function getOtpService(): OtpService {
   return new HarnessOtpService();
 }
