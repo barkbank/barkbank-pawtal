@@ -12,6 +12,7 @@ import {
   dbDeleteDogVetPreferences,
   dbInsertDogVetPreference,
 } from "@/lib/data/db-dogs";
+import { PARTICIPATION_STATUS } from "@/lib/data/db-enums";
 
 type Response =
   | "OK_UPDATED"
@@ -96,20 +97,19 @@ async function updateDogFields(
   conn: PoolClient,
   ctx: Context,
 ): Promise<"OK" | "FAILURE_DB_UPDATE"> {
-  const { actor, update } = ctx;
-  const { dogMapper } = actor.getParams();
+  const { update } = ctx;
   const {
     dogId,
-    dogName,
     dogWeightKg,
     dogEverPregnant,
     dogEverReceivedTransfusion,
     dogParticipationStatus,
     dogPauseExpiryTime,
   } = update;
-  const { dogEncryptedOii } = await dogMapper.mapDogOiiToDogSecureOii({
-    dogName,
-  });
+  const [dogEncryptedOii, dogEncryptedReason] = await Promise.all([
+    getDogEncryptedOii(ctx),
+    getDogEncryptedReason(ctx),
+  ]);
   const sql = `
   UPDATE dogs
   SET
@@ -118,7 +118,8 @@ async function updateDogFields(
     dog_ever_pregnant = $4,
     dog_ever_received_transfusion = $5,
     dog_participation_status = $6,
-    dog_pause_expiry_time = $7
+    dog_encrypted_reason = $7,
+    dog_pause_expiry_time = $8
   WHERE
     dog_id = $1
   RETURNING 1
@@ -130,6 +131,7 @@ async function updateDogFields(
     dogEverPregnant,
     dogEverReceivedTransfusion,
     dogParticipationStatus,
+    dogEncryptedReason,
     dogPauseExpiryTime,
   ]);
   if (res.rows.length !== 1) {
@@ -149,4 +151,30 @@ async function updateVetPreference(
     await dbInsertDogVetPreference(conn, dogId, vetId);
   }
   return "OK";
+}
+
+async function getDogEncryptedOii(ctx: Context): Promise<string> {
+  const { actor, update } = ctx;
+  const { dogMapper } = actor.getParams();
+  const { dogName } = update;
+  const { dogEncryptedOii } = await dogMapper.mapDogOiiToDogSecureOii({
+    dogName,
+  });
+  return dogEncryptedOii;
+}
+
+async function getDogEncryptedReason(ctx: Context): Promise<string> {
+  const { actor, update } = ctx;
+  const { textEncryptionService } = actor.getParams();
+  const { dogParticipationStatus, dogNonParticipationReason } = update;
+  if (dogParticipationStatus === PARTICIPATION_STATUS.PARTICIPATING) {
+    return "";
+  }
+  if (dogNonParticipationReason === "") {
+    return "";
+  }
+  const dogEncryptedReason = await textEncryptionService.getEncryptedData(
+    dogNonParticipationReason,
+  );
+  return dogEncryptedReason;
 }

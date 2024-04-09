@@ -104,6 +104,10 @@ export async function getEncryptedText(text: string): Promise<string> {
   return getTextEncryptionService().getEncryptedData(text);
 }
 
+export async function getDecryptedText(encryptedText: string): Promise<string> {
+  return getTextEncryptionService().getDecryptedData(encryptedText);
+}
+
 export function getOtpService(): OtpService {
   return new HarnessOtpService();
 }
