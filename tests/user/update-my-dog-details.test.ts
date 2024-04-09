@@ -74,9 +74,9 @@ describe("updateMyDogDetails", () => {
         dogNonParticipationReason: "some reason 123",
       });
       const res = await updateMyDogDetails(actor1, update);
-      expect(res).toEqual("OK_UPDATED");
 
       // THEN
+      expect(res).toEqual("OK_UPDATED");
       const queryResult = await dbQuery(
         dbPool,
         `

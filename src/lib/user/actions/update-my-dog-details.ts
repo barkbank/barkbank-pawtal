@@ -19,6 +19,7 @@ type Response =
   | "ERROR_UNAUTHORIZED"
   | "ERROR_MISSING_DOG"
   | "ERROR_MISSING_REPORT"
+  | "ERROR_UNEXPECTED_NON_PARTICIPATION_REASON"
   | "FAILURE_DB_UPDATE";
 
 type Context = {
@@ -30,6 +31,10 @@ export async function updateMyDogDetails(
   actor: UserActor,
   update: MyDogDetailsUpdate,
 ): Promise<Response> {
+  const validUpdateCheck = checkValidUpdate(update);
+  if (validUpdateCheck !== "OK") {
+    return validUpdateCheck;
+  }
   const ctx: Context = { actor, update };
   const { dbPool } = actor.getParams();
   const conn = await dbPool.connect();
@@ -54,6 +59,19 @@ export async function updateMyDogDetails(
     await dbRollback(conn);
     await dbRelease(conn);
   }
+}
+
+function checkValidUpdate(
+  update: MyDogDetailsUpdate,
+): "OK" | "ERROR_UNEXPECTED_NON_PARTICIPATION_REASON" {
+  const { dogParticipationStatus, dogNonParticipationReason } = update;
+  if (
+    dogParticipationStatus === PARTICIPATION_STATUS.PARTICIPATING &&
+    dogNonParticipationReason !== ""
+  ) {
+    return "ERROR_UNEXPECTED_NON_PARTICIPATION_REASON";
+  }
+  return "OK";
 }
 
 async function checkOwnership(

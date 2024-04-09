@@ -76,7 +76,7 @@ export type MyDogRegistrationUpdate = {
   dogEverReceivedTransfusion: YesNoUnknown;
   dogPreferredVetId: string | null;
   dogParticipationStatus: ParticipationStatus;
-  // TODO: dogPauseEndReason: string; When the schema supports it
+  dogNonParticipationReason: string;
   dogPauseExpiryTime: Date | null;
 };
 
