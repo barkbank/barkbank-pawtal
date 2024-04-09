@@ -311,18 +311,29 @@ export class AppFactory {
   public getUserActorFactory(): Promise<UserActorFactory> {
     if (this.promisedUserActorFactory === null) {
       this.promisedUserActorFactory = new Promise(async (resolve) => {
-        const [dbPool, emailHashService, userMapper, dogMapper] =
-          await Promise.all([
-            this.getDbPool(),
-            this.getEmailHashService(),
-            this.getUserMapper(),
-            this.getDogMapper(),
-          ]);
+        const [
+          dbPool,
+          emailHashService,
+          userMapper,
+          dogMapper,
+          textEncryptionService,
+        ] = await Promise.all([
+          this.getDbPool(),
+          this.getEmailHashService(),
+          this.getUserMapper(),
+          this.getDogMapper(),
+          this.getTextEncryptionService(),
+        ]);
         const factoryConfig: UserActorFactoryConfig = {
           dbPool,
           emailHashService,
         };
-        const actorConfig: UserActorConfig = { dbPool, userMapper, dogMapper };
+        const actorConfig: UserActorConfig = {
+          dbPool,
+          userMapper,
+          dogMapper,
+          textEncryptionService,
+        };
         const factory = new UserActorFactory(factoryConfig, actorConfig);
         console.log("Created UserActorFactory");
         resolve(factory);

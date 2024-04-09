@@ -4,11 +4,13 @@ import { UserPii } from "../data/db-models";
 import { UserMapper } from "../data/user-mapper";
 import { DogMapper } from "../data/dog-mapper";
 import { dbSelectUser } from "../data/db-users";
+import { EncryptionService } from "../services/encryption";
 
 export type UserActorConfig = {
   dbPool: Pool;
   userMapper: UserMapper;
   dogMapper: DogMapper;
+  textEncryptionService: EncryptionService;
 };
 
 /**

@@ -160,6 +160,7 @@ export function getUserActorConfig(dbPool: Pool): UserActorConfig {
     dbPool,
     userMapper: getUserMapper(),
     dogMapper: getDogMapper(),
+    textEncryptionService: getTextEncryptionService(),
   };
 }
 
