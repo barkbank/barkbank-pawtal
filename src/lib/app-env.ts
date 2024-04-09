@@ -16,8 +16,20 @@ export enum AppEnv {
   BARKBANK_OTP_SENDER_EMAIL = "BARKBANK_OTP_SENDER_EMAIL",
   BARKBANK_OTP_SENDER_NAME = "BARKBANK_OTP_SENDER_NAME",
 
+  /**
+   * Secret key for PII secrets.
+   */
   BARKBANK_PII_SECRET = "BARKBANK_PII_SECRET",
+
+  /**
+   * Secret key for Owner Identifiable Information (OII) secrets.
+   */
   BARKBANK_OII_SECRET = "BARKBANK_OII_SECRET",
+
+  /**
+   * Secret key for text in general.
+   */
+  BARKBANK_TEXT_SECRET = "BARKBANK_TEXT_SECRET",
 
   BARKBANK_SMTP_HOST = "BARKBANK_SMTP_HOST",
   BARKBANK_SMTP_PORT = "BARKBANK_SMTP_PORT",

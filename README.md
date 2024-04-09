@@ -47,6 +47,7 @@ BARKBANK_OTP_NUM_RECENT_PERIODS=8
 BARKBANK_OTP_SECRET="secret-for-otp-generation"
 BARKBANK_PII_SECRET="secret-for-pii-privacy"
 BARKBANK_OII_SECRET="secret-for-oii-privacy"
+BARKBANK_TEXT_SECRET="secret-for-text-privacy"
 BARKBANK_DB_HOST=localhost
 BARKBANK_DB_PORT=5800
 BARKBANK_DB_NAME=devdb

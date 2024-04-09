@@ -44,6 +44,8 @@ export class AppFactory {
     null;
   private promisedOiiEncryptionService: Promise<EncryptionService> | null =
     null;
+  private promisedTextEncryptionService: Promise<EncryptionService> | null =
+    null;
   private promisedBreedService: Promise<BreedService> | null = null;
   private promisedDbPool: Promise<pg.Pool> | null = null;
   private promisedAdminActorFactory: Promise<AdminActorFactory> | null = null;
@@ -183,7 +185,7 @@ export class AppFactory {
       this.promisedPiiEncryptionService = Promise.resolve(
         new SecretEncryptionService(this.envString(AppEnv.BARKBANK_PII_SECRET)),
       );
-      console.log("Created PiiEncryptionService");
+      console.log("Created EncryptionService for PII");
     }
     return this.promisedPiiEncryptionService;
   }
@@ -193,9 +195,21 @@ export class AppFactory {
       this.promisedOiiEncryptionService = Promise.resolve(
         new SecretEncryptionService(this.envString(AppEnv.BARKBANK_OII_SECRET)),
       );
-      console.log("Created OiiEncryptionService");
+      console.log("Created EncryptionService for OII");
     }
     return this.promisedOiiEncryptionService;
+  }
+
+  private getTextEncryptionService(): Promise<EncryptionService> {
+    if (this.promisedTextEncryptionService === null) {
+      this.promisedTextEncryptionService = Promise.resolve(
+        new SecretEncryptionService(
+          this.envString(AppEnv.BARKBANK_TEXT_SECRET),
+        ),
+      );
+      console.log("Created EncryptionService for text");
+    }
+    return this.promisedTextEncryptionService;
   }
 
   public getBreedService(): Promise<BreedService> {
