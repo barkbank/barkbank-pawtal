@@ -1,6 +1,7 @@
 import { updateMyDogRegistration } from "@/lib/user/actions/update-my-dog-registration";
 import { withDb } from "../_db_helpers";
 import {
+  getDecryptedText,
   getDogMapper,
   getUserActor,
   insertCall,
@@ -21,6 +22,7 @@ import {
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import { Pool, PoolClient } from "pg";
 import { dbBegin, dbQuery, dbRelease } from "@/lib/data/db-utils";
+import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
 
 describe("updateMyDogRegistration", () => {
   it("should return OK_UPDATED when update was successful", async () => {
@@ -43,6 +45,42 @@ describe("updateMyDogRegistration", () => {
       expect(res).toEqual("OK_UPDATED");
       const dataInDb = await reconstructUpdateFromDb(dbPool, d1.dogId);
       expect(dataInDb).toEqual(update);
+    });
+  });
+  it("should encrypt and store non-participation reason", async () => {
+    await withDb(async (dbPool) => {
+      // GIVEN users u1 with dog d1 and preferred vet v1
+      const u1 = await insertUser(1, dbPool);
+      const d1 = await insertDog(1, u1.userId, dbPool);
+      const v1 = await insertVet(1, dbPool);
+      await dbInsertDogVetPreference(dbPool, d1.dogId, v1.vetId);
+
+      // WHEN
+      const actor1 = getUserActor(dbPool, u1.userId);
+      const update = registrationUpdate(d1.dogId, {
+        dogParticipationStatus: PARTICIPATION_STATUS.PAUSED,
+        dogPauseExpiryTime: new Date(Date.now() + MILLIS_PER_WEEK),
+        dogNonParticipationReason: "some reason 123",
+      });
+      const res = await updateMyDogRegistration(actor1, update);
+
+      // THEN
+      expect(res).toEqual("OK_UPDATED");
+      const queryResult = await dbQuery(
+        dbPool,
+        `
+        select dog_encrypted_reason as "dogEncryptedReason"
+        from dogs
+        where dog_id = $1
+        `,
+        [d1.dogId],
+      );
+      const { dogEncryptedReason } = queryResult.rows[0];
+      expect(dogEncryptedReason).not.toEqual("some reason 123");
+      expect(dogEncryptedReason).not.toEqual("");
+      const dogNonParticipationReason =
+        await getDecryptedText(dogEncryptedReason);
+      expect(dogNonParticipationReason).toEqual("some reason 123");
     });
   });
   it("should return ERROR_REPORT_EXISTS when there is an existing report for the dog", async () => {
@@ -125,7 +163,7 @@ function registrationUpdate(
     dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
     dogPreferredVetId: null,
     dogParticipationStatus: PARTICIPATION_STATUS.PARTICIPATING,
-    // TODO: dogPauseEndReason: string; When the schema supports it
+    dogNonParticipationReason: "",
     dogPauseExpiryTime: null,
   };
   return { ...base, ...overrides };
@@ -180,12 +218,16 @@ async function fetchDogFields(
     dog_ever_pregnant as "dogEverPregnant",
     dog_ever_received_transfusion as "dogEverReceivedTransfusion",
     dog_participation_status as "dogParticipationStatus",
+    dog_encrypted_reason as "dogEncryptedReason",
     dog_pause_expiry_time as "dogPauseExpiryTime"
   from dogs
   where dog_id = $1
   `;
   const res = await dbQuery(conn, sql, [dogId]);
-  return res.rows[0];
+  const { dogEncryptedReason, ...otherFields } = res.rows[0];
+  const dogNonParticipationReason =
+    dogEncryptedReason === "" ? "" : await getDecryptedText(dogEncryptedReason);
+  return { dogNonParticipationReason, ...otherFields };
 }
 
 async function fetchDogPreferredVetId(

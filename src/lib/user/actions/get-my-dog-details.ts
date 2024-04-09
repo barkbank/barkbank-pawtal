@@ -1,6 +1,7 @@
 import { dbQuery } from "@/lib/data/db-utils";
 import { UserActor } from "../user-actor";
 import { MyDogDetails, MyDogReport } from "../user-models";
+import { PARTICIPATION_STATUS, ParticipationStatus } from "@/lib/data/db-enums";
 
 export async function getMyDogDetails(
   actor: UserActor,
@@ -64,6 +65,7 @@ export async function getMyDogDetails(
     COALESCE(tReport.dog_reports, json_build_array()) as "jsonDogReports",
     tStatus.participation_status as "dogParticipationStatus",
     tStatus.participation_pause_expiry_time as "dogPauseExpiryTime",
+    tDog.dog_encrypted_reason as "dogEncryptedReason",
     tPref.vet_id as "dogPreferredVetId",
 
     tStatus.profile_status as "profileStatus",
@@ -83,7 +85,13 @@ export async function getMyDogDetails(
   if (res.rows.length === 0) {
     return null;
   }
-  const { dogEncryptedOii, jsonDogReports, ...otherFields } = res.rows[0];
+  const {
+    dogEncryptedOii,
+    jsonDogReports,
+    dogParticipationStatus,
+    dogEncryptedReason,
+    ...otherFields
+  } = res.rows[0];
   const { dogName } = await dogMapper.mapDogSecureOiiToDogOii({
     dogEncryptedOii,
   });
@@ -103,11 +111,35 @@ export async function getMyDogDetails(
       return report;
     },
   );
+  const dogNonParticipationReason = await getDogNonParticipationReason(actor, {
+    dogParticipationStatus,
+    dogEncryptedReason,
+  });
   const details: MyDogDetails = {
     dogId,
     dogName,
     dogReports,
+    dogParticipationStatus,
+    dogNonParticipationReason,
     ...otherFields,
   };
   return details;
+}
+
+async function getDogNonParticipationReason(
+  actor: UserActor,
+  args: {
+    dogParticipationStatus: ParticipationStatus;
+    dogEncryptedReason: string;
+  },
+): Promise<string> {
+  const { dogParticipationStatus, dogEncryptedReason } = args;
+  if (dogParticipationStatus === PARTICIPATION_STATUS.PARTICIPATING) {
+    return "";
+  }
+  if (dogEncryptedReason === "") {
+    return "";
+  }
+  const { textEncryptionService } = actor.getParams();
+  return textEncryptionService.getDecryptedData(dogEncryptedReason);
 }

@@ -58,7 +58,7 @@ export type MyDogDetails = StatusSet & {
   dogEverReceivedTransfusion: YesNoUnknown;
   dogPreferredVetId: string | null;
   dogParticipationStatus: ParticipationStatus;
-  // TODO: dogPauseEndReason: string; When the schema supports it
+  dogNonParticipationReason: string;
   dogPauseExpiryTime: Date | null;
 
   dogReports: MyDogReport[];
@@ -76,7 +76,7 @@ export type MyDogRegistrationUpdate = {
   dogEverReceivedTransfusion: YesNoUnknown;
   dogPreferredVetId: string | null;
   dogParticipationStatus: ParticipationStatus;
-  // TODO: dogPauseEndReason: string; When the schema supports it
+  dogNonParticipationReason: string;
   dogPauseExpiryTime: Date | null;
 };
 
@@ -88,6 +88,6 @@ export type MyDogDetailsUpdate = {
   dogEverReceivedTransfusion: YesNoUnknown;
   dogPreferredVetId: string | null;
   dogParticipationStatus: ParticipationStatus;
-  // TODO: dogPauseEndReason: string; When the schema supports it
+  dogNonParticipationReason: string;
   dogPauseExpiryTime: Date | null;
 };
