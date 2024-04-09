@@ -1,7 +1,7 @@
 import { dbUpdateDogParticipation } from "@/lib/data/db-dogs";
 import { withDb } from "../_db_helpers";
 import {
-  getGeneralEncryptionService,
+  getTextEncryptionService,
   insertDog,
   insertUser,
 } from "../_fixtures";
@@ -101,5 +101,5 @@ function nextWeek(): Date {
 }
 
 async function encryptedText(text: string): Promise<string> {
-  return getGeneralEncryptionService().getEncryptedData(text);
+  return getTextEncryptionService().getEncryptedData(text);
 }

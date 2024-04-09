@@ -95,9 +95,9 @@ export function getOiiEncryptionService(): EncryptionService {
   return new HarnessEncryptionService("oii-secret");
 }
 
-export function getGeneralEncryptionService(): EncryptionService {
+export function getTextEncryptionService(): EncryptionService {
   // For reasons and notes
-  return new HarnessEncryptionService("general");
+  return new HarnessEncryptionService("text-secret");
 }
 
 export function getOtpService(): OtpService {
@@ -435,7 +435,7 @@ export async function insertCall(
   const encryptedOptOutReason =
     optOutReason === undefined
       ? ""
-      : await getGeneralEncryptionService().getEncryptedData(optOutReason);
+      : await getTextEncryptionService().getEncryptedData(optOutReason);
   const spec: DbCallSpec = {
     dogId,
     vetId,
