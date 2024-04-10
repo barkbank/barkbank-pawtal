@@ -1,17 +1,8 @@
 import { test, expect, Page } from "@playwright/test";
-
-const _URLS = {
-  USER_LOGIN: "http://localhost:3000/user/login",
-  USER_MY_PETS: "http://localhost:3000/user/my-pets",
-  ROOT: "http://localhost:3000/",
-} as const;
-
-// This account is created by scripts/setup-dev-data.js
-// Use make local-accounts to run the script.
-const USER_ACCOUNT_EMAIL = "test_user@user.com";
+import { UI_URLS, UI_USER } from "./_ui_test_helpers";
 
 test.beforeEach(async ({ page }) => {
-  await page.goto(_URLS.USER_LOGIN);
+  await page.goto(UI_URLS.USER_LOGIN);
 });
 
 test.describe("user login page", () => {
@@ -63,19 +54,19 @@ test.describe("user login validations", () => {
 
 test.describe("user login flow", () => {
   test("it brings user to my pets page", async ({ page }) => {
-    await fillEmail(USER_ACCOUNT_EMAIL, page);
+    await fillEmail(UI_USER.EMAIL, page);
     await clickSendMeOtp(page);
-    await expectVisible(`An OTP has been sent to ${USER_ACCOUNT_EMAIL}`, page);
+    await expectVisible(`An OTP has been sent to ${UI_USER.EMAIL}`, page);
     await fillOtp("000000", page);
     await clickLogin(page);
-    await expect(page).toHaveURL(_URLS.USER_MY_PETS);
+    await expect(page).toHaveURL(UI_URLS.USER_MY_PETS);
   });
 });
 
 test.describe("user cancel login flow", () => {
   test("it brings user back to root", async ({ page }) => {
     await clickCancel(page);
-    await expect(page).toHaveURL(_URLS.ROOT);
+    await expect(page).toHaveURL(UI_URLS.ROOT);
   });
 });
 
