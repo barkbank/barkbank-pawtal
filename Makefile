@@ -24,19 +24,24 @@ test:
 # Run playwright tests. show-report will run automatically if a test
 # fails.
 .PHONY: test-ui
-test-ui:
+test-ui: playwright-browsers
 	npx playwright test
 
 # Run playwright tests in headed mode, you will see flashes of
 # browser screens.
 .PHONY: test-ui-headed
-test-ui-headed:
+test-ui-headed: playwright-browsers
 	npx playwright test --headed
 
 # Run playwright interactively
 .PHONY: run-playwright
-run-playwright:
+run-playwright: playwright-browsers
 	npx playwright test --ui
+
+# Installs playwright browsers
+.PHONY: playwright-browsers
+playwright-browsers:
+	npx playwright install chromium firefox webkit
 
 # Runs the local development server.
 .PHONY: run
