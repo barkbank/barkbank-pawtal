@@ -21,11 +21,22 @@ test:
 	bash scripts/test_no_wip_tasks_remaining.sh
 	npm run lint
 
-# Run playwright tests
+# Run playwright tests. show-report will run automatically if a test
+# fails.
 .PHONY: test-ui
 test-ui:
 	npx playwright test
-	npx playwright show-report
+
+# Run playwright tests in headed mode, you will see flashes of
+# browser screens.
+.PHONY: test-ui-headed
+test-ui-headed:
+	npx playwright test --headed
+
+# Run playwright interactively
+.PHONY: run-playwright
+run-playwright:
+	npx playwright test --ui
 
 # Runs the local development server.
 .PHONY: run
