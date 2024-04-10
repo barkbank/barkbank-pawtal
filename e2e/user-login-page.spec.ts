@@ -54,9 +54,9 @@ test.describe("user login validations", () => {
 
 test.describe("user login flow", () => {
   test("it brings user to my pets page", async ({ page }) => {
-    await fillEmail(UI_USER.EMAIL, page);
+    await fillEmail(UI_USER.USER_EMAIL, page);
     await clickSendMeOtp(page);
-    await expectVisible(`An OTP has been sent to ${UI_USER.EMAIL}`, page);
+    await expectVisible(`An OTP has been sent to ${UI_USER.USER_EMAIL}`, page);
     await fillOtp("000000", page);
     await clickLogin(page);
     await expect(page).toHaveURL(UI_URLS.USER_MY_PETS);
