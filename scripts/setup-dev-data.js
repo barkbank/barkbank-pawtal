@@ -85,16 +85,6 @@ function nextInt(rng) {
   return Math.floor(rng() * 2147483647);
 }
 
-function getStandardCallbackFor(label) {
-  return (err, res) => {
-    if (err) {
-      console.error(`Fail: ${label}`, err);
-      return;
-    }
-    console.log(`Success: ${label}`, res);
-  };
-}
-
 function createAdmin(idx) {
   const email = `admin${idx}@admin.com`;
   const nameIdx = nextInt(getRng("createAdmin", idx));
@@ -123,7 +113,7 @@ function createVet(idx) {
   });
 }
 
-function userEmail(idx) {
+function getUserEmail(idx) {
   return `user${idx}@user.com`;
 }
 
@@ -137,7 +127,7 @@ function getUserResidency(idx) {
 }
 
 function createUser(idx, callback) {
-  const email = userEmail(idx);
+  const email = getUserEmail(idx);
   const nameIdx = nextInt(getRng("createUser", idx));
   const userPii = {
     userEmail: email,
@@ -406,7 +396,7 @@ function irange(n) {
   return Array.from(Array(n).keys()).map((i) => i + 1);
 }
 
-function main() {
+function generateAccounts() {
   const numAdmins = 3;
   const numVets = 3;
   const numUsers = 9;
@@ -435,7 +425,7 @@ function main() {
         return createUser(idx).then((user) => {
           const { userId } = user;
           userIdxToUserId[idx] = userId;
-          const email = userEmail(idx);
+          const email = getUserEmail(idx);
           const offset = idx * maxDogsPerUser;
           const numDogs = idx % (maxDogsPerUser + 1);
           return Promise.all(
@@ -522,12 +512,7 @@ function main() {
     });
   }
 
-  Promise.resolve()
-    .then(() => doQuery(`delete from calls`, []))
-    .then(() => doQuery(`delete from dogs`, []))
-    .then(() => doQuery(`delete from users`, []))
-    .then(() => doQuery(`delete from vets`, []))
-    .then(() => doQuery(`delete from admins`, []))
+  return Promise.resolve()
     .then(createAdminAccounts)
     .then(createVetAccounts)
     .then(createUserAccountsAndDogs)
@@ -536,6 +521,74 @@ function main() {
       // Create appointments for the first 3 users.
       return Promise.all(irange(3).map(addAppointment));
     })
+    .then(() => console.log("Generated Accounts"));
+}
+
+function deleteData() {
+  return Promise.resolve()
+    .then(() => doQuery(`delete from calls`, []))
+    .then(() => doQuery(`delete from dogs`, []))
+    .then(() => doQuery(`delete from users`, []))
+    .then(() => doQuery(`delete from vets`, []))
+    .then(() => doQuery(`delete from admins`, []))
+    .then(() => console.log("Deleted data"));
+}
+
+function createUiTestUserAccount() {
+  return Promise.resolve()
+    .then(() => {
+      const userEmail = "test_user@user.com";
+      const userName = "Tess Yu Ser";
+      const userPhoneNumber = "+65 30002000";
+      const userPii = {
+        userEmail,
+        userName,
+        userPhoneNumber,
+      };
+      const userResidency = "SINGAPORE";
+      const body = { userPii, userResidency };
+      return doRequest("POST", "/api/dangerous/users", body).then((res) => {
+        const { userId } = res;
+        console.log(`Created user ${userEmail} (userId: ${userId})`);
+        return { userId, userEmail, userName, userPhoneNumber };
+      });
+    })
+    .then((state) => {
+      const { userEmail } = state;
+      const dogName = "Mape";
+      const body = {
+        userEmail,
+        dogOii: {
+          dogName,
+        },
+        dogDetails: {
+          dogBreed: "Singapore Special",
+          dogBirthday: "2022-07-18",
+          dogGender: "FEMALE",
+          dogWeightKg: 23,
+          dogDea1Point1: "UNKNOWN",
+          dogEverPregnant: "NO",
+          dogEverReceivedTransfusion: "NO",
+        },
+      };
+      return doRequest("POST", "/api/dangerous/dogs", body).then((res) => {
+        const { dogId } = res;
+        console.log(
+          `Added dog ${dogName} (dogId: ${dogId}) for user ${userEmail}`,
+        );
+        return { ...state, dogName, dogId };
+      });
+    })
+    .then((state) => {
+      console.log("Created test user:", state);
+    });
+}
+
+function main() {
+  return Promise.resolve()
+    .then(deleteData)
+    .then(generateAccounts)
+    .then(createUiTestUserAccount)
     .then(() => console.log("Done"));
 }
 

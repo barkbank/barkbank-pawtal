@@ -6,6 +6,10 @@ const _URLS = {
   ROOT: "http://localhost:3000/",
 } as const;
 
+// This account is created by scripts/setup-dev-data.js
+// Use make local-accounts to run the script.
+const USER_ACCOUNT_EMAIL = "test_user@user.com";
+
 test.beforeEach(async ({ page }) => {
   await page.goto(_URLS.USER_LOGIN);
 });
@@ -59,9 +63,9 @@ test.describe("user login validations", () => {
 
 test.describe("user login flow", () => {
   test("it brings user to my pets page", async ({ page }) => {
-    await fillEmail("user1@user.com", page);
+    await fillEmail(USER_ACCOUNT_EMAIL, page);
     await clickSendMeOtp(page);
-    await expectVisible("An OTP has been sent to user1@user.com", page);
+    await expectVisible(`An OTP has been sent to ${USER_ACCOUNT_EMAIL}`, page);
     await fillOtp("000000", page);
     await clickLogin(page);
     await expect(page).toHaveURL(_URLS.USER_MY_PETS);
