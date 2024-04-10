@@ -7,7 +7,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 test.describe("User Login Page", () => {
-  test("contains expected elements", async ({ page }) => {
+  test("it contains expected elements", async ({ page }) => {
     await expect(
       page.getByText("Bark Bank Canine Blood Donation Pawtal"),
     ).toBeVisible();
@@ -27,11 +27,19 @@ test.describe("User Login Page", () => {
     await expect(page.getByLabel("Enter OTP")).toBeEditable();
   });
 
-  test("validates email strings", async ({ page }) => {
+  test("it should validate email strings", async ({ page }) => {
     await page
       .getByLabel("Please provide your email")
       .fill("invalid-email-at-gmail-com");
     await page.getByRole("button", { name: "Send me an OTP" }).click();
     await expect(page.getByText("Invalid email address")).toBeVisible();
+  });
+
+  test("it should check account exists", async ({ page }) => {
+    await page
+      .getByLabel("Please provide your email")
+      .fill("no_such_user@user.com");
+    await page.getByRole("button", { name: "Send me an OTP" }).click();
+    await expect(page.getByText("User account does not exist.")).toBeVisible();
   });
 });
