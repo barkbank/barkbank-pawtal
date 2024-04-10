@@ -30,7 +30,7 @@ test.describe("user login page", () => {
     await expect(page.getByLabel("Please provide your email")).toBeEditable();
     await expect(page.getByLabel("Enter OTP")).toBeEditable();
   });
-})
+});
 
 test.describe("user login validations", () => {
   test("it should validate email strings", async ({ page }) => {
@@ -40,7 +40,7 @@ test.describe("user login validations", () => {
   });
 
   test("it should check account exists", async ({ page }) => {
-    await fillEmail("no_such_user@user.com", page)
+    await fillEmail("no_such_user@user.com", page);
     await clickSendMeOtp(page);
 
     // Expect error message to show. (Known Issue: This assertion does not work
@@ -58,22 +58,22 @@ test.describe("user login validations", () => {
 });
 
 test.describe("user login flow", () => {
-  test("it brings user to my pets page", async ({page}) => {
+  test("it brings user to my pets page", async ({ page }) => {
     await fillEmail("user1@user.com", page);
     await clickSendMeOtp(page);
     await expectVisible("An OTP has been sent to user1@user.com", page);
     await fillOtp("000000", page);
     await clickLogin(page);
     await expect(page).toHaveURL(_URLS.USER_MY_PETS);
-  })
-})
+  });
+});
 
 test.describe("user cancel login flow", () => {
-  test("it brings user back to root", async ({page}) => {
+  test("it brings user back to root", async ({ page }) => {
     await clickCancel(page);
     await expect(page).toHaveURL(_URLS.ROOT);
-  })
-})
+  });
+});
 
 async function expectVisible(text: string, page: Page) {
   await expect(page.getByText(text)).toBeVisible();
