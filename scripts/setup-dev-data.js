@@ -345,6 +345,10 @@ function getBirthday(idx) {
   const ageInDays = Math.floor(minAgeDays + rng() * (maxAgeDays - minAgeDays));
   const ageInMillis = ageInDays * millisPerDay;
   const birthday = new Date(today.getTime() - ageInMillis);
+  return formatBirthday(birthday);
+}
+
+function formatBirthday(birthday) {
   const iso8601 = birthday.toISOString();
   return iso8601.split("T")[0];
 }
@@ -360,31 +364,80 @@ function getWeightKg(idx) {
   return Math.floor(minWeightKg + rng() * (maxWeightKg - minWeightKg));
 }
 
-function createDog(email, idx) {
+function getDogFields(idx, overrides) {
+  const base = {
+    dogName: getDogName(idx),
+    dogBreed: getDogBreed(idx),
+    dogBirthday: getBirthday(idx),
+    dogGender: getGender(idx),
+    dogWeightKg: getWeightKg(idx),
+    dogDea1Point1: getDea1Point1(idx),
+    dogEverPregnant: getEverPregnant(idx),
+    dogEverReceivedTransfusion: getEverReceivedTransfusion(idx),
+  };
+  return { ...base, ...overrides };
+}
+
+const MILLIS_PER_YEAR = 365 * 86400 * 1000;
+const MILLIS_PER_MONTH = MILLIS_PER_YEAR / 12;
+
+function getEligibleDogOverrides() {
+  return {
+    dogName: "Mape",
+    dogBreed: "Singapore Special",
+    dogBirthday: formatBirthday(new Date(Date.now() - 2 * MILLIS_PER_YEAR)),
+    dogGender: "FEMALE",
+    dogWeightKg: 23,
+    dogDea1Point1: "UNKNOWN",
+    dogEverPregnant: "NO",
+    dogEverReceivedTransfusion: "NO",
+  };
+}
+
+function getIneligibleDogOverrides() {
+  return {
+    dogName: "Ridley",
+    dogBreed: "Singapore Special",
+    dogBirthday: formatBirthday(new Date(Date.now() - 3 * MILLIS_PER_MONTH)),
+    dogGender: "FEMALE",
+    dogWeightKg: 23,
+    dogDea1Point1: "UNKNOWN",
+    dogEverPregnant: "NO",
+    dogEverReceivedTransfusion: "NO",
+  };
+}
+
+function getPermanentlyIneligibleDogOverrides() {
+  return {
+    dogName: "Perry",
+    dogBreed: "Singapore Special",
+    dogBirthday: formatBirthday(new Date(Date.now() - 10 * MILLIS_PER_YEAR)),
+    dogGender: "MALE",
+    dogWeightKg: 25,
+    dogDea1Point1: "UNKNOWN",
+    dogEverPregnant: "NO",
+    dogEverReceivedTransfusion: "NO",
+  };
+}
+
+function createDog(userEmail, idx, overrides) {
+  const fields = getDogFields(idx, overrides);
+  const { dogName, ...dogDetails } = fields;
   const body = {
-    userEmail: email,
+    userEmail,
     dogOii: {
-      dogName: getDogName(idx),
+      dogName,
     },
-    dogDetails: {
-      dogBreed: getDogBreed(idx),
-      dogBirthday: getBirthday(idx),
-      dogGender: getGender(idx),
-      dogWeightKg: getWeightKg(idx),
-      dogDea1Point1: getDea1Point1(idx),
-      dogEverPregnant: getEverPregnant(idx),
-      dogEverReceivedTransfusion: getEverReceivedTransfusion(idx),
-    },
+    dogDetails,
   };
   return doRequest("POST", "/api/dangerous/dogs", body).then((res) => {
+    const { dogId } = res;
     console.log(
-      `Created idx=${idx} dogId ${res.dogId} for user ${email} named ${body.dogOii.dogName}`,
+      `Created idx=${idx} dogId ${dogId} for user ${userEmail} named ${dogName}`,
     );
     return {
-      userEmail: body.userEmail,
-      ...body.dogOii,
-      ...body.dogDetails,
-      ...res,
+      dogId,
+      ...fields,
     };
   });
 }
@@ -535,6 +588,11 @@ function deleteData() {
 }
 
 function createUiTestUserAccount() {
+  const toCreate = [
+    getEligibleDogOverrides(),
+    getIneligibleDogOverrides(),
+    getPermanentlyIneligibleDogOverrides(),
+  ];
   return Promise.resolve()
     .then(() => {
       const userEmail = "test_user@user.com";
@@ -555,28 +613,17 @@ function createUiTestUserAccount() {
     })
     .then((state) => {
       const { userEmail } = state;
-      const dogName = "Mape";
-      const body = {
-        userEmail,
-        dogOii: {
-          dogName,
-        },
-        dogDetails: {
-          dogBreed: "Singapore Special",
-          dogBirthday: "2022-07-18",
-          dogGender: "FEMALE",
-          dogWeightKg: 23,
-          dogDea1Point1: "UNKNOWN",
-          dogEverPregnant: "NO",
-          dogEverReceivedTransfusion: "NO",
-        },
-      };
-      return doRequest("POST", "/api/dangerous/dogs", body).then((res) => {
-        const { dogId } = res;
-        console.log(
-          `Added dog ${dogName} (dogId: ${dogId}) for user ${userEmail}`,
-        );
-        return { ...state, dogName, dogId };
+      const futureDogs = toCreate.map((spec, idx) => {
+        return createDog(userEmail, idx, spec).then((dog) => {
+          const { dogId, dogName } = dog;
+          console.log(
+            `Added dog ${dogName} (dogId: ${dogId}) for user ${userEmail}`,
+          );
+          return dog;
+        });
+      });
+      return Promise.all(futureDogs).then((dogs) => {
+        return { ...state, dogs };
       });
     })
     .then((state) => {
