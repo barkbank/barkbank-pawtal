@@ -69,7 +69,7 @@ Keep this terminal window handy. In the local deployment configured above, OTP e
 Run `make local-accounts` to create the following accounts in the local deployment:
 
 - Admin Accounts: admin1@admin.com, admin2@admin.com, admin3@admin.com
-- User Accounts: user1@user.com, user2@user.com, user3@user.com, ... (99 users)
+- User Accounts: user1@user.com, user2@user.com, user3@user.com, ... (9 users)
 - Vet Accounts: vet1@vet.com, vet2@vet.com, vet3@vet.com
 
 The number of dogs created for a user is that user's index modulo 5.

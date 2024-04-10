@@ -15,7 +15,12 @@ import {
   SecretEncryptionService,
 } from "./services/encryption";
 import { HashService, SecretHashService } from "./services/hash";
-import { OtpConfig, OtpService, OtpServiceImpl } from "./services/otp";
+import {
+  DevelopmentOtpService,
+  OtpConfig,
+  OtpService,
+  OtpServiceImpl,
+} from "./services/otp";
 import pg from "pg";
 import { VetActorFactory } from "./vet/vet-actor-factory";
 import {
@@ -111,18 +116,29 @@ export class AppFactory {
 
   public getOtpService(): Promise<OtpService> {
     if (this.promisedOtpService === null) {
-      const config: OtpConfig = {
-        otpLength: 6,
-        otpPeriodMillis: this.envInteger(AppEnv.BARKBANK_OTP_PERIOD_MILLIS),
-        otpRecentPeriods: this.envInteger(
-          AppEnv.BARKBANK_OTP_NUM_RECENT_PERIODS,
-        ),
-        otpHashService: new SecretHashService(
-          this.envString(AppEnv.BARKBANK_OTP_SECRET),
-        ),
-      };
-      this.promisedOtpService = Promise.resolve(new OtpServiceImpl(config));
-      console.log("Created OtpService");
+      if (this.getNodeEnv() === "development") {
+        this.promisedOtpService = new Promise<OtpService>((resolve) => {
+          const service = new DevelopmentOtpService();
+          console.log("Created DevelopmentOtpService as OtpService");
+          resolve(service);
+        });
+      } else {
+        this.promisedOtpService = new Promise<OtpService>((resolve) => {
+          const config: OtpConfig = {
+            otpLength: 6,
+            otpPeriodMillis: this.envInteger(AppEnv.BARKBANK_OTP_PERIOD_MILLIS),
+            otpRecentPeriods: this.envInteger(
+              AppEnv.BARKBANK_OTP_NUM_RECENT_PERIODS,
+            ),
+            otpHashService: new SecretHashService(
+              this.envString(AppEnv.BARKBANK_OTP_SECRET),
+            ),
+          };
+          const service = new OtpServiceImpl(config);
+          console.log("Created OtpServiceImpl as OtpService");
+          resolve(service);
+        });
+      }
     }
     return this.promisedOtpService;
   }

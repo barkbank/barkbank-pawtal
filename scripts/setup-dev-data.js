@@ -85,16 +85,6 @@ function nextInt(rng) {
   return Math.floor(rng() * 2147483647);
 }
 
-function getStandardCallbackFor(label) {
-  return (err, res) => {
-    if (err) {
-      console.error(`Fail: ${label}`, err);
-      return;
-    }
-    console.log(`Success: ${label}`, res);
-  };
-}
-
 function createAdmin(idx) {
   const email = `admin${idx}@admin.com`;
   const nameIdx = nextInt(getRng("createAdmin", idx));
@@ -123,7 +113,7 @@ function createVet(idx) {
   });
 }
 
-function userEmail(idx) {
+function getUserEmail(idx) {
   return `user${idx}@user.com`;
 }
 
@@ -137,7 +127,7 @@ function getUserResidency(idx) {
 }
 
 function createUser(idx, callback) {
-  const email = userEmail(idx);
+  const email = getUserEmail(idx);
   const nameIdx = nextInt(getRng("createUser", idx));
   const userPii = {
     userEmail: email,
@@ -355,6 +345,10 @@ function getBirthday(idx) {
   const ageInDays = Math.floor(minAgeDays + rng() * (maxAgeDays - minAgeDays));
   const ageInMillis = ageInDays * millisPerDay;
   const birthday = new Date(today.getTime() - ageInMillis);
+  return formatBirthday(birthday);
+}
+
+function formatBirthday(birthday) {
   const iso8601 = birthday.toISOString();
   return iso8601.split("T")[0];
 }
@@ -370,31 +364,80 @@ function getWeightKg(idx) {
   return Math.floor(minWeightKg + rng() * (maxWeightKg - minWeightKg));
 }
 
-function createDog(email, idx) {
+function getDogFields(idx, overrides) {
+  const base = {
+    dogName: getDogName(idx),
+    dogBreed: getDogBreed(idx),
+    dogBirthday: getBirthday(idx),
+    dogGender: getGender(idx),
+    dogWeightKg: getWeightKg(idx),
+    dogDea1Point1: getDea1Point1(idx),
+    dogEverPregnant: getEverPregnant(idx),
+    dogEverReceivedTransfusion: getEverReceivedTransfusion(idx),
+  };
+  return { ...base, ...overrides };
+}
+
+const MILLIS_PER_YEAR = 365 * 86400 * 1000;
+const MILLIS_PER_MONTH = MILLIS_PER_YEAR / 12;
+
+function getEligibleDogOverrides() {
+  return {
+    dogName: "Mape",
+    dogBreed: "Singapore Special",
+    dogBirthday: formatBirthday(new Date(Date.now() - 2 * MILLIS_PER_YEAR)),
+    dogGender: "FEMALE",
+    dogWeightKg: 23,
+    dogDea1Point1: "UNKNOWN",
+    dogEverPregnant: "NO",
+    dogEverReceivedTransfusion: "NO",
+  };
+}
+
+function getIneligibleDogOverrides() {
+  return {
+    dogName: "Ridley",
+    dogBreed: "Singapore Special",
+    dogBirthday: formatBirthday(new Date(Date.now() - 3 * MILLIS_PER_MONTH)),
+    dogGender: "FEMALE",
+    dogWeightKg: 23,
+    dogDea1Point1: "UNKNOWN",
+    dogEverPregnant: "NO",
+    dogEverReceivedTransfusion: "NO",
+  };
+}
+
+function getPermanentlyIneligibleDogOverrides() {
+  return {
+    dogName: "Perry",
+    dogBreed: "Singapore Special",
+    dogBirthday: formatBirthday(new Date(Date.now() - 10 * MILLIS_PER_YEAR)),
+    dogGender: "MALE",
+    dogWeightKg: 25,
+    dogDea1Point1: "UNKNOWN",
+    dogEverPregnant: "NO",
+    dogEverReceivedTransfusion: "NO",
+  };
+}
+
+function createDog(userEmail, idx, overrides) {
+  const fields = getDogFields(idx, overrides);
+  const { dogName, ...dogDetails } = fields;
   const body = {
-    userEmail: email,
+    userEmail,
     dogOii: {
-      dogName: getDogName(idx),
+      dogName,
     },
-    dogDetails: {
-      dogBreed: getDogBreed(idx),
-      dogBirthday: getBirthday(idx),
-      dogGender: getGender(idx),
-      dogWeightKg: getWeightKg(idx),
-      dogDea1Point1: getDea1Point1(idx),
-      dogEverPregnant: getEverPregnant(idx),
-      dogEverReceivedTransfusion: getEverReceivedTransfusion(idx),
-    },
+    dogDetails,
   };
   return doRequest("POST", "/api/dangerous/dogs", body).then((res) => {
+    const { dogId } = res;
     console.log(
-      `Created idx=${idx} dogId ${res.dogId} for user ${email} named ${body.dogOii.dogName}`,
+      `Created idx=${idx} dogId ${dogId} for user ${userEmail} named ${dogName}`,
     );
     return {
-      userEmail: body.userEmail,
-      ...body.dogOii,
-      ...body.dogDetails,
-      ...res,
+      dogId,
+      ...fields,
     };
   });
 }
@@ -406,11 +449,11 @@ function irange(n) {
   return Array.from(Array(n).keys()).map((i) => i + 1);
 }
 
-function main() {
+function generateAccounts() {
   const numAdmins = 3;
   const numVets = 3;
-  const numUsers = 99;
-  const maxDogsPerUser = 5;
+  const numUsers = 9;
+  const maxDogsPerUser = 4;
   const userIdxToUserId = {};
   const vetIdxToVetId = {};
   const dogIdToDog = {};
@@ -435,7 +478,7 @@ function main() {
         return createUser(idx).then((user) => {
           const { userId } = user;
           userIdxToUserId[idx] = userId;
-          const email = userEmail(idx);
+          const email = getUserEmail(idx);
           const offset = idx * maxDogsPerUser;
           const numDogs = idx % (maxDogsPerUser + 1);
           return Promise.all(
@@ -522,12 +565,7 @@ function main() {
     });
   }
 
-  Promise.resolve()
-    .then(() => doQuery(`delete from calls`, []))
-    .then(() => doQuery(`delete from dogs`, []))
-    .then(() => doQuery(`delete from users`, []))
-    .then(() => doQuery(`delete from vets`, []))
-    .then(() => doQuery(`delete from admins`, []))
+  return Promise.resolve()
     .then(createAdminAccounts)
     .then(createVetAccounts)
     .then(createUserAccountsAndDogs)
@@ -536,6 +574,68 @@ function main() {
       // Create appointments for the first 3 users.
       return Promise.all(irange(3).map(addAppointment));
     })
+    .then(() => console.log("Generated Accounts"));
+}
+
+function deleteData() {
+  return Promise.resolve()
+    .then(() => doQuery(`delete from calls`, []))
+    .then(() => doQuery(`delete from dogs`, []))
+    .then(() => doQuery(`delete from users`, []))
+    .then(() => doQuery(`delete from vets`, []))
+    .then(() => doQuery(`delete from admins`, []))
+    .then(() => console.log("Deleted data"));
+}
+
+function createUiTestUserAccount() {
+  const toCreate = [
+    getEligibleDogOverrides(),
+    getIneligibleDogOverrides(),
+    getPermanentlyIneligibleDogOverrides(),
+  ];
+  return Promise.resolve()
+    .then(() => {
+      const userEmail = "test_user@user.com";
+      const userName = "Tess Yu Ser";
+      const userPhoneNumber = "+65 30002000";
+      const userPii = {
+        userEmail,
+        userName,
+        userPhoneNumber,
+      };
+      const userResidency = "SINGAPORE";
+      const body = { userPii, userResidency };
+      return doRequest("POST", "/api/dangerous/users", body).then((res) => {
+        const { userId } = res;
+        console.log(`Created user ${userEmail} (userId: ${userId})`);
+        return { userId, userEmail, userName, userPhoneNumber };
+      });
+    })
+    .then((state) => {
+      const { userEmail } = state;
+      const futureDogs = toCreate.map((spec, idx) => {
+        return createDog(userEmail, idx, spec).then((dog) => {
+          const { dogId, dogName } = dog;
+          console.log(
+            `Added dog ${dogName} (dogId: ${dogId}) for user ${userEmail}`,
+          );
+          return dog;
+        });
+      });
+      return Promise.all(futureDogs).then((dogs) => {
+        return { ...state, dogs };
+      });
+    })
+    .then((state) => {
+      console.log("Created test user:", state);
+    });
+}
+
+function main() {
+  return Promise.resolve()
+    .then(deleteData)
+    .then(generateAccounts)
+    .then(createUiTestUserAccount)
     .then(() => console.log("Done"));
 }
 
