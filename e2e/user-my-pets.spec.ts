@@ -3,7 +3,7 @@ import { UI_URLS, loginTestUser } from "./_ui_test_helpers";
 
 test.beforeEach(async ({ page }) => {
   await loginTestUser({ page });
-  await page.getByRole('link', { name: 'Icon for the My Pets option' }).click();
+  await page.getByRole("link", { name: "Icon for the My Pets option" }).click();
   await page.waitForURL(UI_URLS.USER_MY_PETS);
 });
 
