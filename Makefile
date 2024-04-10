@@ -21,6 +21,12 @@ test:
 	bash scripts/test_no_wip_tasks_remaining.sh
 	npm run lint
 
+# Run playwright tests
+.PHONY: test-ui
+test-ui:
+	npx playwright test
+	npx playwright show-report
+
 # Runs the local development server.
 .PHONY: run
 run:
