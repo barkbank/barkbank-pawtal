@@ -37,9 +37,14 @@ test.describe("User Login Page", () => {
 
   test("it should check account exists", async ({ page }) => {
     await page
-      .getByLabel("Please provide your email")
+      .getByLabel("Please provide your email address")
       .fill("no_such_user@user.com");
+    await expect(page
+      .getByLabel("Please provide your email address")).toHaveValue("no_such_user@user.com");
     await page.getByRole("button", { name: "Send me an OTP" }).click();
+
+    // Known Issue: This assertion does not work for webkit when executed in
+    // non-interactive mode.
     await expect(page.getByText("User account does not exist.")).toBeVisible();
   });
 });
