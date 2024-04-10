@@ -1,4 +1,4 @@
-import { test, expect, Page } from "@playwright/test";
+import { expect, Page } from "@playwright/test";
 
 export const UI_URLS = {
   USER_LOGIN: "http://localhost:3000/user/login",
