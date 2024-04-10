@@ -36,15 +36,28 @@ test.describe("User Login Page", () => {
   });
 
   test("it should check account exists", async ({ page }) => {
+    // Fill in a valid email that has no account
     await page
       .getByLabel("Please provide your email address")
       .fill("no_such_user@user.com");
-    await expect(page
-      .getByLabel("Please provide your email address")).toHaveValue("no_such_user@user.com");
+    await expect(
+      page.getByLabel("Please provide your email address"),
+    ).toHaveValue("no_such_user@user.com");
+
+    // Click button for requesting an OTP
     await page.getByRole("button", { name: "Send me an OTP" }).click();
 
-    // Known Issue: This assertion does not work for webkit when executed in
-    // non-interactive mode.
+    // Expect error message to show. (Known Issue: This assertion does not work
+    // for webkit when executed in non-interactive mode.)
     await expect(page.getByText("User account does not exist.")).toBeVisible();
+  });
+
+  test("it should display form validation errors when submit is clicked", async ({
+    page,
+  }) => {
+    // Click the login button.
+    await page.getByRole("button", { name: "Login" }).click();
+    await expect(page.getByText("Invalid email")).toBeVisible();
+    await expect(page.getByText("OTP cannot be empty")).toBeVisible();
   });
 });
