@@ -52,7 +52,7 @@ describe("getIncompleteProfiles", () => {
       });
       const profile = guaranteed(result)[0];
       const expected = await getExpectedProfile(1, userId, dogId);
-      expect(profile).toEqual(expected);
+      expect(profile).toEqual(expected); //
     });
   });
   it("should order profiles by creation time, oldest first", async () => {
@@ -176,7 +176,7 @@ async function getExpectedProfile(
     dogBirthday: parseDateTime("2020-03-03", UTC_DATE_OPTION),
     dogWeightKg: null,
     dogBreed: "",
-    dogEverPregnant: YES_NO_UNKNOWN.UNKNOWN,
+    dogEverPregnant: YES_NO_UNKNOWN.NO,
     dogEverReceivedTransfusion: YES_NO_UNKNOWN.UNKNOWN,
   };
 }
@@ -191,7 +191,7 @@ async function insertIncompleteProfile(
     dogBirthday: parseDateTime("2020-03-03", UTC_DATE_OPTION),
     dogWeightKg: null,
     dogBreed: "",
-    dogEverPregnant: YES_NO_UNKNOWN.UNKNOWN,
+    dogEverPregnant: YES_NO_UNKNOWN.NO,
     dogEverReceivedTransfusion: YES_NO_UNKNOWN.UNKNOWN,
   });
   await setDogCreationTime(idx, dogId, dbPool);

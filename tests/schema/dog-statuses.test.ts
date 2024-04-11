@@ -9,7 +9,11 @@ import {
 } from "../_fixtures";
 import { dbQuery } from "@/lib/data/db-utils";
 import { DbReportSpec, DogSpec, UserSpec } from "@/lib/data/db-models";
-import { PARTICIPATION_STATUS, YES_NO_UNKNOWN } from "@/lib/data/db-enums";
+import {
+  DOG_GENDER,
+  PARTICIPATION_STATUS,
+  YES_NO_UNKNOWN,
+} from "@/lib/data/db-enums";
 import { USER_RESIDENCY } from "@/lib/data/db-enums";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import {
@@ -156,6 +160,7 @@ describe("dog_statuses view", () => {
           dogSpec: {
             dogBreed: "Test Dog",
             dogWeightKg: 18,
+            dogGender: DOG_GENDER.UNKNOWN,
             dogEverPregnant: YES_NO_UNKNOWN.UNKNOWN,
             dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
           },
@@ -207,7 +212,11 @@ describe("dog_statuses view", () => {
     it("should be PERMANENTLY_INELIGIBLE if dog was ever pregnant", async () => {
       await withDb(async (dbPool) => {
         const { dogId } = await initDog(dbPool, {
-          dogSpec: { ...ELIGIBLE_SPEC, dogEverPregnant: YES_NO_UNKNOWN.YES },
+          dogSpec: {
+            ...ELIGIBLE_SPEC,
+            dogGender: DOG_GENDER.FEMALE,
+            dogEverPregnant: YES_NO_UNKNOWN.YES,
+          },
         });
         const res = await dbQuery(
           dbPool,
@@ -285,6 +294,7 @@ describe("dog_statuses view", () => {
         const { dogId } = await initDog(dbPool, {
           dogSpec: {
             ...ELIGIBLE_SPEC,
+            dogGender: DOG_GENDER.UNKNOWN,
             dogEverPregnant: YES_NO_UNKNOWN.UNKNOWN,
           },
         });
