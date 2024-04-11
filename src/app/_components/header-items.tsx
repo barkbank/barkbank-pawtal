@@ -14,19 +14,10 @@ const MobileNav = ({ accountType }: { accountType?: AccountType }) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (
-    <nav className="sticky top-0 z-10 flex min-h-[72px] flex-row items-center justify-between border-b bg-white shadow-lg">
+    <nav className="sticky top-0 z-10 border-b bg-white shadow-lg">
       <Collapsible.Root open={isOpen} onOpenChange={setIsOpen}>
-        <div className="mx-4 flex min-h-[72px] items-center gap-2">
-          <Collapsible.Trigger asChild>
-            <Button variant="outline" size="icon" className="md:hidden">
-              {isOpen ? (
-                <XIcon className="h-4 w-4" />
-              ) : (
-                <MenuIcon className="h-4 w-4" />
-              )}
-            </Button>
-          </Collapsible.Trigger>
-          <Link href={RoutePath.ROOT}>
+        <div className="mx-3 flex min-h-[72px] flex-row items-center justify-between">
+          <Link href={RoutePath.ROOT} className="w-[60px]">
             <Image
               src={IMG_PATH.BARK_BANK_LOGO}
               alt="bark bank logo"
@@ -34,6 +25,15 @@ const MobileNav = ({ accountType }: { accountType?: AccountType }) => {
               height={60}
             />
           </Link>
+          <Collapsible.Trigger asChild>
+            <Button variant="outline" size="icon">
+              {isOpen ? (
+                <XIcon className="h-4 w-4" />
+              ) : (
+                <MenuIcon className="h-4 w-4" />
+              )}
+            </Button>
+          </Collapsible.Trigger>
         </div>
 
         <Collapsible.Content>
