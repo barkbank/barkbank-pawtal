@@ -194,7 +194,7 @@ function ActionBlock(props: { dog: MyDog }) {
     );
   }
   return (
-    <div className="flex w-full flex-col gap-3">
+    <div className="flex flex-col gap-3">
       <Button variant="brandInverse" className="w-full">
         Edit
       </Button>
@@ -213,7 +213,7 @@ function DogCard(props: { dog: MyDog; cardIdx: number; isLastCard: boolean }) {
       : IMG_PATH.BORDER_COLLIE_DOG_AVATAR;
   return (
     <>
-      <div className="mt-3 flex flex-col place-items-center gap-3 rounded-md px-3 py-3 shadow-sm shadow-slate-400 first:mt-0">
+      <div className="mt-3 flex flex-col place-items-center gap-3 rounded-md px-3 py-3 shadow-sm shadow-slate-400 first:mt-0 md:flex-row">
         {/* Avatar */}
         <Image
           src={imgSrc}
@@ -224,7 +224,7 @@ function DogCard(props: { dog: MyDog; cardIdx: number; isLastCard: boolean }) {
         />
 
         {/* Details */}
-        <div>
+        <div className="flex-1">
           <div className="text-grey-100 text-lg font-semibold leading-9">
             {dog.dogName}
           </div>
@@ -232,7 +232,9 @@ function DogCard(props: { dog: MyDog; cardIdx: number; isLastCard: boolean }) {
         </div>
 
         {/* Buttons */}
-        <ActionBlock dog={dog} />
+        <div className="w-full md:w-48">
+          <ActionBlock dog={dog} />
+        </div>
       </div>
     </>
   );
