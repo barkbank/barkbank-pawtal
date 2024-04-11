@@ -6,6 +6,7 @@ import {
   ServiceStatus,
   YesNoUnknown,
   DogGender,
+  UserResidency,
 } from "../data/db-enums";
 import { StatusSet } from "../data/status-mapper";
 
@@ -19,6 +20,13 @@ export type MyAccount = {
 
 export type MyLastContactedTime = {
   userLastContactedTime: Date | null;
+};
+
+export type MyAccountDetailsUpdate = {
+  userName: string;
+  userPhoneNumber: string;
+  userEmail: string;
+  userResidency: UserResidency;
 };
 
 export type MyDogAppointment = {
