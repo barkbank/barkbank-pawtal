@@ -38,13 +38,28 @@ const MobileNav = ({ accountType }: { accountType?: AccountType }) => {
 
         <Collapsible.Content>
           <div className="mx-4 my-2 flex flex-col gap-2">
-            <Link href={RoutePath.ROOT}>Home</Link>
-            <Link href={RoutePath.ABOUT_US}>About Us</Link>
-            <Link href={RoutePath.BE_A_DONOR}>Be a Donor</Link>
-            <Link href={RoutePath.ARTICLES}>Articles</Link>
-            <Link href={RoutePath.FAQ}>FAQ</Link>
-            <Link href={RoutePath.INFO}>Info</Link>
-            <Link href={RoutePath.ACCOUNT_DASHBOARD(accountType)}>
+            <Link className="text-right" href={RoutePath.ROOT}>
+              Home
+            </Link>
+            <Link className="text-right" href={RoutePath.ABOUT_US}>
+              About Us
+            </Link>
+            <Link className="text-right" href={RoutePath.BE_A_DONOR}>
+              Be a Donor
+            </Link>
+            <Link className="text-right" href={RoutePath.ARTICLES}>
+              Articles
+            </Link>
+            <Link className="text-right" href={RoutePath.FAQ}>
+              FAQ
+            </Link>
+            <Link className="text-right" href={RoutePath.INFO}>
+              Info
+            </Link>
+            <Link
+              className="flex flex-row-reverse"
+              href={RoutePath.ACCOUNT_DASHBOARD(accountType)}
+            >
               <CircleUser />
             </Link>
           </div>
