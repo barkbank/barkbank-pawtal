@@ -10,13 +10,13 @@ import { Button } from "@/components/ui/button";
 import * as Collapsible from "@radix-ui/react-collapsible";
 import { AccountType } from "@/lib/auth-models";
 
-const HeaderItems = ({ accountType }: { accountType?: AccountType }) => {
+const MobileNav = ({ accountType }: { accountType?: AccountType }) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (
-    <nav className="sticky top-0 z-10 flex min-h-[72px] items-center justify-between border-b bg-white shadow-lg">
+    <nav className="sticky top-0 z-10 flex min-h-[72px] flex-row items-center justify-between border-b bg-white shadow-lg">
       <Collapsible.Root open={isOpen} onOpenChange={setIsOpen}>
-        <div className="mx-4 flex min-h-[72px] items-center gap-2 md:mx-10">
+        <div className="mx-4 flex min-h-[72px] items-center gap-2">
           <Collapsible.Trigger asChild>
             <Button variant="outline" size="icon" className="md:hidden">
               {isOpen ? (
@@ -26,7 +26,6 @@ const HeaderItems = ({ accountType }: { accountType?: AccountType }) => {
               )}
             </Button>
           </Collapsible.Trigger>
-
           <Link href={RoutePath.ROOT}>
             <Image
               src={IMG_PATH.BARK_BANK_LOGO}
@@ -38,7 +37,7 @@ const HeaderItems = ({ accountType }: { accountType?: AccountType }) => {
         </div>
 
         <Collapsible.Content>
-          <div className="mx-4 my-2 flex flex-col gap-2 md:hidden">
+          <div className="mx-4 my-2 flex flex-col gap-2">
             <Link href={RoutePath.ROOT}>Home</Link>
             <Link href={RoutePath.ABOUT_US}>About Us</Link>
             <Link href={RoutePath.BE_A_DONOR}>Be a Donor</Link>
@@ -51,8 +50,25 @@ const HeaderItems = ({ accountType }: { accountType?: AccountType }) => {
           </div>
         </Collapsible.Content>
       </Collapsible.Root>
+    </nav>
+  );
+};
 
-      <div className="hidden gap-x-8 md:flex md:last:mr-8">
+const DesktopNav = ({ accountType }: { accountType?: AccountType }) => {
+  return (
+    <nav className="sticky top-0 z-10 flex h-[72px] flex-row items-center justify-between border-b bg-white shadow-lg">
+      <div className="ml-8 w-[72px] flex-none">
+        <Link href={RoutePath.ROOT}>
+          <Image
+            src={IMG_PATH.BARK_BANK_LOGO}
+            alt="bark bank logo"
+            width={60}
+            height={60}
+          />
+        </Link>
+      </div>
+
+      <div className="mr-8 flex gap-8 gap-x-8">
         <Link href={RoutePath.ROOT}>Home</Link>
         <Link href={RoutePath.ABOUT_US}>About Us</Link>
         <Link href={RoutePath.BE_A_DONOR}>Be a Donor</Link>
@@ -64,6 +80,19 @@ const HeaderItems = ({ accountType }: { accountType?: AccountType }) => {
         </Link>
       </div>
     </nav>
+  );
+};
+
+const HeaderItems = ({ accountType }: { accountType?: AccountType }) => {
+  return (
+    <>
+      <div className="md:hidden">
+        <MobileNav />
+      </div>
+      <div className="hidden md:block">
+        <DesktopNav />
+      </div>
+    </>
   );
 };
 
