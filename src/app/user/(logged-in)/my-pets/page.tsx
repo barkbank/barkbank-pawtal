@@ -31,7 +31,6 @@ import {
   StatusSet,
   mapStatusSetToHighlightedStatus,
 } from "@/lib/data/status-mapper";
-import { BarkH1, BarkH3, BarkH5 } from "@/components/bark/bark-typography";
 
 function toStatusSet(dog: MyDog): StatusSet {
   const statusSet: StatusSet = {
@@ -214,7 +213,7 @@ function DogCard(props: { dog: MyDog; cardIdx: number; isLastCard: boolean }) {
       : IMG_PATH.BORDER_COLLIE_DOG_AVATAR;
   return (
     <>
-      <div className="mt-3 flex flex-col place-items-center gap-3 rounded-md px-3 py-3 shadow-sm shadow-slate-400">
+      <div className="mt-3 flex flex-col place-items-center gap-3 rounded-md px-3 py-3 shadow-sm shadow-slate-400 first:mt-0">
         {/* Avatar */}
         <Image
           src={imgSrc}
