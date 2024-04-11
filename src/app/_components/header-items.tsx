@@ -14,7 +14,7 @@ const MobileNav = ({ accountType }: { accountType?: AccountType }) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (
-    <nav className="sticky top-0 z-10 border-b bg-white shadow-lg">
+    <nav className="border-b bg-white shadow-lg">
       <Collapsible.Root open={isOpen} onOpenChange={setIsOpen}>
         <div className="mx-3 flex min-h-[72px] flex-row items-center justify-between">
           <Link href={RoutePath.ROOT} className="w-[60px]">
@@ -56,7 +56,7 @@ const MobileNav = ({ accountType }: { accountType?: AccountType }) => {
 
 const DesktopNav = ({ accountType }: { accountType?: AccountType }) => {
   return (
-    <nav className="sticky top-0 z-10 flex h-[72px] flex-row items-center justify-between border-b bg-white shadow-lg">
+    <nav className="flex h-[72px] flex-row items-center justify-between border-b bg-white shadow-lg">
       <div className="ml-8 w-[72px] flex-none">
         <Link href={RoutePath.ROOT}>
           <Image
@@ -85,14 +85,14 @@ const DesktopNav = ({ accountType }: { accountType?: AccountType }) => {
 
 const HeaderItems = ({ accountType }: { accountType?: AccountType }) => {
   return (
-    <>
+    <div className="sticky top-0 z-10">
       <div className="md:hidden">
         <MobileNav />
       </div>
       <div className="hidden md:block">
         <DesktopNav />
       </div>
-    </>
+    </div>
   );
 };
 
