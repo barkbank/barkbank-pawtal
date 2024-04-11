@@ -381,6 +381,19 @@ function getDogFields(idx, overrides) {
 const MILLIS_PER_YEAR = 365 * 86400 * 1000;
 const MILLIS_PER_MONTH = MILLIS_PER_YEAR / 12;
 
+function getIncompleteDogOverrides() {
+  return {
+    dogName: "Bentley",
+    dogBreed: "",
+    dogBirthday: formatBirthday(new Date(Date.now() - 3 * MILLIS_PER_YEAR)),
+    dogGender: "MALE",
+    dogWeightKg: null,
+    dogDea1Point1: "UNKNOWN",
+    dogEverPregnant: "UNKNOWN",
+    dogEverReceivedTransfusion: "UNKNOWN",
+  };
+}
+
 function getEligibleDogOverrides() {
   return {
     dogName: "Mape",
@@ -589,6 +602,7 @@ function deleteData() {
 
 function createUiTestUserAccount() {
   const toCreate = [
+    getIncompleteDogOverrides(),
     getEligibleDogOverrides(),
     getIneligibleDogOverrides(),
     getPermanentlyIneligibleDogOverrides(),

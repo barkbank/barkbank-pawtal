@@ -10,24 +10,14 @@ import { Button } from "@/components/ui/button";
 import * as Collapsible from "@radix-ui/react-collapsible";
 import { AccountType } from "@/lib/auth-models";
 
-const HeaderItems = ({ accountType }: { accountType?: AccountType }) => {
+const MobileNav = ({ accountType }: { accountType?: AccountType }) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (
-    <nav className="sticky top-0 z-10 flex min-h-[72px] items-center justify-between border-b bg-white shadow-lg">
+    <nav className="border-b bg-white shadow-lg">
       <Collapsible.Root open={isOpen} onOpenChange={setIsOpen}>
-        <div className="mx-4 flex min-h-[72px] items-center gap-2 md:mx-10">
-          <Collapsible.Trigger asChild>
-            <Button variant="outline" size="icon" className="md:hidden">
-              {isOpen ? (
-                <XIcon className="h-4 w-4" />
-              ) : (
-                <MenuIcon className="h-4 w-4" />
-              )}
-            </Button>
-          </Collapsible.Trigger>
-
-          <Link href={RoutePath.ROOT}>
+        <div className="mx-3 flex min-h-[72px] flex-row items-center justify-between">
+          <Link href={RoutePath.ROOT} className="w-[60px]">
             <Image
               src={IMG_PATH.BARK_BANK_LOGO}
               alt="bark bank logo"
@@ -35,24 +25,65 @@ const HeaderItems = ({ accountType }: { accountType?: AccountType }) => {
               height={60}
             />
           </Link>
+          <Collapsible.Trigger asChild>
+            <Button variant="outline" size="icon">
+              {isOpen ? (
+                <XIcon className="h-4 w-4" />
+              ) : (
+                <MenuIcon className="h-4 w-4" />
+              )}
+            </Button>
+          </Collapsible.Trigger>
         </div>
 
         <Collapsible.Content>
-          <div className="mx-4 my-2 flex flex-col gap-2 md:hidden">
-            <Link href={RoutePath.ROOT}>Home</Link>
-            <Link href={RoutePath.ABOUT_US}>About Us</Link>
-            <Link href={RoutePath.BE_A_DONOR}>Be a Donor</Link>
-            <Link href={RoutePath.ARTICLES}>Articles</Link>
-            <Link href={RoutePath.FAQ}>FAQ</Link>
-            <Link href={RoutePath.INFO}>Info</Link>
-            <Link href={RoutePath.ACCOUNT_DASHBOARD(accountType)}>
+          <div className="mx-4 my-2 flex flex-col gap-2">
+            <Link className="text-right" href={RoutePath.ROOT}>
+              Home
+            </Link>
+            <Link className="text-right" href={RoutePath.ABOUT_US}>
+              About Us
+            </Link>
+            <Link className="text-right" href={RoutePath.BE_A_DONOR}>
+              Be a Donor
+            </Link>
+            <Link className="text-right" href={RoutePath.ARTICLES}>
+              Articles
+            </Link>
+            <Link className="text-right" href={RoutePath.FAQ}>
+              FAQ
+            </Link>
+            <Link className="text-right" href={RoutePath.INFO}>
+              Info
+            </Link>
+            <Link
+              className="flex flex-row-reverse"
+              href={RoutePath.ACCOUNT_DASHBOARD(accountType)}
+            >
               <CircleUser />
             </Link>
           </div>
         </Collapsible.Content>
       </Collapsible.Root>
+    </nav>
+  );
+};
 
-      <div className="hidden gap-x-8 md:flex md:last:mr-8">
+const DesktopNav = ({ accountType }: { accountType?: AccountType }) => {
+  return (
+    <nav className="flex h-[72px] flex-row items-center justify-between border-b bg-white shadow-lg">
+      <div className="ml-8 w-[72px] flex-none">
+        <Link href={RoutePath.ROOT}>
+          <Image
+            src={IMG_PATH.BARK_BANK_LOGO}
+            alt="bark bank logo"
+            width={60}
+            height={60}
+          />
+        </Link>
+      </div>
+
+      <div className="mr-8 flex gap-8 gap-x-8">
         <Link href={RoutePath.ROOT}>Home</Link>
         <Link href={RoutePath.ABOUT_US}>About Us</Link>
         <Link href={RoutePath.BE_A_DONOR}>Be a Donor</Link>
@@ -64,6 +95,19 @@ const HeaderItems = ({ accountType }: { accountType?: AccountType }) => {
         </Link>
       </div>
     </nav>
+  );
+};
+
+const HeaderItems = ({ accountType }: { accountType?: AccountType }) => {
+  return (
+    <div className="sticky top-0 z-10">
+      <div className="md:hidden">
+        <MobileNav />
+      </div>
+      <div className="hidden md:block">
+        <DesktopNav />
+      </div>
+    </div>
   );
 };
 

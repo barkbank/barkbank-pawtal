@@ -24,5 +24,8 @@ test.describe("user my pets", () => {
         .filter({ hasText: "PerryIneligiblePerry does not" })
         .nth(3),
     ).toBeVisible();
+    await expect(
+      page.locator("div").filter({ hasText: "BentleyProfile" }).nth(3),
+    ).toBeVisible();
   });
 });

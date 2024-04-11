@@ -188,15 +188,19 @@ function ActionBlock(props: { dog: MyDog }) {
   const highlightedStatus = mapStatusSetToHighlightedStatus(toStatusSet(dog));
   if (highlightedStatus === PROFILE_STATUS.INCOMPLETE) {
     return (
-      <div className="flex flex-row gap-3">
-        <Button variant="brand">Complete Profile</Button>
-      </div>
+      <Button variant="brand" className="w-full">
+        Complete Profile
+      </Button>
     );
   }
   return (
-    <div className="flex flex-row gap-3">
-      <Button variant="brandInverse">Edit</Button>
-      <Button variant="brandInverse">View</Button>
+    <div className="flex flex-col gap-3">
+      <Button variant="brandInverse" className="w-full">
+        Edit
+      </Button>
+      <Button variant="brandInverse" className="w-full">
+        View
+      </Button>
     </div>
   );
 }
@@ -209,46 +213,27 @@ function DogCard(props: { dog: MyDog; cardIdx: number; isLastCard: boolean }) {
       : IMG_PATH.BORDER_COLLIE_DOG_AVATAR;
   return (
     <>
-      <div
-        className={clsx("mt-4 flex flex-row gap-5 pb-4 md:mx-5 md:px-4", {
-          "border-b border-solid border-[#A5A4A6]": !isLastCard,
-        })}
-      >
-        {/* Left Side Avatar */}
+      <div className="mt-3 flex flex-col place-items-center gap-3 rounded-md px-3 py-3 shadow-sm shadow-slate-400 first:mt-0 md:flex-row">
+        {/* Avatar */}
         <Image
           src={imgSrc}
           alt="Generic dog avatar for dog details"
           width={100}
           height={100}
-          className="hidden md:block"
+          className=""
         />
 
-        {/* Right Side Details */}
-        <div>
-          {/* Dog Name across the details */}
-          <div>
-            <Image
-              src={imgSrc}
-              alt="Generic dog avatar for dog details"
-              width={100}
-              height={100}
-              className="md:hidden"
-            />
-            <div className="text-grey-100 text-lg font-bold leading-9">
-              {dog.dogName}
-            </div>
+        {/* Details */}
+        <div className="flex-1">
+          <div className="text-grey-100 text-lg font-semibold leading-9">
+            {dog.dogName}
           </div>
+          <StatusBlock dog={dog} />
+        </div>
 
-          {/* Details and Buttons below */}
-          <div className="mt-2 flex flex-col gap-5 md:flex-row">
-            <div className="min-w-40 max-w-96">
-              <StatusBlock dog={dog} />
-            </div>
-
-            <div>
-              <ActionBlock dog={dog} />
-            </div>
-          </div>
+        {/* Buttons */}
+        <div className="w-full md:w-48">
+          <ActionBlock dog={dog} />
         </div>
       </div>
     </>
@@ -273,7 +258,7 @@ export default async function Page() {
           />
         ))}
       </div>
-      <Button className="w-full" variant="brandInverse">
+      <Button className="mt-3 w-full" variant="brandInverse">
         Add Pet
       </Button>
     </>
