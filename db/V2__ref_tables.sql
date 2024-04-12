@@ -62,6 +62,9 @@ CREATE TABLE dogs (
     OR (dog_participation_status = 'PAUSED' AND dog_pause_expiry_time IS NOT NULL)
     OR (dog_participation_status = 'OPTED_OUT' AND dog_pause_expiry_time IS NULL)
   ),
+  CONSTRAINT dog_pregnancy_check CHECK (
+    (dog_gender <> 'MALE' OR dog_ever_pregnant = 'NO')
+  ),
   CONSTRAINT dogs_fk_users FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE SET NULL,
   CONSTRAINT dogs_pk PRIMARY KEY (dog_id)
 );
