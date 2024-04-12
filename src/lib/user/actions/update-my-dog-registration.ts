@@ -80,7 +80,7 @@ async function checkOwnership(
 ): Promise<"OK" | "ERROR_MISSING_DOG" | "ERROR_UNAUTHORIZED"> {
   const { actor, update } = ctx;
   const sql = `SELECT user_id as "ownerUserId" FROM dogs WHERE dog_id = $1`;
-  const res = await dbQuery(conn, sql, [update.dogId]);
+  const res = await dbQuery<{ ownerUserId: string }>(conn, sql, [update.dogId]);
   if (res.rows.length === 0) {
     return "ERROR_MISSING_DOG";
   }
@@ -98,7 +98,7 @@ async function checkExistingReport(
 ): Promise<"OK" | "ERROR_REPORT_EXISTS"> {
   const { update } = ctx;
   const sql = `SELECT COUNT(1)::integer as "numReports" FROM reports WHERE dog_id = $1`;
-  const res = await dbQuery(conn, sql, [update.dogId]);
+  const res = await dbQuery<{ numReports: number }>(conn, sql, [update.dogId]);
   const { numReports } = res.rows[0];
   if (numReports > 0) {
     return "ERROR_REPORT_EXISTS";
