@@ -26,11 +26,11 @@ import {
   BarkStatusTemporarilyIneligible,
 } from "@/components/bark/bark-status";
 import clsx from "clsx";
-import { Button } from "@/components/ui/button";
 import {
   StatusSet,
   mapStatusSetToHighlightedStatus,
 } from "@/lib/data/status-mapper";
+import { BarkButton } from "@/components/bark/bark-button";
 
 function toStatusSet(dog: MyDog): StatusSet {
   const statusSet: StatusSet = {
@@ -188,19 +188,19 @@ function ActionBlock(props: { dog: MyDog }) {
   const highlightedStatus = mapStatusSetToHighlightedStatus(toStatusSet(dog));
   if (highlightedStatus === PROFILE_STATUS.INCOMPLETE) {
     return (
-      <Button variant="brand" className="w-full">
+      <BarkButton variant="brand" className="w-full">
         Complete Profile
-      </Button>
+      </BarkButton>
     );
   }
   return (
     <div className="flex flex-col gap-3">
-      <Button variant="brandInverse" className="w-full">
+      <BarkButton variant="brandInverse" className="w-full">
         Edit
-      </Button>
-      <Button variant="brandInverse" className="w-full">
+      </BarkButton>
+      <BarkButton variant="brandInverse" className="w-full">
         View
-      </Button>
+      </BarkButton>
     </div>
   );
 }
@@ -258,9 +258,9 @@ export default async function Page() {
           />
         ))}
       </div>
-      <Button className="mt-3 w-full" variant="brandInverse">
+      <BarkButton className="mt-3 w-full" variant="brandInverse">
         Add Pet
-      </Button>
+      </BarkButton>
     </>
   );
 }

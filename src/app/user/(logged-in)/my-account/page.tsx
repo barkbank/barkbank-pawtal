@@ -3,17 +3,16 @@
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
-import { Button, buttonVariants } from "@/components/ui/button";
 import { IMG_PATH } from "@/lib/image-path";
 import { getMyLatestCall } from "@/lib/user/actions/get-my-latest-call";
 import { getMyAccount } from "@/lib/user/actions/get-my-account";
 import { formatDistanceStrict } from "date-fns";
 import { BarkH1, BarkH4 } from "@/components/bark/bark-typography";
-import Link from "next/link";
 import Image from "next/image";
 
 import { capitalize } from "lodash";
 import { formatDateTime, SINGAPORE_TIME_ZONE } from "@/lib/utilities/bark-time";
+import { BarkButton } from "@/components/bark/bark-button";
 
 export default async function Page() {
   const actor = await getAuthenticatedUserActor();
@@ -90,16 +89,14 @@ export default async function Page() {
         <p className="text-sm font-bold">User ID Number</p>
         <p>{actor.getUserId()}</p>
       </div>
-      <div className="flex gap-3">
-        <Link
-          className={`h-[60px] ${buttonVariants({ variant: "brand" })}`}
+      <div className="flex flex-col gap-3">
+        <BarkButton
+          className="w-full md:w-32"
+          variant="brand"
           href={RoutePath.USER_MY_ACCOUNT_EDIT}
         >
           Edit
-        </Link>
-        <Button className="h-[60px]" variant={"brandInverse"}>
-          Delete
-        </Button>
+        </BarkButton>
       </div>
     </main>
   );
