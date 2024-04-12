@@ -63,6 +63,7 @@ function convertToCamelCase(columnName: string): string {
   return columnName.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
 }
 
+// TODO: remove all usage of toCamelCaseRow. Safer to explicitly specify the column names in query.
 export function toCamelCaseRow(row: any): any {
   const result: { [key: string]: any } = {};
   for (const key of Object.keys(row)) {
