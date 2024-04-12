@@ -1,6 +1,13 @@
 import { dbQuery } from "../../data/db-utils";
-import { MyDog } from "../user-models";
+import { MyDog, MyDogAppointment } from "../user-models";
 import { UserActor } from "../user-actor";
+import {
+  DogGender,
+  MedicalStatus,
+  ParticipationStatus,
+  ProfileStatus,
+  ServiceStatus,
+} from "@/lib/data/db-enums";
 
 export async function getMyPets(actor: UserActor): Promise<MyDog[]> {
   const { userId, dbPool, dogMapper } = actor.getParams();
@@ -43,32 +50,27 @@ export async function getMyPets(actor: UserActor): Promise<MyDog[]> {
   LEFT JOIN dog_statuses as tStatus on tDog.dog_id = tStatus.dog_id
   LEFT JOIN mAppointmentsPendingReport as tAppointment on tDog.dog_id = tAppointment.dog_id
   `;
-  const res = await dbQuery(dbPool, sql, [userId]);
-  const dogs = await Promise.all(
-    res.rows.map(async (row) => {
-      const {
-        dogId,
-        dogGender,
-        dogServiceStatus,
-        dogProfileStatus,
-        dogMedicalStatus,
-        dogParticipationStatus,
-        dogAppointments,
-      } = row;
-      const secureOii = dogMapper.toDogSecureOii(row);
-      const { dogName } = await dogMapper.mapDogSecureOiiToDogOii(secureOii);
-      const myDog: MyDog = {
-        dogId,
-        dogName,
-        dogGender,
-        dogServiceStatus,
-        dogProfileStatus,
-        dogMedicalStatus,
-        dogParticipationStatus,
-        dogAppointments,
-      };
-      return myDog;
-    }),
-  );
-  return dogs;
+  type Row = {
+    dogId: string;
+    dogEncryptedOii: string;
+    dogGender: DogGender;
+    dogServiceStatus: ServiceStatus;
+    dogProfileStatus: ProfileStatus;
+    dogMedicalStatus: MedicalStatus;
+    dogParticipationStatus: ParticipationStatus;
+    dogAppointments: MyDogAppointment[];
+  };
+  const res = await dbQuery<Row>(dbPool, sql, [userId]);
+  const futureDogs = res.rows.map(async (row) => {
+    const { dogEncryptedOii, ...otherFields } = row;
+    const { dogName } = await dogMapper.mapDogSecureOiiToDogOii({
+      dogEncryptedOii,
+    });
+    const myDog: MyDog = {
+      dogName,
+      ...otherFields,
+    };
+    return myDog;
+  });
+  return Promise.all(futureDogs);
 }
