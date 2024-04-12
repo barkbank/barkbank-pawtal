@@ -15,4 +15,10 @@ test.describe("user my account", () => {
     await expect(page.getByText(UI_USER.USER_PHONE_NUMBER)).toBeVisible();
     await expect(page.getByText("Account created on")).toBeVisible();
   });
+  test("it has an edit button", async ({ page }) => {
+    await expect(page.getByRole("link", { name: "Edit" })).toBeVisible();
+  });
+  test("it has no delete button", async ({ page }) => {
+    await expect(page.getByRole("link", { name: "Delete" })).not.toBeVisible();
+  });
 });
