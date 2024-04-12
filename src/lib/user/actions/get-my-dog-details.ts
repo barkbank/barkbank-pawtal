@@ -1,7 +1,17 @@
 import { dbQuery } from "@/lib/data/db-utils";
 import { UserActor } from "../user-actor";
 import { MyDogDetails, MyDogReport } from "../user-models";
-import { PARTICIPATION_STATUS, ParticipationStatus } from "@/lib/data/db-enums";
+import {
+  DogAntigenPresence,
+  DogGender,
+  MedicalStatus,
+  PARTICIPATION_STATUS,
+  ParticipationStatus,
+  ProfileStatus,
+  ServiceStatus,
+  YesNoUnknown,
+} from "@/lib/data/db-enums";
+import { StatusSet } from "@/lib/data/status-mapper";
 
 export async function getMyDogDetails(
   actor: UserActor,
@@ -68,6 +78,7 @@ export async function getMyDogDetails(
     tDog.dog_encrypted_reason as "dogEncryptedReason",
     tPref.vet_id as "dogPreferredVetId",
 
+    -- For StatusSet
     tStatus.profile_status as "profileStatus",
     tStatus.medical_status as "medicalStatus",
     tStatus.service_status as "serviceStatus",
@@ -81,7 +92,29 @@ export async function getMyDogDetails(
   LEFT JOIN latest_values as tLatest on tDog.dog_id = tLatest.dog_id
   LEFT JOIN mPreferredVet as tPref on tDog.dog_id = tPref.dog_id
   `;
-  const res = await dbQuery(dbPool, sql, [dogId, userId]);
+  // TODO: if we fetch the reports in a separate query we can retrieve visitTime as a Date.
+  type ReportRow = {
+    reportId: string;
+    visitTime: string;
+    vetId: string;
+    vetName: string;
+  };
+  type Row = StatusSet & {
+    dogEncryptedOii: string;
+    dogBreed: string;
+    dogBirthday: Date;
+    dogGender: DogGender;
+    dogWeightKg: number | null;
+    dogDea1Point1: DogAntigenPresence;
+    dogEverPregnant: YesNoUnknown;
+    dogEverReceivedTransfusion: YesNoUnknown;
+    jsonDogReports: ReportRow[];
+    dogParticipationStatus: ParticipationStatus;
+    dogPauseExpiryTime: Date | null;
+    dogEncryptedReason: string;
+    dogPreferredVetId: string | null;
+  };
+  const res = await dbQuery<Row>(dbPool, sql, [dogId, userId]);
   if (res.rows.length === 0) {
     return null;
   }
