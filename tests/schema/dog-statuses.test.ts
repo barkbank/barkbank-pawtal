@@ -160,7 +160,7 @@ describe("dog_statuses view", () => {
           dogSpec: {
             dogBreed: "Test Dog",
             dogWeightKg: 18,
-            dogGender: DOG_GENDER.UNKNOWN,
+            dogGender: DOG_GENDER.FEMALE,
             dogEverPregnant: YES_NO_UNKNOWN.UNKNOWN,
             dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
           },
@@ -294,7 +294,7 @@ describe("dog_statuses view", () => {
         const { dogId } = await initDog(dbPool, {
           dogSpec: {
             ...ELIGIBLE_SPEC,
-            dogGender: DOG_GENDER.UNKNOWN,
+            dogGender: DOG_GENDER.FEMALE,
             dogEverPregnant: YES_NO_UNKNOWN.UNKNOWN,
           },
         });

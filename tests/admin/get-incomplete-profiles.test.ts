@@ -52,7 +52,7 @@ describe("getIncompleteProfiles", () => {
       });
       const profile = guaranteed(result)[0];
       const expected = await getExpectedProfile(1, userId, dogId);
-      expect(profile).toEqual(expected); //
+      expect(profile).toEqual(expected);
     });
   });
   it("should order profiles by creation time, oldest first", async () => {
