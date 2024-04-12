@@ -91,7 +91,7 @@ export default async function Page() {
       </div>
       <div className="flex flex-col gap-3">
         <BarkButton
-          className="w-full"
+          className="w-full md:w-32"
           variant="brand"
           href={RoutePath.USER_MY_ACCOUNT_EDIT}
         >
