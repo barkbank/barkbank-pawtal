@@ -1,4 +1,4 @@
-import { Pool, PoolClient, QueryResult } from "pg";
+import { Pool, PoolClient, QueryResult, QueryResultRow } from "pg";
 import { SlowQueryService } from "./db-slow-query";
 
 export type DbContext = Pool | PoolClient;
@@ -26,14 +26,14 @@ export async function dbRelease(conn: PoolClient): Promise<void> {
 
 const _SLOW_QUERY_SINGLETON = new SlowQueryService();
 
-async function timedDbQuery(
+async function timedDbQuery<T extends QueryResultRow>(
   ctx: DbContext,
   sql: string,
   params: any[],
-): Promise<QueryResult<any>> {
+): Promise<QueryResult<T>> {
   try {
     const t0 = _SLOW_QUERY_SINGLETON.getTs();
-    const res = await ctx.query(sql, params);
+    const res = await ctx.query<T>(sql, params);
     const t1 = _SLOW_QUERY_SINGLETON.getTs();
     _SLOW_QUERY_SINGLETON.submit(sql, t1 - t0);
     return res;
@@ -43,16 +43,16 @@ async function timedDbQuery(
   }
 }
 
-export async function dbQuery(
+export async function dbQuery<T extends QueryResultRow>(
   ctx: DbContext,
   sql: string,
   params: any[],
-): Promise<QueryResult<any>> {
+): Promise<QueryResult<T>> {
   if (process.env.NODE_ENV === "development") {
-    return timedDbQuery(ctx, sql, params);
+    return timedDbQuery<T>(ctx, sql, params);
   }
   try {
-    return await ctx.query(sql, params);
+    return await ctx.query<T>(sql, params);
   } catch (error) {
     console.error(`SQL: ${sql}`, error);
     throw error;
