@@ -389,7 +389,7 @@ function getIncompleteDogOverrides() {
     dogGender: "MALE",
     dogWeightKg: null,
     dogDea1Point1: "UNKNOWN",
-    dogEverPregnant: "UNKNOWN",
+    dogEverPregnant: "NO",
     dogEverReceivedTransfusion: "UNKNOWN",
   };
 }
