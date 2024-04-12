@@ -43,7 +43,7 @@ async function timedDbQuery<T extends QueryResultRow>(
   }
 }
 
-export async function dbQuery<T extends QueryResultRow>(
+export async function dbQuery<T extends QueryResultRow = any>(
   ctx: DbContext,
   sql: string,
   params: any[],
