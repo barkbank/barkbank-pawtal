@@ -1,10 +1,11 @@
 import { test, expect } from "@playwright/test";
-import { UI_URLS, UI_USER, loginTestUser } from "./_ui_test_helpers";
+import { UI_USER, loginTestUser, urlOf } from "./_ui_test_helpers";
+import { RoutePath } from "@/lib/route-path";
 
 test.beforeEach(async ({ page }) => {
   await loginTestUser({ page });
   await page.getByRole("link", { name: "Icon for the My Account" }).click();
-  await page.waitForURL(UI_URLS.USER_MY_ACCOUNT);
+  await page.waitForURL(urlOf(RoutePath.USER_MY_ACCOUNT_PAGE));
 });
 
 test.describe("user my account", () => {

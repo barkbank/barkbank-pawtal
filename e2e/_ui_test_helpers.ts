@@ -5,22 +5,6 @@ export function urlOf(path: string): string {
   return `http://localhost:3000${path}`;
 }
 
-// WIP: Remove UI_URLS
-export const UI_URLS = {
-  ROOT: urlOf(RoutePath.ROOT),
-  LOGOUT_PAGE: urlOf(RoutePath.LOGOUT_PAGE),
-
-  USER_LOGGED_IN_PAGE: urlOf(RoutePath.USER_DEFAULT_LOGGED_IN_PAGE),
-  USER_LOGIN: urlOf(RoutePath.USER_LOGIN_PAGE),
-  USER_MY_PETS: urlOf(RoutePath.USER_MY_PETS),
-  USER_MY_ACCOUNT: urlOf(RoutePath.USER_MY_ACCOUNT_PAGE),
-
-  VET_LOGIN: urlOf(RoutePath.VET_LOGIN_PAGE),
-
-  EXTERNAL_FAQ_PAGE: RoutePath.VISIT_FAQ,
-  EXTERNAL_WEBSITE_PAGE: RoutePath.VISIT_WEBSITE,
-} as const;
-
 export const UI_LOCATOR = {
   NAV_BAR: "#bark-nav-bar",
   NAV_MENU_BUTTON: "#bark-nav-menu-button",

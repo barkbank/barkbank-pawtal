@@ -1,9 +1,10 @@
 import { test, expect } from "@playwright/test";
-import { UI_LOCATOR, UI_URLS, loginTestUser } from "./_ui_test_helpers";
+import { UI_LOCATOR, loginTestUser, urlOf } from "./_ui_test_helpers";
+import { RoutePath } from "@/lib/route-path";
 
 test.describe("footer when not logged-in", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(UI_URLS.ROOT);
+    await page.goto(urlOf(RoutePath.ROOT));
   });
   test("it should show options to login as vet", async ({ page }) => {
     await expect(
@@ -21,7 +22,7 @@ test.describe("footer when not logged-in", () => {
 
 test.describe("footer when logged-in as a user", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(UI_URLS.ROOT);
+    await page.goto(urlOf(RoutePath.ROOT));
     await loginTestUser({ page });
   });
   test("it should not show options to login as vet", async ({ page }) => {
