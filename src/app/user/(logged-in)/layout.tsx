@@ -27,10 +27,6 @@ export default async function Layout(props: { children: React.ReactNode }) {
       iconSrc: IMG_PATH.SIDEBAR_KEY,
       iconLightSrc: IMG_PATH.SIDEBAR_KEY_LIGHT,
     },
-    {
-      label: "Logout",
-      href: RoutePath.LOGOUT_PAGE,
-    },
   ];
   return (
     <BarkSidebarLayout routes={routes}>{props.children}</BarkSidebarLayout>

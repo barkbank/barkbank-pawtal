@@ -26,10 +26,6 @@ export default async function Layout(props: { children: React.ReactNode }) {
       label: "Root 3",
       href: RoutePath.ROOT,
     },
-    {
-      label: "Logout",
-      href: RoutePath.LOGOUT_PAGE,
-    },
   ];
   return (
     <BarkSidebarLayout routes={routes}>{props.children}</BarkSidebarLayout>
