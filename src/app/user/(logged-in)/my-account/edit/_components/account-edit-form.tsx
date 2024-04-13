@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { updateAccountDetails } from "../_action/update-my-account-details";
 import { MyAccountDetailsUpdate } from "@/lib/user/user-models";
-import React from "react";
+import React, { DOMAttributes } from "react";
 
 const FORM_SCHEMA = z.object({
   userName: z.string().min(1, { message: "Name cannot be empty" }),
@@ -52,9 +52,12 @@ export default function AccountEditForm(props: {
     setUpdateStatus("Failed to update account details");
   }
 
-  const confirmCancellation = () => {
+  const confirmCancellation = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
     const value = confirm("Are you sure you want to cancel?");
     if (value === true) {
+      e.preventDefault();
       router.push(RoutePath.USER_MY_ACCOUNT_PAGE);
     }
   };
