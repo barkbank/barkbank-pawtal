@@ -42,14 +42,14 @@ const MobileNav = (props: { isLoggedIn: boolean }) => {
             <Link
               className="text-right"
               target="_blank"
-              href={RoutePath.VISIT_WEBSITE}
+              href={RoutePath.WEBSITE_URL}
             >
               Visit Website
             </Link>
             <Link
               className="text-right"
               target="_blank"
-              href={RoutePath.VISIT_FAQ}
+              href={RoutePath.WEBSITE_FAQ_URL}
             >
               Visit FAQ
             </Link>
@@ -81,10 +81,10 @@ const DesktopNav = (props: { isLoggedIn: boolean }) => {
       </div>
 
       <div className="mr-8 flex gap-8 gap-x-8">
-        <Link target="_blank" href={RoutePath.VISIT_WEBSITE}>
+        <Link target="_blank" href={RoutePath.WEBSITE_URL}>
           Visit Website
         </Link>
-        <Link target="_blank" href={RoutePath.VISIT_FAQ}>
+        <Link target="_blank" href={RoutePath.WEBSITE_FAQ_URL}>
           Visit FAQ
         </Link>
         {isLoggedIn && (

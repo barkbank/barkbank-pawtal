@@ -16,7 +16,7 @@ test.describe("nav bar when not logged-in", () => {
       .getByRole("link", { name: "Visit FAQ" });
     await expect(link).toBeVisible();
     await expect(link).toHaveAttribute("target", "_blank");
-    await expect(link).toHaveAttribute("href", RoutePath.VISIT_FAQ);
+    await expect(link).toHaveAttribute("href", RoutePath.WEBSITE_FAQ_URL);
   });
   test("it should have Visit Website", async ({ page }) => {
     const link = page
@@ -24,7 +24,7 @@ test.describe("nav bar when not logged-in", () => {
       .getByRole("link", { name: "Visit Website" });
     await expect(link).toBeVisible();
     await expect(link).toHaveAttribute("target", "_blank");
-    await expect(link).toHaveAttribute("href", RoutePath.VISIT_WEBSITE);
+    await expect(link).toHaveAttribute("href", RoutePath.WEBSITE_URL);
   });
   test("it should not have a Logout option", async ({ page }) => {
     const link = page
@@ -48,7 +48,7 @@ test.describe("nav bar when logged-in as user", () => {
       .getByRole("link", { name: "Visit FAQ" });
     await expect(link).toBeVisible();
     await expect(link).toHaveAttribute("target", "_blank");
-    await expect(link).toHaveAttribute("href", RoutePath.VISIT_FAQ);
+    await expect(link).toHaveAttribute("href", RoutePath.WEBSITE_FAQ_URL);
   });
   test("it should have Visit Website", async ({ page }) => {
     const link = page
@@ -56,7 +56,7 @@ test.describe("nav bar when logged-in as user", () => {
       .getByRole("link", { name: "Visit Website" });
     await expect(link).toBeVisible();
     await expect(link).toHaveAttribute("target", "_blank");
-    await expect(link).toHaveAttribute("href", RoutePath.VISIT_WEBSITE);
+    await expect(link).toHaveAttribute("href", RoutePath.WEBSITE_URL);
   });
   test("it should have a Logout option", async ({ page }) => {
     const link = page

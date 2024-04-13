@@ -35,6 +35,6 @@ export class RoutePath {
   static readonly BE_A_DONOR = "/be-a-donor";
   static readonly INFO = "/info";
 
-  static readonly VISIT_FAQ = "https://www.barkbank.co/faq";
-  static readonly VISIT_WEBSITE = "https://www.barkbank.co/";
+  static readonly WEBSITE_FAQ_URL = "https://www.barkbank.co/faq";
+  static readonly WEBSITE_URL = "https://www.barkbank.co/";
 }
