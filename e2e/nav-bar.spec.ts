@@ -1,10 +1,10 @@
 import { test, expect } from "@playwright/test";
-import { UI_LOCATOR, UI_URLS, loginTestUser } from "./_ui_test_helpers";
+import { UI_LOCATOR, loginTestUser, urlOf } from "./_ui_test_helpers";
 import { RoutePath } from "@/lib/route-path";
 
 test.describe("nav bar when not logged-in", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(UI_URLS.ROOT);
+    await page.goto(urlOf(RoutePath.USER_LOGIN_PAGE));
     const menuButton = page.locator(UI_LOCATOR.NAV_MENU_BUTTON);
     if (await menuButton.isVisible()) {
       await menuButton.click();
@@ -36,7 +36,6 @@ test.describe("nav bar when not logged-in", () => {
 
 test.describe("nav bar when logged-in as user", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(UI_URLS.ROOT);
     await loginTestUser({ page });
     const menuButton = page.locator(UI_LOCATOR.NAV_MENU_BUTTON);
     if (await menuButton.isVisible()) {
@@ -70,7 +69,6 @@ test.describe("nav bar when logged-in as user", () => {
 
 test.describe("nav bar logout flow", () => {
   test("for user", async ({ page }) => {
-    await page.goto(UI_URLS.ROOT);
     await loginTestUser({ page });
     const menuButton = page.locator(UI_LOCATOR.NAV_MENU_BUTTON);
     if (await menuButton.isVisible()) {
@@ -80,9 +78,9 @@ test.describe("nav bar logout flow", () => {
       .locator(UI_LOCATOR.NAV_BAR)
       .getByRole("link", { name: "Logout" })
       .click();
-    await page.waitForURL(UI_URLS.LOGOUT_PAGE);
+    await page.waitForURL(urlOf(RoutePath.LOGOUT_PAGE));
     await expect(page.getByRole("button", { name: "Logout" })).toBeVisible();
     await page.getByRole("button", { name: "Logout" }).click();
-    await expect(page).toHaveURL(UI_URLS.ROOT);
+    await expect(page).toHaveURL(urlOf(RoutePath.USER_LOGIN_PAGE));
   });
 });

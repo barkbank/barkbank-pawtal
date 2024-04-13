@@ -1,9 +1,9 @@
 import { test, expect, Page } from "@playwright/test";
-import { UI_URLS, UI_USER } from "./_ui_test_helpers";
+import { UI_USER, urlOf } from "./_ui_test_helpers";
 import { RoutePath } from "@/lib/route-path";
 
 test.beforeEach(async ({ page }) => {
-  await page.goto(UI_URLS.USER_LOGIN);
+  await page.goto(urlOf(RoutePath.USER_LOGIN_PAGE));
 });
 
 test.describe("user login page", () => {
@@ -66,14 +66,15 @@ test.describe("user login flow", () => {
     await expectVisible(`An OTP has been sent to ${UI_USER.USER_EMAIL}`, page);
     await fillOtp("000000", page);
     await clickLogin(page);
-    await expect(page).toHaveURL(UI_URLS.USER_MY_PETS);
+    await expect(page).toHaveURL(urlOf(RoutePath.USER_MY_PETS));
   });
 });
 
+// TODO: Remove cancel button
 test.describe("user cancel login flow", () => {
   test("it brings user back to root", async ({ page }) => {
     await clickCancel(page);
-    await expect(page).toHaveURL(UI_URLS.ROOT);
+    await expect(page).toHaveURL(urlOf(RoutePath.USER_LOGIN_PAGE));
   });
 });
 
