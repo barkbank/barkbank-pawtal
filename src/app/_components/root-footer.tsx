@@ -1,7 +1,10 @@
+"use client";
+
 import React from "react";
 import { BarkNavRoute } from "../../components/bark/bark-nav";
 import { RoutePath } from "@/lib/route-path";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 const footerRoutes: BarkNavRoute[] = [
   {
@@ -18,22 +21,36 @@ const footerRoutes: BarkNavRoute[] = [
   },
 ];
 
+const loginPages: BarkNavRoute[] = [
+  {
+    label: "Vet Login",
+    href: RoutePath.VET_LOGIN_PAGE,
+  },
+  {
+    label: "Admin Login",
+    href: RoutePath.ADMIN_LOGIN_PAGE,
+  },
+];
+
 const RootFooter = () => {
+  const session = useSession();
+  const { status } = session;
+  const routes =
+    status === "unauthenticated"
+      ? [...footerRoutes, ...loginPages]
+      : footerRoutes;
   return (
-    <div className=" flex min-h-[100px] w-full items-center justify-center bg-grey sm:min-h-[200px]">
-      <div className="flex sm:w-[40%]">
-        {footerRoutes.map((route) => {
-          return (
-            <Link
-              key={route.label}
-              href={route.href}
-              className="w-20 sm:w-full"
-            >
-              {route.label}
-            </Link>
-          );
-        })}
-      </div>
+    <div
+      id="bark-footer"
+      className="flex w-full flex-col items-center justify-center bg-grey md:flex-row"
+    >
+      {routes.map((route) => {
+        return (
+          <Link key={route.label} href={route.href} className="m-3 md:w-32">
+            {route.label}
+          </Link>
+        );
+      })}
     </div>
   );
 };
