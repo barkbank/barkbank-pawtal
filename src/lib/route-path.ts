@@ -37,19 +37,4 @@ export class RoutePath {
 
   static readonly VISIT_FAQ = "https://www.barkbank.co/faq";
   static readonly VISIT_WEBSITE = "https://www.barkbank.co/";
-
-  static readonly ACCOUNT_DASHBOARD = (
-    accountType: AccountType | undefined,
-  ) => {
-    if (accountType === AccountType.ADMIN) {
-      return RoutePath.ADMIN_DASHBOARD_PAGE;
-    }
-    if (accountType === AccountType.VET) {
-      return RoutePath.VET_DASHBOARD_PAGE;
-    }
-    if (accountType === AccountType.USER) {
-      return RoutePath.USER_DEFAULT_LOGGED_IN_PAGE;
-    }
-    return RoutePath.ROOT;
-  };
 }
