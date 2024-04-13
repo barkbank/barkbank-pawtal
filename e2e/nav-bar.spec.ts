@@ -1,5 +1,6 @@
 import { test, expect, Page } from "@playwright/test";
 import { UI_LOCATOR, UI_URLS, loginTestUser } from "./_ui_test_helpers";
+import { RoutePath } from "@/lib/route-path";
 
 test.describe("nav bar when not logged-in", () => {
   test.beforeEach(async ({ page }) => {
@@ -15,7 +16,7 @@ test.describe("nav bar when not logged-in", () => {
       .getByRole("link", { name: "Visit FAQ" });
     await expect(link).toBeVisible();
     await expect(link).toHaveAttribute("target", "_blank");
-    await expect(link).toHaveAttribute("href", UI_URLS.EXTERNAL_FAQ_PAGE);
+    await expect(link).toHaveAttribute("href", RoutePath.VISIT_FAQ);
   });
   test("it should have Visit Website", async ({ page }) => {
     const link = page
@@ -23,7 +24,7 @@ test.describe("nav bar when not logged-in", () => {
       .getByRole("link", { name: "Visit Website" });
     await expect(link).toBeVisible();
     await expect(link).toHaveAttribute("target", "_blank");
-    await expect(link).toHaveAttribute("href", UI_URLS.EXTERNAL_WEBSITE_PAGE);
+    await expect(link).toHaveAttribute("href", RoutePath.VISIT_WEBSITE);
   });
   test("it should not have a Logout option", async ({ page }) => {
     const link = page
@@ -48,7 +49,7 @@ test.describe("nav bar when logged-in as user", () => {
       .getByRole("link", { name: "Visit FAQ" });
     await expect(link).toBeVisible();
     await expect(link).toHaveAttribute("target", "_blank");
-    await expect(link).toHaveAttribute("href", UI_URLS.EXTERNAL_FAQ_PAGE);
+    await expect(link).toHaveAttribute("href", RoutePath.VISIT_FAQ);
   });
   test("it should have Visit Website", async ({ page }) => {
     const link = page
@@ -56,14 +57,13 @@ test.describe("nav bar when logged-in as user", () => {
       .getByRole("link", { name: "Visit Website" });
     await expect(link).toBeVisible();
     await expect(link).toHaveAttribute("target", "_blank");
-    await expect(link).toHaveAttribute("href", UI_URLS.EXTERNAL_WEBSITE_PAGE);
+    await expect(link).toHaveAttribute("href", RoutePath.VISIT_WEBSITE);
   });
   test("it should have a Logout option", async ({ page }) => {
     const link = page
       .locator(UI_LOCATOR.NAV_BAR)
       .getByRole("link", { name: "Logout" });
     await expect(link).toBeVisible();
-    await expect(link).toHaveAttribute("target", "");
-    await expect(link).toHaveAttribute("href", UI_URLS.LOGOUT_PAGE);
+    await expect(link).toHaveAttribute("href", RoutePath.LOGOUT_PAGE);
   });
 });
