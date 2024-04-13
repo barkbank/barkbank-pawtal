@@ -19,7 +19,6 @@ test.describe("user login page", () => {
     await expect(
       page.getByRole("button").getByText("Send me an OTP"),
     ).toBeVisible();
-    await expect(page.getByRole("button").getByText("Cancel")).toBeVisible();
     await expect(page.getByRole("button").getByText("Login")).toBeVisible();
 
     // getByLabel selects input fields by associated label
@@ -67,14 +66,6 @@ test.describe("user login flow", () => {
     await fillOtp("000000", page);
     await clickLogin(page);
     await expect(page).toHaveURL(urlOf(RoutePath.USER_MY_PETS));
-  });
-});
-
-// TODO: Remove cancel button
-test.describe("user cancel login flow", () => {
-  test("it brings user back to root", async ({ page }) => {
-    await clickCancel(page);
-    await expect(page).toHaveURL(urlOf(RoutePath.USER_LOGIN_PAGE));
   });
 });
 
