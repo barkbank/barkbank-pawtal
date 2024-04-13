@@ -25,7 +25,7 @@ test:
 # fails.
 .PHONY: test-ui
 test-ui: playwright-browsers
-	npx playwright test
+	npx playwright test --project "Mobile Chrome" --project "chromium"
 
 # Run playwright tests in headed mode, you will see flashes of
 # browser screens.
