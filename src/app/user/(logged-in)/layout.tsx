@@ -27,6 +27,14 @@ export default async function Layout(props: { children: React.ReactNode }) {
       iconSrc: IMG_PATH.SIDEBAR_KEY,
       iconLightSrc: IMG_PATH.SIDEBAR_KEY_LIGHT,
     },
+    {
+      label: "Criteria",
+      href: RoutePath.USER_CRITERIA,
+    },
+    {
+      label: "Process",
+      href: RoutePath.USER_PROCESS,
+    },
   ];
   return (
     <BarkSidebarLayout routes={routes}>{props.children}</BarkSidebarLayout>

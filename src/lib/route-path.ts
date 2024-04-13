@@ -11,6 +11,8 @@ export class RoutePath {
   static readonly USER_MY_ACCOUNT_PAGE = "/user/my-account";
   static readonly USER_VIEW_DOG = (dogId: string) => `/user/dogs/${dogId}`;
   static readonly USER_EDIT_DOG = (dogId: string) => `/user/dogs/${dogId}/edit`;
+  static readonly USER_CRITERIA = "/user/criteria";
+  static readonly USER_PROCESS = "/user/process";
 
   static readonly USER_DEFAULT_LOGGED_IN_PAGE = RoutePath.USER_MY_PETS;
 

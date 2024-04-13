@@ -9,6 +9,7 @@ export const UI_URLS = {
   ROOT: getLocalUrl(RoutePath.ROOT),
   LOGOUT_PAGE: getLocalUrl(RoutePath.LOGOUT_PAGE),
 
+  USER_LOGGED_IN_PAGE: getLocalUrl(RoutePath.USER_DEFAULT_LOGGED_IN_PAGE),
   USER_LOGIN: getLocalUrl(RoutePath.USER_LOGIN_PAGE),
   USER_MY_PETS: getLocalUrl(RoutePath.USER_MY_PETS),
   USER_MY_ACCOUNT: getLocalUrl(RoutePath.USER_MY_ACCOUNT_PAGE),
@@ -20,6 +21,7 @@ export const UI_URLS = {
 export const UI_LOCATOR = {
   NAV_BAR: "#nav-bar",
   NAV_MENU_BUTTON: "#nav-menu-button",
+  SIDEBAR: "#sidebar",
 } as const;
 
 export const UI_USER = {
@@ -39,5 +41,5 @@ export async function loginTestUser(args: { page: Page }) {
   await expect(page.getByText(UI_USER.USER_EMAIL)).toBeVisible();
   await page.getByLabel("Enter OTP").fill("000000");
   await page.getByRole("button", { name: "Login" }).click();
-  await expect(page).toHaveURL(UI_URLS.USER_MY_PETS);
+  await expect(page).toHaveURL(UI_URLS.USER_LOGGED_IN_PAGE);
 }
