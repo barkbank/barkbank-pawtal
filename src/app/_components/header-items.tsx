@@ -10,8 +10,8 @@ import { Button } from "@/components/ui/button";
 import * as Collapsible from "@radix-ui/react-collapsible";
 import { useSession } from "next-auth/react";
 
-const MobileNav = (props: {isLoggedIn: boolean}) => {
-  const {isLoggedIn} = props;
+const MobileNav = (props: { isLoggedIn: boolean }) => {
+  const { isLoggedIn } = props;
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (
@@ -65,8 +65,8 @@ const MobileNav = (props: {isLoggedIn: boolean}) => {
   );
 };
 
-const DesktopNav = (props: {isLoggedIn: boolean}) => {
-  const {isLoggedIn} = props;
+const DesktopNav = (props: { isLoggedIn: boolean }) => {
+  const { isLoggedIn } = props;
   return (
     <nav className="flex h-[72px] flex-row items-center justify-between border-b bg-white shadow-lg">
       <div className="ml-8 w-[72px] flex-none">
@@ -99,7 +99,7 @@ const DesktopNav = (props: {isLoggedIn: boolean}) => {
 
 const HeaderItems = () => {
   const session = useSession();
-  const {status} = session;
+  const { status } = session;
   const isLoggedIn = status === "authenticated";
   return (
     <div className="sticky top-0 z-10" id="nav-bar">
