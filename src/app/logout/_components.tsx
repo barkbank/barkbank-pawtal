@@ -14,21 +14,27 @@ export function LogoutQuestion() {
     signOut();
   };
   return (
-    <>
-      <div className="flex min-h-screen flex-col items-center justify-between">
-        <div className="mx-auto max-w-[1100px] sm:w-[36rem] sm:px-6 sm:py-10 md:w-full ">
-          <BarkH2>Logout</BarkH2>
-          <BarkP>Are you sure you want to logout?</BarkP>
-          <div className="mt-6 flex flex-row gap-3">
-            <Button variant="brandInverse" onClick={onCancel}>
-              Cancel
-            </Button>
-            <Button variant="brand" onClick={onLogout}>
-              Logout
-            </Button>
-          </div>
+    <div className="flex flex-col place-items-center p-3">
+      <div className="w-full max-w-80">
+        <BarkH2>Logout</BarkH2>
+        <BarkP>Are you sure you want to logout?</BarkP>
+        <div className="mt-6 flex flex-col gap-3 md:flex-row">
+          <Button
+            className="w-full md:w-1/2"
+            variant="brandInverse"
+            onClick={onCancel}
+          >
+            Cancel
+          </Button>
+          <Button
+            className="w-full md:w-1/2"
+            variant="brand"
+            onClick={onLogout}
+          >
+            Logout
+          </Button>
         </div>
       </div>
-    </>
+    </div>
   );
 }
