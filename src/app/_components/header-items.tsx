@@ -2,15 +2,16 @@
 
 import Image from "next/image";
 import React from "react";
-import { CircleUser, MenuIcon, XIcon } from "lucide-react";
+import { MenuIcon, XIcon } from "lucide-react";
 import { RoutePath } from "@/lib/route-path";
 import Link from "next/link";
 import { IMG_PATH } from "@/lib/image-path";
 import { Button } from "@/components/ui/button";
 import * as Collapsible from "@radix-ui/react-collapsible";
-import { AccountType } from "@/lib/auth-models";
+import { useSession } from "next-auth/react";
 
-const MobileNav = ({ accountType }: { accountType?: AccountType }) => {
+const MobileNav = (props: {isLoggedIn: boolean}) => {
+  const {isLoggedIn} = props;
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (
@@ -52,7 +53,7 @@ const MobileNav = ({ accountType }: { accountType?: AccountType }) => {
             >
               Visit FAQ
             </Link>
-            {accountType !== undefined && (
+            {isLoggedIn && (
               <Link className="text-right" href={RoutePath.LOGOUT_PAGE}>
                 Logout
               </Link>
@@ -64,7 +65,8 @@ const MobileNav = ({ accountType }: { accountType?: AccountType }) => {
   );
 };
 
-const DesktopNav = ({ accountType }: { accountType?: AccountType }) => {
+const DesktopNav = (props: {isLoggedIn: boolean}) => {
+  const {isLoggedIn} = props;
   return (
     <nav className="flex h-[72px] flex-row items-center justify-between border-b bg-white shadow-lg">
       <div className="ml-8 w-[72px] flex-none">
@@ -85,7 +87,7 @@ const DesktopNav = ({ accountType }: { accountType?: AccountType }) => {
         <Link target="_blank" href={RoutePath.VISIT_FAQ}>
           Visit FAQ
         </Link>
-        {accountType !== undefined && (
+        {isLoggedIn && (
           <Link className="text-right" href={RoutePath.LOGOUT_PAGE}>
             Logout
           </Link>
@@ -95,14 +97,17 @@ const DesktopNav = ({ accountType }: { accountType?: AccountType }) => {
   );
 };
 
-const HeaderItems = ({ accountType }: { accountType?: AccountType }) => {
+const HeaderItems = () => {
+  const session = useSession();
+  const {status} = session;
+  const isLoggedIn = status === "authenticated";
   return (
     <div className="sticky top-0 z-10" id="nav-bar">
       <div className="md:hidden">
-        <MobileNav accountType={accountType} />
+        <MobileNav isLoggedIn={isLoggedIn} />
       </div>
       <div className="hidden md:block">
-        <DesktopNav accountType={accountType} />
+        <DesktopNav isLoggedIn={isLoggedIn} />
       </div>
     </div>
   );
