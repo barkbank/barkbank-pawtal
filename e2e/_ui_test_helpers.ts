@@ -1,10 +1,25 @@
+import { RoutePath } from "@/lib/route-path";
 import { expect, Page } from "@playwright/test";
 
+function getLocalUrl(path: string): string {
+  return `http://localhost:3000${path}`;
+}
+
 export const UI_URLS = {
-  USER_LOGIN: "http://localhost:3000/user/login",
-  USER_MY_PETS: "http://localhost:3000/user/my-pets",
-  USER_MY_ACCOUNT: "http://localhost:3000/user/my-account",
-  ROOT: "http://localhost:3000/",
+  ROOT: getLocalUrl(RoutePath.ROOT),
+  LOGOUT_PAGE: getLocalUrl(RoutePath.LOGOUT_PAGE),
+
+  USER_LOGIN: getLocalUrl(RoutePath.USER_LOGIN_PAGE),
+  USER_MY_PETS: getLocalUrl(RoutePath.USER_MY_PETS),
+  USER_MY_ACCOUNT: getLocalUrl(RoutePath.USER_MY_ACCOUNT_PAGE),
+
+  EXTERNAL_FAQ_PAGE: RoutePath.VISIT_FAQ,
+  EXTERNAL_WEBSITE_PAGE: RoutePath.VISIT_WEBSITE,
+} as const;
+
+export const UI_LOCATOR = {
+  NAV_BAR: "#nav-bar",
+  NAV_MENU_BUTTON: "#nav-menu-button",
 } as const;
 
 export const UI_USER = {
