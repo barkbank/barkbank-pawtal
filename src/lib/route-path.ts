@@ -18,11 +18,13 @@ export class RoutePath {
 
   static readonly VET_LOGIN_PAGE = "/vet/login";
   static readonly VET_DASHBOARD_PAGE = "/vet/dashboard";
+  static readonly VET_DEFAULT_LOGGED_IN_PAGE = RoutePath.VET_DASHBOARD_PAGE;
 
   static readonly ADMIN_LOGIN_PAGE = "/admin/login";
   static readonly ADMIN_DASHBOARD_PAGE = "/admin/dashboard";
   static readonly ADMIN_DATABASE_PAGE = "/admin/database";
   static readonly ADMIN_USER_ACCESS_PAGE = "/admin/user-access";
+  static readonly ADMIN_DEFAULT_LOGGED_IN_PAGE = RoutePath.ADMIN_DASHBOARD_PAGE;
 
   static readonly CONTACT_US = "/contact-us";
   static readonly PRIVACY_POLICY = "/privacy-policy";
