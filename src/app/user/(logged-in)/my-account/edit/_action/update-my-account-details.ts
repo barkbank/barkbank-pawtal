@@ -5,6 +5,7 @@ import { RoutePath } from "@/lib/route-path";
 import { getMyAccount } from "@/lib/user/actions/get-my-account";
 import { updateMyAccountDetails } from "@/lib/user/actions/update-my-account-details";
 import { MyAccountDetailsUpdate } from "@/lib/user/user-models";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export type UpdateAccountDetailsResponse =
@@ -25,6 +26,7 @@ export async function updateAccountDetails(
 
   const response = await updateMyAccountDetails(actor, request);
   if (response === "OK_UPDATED") {
+    revalidatePath("/user/(logged-in)/my-account");
     return "STATUS_204_UPDATED";
   }
   return "STATUS_500_INTERNAL_SERVER_ERROR";
