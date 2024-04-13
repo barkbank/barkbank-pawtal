@@ -1,5 +1,6 @@
 import { test, expect, Page } from "@playwright/test";
 import { UI_URLS, UI_USER } from "./_ui_test_helpers";
+import { RoutePath } from "@/lib/route-path";
 
 test.beforeEach(async ({ page }) => {
   await page.goto(UI_URLS.USER_LOGIN);
@@ -25,6 +26,12 @@ test.describe("user login page", () => {
     await expect(page.getByLabel("Please provide your email")).toBeEditable();
     await expect(page.getByLabel("Enter OTP")).toBeEditable();
   });
+
+  test("it should have a link to user registration page", async ({page}) => {
+    const link = page.getByRole("link", {name: "registration"});
+    await expect(link).toBeVisible();
+    await expect(link).toHaveAttribute("href", RoutePath.USER_REGISTRATION);
+  })
 });
 
 test.describe("user login validations", () => {
