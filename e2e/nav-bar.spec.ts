@@ -67,3 +67,22 @@ test.describe("nav bar when logged-in as user", () => {
     await expect(link).toHaveAttribute("href", RoutePath.LOGOUT_PAGE);
   });
 });
+
+test.describe("nav bar logout flow", () => {
+  test("for user", async ({ page }) => {
+    await page.goto(UI_URLS.ROOT);
+    await loginTestUser({ page });
+    const menuButton = page.locator(UI_LOCATOR.NAV_MENU_BUTTON);
+    if (await menuButton.isVisible()) {
+      await menuButton.click();
+    }
+    await page
+      .locator(UI_LOCATOR.NAV_BAR)
+      .getByRole("link", { name: "Logout" })
+      .click();
+    await page.waitForURL(UI_URLS.LOGOUT_PAGE);
+    await expect(page.getByRole("button", { name: "Logout" })).toBeVisible();
+    await page.getByRole("button", { name: "Logout" }).click();
+    await expect(page).toHaveURL(UI_URLS.ROOT);
+  });
+});
