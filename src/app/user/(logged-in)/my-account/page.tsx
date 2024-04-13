@@ -95,7 +95,7 @@ export default async function Page() {
           className={`h-[60px] ${buttonVariants({ variant: "brand" })}`}
           href={{
             pathname: RoutePath.USER_MY_ACCOUNT_EDIT,
-            query: { userName, userPhoneNumber, userResidency },
+            query: { userName, userPhoneNumber, userResidency, userEmail },
           }}
         >
           Edit

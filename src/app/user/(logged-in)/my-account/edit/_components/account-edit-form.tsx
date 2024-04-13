@@ -2,8 +2,6 @@
 
 import {
   BarkForm,
-  BarkFormButton,
-  BarkFormHeader,
   BarkFormInput,
   BarkFormRadioGroup,
   BarkFormSubmitButton,
@@ -15,11 +13,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { updateAccountDetails } from "../_action/update-my-account-details";
+import { MyAccountDetailsUpdate } from "@/lib/user/user-models";
+import React from "react";
 
 const FORM_SCHEMA = z.object({
   userName: z.string().min(1, { message: "Name cannot be empty" }),
   userPhoneNumber: z.string(),
-  userResidency: z.string().min(1, { message: "Residency must be specified" }),
+  userEmail: z.string(),
+  userResidency: z.string(),
 });
 
 type FormDataType = z.infer<typeof FORM_SCHEMA>;
@@ -32,9 +34,22 @@ export default function AccountEditForm(props: {
     resolver: zodResolver(FORM_SCHEMA),
     defaultValues: props.defaultValues,
   });
+  const [updateStatus, setUpdateStatus] = React.useState("");
 
-  async function onSubmit(values: FormDataType) {
-    console.log(values);
+  async function saveUser(values: FormDataType) {
+    const confirmation = confirm("Are you sure you want to save?");
+    if (!confirmation) {
+      return;
+    }
+    setUpdateStatus("");
+    const request = values as MyAccountDetailsUpdate;
+
+    const response = await updateAccountDetails(request);
+    if (response === "STATUS_204_UPDATED") {
+      router.push(RoutePath.USER_MY_ACCOUNT_PAGE);
+      return;
+    }
+    setUpdateStatus("Failed to update account details");
   }
 
   const confirmCancellation = () => {
@@ -46,7 +61,7 @@ export default function AccountEditForm(props: {
 
   return (
     <>
-      <BarkForm onSubmit={onSubmit} form={form}>
+      <BarkForm onSubmit={saveUser} form={form}>
         <BarkFormInput form={form} label="My Name" name={"userName"} />
         <BarkFormInput
           form={form}
@@ -72,6 +87,7 @@ export default function AccountEditForm(props: {
           >
             Cancel
           </Button>
+          {updateStatus && <div className="text-red-500">{updateStatus}</div>}
         </div>
       </BarkForm>
     </>
