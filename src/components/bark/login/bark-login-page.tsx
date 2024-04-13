@@ -41,7 +41,7 @@ export default async function BarkLoginPage(props: {
             <BarkH1>Bark Bank Canine Blood Donation Pawtal</BarkH1>
           </div>
         </div>
-        <div className="mx-auto max-w-[1100px] sm:w-[36rem] sm:px-6 sm:py-10 md:w-full ">
+        <div className="w-full max-w-[1000px] px-3">
           <BarkH2>{title}</BarkH2>
           <BarkLoginForm
             accountType={accountType}

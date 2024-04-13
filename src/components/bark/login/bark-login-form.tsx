@@ -117,7 +117,9 @@ export default function BarkLoginForm(props: {
           description={emailDescription}
         />
         {/* TODO - We need a CAPTCHA to prevent abuse of Send me an OTP */}
-        <BarkFormButton onClick={onRequestOtp}>Send me an OTP</BarkFormButton>
+        <BarkFormButton className="w-full md:w-48" onClick={onRequestOtp}>
+          Send me an OTP
+        </BarkFormButton>
         {recipientEmail !== "" && (
           <BarkFormParagraph>
             An OTP has been sent to {recipientEmail}
@@ -129,12 +131,9 @@ export default function BarkLoginForm(props: {
           </FormMessage>
         )}
         <BarkFormInput form={form} name="otp" label="Enter OTP" />
-        <div className="flex w-full gap-x-4">
-          <BarkFormButton onClick={async () => router.push(RoutePath.ROOT)}>
-            Cancel
-          </BarkFormButton>
-          <BarkFormSubmitButton>Login</BarkFormSubmitButton>
-        </div>
+        <BarkFormSubmitButton className="w-full md:w-48">
+          Login
+        </BarkFormSubmitButton>
         <BarkFormError form={form} />
         {shouldShowLoginFailed && (
           <FormMessage className="mt-6 text-red-500">Login Failed</FormMessage>
