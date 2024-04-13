@@ -22,6 +22,15 @@ export default async function Page() {
           to create an account.
         </>
       }
+      emailDescription={
+        <>
+          If you are a new user, please{" "}
+          <Link href={RoutePath.USER_REGISTRATION} className="text-blue-400">
+            register here
+          </Link>
+          .
+        </>
+      }
     />
   );
 }

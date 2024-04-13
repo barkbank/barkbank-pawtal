@@ -27,11 +27,11 @@ test.describe("user login page", () => {
     await expect(page.getByLabel("Enter OTP")).toBeEditable();
   });
 
-  test("it should have a link to user registration page", async ({page}) => {
-    const link = page.getByRole("link", {name: "registration"});
+  test("it should have a link to user registration page", async ({ page }) => {
+    const link = page.getByRole("link", { name: "register" });
     await expect(link).toBeVisible();
     await expect(link).toHaveAttribute("href", RoutePath.USER_REGISTRATION);
-  })
+  });
 });
 
 test.describe("user login validations", () => {

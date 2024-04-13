@@ -13,9 +13,16 @@ export default async function BarkLoginPage(props: {
   successPath: string;
   logoSrc: string;
   noAccountErrorMessage: string | React.ReactNode;
+  emailDescription?: string | React.ReactNode;
 }) {
-  const { title, accountType, successPath, logoSrc, noAccountErrorMessage } =
-    props;
+  const {
+    title,
+    accountType,
+    successPath,
+    logoSrc,
+    noAccountErrorMessage,
+    emailDescription,
+  } = props;
   if (await isLoggedIn(accountType)) {
     redirect(successPath);
   }
@@ -40,6 +47,7 @@ export default async function BarkLoginPage(props: {
             accountType={accountType}
             successPath={successPath}
             noAccountErrorMessage={noAccountErrorMessage}
+            emailDescription={emailDescription}
           />
         </div>
       </div>
