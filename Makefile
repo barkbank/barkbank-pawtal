@@ -1,7 +1,13 @@
 # Default command. It installs npm packages, if any, runs the code
-# formatter, and then runs the unit tests.
+# formatter, runs the unit tests, and does a schema diff.
 .PHONY: default
 default: npm-install fmt test schema-diff
+
+# Does everything default does AND THEN also run frontend tests—which
+# takes awhile to complete. If you just want to run the frontend
+# tests, use test-ui.
+.PHONY: all
+all: default test-ui
 
 # Vars
 BARKBANK_SCHEMA_DIR=../barkbank-schema
