@@ -19,9 +19,10 @@ export const UI_URLS = {
 } as const;
 
 export const UI_LOCATOR = {
-  NAV_BAR: "#nav-bar",
-  NAV_MENU_BUTTON: "#nav-menu-button",
-  SIDEBAR: "#sidebar",
+  NAV_BAR: "#bark-nav-bar",
+  NAV_MENU_BUTTON: "#bark-nav-menu-button",
+  SIDEBAR: "#bark-sidebar",
+  FOOTER: "#bark-footer",
 } as const;
 
 export const UI_USER = {

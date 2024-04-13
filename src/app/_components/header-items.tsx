@@ -27,7 +27,7 @@ const MobileNav = (props: { isLoggedIn: boolean }) => {
             />
           </Link>
           <Collapsible.Trigger asChild>
-            <Button variant="outline" size="icon" id="nav-menu-button">
+            <Button variant="outline" size="icon" id="bark-nav-menu-button">
               {isOpen ? (
                 <XIcon className="h-4 w-4" />
               ) : (
@@ -102,7 +102,7 @@ const HeaderItems = () => {
   const { status } = session;
   const isLoggedIn = status === "authenticated";
   return (
-    <div className="sticky top-0 z-10" id="nav-bar">
+    <div className="sticky top-0 z-10" id="bark-nav-bar">
       <div className="md:hidden">
         <MobileNav isLoggedIn={isLoggedIn} />
       </div>
