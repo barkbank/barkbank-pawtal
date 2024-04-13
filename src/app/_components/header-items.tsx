@@ -41,23 +41,22 @@ const MobileNav = ({ accountType }: { accountType?: AccountType }) => {
             <Link
               className="text-right"
               target="_blank"
-              href={RoutePath.VISIT_FAQ}
-            >
-              Visit FAQ
-            </Link>
-            <Link
-              className="text-right"
-              target="_blank"
               href={RoutePath.VISIT_WEBSITE}
             >
               Visit Website
             </Link>
             <Link
-              className="flex flex-row-reverse"
-              href={RoutePath.ACCOUNT_DASHBOARD(accountType)}
+              className="text-right"
+              target="_blank"
+              href={RoutePath.VISIT_FAQ}
             >
-              <CircleUser />
+              Visit FAQ
             </Link>
+            {accountType !== undefined && (
+              <Link className="text-right" href={RoutePath.LOGOUT_PAGE}>
+                Logout
+              </Link>
+            )}
           </div>
         </Collapsible.Content>
       </Collapsible.Root>
@@ -80,15 +79,17 @@ const DesktopNav = ({ accountType }: { accountType?: AccountType }) => {
       </div>
 
       <div className="mr-8 flex gap-8 gap-x-8">
-        <Link target="_blank" href={RoutePath.VISIT_FAQ}>
-          Visit FAQ
-        </Link>
         <Link target="_blank" href={RoutePath.VISIT_WEBSITE}>
           Visit Website
         </Link>
-        <Link href={RoutePath.ACCOUNT_DASHBOARD(accountType)}>
-          <CircleUser />
+        <Link target="_blank" href={RoutePath.VISIT_FAQ}>
+          Visit FAQ
         </Link>
+        {accountType !== undefined && (
+          <Link className="text-right" href={RoutePath.LOGOUT_PAGE}>
+            Logout
+          </Link>
+        )}
       </div>
     </nav>
   );
@@ -96,12 +97,12 @@ const DesktopNav = ({ accountType }: { accountType?: AccountType }) => {
 
 const HeaderItems = ({ accountType }: { accountType?: AccountType }) => {
   return (
-    <div className="sticky top-0 z-10">
+    <div className="sticky top-0 z-10" id="nav-bar">
       <div className="md:hidden">
-        <MobileNav />
+        <MobileNav accountType={accountType} />
       </div>
       <div className="hidden md:block">
-        <DesktopNav />
+        <DesktopNav accountType={accountType} />
       </div>
     </div>
   );
