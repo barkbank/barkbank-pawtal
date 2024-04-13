@@ -30,7 +30,9 @@ export class RoutePath {
   static readonly ABOUT_US = "/about";
   static readonly BE_A_DONOR = "/be-a-donor";
   static readonly INFO = "/info";
-  static readonly FAQ = "/faq";
+
+  static readonly VISIT_FAQ = "https://www.barkbank.co/faq";
+  static readonly VISIT_WEBSITE = "https://www.barkbank.co/";
 
   static readonly ACCOUNT_DASHBOARD = (
     accountType: AccountType | undefined,
