@@ -21,4 +21,8 @@ test.describe("nav bar when not logged-in", () => {
     await expect(link).toHaveAttribute("target", "_blank");
     await expect(link).toHaveAttribute("href", "https://www.barkbank.co/");
   });
+  test("it should not have a Logout option", async ({ page }) => {
+    const link = page.getByRole("link", { name: "Logout" });
+    await expect(link).not.toBeVisible();
+  });
 });
