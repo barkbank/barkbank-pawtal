@@ -10,8 +10,34 @@ import { Button } from "@/components/ui/button";
 import * as Collapsible from "@radix-ui/react-collapsible";
 import { useSession } from "next-auth/react";
 
-const MobileNav = (props: { isLoggedIn: boolean }) => {
-  const { isLoggedIn } = props;
+type NavOption = {
+  label: string;
+  href: string;
+  target?: "_blank";
+};
+
+const WEBSITE_NAV_OPTIONS: NavOption[] = [
+  {
+    label: "Visit Website",
+    href: RoutePath.WEBSITE_URL,
+    target: "_blank",
+  },
+  {
+    label: "Visit FAQ",
+    href: RoutePath.WEBSITE_FAQ_URL,
+    target: "_blank",
+  },
+];
+
+const AUTHENTICATED_OPTIONS: NavOption[] = [
+  {
+    label: "Logout",
+    href: RoutePath.LOGOUT_PAGE,
+  },
+];
+
+const MobileNav = (props: { navOptions: NavOption[] }) => {
+  const { navOptions } = props;
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (
@@ -38,26 +64,21 @@ const MobileNav = (props: { isLoggedIn: boolean }) => {
         </div>
 
         <Collapsible.Content>
-          <div className="mx-4 my-2 flex flex-col gap-2">
-            <Link
-              className="text-right"
-              target="_blank"
-              href={RoutePath.WEBSITE_URL}
-            >
-              Visit Website
-            </Link>
-            <Link
-              className="text-right"
-              target="_blank"
-              href={RoutePath.WEBSITE_FAQ_URL}
-            >
-              Visit FAQ
-            </Link>
-            {isLoggedIn && (
-              <Link className="text-right" href={RoutePath.LOGOUT_PAGE}>
-                Logout
-              </Link>
-            )}
+          <div className="mx-4 my-2 flex flex-col gap-6">
+            {navOptions.map((option) => {
+              const { label, href, target } = option;
+              return (
+                <Link
+                  key={label}
+                  className="text-right text-xl"
+                  target={target}
+                  href={href}
+                  onClick={() => setIsOpen(false)}
+                >
+                  {label}
+                </Link>
+              );
+            })}
           </div>
         </Collapsible.Content>
       </Collapsible.Root>
@@ -65,8 +86,8 @@ const MobileNav = (props: { isLoggedIn: boolean }) => {
   );
 };
 
-const DesktopNav = (props: { isLoggedIn: boolean }) => {
-  const { isLoggedIn } = props;
+const DesktopNav = (props: { navOptions: NavOption[] }) => {
+  const { navOptions } = props;
   return (
     <nav className="flex h-[72px] flex-row items-center justify-between border-b bg-white shadow-lg">
       <div className="ml-8 w-[72px] flex-none">
@@ -81,17 +102,14 @@ const DesktopNav = (props: { isLoggedIn: boolean }) => {
       </div>
 
       <div className="mr-8 flex gap-8 gap-x-8">
-        <Link target="_blank" href={RoutePath.WEBSITE_URL}>
-          Visit Website
-        </Link>
-        <Link target="_blank" href={RoutePath.WEBSITE_FAQ_URL}>
-          Visit FAQ
-        </Link>
-        {isLoggedIn && (
-          <Link className="text-right" href={RoutePath.LOGOUT_PAGE}>
-            Logout
-          </Link>
-        )}
+        {navOptions.map((option) => {
+          const { label, href, target } = option;
+          return (
+            <Link key={label} target={target} href={href}>
+              {label}
+            </Link>
+          );
+        })}
       </div>
     </nav>
   );
@@ -100,14 +118,17 @@ const DesktopNav = (props: { isLoggedIn: boolean }) => {
 const HeaderItems = () => {
   const session = useSession();
   const { status } = session;
-  const isLoggedIn = status === "authenticated";
+  const isAuthenticated = status === "authenticated";
+  const navOptions: NavOption[] = isAuthenticated
+    ? [...WEBSITE_NAV_OPTIONS, ...AUTHENTICATED_OPTIONS]
+    : WEBSITE_NAV_OPTIONS;
   return (
     <div className="sticky top-0 z-10" id="bark-nav-bar">
       <div className="md:hidden">
-        <MobileNav isLoggedIn={isLoggedIn} />
+        <MobileNav navOptions={navOptions} />
       </div>
       <div className="hidden md:block">
-        <DesktopNav isLoggedIn={isLoggedIn} />
+        <DesktopNav navOptions={navOptions} />
       </div>
     </div>
   );

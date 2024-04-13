@@ -28,16 +28,18 @@ test:
 	npm run lint
 
 # Run playwright tests. show-report will run automatically if a test
-# fails.
+# fails. If you want to use more workers, specify pw_workers like this
+# "make pw_workers=4 test-ui".
+pw_workers=1
 .PHONY: test-ui
 test-ui: playwright-browsers
-	npx playwright test --project "Mobile Chrome" --project "chromium"
+	npx playwright test --workers $(pw_workers) --project "Mobile Chrome" --project "chromium"
 
-# Run playwright tests in headed mode, you will see flashes of
-# browser screens.
+# Like test-ui, but also adds --headed to run the tests in headed
+# mode, you will see flashes of browser screens.
 .PHONY: test-ui-headed
 test-ui-headed: playwright-browsers
-	npx playwright test --headed
+	npx playwright test --workers $(pw_workers) --project "Mobile Chrome" --project "chromium" --headed
 
 # Run playwright interactively
 .PHONY: run-playwright
