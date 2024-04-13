@@ -1,8 +1,9 @@
 import { test, expect, Page } from "@playwright/test";
-import { UI_URLS, UI_USER } from "./_ui_test_helpers";
+import { UI_USER, urlOf } from "./_ui_test_helpers";
+import { RoutePath } from "@/lib/route-path";
 
 test.beforeEach(async ({ page }) => {
-  await page.goto(UI_URLS.USER_LOGIN);
+  await page.goto(urlOf(RoutePath.USER_LOGIN_PAGE));
 });
 
 test.describe("user login page", () => {
@@ -18,12 +19,17 @@ test.describe("user login page", () => {
     await expect(
       page.getByRole("button").getByText("Send me an OTP"),
     ).toBeVisible();
-    await expect(page.getByRole("button").getByText("Cancel")).toBeVisible();
     await expect(page.getByRole("button").getByText("Login")).toBeVisible();
 
     // getByLabel selects input fields by associated label
     await expect(page.getByLabel("Please provide your email")).toBeEditable();
     await expect(page.getByLabel("Enter OTP")).toBeEditable();
+  });
+
+  test("it should have a link to user registration page", async ({ page }) => {
+    const link = page.getByRole("link", { name: "register" });
+    await expect(link).toBeVisible();
+    await expect(link).toHaveAttribute("href", RoutePath.USER_REGISTRATION);
   });
 });
 
@@ -59,14 +65,7 @@ test.describe("user login flow", () => {
     await expectVisible(`An OTP has been sent to ${UI_USER.USER_EMAIL}`, page);
     await fillOtp("000000", page);
     await clickLogin(page);
-    await expect(page).toHaveURL(UI_URLS.USER_MY_PETS);
-  });
-});
-
-test.describe("user cancel login flow", () => {
-  test("it brings user back to root", async ({ page }) => {
-    await clickCancel(page);
-    await expect(page).toHaveURL(UI_URLS.ROOT);
+    await expect(page).toHaveURL(urlOf(RoutePath.USER_MY_PETS));
   });
 });
 

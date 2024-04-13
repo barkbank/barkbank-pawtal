@@ -28,8 +28,12 @@ export default async function Layout(props: { children: React.ReactNode }) {
       iconLightSrc: IMG_PATH.SIDEBAR_KEY_LIGHT,
     },
     {
-      label: "Logout",
-      href: RoutePath.LOGOUT_PAGE,
+      label: "Criteria",
+      href: RoutePath.USER_CRITERIA,
+    },
+    {
+      label: "Process",
+      href: RoutePath.USER_PROCESS,
     },
   ];
   return (

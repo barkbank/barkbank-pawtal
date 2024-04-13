@@ -78,7 +78,7 @@ export function BarkFormInput(props: {
   label: string;
   type?: "text" | "password" | "number" | "email";
   placeholder?: string;
-  description?: string;
+  description?: string | React.ReactNode;
   children?: React.ReactNode;
 }) {
   const { form, name, label, type, placeholder, description, children } = props;

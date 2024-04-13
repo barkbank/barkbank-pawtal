@@ -2,15 +2,16 @@
 
 import Image from "next/image";
 import React from "react";
-import { CircleUser, MenuIcon, XIcon } from "lucide-react";
+import { MenuIcon, XIcon } from "lucide-react";
 import { RoutePath } from "@/lib/route-path";
 import Link from "next/link";
 import { IMG_PATH } from "@/lib/image-path";
 import { Button } from "@/components/ui/button";
 import * as Collapsible from "@radix-ui/react-collapsible";
-import { AccountType } from "@/lib/auth-models";
+import { useSession } from "next-auth/react";
 
-const MobileNav = ({ accountType }: { accountType?: AccountType }) => {
+const MobileNav = (props: { isLoggedIn: boolean }) => {
+  const { isLoggedIn } = props;
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (
@@ -26,7 +27,7 @@ const MobileNav = ({ accountType }: { accountType?: AccountType }) => {
             />
           </Link>
           <Collapsible.Trigger asChild>
-            <Button variant="outline" size="icon">
+            <Button variant="outline" size="icon" id="bark-nav-menu-button">
               {isOpen ? (
                 <XIcon className="h-4 w-4" />
               ) : (
@@ -38,30 +39,25 @@ const MobileNav = ({ accountType }: { accountType?: AccountType }) => {
 
         <Collapsible.Content>
           <div className="mx-4 my-2 flex flex-col gap-2">
-            <Link className="text-right" href={RoutePath.ROOT}>
-              Home
-            </Link>
-            <Link className="text-right" href={RoutePath.ABOUT_US}>
-              About Us
-            </Link>
-            <Link className="text-right" href={RoutePath.BE_A_DONOR}>
-              Be a Donor
-            </Link>
-            <Link className="text-right" href={RoutePath.ARTICLES}>
-              Articles
-            </Link>
-            <Link className="text-right" href={RoutePath.FAQ}>
-              FAQ
-            </Link>
-            <Link className="text-right" href={RoutePath.INFO}>
-              Info
+            <Link
+              className="text-right"
+              target="_blank"
+              href={RoutePath.WEBSITE_URL}
+            >
+              Visit Website
             </Link>
             <Link
-              className="flex flex-row-reverse"
-              href={RoutePath.ACCOUNT_DASHBOARD(accountType)}
+              className="text-right"
+              target="_blank"
+              href={RoutePath.WEBSITE_FAQ_URL}
             >
-              <CircleUser />
+              Visit FAQ
             </Link>
+            {isLoggedIn && (
+              <Link className="text-right" href={RoutePath.LOGOUT_PAGE}>
+                Logout
+              </Link>
+            )}
           </div>
         </Collapsible.Content>
       </Collapsible.Root>
@@ -69,7 +65,8 @@ const MobileNav = ({ accountType }: { accountType?: AccountType }) => {
   );
 };
 
-const DesktopNav = ({ accountType }: { accountType?: AccountType }) => {
+const DesktopNav = (props: { isLoggedIn: boolean }) => {
+  const { isLoggedIn } = props;
   return (
     <nav className="flex h-[72px] flex-row items-center justify-between border-b bg-white shadow-lg">
       <div className="ml-8 w-[72px] flex-none">
@@ -84,28 +81,33 @@ const DesktopNav = ({ accountType }: { accountType?: AccountType }) => {
       </div>
 
       <div className="mr-8 flex gap-8 gap-x-8">
-        <Link href={RoutePath.ROOT}>Home</Link>
-        <Link href={RoutePath.ABOUT_US}>About Us</Link>
-        <Link href={RoutePath.BE_A_DONOR}>Be a Donor</Link>
-        <Link href={RoutePath.ARTICLES}>Articles</Link>
-        <Link href={RoutePath.FAQ}>FAQ</Link>
-        <Link href={RoutePath.INFO}>Info</Link>
-        <Link href={RoutePath.ACCOUNT_DASHBOARD(accountType)}>
-          <CircleUser />
+        <Link target="_blank" href={RoutePath.WEBSITE_URL}>
+          Visit Website
         </Link>
+        <Link target="_blank" href={RoutePath.WEBSITE_FAQ_URL}>
+          Visit FAQ
+        </Link>
+        {isLoggedIn && (
+          <Link className="text-right" href={RoutePath.LOGOUT_PAGE}>
+            Logout
+          </Link>
+        )}
       </div>
     </nav>
   );
 };
 
-const HeaderItems = ({ accountType }: { accountType?: AccountType }) => {
+const HeaderItems = () => {
+  const session = useSession();
+  const { status } = session;
+  const isLoggedIn = status === "authenticated";
   return (
-    <div className="sticky top-0 z-10">
+    <div className="sticky top-0 z-10" id="bark-nav-bar">
       <div className="md:hidden">
-        <MobileNav />
+        <MobileNav isLoggedIn={isLoggedIn} />
       </div>
       <div className="hidden md:block">
-        <DesktopNav />
+        <DesktopNav isLoggedIn={isLoggedIn} />
       </div>
     </div>
   );
