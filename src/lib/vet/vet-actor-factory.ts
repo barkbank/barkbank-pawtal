@@ -1,31 +1,32 @@
 import { Pool } from "pg";
-import { EncryptionService } from "../services/encryption";
 import { VetActor, VetActorConfig } from "./vet-actor";
 import { dbSelectVetIdByEmail } from "../data/db-vets";
 import { LRUCache } from "lru-cache";
 
 export type VetActorFactoryConfig = {
   dbPool: Pool;
-  piiEncryptionService: EncryptionService;
 };
 
 export class VetActorFactory {
-  private config: VetActorFactoryConfig;
+  private factoryConfig: VetActorFactoryConfig;
+  private actorConfig: VetActorConfig;
   private idCache: LRUCache<string, string>;
 
-  constructor(config: VetActorFactoryConfig) {
-    this.config = config;
+  constructor(args: {
+    factoryConfig: VetActorFactoryConfig;
+    actorConfig: VetActorConfig;
+  }) {
+    this.factoryConfig = args.factoryConfig;
+    this.actorConfig = args.actorConfig;
     this.idCache = new LRUCache({ max: 10 });
   }
 
   public async getVetActor(vetEmail: string): Promise<VetActor | null> {
-    const { dbPool, piiEncryptionService } = this.config;
     const vetId = await this.getVetIdByEmail(vetEmail);
     if (vetId === null) {
       return null;
     }
-    const config: VetActorConfig = { dbPool, piiEncryptionService };
-    const actor = new VetActor(vetId, config);
+    const actor = new VetActor(vetId, this.actorConfig);
     return actor;
   }
 
@@ -34,7 +35,7 @@ export class VetActorFactory {
     if (cachedVetId !== undefined) {
       return cachedVetId;
     }
-    const { dbPool } = this.config;
+    const { dbPool } = this.factoryConfig;
     const vetId = await dbSelectVetIdByEmail(dbPool, vetEmail);
     if (vetId === null) {
       return null;

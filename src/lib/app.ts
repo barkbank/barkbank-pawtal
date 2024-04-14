@@ -22,7 +22,10 @@ import {
   OtpServiceImpl,
 } from "./services/otp";
 import pg from "pg";
-import { VetActorFactory } from "./vet/vet-actor-factory";
+import {
+  VetActorFactory,
+  VetActorFactoryConfig,
+} from "./vet/vet-actor-factory";
 import {
   UserActorFactory,
   UserActorFactoryConfig,
@@ -39,6 +42,7 @@ import {
   EmailOtpService,
   EmailOtpServiceConfig,
 } from "./services/email-otp-service";
+import { VetActorConfig } from "./vet/vet-actor";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -313,10 +317,9 @@ export class AppFactory {
           this.getDbPool(),
           this.getPiiEncryptionService(),
         ]);
-        const factory = new VetActorFactory({
-          dbPool,
-          piiEncryptionService,
-        });
+        const factoryConfig: VetActorFactoryConfig = { dbPool };
+        const actorConfig: VetActorConfig = { dbPool, piiEncryptionService };
+        const factory = new VetActorFactory({ factoryConfig, actorConfig });
         console.log("Created VetActorFactory");
         resolve(factory);
       });

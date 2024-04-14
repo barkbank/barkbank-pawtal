@@ -74,6 +74,7 @@ import {
   EmailOtpService,
   EmailOtpServiceConfig,
 } from "@/lib/services/email-otp-service";
+import { VetActorConfig } from "@/lib/vet/vet-actor";
 
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
@@ -313,12 +314,20 @@ export function userPii(idx: number): UserPii {
 export function getVetActorFactoryConfig(dbPool: Pool): VetActorFactoryConfig {
   return {
     dbPool,
+  };
+}
+
+export function getVetActorConfig(dbPool: Pool): VetActorConfig {
+  return {
+    dbPool,
     piiEncryptionService: getPiiEncryptionService(),
   };
 }
 
 export function getVetActorFactory(dbPool: Pool): VetActorFactory {
-  return new VetActorFactory(getVetActorFactoryConfig(dbPool));
+  const factoryConfig = getVetActorFactoryConfig(dbPool);
+  const actorConfig = getVetActorConfig(dbPool);
+  return new VetActorFactory({ factoryConfig, actorConfig });
 }
 
 export async function insertVet(idx: number, dbPool: Pool): Promise<Vet> {
