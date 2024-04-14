@@ -74,6 +74,8 @@ import {
   EmailOtpService,
   EmailOtpServiceConfig,
 } from "@/lib/services/email-otp-service";
+import { VetActor, VetActorConfig } from "@/lib/vet/vet-actor";
+import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
 
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
@@ -313,12 +315,27 @@ export function userPii(idx: number): UserPii {
 export function getVetActorFactoryConfig(dbPool: Pool): VetActorFactoryConfig {
   return {
     dbPool,
-    piiEncryptionService: getPiiEncryptionService(),
+  };
+}
+
+export function getVetActorConfig(dbPool: Pool): VetActorConfig {
+  return {
+    dbPool,
+    userMapper: getUserMapper(),
+    dogMapper: getDogMapper(),
+    textEncryptionService: getTextEncryptionService(),
   };
 }
 
 export function getVetActorFactory(dbPool: Pool): VetActorFactory {
-  return new VetActorFactory(getVetActorFactoryConfig(dbPool));
+  const factoryConfig = getVetActorFactoryConfig(dbPool);
+  const actorConfig = getVetActorConfig(dbPool);
+  return new VetActorFactory({ factoryConfig, actorConfig });
+}
+
+export function getVetActor(vetId: string, dbPool: Pool): VetActor {
+  const config = getVetActorConfig(dbPool);
+  return new VetActor(vetId, config);
 }
 
 export async function insertVet(idx: number, dbPool: Pool): Promise<Vet> {
@@ -350,6 +367,17 @@ function getDogBirthday(idx: number): Date {
   const m = 1 + (idx % 11);
   const d = 1 + (idx % 23);
   return BARK_UTC.getDate(y, m, d);
+}
+
+export function getEligibleDogSpecOverrides(): Partial<DogSpec> {
+  return {
+    dogBreed: "Great Elidog",
+    dogBirthday: new Date(Date.now() - 3 * 52 * MILLIS_PER_WEEK), // ~3 yrs old
+    dogGender: DOG_GENDER.FEMALE,
+    dogWeightKg: 25,
+    dogEverPregnant: YES_NO_UNKNOWN.NO,
+    dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
+  };
 }
 
 export async function insertDog(

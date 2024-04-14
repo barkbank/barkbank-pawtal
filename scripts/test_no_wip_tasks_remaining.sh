@@ -7,7 +7,7 @@ if [[ -z "$OUTPUT" ]]; then
 else
     echo "FAIL - The following WIP comments remain"
     echo
-    grep --color=always -R 'WIP' src tests db e2e
+    grep -n --color=always -R 'WIP' src tests db e2e
     echo
     exit 1
 fi
