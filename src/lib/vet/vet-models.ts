@@ -10,3 +10,10 @@ export type AvailableDog = {
   dogEverReceivedTransfusion: YesNoUnknown;
   dogEverPregnant: YesNoUnknown;
 };
+
+export type OwnerContactDetails = {
+  dogId: string;
+  userName: string;
+  userEmail: string;
+  userPhoneNumber: string;
+}
