@@ -3,7 +3,7 @@
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { IMG_PATH } from "@/lib/image-path";
 import { getMyLatestCall } from "@/lib/user/actions/get-my-latest-call";
 import { getMyAccount } from "@/lib/user/actions/get-my-account";
@@ -100,9 +100,6 @@ export default async function Page() {
         >
           Edit
         </Link>
-        <Button className="h-[60px]" variant={"brandInverse"}>
-          Delete
-        </Button>
       </div>
     </main>
   );
