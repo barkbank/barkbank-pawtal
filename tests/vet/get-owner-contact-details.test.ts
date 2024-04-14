@@ -42,6 +42,32 @@ describe("getOwnerContactDetails", () => {
       expect(result).toBeUndefined();
     });
   });
+  it("should return ERROR_UNAUTHORIZED when vet is a preferred vet of the owner BUT for another dog", async () => {
+    await withDb(async (dbPool) => {
+      // GIVEN vets v1 and v2
+      const v1 = await insertVet(1, dbPool);
+      const v2 = await insertVet(2, dbPool);
+
+      // AND user with two dogs d1 and d2
+      const u1 = await insertUser(1, dbPool);
+      const d1 = await insertDog(1, u1.userId, dbPool);
+      const d2 = await insertDog(2, u1.userId, dbPool);
+
+      // AND preferred vet for d1 is v1
+      await dbInsertDogVetPreference(dbPool, d1.dogId, v1.vetId);
+
+      // AND preferred vet for d2 is v2
+      await dbInsertDogVetPreference(dbPool, d2.dogId, v2.vetId);
+
+      // WHEN v1 requests for owner details of d2.
+      const actor = getVetActor(v1.vetId, dbPool);
+      const { result, error } = await getOwnerContactDetails(actor, d2.dogId);
+
+      // THEN
+      expect(error).toEqual("ERROR_UNAUTHORIZED");
+      expect(result).toBeUndefined();
+    });
+  });
   it("should return ERROR_NO_DOG when dogId matches no dog", async () => {
     await withDb(async (dbPool) => {
       // GIVEN
