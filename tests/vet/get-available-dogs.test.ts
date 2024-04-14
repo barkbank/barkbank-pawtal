@@ -1,6 +1,7 @@
 import { getAvailableDogs } from "@/lib/vet/actions/get-available-dogs";
 import { withDb } from "../_db_helpers";
 import {
+  getDogOii,
   getEligibleDogSpecOverrides,
   getVetActor,
   insertCall,
@@ -19,9 +20,27 @@ import {
   USER_RESIDENCY,
   YES_NO_UNKNOWN,
 } from "@/lib/data/db-enums";
+import { AvailableDog } from "@/lib/vet/vet-models";
+import { dbQuery } from "@/lib/data/db-utils";
 
 describe("getAvailableDogs", () => {
-  it("should return empty list when there are no available dogs", async () => {
+  it("should return available dog", async () => {
+    await withDb(async (dbPool) => {
+      // GIVEN
+      const { vetId } = await insertVet(1, dbPool);
+
+      // AND
+      const { availableDog } = await insertAvailableDog(vetId, 2, dbPool);
+
+      // WHEN
+      const actor = getVetActor(vetId, dbPool);
+      const dogs = await getAvailableDogs(actor);
+
+      // THEN
+      expect(dogs).toEqual([availableDog]);
+    });
+  });
+  it("should not return unavailable dogs", async () => {
     await withDb(async (dbPool) => {
       // GIVEN
       const { vetId } = await insertVet(1, dbPool);
@@ -43,6 +62,35 @@ describe("getAvailableDogs", () => {
     });
   });
 });
+
+async function insertAvailableDog(
+  vetId: string,
+  idx: number,
+  dbPool: Pool,
+): Promise<{ userId: string; dogId: string; availableDog: AvailableDog }> {
+  const { userId } = await insertUser(idx, dbPool);
+  const spec = getEligibleDogSpecOverrides();
+  const { dogId } = await insertDog(idx, userId, dbPool, spec);
+  await dbInsertDogVetPreference(dbPool, dogId, vetId);
+  const { dogName } = await getDogOii(idx);
+  const sql = `
+  select
+    user_id as "userId",
+    dog_id as "dogId",
+    $2 as "dogName",
+    dog_breed as "dogBreed",
+    dog_birthday as "dogBirthday",
+    dog_gender as "dogGender",
+    dog_weight_kg as "dogWeightKg",
+    dog_ever_received_transfusion as "dogEverReceivedTransfusion",
+    dog_ever_pregnant as "dogEverPregnant"
+  from dogs
+  where dog_id = $1
+  `;
+  const res = await dbQuery<AvailableDog>(dbPool, sql, [dogId, dogName]);
+  const availableDog = res.rows[0];
+  return { userId, dogId, availableDog };
+}
 
 async function insertDogWithNoVetPreference(
   idx: number,
