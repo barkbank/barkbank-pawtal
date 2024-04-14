@@ -92,7 +92,6 @@ async function insertAvailableDog(
   const { dogName } = await getDogOii(idx);
   const sql = `
   select
-    user_id as "userId",
     dog_id as "dogId",
     $2 as "dogName",
     dog_breed as "dogBreed",

@@ -25,7 +25,6 @@ export async function getAvailableDogs(
 }
 
 type Row = {
-  userId: string;
   dogId: string;
   dogEncryptedOii: string;
   dogBreed: string;
@@ -62,7 +61,6 @@ async function fetchRows(actor: VetActor): Promise<Row[]> {
   )
 
   SELECT
-    tDog.user_id as "userId",
     tDog.dog_id as "dogId",
     tDog.dog_encrypted_oii as "dogEncryptedOii",
     tDog.dog_breed as "dogBreed",
