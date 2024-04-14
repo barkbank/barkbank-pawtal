@@ -1,9 +1,6 @@
 import { DogGender, YesNoUnknown } from "../data/db-enums";
 
-/**
- * Dog that is available for scheduling.
- */
-type AvailableDog = {
+export type AvailableDog = {
   userId: string;
   dogId: string;
   dogName: string;
