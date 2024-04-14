@@ -57,6 +57,29 @@ describe("getAvailableDogs", () => {
       expect(dogs).toEqual([]);
     });
   });
+  it("should return available dog whose owner previously declined", async () => {
+    await withDb(async (dbPool) => {
+      // GIVEN
+      const { vetId } = await insertVet(1, dbPool);
+
+      // AND
+      const { availableDog, dogId } = await insertAvailableDog(
+        vetId,
+        2,
+        dbPool,
+      );
+
+      // AND
+      await insertCall(dbPool, dogId, vetId, CALL_OUTCOME.DECLINED);
+
+      // WHEN
+      const actor = getVetActor(vetId, dbPool);
+      const dogs = await getAvailableDogs(actor);
+
+      // THEN
+      expect(dogs).toEqual([availableDog]);
+    });
+  });
   it("should not return unavailable dogs", async () => {
     await withDb(async (dbPool) => {
       // GIVEN
