@@ -112,7 +112,7 @@ CREATE TABLE reports (
   ineligibility_expiry_time TIMESTAMP WITH TIME ZONE,
   dog_id BIGINT NOT NULL,
   vet_id BIGINT NOT NULL,
-  dog_did_donate_blood BOOLEAN,
+  dog_did_donate_blood BOOLEAN NOT NULL,
   CONSTRAINT reports_fk_calls FOREIGN KEY (call_id) REFERENCES calls (call_id) ON DELETE RESTRICT,
   CONSTRAINT reports_fk_dogs FOREIGN KEY (dog_id) REFERENCES dogs (dog_id) ON DELETE RESTRICT,
   CONSTRAINT reports_fk_vets FOREIGN KEY (vet_id) REFERENCES vets (vet_id) ON DELETE RESTRICT,
