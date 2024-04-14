@@ -27,7 +27,7 @@ export default async function Page({
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="m-10 flex flex-col">
       <BarkH2>Edit My Account Details</BarkH2>
       <AccountEditForm defaultValues={searchParams} />
     </div>
