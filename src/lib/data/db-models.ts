@@ -153,6 +153,7 @@ export type DbReportSpec = {
   visitTime: Date;
   dogWeightKg: number;
   dogBodyConditioningScore: number;
+  dogDidDonateBlood: boolean;
   dogHeartworm: PosNegNil;
   dogDea1Point1: PosNegNil;
   dogReportedIneligibility: ReportedIneligibility;

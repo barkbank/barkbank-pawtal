@@ -6,26 +6,27 @@ export async function dbInsertReport(
   reportSpec: DbReportSpec,
 ): Promise<DbReportGen> {
   const sql = `
-  insert into reports (
+  INSERT INTO reports (
     call_id,
     dog_id,
     vet_id,
     visit_time,
     dog_weight_kg,
     dog_body_conditioning_score,
+    dog_did_donate_blood,
     dog_heartworm,
     dog_dea1_point1,
     dog_reported_ineligibility,
     encrypted_ineligibility_reason,
     ineligibility_expiry_time
   )
-  values (
+  VALUES (
     $1,
     (SELECT dog_id FROM calls WHERE call_id = $1),
     (SELECT vet_id FROM calls WHERE call_id = $1),
-    $2, $3, $4, $5, $6, $7, $8, $9
+    $2, $3, $4, $5, $6, $7, $8, $9, $10
   )
-  returning
+  RETURNING
     report_id as "reportId",
     dog_id as "dogId",
     vet_id as "vetId",
@@ -37,6 +38,7 @@ export async function dbInsertReport(
     reportSpec.visitTime,
     reportSpec.dogWeightKg,
     reportSpec.dogBodyConditioningScore,
+    reportSpec.dogDidDonateBlood,
     reportSpec.dogHeartworm,
     reportSpec.dogDea1Point1,
     reportSpec.dogReportedIneligibility,

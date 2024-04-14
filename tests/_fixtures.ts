@@ -506,6 +506,7 @@ export function getDbReportSpec(
     visitTime: visitTime,
     dogWeightKg: 1,
     dogBodyConditioningScore: 1,
+    dogDidDonateBlood: false,
     dogHeartworm: POS_NEG_NIL.NIL,
     dogDea1Point1: POS_NEG_NIL.NIL,
     dogReportedIneligibility: REPORTED_INELIGIBILITY.NIL,
