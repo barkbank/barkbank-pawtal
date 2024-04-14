@@ -16,4 +16,5 @@ export type OwnerContactDetails = {
   userName: string;
   userEmail: string;
   userPhoneNumber: string;
+  userLastContactedTime: Date | null;
 };
