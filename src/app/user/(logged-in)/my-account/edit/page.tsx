@@ -27,8 +27,10 @@ export default async function Page({
   }
 
   return (
-    <div className="m-10 flex flex-col">
-      <BarkH2>Edit My Account Details</BarkH2>
+    <div className="my-5 ml-[60px] flex flex-col">
+      <BarkH2>
+        <span className="font-bold">Edit My Account Details</span>
+      </BarkH2>
       <AccountEditForm defaultValues={searchParams} />
     </div>
   );
