@@ -28,6 +28,12 @@ export default async function Layout(props: { children: React.ReactNode }) {
       iconLightSrc: IMG_PATH.SIDEBAR_KEY_LIGHT,
     },
     {
+      label: "Info",
+      href: RoutePath.USER_INFO,
+      iconSrc: IMG_PATH.SIDE_BAR_INFO,
+      iconLightSrc: IMG_PATH.SIDE_BAR_INFO_LIGHT,
+    },
+    {
       label: "Criteria",
       href: RoutePath.USER_CRITERIA,
     },
