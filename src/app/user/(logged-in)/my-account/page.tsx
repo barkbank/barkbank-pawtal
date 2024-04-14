@@ -88,7 +88,7 @@ export default async function Page() {
   ];
 
   return (
-    <main className="flex flex-col gap-6">
+    <main className="m-3 flex flex-col gap-6">
       <BarkH1>My Account Details</BarkH1>
 
       <div className="flex flex-col gap-2">

@@ -247,7 +247,7 @@ export default async function Page() {
   }
   const dogs = await getMyPets(actor);
   return (
-    <>
+    <div className="m-3">
       <div>
         {dogs.map((dog, idx, ary) => (
           <DogCard
@@ -261,6 +261,6 @@ export default async function Page() {
       <BarkButton className="mt-3 w-full" variant="brandInverse">
         Add Pet
       </BarkButton>
-    </>
+    </div>
   );
 }
