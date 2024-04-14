@@ -26,4 +26,11 @@ export class VetActor {
   public getVetId(): string {
     return this.vetId;
   }
+
+  public getParams(): VetActorConfig & { vetId: string } {
+    return {
+      vetId: this.vetId,
+      ...this.config,
+    };
+  }
 }
