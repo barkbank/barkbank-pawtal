@@ -1,14 +1,13 @@
 import { Pool } from "pg";
 import { EncryptionService } from "../services/encryption";
+import { UserMapper } from "../data/user-mapper";
+import { DogMapper } from "../data/dog-mapper";
 
 export type VetActorConfig = {
   dbPool: Pool;
-
-  /**
-   * Needed by vet when they want to decrypt user PII for the purposes of
-   * contacting them.
-   */
-  piiEncryptionService: EncryptionService;
+  userMapper: UserMapper;
+  dogMapper: DogMapper;
+  textEncryptionService: EncryptionService;
 };
 
 /**

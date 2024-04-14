@@ -313,12 +313,20 @@ export class AppFactory {
   public getVetActorFactory(): Promise<VetActorFactory> {
     if (this.promisedVetActorFactory === null) {
       this.promisedVetActorFactory = new Promise(async (resolve) => {
-        const [dbPool, piiEncryptionService] = await Promise.all([
-          this.getDbPool(),
-          this.getPiiEncryptionService(),
-        ]);
+        const [dbPool, userMapper, dogMapper, textEncryptionService] =
+          await Promise.all([
+            this.getDbPool(),
+            this.getUserMapper(),
+            this.getDogMapper(),
+            this.getTextEncryptionService(),
+          ]);
         const factoryConfig: VetActorFactoryConfig = { dbPool };
-        const actorConfig: VetActorConfig = { dbPool, piiEncryptionService };
+        const actorConfig: VetActorConfig = {
+          dbPool,
+          userMapper,
+          dogMapper,
+          textEncryptionService,
+        };
         const factory = new VetActorFactory({ factoryConfig, actorConfig });
         console.log("Created VetActorFactory");
         resolve(factory);

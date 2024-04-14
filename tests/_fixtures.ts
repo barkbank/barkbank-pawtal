@@ -320,7 +320,9 @@ export function getVetActorFactoryConfig(dbPool: Pool): VetActorFactoryConfig {
 export function getVetActorConfig(dbPool: Pool): VetActorConfig {
   return {
     dbPool,
-    piiEncryptionService: getPiiEncryptionService(),
+    userMapper: getUserMapper(),
+    dogMapper: getDogMapper(),
+    textEncryptionService: getTextEncryptionService(),
   };
 }
 
