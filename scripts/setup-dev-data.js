@@ -641,6 +641,24 @@ function createUiTestUserAccount() {
       });
     })
     .then((state) => {
+      const sql = `select vet_id as "vetId" from vets where vet_email = $1`;
+      return doQuery(sql, ["vet1@vet.com"]).then((res) => {
+        const { vetId } = res.rows[0];
+        return { ...state, vetId };
+      });
+    })
+    .then((state) => {
+      const { userId, vetId, dogs } = state;
+      const insertions = dogs.map((dog) => {
+        const { dogId } = dog;
+        const sql = `insert into dog_vet_preferences(user_id, vet_id, dog_id) values ($1, $2, $3)`;
+        return doQuery(sql, [userId, vetId, dogId]).then(() => {
+          console.log("Inserted preference", { dogId, vetId });
+        });
+      });
+      return Promise.all(insertions).then(() => state);
+    })
+    .then((state) => {
       console.log("Created test user:", state);
     });
 }
