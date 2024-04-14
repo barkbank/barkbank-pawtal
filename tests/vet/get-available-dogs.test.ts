@@ -40,6 +40,23 @@ describe("getAvailableDogs", () => {
       expect(dogs).toEqual([availableDog]);
     });
   });
+  it("should not return available dog that prefers another vet", async () => {
+    await withDb(async (dbPool) => {
+      // GIVEN
+      const { vetId } = await insertVet(1, dbPool);
+
+      // AND
+      const { vetId: otherVetId } = await insertVet(2, dbPool);
+      const { availableDog } = await insertAvailableDog(otherVetId, 2, dbPool);
+
+      // WHEN
+      const actor = getVetActor(vetId, dbPool);
+      const dogs = await getAvailableDogs(actor);
+
+      // THEN
+      expect(dogs).toEqual([]);
+    });
+  });
   it("should not return unavailable dogs", async () => {
     await withDb(async (dbPool) => {
       // GIVEN
