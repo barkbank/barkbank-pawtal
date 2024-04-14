@@ -1,7 +1,6 @@
 import { DogGender, YesNoUnknown } from "../data/db-enums";
 
 export type AvailableDog = {
-  userId: string;
   dogId: string;
   dogName: string;
   dogBreed: string;
@@ -10,4 +9,11 @@ export type AvailableDog = {
   dogWeightKg: number | null;
   dogEverReceivedTransfusion: YesNoUnknown;
   dogEverPregnant: YesNoUnknown;
+};
+
+export type OwnerContactDetails = {
+  dogId: string;
+  userName: string;
+  userEmail: string;
+  userPhoneNumber: string;
 };
