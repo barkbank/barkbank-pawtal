@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { updateAccountDetails } from "../_action/update-my-account-details";
 import { MyAccountDetailsUpdate } from "@/lib/user/user-models";
-import React, { DOMAttributes } from "react";
+import React from "react";
 
 const FORM_SCHEMA = z.object({
   userName: z.string().min(1, { message: "Name cannot be empty" }),
