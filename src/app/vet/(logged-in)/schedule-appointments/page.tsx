@@ -19,7 +19,7 @@ export default async function Page() {
   );
   return (
     <div>
-      Data: <pre>{JSON.stringify(data, null, 2)}</pre>
+      Data: <pre className="text-[6pt] md:text-base">{JSON.stringify(data, null, 2)}</pre>
     </div>
   );
 }
