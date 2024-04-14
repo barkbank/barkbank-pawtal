@@ -12,6 +12,7 @@ export default async function Page() {
       accountType={AccountType.ADMIN}
       successPath={RoutePath.ADMIN_DASHBOARD_PAGE}
       logoSrc={IMG_PATH.PURPLE_DOG_HOUSE}
+      noAccountErrorMessage="Admin account does not exist"
     />
   );
 }

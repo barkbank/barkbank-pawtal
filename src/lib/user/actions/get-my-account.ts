@@ -1,6 +1,7 @@
 import { UserActor } from "../user-actor";
 import { dbQuery } from "@/lib/data/db-utils";
 import { MyAccount } from "../user-models";
+import { UserResidency } from "@/lib/data/db-enums";
 
 export async function getMyAccount(
   actor: UserActor,
@@ -18,7 +19,13 @@ export async function getMyAccount(
   WHERE 
     user_id = $1
   `;
-  const res = await dbQuery(dbPool, sql, [userId]);
+  type Row = {
+    userCreationTime: Date;
+    userHashedEmail: string;
+    userEncryptedPii: string;
+    userResidency: UserResidency;
+  };
+  const res = await dbQuery<Row>(dbPool, sql, [userId]);
   if (res.rows.length === 0) {
     return null;
   }

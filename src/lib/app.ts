@@ -5,10 +5,9 @@ import {
 import { BreedService } from "./services/breed";
 import {
   EmailContact,
-  EmailSender,
   EmailService,
-  NodemailerEmailSender,
-  PassthroughEmailSender,
+  NodemailerEmailService,
+  PassthroughEmailService,
   SmtpConfig,
 } from "./services/email";
 import {
@@ -16,9 +15,17 @@ import {
   SecretEncryptionService,
 } from "./services/encryption";
 import { HashService, SecretHashService } from "./services/hash";
-import { OtpConfig, OtpService, OtpServiceImpl } from "./services/otp";
+import {
+  DevelopmentOtpService,
+  OtpConfig,
+  OtpService,
+  OtpServiceImpl,
+} from "./services/otp";
 import pg from "pg";
-import { VetActorFactory } from "./vet/vet-actor-factory";
+import {
+  VetActorFactory,
+  VetActorFactoryConfig,
+} from "./vet/vet-actor-factory";
 import {
   UserActorFactory,
   UserActorFactoryConfig,
@@ -31,6 +38,11 @@ import { DogMapper } from "./data/dog-mapper";
 import { RegistrationService } from "./services/registration";
 import { UserActorConfig } from "./user/user-actor";
 import { AdminActorConfig } from "./admin/admin-actor";
+import {
+  EmailOtpService,
+  EmailOtpServiceConfig,
+} from "./services/email-otp-service";
+import { VetActorConfig } from "./vet/vet-actor";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -40,6 +52,8 @@ export class AppFactory {
   private promisedPiiEncryptionService: Promise<EncryptionService> | null =
     null;
   private promisedOiiEncryptionService: Promise<EncryptionService> | null =
+    null;
+  private promisedTextEncryptionService: Promise<EncryptionService> | null =
     null;
   private promisedBreedService: Promise<BreedService> | null = null;
   private promisedDbPool: Promise<pg.Pool> | null = null;
@@ -51,6 +65,7 @@ export class AppFactory {
   private promisedDogMapper: Promise<DogMapper> | null = null;
   private promisedRegistrationService: Promise<RegistrationService> | null =
     null;
+  private promisedEmailOtpService: Promise<EmailOtpService> | null = null;
 
   constructor(envs: NodeJS.Dict<string>) {
     this.envs = envs;
@@ -81,46 +96,53 @@ export class AppFactory {
   }
 
   public getEmailService(): Promise<EmailService> {
-    const self = this;
-
-    function resolveEmailSender(): EmailSender {
-      if (self.envString(AppEnv.BARKBANK_SMTP_HOST) === "") {
-        console.log("Using PassthroughEmailSender");
-        return new PassthroughEmailSender();
-      }
-      const config: SmtpConfig = {
-        smtpHost: self.envString(AppEnv.BARKBANK_SMTP_HOST),
-        smtpPort: self.envInteger(AppEnv.BARKBANK_SMTP_PORT),
-        smtpUser: self.envString(AppEnv.BARKBANK_SMTP_USER),
-        smtpPassword: self.envString(AppEnv.BARKBANK_SMTP_PASSWORD),
-      };
-      console.log("Using NodemailerEmailSender");
-      return new NodemailerEmailSender(config);
-    }
-
     if (this.promisedEmailService === null) {
-      this.promisedEmailService = Promise.resolve(
-        new EmailService(resolveEmailSender()),
-      );
-      console.log("Created EmailService");
+      this.promisedEmailService = new Promise<EmailService>((resolve) => {
+        if (this.envString(AppEnv.BARKBANK_SMTP_HOST) === "") {
+          resolve(new PassthroughEmailService());
+          console.log("Created PassthroughEmailService as EmailService");
+          return;
+        }
+
+        const config: SmtpConfig = {
+          smtpHost: this.envString(AppEnv.BARKBANK_SMTP_HOST),
+          smtpPort: this.envInteger(AppEnv.BARKBANK_SMTP_PORT),
+          smtpUser: this.envString(AppEnv.BARKBANK_SMTP_USER),
+          smtpPassword: this.envString(AppEnv.BARKBANK_SMTP_PASSWORD),
+        };
+        resolve(new NodemailerEmailService(config));
+        console.log("Created NodemailerEmailService as EmailService");
+        return;
+      });
     }
     return this.promisedEmailService;
   }
 
   public getOtpService(): Promise<OtpService> {
     if (this.promisedOtpService === null) {
-      const config: OtpConfig = {
-        otpLength: 6,
-        otpPeriodMillis: this.envInteger(AppEnv.BARKBANK_OTP_PERIOD_MILLIS),
-        otpRecentPeriods: this.envInteger(
-          AppEnv.BARKBANK_OTP_NUM_RECENT_PERIODS,
-        ),
-        otpHashService: new SecretHashService(
-          this.envString(AppEnv.BARKBANK_OTP_SECRET),
-        ),
-      };
-      this.promisedOtpService = Promise.resolve(new OtpServiceImpl(config));
-      console.log("Created OtpService");
+      if (this.getNodeEnv() === "development") {
+        this.promisedOtpService = new Promise<OtpService>((resolve) => {
+          const service = new DevelopmentOtpService();
+          console.log("Created DevelopmentOtpService as OtpService");
+          resolve(service);
+        });
+      } else {
+        this.promisedOtpService = new Promise<OtpService>((resolve) => {
+          const config: OtpConfig = {
+            otpLength: 6,
+            otpPeriodMillis: this.envInteger(AppEnv.BARKBANK_OTP_PERIOD_MILLIS),
+            otpRecentPeriods: this.envInteger(
+              AppEnv.BARKBANK_OTP_NUM_RECENT_PERIODS,
+            ),
+            otpHashService: new SecretHashService(
+              this.envString(AppEnv.BARKBANK_OTP_SECRET),
+            ),
+          };
+          const service = new OtpServiceImpl(config);
+          console.log("Created OtpServiceImpl as OtpService");
+          resolve(service);
+        });
+      }
     }
     return this.promisedOtpService;
   }
@@ -130,6 +152,42 @@ export class AppFactory {
       email: this.envString(AppEnv.BARKBANK_OTP_SENDER_EMAIL),
       name: this.envOptionalString(AppEnv.BARKBANK_OTP_SENDER_NAME),
     });
+  }
+
+  public getEmailOtpService(): Promise<EmailOtpService> {
+    if (this.promisedEmailOtpService === null) {
+      this.promisedEmailOtpService = new Promise<EmailOtpService>(
+        async (resolve) => {
+          const [
+            otpService,
+            emailService,
+            sender,
+            userActorFactory,
+            vetActorFactory,
+            adminActorFactory,
+          ] = await Promise.all([
+            this.getOtpService(),
+            this.getEmailService(),
+            this.getSenderForOtpEmail(),
+            this.getUserActorFactory(),
+            this.getVetActorFactory(),
+            this.getAdminActorFactory(),
+          ]);
+          const config: EmailOtpServiceConfig = {
+            otpService,
+            emailService,
+            sender,
+            userActorFactory,
+            vetActorFactory,
+            adminActorFactory,
+          };
+          const service = new EmailOtpService(config);
+          resolve(service);
+          console.log("Created EmailOtpService");
+        },
+      );
+    }
+    return this.promisedEmailOtpService;
   }
 
   public getEmailHashService(): Promise<HashService> {
@@ -147,7 +205,7 @@ export class AppFactory {
       this.promisedPiiEncryptionService = Promise.resolve(
         new SecretEncryptionService(this.envString(AppEnv.BARKBANK_PII_SECRET)),
       );
-      console.log("Created PiiEncryptionService");
+      console.log("Created EncryptionService for PII");
     }
     return this.promisedPiiEncryptionService;
   }
@@ -157,9 +215,21 @@ export class AppFactory {
       this.promisedOiiEncryptionService = Promise.resolve(
         new SecretEncryptionService(this.envString(AppEnv.BARKBANK_OII_SECRET)),
       );
-      console.log("Created OiiEncryptionService");
+      console.log("Created EncryptionService for OII");
     }
     return this.promisedOiiEncryptionService;
+  }
+
+  private getTextEncryptionService(): Promise<EncryptionService> {
+    if (this.promisedTextEncryptionService === null) {
+      this.promisedTextEncryptionService = Promise.resolve(
+        new SecretEncryptionService(
+          this.envString(AppEnv.BARKBANK_TEXT_SECRET),
+        ),
+      );
+      console.log("Created EncryptionService for text");
+    }
+    return this.promisedTextEncryptionService;
   }
 
   public getBreedService(): Promise<BreedService> {
@@ -243,14 +313,21 @@ export class AppFactory {
   public getVetActorFactory(): Promise<VetActorFactory> {
     if (this.promisedVetActorFactory === null) {
       this.promisedVetActorFactory = new Promise(async (resolve) => {
-        const [dbPool, piiEncryptionService] = await Promise.all([
-          this.getDbPool(),
-          this.getPiiEncryptionService(),
-        ]);
-        const factory = new VetActorFactory({
+        const [dbPool, userMapper, dogMapper, textEncryptionService] =
+          await Promise.all([
+            this.getDbPool(),
+            this.getUserMapper(),
+            this.getDogMapper(),
+            this.getTextEncryptionService(),
+          ]);
+        const factoryConfig: VetActorFactoryConfig = { dbPool };
+        const actorConfig: VetActorConfig = {
           dbPool,
-          piiEncryptionService,
-        });
+          userMapper,
+          dogMapper,
+          textEncryptionService,
+        };
+        const factory = new VetActorFactory({ factoryConfig, actorConfig });
         console.log("Created VetActorFactory");
         resolve(factory);
       });
@@ -261,18 +338,29 @@ export class AppFactory {
   public getUserActorFactory(): Promise<UserActorFactory> {
     if (this.promisedUserActorFactory === null) {
       this.promisedUserActorFactory = new Promise(async (resolve) => {
-        const [dbPool, emailHashService, userMapper, dogMapper] =
-          await Promise.all([
-            this.getDbPool(),
-            this.getEmailHashService(),
-            this.getUserMapper(),
-            this.getDogMapper(),
-          ]);
+        const [
+          dbPool,
+          emailHashService,
+          userMapper,
+          dogMapper,
+          textEncryptionService,
+        ] = await Promise.all([
+          this.getDbPool(),
+          this.getEmailHashService(),
+          this.getUserMapper(),
+          this.getDogMapper(),
+          this.getTextEncryptionService(),
+        ]);
         const factoryConfig: UserActorFactoryConfig = {
           dbPool,
           emailHashService,
         };
-        const actorConfig: UserActorConfig = { dbPool, userMapper, dogMapper };
+        const actorConfig: UserActorConfig = {
+          dbPool,
+          userMapper,
+          dogMapper,
+          textEncryptionService,
+        };
         const factory = new UserActorFactory(factoryConfig, actorConfig);
         console.log("Created UserActorFactory");
         resolve(factory);

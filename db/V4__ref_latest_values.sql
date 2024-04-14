@@ -1,7 +1,12 @@
 CREATE VIEW latest_values AS (
     WITH
     mLatestReports as (
-        SELECT tReport.*
+        SELECT
+            tReport.dog_id,
+            tReport.dog_weight_kg,
+            tReport.dog_body_conditioning_score,
+            tReport.dog_reported_ineligibility,
+            tReport.ineligibility_expiry_time
         FROM (
             SELECT
                 dog_id,

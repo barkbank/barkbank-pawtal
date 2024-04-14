@@ -12,12 +12,14 @@ import {
   dbDeleteDogVetPreferences,
   dbInsertDogVetPreference,
 } from "@/lib/data/db-dogs";
+import { PARTICIPATION_STATUS } from "@/lib/data/db-enums";
 
 type Response =
   | "OK_UPDATED"
   | "ERROR_UNAUTHORIZED"
   | "ERROR_MISSING_DOG"
   | "ERROR_MISSING_REPORT"
+  | "ERROR_UNEXPECTED_NON_PARTICIPATION_REASON"
   | "FAILURE_DB_UPDATE";
 
 type Context = {
@@ -29,6 +31,10 @@ export async function updateMyDogDetails(
   actor: UserActor,
   update: MyDogDetailsUpdate,
 ): Promise<Response> {
+  const validUpdateCheck = checkValidUpdate(update);
+  if (validUpdateCheck !== "OK") {
+    return validUpdateCheck;
+  }
   const ctx: Context = { actor, update };
   const { dbPool } = actor.getParams();
   const conn = await dbPool.connect();
@@ -55,13 +61,26 @@ export async function updateMyDogDetails(
   }
 }
 
+function checkValidUpdate(
+  update: MyDogDetailsUpdate,
+): "OK" | "ERROR_UNEXPECTED_NON_PARTICIPATION_REASON" {
+  const { dogParticipationStatus, dogNonParticipationReason } = update;
+  if (
+    dogParticipationStatus === PARTICIPATION_STATUS.PARTICIPATING &&
+    dogNonParticipationReason !== ""
+  ) {
+    return "ERROR_UNEXPECTED_NON_PARTICIPATION_REASON";
+  }
+  return "OK";
+}
+
 async function checkOwnership(
   conn: PoolClient,
   ctx: Context,
 ): Promise<"OK" | "ERROR_MISSING_DOG" | "ERROR_UNAUTHORIZED"> {
   const { actor, update } = ctx;
   const sql = `SELECT user_id as "ownerUserId" FROM dogs WHERE dog_id = $1`;
-  const res = await dbQuery(conn, sql, [update.dogId]);
+  const res = await dbQuery<{ ownerUserId: string }>(conn, sql, [update.dogId]);
   if (res.rows.length === 0) {
     return "ERROR_MISSING_DOG";
   }
@@ -84,7 +103,7 @@ async function checkExistingReport(
   FROM reports
   WHERE dog_id = $1
   `;
-  const res = await dbQuery(conn, sql, [dogId]);
+  const res = await dbQuery<{ numReports: number }>(conn, sql, [dogId]);
   const { numReports } = res.rows[0];
   if (numReports === 0) {
     return "ERROR_MISSING_REPORT";
@@ -96,20 +115,19 @@ async function updateDogFields(
   conn: PoolClient,
   ctx: Context,
 ): Promise<"OK" | "FAILURE_DB_UPDATE"> {
-  const { actor, update } = ctx;
-  const { dogMapper } = actor.getParams();
+  const { update } = ctx;
   const {
     dogId,
-    dogName,
     dogWeightKg,
     dogEverPregnant,
     dogEverReceivedTransfusion,
     dogParticipationStatus,
     dogPauseExpiryTime,
   } = update;
-  const { dogEncryptedOii } = await dogMapper.mapDogOiiToDogSecureOii({
-    dogName,
-  });
+  const [dogEncryptedOii, dogEncryptedReason] = await Promise.all([
+    getDogEncryptedOii(ctx),
+    getDogEncryptedReason(ctx),
+  ]);
   const sql = `
   UPDATE dogs
   SET
@@ -118,7 +136,8 @@ async function updateDogFields(
     dog_ever_pregnant = $4,
     dog_ever_received_transfusion = $5,
     dog_participation_status = $6,
-    dog_pause_expiry_time = $7
+    dog_encrypted_reason = $7,
+    dog_pause_expiry_time = $8
   WHERE
     dog_id = $1
   RETURNING 1
@@ -130,6 +149,7 @@ async function updateDogFields(
     dogEverPregnant,
     dogEverReceivedTransfusion,
     dogParticipationStatus,
+    dogEncryptedReason,
     dogPauseExpiryTime,
   ]);
   if (res.rows.length !== 1) {
@@ -149,4 +169,30 @@ async function updateVetPreference(
     await dbInsertDogVetPreference(conn, dogId, vetId);
   }
   return "OK";
+}
+
+async function getDogEncryptedOii(ctx: Context): Promise<string> {
+  const { actor, update } = ctx;
+  const { dogMapper } = actor.getParams();
+  const { dogName } = update;
+  const { dogEncryptedOii } = await dogMapper.mapDogOiiToDogSecureOii({
+    dogName,
+  });
+  return dogEncryptedOii;
+}
+
+async function getDogEncryptedReason(ctx: Context): Promise<string> {
+  const { actor, update } = ctx;
+  const { textEncryptionService } = actor.getParams();
+  const { dogParticipationStatus, dogNonParticipationReason } = update;
+  if (dogParticipationStatus === PARTICIPATION_STATUS.PARTICIPATING) {
+    return "";
+  }
+  if (dogNonParticipationReason === "") {
+    return "";
+  }
+  const dogEncryptedReason = await textEncryptionService.getEncryptedData(
+    dogNonParticipationReason,
+  );
+  return dogEncryptedReason;
 }

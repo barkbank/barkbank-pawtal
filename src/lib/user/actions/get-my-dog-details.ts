@@ -1,6 +1,17 @@
 import { dbQuery } from "@/lib/data/db-utils";
 import { UserActor } from "../user-actor";
 import { MyDogDetails, MyDogReport } from "../user-models";
+import {
+  DogAntigenPresence,
+  DogGender,
+  MedicalStatus,
+  PARTICIPATION_STATUS,
+  ParticipationStatus,
+  ProfileStatus,
+  ServiceStatus,
+  YesNoUnknown,
+} from "@/lib/data/db-enums";
+import { StatusSet } from "@/lib/data/status-mapper";
 
 export async function getMyDogDetails(
   actor: UserActor,
@@ -64,8 +75,10 @@ export async function getMyDogDetails(
     COALESCE(tReport.dog_reports, json_build_array()) as "jsonDogReports",
     tStatus.participation_status as "dogParticipationStatus",
     tStatus.participation_pause_expiry_time as "dogPauseExpiryTime",
+    tDog.dog_encrypted_reason as "dogEncryptedReason",
     tPref.vet_id as "dogPreferredVetId",
 
+    -- For StatusSet
     tStatus.profile_status as "profileStatus",
     tStatus.medical_status as "medicalStatus",
     tStatus.service_status as "serviceStatus",
@@ -79,11 +92,39 @@ export async function getMyDogDetails(
   LEFT JOIN latest_values as tLatest on tDog.dog_id = tLatest.dog_id
   LEFT JOIN mPreferredVet as tPref on tDog.dog_id = tPref.dog_id
   `;
-  const res = await dbQuery(dbPool, sql, [dogId, userId]);
+  // TODO: if we fetch the reports in a separate query we can retrieve visitTime as a Date.
+  type ReportRow = {
+    reportId: string;
+    visitTime: string;
+    vetId: string;
+    vetName: string;
+  };
+  type Row = StatusSet & {
+    dogEncryptedOii: string;
+    dogBreed: string;
+    dogBirthday: Date;
+    dogGender: DogGender;
+    dogWeightKg: number | null;
+    dogDea1Point1: DogAntigenPresence;
+    dogEverPregnant: YesNoUnknown;
+    dogEverReceivedTransfusion: YesNoUnknown;
+    jsonDogReports: ReportRow[];
+    dogParticipationStatus: ParticipationStatus;
+    dogPauseExpiryTime: Date | null;
+    dogEncryptedReason: string;
+    dogPreferredVetId: string | null;
+  };
+  const res = await dbQuery<Row>(dbPool, sql, [dogId, userId]);
   if (res.rows.length === 0) {
     return null;
   }
-  const { dogEncryptedOii, jsonDogReports, ...otherFields } = res.rows[0];
+  const {
+    dogEncryptedOii,
+    jsonDogReports,
+    dogParticipationStatus,
+    dogEncryptedReason,
+    ...otherFields
+  } = res.rows[0];
   const { dogName } = await dogMapper.mapDogSecureOiiToDogOii({
     dogEncryptedOii,
   });
@@ -103,11 +144,35 @@ export async function getMyDogDetails(
       return report;
     },
   );
+  const dogNonParticipationReason = await getDogNonParticipationReason(actor, {
+    dogParticipationStatus,
+    dogEncryptedReason,
+  });
   const details: MyDogDetails = {
     dogId,
     dogName,
     dogReports,
+    dogParticipationStatus,
+    dogNonParticipationReason,
     ...otherFields,
   };
   return details;
+}
+
+async function getDogNonParticipationReason(
+  actor: UserActor,
+  args: {
+    dogParticipationStatus: ParticipationStatus;
+    dogEncryptedReason: string;
+  },
+): Promise<string> {
+  const { dogParticipationStatus, dogEncryptedReason } = args;
+  if (dogParticipationStatus === PARTICIPATION_STATUS.PARTICIPATING) {
+    return "";
+  }
+  if (dogEncryptedReason === "") {
+    return "";
+  }
+  const { textEncryptionService } = actor.getParams();
+  return textEncryptionService.getDecryptedData(dogEncryptedReason);
 }

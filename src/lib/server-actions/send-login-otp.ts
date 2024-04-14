@@ -1,25 +1,14 @@
 "use server";
 
 import APP from "@/lib/app";
-import { Email } from "@/lib/services/email";
+import { AccountType } from "../auth-models";
 
-export async function sendLoginOtp(emailAddress: string): Promise<void> {
-  console.log("Sending OTP to", emailAddress);
-  const emailService = await APP.getEmailService();
-  const otpService = await APP.getOtpService();
-  const otp = await otpService.getCurrentOtp(emailAddress);
-  const sender = await APP.getSenderForOtpEmail();
-  const email: Email = {
-    sender,
-    recipient: { email: emailAddress },
-    subject: "Bark Bank OTP",
-    bodyText: `Your Bark Bank OTP is ${otp}`,
-    bodyHtml: `<p>Your Bark Bank OTP is <b>${otp}</b></p>`,
-  };
-  const { result } = await emailService.sendEmail(email);
-  if (result) {
-    console.log("OTP email was sent to", emailAddress);
-  } else {
-    console.warn("Failed to send email");
-  }
+type ResponseCode = "OK" | "NO_ACCOUNT" | "SEND_FAILED";
+
+export async function sendLoginOtp(args: {
+  emailAddress: string;
+  accountType: AccountType | null;
+}): Promise<ResponseCode> {
+  const emailOtpService = await APP.getEmailOtpService();
+  return emailOtpService.sendOtp(args);
 }

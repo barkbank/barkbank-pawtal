@@ -22,6 +22,15 @@ export interface OtpService {
   getRecentOtps(value: string): Promise<string[]>;
 }
 
+export class DevelopmentOtpService implements OtpService {
+  public async getCurrentOtp(value: string): Promise<string> {
+    return "000000";
+  }
+  public async getRecentOtps(value: string): Promise<string[]> {
+    return ["000000"];
+  }
+}
+
 export class OtpServiceImpl implements OtpService {
   private config: OtpConfig;
   private otpModulus: number;

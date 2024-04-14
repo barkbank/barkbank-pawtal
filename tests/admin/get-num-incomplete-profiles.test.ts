@@ -71,7 +71,7 @@ async function insertIncompleteProfile(
     dogBirthday: parseDateTime("2020-03-03", UTC_DATE_OPTION),
     dogWeightKg: null,
     dogBreed: "",
-    dogEverPregnant: YES_NO_UNKNOWN.UNKNOWN,
+    dogEverPregnant: YES_NO_UNKNOWN.NO,
     dogEverReceivedTransfusion: YES_NO_UNKNOWN.UNKNOWN,
   });
   await setDogCreationTime(idx, dogId, dbPool);

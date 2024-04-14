@@ -1,15 +1,13 @@
 import { Pool } from "pg";
 import { EncryptionService } from "../services/encryption";
-import { Vet } from "../data/db-models";
+import { UserMapper } from "../data/user-mapper";
+import { DogMapper } from "../data/dog-mapper";
 
 export type VetActorConfig = {
   dbPool: Pool;
-
-  /**
-   * Needed by vet when they want to decrypt user PII for the purposes of
-   * contacting them.
-   */
-  piiEncryptionService: EncryptionService;
+  userMapper: UserMapper;
+  dogMapper: DogMapper;
+  textEncryptionService: EncryptionService;
 };
 
 /**
@@ -26,5 +24,12 @@ export class VetActor {
 
   public getVetId(): string {
     return this.vetId;
+  }
+
+  public getParams(): VetActorConfig & { vetId: string } {
+    return {
+      vetId: this.vetId,
+      ...this.config,
+    };
   }
 }

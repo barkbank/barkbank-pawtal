@@ -62,6 +62,9 @@ CREATE TABLE dogs (
     OR (dog_participation_status = 'PAUSED' AND dog_pause_expiry_time IS NOT NULL)
     OR (dog_participation_status = 'OPTED_OUT' AND dog_pause_expiry_time IS NULL)
   ),
+  CONSTRAINT dog_pregnancy_check CHECK (
+    (dog_gender <> 'MALE' OR dog_ever_pregnant = 'NO')
+  ),
   CONSTRAINT dogs_fk_users FOREIGN KEY (user_id) REFERENCES users (user_id) ON DELETE SET NULL,
   CONSTRAINT dogs_pk PRIMARY KEY (dog_id)
 );
@@ -109,6 +112,7 @@ CREATE TABLE reports (
   ineligibility_expiry_time TIMESTAMP WITH TIME ZONE,
   dog_id BIGINT NOT NULL,
   vet_id BIGINT NOT NULL,
+  dog_did_donate_blood BOOLEAN NOT NULL,
   CONSTRAINT reports_fk_calls FOREIGN KEY (call_id) REFERENCES calls (call_id) ON DELETE RESTRICT,
   CONSTRAINT reports_fk_dogs FOREIGN KEY (dog_id) REFERENCES dogs (dog_id) ON DELETE RESTRICT,
   CONSTRAINT reports_fk_vets FOREIGN KEY (vet_id) REFERENCES vets (vet_id) ON DELETE RESTRICT,

@@ -9,7 +9,6 @@ export async function getMyLatestCall(
 
   const sql = `
   SELECT
-    tUser.user_id as "userId",
     MAX(tCall.call_creation_time) as "userLastContactedTime"
   FROM
     users as tUser
@@ -20,15 +19,9 @@ export async function getMyLatestCall(
   GROUP BY tUser.user_id
   `;
 
-  const res = await dbQuery(dbPool, sql, [userId]);
-
+  const res = await dbQuery<MyLastContactedTime>(dbPool, sql, [userId]);
   if (res.rows.length === 0) {
     return null;
   }
-
-  const { userLastContactedTime } = res.rows[0];
-
-  return {
-    userLastContactedTime,
-  };
+  return res.rows[0];
 }

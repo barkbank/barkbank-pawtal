@@ -4,9 +4,6 @@ import { isLoggedIn } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { BarkH1, BarkH2 } from "@/components/bark/bark-typography";
 import BarkLoginForm from "./bark-login-form";
-import { BarkNavRoute } from "../bark-nav";
-import { RoutePath } from "@/lib/route-path";
-import Link from "next/link";
 import Image from "next/image";
 import { AccountType } from "@/lib/auth-models";
 
@@ -15,8 +12,17 @@ export default async function BarkLoginPage(props: {
   accountType: AccountType;
   successPath: string;
   logoSrc: string;
+  noAccountErrorMessage: string | React.ReactNode;
+  emailDescription?: string | React.ReactNode;
 }) {
-  const { title, accountType, successPath, logoSrc } = props;
+  const {
+    title,
+    accountType,
+    successPath,
+    logoSrc,
+    noAccountErrorMessage,
+    emailDescription,
+  } = props;
   if (await isLoggedIn(accountType)) {
     redirect(successPath);
   }
@@ -35,9 +41,14 @@ export default async function BarkLoginPage(props: {
             <BarkH1>Bark Bank Canine Blood Donation Pawtal</BarkH1>
           </div>
         </div>
-        <div className="mx-auto max-w-[1100px] sm:w-[36rem] sm:px-6 sm:py-10 md:w-full ">
+        <div className="w-full max-w-[1000px] px-3">
           <BarkH2>{title}</BarkH2>
-          <BarkLoginForm accountType={accountType} successPath={successPath} />
+          <BarkLoginForm
+            accountType={accountType}
+            successPath={successPath}
+            noAccountErrorMessage={noAccountErrorMessage}
+            emailDescription={emailDescription}
+          />
         </div>
       </div>
     </>

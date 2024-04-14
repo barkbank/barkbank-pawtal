@@ -64,12 +64,19 @@ export class UserMapper {
     return userPii;
   }
 
+  // TODO: It should be possible to change all usage of this to mapUserEncryptedPiiToUserPii
   public async mapUserSecurePiiToUserPii(
     userSecurePii: UserSecurePii,
   ): Promise<UserPii> {
-    const jsonEncoded = await this.piiEncryptionService.getDecryptedData(
-      userSecurePii.userEncryptedPii,
-    );
+    return this.mapUserEncryptedPiiToUserPii(userSecurePii);
+  }
+
+  public async mapUserEncryptedPiiToUserPii(args: {
+    userEncryptedPii: string;
+  }): Promise<UserPii> {
+    const { userEncryptedPii } = args;
+    const jsonEncoded =
+      await this.piiEncryptionService.getDecryptedData(userEncryptedPii);
     const obj = JSON.parse(jsonEncoded) as UserPii;
     return this.toUserPii(obj);
   }

@@ -47,6 +47,7 @@ BARKBANK_OTP_NUM_RECENT_PERIODS=8
 BARKBANK_OTP_SECRET="secret-for-otp-generation"
 BARKBANK_PII_SECRET="secret-for-pii-privacy"
 BARKBANK_OII_SECRET="secret-for-oii-privacy"
+BARKBANK_TEXT_SECRET="secret-for-text-privacy"
 BARKBANK_DB_HOST=localhost
 BARKBANK_DB_PORT=5800
 BARKBANK_DB_NAME=devdb
@@ -68,7 +69,7 @@ Keep this terminal window handy. In the local deployment configured above, OTP e
 Run `make local-accounts` to create the following accounts in the local deployment:
 
 - Admin Accounts: admin1@admin.com, admin2@admin.com, admin3@admin.com
-- User Accounts: user1@user.com, user2@user.com, user3@user.com, ... (99 users)
+- User Accounts: user1@user.com, user2@user.com, user3@user.com, ... (9 users)
 - Vet Accounts: vet1@vet.com, vet2@vet.com, vet3@vet.com
 
 The number of dogs created for a user is that user's index modulo 5.

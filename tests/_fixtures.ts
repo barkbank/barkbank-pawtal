@@ -35,10 +35,17 @@ import {
   HarnessHashService,
   HarnessEncryptionService,
   HarnessOtpService,
+  HarnessEmailService,
 } from "./_harness";
-import { AdminActorFactoryConfig } from "@/lib/admin/admin-actor-factory";
+import {
+  AdminActorFactory,
+  AdminActorFactoryConfig,
+} from "@/lib/admin/admin-actor-factory";
 import { dbInsertUser, dbSelectUser } from "@/lib/data/db-users";
-import { VetActorFactoryConfig } from "@/lib/vet/vet-actor-factory";
+import {
+  VetActorFactory,
+  VetActorFactoryConfig,
+} from "@/lib/vet/vet-actor-factory";
 import { dbInsertVet, dbSelectVet } from "@/lib/data/db-vets";
 import { HashService } from "@/lib/services/hash";
 import { EncryptionService } from "@/lib/services/encryption";
@@ -51,7 +58,10 @@ import { DbContext } from "@/lib/data/db-utils";
 import { dbInsertDog } from "@/lib/data/db-dogs";
 import { OtpService } from "@/lib/services/otp";
 import { UserActor, UserActorConfig } from "@/lib/user/user-actor";
-import { UserActorFactoryConfig } from "@/lib/user/user-actor-factory";
+import {
+  UserActorFactory,
+  UserActorFactoryConfig,
+} from "@/lib/user/user-actor-factory";
 import {
   CallOutcome,
   POS_NEG_NIL,
@@ -59,6 +69,13 @@ import {
 } from "@/lib/data/db-enums";
 import { dbInsertReport } from "@/lib/data/db-reports";
 import { dbInsertCall } from "@/lib/data/db-calls";
+import { EmailService } from "@/lib/services/email";
+import {
+  EmailOtpService,
+  EmailOtpServiceConfig,
+} from "@/lib/services/email-otp-service";
+import { VetActor, VetActorConfig } from "@/lib/vet/vet-actor";
+import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
 
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
@@ -80,13 +97,44 @@ export function getOiiEncryptionService(): EncryptionService {
   return new HarnessEncryptionService("oii-secret");
 }
 
-export function getGeneralEncryptionService(): EncryptionService {
+export function getTextEncryptionService(): EncryptionService {
   // For reasons and notes
-  return new HarnessEncryptionService("general");
+  return new HarnessEncryptionService("text-secret");
+}
+
+export async function getEncryptedText(text: string): Promise<string> {
+  return getTextEncryptionService().getEncryptedData(text);
+}
+
+export async function getDecryptedText(encryptedText: string): Promise<string> {
+  return getTextEncryptionService().getDecryptedData(encryptedText);
 }
 
 export function getOtpService(): OtpService {
   return new HarnessOtpService();
+}
+
+export function getEmailService(): EmailService {
+  return new HarnessEmailService();
+}
+
+export function getEmailOtpService(
+  dbPool: Pool,
+  configOverrides?: Partial<EmailOtpServiceConfig>,
+): EmailOtpService {
+  const base: EmailOtpServiceConfig = {
+    otpService: getOtpService(),
+    emailService: getEmailService(),
+    sender: {
+      email: "otp@test.com",
+      name: "OTP Test",
+    },
+    userActorFactory: getUserActorFactory(dbPool),
+    vetActorFactory: getVetActorFactory(dbPool),
+    adminActorFactory: getAdminActorFactory(dbPool),
+  };
+  const config = { ...base, ...configOverrides };
+  return new EmailOtpService(config);
 }
 
 export function getAdminMapper(): AdminMapper {
@@ -122,6 +170,7 @@ export function getUserActorConfig(dbPool: Pool): UserActorConfig {
     dbPool,
     userMapper: getUserMapper(),
     dogMapper: getDogMapper(),
+    textEncryptionService: getTextEncryptionService(),
   };
 }
 
@@ -132,6 +181,13 @@ export function getUserActorFactoryConfig(
     dbPool,
     emailHashService: getEmailHashService(),
   };
+}
+
+export function getUserActorFactory(dbPool: Pool) {
+  return new UserActorFactory(
+    getUserActorFactoryConfig(dbPool),
+    getUserActorConfig(dbPool),
+  );
 }
 
 export function getAdminActorFactoryConfig(
@@ -155,6 +211,13 @@ export function getAdminActorConfig(db: Pool): AdminActorConfig {
     userMapper: getUserMapper(),
     dogMapper: getDogMapper(),
   };
+}
+
+export function getAdminActorFactory(dbPool: Pool) {
+  return new AdminActorFactory(
+    getAdminActorFactoryConfig(dbPool),
+    getAdminActorConfig(dbPool),
+  );
 }
 
 export function getAdminActor(dbPool: Pool, adminId: string): AdminActor {
@@ -252,8 +315,27 @@ export function userPii(idx: number): UserPii {
 export function getVetActorFactoryConfig(dbPool: Pool): VetActorFactoryConfig {
   return {
     dbPool,
-    piiEncryptionService: getPiiEncryptionService(),
   };
+}
+
+export function getVetActorConfig(dbPool: Pool): VetActorConfig {
+  return {
+    dbPool,
+    userMapper: getUserMapper(),
+    dogMapper: getDogMapper(),
+    textEncryptionService: getTextEncryptionService(),
+  };
+}
+
+export function getVetActorFactory(dbPool: Pool): VetActorFactory {
+  const factoryConfig = getVetActorFactoryConfig(dbPool);
+  const actorConfig = getVetActorConfig(dbPool);
+  return new VetActorFactory({ factoryConfig, actorConfig });
+}
+
+export function getVetActor(vetId: string, dbPool: Pool): VetActor {
+  const config = getVetActorConfig(dbPool);
+  return new VetActor(vetId, config);
 }
 
 export async function insertVet(idx: number, dbPool: Pool): Promise<Vet> {
@@ -285,6 +367,17 @@ function getDogBirthday(idx: number): Date {
   const m = 1 + (idx % 11);
   const d = 1 + (idx % 23);
   return BARK_UTC.getDate(y, m, d);
+}
+
+export function getEligibleDogSpecOverrides(): Partial<DogSpec> {
+  return {
+    dogBreed: "Great Elidog",
+    dogBirthday: new Date(Date.now() - 3 * 52 * MILLIS_PER_WEEK), // ~3 yrs old
+    dogGender: DOG_GENDER.FEMALE,
+    dogWeightKg: 25,
+    dogEverPregnant: YES_NO_UNKNOWN.NO,
+    dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
+  };
 }
 
 export async function insertDog(
@@ -379,7 +472,7 @@ export async function insertCall(
   const encryptedOptOutReason =
     optOutReason === undefined
       ? ""
-      : await getGeneralEncryptionService().getEncryptedData(optOutReason);
+      : await getTextEncryptionService().getEncryptedData(optOutReason);
   const spec: DbCallSpec = {
     dogId,
     vetId,
@@ -413,6 +506,7 @@ export function getDbReportSpec(
     visitTime: visitTime,
     dogWeightKg: 1,
     dogBodyConditioningScore: 1,
+    dogDidDonateBlood: false,
     dogHeartworm: POS_NEG_NIL.NIL,
     dogDea1Point1: POS_NEG_NIL.NIL,
     dogReportedIneligibility: REPORTED_INELIGIBILITY.NIL,
