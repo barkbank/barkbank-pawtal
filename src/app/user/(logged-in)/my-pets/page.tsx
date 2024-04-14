@@ -247,20 +247,18 @@ export default async function Page() {
   }
   const dogs = await getMyPets(actor);
   return (
-    <>
-      <div>
-        {dogs.map((dog, idx, ary) => (
-          <DogCard
-            key={dog.dogId}
-            dog={dog}
-            cardIdx={idx}
-            isLastCard={idx === ary.length - 1}
-          />
-        ))}
-      </div>
+    <div className="m-3">
+      {dogs.map((dog, idx, ary) => (
+        <DogCard
+          key={dog.dogId}
+          dog={dog}
+          cardIdx={idx}
+          isLastCard={idx === ary.length - 1}
+        />
+      ))}
       <BarkButton className="mt-3 w-full" variant="brandInverse">
         Add Pet
       </BarkButton>
-    </>
+    </div>
   );
 }
