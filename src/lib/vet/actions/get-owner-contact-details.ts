@@ -36,23 +36,43 @@ type Context = {
 };
 
 type Row = {
-  userEncryptedPii: string;
   isPreferredVet: boolean;
+  userEncryptedPii: string;
+  vetUserLastContactedTime: Date | null;
 };
 
 async function fetchRow(ctx: Context): Promise<Row | null> {
   const { actor, dogId } = ctx;
   const { dbPool, vetId } = actor.getParams();
   const sql = `
+  WITH
+  mVetLatestCall as (
+    -- This is the latest call to the user regardless of dog
+    SELECT
+      tDog.user_id,
+      MAX(tCall.call_creation_time) as max_call_creation_time
+    FROM calls as tCall
+    LEFT JOIN dogs as tDog on tCall.dog_id = tDog.dog_id
+    WHERE tCall.vet_id = $2
+    AND tDog.user_id IN (
+      SELECT user_id
+      FROM dogs
+      WHERE dog_id = $1
+    )
+    GROUP BY tDog.user_id
+  )
+
   SELECT
-    tUser.user_encrypted_pii as "userEncryptedPii",
     $2 IN (
       SELECT vet_id
       FROM dog_vet_preferences
       WHERE dog_id = $1
-    ) as "isPreferredVet"
+    ) as "isPreferredVet",
+    tUser.user_encrypted_pii as "userEncryptedPii",
+    tCall.max_call_creation_time as "vetUserLastContactedTime"
   FROM dogs as tDog
   LEFT JOIN users as tUser on tDog.user_id = tUser.user_id
+  LEFT JOIN mVetLatestCall as tCall on tDog.user_id = tCall.user_id
   WHERE dog_id = $1
   `;
   const res = await dbQuery<Row>(dbPool, sql, [dogId, vetId]);
@@ -65,7 +85,7 @@ async function toOwnerContactDetails(
 ): Promise<OwnerContactDetails> {
   const { actor, dogId } = ctx;
   const { userMapper } = actor.getParams();
-  const { userEncryptedPii } = row;
+  const { isPreferredVet, userEncryptedPii, ...otherFields } = row;
   const { userName, userEmail, userPhoneNumber } =
     await userMapper.mapUserEncryptedPiiToUserPii({ userEncryptedPii });
   return {
@@ -73,5 +93,6 @@ async function toOwnerContactDetails(
     userName,
     userEmail,
     userPhoneNumber,
+    ...otherFields,
   };
 }
