@@ -108,6 +108,21 @@ export async function dbInsertDogVetPreference(
   return res.rows.length === 1;
 }
 
+export async function dbDeleteDogVetPreference(
+  ctx: DbContext,
+  dogId: string,
+  vetId: string,
+): Promise<boolean> {
+  const sql = `
+  DELETE FROM dog_vet_preferences
+  WHERE dog_id = $1
+  AND vet_id = $2
+  RETURNING 1
+  `;
+  const res = await dbQuery(ctx, sql, [dogId, vetId]);
+  return res.rows.length === 1;
+}
+
 export async function dbDeleteDogVetPreferences(
   ctx: DbContext,
   dogId: string,

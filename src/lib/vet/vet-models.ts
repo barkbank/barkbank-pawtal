@@ -16,5 +16,9 @@ export type OwnerContactDetails = {
   userName: string;
   userEmail: string;
   userPhoneNumber: string;
-  userLastContactedTime: Date | null;
+
+  /**
+   * The last time the vet contacted the user.
+   */
+  vetUserLastContactedTime: Date | null;
 };
