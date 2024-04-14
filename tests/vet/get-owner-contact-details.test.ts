@@ -42,6 +42,21 @@ describe("getOwnerContactDetails", () => {
       expect(result).toBeUndefined();
     });
   });
+  it("should return ERROR_NO_DOG when dogId matches no dog", async () => {
+    await withDb(async (dbPool) => {
+      // GIVEN
+      const { vetId } = await insertVet(1, dbPool);
+      const dogId = "99999"; // no such dog
+
+      // WHEN
+      const actor = getVetActor(vetId, dbPool);
+      const { result, error } = await getOwnerContactDetails(actor, dogId);
+
+      // THEN
+      expect(error).toEqual("ERROR_NO_DOG");
+      expect(result).toBeUndefined();
+    });
+  });
 });
 
 async function insertOwner(
