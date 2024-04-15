@@ -56,8 +56,7 @@ async function fetchRows(actor: VetActor): Promise<Row[]> {
   mDogsPendingReports as (
     SELECT dog_id
     FROM calls
-    WHERE call_id NOT IN (SELECT call_id FROM reports)
-    AND call_outcome = 'APPOINTMENT'
+    WHERE call_outcome = 'APPOINTMENT'
     GROUP BY dog_id
   )
 
