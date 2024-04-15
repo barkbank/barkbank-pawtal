@@ -28,17 +28,12 @@ export async function getMyDogDetails(
   ),
   mNumPendingReports as (
     SELECT
-      tDog.dog_id,
+      dog_id,
       COUNT(1) as num_pending_reports
-    FROM mUserDog as tDog
-    LEFT JOIN calls as tCall on (
-      tDog.dog_id = tCall.dog_id
-      AND tCall.call_outcome = 'APPOINTMENT'
-    )
-    LEFT JOIN reports as tReport on tCall.call_id = tReport.call_id
-    WHERE tCall.call_id IS NOT NULL
-    AND tReport.report_id IS NULL
-    GROUP BY tDog.dog_id
+    FROM calls
+    WHERE call_outcome = 'APPOINTMENT'
+    AND dog_id = $1
+    GROUP BY dog_id
   ),
   mReports as (
     SELECT
@@ -87,7 +82,7 @@ export async function getMyDogDetails(
 
   FROM mUserDog as tDog
   LEFT JOIN dog_statuses as tStatus on tDog.dog_id = tStatus.dog_id
-  LEFT JOIN mNumPendingReports as tPending on tDog.dog_id = tPending.num_pending_reports
+  LEFT JOIN mNumPendingReports as tPending on tDog.dog_id = tPending.dog_id
   LEFT JOIN mReports as tReport on tDog.dog_id = tReport.dog_id
   LEFT JOIN latest_values as tLatest on tDog.dog_id = tLatest.dog_id
   LEFT JOIN mPreferredVet as tPref on tDog.dog_id = tPref.dog_id
