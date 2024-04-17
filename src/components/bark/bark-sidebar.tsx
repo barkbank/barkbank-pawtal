@@ -16,11 +16,6 @@ export type BarkSidebarRoute = {
 function SideOption(props: { route: BarkSidebarRoute; currentPath: string }) {
   const { route, currentPath } = props;
   const isActive = currentPath.startsWith(route.href);
-  console.log({
-    routeHref: route.href,
-    currentPath,
-    isActive,
-  });
   const iconSrc = (() => {
     if (isActive) {
       return route.iconSrc || IMG_PATH.SIDEBAR_SQUARE;
