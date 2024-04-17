@@ -18,6 +18,7 @@ import {
   parseDateTime,
 } from "@/lib/utilities/bark-time";
 import { getAgeMonths } from "@/lib/utilities/bark-age";
+import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
 
 describe("latest_values", () => {
   const USER_IDX = 84;
@@ -304,6 +305,38 @@ describe("latest_values", () => {
         );
         expect(expectedMonths).toEqual(2 * 12 + 3);
         expect(res.rows[0].latest_dog_age_months).toEqual(expectedMonths);
+      });
+    });
+  });
+  describe("latest_blood_donation_time", () => {
+    it("should be NULL when there is no record of a blood donation", async () => {
+      await withDb(async (dbPool) => {
+        const { dogId, vetId } = await initDog(dbPool);
+        const res = await dbQuery(
+          dbPool,
+          `SELECT latest_blood_donation_time FROM latest_values WHERE dog_id = $1`,
+          [dogId],
+        );
+        expect(res.rows[0].latest_blood_donation_time).toBeNull();
+      });
+    });
+    it("should be latest time a blood donation was done", async () => {
+      await withDb(async (dbPool) => {
+        const { dogId, vetId } = await initDog(dbPool);
+        const twoYearsAgo = new Date(Date.now() - 2 * 52 * MILLIS_PER_WEEK);
+        const oneYearAgo = new Date(Date.now() - 1 * 52 * MILLIS_PER_WEEK);
+        await addReport(dbPool, dogId, vetId, {
+          reportSpec: { visitTime: twoYearsAgo, dogDidDonateBlood: true },
+        });
+        await addReport(dbPool, dogId, vetId, {
+          reportSpec: { visitTime: oneYearAgo, dogDidDonateBlood: true },
+        });
+        const res = await dbQuery(
+          dbPool,
+          `SELECT latest_blood_donation_time FROM latest_values WHERE dog_id = $1`,
+          [dogId],
+        );
+        expect(res.rows[0].latest_blood_donation_time).toEqual(oneYearAgo);
       });
     });
   });
