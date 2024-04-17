@@ -24,6 +24,7 @@ import {
   REPORTED_INELIGIBILITY,
   SERVICE_STATUS,
 } from "@/lib/data/db-enums";
+import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
 
 describe("dog_statuses view", () => {
   const USER_IDX = 84;
@@ -208,6 +209,7 @@ describe("dog_statuses view", () => {
       dogDea1Point1: POS_NEG_NIL.NIL,
       dogHeartworm: POS_NEG_NIL.NIL,
       dogReportedIneligibility: REPORTED_INELIGIBILITY.NIL,
+      dogDidDonateBlood: false,
     };
     it("should be PERMANENTLY_INELIGIBLE if dog was ever pregnant", async () => {
       await withDb(async (dbPool) => {
@@ -376,9 +378,47 @@ describe("dog_statuses view", () => {
         );
       });
     });
-    it("TODO: should be TEMPORARILY_INELIGIBLE if it donated blood recently (3 months)", async () => {
-      // TODO: Defer because it is not designed how donation information would be caputred.
-      await withDb(async (dbPool) => {});
+    it("should be TEMPORARILY_INELIGIBLE if it donated blood recently (3 months)", async () => {
+      await withDb(async (dbPool) => {
+        const { dogId, vetId } = await initDog(dbPool, {
+          dogSpec: ELIGIBLE_SPEC,
+        });
+        await addReport(dbPool, dogId, vetId, {
+          reportSpec: {
+            ...ELIGIBLE_REPORT,
+            dogDidDonateBlood: true,
+            visitTime: new Date(Date.now() - 8 * MILLIS_PER_WEEK),
+          },
+        });
+        const res = await dbQuery(
+          dbPool,
+          `select medical_status from dog_statuses where dog_id = $1`,
+          [dogId],
+        );
+        expect(res.rows[0].medical_status).toEqual(
+          MEDICAL_STATUS.TEMPORARILY_INELIGIBLE,
+        );
+      });
+    });
+    it("should be ELIGIBLE if it donated blood more than 3 months ago", async () => {
+      await withDb(async (dbPool) => {
+        const { dogId, vetId } = await initDog(dbPool, {
+          dogSpec: ELIGIBLE_SPEC,
+        });
+        await addReport(dbPool, dogId, vetId, {
+          reportSpec: {
+            ...ELIGIBLE_REPORT,
+            dogDidDonateBlood: true,
+            visitTime: new Date(Date.now() - 16 * MILLIS_PER_WEEK),
+          },
+        });
+        const res = await dbQuery(
+          dbPool,
+          `select medical_status from dog_statuses where dog_id = $1`,
+          [dogId],
+        );
+        expect(res.rows[0].medical_status).toEqual(MEDICAL_STATUS.ELIGIBLE);
+      });
     });
     it("TODO: should be TEMPORARILY_INELIGIBLE if it was vaccinated recently (2 weeks)", async () => {
       // TODO: Defer because it is not designed how vaccination information would be captured.
