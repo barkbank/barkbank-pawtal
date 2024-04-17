@@ -58,6 +58,14 @@ CREATE VIEW latest_values AS (
             AND tLatest.latest_visit_time = tReport.visit_time
         )
     ),
+    mLatestBloodDonationTimes as (
+        SELECT
+            dog_id,
+            MAX(visit_time) as latest_blood_donation_time
+        FROM reports
+        WHERE dog_did_donate_blood = TRUE
+        GROUP BY dog_id
+    ),
     mAgeCalculations as (
         WITH
         mDateParts as (
@@ -95,6 +103,7 @@ CREATE VIEW latest_values AS (
         tLatest.dog_body_conditioning_score as latest_dog_body_conditioning_score,
         COALESCE(tHeartworm.latest_dog_heartworm_result, 'NIL') as latest_dog_heartworm_result,
         tHeartworm.latest_dog_heartworm_observation_time,
+        tDonation.latest_blood_donation_time,
         tLatest.dog_reported_ineligibility as latest_dog_reported_ineligibility,
         tLatest.ineligibility_expiry_time as latest_ineligibility_expiry_time,
         CASE
@@ -110,4 +119,5 @@ CREATE VIEW latest_values AS (
     LEFT JOIN mLatestHeartwormReports as tHeartworm on tDog.dog_id = tHeartworm.dog_id
     LEFT JOIN mLatestDea1Point1 as tDea1Point1 on tDog.dog_id = tDea1Point1.dog_id
     LEFT JOIN mAgeCalculations as tAge on tDog.dog_id = tAge.dog_id
+    LEFT JOIN mLatestBloodDonationTimes as tDonation on tDog.dog_id = tDonation.dog_id
 );
