@@ -103,7 +103,6 @@ CREATE VIEW latest_values AS (
         tLatest.dog_body_conditioning_score as latest_dog_body_conditioning_score,
         COALESCE(tHeartworm.latest_dog_heartworm_result, 'NIL') as latest_dog_heartworm_result,
         tHeartworm.latest_dog_heartworm_observation_time,
-        tDonation.latest_blood_donation_time,
         tLatest.dog_reported_ineligibility as latest_dog_reported_ineligibility,
         tLatest.ineligibility_expiry_time as latest_ineligibility_expiry_time,
         CASE
@@ -112,7 +111,8 @@ CREATE VIEW latest_values AS (
             WHEN tDog.dog_dea1_point1 = 'NEGATIVE' THEN 'NEGATIVE'::t_pos_neg_nil
             ELSE 'NIL'::t_pos_neg_nil
         END as latest_dog_dea1_point1,
-        tAge.latest_dog_age_months
+        tAge.latest_dog_age_months,
+        tDonation.latest_blood_donation_time
     FROM dogs as tDog
     LEFT JOIN users as tUser on tDog.user_id = tUser.user_id
     LEFT JOIN mLatestReports as tLatest on tDog.dog_id = tLatest.dog_id
