@@ -1,10 +1,12 @@
 "use client";
 
 import {
-  BarkForm, BarkFormDateInput, BarkFormInput,
+  BarkForm,
+  BarkFormDateInput,
+  BarkFormInput,
   BarkFormOption,
   BarkFormRadioGroup,
-  BarkFormSubmitButton
+  BarkFormSubmitButton,
 } from "@/components/bark/bark-form";
 import { isValidWeightKg } from "@/lib/utilities/bark-utils";
 import {
@@ -49,10 +51,7 @@ export default function GeneralDogForm(props: {
   vetOptions: BarkFormOption[];
   defaultValues?: FormDataType;
 }) {
-  const {
-    vetOptions,
-    defaultValues,
-  } = props;
+  const { vetOptions, defaultValues } = props;
   const form = useForm<FormDataType>({
     resolver: zodResolver(
       FORM_SCHEMA.extend({
@@ -63,7 +62,7 @@ export default function GeneralDogForm(props: {
             : z.string().min(1, { message: "Please select an option" }),
       }),
     ),
-    defaultValues
+    defaultValues,
   });
 
   async function onSubmit(values: FormDataType) {
@@ -183,9 +182,7 @@ export default function GeneralDogForm(props: {
         )}
 
         <div className="flex gap-2">
-          <BarkFormSubmitButton className="w-full">
-            Submit
-          </BarkFormSubmitButton>
+          <BarkFormSubmitButton className="w-full">Submit</BarkFormSubmitButton>
         </div>
       </BarkForm>
     </div>
