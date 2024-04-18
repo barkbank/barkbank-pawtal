@@ -37,10 +37,6 @@ export default function AccountEditForm(props: {
   const [updateStatus, setUpdateStatus] = React.useState("");
 
   async function saveUser(values: FormDataType) {
-    const confirmation = confirm("Are you sure you want to save?");
-    if (!confirmation) {
-      return;
-    }
     setUpdateStatus("");
     const request = values as MyAccountDetailsUpdate;
 
