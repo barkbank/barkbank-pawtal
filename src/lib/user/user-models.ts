@@ -13,7 +13,7 @@ import { StatusSet } from "../data/status-mapper";
 export type MyAccount = {
   userCreationTime: Date;
   userName: string;
-  userResidency: string;
+  userResidency: UserResidency;
   userEmail: string;
   userPhoneNumber: string;
 };

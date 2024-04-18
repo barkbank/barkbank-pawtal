@@ -4,19 +4,10 @@ import { getAuthenticatedUserActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { getMyAccount } from "@/lib/user/actions/get-my-account";
 import { redirect } from "next/navigation";
+import { UserResidency } from "@/lib/data/db-enums";
+import { MyAccount } from "@/lib/user/user-models";
 
-type SearchParams = {
-  userName: string;
-  userPhoneNumber: string;
-  userResidency: string;
-  userEmail: string;
-};
-
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: SearchParams;
-}) {
+export default async function Page() {
   const actor = await getAuthenticatedUserActor();
   if (!actor) {
     redirect(RoutePath.USER_LOGIN_PAGE);
@@ -26,12 +17,15 @@ export default async function Page({
     redirect(RoutePath.USER_LOGIN_PAGE);
   }
 
+  const { userName, userPhoneNumber, userResidency } = account;
+  const props = { userName, userPhoneNumber, userResidency };
+
   return (
     <div className="m-3 flex flex-col">
       <BarkH2>
         <span className="font-bold">Edit My Account Details</span>
       </BarkH2>
-      <AccountEditForm defaultValues={searchParams} />
+      <AccountEditForm {...props} />
     </div>
   );
 }

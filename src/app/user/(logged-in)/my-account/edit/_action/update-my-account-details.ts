@@ -23,6 +23,8 @@ export async function updateAccountDetails(
   if (!account) {
     redirect(RoutePath.USER_LOGIN_PAGE);
   }
+  const { userEmail } = account;
+  request.userEmail = userEmail;
 
   const response = await updateMyAccountDetails(actor, request);
   if (response === "OK_UPDATED") {

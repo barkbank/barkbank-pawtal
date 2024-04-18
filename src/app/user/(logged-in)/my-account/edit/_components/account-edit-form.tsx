@@ -4,10 +4,8 @@ import {
   BarkForm,
   BarkFormInput,
   BarkFormRadioGroup,
-  BarkFormSubmitButton,
 } from "@/components/bark/bark-form";
-import { Button } from "@/components/ui/button";
-import { USER_RESIDENCY } from "@/lib/data/db-enums";
+import { USER_RESIDENCY, UserResidency } from "@/lib/data/db-enums";
 import { RoutePath } from "@/lib/route-path";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -15,25 +13,34 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { updateAccountDetails } from "../_action/update-my-account-details";
 import { MyAccountDetailsUpdate } from "@/lib/user/user-models";
-import React from "react";
+import React, { ButtonHTMLAttributes } from "react";
 import { BarkButton } from "@/components/bark/bark-button";
 
 const FORM_SCHEMA = z.object({
   userName: z.string().min(1, { message: "Name cannot be empty" }),
   userPhoneNumber: z.string(),
-  userEmail: z.string(),
   userResidency: z.nativeEnum(USER_RESIDENCY),
 });
 
 type FormDataType = z.infer<typeof FORM_SCHEMA>;
 
-export default function AccountEditForm(props: {
-  defaultValues: FormDataType;
+export default function AccountEditForm({
+  userName,
+  userPhoneNumber,
+  userResidency,
+}: {
+  userName: string;
+  userPhoneNumber: string;
+  userResidency: UserResidency;
 }) {
   const router = useRouter();
   const form = useForm<FormDataType>({
     resolver: zodResolver(FORM_SCHEMA),
-    defaultValues: props.defaultValues,
+    defaultValues: {
+      userName,
+      userPhoneNumber,
+      userResidency,
+    },
   });
   const [updateStatus, setUpdateStatus] = React.useState("");
 
@@ -52,12 +59,11 @@ export default function AccountEditForm(props: {
   return (
     <>
       <BarkForm onSubmit={saveUser} form={form}>
-        <BarkFormInput form={form} label="My Name" name={"userName"} />
+        <BarkFormInput form={form} label="My Name" name="userName" />
         <BarkFormInput
           form={form}
           label="My Phone Number"
           name={"userPhoneNumber"}
-          placeholder="+65"
         />
         <BarkFormRadioGroup
           form={form}
