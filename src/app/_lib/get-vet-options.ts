@@ -9,10 +9,13 @@ export type VetOption = {
 
 export async function getVetOptions(dbPool: Pool): Promise<VetOption[]> {
   const sql = `
-    SELECT vet_id, vet_name, vet_address
+    SELECT
+      vet_id as "vetId",
+      vet_name as "vetName",
+      vet_address as "vetAddress"
     FROM vets
     ORDER BY vet_name
   `;
-  const res = await dbQuery(dbPool, sql, []);
-  return res.rows.map(toCamelCaseRow) as VetOption[];
+  const res = await dbQuery<VetOption>(dbPool, sql, []);
+  return res.rows;
 }
