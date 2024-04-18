@@ -3,17 +3,16 @@
 import {
   BarkForm,
   BarkFormDateInput,
-  BarkFormHeader,
   BarkFormInput,
   BarkFormOption,
   BarkFormParagraph,
   BarkFormRadioGroup,
-  BarkFormSubmitButton,
 } from "@/components/bark/bark-form";
 import { isValidWeightKg } from "@/lib/utilities/bark-utils";
 import {
   DOG_ANTIGEN_PRESENCE,
   DOG_GENDER,
+  PARTICIPATION_STATUS,
   YES_NO_UNKNOWN,
 } from "@/lib/data/db-enums";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -47,6 +46,9 @@ const FORM_SCHEMA = z.object({
     .min(1, { message: "Please select an option" }),
   dogEverPregnant: z.string().min(1, { message: "Please select an option" }),
   dogPreferredVetId: z.string().optional(),
+  dogParticipationStatus: z.nativeEnum(PARTICIPATION_STATUS),
+  dogNonParticipationReason: z.string(),
+  dogParticipationResumeDate: z.string(),
 });
 
 type FormDataType = z.infer<typeof FORM_SCHEMA>;
@@ -181,6 +183,42 @@ export default function GeneralDogForm(props: {
             options={vetOptions}
           />
         )}
+
+        <BarkFormRadioGroup
+          form={form}
+          label="Participation Status"
+          name="dogParticipationStatus"
+          options={[
+            {
+              label: "Participating",
+              value: PARTICIPATION_STATUS.PARTICIPATING,
+            },
+            {
+              label: "Paused",
+              value: PARTICIPATION_STATUS.PAUSED,
+            },
+            {
+              label: "Opted-Out",
+              value: PARTICIPATION_STATUS.OPTED_OUT,
+            },
+          ]}
+        />
+
+        <BarkFormInput
+          form={form}
+          label="Non-participation Reason"
+          description="Applicable only if not participating—i.e. paused or opted-out."
+          name="dogNonParticipationReason"
+          type="text"
+        />
+
+        <BarkFormInput
+          form={form}
+          label="Participation Resume Date"
+          description="Applicable only if participation is paused."
+          name="dogParticipationResumeDate"
+          type="text"
+        />
 
         <div className="mt-6 flex flex-col gap-3 md:flex-row">
           <BarkButton className="w-full md:w-40" variant="brand" type="submit">
