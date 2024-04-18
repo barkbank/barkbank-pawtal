@@ -27,6 +27,7 @@ type Context = {
   update: MyDogRegistrationUpdate;
 };
 
+// TODO: Change updateMyDogRegistration params to actor, dogId, MyDogRegistration
 export async function updateMyDogRegistration(
   actor: UserActor,
   update: MyDogRegistrationUpdate,

@@ -5,10 +5,15 @@ import GeneralDogForm, {
   DogFormData,
 } from "../../_components/general-dog-form";
 
+// WIP: Define MyDogRegistration. It is MyDogRegistrationUpdate without the dogId.
+// WIP: Impl addMyDogRegistration(UserActor, MyDogRegistration).
+// WIP: Impl add-dog server-action to call addMyDogRegistration.
+
 export default function AddDogForm(props: { vetOptions: BarkFormOption[] }) {
   const { vetOptions } = props;
   async function onSubmit(values: DogFormData) {
     console.log(values);
+
   }
   return (
     <GeneralDogForm
