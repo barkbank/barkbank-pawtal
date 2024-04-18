@@ -20,6 +20,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { BarkButton } from "@/components/bark/bark-button";
+import { BarkH1 } from "@/components/bark/bark-typography";
 
 const FORM_SCHEMA = z.object({
   dogName: z.string().min(1, { message: "Name cannot be empty" }),
@@ -75,7 +76,7 @@ export default function GeneralDogForm(props: {
 
   return (
     <div>
-      <BarkFormHeader>{formTitle}</BarkFormHeader>
+      <BarkH1>{formTitle}</BarkH1>
       <BarkFormParagraph>
         Please fill in the required information.
       </BarkFormParagraph>
