@@ -46,7 +46,7 @@ export default function AccountEditForm({
 
   async function saveUser(values: FormDataType) {
     setUpdateStatus("");
-    const request = values as MyAccountDetailsUpdate;
+    const request: MyAccountDetailsUpdate = values;
 
     const response = await updateAccountDetails(request);
     if (response === "STATUS_204_UPDATED") {
