@@ -19,6 +19,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { BarkButton } from "@/components/bark/bark-button";
 
 const FORM_SCHEMA = z.object({
   dogName: z.string().min(1, { message: "Name cannot be empty" }),
@@ -79,28 +80,20 @@ export default function GeneralDogForm(props: {
         Please fill in the required information.
       </BarkFormParagraph>
       <BarkForm onSubmit={onSubmit} form={form}>
-        <BarkFormInput
-          form={form}
-          label="What's your dog's name?"
-          name="dogName"
-        />
+        <BarkFormInput form={form} label="Name" name="dogName" />
 
-        <BarkFormInput
-          form={form}
-          label="What's your dog's breed?"
-          name="dogBreed"
-          type="text"
-        />
+        <BarkFormInput form={form} label="Breed" name="dogBreed" type="text" />
 
         <BarkFormDateInput
           form={form}
-          label="When is it's birthday? (YYYY-MM-DD)"
+          label="Birthday"
           name="dogBirthday"
+          description="Use YYYY-MM-DD format. Approximations are okay."
         />
 
         <BarkFormRadioGroup
           form={form}
-          label="What's your dog's sex?"
+          label="Sex"
           name="dogGender"
           layout="radio"
           options={[
@@ -111,15 +104,15 @@ export default function GeneralDogForm(props: {
 
         <BarkFormInput
           form={form}
-          label="What's your dog's weight? (KG)"
-          description="Provide whole number weight or leave blank if unknown"
+          label="Weight"
+          description="Specify weight in kilograms. E.g. 23.4"
           name="dogWeightKg"
           type="text"
         />
 
         <BarkFormRadioGroup
           form={form}
-          label="Do you know it's blood type?"
+          label="Blood Type"
           name="dogDea1Point1"
           options={[
             {
@@ -139,7 +132,7 @@ export default function GeneralDogForm(props: {
 
         <BarkFormRadioGroup
           form={form}
-          label="Has it received blood transfusion before?"
+          label="Ever Received Blood Transfusion"
           name="dogEverReceivedTransfusion"
           layout="radio"
           options={[
@@ -160,7 +153,7 @@ export default function GeneralDogForm(props: {
 
         <BarkFormRadioGroup
           form={form}
-          label="Has your dog been pregnant before?"
+          label="Ever Pregnant"
           name="dogEverPregnant"
           layout="radio"
           options={[
@@ -182,14 +175,19 @@ export default function GeneralDogForm(props: {
         {vetOptions.length > 1 && (
           <BarkFormRadioGroup
             form={form}
-            label="Select your preferred vet for blood profiling test and blood donation"
+            label="Preferred Donation Point"
             name="dogPreferredVetId"
             options={vetOptions}
           />
         )}
 
-        <div className="flex gap-2">
-          <BarkFormSubmitButton className="w-full">Submit</BarkFormSubmitButton>
+        <div className="mt-6 flex flex-col gap-3 md:flex-row">
+          <BarkButton className="w-full md:w-40" variant="brand" type="submit">
+            Save
+          </BarkButton>
+          <BarkButton className="w-full md:w-40" variant="brandInverse">
+            Cancel
+          </BarkButton>
         </div>
       </BarkForm>
     </div>
