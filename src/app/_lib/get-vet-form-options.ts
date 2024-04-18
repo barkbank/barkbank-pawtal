@@ -2,7 +2,9 @@ import { BarkFormOption } from "@/components/bark/bark-form";
 import { dbQuery } from "@/lib/data/db-utils";
 import { Pool } from "pg";
 
-export async function getVetFormOptions(dbPool: Pool): Promise<BarkFormOption[]> {
+export async function getVetFormOptions(
+  dbPool: Pool,
+): Promise<BarkFormOption[]> {
   const sql = `
     SELECT
       vet_id as "value",

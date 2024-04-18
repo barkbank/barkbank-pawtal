@@ -14,7 +14,7 @@ export default async function Page() {
   }
 
   const [breeds, vetOptions] = await Promise.all([
-    APP.getBreedService().then(service => service.getAllBreeds()),
+    APP.getBreedService().then((service) => service.getAllBreeds()),
     APP.getDbPool().then(getVetFormOptions),
   ]);
 
