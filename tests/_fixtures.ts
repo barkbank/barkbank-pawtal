@@ -67,7 +67,7 @@ import {
   POS_NEG_NIL,
   REPORTED_INELIGIBILITY,
 } from "@/lib/data/db-enums";
-import { dbInsertReport } from "@/lib/data/db-reports";
+import { dbInsertReportAndUpdateCall } from "@/lib/data/db-reports";
 import { dbInsertCall } from "@/lib/data/db-calls";
 import { EmailService } from "@/lib/services/email";
 import {
@@ -489,7 +489,7 @@ export async function insertReport(
   overrides?: Partial<DbReportSpec>,
 ): Promise<DbReportGen> {
   const spec = getDbReportSpec(callId, overrides);
-  const gen = await dbInsertReport(dbPool, spec);
+  const gen = await dbInsertReportAndUpdateCall(dbPool, spec);
   return gen;
 }
 
