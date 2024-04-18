@@ -230,12 +230,12 @@ export default function GeneralDogForm(props: {
           type="text"
         />
 
-        <div className="mt-6 flex flex-col gap-3 md:flex-row">
-          <BarkButton className="w-full md:w-40" variant="brand" type="submit">
-            Save
-          </BarkButton>
+        <div className="mt-6 flex flex-col gap-3 md:flex-row-reverse md:justify-end">
           <BarkButton className="w-full md:w-40" variant="brandInverse">
             Cancel
+          </BarkButton>
+          <BarkButton className="w-full md:w-40" variant="brand" type="submit">
+            Save
           </BarkButton>
         </div>
       </BarkForm>
