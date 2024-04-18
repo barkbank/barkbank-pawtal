@@ -27,7 +27,7 @@ export default async function Page({
   }
 
   return (
-    <div className="my-5 ml-[60px] flex flex-col">
+    <div className="m-3 flex flex-col">
       <BarkH2>
         <span className="font-bold">Edit My Account Details</span>
       </BarkH2>
