@@ -25,7 +25,6 @@ export type MyLastContactedTime = {
 export type MyAccountDetailsUpdate = {
   userName: string;
   userPhoneNumber: string;
-  userEmail: string;
   userResidency: UserResidency;
 };
 

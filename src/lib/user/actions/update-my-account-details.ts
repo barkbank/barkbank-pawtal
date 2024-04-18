@@ -8,6 +8,7 @@ import {
 import { UserActor } from "../user-actor";
 import { MyAccountDetailsUpdate } from "../user-models";
 import { PoolClient } from "pg";
+import { guaranteed } from "@/lib/utilities/bark-utils";
 
 type Context = {
   actor: UserActor;
@@ -41,7 +42,11 @@ async function updateAccountFields(
 ): Promise<"OK" | "FAILURE_DB_UPDATE"> {
   const { actor, update } = ctx;
   const { userId, userMapper } = actor.getParams();
-  const { userName, userEmail, userPhoneNumber, userResidency } = update;
+  const { userName, userPhoneNumber, userResidency } = update;
+
+  const userPii = guaranteed(await actor.getOwnUserPii());
+  const userEmail = userPii.userEmail;
+
   const { userEncryptedPii } = await userMapper.mapUserPiiToUserSecurePii({
     userName,
     userPhoneNumber,
@@ -55,9 +60,8 @@ async function updateAccountFields(
       user_encrypted_pii = $3
     WHERE 
       user_id = $1
-    RETURNING 
-      user_residency,
-      user_encrypted_pii
+    RETURNING
+      1
   `;
   const res = await dbQuery(conn, sql, [
     userId,
