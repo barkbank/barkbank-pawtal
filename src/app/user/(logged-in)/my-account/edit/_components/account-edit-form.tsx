@@ -42,10 +42,10 @@ export default function AccountEditForm({
       userResidency,
     },
   });
-  const [updateStatus, setUpdateStatus] = React.useState("");
+  const [updateError, setUpdateError] = React.useState("");
 
   async function saveUser(values: FormDataType) {
-    setUpdateStatus("");
+    setUpdateError("");
     const request: MyAccountDetailsUpdate = values;
 
     const response = await updateAccountDetails(request);
@@ -53,7 +53,7 @@ export default function AccountEditForm({
       router.push(RoutePath.USER_MY_ACCOUNT_PAGE);
       return;
     }
-    setUpdateStatus("Failed to update account details");
+    setUpdateError("Failed to update account details");
   }
 
   return (
@@ -83,7 +83,7 @@ export default function AccountEditForm({
           >
             Cancel
           </BarkButton>
-          {updateStatus && <div className="text-red-500">{updateStatus}</div>}
+          {updateError && <div className="text-red-500">{updateError}</div>}
         </div>
       </BarkForm>
     </>
