@@ -16,6 +16,7 @@ import { z } from "zod";
 import { updateAccountDetails } from "../_action/update-my-account-details";
 import { MyAccountDetailsUpdate } from "@/lib/user/user-models";
 import React from "react";
+import { BarkButton } from "@/components/bark/bark-button";
 
 const FORM_SCHEMA = z.object({
   userName: z.string().min(1, { message: "Name cannot be empty" }),
@@ -48,16 +49,6 @@ export default function AccountEditForm(props: {
     setUpdateStatus("Failed to update account details");
   }
 
-  const confirmCancellation = (
-    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  ) => {
-    const value = confirm("Are you sure you want to cancel?");
-    if (value === true) {
-      e.preventDefault();
-      router.push(RoutePath.USER_MY_ACCOUNT_PAGE);
-    }
-  };
-
   return (
     <>
       <BarkForm onSubmit={saveUser} form={form}>
@@ -77,15 +68,15 @@ export default function AccountEditForm(props: {
             { label: "No", value: USER_RESIDENCY.OTHER },
           ]}
         />
-        <div className="flex gap-2">
-          <BarkFormSubmitButton className="h-[60px]">Save</BarkFormSubmitButton>
-          <Button
-            className="mt-6 inline-block h-[60px]"
+        <div className="mt-6 flex gap-2">
+          <BarkButton variant="brand">Save</BarkButton>
+          <BarkButton
+            className="inline-block h-[60px]"
             variant={"brandInverse"}
-            onClick={confirmCancellation}
+            onClick={async () => router.push(RoutePath.USER_MY_ACCOUNT_PAGE)}
           >
             Cancel
-          </Button>
+          </BarkButton>
           {updateStatus && <div className="text-red-500">{updateStatus}</div>}
         </div>
       </BarkForm>
