@@ -21,7 +21,7 @@ const FORM_SCHEMA = z.object({
   userName: z.string().min(1, { message: "Name cannot be empty" }),
   userPhoneNumber: z.string(),
   userEmail: z.string(),
-  userResidency: z.string(),
+  userResidency: z.nativeEnum(USER_RESIDENCY),
 });
 
 type FormDataType = z.infer<typeof FORM_SCHEMA>;
