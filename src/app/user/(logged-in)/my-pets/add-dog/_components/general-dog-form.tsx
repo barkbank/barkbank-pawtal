@@ -3,8 +3,10 @@
 import {
   BarkForm,
   BarkFormDateInput,
+  BarkFormHeader,
   BarkFormInput,
   BarkFormOption,
+  BarkFormParagraph,
   BarkFormRadioGroup,
   BarkFormSubmitButton,
 } from "@/components/bark/bark-form";
@@ -48,10 +50,11 @@ const FORM_SCHEMA = z.object({
 type FormDataType = z.infer<typeof FORM_SCHEMA>;
 
 export default function GeneralDogForm(props: {
+  formTitle: string;
   vetOptions: BarkFormOption[];
   defaultValues?: FormDataType;
 }) {
-  const { vetOptions, defaultValues } = props;
+  const { formTitle, vetOptions, defaultValues } = props;
   const form = useForm<FormDataType>({
     resolver: zodResolver(
       FORM_SCHEMA.extend({
@@ -71,6 +74,10 @@ export default function GeneralDogForm(props: {
 
   return (
     <div>
+      <BarkFormHeader>{formTitle}</BarkFormHeader>
+      <BarkFormParagraph>
+        Please fill in the required information.
+      </BarkFormParagraph>
       <BarkForm onSubmit={onSubmit} form={form}>
         <BarkFormInput
           form={form}

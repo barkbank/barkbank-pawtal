@@ -6,7 +6,7 @@ import { AccountType } from "@/lib/auth-models";
 import { isLoggedIn } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
-import { getVetOptions } from "./_lib/get-vet-options";
+import { getVetOptions } from "../../_lib/get-vet-options";
 import { Breed } from "@/lib/services/breed";
 import { BarkFormOption } from "@/components/bark/bark-form";
 

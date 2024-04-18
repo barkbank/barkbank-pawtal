@@ -1,7 +1,4 @@
-import {
-  VetOption,
-  getVetOptions,
-} from "@/app/user/registration/_lib/get-vet-options";
+import { VetOption, getVetOptions } from "@/app/_lib/get-vet-options";
 import { withDb } from "./_db_helpers";
 import { getVetSpec } from "./_fixtures";
 import { dbInsertVet } from "@/lib/data/db-vets";
