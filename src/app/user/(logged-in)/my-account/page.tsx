@@ -14,6 +14,7 @@ import Image from "next/image";
 import { capitalize } from "lodash";
 import { formatDateTime, SINGAPORE_TIME_ZONE } from "@/lib/utilities/bark-time";
 import Link from "next/link";
+import { BarkButton } from "@/components/bark/bark-button";
 
 export default async function Page() {
   const actor = await getAuthenticatedUserActor();
@@ -120,15 +121,15 @@ export default async function Page() {
         <p className="text-sm font-bold">User ID Number</p>
         <p>{actor.getUserId()}</p>
       </div>
-      <div className="flex gap-3">
-        <Link
-          className={`h-[60px] ${buttonVariants({ variant: "brand" })}`}
-          href={{
-            pathname: RoutePath.USER_MY_ACCOUNT_EDIT,
-          }}
+
+      <div className="flex flex-col gap-3">
+        <BarkButton
+          className="w-full md:w-32"
+          variant="brand"
+          href={RoutePath.USER_MY_ACCOUNT_EDIT}
         >
           Edit
-        </Link>
+        </BarkButton>
       </div>
     </main>
   );
