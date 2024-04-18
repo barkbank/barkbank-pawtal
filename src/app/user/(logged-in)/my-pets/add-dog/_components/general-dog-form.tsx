@@ -36,30 +36,43 @@ const FORM_SCHEMA = z.object({
         message: "Birthday must be a valid date in the format YYYY-MM-DD",
       },
     ),
-  dogGender: z.string().min(1, { message: "Please select an option" }),
+  dogGender: z.nativeEnum(DOG_GENDER),
   dogWeightKg: z.string().refine(isValidWeightKg, {
     message: "Weight should be a positive number or left blank",
   }),
-  dogDea1Point1: z.string().min(1, { message: "Please select an option" }),
-  dogEverReceivedTransfusion: z
-    .string()
-    .min(1, { message: "Please select an option" }),
-  dogEverPregnant: z.string().min(1, { message: "Please select an option" }),
+  dogDea1Point1: z.nativeEnum(DOG_ANTIGEN_PRESENCE),
+  dogEverReceivedTransfusion: z.nativeEnum(YES_NO_UNKNOWN),
+  dogEverPregnant: z.nativeEnum(YES_NO_UNKNOWN),
   dogPreferredVetId: z.string().optional(),
   dogParticipationStatus: z.nativeEnum(PARTICIPATION_STATUS),
   dogNonParticipationReason: z.string(),
   dogParticipationResumeDate: z.string(),
 });
 
-type FormDataType = z.infer<typeof FORM_SCHEMA>;
+export type DogFormData = z.infer<typeof FORM_SCHEMA>;
+
+const EMPTY_VALUES: DogFormData = {
+  dogName: "",
+  dogBreed: "",
+  dogBirthday: "",
+  dogGender: DOG_GENDER.UNKNOWN,
+  dogWeightKg: "",
+  dogDea1Point1: DOG_ANTIGEN_PRESENCE.UNKNOWN,
+  dogEverReceivedTransfusion: YES_NO_UNKNOWN.UNKNOWN,
+  dogEverPregnant: YES_NO_UNKNOWN.UNKNOWN,
+  dogPreferredVetId: "",
+  dogNonParticipationReason: "",
+  dogParticipationResumeDate: "",
+};
 
 export default function GeneralDogForm(props: {
   formTitle: string;
   vetOptions: BarkFormOption[];
-  defaultValues?: FormDataType;
+  prefillData?: DogFormData;
+  onSubmit: (values: DogFormData) => Promise<void>;
 }) {
-  const { formTitle, vetOptions, defaultValues } = props;
-  const form = useForm<FormDataType>({
+  const { formTitle, vetOptions, prefillData, onSubmit } = props;
+  const form = useForm<DogFormData>({
     resolver: zodResolver(
       FORM_SCHEMA.extend({
         // Only if there are more than 1 vet options, we require the user to select one. Else vet will be predetermine.
@@ -69,12 +82,8 @@ export default function GeneralDogForm(props: {
             : z.string().min(1, { message: "Please select an option" }),
       }),
     ),
-    defaultValues,
+    defaultValues: { ...EMPTY_VALUES, ...prefillData },
   });
-
-  async function onSubmit(values: FormDataType) {
-    console.log(values);
-  }
 
   return (
     <div>
