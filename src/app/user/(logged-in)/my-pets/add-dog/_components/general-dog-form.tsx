@@ -61,6 +61,7 @@ const EMPTY_VALUES: DogFormData = {
   dogEverReceivedTransfusion: YES_NO_UNKNOWN.UNKNOWN,
   dogEverPregnant: YES_NO_UNKNOWN.UNKNOWN,
   dogPreferredVetId: "",
+  dogParticipationStatus: PARTICIPATION_STATUS.PARTICIPATING,
   dogNonParticipationReason: "",
   dogParticipationResumeDate: "",
 };
