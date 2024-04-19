@@ -5,8 +5,8 @@ import GeneralDogForm, {
   DogFormData,
 } from "../../_components/general-dog-form";
 
-// WIP: Impl addMyDogRegistration(UserActor, MyDogRegistration).
-// WIP: Impl add-dog server-action to call addMyDogRegistration.
+// WIP: Impl addMyDog(UserActor, MyDogRegistration).
+// WIP: Impl add-dog server-action to call addMyDog.
 
 export default function AddDogForm(props: { vetOptions: BarkFormOption[] }) {
   const { vetOptions } = props;
