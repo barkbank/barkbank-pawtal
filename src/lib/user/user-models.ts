@@ -64,6 +64,23 @@ export type MyDogDetails = StatusSet & {
   dogReports: MyDogReport[];
 };
 
+/**
+ * The dog fields that can be updated prior to the first medical report. This
+ * can be used by registration and add-dog.
+ */
+export type MyDogRegistration = {
+  dogName: string;
+  dogBreed: string;
+  dogBirthday: Date;
+  dogGender: DogGender;
+  dogWeightKg: number | null;
+  dogDea1Point1: DogAntigenPresence;
+  dogEverPregnant: YesNoUnknown;
+  dogEverReceivedTransfusion: YesNoUnknown;
+  dogPreferredVetId: string | null;
+}
+
+// WIP: Remove MyDogRegistrationUpdate. Use MyDogRegistration instead.
 export type MyDogRegistrationUpdate = {
   dogId: string;
   dogName: string;
