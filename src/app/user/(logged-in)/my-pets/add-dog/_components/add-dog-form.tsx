@@ -13,7 +13,6 @@ export default function AddDogForm(props: { vetOptions: BarkFormOption[] }) {
   const { vetOptions } = props;
   async function onSubmit(values: DogFormData) {
     console.log(values);
-
   }
   return (
     <GeneralDogForm

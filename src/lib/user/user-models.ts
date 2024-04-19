@@ -78,7 +78,7 @@ export type MyDogRegistration = {
   dogEverPregnant: YesNoUnknown;
   dogEverReceivedTransfusion: YesNoUnknown;
   dogPreferredVetId: string | null;
-}
+};
 
 // WIP: Remove MyDogRegistrationUpdate. Use MyDogRegistration instead.
 export type MyDogRegistrationUpdate = {
