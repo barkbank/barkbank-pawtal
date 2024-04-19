@@ -5,7 +5,6 @@ import GeneralDogForm, {
   DogFormData,
 } from "../../_components/general-dog-form";
 
-// WIP: Define MyDogRegistration. It is MyDogRegistrationUpdate without the dogId.
 // WIP: Impl addMyDogRegistration(UserActor, MyDogRegistration).
 // WIP: Impl add-dog server-action to call addMyDogRegistration.
 
