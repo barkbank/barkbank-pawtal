@@ -27,15 +27,37 @@ describe("addMyDog", () => {
 
       // AND dog registration r1
       const r1: MyDogRegistration = {
-        dogName: "Hippo",
-        dogBreed: "Greyhound",
-        dogBirthday: parseDateTime("2023-01-01", UTC_DATE_OPTION),
-        dogGender: DOG_GENDER.MALE,
-        dogWeightKg: 68,
-        dogEverPregnant: YES_NO_UNKNOWN.NO,
-        dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
-        dogDea1Point1: DOG_ANTIGEN_PRESENCE.POSITIVE,
+        ...MY_DOG_REG_WITH_NO_VET,
         dogPreferredVetId: v1.vetId,
+      };
+
+      // WHEN addMyDog
+      const actor = getUserActor(dbPool, u1.userId);
+      const { result, error } = await addMyDog(actor, r1);
+
+      // THEN expect dog belonging to user
+      expect(error).toBeUndefined();
+      const { dogId } = result!;
+      const dog = await fetchRecord(dbPool, dogId);
+      expect(dog).toEqual({
+        userId: u1.userId,
+        ...r1,
+      });
+    });
+  });
+
+  it("should support empty-string vet ID", async () => {
+    await withDb(async (dbPool) => {
+      // GIVEN user u1
+      const u1 = await insertUser(1, dbPool);
+
+      // AND vet v1
+      const v1 = await insertVet(1, dbPool);
+
+      // AND dog registration r1
+      const r1: MyDogRegistration = {
+        ...MY_DOG_REG_WITH_NO_VET,
+        dogPreferredVetId: "",
       };
 
       // WHEN addMyDog
@@ -54,6 +76,18 @@ describe("addMyDog", () => {
   });
 });
 
+const MY_DOG_REG_WITH_NO_VET: MyDogRegistration = {
+  dogName: "Hippo",
+  dogBreed: "Greyhound",
+  dogBirthday: parseDateTime("2023-01-01", UTC_DATE_OPTION),
+  dogGender: DOG_GENDER.MALE,
+  dogWeightKg: 68,
+  dogEverPregnant: YES_NO_UNKNOWN.NO,
+  dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
+  dogDea1Point1: DOG_ANTIGEN_PRESENCE.POSITIVE,
+  dogPreferredVetId: "",
+};
+
 type Record = MyDogRegistration & {
   userId: string;
 };
@@ -70,7 +104,7 @@ async function fetchRecord(dbPool: Pool, dogId: string): Promise<Record> {
     tDog.dog_ever_pregnant as "dogEverPregnant",
     tDog.dog_ever_received_transfusion as "dogEverReceivedTransfusion",
     tDog.dog_dea1_point1 as "dogDea1Point1",
-    tPref.vet_id as "dogPreferredVetId"
+    COALESCE(tPref.vet_id::text, '') as "dogPreferredVetId"
   FROM dogs as tDog
   LEFT JOIN (
     SELECT dog_id, vet_id

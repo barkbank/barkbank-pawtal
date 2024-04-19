@@ -77,7 +77,7 @@ export type MyDogRegistration = {
   dogDea1Point1: DogAntigenPresence;
   dogEverPregnant: YesNoUnknown;
   dogEverReceivedTransfusion: YesNoUnknown;
-  dogPreferredVetId: string | null;
+  dogPreferredVetId: string;
 };
 
 // WIP: Remove MyDogRegistrationUpdate. Use MyDogRegistration instead.

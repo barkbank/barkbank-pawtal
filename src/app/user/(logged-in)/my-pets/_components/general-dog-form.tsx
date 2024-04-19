@@ -42,7 +42,7 @@ const FORM_SCHEMA = z.object({
   dogDea1Point1: z.nativeEnum(DOG_ANTIGEN_PRESENCE),
   dogEverReceivedTransfusion: z.nativeEnum(YES_NO_UNKNOWN),
   dogEverPregnant: z.nativeEnum(YES_NO_UNKNOWN),
-  dogPreferredVetId: z.string().optional(),
+  dogPreferredVetId: z.string(),
 });
 
 export type DogFormData = z.infer<typeof FORM_SCHEMA>;

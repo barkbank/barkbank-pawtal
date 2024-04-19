@@ -25,7 +25,7 @@ export async function addMyDog(
   try {
     await dbBegin(conn);
     const { dogId } = await dbInsertDog(dbPool, userId, dogSpec);
-    if (dogPreferredVetId !== null) {
+    if (dogPreferredVetId !== "") {
       await dbInsertDogVetPreference(conn, dogId, dogPreferredVetId);
     }
     await dbCommit(conn);
