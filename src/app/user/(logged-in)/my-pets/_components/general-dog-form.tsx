@@ -12,7 +12,6 @@ import { isValidWeightKg } from "@/lib/utilities/bark-utils";
 import {
   DOG_ANTIGEN_PRESENCE,
   DOG_GENDER,
-  PARTICIPATION_STATUS,
   YES_NO_UNKNOWN,
 } from "@/lib/data/db-enums";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -44,26 +43,16 @@ const FORM_SCHEMA = z.object({
   dogEverReceivedTransfusion: z.nativeEnum(YES_NO_UNKNOWN),
   dogEverPregnant: z.nativeEnum(YES_NO_UNKNOWN),
   dogPreferredVetId: z.string().optional(),
-  dogParticipationStatus: z.nativeEnum(PARTICIPATION_STATUS),
-  dogNonParticipationReason: z.string(),
-  dogParticipationResumeDate: z.string(),
 });
 
 export type DogFormData = z.infer<typeof FORM_SCHEMA>;
 
-const EMPTY_VALUES: DogFormData = {
+const EMPTY_VALUES: Partial<DogFormData> = {
   dogName: "",
   dogBreed: "",
   dogBirthday: "",
-  dogGender: DOG_GENDER.UNKNOWN,
   dogWeightKg: "",
-  dogDea1Point1: DOG_ANTIGEN_PRESENCE.UNKNOWN,
-  dogEverReceivedTransfusion: YES_NO_UNKNOWN.UNKNOWN,
-  dogEverPregnant: YES_NO_UNKNOWN.UNKNOWN,
   dogPreferredVetId: "",
-  dogParticipationStatus: PARTICIPATION_STATUS.PARTICIPATING,
-  dogNonParticipationReason: "",
-  dogParticipationResumeDate: "",
 };
 
 export default function GeneralDogForm(props: {
@@ -193,42 +182,6 @@ export default function GeneralDogForm(props: {
             options={vetOptions}
           />
         )}
-
-        <BarkFormRadioGroup
-          form={form}
-          label="Participation Status"
-          name="dogParticipationStatus"
-          options={[
-            {
-              label: "Participating",
-              value: PARTICIPATION_STATUS.PARTICIPATING,
-            },
-            {
-              label: "Paused",
-              value: PARTICIPATION_STATUS.PAUSED,
-            },
-            {
-              label: "Opted-Out",
-              value: PARTICIPATION_STATUS.OPTED_OUT,
-            },
-          ]}
-        />
-
-        <BarkFormInput
-          form={form}
-          label="Non-participation Reason"
-          description="Applicable only if not participating—i.e. paused or opted-out."
-          name="dogNonParticipationReason"
-          type="text"
-        />
-
-        <BarkFormInput
-          form={form}
-          label="Participation Resume Date"
-          description="Applicable only if participation is paused."
-          name="dogParticipationResumeDate"
-          type="text"
-        />
 
         <div className="mt-6 flex flex-col gap-3 md:flex-row-reverse md:justify-end">
           <BarkButton className="w-full md:w-40" variant="brandInverse">
