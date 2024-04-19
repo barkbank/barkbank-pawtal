@@ -6,13 +6,14 @@ import GeneralDogForm, {
 } from "../../_components/general-dog-form";
 import { MyDogRegistration } from "@/lib/user/user-models";
 import { UTC_DATE_OPTION, parseDateTime } from "@/lib/utilities/bark-time";
-
-// WIP: Impl addMyDog(UserActor, MyDogRegistration).
-// WIP: Impl add-dog server-action to call addMyDog.
+import { submitDog } from "../_actions/submit-dog";
+import { useRouter } from "next/navigation";
+import { RoutePath } from "@/lib/route-path";
 
 export default function AddDogForm(props: { vetOptions: BarkFormOption[] }) {
+  const router = useRouter();
   const { vetOptions } = props;
-  async function onSubmit(values: DogFormData) {
+  async function handleValues(values: DogFormData) {
     console.log(values);
     const {
       dogBirthday: dogBirthdayString,
@@ -23,12 +24,18 @@ export default function AddDogForm(props: { vetOptions: BarkFormOption[] }) {
     const dogWeightKg = parseFloat(dogWeightKgString);
     const reg: MyDogRegistration = { dogBirthday, dogWeightKg, ...otherFields };
     console.log(reg);
+    const { result, error } = await submitDog(reg);
+    if (error) {
+      return error;
+    }
+    router.push(RoutePath.USER_MY_PETS);
+    return "";
   }
   return (
     <GeneralDogForm
       formTitle="Add Dog"
       vetOptions={vetOptions}
-      onSubmit={onSubmit}
+      handleValues={handleValues}
     />
   );
 }

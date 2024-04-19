@@ -1,4 +1,4 @@
-import { Ok, Result } from "@/lib/utilities/result";
+import { Err, Ok, Result } from "@/lib/utilities/result";
 import { UserActor } from "../user-actor";
 import { MyDogRegistration } from "../user-models";
 import { dbBegin, dbCommit, dbRelease, dbRollback } from "@/lib/data/db-utils";
@@ -30,6 +30,8 @@ export async function addMyDog(
     }
     await dbCommit(conn);
     return Ok({ dogId });
+  } catch {
+    return Err("FAILED");
   } finally {
     await dbRollback(conn);
     await dbRelease(conn);

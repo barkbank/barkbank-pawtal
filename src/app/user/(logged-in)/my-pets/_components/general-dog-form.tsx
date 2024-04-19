@@ -3,6 +3,7 @@
 import {
   BarkForm,
   BarkFormDateInput,
+  BarkFormError,
   BarkFormInput,
   BarkFormOption,
   BarkFormParagraph,
@@ -19,6 +20,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { BarkButton } from "@/components/bark/bark-button";
 import { BarkH1 } from "@/components/bark/bark-typography";
+import { Result } from "@/lib/utilities/result";
 
 const FORM_SCHEMA = z.object({
   dogName: z.string().min(1, { message: "Name cannot be empty" }),
@@ -59,9 +61,9 @@ export default function GeneralDogForm(props: {
   formTitle: string;
   vetOptions: BarkFormOption[];
   prefillData?: DogFormData;
-  onSubmit: (values: DogFormData) => Promise<void>;
+  handleValues: (values: DogFormData) => Promise<string>;
 }) {
-  const { formTitle, vetOptions, prefillData, onSubmit } = props;
+  const { formTitle, vetOptions, prefillData, handleValues } = props;
   const form = useForm<DogFormData>({
     resolver: zodResolver(
       FORM_SCHEMA.extend({
@@ -74,6 +76,11 @@ export default function GeneralDogForm(props: {
     ),
     defaultValues: { ...EMPTY_VALUES, ...prefillData },
   });
+
+  async function onSubmit(values: DogFormData) {
+    const errorMsg = await handleValues(values);
+    form.setError("root", { message: errorMsg });
+  }
 
   return (
     <div>
@@ -182,6 +189,8 @@ export default function GeneralDogForm(props: {
             options={vetOptions}
           />
         )}
+
+        <BarkFormError form={form} />
 
         <div className="mt-6 flex flex-col gap-3 md:flex-row-reverse md:justify-end">
           <BarkButton className="w-full md:w-40" variant="brandInverse">
