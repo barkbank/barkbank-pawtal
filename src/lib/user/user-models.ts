@@ -87,7 +87,7 @@ export type MyDogRegistration = {
   dogPreferredVetId: string;
 };
 
-// TODO: Remove MyDogRegistrationUpdate. Use MyDogRegistration instead.
+// WIP: Remove MyDogRegistrationUpdate. Use MyDogRegistration instead.
 export type MyDogRegistrationUpdate = {
   dogId: string;
   dogName: string;
