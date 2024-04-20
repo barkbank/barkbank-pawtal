@@ -24,12 +24,15 @@ type Response =
 
 type Context = {
   actor: UserActor;
+  dogId: string;
   update: MyDogRegistration;
 };
 
 // WIP: Change updateMyDogRegistration params to actor, dogId, MyDogRegistration
 export async function updateMyDogRegistration(
   actor: UserActor,
+  dogId: string,
+  // WIP: Find a better name for 'update' and 'registration'
   update: MyDogRegistration,
 ): Promise<Response> {
   const validUpdateCheck = checkValidUpdate(update);
@@ -37,7 +40,7 @@ export async function updateMyDogRegistration(
     return validUpdateCheck;
   }
   const { dbPool } = actor.getParams();
-  const ctx: Context = { actor, update };
+  const ctx: Context = { actor, dogId, update };
   const conn = await dbPool.connect();
   try {
     await dbBegin(conn);
@@ -79,9 +82,9 @@ async function checkOwnership(
   conn: PoolClient,
   ctx: Context,
 ): Promise<"OK" | "ERROR_MISSING_DOG" | "ERROR_UNAUTHORIZED"> {
-  const { actor, update } = ctx;
+  const { actor, dogId, update } = ctx;
   const sql = `SELECT user_id as "ownerUserId" FROM dogs WHERE dog_id = $1`;
-  const res = await dbQuery<{ ownerUserId: string }>(conn, sql, [update.dogId]);
+  const res = await dbQuery<{ ownerUserId: string }>(conn, sql, [dogId]);
   if (res.rows.length === 0) {
     return "ERROR_MISSING_DOG";
   }
@@ -97,9 +100,9 @@ async function checkExistingReport(
   conn: PoolClient,
   ctx: Context,
 ): Promise<"OK" | "ERROR_REPORT_EXISTS"> {
-  const { update } = ctx;
+  const { dogId, update } = ctx;
   const sql = `SELECT COUNT(1)::integer as "numReports" FROM reports WHERE dog_id = $1`;
-  const res = await dbQuery<{ numReports: number }>(conn, sql, [update.dogId]);
+  const res = await dbQuery<{ numReports: number }>(conn, sql, [dogId]);
   const { numReports } = res.rows[0];
   if (numReports > 0) {
     return "ERROR_REPORT_EXISTS";
@@ -111,9 +114,8 @@ async function updateDogFields(
   conn: PoolClient,
   ctx: Context,
 ): Promise<"OK" | "FAILURE_DB_UPDATE"> {
-  const { actor, update } = ctx;
+  const { actor, dogId, update } = ctx;
   const {
-    dogId,
     dogBreed,
     dogBirthday,
     dogGender,
@@ -170,8 +172,8 @@ async function updateVetPreference(
   conn: PoolClient,
   ctx: Context,
 ): Promise<"OK"> {
-  const { update } = ctx;
-  const { dogId, dogPreferredVetId: vetId } = update;
+  const { dogId, update } = ctx;
+  const { dogPreferredVetId: vetId } = update;
   await dbDeleteDogVetPreferences(conn, dogId);
   if (vetId !== null) {
     await dbInsertDogVetPreference(conn, dogId, vetId);

@@ -24,6 +24,7 @@ import { Pool, PoolClient } from "pg";
 import { dbBegin, dbQuery, dbRelease } from "@/lib/data/db-utils";
 import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
 
+// WIP: Fix these broken tests first, then fix the impl. (!!!)
 describe("updateMyDogRegistration", () => {
   it("should return OK_UPDATED when update was successful", async () => {
     await withDb(async (dbPool) => {
@@ -148,11 +149,9 @@ describe("updateMyDogRegistration", () => {
 });
 
 function registrationUpdate(
-  dogId: string,
   overrides?: Partial<MyDogRegistration>,
 ): MyDogRegistration {
   const base: MyDogRegistration = {
-    dogId,
     dogName: "updated name",
     dogBreed: "updated breed",
     dogBirthday: parseDateTime("1970-01-01", UTC_DATE_OPTION),
@@ -161,10 +160,7 @@ function registrationUpdate(
     dogDea1Point1: DOG_ANTIGEN_PRESENCE.UNKNOWN,
     dogEverPregnant: YES_NO_UNKNOWN.NO,
     dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
-    dogPreferredVetId: null,
-    dogParticipationStatus: PARTICIPATION_STATUS.PARTICIPATING,
-    dogNonParticipationReason: "",
-    dogPauseExpiryTime: null,
+    dogPreferredVetId: "",
   };
   return { ...base, ...overrides };
 }
@@ -241,7 +237,7 @@ async function fetchDogPreferredVetId(
   `;
   const res = await dbQuery(conn, sql, [dogId]);
   if (res.rows.length === 0) {
-    return { dogPreferredVetId: null };
+    return { dogPreferredVetId: "" };
   }
   if (res.rows.length > 1) {
     return { dogPreferredVetId: "MORE_THAN_ONE" };
