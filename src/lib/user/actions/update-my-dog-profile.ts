@@ -6,7 +6,7 @@ import {
   dbRollback,
 } from "@/lib/data/db-utils";
 import { UserActor } from "../user-actor";
-import { MyDogProfile } from "../user-models";
+import { DogProfile } from "../user-models";
 import { PoolClient } from "pg";
 import {
   dbDeleteDogVetPreferences,
@@ -23,13 +23,13 @@ type Response =
 type Context = {
   actor: UserActor;
   dogId: string;
-  dogProfile: MyDogProfile;
+  dogProfile: DogProfile;
 };
 
 export async function updateMyDogProfile(
   actor: UserActor,
   dogId: string,
-  dogProfile: MyDogProfile,
+  dogProfile: DogProfile,
 ): Promise<Response> {
   const { dbPool } = actor.getParams();
   const ctx: Context = { actor, dogId, dogProfile };

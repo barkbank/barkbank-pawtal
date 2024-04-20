@@ -9,7 +9,7 @@ import {
   insertUser,
   insertVet,
 } from "../_fixtures";
-import { MyDogProfile } from "@/lib/user/user-models";
+import { DogProfile } from "@/lib/user/user-models";
 import { UTC_DATE_OPTION, parseDateTime } from "@/lib/utilities/bark-time";
 import {
   CALL_OUTCOME,
@@ -102,8 +102,8 @@ describe("updateMyDogProfile", () => {
   });
 });
 
-function _getDogProfile(overrides?: Partial<MyDogProfile>): MyDogProfile {
-  const base: MyDogProfile = {
+function _getDogProfile(overrides?: Partial<DogProfile>): DogProfile {
+  const base: DogProfile = {
     dogName: "updated name",
     dogBreed: "updated breed",
     dogBirthday: parseDateTime("1970-01-01", UTC_DATE_OPTION),

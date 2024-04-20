@@ -3,12 +3,12 @@
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { addMyDog } from "@/lib/user/actions/add-my-dog";
-import { MyDogProfile } from "@/lib/user/user-models";
+import { DogProfile } from "@/lib/user/user-models";
 import { Err, Result } from "@/lib/utilities/result";
 import { revalidatePath } from "next/cache";
 
 export async function submitDog(
-  dogProfile: MyDogProfile,
+  dogProfile: DogProfile,
 ): Promise<Result<{ dogId: string }, "FAILED" | "ERROR_UNAUTHORIZED">> {
   const actor = await getAuthenticatedUserActor();
   if (actor === null) {

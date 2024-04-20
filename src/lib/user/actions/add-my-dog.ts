@@ -1,6 +1,6 @@
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { UserActor } from "../user-actor";
-import { MyDogProfile } from "../user-models";
+import { DogProfile } from "../user-models";
 import { dbBegin, dbCommit, dbRelease, dbRollback } from "@/lib/data/db-utils";
 import { DogSpec } from "@/lib/data/db-models";
 import { dbInsertDog, dbInsertDogVetPreference } from "@/lib/data/db-dogs";
@@ -13,7 +13,7 @@ type AddDogError = "FAILED";
 
 export async function addMyDog(
   actor: UserActor,
-  dogProfile: MyDogProfile,
+  dogProfile: DogProfile,
 ): Promise<Result<AddDogResult, AddDogError>> {
   const { userId, dbPool, dogMapper } = actor.getParams();
   const { dogName, dogPreferredVetId, ...otherFields } = dogProfile;

@@ -87,7 +87,7 @@ export type MyDogDetails = StatusSet & {
  * The dog fields that can be updated prior to the first medical report. This
  * can be used by registration and add-dog.
  */
-export type MyDogProfile = {
+export type DogProfile = {
   dogName: string;
   dogBreed: string;
   dogBirthday: Date;
