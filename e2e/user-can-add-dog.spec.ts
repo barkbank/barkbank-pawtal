@@ -1,13 +1,16 @@
 import { test, expect } from "@playwright/test";
-import { loginTestUser, urlOf } from "./_ui_test_helpers";
+import { registerTestUser } from "./_lib/register-test-user";
+import { getTestBirthday } from "./_lib/e2e-test-utils";
+import { generateTestDogName } from "./_lib/e2e-test-utils";
+import { urlOf } from "./_lib/e2e-test-utils";
 import { RoutePath } from "@/lib/route-path";
-import { SINGAPORE_TIME_ZONE, formatDateTime } from "@/lib/utilities/bark-time";
-import { sprintf } from "sprintf-js";
-import { generateRandomGUID } from "@/lib/utilities/bark-guid";
 
-test("user can login, add dog, and see it in my-pets", async ({ page }) => {
+test("user can register, login, add dog, and see it in my-pets", async ({
+  page,
+}) => {
   // GIVEN login
-  await loginTestUser({ page });
+  const { userEmail } = await registerTestUser({ page });
+  console.log({ userEmail });
   await page.goto(urlOf(RoutePath.USER_MY_PETS));
   await page.waitForURL(urlOf(RoutePath.USER_MY_PETS));
 
@@ -16,11 +19,11 @@ test("user can login, add dog, and see it in my-pets", async ({ page }) => {
   await expect(page).toHaveURL(urlOf(RoutePath.USER_ADD_DOG));
 
   // WHEN dog details are filled in
-  const dogName = generateDogName();
+  const dogName = generateTestDogName();
   console.log({ dogName });
   await page.getByLabel("Name").fill(dogName);
   await page.getByLabel("Breed").fill("UI_TEST_DOG");
-  await page.locator('input[name="dogBirthday"]').fill(getBirthday(3));
+  await page.locator('input[name="dogBirthday"]').fill(getTestBirthday(3));
   await page.getByLabel("Weight").fill("25");
 
   // WITH gender: Male
@@ -62,21 +65,3 @@ test("user can login, add dog, and see it in my-pets", async ({ page }) => {
   // AND expect new dog to be in the list.
   await expect(page.getByText(dogName)).toBeVisible();
 });
-
-function generateDogName(): string {
-  const tsid = formatDateTime(new Date(), {
-    format: "d MMM yyyy",
-    timeZone: SINGAPORE_TIME_ZONE,
-  });
-  const guid = generateRandomGUID(6);
-  return `Kelper (${tsid}, ${guid})`;
-}
-
-function getBirthday(ageYears: number): string {
-  const ts = new Date();
-  const y = ts.getUTCFullYear() - ageYears;
-  const m = ts.getUTCMonth() + 1;
-  const d = ts.getUTCDate();
-  const ymd = sprintf("%04d-%02d-%02d", y, m, d);
-  return ymd;
-}

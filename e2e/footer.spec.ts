@@ -1,5 +1,7 @@
 import { test, expect } from "@playwright/test";
-import { UI_LOCATOR, loginTestUser, urlOf } from "./_ui_test_helpers";
+import { loginTestUser } from "./_lib/login-test-account";
+import { UI_LOCATOR } from "./_lib/e2e-test-utils";
+import { urlOf } from "./_lib/e2e-test-utils";
 import { RoutePath } from "@/lib/route-path";
 
 test.describe("footer when not logged-in", () => {

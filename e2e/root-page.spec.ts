@@ -1,10 +1,10 @@
 import { test, expect } from "@playwright/test";
 import {
-  urlOf,
   loginTestAdmin,
   loginTestUser,
   loginTestVet,
-} from "./_ui_test_helpers";
+} from "./_lib/login-test-account";
+import { urlOf } from "./_lib/e2e-test-utils";
 import { RoutePath } from "@/lib/route-path";
 
 test.describe("root page", () => {
