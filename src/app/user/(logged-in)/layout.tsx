@@ -24,8 +24,8 @@ export default async function Layout(props: { children: React.ReactNode }) {
     {
       label: "My Account",
       href: RoutePath.USER_MY_ACCOUNT_PAGE,
-      iconSrc: IMG_PATH.SIDEBAR_KEY,
-      iconLightSrc: IMG_PATH.SIDEBAR_KEY_LIGHT,
+      iconSrc: IMG_PATH.SIDEBAR_USER,
+      iconLightSrc: IMG_PATH.SIDEBAR_USER_LIGHT,
     },
     {
       label: "Criteria",
