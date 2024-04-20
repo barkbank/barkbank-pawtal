@@ -1,4 +1,4 @@
-import { updateMyDogRegistration } from "@/lib/user/actions/update-my-dog-registration";
+import { updateMyDogProfile } from "@/lib/user/actions/update-my-dog-profile";
 import { withDb } from "../_db_helpers";
 import {
   fetchDogInfo,
@@ -19,7 +19,7 @@ import {
 } from "@/lib/data/db-enums";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 
-describe("updateMyDogRegistration", () => {
+describe("updateMyDogProfile", () => {
   it("should return OK_UPDATED when update was successful", async () => {
     await withDb(async (dbPool) => {
       // GIVEN users u1 with dog d1 and preferred vet v1
@@ -34,7 +34,7 @@ describe("updateMyDogRegistration", () => {
       const update = _getDogProfile({
         dogPreferredVetId: v2.vetId,
       });
-      const res = await updateMyDogRegistration(actor1, d1.dogId, update);
+      const res = await updateMyDogProfile(actor1, d1.dogId, update);
 
       // THEN
       expect(res).toEqual("OK_UPDATED");
@@ -59,11 +59,7 @@ describe("updateMyDogRegistration", () => {
 
       // WHEN
       const actor1 = getUserActor(dbPool, u1.userId);
-      const res = await updateMyDogRegistration(
-        actor1,
-        d1.dogId,
-        _getDogProfile(),
-      );
+      const res = await updateMyDogProfile(actor1, d1.dogId, _getDogProfile());
 
       // THEN
       expect(res).toEqual("ERROR_REPORT_EXISTS");
@@ -80,11 +76,7 @@ describe("updateMyDogRegistration", () => {
 
       // WHEN u1 attempts to update d2
       const actor1 = getUserActor(dbPool, u1.userId);
-      const res = await updateMyDogRegistration(
-        actor1,
-        d2.dogId,
-        _getDogProfile(),
-      );
+      const res = await updateMyDogProfile(actor1, d2.dogId, _getDogProfile());
 
       // THEN
       expect(res).toEqual("ERROR_UNAUTHORIZED");
@@ -98,7 +90,7 @@ describe("updateMyDogRegistration", () => {
       // WHEN u1 attempts to update dog that does not exist
       const actor1 = getUserActor(dbPool, u1.userId);
       const nonExistentDogId = "123";
-      const res = await updateMyDogRegistration(
+      const res = await updateMyDogProfile(
         actor1,
         nonExistentDogId,
         _getDogProfile(),

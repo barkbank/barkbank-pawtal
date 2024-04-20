@@ -26,7 +26,7 @@ type Context = {
   dogProfile: MyDogProfile;
 };
 
-export async function updateMyDogRegistration(
+export async function updateMyDogProfile(
   actor: UserActor,
   dogId: string,
   dogProfile: MyDogProfile,
