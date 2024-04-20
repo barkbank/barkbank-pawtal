@@ -1,15 +1,13 @@
-import {
-  VetOption,
-  getVetOptions,
-} from "@/app/user/registration/_lib/get-vet-options";
-import { withDb } from "./_db_helpers";
-import { getVetSpec } from "./_fixtures";
+import { getVetFormOptions } from "@/app/_lib/get-vet-form-options";
+import { withDb } from "../_db_helpers";
+import { getVetSpec } from "../_fixtures";
 import { dbInsertVet } from "@/lib/data/db-vets";
+import { BarkFormOption } from "@/components/bark/bark-form";
 
-describe("getVetOptions", () => {
+describe("getVetFormOptions", () => {
   it("should return an empty list when there are no vets in the database", async () => {
     await withDb(async (dbPool) => {
-      const options: VetOption[] = await getVetOptions(dbPool);
+      const options: BarkFormOption[] = await getVetFormOptions(dbPool);
       expect(options).toEqual([]);
     });
   });
@@ -25,17 +23,17 @@ describe("getVetOptions", () => {
       });
       const gen1 = await dbInsertVet(dbPool, spec1);
       const gen2 = await dbInsertVet(dbPool, spec2);
-      const options: VetOption[] = await getVetOptions(dbPool);
-      const expected: VetOption[] = [
+      const options: BarkFormOption[] = await getVetFormOptions(dbPool);
+      const expected: BarkFormOption[] = [
         {
-          vetId: gen2.vetId,
-          vetName: spec2.vetName,
-          vetAddress: spec2.vetAddress,
+          value: gen2.vetId,
+          label: spec2.vetName,
+          description: spec2.vetAddress,
         },
         {
-          vetId: gen1.vetId,
-          vetName: spec1.vetName,
-          vetAddress: spec1.vetAddress,
+          value: gen1.vetId,
+          label: spec1.vetName,
+          description: spec1.vetAddress,
         },
       ];
       expect(options).toEqual(expected);

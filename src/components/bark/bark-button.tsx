@@ -8,8 +8,9 @@ export function BarkButton(props: {
   className?: string;
   href?: string;
   onClick?: () => Promise<void>;
+  type?: "button" | "submit" | "reset";
 }) {
-  const { children, variant, className, href, onClick } = props;
+  const { children, variant, className, type, href, onClick } = props;
 
   if (href !== undefined) {
     return (
@@ -27,13 +28,18 @@ export function BarkButton(props: {
         className={clsx("h-[60px]", className)}
         variant={variant}
         onClick={onClick}
+        type={type}
       >
         {children}
       </Button>
     );
   }
   return (
-    <Button className={clsx("h-[60px]", className)} variant={variant}>
+    <Button
+      className={clsx("h-[60px]", className)}
+      variant={variant}
+      type={type}
+    >
       {children}
     </Button>
   );
