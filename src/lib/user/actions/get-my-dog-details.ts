@@ -4,11 +4,8 @@ import { MyDogDetails, MyDogReport } from "../user-models";
 import {
   DogAntigenPresence,
   DogGender,
-  MedicalStatus,
   PARTICIPATION_STATUS,
   ParticipationStatus,
-  ProfileStatus,
-  ServiceStatus,
   YesNoUnknown,
 } from "@/lib/data/db-enums";
 import { StatusSet } from "@/lib/data/status-mapper";
