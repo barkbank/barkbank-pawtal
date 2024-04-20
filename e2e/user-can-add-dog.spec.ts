@@ -2,10 +2,9 @@ import { test, expect } from "@playwright/test";
 import { loginTestUser, urlOf } from "./_ui_test_helpers";
 import { RoutePath } from "@/lib/route-path";
 import { SINGAPORE_TIME_ZONE, formatDateTime } from "@/lib/utilities/bark-time";
-import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
 import { sprintf } from "sprintf-js";
 
-test("user logs-in and adds a dog", async ({ page }) => {
+test("user can login, add dog, and see it in my-pets", async ({ page }) => {
   // GIVEN login
   await loginTestUser({ page });
   await page.goto(urlOf(RoutePath.USER_MY_PETS));
