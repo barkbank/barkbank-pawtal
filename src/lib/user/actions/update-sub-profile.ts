@@ -27,7 +27,7 @@ type Context = {
   subProfile: SubProfile;
 };
 
-export async function updateMyDogDetails(
+export async function updateSubProfile(
   actor: UserActor,
   // WIP: dogId should be a param.
   subProfile: SubProfile,

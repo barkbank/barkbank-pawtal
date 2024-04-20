@@ -15,13 +15,13 @@ import {
   insertUser,
   insertVet,
 } from "../_fixtures";
-import { updateMyDogDetails } from "@/lib/user/actions/update-my-dog-details";
+import { updateSubProfile } from "@/lib/user/actions/update-sub-profile";
 import { Pool, PoolClient } from "pg";
 import { dbBegin, dbQuery, dbRelease } from "@/lib/data/db-utils";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
 
-describe("updateMyDogDetails", () => {
+describe("updateSubProfile", () => {
   it("should return OK_UPDATED when successfully updated dog details", async () => {
     await withDb(async (dbPool) => {
       // GIVEN users u1 with dog d1 and preferred vet v1
@@ -43,7 +43,7 @@ describe("updateMyDogDetails", () => {
       const update = _getSubProfile(d1.dogId, {
         dogPreferredVetId: v2.vetId,
       });
-      const res = await updateMyDogDetails(actor1, update);
+      const res = await updateSubProfile(actor1, update);
 
       // THEN
       expect(res).toEqual("OK_UPDATED");
@@ -73,7 +73,7 @@ describe("updateMyDogDetails", () => {
         dogPauseExpiryTime: new Date(Date.now() + MILLIS_PER_WEEK),
         dogNonParticipationReason: "some reason 123",
       });
-      const res = await updateMyDogDetails(actor1, update);
+      const res = await updateSubProfile(actor1, update);
 
       // THEN
       expect(res).toEqual("OK_UPDATED");
@@ -103,7 +103,7 @@ describe("updateMyDogDetails", () => {
       const u2 = await insertUser(2, dbPool);
       const update = _getSubProfile(d1.dogId);
       const actor = getUserActor(dbPool, u2.userId);
-      const res = await updateMyDogDetails(actor, update);
+      const res = await updateSubProfile(actor, update);
       expect(res).toEqual("ERROR_UNAUTHORIZED");
     });
   });
@@ -113,7 +113,7 @@ describe("updateMyDogDetails", () => {
       const d1 = await insertDog(1, u1.userId, dbPool);
       const update = _getSubProfile(d1.dogId);
       const actor = getUserActor(dbPool, u1.userId);
-      const res = await updateMyDogDetails(actor, update);
+      const res = await updateSubProfile(actor, update);
       expect(res).toEqual("ERROR_MISSING_REPORT");
     });
   });
@@ -123,7 +123,7 @@ describe("updateMyDogDetails", () => {
       const unknownDogId = "123";
       const update = _getSubProfile(unknownDogId);
       const actor = getUserActor(dbPool, u1.userId);
-      const res = await updateMyDogDetails(actor, update);
+      const res = await updateSubProfile(actor, update);
       expect(res).toEqual("ERROR_MISSING_DOG");
     });
   });

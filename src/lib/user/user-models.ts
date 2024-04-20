@@ -62,7 +62,7 @@ export type MyDogReport = {
 // WIP: DONE: Rename MyDogRegistration to MyDogProfile
 // WIP: DONE: Rename updateMyDogRegistration to updateMyDogProfile
 // WIP: DONE: Rename MyDogDetailsUpdate to SubProfile
-// WIP: Rename updateMyDogDetails to updateSubProfile
+// WIP: DONE: Rename updateMyDogDetails to updateSubProfile
 // WIP: Remove participation details from SubProfile
 // WIP: Change getMyDogDetails to getMyDogProfile
 // WIP: Remove MyDogDetails
