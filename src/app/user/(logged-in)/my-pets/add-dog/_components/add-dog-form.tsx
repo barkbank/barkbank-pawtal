@@ -13,8 +13,8 @@ import { RoutePath } from "@/lib/route-path";
 export default function AddDogForm(props: { vetOptions: BarkFormOption[] }) {
   const router = useRouter();
   const { vetOptions } = props;
+
   async function handleValues(values: DogFormData) {
-    console.log(values);
     const {
       dogBirthday: dogBirthdayString,
       dogWeightKg: dogWeightKgString,
@@ -23,14 +23,14 @@ export default function AddDogForm(props: { vetOptions: BarkFormOption[] }) {
     const dogBirthday = parseDateTime(dogBirthdayString, UTC_DATE_OPTION);
     const dogWeightKg = parseFloat(dogWeightKgString);
     const reg: MyDogRegistration = { dogBirthday, dogWeightKg, ...otherFields };
-    console.log(reg);
-    const { result, error } = await submitDog(reg);
+    const { error } = await submitDog(reg);
     if (error) {
       return error;
     }
     router.push(RoutePath.USER_MY_PETS);
     return "";
   }
+
   return (
     <GeneralDogForm
       formTitle="Add Dog"
