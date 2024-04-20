@@ -61,33 +61,8 @@ export type MyDogReport = {
 };
 
 // WIP: Refactor the following...
-
-// WIP: DONE: Transform getMyDogDetails into getDogProfile
-
 // WIP: Rename MyDogAppointment to PendingReport
 // WIP: Rename MyDog::dogAppointments to pendingReports
-
-/**
- * @deprecated Use DogProfile & DogStatuses instead.
- */
-export type MyDogDetails = StatusSet & {
-  dogId: string;
-
-  dogName: string;
-  dogBreed: string;
-  dogBirthday: Date;
-  dogGender: DogGender;
-  dogWeightKg: number | null;
-  dogDea1Point1: DogAntigenPresence;
-  dogEverPregnant: YesNoUnknown;
-  dogEverReceivedTransfusion: YesNoUnknown;
-  dogPreferredVetId: string | null;
-  dogParticipationStatus: ParticipationStatus;
-  dogNonParticipationReason: string;
-  dogPauseExpiryTime: Date | null;
-
-  dogReports: MyDogReport[];
-};
 
 /**
  * The different statuses of a dog.
