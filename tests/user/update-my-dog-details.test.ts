@@ -1,4 +1,4 @@
-import { MyDogDetailsUpdate } from "@/lib/user/user-models";
+import { SubProfile } from "@/lib/user/user-models";
 import { withDb } from "../_db_helpers";
 import {
   CALL_OUTCOME,
@@ -40,14 +40,14 @@ describe("updateMyDogDetails", () => {
       // WHEN
       const v2 = await insertVet(2, dbPool);
       const actor1 = getUserActor(dbPool, u1.userId);
-      const update = detailsUpdate(d1.dogId, {
+      const update = _getSubProfile(d1.dogId, {
         dogPreferredVetId: v2.vetId,
       });
       const res = await updateMyDogDetails(actor1, update);
 
       // THEN
       expect(res).toEqual("OK_UPDATED");
-      const dataInDb = await reconstructUpdateFromDb(dbPool, d1.dogId);
+      const dataInDb = await _fetchSubProfile(dbPool, d1.dogId);
       expect(dataInDb).toEqual(update);
     });
   });
@@ -68,7 +68,7 @@ describe("updateMyDogDetails", () => {
 
       // WHEN
       const actor1 = getUserActor(dbPool, u1.userId);
-      const update = detailsUpdate(d1.dogId, {
+      const update = _getSubProfile(d1.dogId, {
         dogParticipationStatus: PARTICIPATION_STATUS.PAUSED,
         dogPauseExpiryTime: new Date(Date.now() + MILLIS_PER_WEEK),
         dogNonParticipationReason: "some reason 123",
@@ -101,7 +101,7 @@ describe("updateMyDogDetails", () => {
 
       // WHEN u2 tries to update u1's dog
       const u2 = await insertUser(2, dbPool);
-      const update = detailsUpdate(d1.dogId);
+      const update = _getSubProfile(d1.dogId);
       const actor = getUserActor(dbPool, u2.userId);
       const res = await updateMyDogDetails(actor, update);
       expect(res).toEqual("ERROR_UNAUTHORIZED");
@@ -111,7 +111,7 @@ describe("updateMyDogDetails", () => {
     await withDb(async (dbPool) => {
       const u1 = await insertUser(1, dbPool);
       const d1 = await insertDog(1, u1.userId, dbPool);
-      const update = detailsUpdate(d1.dogId);
+      const update = _getSubProfile(d1.dogId);
       const actor = getUserActor(dbPool, u1.userId);
       const res = await updateMyDogDetails(actor, update);
       expect(res).toEqual("ERROR_MISSING_REPORT");
@@ -121,7 +121,7 @@ describe("updateMyDogDetails", () => {
     await withDb(async (dbPool) => {
       const u1 = await insertUser(1, dbPool);
       const unknownDogId = "123";
-      const update = detailsUpdate(unknownDogId);
+      const update = _getSubProfile(unknownDogId);
       const actor = getUserActor(dbPool, u1.userId);
       const res = await updateMyDogDetails(actor, update);
       expect(res).toEqual("ERROR_MISSING_DOG");
@@ -129,11 +129,11 @@ describe("updateMyDogDetails", () => {
   });
 });
 
-function detailsUpdate(
+function _getSubProfile(
   dogId: string,
-  overrides?: Partial<MyDogDetailsUpdate>,
-): MyDogDetailsUpdate {
-  const base: MyDogDetailsUpdate = {
+  overrides?: Partial<SubProfile>,
+): SubProfile {
+  const base: SubProfile = {
     dogId,
     dogName: "updated name",
     dogWeightKg: 50,
@@ -147,25 +147,26 @@ function detailsUpdate(
   return { ...base, ...overrides };
 }
 
-async function reconstructUpdateFromDb(
+// WIP: this can be in one function. AFTER we have removed participation status
+async function _fetchSubProfile(
   dbPool: Pool,
   dogId: string,
-): Promise<Partial<MyDogDetailsUpdate>> {
+): Promise<Partial<SubProfile>> {
   const conn = await dbPool.connect();
   try {
     await dbBegin(conn);
-    const fieldsPart = await fetchDogFields(conn, dogId);
-    const vetPart = await fetchDogPreferredVetId(conn, dogId);
+    const fieldsPart = await _fetchDogFields(conn, dogId);
+    const vetPart = await _fetchDogPreferredVetId(conn, dogId);
     return { ...fieldsPart, ...vetPart };
   } finally {
     await dbRelease(conn);
   }
 }
 
-async function fetchDogFields(
+async function _fetchDogFields(
   conn: PoolClient,
   dogId: string,
-): Promise<Partial<MyDogDetailsUpdate>> {
+): Promise<Partial<SubProfile>> {
   const sql = `
   select
     dog_encrypted_oii as "dogEncryptedOii",
@@ -188,10 +189,10 @@ async function fetchDogFields(
   return { dogId, dogName, dogNonParticipationReason, ...dogFields };
 }
 
-async function fetchDogPreferredVetId(
+async function _fetchDogPreferredVetId(
   conn: PoolClient,
   dogId: string,
-): Promise<Partial<MyDogDetailsUpdate>> {
+): Promise<Partial<SubProfile>> {
   const sql = `
   select vet_id as "dogPreferredVetId"
   from dog_vet_preferences

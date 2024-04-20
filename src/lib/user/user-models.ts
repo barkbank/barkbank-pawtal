@@ -61,9 +61,9 @@ export type MyDogReport = {
 // WIP: Refactor the following...
 // WIP: DONE: Rename MyDogRegistration to MyDogProfile
 // WIP: DONE: Rename updateMyDogRegistration to updateMyDogProfile
-// WIP: Rename MyDogDetailsUpdate to MyPartialDogProfile
-// WIP: Rename updateMyDogDetails to updateMyPartialDogProfile
-// WIP: Remove participation details from updateMyPartialDogProfile
+// WIP: DONE: Rename MyDogDetailsUpdate to SubProfile
+// WIP: Rename updateMyDogDetails to updateSubProfile
+// WIP: Remove participation details from SubProfile
 // WIP: Change getMyDogDetails to getMyDogProfile
 // WIP: Remove MyDogDetails
 
@@ -102,6 +102,7 @@ export type MyDogProfile = {
   dogPreferredVetId: string;
 };
 
+// WIP: Do we need this? Is it for getMyDogProfile? Yes.
 export type MySecureDogProfile = {
   dogEncryptedOii: string;
   dogBreed: string;
@@ -114,7 +115,11 @@ export type MySecureDogProfile = {
   dogPreferredVetId: string;
 };
 
-export type MyDogDetailsUpdate = {
+/**
+ * The subset of MyDogProfile that can be modified after the first medical
+ * report.
+ */
+export type SubProfile = {
   dogId: string;
   dogName: string;
   dogWeightKg: number | null;

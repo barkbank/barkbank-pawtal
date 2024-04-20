@@ -1,6 +1,6 @@
 import { PoolClient } from "pg";
 import { UserActor } from "../user-actor";
-import { MyDogDetailsUpdate } from "../user-models";
+import { SubProfile } from "../user-models";
 import {
   dbBegin,
   dbCommit,
@@ -24,18 +24,19 @@ type Response =
 
 type Context = {
   actor: UserActor;
-  update: MyDogDetailsUpdate;
+  subProfile: SubProfile;
 };
 
 export async function updateMyDogDetails(
   actor: UserActor,
-  update: MyDogDetailsUpdate,
+  // WIP: dogId should be a param.
+  subProfile: SubProfile,
 ): Promise<Response> {
-  const validUpdateCheck = checkValidUpdate(update);
+  const validUpdateCheck = checkValidUpdate(subProfile);
   if (validUpdateCheck !== "OK") {
     return validUpdateCheck;
   }
-  const ctx: Context = { actor, update };
+  const ctx: Context = { actor, subProfile };
   const { dbPool } = actor.getParams();
   const conn = await dbPool.connect();
   try {
@@ -62,9 +63,9 @@ export async function updateMyDogDetails(
 }
 
 function checkValidUpdate(
-  update: MyDogDetailsUpdate,
+  subProfile: SubProfile,
 ): "OK" | "ERROR_UNEXPECTED_NON_PARTICIPATION_REASON" {
-  const { dogParticipationStatus, dogNonParticipationReason } = update;
+  const { dogParticipationStatus, dogNonParticipationReason } = subProfile;
   if (
     dogParticipationStatus === PARTICIPATION_STATUS.PARTICIPATING &&
     dogNonParticipationReason !== ""
@@ -78,9 +79,11 @@ async function checkOwnership(
   conn: PoolClient,
   ctx: Context,
 ): Promise<"OK" | "ERROR_MISSING_DOG" | "ERROR_UNAUTHORIZED"> {
-  const { actor, update } = ctx;
+  const { actor, subProfile } = ctx;
   const sql = `SELECT user_id as "ownerUserId" FROM dogs WHERE dog_id = $1`;
-  const res = await dbQuery<{ ownerUserId: string }>(conn, sql, [update.dogId]);
+  const res = await dbQuery<{ ownerUserId: string }>(conn, sql, [
+    subProfile.dogId,
+  ]);
   if (res.rows.length === 0) {
     return "ERROR_MISSING_DOG";
   }
@@ -96,8 +99,8 @@ async function checkExistingReport(
   conn: PoolClient,
   ctx: Context,
 ): Promise<"OK" | "ERROR_MISSING_REPORT"> {
-  const { update } = ctx;
-  const { dogId } = update;
+  const { subProfile } = ctx;
+  const { dogId } = subProfile;
   const sql = `
   SELECT COUNT(1)::integer as "numReports"
   FROM reports
@@ -115,7 +118,7 @@ async function updateDogFields(
   conn: PoolClient,
   ctx: Context,
 ): Promise<"OK" | "FAILURE_DB_UPDATE"> {
-  const { update } = ctx;
+  const { subProfile } = ctx;
   const {
     dogId,
     dogWeightKg,
@@ -123,7 +126,7 @@ async function updateDogFields(
     dogEverReceivedTransfusion,
     dogParticipationStatus,
     dogPauseExpiryTime,
-  } = update;
+  } = subProfile;
   const [dogEncryptedOii, dogEncryptedReason] = await Promise.all([
     getDogEncryptedOii(ctx),
     getDogEncryptedReason(ctx),
@@ -162,8 +165,8 @@ async function updateVetPreference(
   conn: PoolClient,
   ctx: Context,
 ): Promise<"OK"> {
-  const { update } = ctx;
-  const { dogId, dogPreferredVetId: vetId } = update;
+  const { subProfile } = ctx;
+  const { dogId, dogPreferredVetId: vetId } = subProfile;
   await dbDeleteDogVetPreferences(conn, dogId);
   if (vetId !== null) {
     await dbInsertDogVetPreference(conn, dogId, vetId);
@@ -172,9 +175,9 @@ async function updateVetPreference(
 }
 
 async function getDogEncryptedOii(ctx: Context): Promise<string> {
-  const { actor, update } = ctx;
+  const { actor, subProfile } = ctx;
   const { dogMapper } = actor.getParams();
-  const { dogName } = update;
+  const { dogName } = subProfile;
   const { dogEncryptedOii } = await dogMapper.mapDogOiiToDogSecureOii({
     dogName,
   });
@@ -182,9 +185,9 @@ async function getDogEncryptedOii(ctx: Context): Promise<string> {
 }
 
 async function getDogEncryptedReason(ctx: Context): Promise<string> {
-  const { actor, update } = ctx;
+  const { actor, subProfile } = ctx;
   const { textEncryptionService } = actor.getParams();
-  const { dogParticipationStatus, dogNonParticipationReason } = update;
+  const { dogParticipationStatus, dogNonParticipationReason } = subProfile;
   if (dogParticipationStatus === PARTICIPATION_STATUS.PARTICIPATING) {
     return "";
   }
