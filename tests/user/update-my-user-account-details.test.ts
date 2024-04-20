@@ -21,7 +21,7 @@ describe("updateMyAccountDetails", () => {
       expect(res).toEqual("OK_UPDATED");
 
       const account = await getMyAccount(actor);
-      console.log(JSON.stringify(account))
+      console.log(JSON.stringify(account));
       const { userName, userPhoneNumber, userResidency } = account!;
 
       expect(userName).toEqual(update.userName);

@@ -1,7 +1,7 @@
-import { MyDogRegistration } from "@/lib/user/user-models";
+import { DogProfile } from "@/lib/user/user-models";
 import { withDb } from "../_db_helpers";
 import {
-  getDogMapper,
+  fetchDogInfo,
   getUserActor,
   insertUser,
   insertVet,
@@ -13,8 +13,6 @@ import {
   YES_NO_UNKNOWN,
 } from "@/lib/data/db-enums";
 import { addMyDog } from "@/lib/user/actions/add-my-dog";
-import { dbQuery } from "@/lib/data/db-utils";
-import { Pool } from "pg";
 
 describe("addMyDog", () => {
   it("should register a new dog to the user", async () => {
@@ -25,24 +23,22 @@ describe("addMyDog", () => {
       // AND vet v1
       const v1 = await insertVet(1, dbPool);
 
-      // AND dog registration r1
-      const r1: MyDogRegistration = {
-        ...MY_DOG_REG_WITH_NO_VET,
+      // AND dog profile p1
+      const p1: DogProfile = {
+        ...DOG_PROFILE_WITHOUT_VET,
         dogPreferredVetId: v1.vetId,
       };
 
       // WHEN addMyDog
       const actor = getUserActor(dbPool, u1.userId);
-      const { result, error } = await addMyDog(actor, r1);
+      const { result, error } = await addMyDog(actor, p1);
 
       // THEN expect dog belonging to user
       expect(error).toBeUndefined();
       const { dogId } = result!;
-      const dog = await fetchRecord(dbPool, dogId);
-      expect(dog).toEqual({
-        userId: u1.userId,
-        ...r1,
-      });
+      const { dogProfile, userId } = await fetchDogInfo(dbPool, dogId);
+      expect(dogProfile).toEqual(p1);
+      expect(userId).toEqual(u1.userId);
     });
   });
 
@@ -54,29 +50,27 @@ describe("addMyDog", () => {
       // AND vet v1
       const v1 = await insertVet(1, dbPool);
 
-      // AND dog registration r1
-      const r1: MyDogRegistration = {
-        ...MY_DOG_REG_WITH_NO_VET,
+      // AND dog profile p1
+      const p1: DogProfile = {
+        ...DOG_PROFILE_WITHOUT_VET,
         dogPreferredVetId: "",
       };
 
       // WHEN addMyDog
       const actor = getUserActor(dbPool, u1.userId);
-      const { result, error } = await addMyDog(actor, r1);
+      const { result, error } = await addMyDog(actor, p1);
 
       // THEN expect dog belonging to user
       expect(error).toBeUndefined();
       const { dogId } = result!;
-      const dog = await fetchRecord(dbPool, dogId);
-      expect(dog).toEqual({
-        userId: u1.userId,
-        ...r1,
-      });
+      const { dogProfile, userId } = await fetchDogInfo(dbPool, dogId);
+      expect(dogProfile).toEqual(p1);
+      expect(userId).toEqual(u1.userId);
     });
   });
 });
 
-const MY_DOG_REG_WITH_NO_VET: MyDogRegistration = {
+const DOG_PROFILE_WITHOUT_VET: DogProfile = {
   dogName: "Hippo",
   dogBreed: "Greyhound",
   dogBirthday: parseDateTime("2023-01-01", UTC_DATE_OPTION),
@@ -87,36 +81,3 @@ const MY_DOG_REG_WITH_NO_VET: MyDogRegistration = {
   dogDea1Point1: DOG_ANTIGEN_PRESENCE.POSITIVE,
   dogPreferredVetId: "",
 };
-
-type Record = MyDogRegistration & {
-  userId: string;
-};
-
-async function fetchRecord(dbPool: Pool, dogId: string): Promise<Record> {
-  const sql = `
-  SELECT
-    tDog.user_id as "userId",
-    tDog.dog_encrypted_oii as "dogEncryptedOii",
-    tDog.dog_breed as "dogBreed",
-    tDog.dog_birthday as "dogBirthday",
-    tDog.dog_gender as "dogGender",
-    tDog.dog_weight_kg as "dogWeightKg",
-    tDog.dog_ever_pregnant as "dogEverPregnant",
-    tDog.dog_ever_received_transfusion as "dogEverReceivedTransfusion",
-    tDog.dog_dea1_point1 as "dogDea1Point1",
-    COALESCE(tPref.vet_id::text, '') as "dogPreferredVetId"
-  FROM dogs as tDog
-  LEFT JOIN (
-    SELECT dog_id, vet_id
-    FROM dog_vet_preferences
-    WHERE dog_id = $1
-  ) as tPref on tDog.dog_id = tPref.vet_id
-  WHERE tDog.dog_id = $1
-  `;
-  const res = await dbQuery(dbPool, sql, [dogId]);
-  const { dogEncryptedOii, ...otherFields } = res.rows[0];
-  const { dogName } = await getDogMapper().mapDogSecureOiiToDogOii({
-    dogEncryptedOii,
-  });
-  return { dogName, ...otherFields };
-}

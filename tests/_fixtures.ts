@@ -54,7 +54,7 @@ import { VetMapper } from "@/lib/data/vet-mapper";
 import { DogMapper } from "@/lib/data/dog-mapper";
 import { UserMapper } from "@/lib/data/user-mapper";
 import { BARK_UTC } from "@/lib/utilities/bark-time";
-import { DbContext } from "@/lib/data/db-utils";
+import { DbContext, dbQuery } from "@/lib/data/db-utils";
 import { dbInsertDog } from "@/lib/data/db-dogs";
 import { OtpService } from "@/lib/services/otp";
 import { UserActor, UserActorConfig } from "@/lib/user/user-actor";
@@ -76,6 +76,8 @@ import {
 } from "@/lib/services/email-otp-service";
 import { VetActor, VetActorConfig } from "@/lib/vet/vet-actor";
 import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
+import { DogProfile, SubProfile } from "@/lib/user/user-models";
+import { getDogProfile } from "@/lib/user/actions/get-dog-profile";
 
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
@@ -514,4 +516,26 @@ export function getDbReportSpec(
     ineligibilityExpiryTime: null,
   };
   return { ...base, ...overrides };
+}
+
+export async function fetchDogOwnerId(
+  dbCtx: DbContext,
+  dogId: string,
+): Promise<{ userId: string }> {
+  const sql = `SELECT user_id as "userId" FROM dogs WHERE dog_id = $1`;
+  const res = await dbQuery<{ userId: string }>(dbCtx, sql, [dogId]);
+  return res.rows[0];
+}
+
+export async function fetchDogInfo(
+  dbPool: Pool,
+  dogId: string,
+): Promise<{ userId: string; dogProfile: DogProfile; subProfile: SubProfile }> {
+  const { userId } = await fetchDogOwnerId(dbPool, dogId);
+  const actor = getUserActor(dbPool, userId);
+  const { result } = await getDogProfile(actor, dogId);
+  const dogProfile = result!;
+  const { dogBreed, dogBirthday, dogGender, dogDea1Point1, ...subProfile } =
+    dogProfile;
+  return { userId, dogProfile, subProfile };
 }

@@ -1,6 +1,6 @@
 import { PoolClient } from "pg";
 import { UserActor } from "../user-actor";
-import { MyDogDetailsUpdate } from "../user-models";
+import { SubProfile } from "../user-models";
 import {
   dbBegin,
   dbCommit,
@@ -12,30 +12,26 @@ import {
   dbDeleteDogVetPreferences,
   dbInsertDogVetPreference,
 } from "@/lib/data/db-dogs";
-import { PARTICIPATION_STATUS } from "@/lib/data/db-enums";
 
 type Response =
   | "OK_UPDATED"
   | "ERROR_UNAUTHORIZED"
   | "ERROR_MISSING_DOG"
   | "ERROR_MISSING_REPORT"
-  | "ERROR_UNEXPECTED_NON_PARTICIPATION_REASON"
   | "FAILURE_DB_UPDATE";
 
 type Context = {
   actor: UserActor;
-  update: MyDogDetailsUpdate;
+  dogId: string;
+  subProfile: SubProfile;
 };
 
-export async function updateMyDogDetails(
+export async function updateSubProfile(
   actor: UserActor,
-  update: MyDogDetailsUpdate,
+  dogId: string,
+  subProfile: SubProfile,
 ): Promise<Response> {
-  const validUpdateCheck = checkValidUpdate(update);
-  if (validUpdateCheck !== "OK") {
-    return validUpdateCheck;
-  }
-  const ctx: Context = { actor, update };
+  const ctx: Context = { actor, dogId, subProfile };
   const { dbPool } = actor.getParams();
   const conn = await dbPool.connect();
   try {
@@ -61,26 +57,13 @@ export async function updateMyDogDetails(
   }
 }
 
-function checkValidUpdate(
-  update: MyDogDetailsUpdate,
-): "OK" | "ERROR_UNEXPECTED_NON_PARTICIPATION_REASON" {
-  const { dogParticipationStatus, dogNonParticipationReason } = update;
-  if (
-    dogParticipationStatus === PARTICIPATION_STATUS.PARTICIPATING &&
-    dogNonParticipationReason !== ""
-  ) {
-    return "ERROR_UNEXPECTED_NON_PARTICIPATION_REASON";
-  }
-  return "OK";
-}
-
 async function checkOwnership(
   conn: PoolClient,
   ctx: Context,
 ): Promise<"OK" | "ERROR_MISSING_DOG" | "ERROR_UNAUTHORIZED"> {
-  const { actor, update } = ctx;
+  const { actor, dogId, subProfile } = ctx;
   const sql = `SELECT user_id as "ownerUserId" FROM dogs WHERE dog_id = $1`;
-  const res = await dbQuery<{ ownerUserId: string }>(conn, sql, [update.dogId]);
+  const res = await dbQuery<{ ownerUserId: string }>(conn, sql, [dogId]);
   if (res.rows.length === 0) {
     return "ERROR_MISSING_DOG";
   }
@@ -96,8 +79,7 @@ async function checkExistingReport(
   conn: PoolClient,
   ctx: Context,
 ): Promise<"OK" | "ERROR_MISSING_REPORT"> {
-  const { update } = ctx;
-  const { dogId } = update;
+  const { dogId, subProfile } = ctx;
   const sql = `
   SELECT COUNT(1)::integer as "numReports"
   FROM reports
@@ -115,29 +97,20 @@ async function updateDogFields(
   conn: PoolClient,
   ctx: Context,
 ): Promise<"OK" | "FAILURE_DB_UPDATE"> {
-  const { update } = ctx;
-  const {
-    dogId,
-    dogWeightKg,
-    dogEverPregnant,
-    dogEverReceivedTransfusion,
-    dogParticipationStatus,
-    dogPauseExpiryTime,
-  } = update;
-  const [dogEncryptedOii, dogEncryptedReason] = await Promise.all([
-    getDogEncryptedOii(ctx),
-    getDogEncryptedReason(ctx),
-  ]);
+  const { dogId, subProfile, actor } = ctx;
+  const { dogMapper } = actor.getParams();
+  const { dogName, dogWeightKg, dogEverPregnant, dogEverReceivedTransfusion } =
+    subProfile;
+  const { dogEncryptedOii } = await dogMapper.mapDogOiiToDogSecureOii({
+    dogName,
+  });
   const sql = `
   UPDATE dogs
   SET
     dog_encrypted_oii = $2,
     dog_weight_kg = $3,
     dog_ever_pregnant = $4,
-    dog_ever_received_transfusion = $5,
-    dog_participation_status = $6,
-    dog_encrypted_reason = $7,
-    dog_pause_expiry_time = $8
+    dog_ever_received_transfusion = $5
   WHERE
     dog_id = $1
   RETURNING 1
@@ -148,9 +121,6 @@ async function updateDogFields(
     dogWeightKg,
     dogEverPregnant,
     dogEverReceivedTransfusion,
-    dogParticipationStatus,
-    dogEncryptedReason,
-    dogPauseExpiryTime,
   ]);
   if (res.rows.length !== 1) {
     return "FAILURE_DB_UPDATE";
@@ -162,37 +132,11 @@ async function updateVetPreference(
   conn: PoolClient,
   ctx: Context,
 ): Promise<"OK"> {
-  const { update } = ctx;
-  const { dogId, dogPreferredVetId: vetId } = update;
+  const { dogId, subProfile } = ctx;
+  const { dogPreferredVetId: vetId } = subProfile;
   await dbDeleteDogVetPreferences(conn, dogId);
-  if (vetId !== null) {
+  if (vetId !== "") {
     await dbInsertDogVetPreference(conn, dogId, vetId);
   }
   return "OK";
-}
-
-async function getDogEncryptedOii(ctx: Context): Promise<string> {
-  const { actor, update } = ctx;
-  const { dogMapper } = actor.getParams();
-  const { dogName } = update;
-  const { dogEncryptedOii } = await dogMapper.mapDogOiiToDogSecureOii({
-    dogName,
-  });
-  return dogEncryptedOii;
-}
-
-async function getDogEncryptedReason(ctx: Context): Promise<string> {
-  const { actor, update } = ctx;
-  const { textEncryptionService } = actor.getParams();
-  const { dogParticipationStatus, dogNonParticipationReason } = update;
-  if (dogParticipationStatus === PARTICIPATION_STATUS.PARTICIPATING) {
-    return "";
-  }
-  if (dogNonParticipationReason === "") {
-    return "";
-  }
-  const dogEncryptedReason = await textEncryptionService.getEncryptedData(
-    dogNonParticipationReason,
-  );
-  return dogEncryptedReason;
 }
