@@ -3,7 +3,7 @@ import { UserActor } from "../user-actor";
 import { DogProfile, SecureDogProfile } from "../user-models";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 
-type ErrorCode = "ERROR_UNAUTHORIZED";
+type ErrorCode = "ERROR_UNAUTHORIZED" | "ERROR_MISSING_DOG";
 
 export async function getDogProfile(
   actor: UserActor,
@@ -12,6 +12,7 @@ export async function getDogProfile(
   const { dbPool, userId, dogMapper } = actor.getParams();
   const sql = `
   SELECT
+    tDog.user_id as "dogOwnerId",
     tDog.dog_encrypted_oii as "dogEncryptedOii",
     tDog.dog_breed as "dogBreed",
     tDog.dog_birthday as "dogBirthday",
@@ -29,13 +30,16 @@ export async function getDogProfile(
     WHERE dog_id = $1
   ) as tPref on tDog.dog_id = tPref.dog_id
   WHERE tDog.dog_id = $1
-  AND tDog.user_id = $2
   `;
-  const res = await dbQuery<SecureDogProfile>(dbPool, sql, [dogId, userId]);
+  type Row = SecureDogProfile & { dogOwnerId: string };
+  const res = await dbQuery<Row>(dbPool, sql, [dogId]);
   if (res.rows.length === 0) {
+    return Err("ERROR_MISSING_DOG");
+  }
+  const { dogOwnerId, dogEncryptedOii, ...otherFields } = res.rows[0];
+  if (dogOwnerId !== userId) {
     return Err("ERROR_UNAUTHORIZED");
   }
-  const { dogEncryptedOii, ...otherFields } = res.rows[0];
   const { dogName } = await dogMapper.mapDogSecureOiiToDogOii({
     dogEncryptedOii,
   });

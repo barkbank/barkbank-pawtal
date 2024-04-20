@@ -20,17 +20,32 @@ import {
 describe("getDogProfile", () => {
   it("should return ERROR_UNAUTHORIZED when user does not own the dog requested", async () => {
     await withDb(async (dbPool) => {
-      // Given that user1 owns dog1
-      const { userId: userId1 } = await insertUser(1, dbPool);
-      const { dogId: dogId1 } = await insertDog(2, userId1, dbPool);
+      // Given user u1 owns d1
+      const u1 = await insertUser(1, dbPool);
+      const d1 = await insertDog(2, u1.userId, dbPool);
 
-      // When user2 requests for details pertaining to dog1
-      const { userId: userId2 } = await insertUser(2, dbPool);
-      const actor2 = getUserActor(dbPool, userId2);
-      const { result, error } = await getDogProfile(actor2, dogId1);
+      // When u2 requests for details pertaining to d1
+      const u2 = await insertUser(2, dbPool);
+      const u2Actor = getUserActor(dbPool, u2.userId);
+      const { result, error } = await getDogProfile(u2Actor, d1.dogId);
 
       // Then
       expect(error).toEqual("ERROR_UNAUTHORIZED");
+      expect(result).toBeUndefined();
+    });
+  });
+  it("should return ERROR_MISSING_DOG when dog does not exist", async () => {
+    await withDb(async (dbPool) => {
+      // Given u1
+      const u1 = await insertUser(1, dbPool);
+
+      // When u1 requests for dog that does not exists
+      const actor = getUserActor(dbPool, u1.userId);
+      const noSuchDogId = "87654";
+      const { result, error } = await getDogProfile(actor, noSuchDogId);
+
+      // Then
+      expect(error).toEqual("ERROR_MISSING_DOG");
       expect(result).toBeUndefined();
     });
   });
