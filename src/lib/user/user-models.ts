@@ -59,11 +59,12 @@ export type MyDogReport = {
 };
 
 // WIP: Refactor the following...
-// WIP: DONE: Rename MyDogProfile to DogProfile
-// WIP: DONE: Rename updateMyDogProfile to updateDogProfile
 // WIP: Change getMyDogDetails to getMyDogProfile
 // WIP: Remove MyDogDetails
 
+/**
+ * @deprecated Use DogProfile & DogStatuses instead.
+ */
 export type MyDogDetails = StatusSet & {
   dogId: string;
 
@@ -82,6 +83,15 @@ export type MyDogDetails = StatusSet & {
 
   dogReports: MyDogReport[];
 };
+
+// WIP: Defined this. Is it used?
+export type DogStatuses = {
+  dogServiceStatus: ServiceStatus;
+  dogProfileStatus: ProfileStatus;
+  dogMedicalStatus: MedicalStatus;
+  dogParticipationStatus: ParticipationStatus;
+  // WIP: Should we have highlighted status here?
+}
 
 /**
  * The dog fields that can be updated prior to the first medical report. This
