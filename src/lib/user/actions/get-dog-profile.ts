@@ -1,7 +1,12 @@
 import { dbQuery } from "@/lib/data/db-utils";
 import { UserActor } from "../user-actor";
-import { DogProfile, SecureDogProfile } from "../user-models";
+import { DogProfile } from "../user-models";
 import { Err, Ok, Result } from "@/lib/utilities/result";
+import {
+  DogAntigenPresence,
+  DogGender,
+  YesNoUnknown,
+} from "@/lib/data/db-enums";
 
 type ErrorCode = "ERROR_UNAUTHORIZED" | "ERROR_MISSING_DOG";
 
@@ -35,7 +40,18 @@ export async function getDogProfile(
   ) as tPref on tDog.dog_id = tPref.dog_id
   WHERE tDog.dog_id = $1
   `;
-  type Row = SecureDogProfile & { dogOwnerId: string };
+  type Row = {
+    dogOwnerId: string;
+    dogEncryptedOii: string;
+    dogBreed: string;
+    dogBirthday: Date;
+    dogGender: DogGender;
+    dogWeightKg: number | null;
+    dogDea1Point1: DogAntigenPresence;
+    dogEverPregnant: YesNoUnknown;
+    dogEverReceivedTransfusion: YesNoUnknown;
+    dogPreferredVetId: string;
+  };
   const res = await dbQuery<Row>(dbPool, sql, [dogId]);
   if (res.rows.length === 0) {
     return Err("ERROR_MISSING_DOG");

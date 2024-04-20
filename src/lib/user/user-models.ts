@@ -84,18 +84,6 @@ export type DogProfile = {
   dogPreferredVetId: string;
 };
 
-export type SecureDogProfile = {
-  dogEncryptedOii: string;
-  dogBreed: string;
-  dogBirthday: Date;
-  dogGender: DogGender;
-  dogWeightKg: number | null;
-  dogDea1Point1: DogAntigenPresence;
-  dogEverPregnant: YesNoUnknown;
-  dogEverReceivedTransfusion: YesNoUnknown;
-  dogPreferredVetId: string;
-};
-
 /**
  * The subset of MyDogProfile that can be modified after the first medical
  * report.
