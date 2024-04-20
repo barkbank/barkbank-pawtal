@@ -6,7 +6,7 @@ import {
   dbRollback,
 } from "@/lib/data/db-utils";
 import { UserActor } from "../user-actor";
-import { MyDogRegistrationUpdate } from "../user-models";
+import { MyDogRegistration } from "../user-models";
 import { PoolClient } from "pg";
 import {
   dbDeleteDogVetPreferences,
@@ -24,13 +24,13 @@ type Response =
 
 type Context = {
   actor: UserActor;
-  update: MyDogRegistrationUpdate;
+  update: MyDogRegistration;
 };
 
 // WIP: Change updateMyDogRegistration params to actor, dogId, MyDogRegistration
 export async function updateMyDogRegistration(
   actor: UserActor,
-  update: MyDogRegistrationUpdate,
+  update: MyDogRegistration,
 ): Promise<Response> {
   const validUpdateCheck = checkValidUpdate(update);
   if (validUpdateCheck !== "OK") {
@@ -63,7 +63,7 @@ export async function updateMyDogRegistration(
 }
 
 function checkValidUpdate(
-  update: MyDogRegistrationUpdate,
+  update: MyDogRegistration,
 ): "OK" | "ERROR_UNEXPECTED_NON_PARTICIPATION_REASON" {
   const { dogParticipationStatus, dogNonParticipationReason } = update;
   if (

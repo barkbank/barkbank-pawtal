@@ -87,23 +87,6 @@ export type MyDogRegistration = {
   dogPreferredVetId: string;
 };
 
-// WIP: Remove MyDogRegistrationUpdate. Use MyDogRegistration instead.
-export type MyDogRegistrationUpdate = {
-  dogId: string;
-  dogName: string;
-  dogBreed: string;
-  dogBirthday: Date;
-  dogGender: DogGender;
-  dogWeightKg: number | null;
-  dogDea1Point1: DogAntigenPresence;
-  dogEverPregnant: YesNoUnknown;
-  dogEverReceivedTransfusion: YesNoUnknown;
-  dogPreferredVetId: string | null;
-  dogParticipationStatus: ParticipationStatus;
-  dogNonParticipationReason: string;
-  dogPauseExpiryTime: Date | null;
-};
-
 export type MyDogDetailsUpdate = {
   dogId: string;
   dogName: string;

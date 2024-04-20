@@ -10,7 +10,7 @@ import {
   insertUser,
   insertVet,
 } from "../_fixtures";
-import { MyDogRegistrationUpdate } from "@/lib/user/user-models";
+import { MyDogRegistration } from "@/lib/user/user-models";
 import { UTC_DATE_OPTION, parseDateTime } from "@/lib/utilities/bark-time";
 import {
   CALL_OUTCOME,
@@ -149,9 +149,9 @@ describe("updateMyDogRegistration", () => {
 
 function registrationUpdate(
   dogId: string,
-  overrides?: Partial<MyDogRegistrationUpdate>,
-): MyDogRegistrationUpdate {
-  const base: MyDogRegistrationUpdate = {
+  overrides?: Partial<MyDogRegistration>,
+): MyDogRegistration {
+  const base: MyDogRegistration = {
     dogId,
     dogName: "updated name",
     dogBreed: "updated breed",
@@ -172,7 +172,7 @@ function registrationUpdate(
 async function reconstructUpdateFromDb(
   dbPool: Pool,
   dogId: string,
-): Promise<Partial<MyDogRegistrationUpdate>> {
+): Promise<Partial<MyDogRegistration>> {
   const conn = await dbPool.connect();
   try {
     await dbBegin(conn);
@@ -188,7 +188,7 @@ async function reconstructUpdateFromDb(
 async function fetchDogName(
   conn: PoolClient,
   dogId: string,
-): Promise<Partial<MyDogRegistrationUpdate>> {
+): Promise<Partial<MyDogRegistration>> {
   const sql = `
   select
     dog_encrypted_oii as "dogEncryptedOii"
@@ -206,7 +206,7 @@ async function fetchDogName(
 async function fetchDogFields(
   conn: PoolClient,
   dogId: string,
-): Promise<Partial<MyDogRegistrationUpdate>> {
+): Promise<Partial<MyDogRegistration>> {
   const sql = `
   select
     dog_id as "dogId",
@@ -233,7 +233,7 @@ async function fetchDogFields(
 async function fetchDogPreferredVetId(
   conn: PoolClient,
   dogId: string,
-): Promise<Partial<MyDogRegistrationUpdate>> {
+): Promise<Partial<MyDogRegistration>> {
   const sql = `
   select vet_id as "dogPreferredVetId"
   from dog_vet_preferences
