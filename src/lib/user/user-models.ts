@@ -59,8 +59,8 @@ export type MyDogReport = {
 };
 
 // WIP: Refactor the following...
-// WIP: Rename MyDogProfile to DogProfile
-// WIP: Rename updateMyDogProfile to updateDogProfile
+// WIP: DONE: Rename MyDogProfile to DogProfile
+// WIP: DONE: Rename updateMyDogProfile to updateDogProfile
 // WIP: Change getMyDogDetails to getMyDogProfile
 // WIP: Remove MyDogDetails
 
