@@ -80,7 +80,7 @@ export type MyDogRegistration = {
   dogPreferredVetId: string;
 };
 
-// WIP: Remove MyDogRegistrationUpdate. Use MyDogRegistration instead.
+// TODO: Remove MyDogRegistrationUpdate. Use MyDogRegistration instead.
 export type MyDogRegistrationUpdate = {
   dogId: string;
   dogName: string;
