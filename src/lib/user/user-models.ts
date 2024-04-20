@@ -46,6 +46,8 @@ export type MyDog = {
   dogServiceStatus: ServiceStatus;
   dogParticipationStatus: ParticipationStatus;
   dogAppointments: MyDogAppointment[];
+  // WIP: is this more like pending reports? pendingReports: PendingReport[]
+  // WIP: PendingReport = {callId, vetId, vetName}
 };
 
 /**
@@ -59,8 +61,11 @@ export type MyDogReport = {
 };
 
 // WIP: Refactor the following...
-// WIP: Change getMyDogDetails to getMyDogProfile
+// WIP: Impl getDogProfile
+// WIP: Delete getMyDogDetails
 // WIP: Remove MyDogDetails
+// WIP: Rename MyDogAppointment to PendingReport
+// WIP: Rename MyDog::dogAppointments to pendingReports
 
 /**
  * @deprecated Use DogProfile & DogStatuses instead.
@@ -84,14 +89,16 @@ export type MyDogDetails = StatusSet & {
   dogReports: MyDogReport[];
 };
 
-// WIP: Defined this. Is it used?
+/**
+ * The different statuses of a dog.
+ */
 export type DogStatuses = {
   dogServiceStatus: ServiceStatus;
   dogProfileStatus: ProfileStatus;
   dogMedicalStatus: MedicalStatus;
   dogParticipationStatus: ParticipationStatus;
-  // WIP: Should we have highlighted status here?
-}
+  numPendingReports: number;
+};
 
 /**
  * The dog fields that can be updated prior to the first medical report. This
