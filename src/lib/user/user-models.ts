@@ -59,11 +59,6 @@ export type MyDogReport = {
 };
 
 // WIP: Refactor the following...
-// WIP: DONE: Rename MyDogRegistration to MyDogProfile
-// WIP: DONE: Rename updateMyDogRegistration to updateMyDogProfile
-// WIP: DONE: Rename MyDogDetailsUpdate to SubProfile
-// WIP: DONE: Rename updateMyDogDetails to updateSubProfile
-// WIP: Remove participation details from SubProfile
 // WIP: Change getMyDogDetails to getMyDogProfile
 // WIP: Remove MyDogDetails
 
@@ -120,13 +115,9 @@ export type MySecureDogProfile = {
  * report.
  */
 export type SubProfile = {
-  dogId: string;
   dogName: string;
   dogWeightKg: number | null;
   dogEverPregnant: YesNoUnknown;
   dogEverReceivedTransfusion: YesNoUnknown;
-  dogPreferredVetId: string | null;
-  dogParticipationStatus: ParticipationStatus;
-  dogNonParticipationReason: string;
-  dogPauseExpiryTime: Date | null;
+  dogPreferredVetId: string;
 };

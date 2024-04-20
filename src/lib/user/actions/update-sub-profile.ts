@@ -12,31 +12,26 @@ import {
   dbDeleteDogVetPreferences,
   dbInsertDogVetPreference,
 } from "@/lib/data/db-dogs";
-import { PARTICIPATION_STATUS } from "@/lib/data/db-enums";
 
 type Response =
   | "OK_UPDATED"
   | "ERROR_UNAUTHORIZED"
   | "ERROR_MISSING_DOG"
   | "ERROR_MISSING_REPORT"
-  | "ERROR_UNEXPECTED_NON_PARTICIPATION_REASON"
   | "FAILURE_DB_UPDATE";
 
 type Context = {
   actor: UserActor;
+  dogId: string;
   subProfile: SubProfile;
 };
 
 export async function updateSubProfile(
   actor: UserActor,
-  // WIP: dogId should be a param.
+  dogId: string,
   subProfile: SubProfile,
 ): Promise<Response> {
-  const validUpdateCheck = checkValidUpdate(subProfile);
-  if (validUpdateCheck !== "OK") {
-    return validUpdateCheck;
-  }
-  const ctx: Context = { actor, subProfile };
+  const ctx: Context = { actor, dogId, subProfile };
   const { dbPool } = actor.getParams();
   const conn = await dbPool.connect();
   try {
@@ -62,28 +57,13 @@ export async function updateSubProfile(
   }
 }
 
-function checkValidUpdate(
-  subProfile: SubProfile,
-): "OK" | "ERROR_UNEXPECTED_NON_PARTICIPATION_REASON" {
-  const { dogParticipationStatus, dogNonParticipationReason } = subProfile;
-  if (
-    dogParticipationStatus === PARTICIPATION_STATUS.PARTICIPATING &&
-    dogNonParticipationReason !== ""
-  ) {
-    return "ERROR_UNEXPECTED_NON_PARTICIPATION_REASON";
-  }
-  return "OK";
-}
-
 async function checkOwnership(
   conn: PoolClient,
   ctx: Context,
 ): Promise<"OK" | "ERROR_MISSING_DOG" | "ERROR_UNAUTHORIZED"> {
-  const { actor, subProfile } = ctx;
+  const { actor, dogId, subProfile } = ctx;
   const sql = `SELECT user_id as "ownerUserId" FROM dogs WHERE dog_id = $1`;
-  const res = await dbQuery<{ ownerUserId: string }>(conn, sql, [
-    subProfile.dogId,
-  ]);
+  const res = await dbQuery<{ ownerUserId: string }>(conn, sql, [dogId]);
   if (res.rows.length === 0) {
     return "ERROR_MISSING_DOG";
   }
@@ -99,8 +79,7 @@ async function checkExistingReport(
   conn: PoolClient,
   ctx: Context,
 ): Promise<"OK" | "ERROR_MISSING_REPORT"> {
-  const { subProfile } = ctx;
-  const { dogId } = subProfile;
+  const { dogId, subProfile } = ctx;
   const sql = `
   SELECT COUNT(1)::integer as "numReports"
   FROM reports
@@ -118,29 +97,20 @@ async function updateDogFields(
   conn: PoolClient,
   ctx: Context,
 ): Promise<"OK" | "FAILURE_DB_UPDATE"> {
-  const { subProfile } = ctx;
-  const {
-    dogId,
-    dogWeightKg,
-    dogEverPregnant,
-    dogEverReceivedTransfusion,
-    dogParticipationStatus,
-    dogPauseExpiryTime,
-  } = subProfile;
-  const [dogEncryptedOii, dogEncryptedReason] = await Promise.all([
-    getDogEncryptedOii(ctx),
-    getDogEncryptedReason(ctx),
-  ]);
+  const { dogId, subProfile, actor } = ctx;
+  const { dogMapper } = actor.getParams();
+  const { dogName, dogWeightKg, dogEverPregnant, dogEverReceivedTransfusion } =
+    subProfile;
+  const { dogEncryptedOii } = await dogMapper.mapDogOiiToDogSecureOii({
+    dogName,
+  });
   const sql = `
   UPDATE dogs
   SET
     dog_encrypted_oii = $2,
     dog_weight_kg = $3,
     dog_ever_pregnant = $4,
-    dog_ever_received_transfusion = $5,
-    dog_participation_status = $6,
-    dog_encrypted_reason = $7,
-    dog_pause_expiry_time = $8
+    dog_ever_received_transfusion = $5
   WHERE
     dog_id = $1
   RETURNING 1
@@ -151,9 +121,6 @@ async function updateDogFields(
     dogWeightKg,
     dogEverPregnant,
     dogEverReceivedTransfusion,
-    dogParticipationStatus,
-    dogEncryptedReason,
-    dogPauseExpiryTime,
   ]);
   if (res.rows.length !== 1) {
     return "FAILURE_DB_UPDATE";
@@ -165,37 +132,11 @@ async function updateVetPreference(
   conn: PoolClient,
   ctx: Context,
 ): Promise<"OK"> {
-  const { subProfile } = ctx;
-  const { dogId, dogPreferredVetId: vetId } = subProfile;
+  const { dogId, subProfile } = ctx;
+  const { dogPreferredVetId: vetId } = subProfile;
   await dbDeleteDogVetPreferences(conn, dogId);
-  if (vetId !== null) {
+  if (vetId !== "") {
     await dbInsertDogVetPreference(conn, dogId, vetId);
   }
   return "OK";
-}
-
-async function getDogEncryptedOii(ctx: Context): Promise<string> {
-  const { actor, subProfile } = ctx;
-  const { dogMapper } = actor.getParams();
-  const { dogName } = subProfile;
-  const { dogEncryptedOii } = await dogMapper.mapDogOiiToDogSecureOii({
-    dogName,
-  });
-  return dogEncryptedOii;
-}
-
-async function getDogEncryptedReason(ctx: Context): Promise<string> {
-  const { actor, subProfile } = ctx;
-  const { textEncryptionService } = actor.getParams();
-  const { dogParticipationStatus, dogNonParticipationReason } = subProfile;
-  if (dogParticipationStatus === PARTICIPATION_STATUS.PARTICIPATING) {
-    return "";
-  }
-  if (dogNonParticipationReason === "") {
-    return "";
-  }
-  const dogEncryptedReason = await textEncryptionService.getEncryptedData(
-    dogNonParticipationReason,
-  );
-  return dogEncryptedReason;
 }
