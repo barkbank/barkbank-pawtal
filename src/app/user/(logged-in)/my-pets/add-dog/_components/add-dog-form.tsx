@@ -4,7 +4,7 @@ import { BarkFormOption } from "@/components/bark/bark-form";
 import GeneralDogForm, {
   DogFormData,
 } from "../../_components/general-dog-form";
-import { MyDogRegistration } from "@/lib/user/user-models";
+import { MyDogProfile } from "@/lib/user/user-models";
 import { UTC_DATE_OPTION, parseDateTime } from "@/lib/utilities/bark-time";
 import { submitDog } from "../_actions/submit-dog";
 import { useRouter } from "next/navigation";
@@ -22,8 +22,12 @@ export default function AddDogForm(props: { vetOptions: BarkFormOption[] }) {
     } = values;
     const dogBirthday = parseDateTime(dogBirthdayString, UTC_DATE_OPTION);
     const dogWeightKg = parseFloat(dogWeightKgString);
-    const reg: MyDogRegistration = { dogBirthday, dogWeightKg, ...otherFields };
-    const { error } = await submitDog(reg);
+    const dogProfile: MyDogProfile = {
+      dogBirthday,
+      dogWeightKg,
+      ...otherFields,
+    };
+    const { error } = await submitDog(dogProfile);
     if (error) {
       return error;
     }

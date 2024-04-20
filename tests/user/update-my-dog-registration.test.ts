@@ -9,7 +9,7 @@ import {
   insertUser,
   insertVet,
 } from "../_fixtures";
-import { MyDogRegistration } from "@/lib/user/user-models";
+import { MyDogProfile } from "@/lib/user/user-models";
 import { UTC_DATE_OPTION, parseDateTime } from "@/lib/utilities/bark-time";
 import {
   CALL_OUTCOME,
@@ -31,14 +31,14 @@ describe("updateMyDogRegistration", () => {
       // WHEN
       const v2 = await insertVet(2, dbPool);
       const actor1 = getUserActor(dbPool, u1.userId);
-      const update = registrationUpdate({
+      const update = _getDogProfile({
         dogPreferredVetId: v2.vetId,
       });
       const res = await updateMyDogRegistration(actor1, d1.dogId, update);
 
       // THEN
       expect(res).toEqual("OK_UPDATED");
-      const { registration } = await fetchDogInfo(dbPool, d1.dogId);
+      const { dogProfile: registration } = await fetchDogInfo(dbPool, d1.dogId);
       expect(registration).toEqual(update);
     });
   });
@@ -62,7 +62,7 @@ describe("updateMyDogRegistration", () => {
       const res = await updateMyDogRegistration(
         actor1,
         d1.dogId,
-        registrationUpdate(),
+        _getDogProfile(),
       );
 
       // THEN
@@ -83,7 +83,7 @@ describe("updateMyDogRegistration", () => {
       const res = await updateMyDogRegistration(
         actor1,
         d2.dogId,
-        registrationUpdate(),
+        _getDogProfile(),
       );
 
       // THEN
@@ -101,7 +101,7 @@ describe("updateMyDogRegistration", () => {
       const res = await updateMyDogRegistration(
         actor1,
         nonExistentDogId,
-        registrationUpdate(),
+        _getDogProfile(),
       );
 
       // THEN
@@ -110,10 +110,8 @@ describe("updateMyDogRegistration", () => {
   });
 });
 
-function registrationUpdate(
-  overrides?: Partial<MyDogRegistration>,
-): MyDogRegistration {
-  const base: MyDogRegistration = {
+function _getDogProfile(overrides?: Partial<MyDogProfile>): MyDogProfile {
+  const base: MyDogProfile = {
     dogName: "updated name",
     dogBreed: "updated breed",
     dogBirthday: parseDateTime("1970-01-01", UTC_DATE_OPTION),

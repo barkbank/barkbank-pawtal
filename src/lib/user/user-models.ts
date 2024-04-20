@@ -58,7 +58,6 @@ export type MyDogReport = {
   vetName: string;
 };
 
-
 // WIP: Refactor the following...
 // WIP: Rename MyDogRegistration to MyDogProfile
 // WIP: Rename updateMyDogRegistration to updateMyDogProfile
@@ -91,8 +90,20 @@ export type MyDogDetails = StatusSet & {
  * The dog fields that can be updated prior to the first medical report. This
  * can be used by registration and add-dog.
  */
-export type MyDogRegistration = {
+export type MyDogProfile = {
   dogName: string;
+  dogBreed: string;
+  dogBirthday: Date;
+  dogGender: DogGender;
+  dogWeightKg: number | null;
+  dogDea1Point1: DogAntigenPresence;
+  dogEverPregnant: YesNoUnknown;
+  dogEverReceivedTransfusion: YesNoUnknown;
+  dogPreferredVetId: string;
+};
+
+export type MySecureDogProfile = {
+  dogEncryptedOii: string;
   dogBreed: string;
   dogBirthday: Date;
   dogGender: DogGender;

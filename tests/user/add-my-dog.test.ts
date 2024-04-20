@@ -1,4 +1,4 @@
-import { MyDogRegistration } from "@/lib/user/user-models";
+import { MyDogProfile } from "@/lib/user/user-models";
 import { withDb } from "../_db_helpers";
 import {
   fetchDogInfo,
@@ -23,21 +23,21 @@ describe("addMyDog", () => {
       // AND vet v1
       const v1 = await insertVet(1, dbPool);
 
-      // AND dog registration r1
-      const r1: MyDogRegistration = {
-        ...MY_DOG_REG_WITH_NO_VET,
+      // AND dog profile p1
+      const p1: MyDogProfile = {
+        ...DOG_PROFILE_WITHOUT_VET,
         dogPreferredVetId: v1.vetId,
       };
 
       // WHEN addMyDog
       const actor = getUserActor(dbPool, u1.userId);
-      const { result, error } = await addMyDog(actor, r1);
+      const { result, error } = await addMyDog(actor, p1);
 
       // THEN expect dog belonging to user
       expect(error).toBeUndefined();
       const { dogId } = result!;
-      const { registration, userId } = await fetchDogInfo(dbPool, dogId);
-      expect(registration).toEqual(r1);
+      const { dogProfile, userId } = await fetchDogInfo(dbPool, dogId);
+      expect(dogProfile).toEqual(p1);
       expect(userId).toEqual(u1.userId);
     });
   });
@@ -50,27 +50,27 @@ describe("addMyDog", () => {
       // AND vet v1
       const v1 = await insertVet(1, dbPool);
 
-      // AND dog registration r1
-      const r1: MyDogRegistration = {
-        ...MY_DOG_REG_WITH_NO_VET,
+      // AND dog profile p1
+      const p1: MyDogProfile = {
+        ...DOG_PROFILE_WITHOUT_VET,
         dogPreferredVetId: "",
       };
 
       // WHEN addMyDog
       const actor = getUserActor(dbPool, u1.userId);
-      const { result, error } = await addMyDog(actor, r1);
+      const { result, error } = await addMyDog(actor, p1);
 
       // THEN expect dog belonging to user
       expect(error).toBeUndefined();
       const { dogId } = result!;
-      const { registration, userId } = await fetchDogInfo(dbPool, dogId);
-      expect(registration).toEqual(r1);
+      const { dogProfile, userId } = await fetchDogInfo(dbPool, dogId);
+      expect(dogProfile).toEqual(p1);
       expect(userId).toEqual(u1.userId);
     });
   });
 });
 
-const MY_DOG_REG_WITH_NO_VET: MyDogRegistration = {
+const DOG_PROFILE_WITHOUT_VET: MyDogProfile = {
   dogName: "Hippo",
   dogBreed: "Greyhound",
   dogBirthday: parseDateTime("2023-01-01", UTC_DATE_OPTION),

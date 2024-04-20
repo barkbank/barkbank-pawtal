@@ -76,7 +76,7 @@ import {
 } from "@/lib/services/email-otp-service";
 import { VetActor, VetActorConfig } from "@/lib/vet/vet-actor";
 import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
-import { MyDogRegistration } from "@/lib/user/user-models";
+import { MyDogProfile } from "@/lib/user/user-models";
 
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
@@ -521,7 +521,7 @@ export function getDbReportSpec(
 export async function fetchDogInfo(
   dbCtx: DbContext,
   dogId: string,
-): Promise<{ registration: MyDogRegistration; userId: string }> {
+): Promise<{ dogProfile: MyDogProfile; userId: string }> {
   const sql = `
   SELECT
     tDog.user_id as "userId",
@@ -559,5 +559,5 @@ export async function fetchDogInfo(
   const { dogName } = await getDogMapper().mapDogSecureOiiToDogOii({
     dogEncryptedOii,
   });
-  return { userId, registration: { dogName, ...otherFields } };
+  return { userId, dogProfile: { dogName, ...otherFields } };
 }
