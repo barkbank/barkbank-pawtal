@@ -34,6 +34,9 @@ export type MyDogAppointment = {
   vetName: string;
 };
 
+/**
+ * Summary details of a user's dog for the My Pets view.
+ */
 export type MyDog = {
   dogId: string;
   dogName: string;
@@ -45,12 +48,25 @@ export type MyDog = {
   dogAppointments: MyDogAppointment[];
 };
 
+/**
+ * @deprecated Do not use yet, we will expand this to be a full report.
+ */
 export type MyDogReport = {
   reportId: string;
   visitTime: Date;
   vetId: string;
   vetName: string;
 };
+
+
+// WIP: Refactor the following...
+// WIP: Rename MyDogRegistration to MyDogProfile
+// WIP: Rename updateMyDogRegistration to updateMyDogProfile
+// WIP: Rename MyDogDetailsUpdate to MyPartialDogProfile
+// WIP: Rename updateMyDogDetails to updateMyPartialDogProfile
+// WIP: Remove participation details from updateMyPartialDogProfile
+// WIP: Change getMyDogDetails to getMyDogProfile
+// WIP: Remove MyDogDetails
 
 export type MyDogDetails = StatusSet & {
   dogId: string;
