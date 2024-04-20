@@ -1,9 +1,11 @@
 "use server";
 
 import { getAuthenticatedUserActor } from "@/lib/auth";
+import { RoutePath } from "@/lib/route-path";
 import { addMyDog } from "@/lib/user/actions/add-my-dog";
 import { MyDogRegistration } from "@/lib/user/user-models";
 import { Err, Result } from "@/lib/utilities/result";
+import { revalidatePath } from "next/cache";
 
 export async function submitDog(
   reg: MyDogRegistration,
@@ -12,5 +14,9 @@ export async function submitDog(
   if (actor === null) {
     return Err("ERROR_UNAUTHORIZED");
   }
-  return addMyDog(actor, reg);
+  const res = await addMyDog(actor, reg);
+  if (res.error === undefined) {
+    revalidatePath(RoutePath.USER_MY_PETS, "page");
+  }
+  return res;
 }
