@@ -20,7 +20,11 @@ export async function getDogProfile(
     tLatest.latest_dog_weight_kg as "dogWeightKg",
     tDog.dog_ever_pregnant as "dogEverPregnant",
     tDog.dog_ever_received_transfusion as "dogEverReceivedTransfusion",
-    tLatest.latest_dog_dea1_point1 as "dogDea1Point1",
+    CASE
+      WHEN tLatest.latest_dog_dea1_point1 = 'POSITIVE' THEN 'POSITIVE'::t_dog_antigen_presence
+      WHEN tLatest.latest_dog_dea1_point1 = 'NEGATIVE' THEN 'NEGATIVE'::t_dog_antigen_presence
+      ELSE 'UNKNOWN'::t_dog_antigen_presence
+    END as "dogDea1Point1",
     COALESCE(tPref.vet_id::text, '') as "dogPreferredVetId"
   FROM dogs as tDog
   LEFT JOIN latest_values as tLatest on tDog.dog_id = tLatest.dog_id

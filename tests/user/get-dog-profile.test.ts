@@ -49,7 +49,6 @@ describe("getDogProfile", () => {
       expect(result).toBeUndefined();
     });
   });
-  // WIP: should return ERROR_MISSING_DOG when dog does not exists.
   it("should return dog profile when user owns the dog requested", async () => {
     await withDb(async (dbPool) => {
       // Given that u1 owns dog d1

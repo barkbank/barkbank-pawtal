@@ -8,7 +8,6 @@ import {
   DogGender,
   UserResidency,
 } from "../data/db-enums";
-import { StatusSet } from "../data/status-mapper";
 
 export type MyAccount = {
   userCreationTime: Date;
@@ -46,8 +45,6 @@ export type MyDog = {
   dogServiceStatus: ServiceStatus;
   dogParticipationStatus: ParticipationStatus;
   dogAppointments: MyDogAppointment[];
-  // WIP: is this more like pending reports? pendingReports: PendingReport[]
-  // WIP: PendingReport = {callId, vetId, vetName}
 };
 
 /**
@@ -59,10 +56,6 @@ export type MyDogReport = {
   vetId: string;
   vetName: string;
 };
-
-// WIP: Refactor the following...
-// WIP: Rename MyDogAppointment to PendingReport
-// WIP: Rename MyDog::dogAppointments to pendingReports
 
 /**
  * The different statuses of a dog.

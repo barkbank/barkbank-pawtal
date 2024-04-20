@@ -77,6 +77,7 @@ import {
 import { VetActor, VetActorConfig } from "@/lib/vet/vet-actor";
 import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
 import { DogProfile } from "@/lib/user/user-models";
+import { getDogProfile } from "@/lib/user/actions/get-dog-profile";
 
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
@@ -517,47 +518,22 @@ export function getDbReportSpec(
   return { ...base, ...overrides };
 }
 
-// WIP: Consider moving this into some user-queries.ts module of sorts.
-export async function fetchDogInfo(
+export async function fetchDogOwnerId(
   dbCtx: DbContext,
   dogId: string,
+): Promise<{ userId: string }> {
+  const sql = `SELECT user_id as "userId" FROM dogs WHERE dog_id = $1`;
+  const res = await dbQuery<{ userId: string }>(dbCtx, sql, [dogId]);
+  return res.rows[0];
+}
+
+export async function fetchDogInfo(
+  dbPool: Pool,
+  dogId: string,
 ): Promise<{ dogProfile: DogProfile; userId: string }> {
-  const sql = `
-  SELECT
-    tDog.user_id as "userId",
-    tDog.dog_encrypted_oii as "dogEncryptedOii",
-    tDog.dog_breed as "dogBreed",
-    tDog.dog_birthday as "dogBirthday",
-    tDog.dog_gender as "dogGender",
-    tDog.dog_weight_kg as "dogWeightKg",
-    tDog.dog_ever_pregnant as "dogEverPregnant",
-    tDog.dog_ever_received_transfusion as "dogEverReceivedTransfusion",
-    tDog.dog_dea1_point1 as "dogDea1Point1",
-    COALESCE(tPref.vet_id::text, '') as "dogPreferredVetId"
-  FROM dogs as tDog
-  LEFT JOIN (
-    SELECT dog_id, vet_id
-    FROM dog_vet_preferences
-    WHERE dog_id = $1
-  ) as tPref on tDog.dog_id = tPref.dog_id
-  WHERE tDog.dog_id = $1
-  `;
-  type Row = {
-    userId: string;
-    dogEncryptedOii: string;
-    dogBreed: string;
-    dogBirthday: Date;
-    dogGender: DogGender;
-    dogWeightKg: number | null;
-    dogEverPregnant: YesNoUnknown;
-    dogEverReceivedTransfusion: YesNoUnknown;
-    dogDea1Point1: DogAntigenPresence;
-    dogPreferredVetId: string;
-  };
-  const res = await dbQuery<Row>(dbCtx, sql, [dogId]);
-  const { userId, dogEncryptedOii, ...otherFields } = res.rows[0];
-  const { dogName } = await getDogMapper().mapDogSecureOiiToDogOii({
-    dogEncryptedOii,
-  });
-  return { userId, dogProfile: { dogName, ...otherFields } };
+  const { userId } = await fetchDogOwnerId(dbPool, dogId);
+  const actor = getUserActor(dbPool, userId);
+  const { result } = await getDogProfile(actor, dogId);
+  const dogProfile = result!;
+  return { dogProfile, userId };
 }
