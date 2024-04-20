@@ -388,6 +388,12 @@ export function BarkFormButton(props: {
   );
 }
 
+// TODO: Remove this deprecated function
+/**
+ * @deprecated Use BarkButton type="submit" instead. BarkFormSubmitButton has a
+ * mt-6 that makes it difficult to arrange when it is grouped with other buttons
+ * (e.g. Cancel).
+ */
 export function BarkFormSubmitButton(props: {
   className?: string;
   children: React.ReactNode;
