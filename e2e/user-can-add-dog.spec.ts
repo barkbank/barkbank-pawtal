@@ -1,10 +1,8 @@
 import { test, expect } from "@playwright/test";
-import {
-  generateTestDogName,
-  getTestBirthday,
-  registerTestUser,
-  urlOf,
-} from "./_ui_test_helpers";
+import { registerTestUser } from "./_lib/register-test-user";
+import { getTestBirthday } from "./_lib/e2e-test-utils";
+import { generateTestDogName } from "./_lib/e2e-test-utils";
+import { urlOf } from "./_lib/e2e-test-utils";
 import { RoutePath } from "@/lib/route-path";
 
 test("user can register, login, add dog, and see it in my-pets", async ({

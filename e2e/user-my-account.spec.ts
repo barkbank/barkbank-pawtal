@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
-import { UI_USER, loginTestUser, urlOf } from "./_ui_test_helpers";
+import { UI_USER, loginTestUser } from "./_lib/login-test-account";
+import { urlOf } from "./_lib/e2e-test-utils";
 import { RoutePath } from "@/lib/route-path";
 
 test.beforeEach(async ({ page }) => {
