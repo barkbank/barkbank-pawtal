@@ -12,14 +12,12 @@ import {
   dbDeleteDogVetPreferences,
   dbInsertDogVetPreference,
 } from "@/lib/data/db-dogs";
-import { PARTICIPATION_STATUS } from "@/lib/data/db-enums";
 
 type Response =
   | "OK_UPDATED"
   | "ERROR_REPORT_EXISTS"
   | "ERROR_UNAUTHORIZED"
   | "ERROR_MISSING_DOG"
-  | "ERROR_UNEXPECTED_NON_PARTICIPATION_REASON"
   | "FAILURE_DB_UPDATE";
 
 type Context = {
@@ -28,17 +26,12 @@ type Context = {
   update: MyDogRegistration;
 };
 
-// WIP: Change updateMyDogRegistration params to actor, dogId, MyDogRegistration
 export async function updateMyDogRegistration(
   actor: UserActor,
   dogId: string,
   // WIP: Find a better name for 'update' and 'registration'
   update: MyDogRegistration,
 ): Promise<Response> {
-  const validUpdateCheck = checkValidUpdate(update);
-  if (validUpdateCheck !== "OK") {
-    return validUpdateCheck;
-  }
   const { dbPool } = actor.getParams();
   const ctx: Context = { actor, dogId, update };
   const conn = await dbPool.connect();
@@ -63,19 +56,6 @@ export async function updateMyDogRegistration(
     await dbRollback(conn);
     await dbRelease(conn);
   }
-}
-
-function checkValidUpdate(
-  update: MyDogRegistration,
-): "OK" | "ERROR_UNEXPECTED_NON_PARTICIPATION_REASON" {
-  const { dogParticipationStatus, dogNonParticipationReason } = update;
-  if (
-    dogParticipationStatus === PARTICIPATION_STATUS.PARTICIPATING &&
-    dogNonParticipationReason !== ""
-  ) {
-    return "ERROR_UNEXPECTED_NON_PARTICIPATION_REASON";
-  }
-  return "OK";
 }
 
 async function checkOwnership(
@@ -115,7 +95,9 @@ async function updateDogFields(
   ctx: Context,
 ): Promise<"OK" | "FAILURE_DB_UPDATE"> {
   const { actor, dogId, update } = ctx;
+  const { dogMapper } = actor.getParams();
   const {
+    dogName,
     dogBreed,
     dogBirthday,
     dogGender,
@@ -123,13 +105,10 @@ async function updateDogFields(
     dogDea1Point1,
     dogEverPregnant,
     dogEverReceivedTransfusion,
-    dogParticipationStatus,
-    dogPauseExpiryTime,
   } = update;
-  const [dogEncryptedOii, dogEncryptedReason] = await Promise.all([
-    getDogEncryptedOii(ctx),
-    getDogEncryptedReason(ctx),
-  ]);
+  const { dogEncryptedOii } = await dogMapper.mapDogOiiToDogSecureOii({
+    dogName,
+  });
   const sql = `
   UPDATE dogs
   SET
@@ -140,10 +119,7 @@ async function updateDogFields(
     dog_weight_kg = $6,
     dog_dea1_point1 = $7,
     dog_ever_pregnant = $8,
-    dog_ever_received_transfusion = $9,
-    dog_participation_status = $10,
-    dog_encrypted_reason = $11,
-    dog_pause_expiry_time = $12
+    dog_ever_received_transfusion = $9
   WHERE
     dog_id = $1
   RETURNING 1
@@ -158,9 +134,6 @@ async function updateDogFields(
     dogDea1Point1,
     dogEverPregnant,
     dogEverReceivedTransfusion,
-    dogParticipationStatus,
-    dogEncryptedReason,
-    dogPauseExpiryTime,
   ]);
   if (res.rows.length !== 1) {
     return "FAILURE_DB_UPDATE";
@@ -175,34 +148,8 @@ async function updateVetPreference(
   const { dogId, update } = ctx;
   const { dogPreferredVetId: vetId } = update;
   await dbDeleteDogVetPreferences(conn, dogId);
-  if (vetId !== null) {
+  if (vetId !== "") {
     await dbInsertDogVetPreference(conn, dogId, vetId);
   }
   return "OK";
-}
-
-async function getDogEncryptedOii(ctx: Context): Promise<string> {
-  const { actor, update } = ctx;
-  const { dogMapper } = actor.getParams();
-  const { dogName } = update;
-  const { dogEncryptedOii } = await dogMapper.mapDogOiiToDogSecureOii({
-    dogName,
-  });
-  return dogEncryptedOii;
-}
-
-async function getDogEncryptedReason(ctx: Context): Promise<string> {
-  const { actor, update } = ctx;
-  const { textEncryptionService } = actor.getParams();
-  const { dogParticipationStatus, dogNonParticipationReason } = update;
-  if (dogParticipationStatus === PARTICIPATION_STATUS.PARTICIPATING) {
-    return "";
-  }
-  if (dogNonParticipationReason === "") {
-    return "";
-  }
-  const dogEncryptedReason = await textEncryptionService.getEncryptedData(
-    dogNonParticipationReason,
-  );
-  return dogEncryptedReason;
 }

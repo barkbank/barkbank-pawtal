@@ -54,7 +54,7 @@ import { VetMapper } from "@/lib/data/vet-mapper";
 import { DogMapper } from "@/lib/data/dog-mapper";
 import { UserMapper } from "@/lib/data/user-mapper";
 import { BARK_UTC } from "@/lib/utilities/bark-time";
-import { DbContext } from "@/lib/data/db-utils";
+import { DbContext, dbQuery } from "@/lib/data/db-utils";
 import { dbInsertDog } from "@/lib/data/db-dogs";
 import { OtpService } from "@/lib/services/otp";
 import { UserActor, UserActorConfig } from "@/lib/user/user-actor";
@@ -76,6 +76,7 @@ import {
 } from "@/lib/services/email-otp-service";
 import { VetActor, VetActorConfig } from "@/lib/vet/vet-actor";
 import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
+import { MyDogRegistration } from "@/lib/user/user-models";
 
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
@@ -514,4 +515,49 @@ export function getDbReportSpec(
     ineligibilityExpiryTime: null,
   };
   return { ...base, ...overrides };
+}
+
+// WIP: Consider moving this into some user-queries.ts module of sorts.
+export async function fetchDogInfo(
+  dbCtx: DbContext,
+  dogId: string,
+): Promise<{ registration: MyDogRegistration; userId: string }> {
+  const sql = `
+  SELECT
+    tDog.user_id as "userId",
+    tDog.dog_encrypted_oii as "dogEncryptedOii",
+    tDog.dog_breed as "dogBreed",
+    tDog.dog_birthday as "dogBirthday",
+    tDog.dog_gender as "dogGender",
+    tDog.dog_weight_kg as "dogWeightKg",
+    tDog.dog_ever_pregnant as "dogEverPregnant",
+    tDog.dog_ever_received_transfusion as "dogEverReceivedTransfusion",
+    tDog.dog_dea1_point1 as "dogDea1Point1",
+    COALESCE(tPref.vet_id::text, '') as "dogPreferredVetId"
+  FROM dogs as tDog
+  LEFT JOIN (
+    SELECT dog_id, vet_id
+    FROM dog_vet_preferences
+    WHERE dog_id = $1
+  ) as tPref on tDog.dog_id = tPref.dog_id
+  WHERE tDog.dog_id = $1
+  `;
+  type Row = {
+    userId: string;
+    dogEncryptedOii: string;
+    dogBreed: string;
+    dogBirthday: Date;
+    dogGender: DogGender;
+    dogWeightKg: number | null;
+    dogEverPregnant: YesNoUnknown;
+    dogEverReceivedTransfusion: YesNoUnknown;
+    dogDea1Point1: DogAntigenPresence;
+    dogPreferredVetId: string;
+  };
+  const res = await dbQuery<Row>(dbCtx, sql, [dogId]);
+  const { userId, dogEncryptedOii, ...otherFields } = res.rows[0];
+  const { dogName } = await getDogMapper().mapDogSecureOiiToDogOii({
+    dogEncryptedOii,
+  });
+  return { userId, registration: { dogName, ...otherFields } };
 }
