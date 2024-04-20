@@ -6,6 +6,7 @@ import {
   YesNoUnknown,
 } from "@/lib/data/db-enums";
 import {
+  fetchDogInfo,
   getDogMapper,
   getUserActor,
   insertCall,
@@ -24,7 +25,7 @@ describe("updateSubProfile", () => {
     await withDb(async (dbPool) => {
       // GIVEN users u1 with dog d1 and preferred vet v1
       const u1 = await insertUser(1, dbPool);
-      const d1 = await insertDog(1, u1.userId, dbPool);
+      const d1 = await insertDog(1, u1.userId, dbPool, { dogWeightKg: 30 });
       const v1 = await insertVet(1, dbPool);
       await dbInsertDogVetPreference(dbPool, d1.dogId, v1.vetId);
       const c1 = await insertCall(
@@ -33,20 +34,21 @@ describe("updateSubProfile", () => {
         v1.vetId,
         CALL_OUTCOME.APPOINTMENT,
       );
-      const r1 = await insertReport(dbPool, c1.callId);
+      const r1 = await insertReport(dbPool, c1.callId, { dogWeightKg: 31 });
 
       // WHEN
       const v2 = await insertVet(2, dbPool);
       const actor1 = getUserActor(dbPool, u1.userId);
       const update = _getSubProfile({
         dogPreferredVetId: v2.vetId,
+        dogWeightKg: 31, // TODO: Change this to 32 to test latest_values
       });
       const res = await updateSubProfile(actor1, d1.dogId, update);
 
       // THEN
       expect(res).toEqual("OK_UPDATED");
-      const dataInDb = await _fetchSubProfile(dbPool, d1.dogId);
-      expect(dataInDb).toEqual(update);
+      const { subProfile } = await fetchDogInfo(dbPool, d1.dogId);
+      expect(subProfile).toEqual(update);
     });
   });
   it("should return ERROR_UNAUTHORIZED when user does not own the dog", async () => {
@@ -93,38 +95,4 @@ function _getSubProfile(overrides?: Partial<SubProfile>): SubProfile {
     dogPreferredVetId: "",
   };
   return { ...base, ...overrides };
-}
-
-async function _fetchSubProfile(
-  dbPool: Pool,
-  dogId: string,
-): Promise<SubProfile> {
-  const sql = `
-  SELECT
-    tDog.dog_encrypted_oii as "dogEncryptedOii",
-    tDog.dog_weight_kg as "dogWeightKg",
-    tDog.dog_ever_pregnant as "dogEverPregnant",
-    tDog.dog_ever_received_transfusion as "dogEverReceivedTransfusion",
-    tPref.vet_id as "dogPreferredVetId"
-  FROM dogs as tDog
-  LEFT JOIN (
-    SELECT dog_id, vet_id
-    FROM dog_vet_preferences
-    WHERE dog_id = $1
-  ) as tPref on tDog.dog_id = tPref.dog_id
-  WHERE tDog.dog_id = $1
-  `;
-  type Row = {
-    dogEncryptedOii: string;
-    dogWeightKg: number | null;
-    dogEverPregnant: YesNoUnknown;
-    dogEverReceivedTransfusion: YesNoUnknown;
-    dogPreferredVetId: string;
-  };
-  const res = await dbQuery<Row>(dbPool, sql, [dogId]);
-  const { dogEncryptedOii, ...otherFields } = res.rows[0];
-  const { dogName } = await getDogMapper().mapDogSecureOiiToDogOii({
-    dogEncryptedOii,
-  });
-  return { dogName, ...otherFields };
 }
