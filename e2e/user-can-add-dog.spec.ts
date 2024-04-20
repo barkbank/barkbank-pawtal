@@ -3,6 +3,7 @@ import { loginTestUser, urlOf } from "./_ui_test_helpers";
 import { RoutePath } from "@/lib/route-path";
 import { SINGAPORE_TIME_ZONE, formatDateTime } from "@/lib/utilities/bark-time";
 import { sprintf } from "sprintf-js";
+import { generateRandomGUID } from "@/lib/utilities/bark-guid";
 
 test("user can login, add dog, and see it in my-pets", async ({ page }) => {
   // GIVEN login
@@ -16,6 +17,7 @@ test("user can login, add dog, and see it in my-pets", async ({ page }) => {
 
   // WHEN dog details are filled in
   const dogName = generateDogName();
+  console.log({ dogName });
   await page.getByLabel("Name").fill(dogName);
   await page.getByLabel("Breed").fill("UI_TEST_DOG");
   await page.locator('input[name="dogBirthday"]').fill(getBirthday(3));
@@ -63,10 +65,11 @@ test("user can login, add dog, and see it in my-pets", async ({ page }) => {
 
 function generateDogName(): string {
   const tsid = formatDateTime(new Date(), {
-    format: "yyyy-MM-dd hh:MM:ss.SSS",
+    format: "d MMM yyyy",
     timeZone: SINGAPORE_TIME_ZONE,
   });
-  return `SGT ${tsid}`;
+  const guid = generateRandomGUID(6);
+  return `Kelper (${tsid}, ${guid})`;
 }
 
 function getBirthday(ageYears: number): string {
