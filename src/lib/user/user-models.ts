@@ -61,9 +61,9 @@ export type MyDogReport = {
 };
 
 // WIP: Refactor the following...
-// WIP: Impl getDogProfile
-// WIP: Delete getMyDogDetails
-// WIP: Remove MyDogDetails
+
+// WIP: DONE: Transform getMyDogDetails into getDogProfile
+
 // WIP: Rename MyDogAppointment to PendingReport
 // WIP: Rename MyDog::dogAppointments to pendingReports
 
@@ -116,8 +116,7 @@ export type DogProfile = {
   dogPreferredVetId: string;
 };
 
-// WIP: Do we need this? Is it for getMyDogProfile? Yes.
-export type MySecureDogProfile = {
+export type SecureDogProfile = {
   dogEncryptedOii: string;
   dogBreed: string;
   dogBirthday: Date;
