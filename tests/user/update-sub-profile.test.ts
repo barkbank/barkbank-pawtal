@@ -1,13 +1,8 @@
 import { SubProfile } from "@/lib/user/user-models";
 import { withDb } from "../_db_helpers";
-import {
-  CALL_OUTCOME,
-  YES_NO_UNKNOWN,
-  YesNoUnknown,
-} from "@/lib/data/db-enums";
+import { CALL_OUTCOME, YES_NO_UNKNOWN } from "@/lib/data/db-enums";
 import {
   fetchDogInfo,
-  getDogMapper,
   getUserActor,
   insertCall,
   insertDog,
@@ -16,8 +11,6 @@ import {
   insertVet,
 } from "../_fixtures";
 import { updateSubProfile } from "@/lib/user/actions/update-sub-profile";
-import { Pool } from "pg";
-import { dbQuery } from "@/lib/data/db-utils";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 
 describe("updateSubProfile", () => {
@@ -41,7 +34,7 @@ describe("updateSubProfile", () => {
       const actor1 = getUserActor(dbPool, u1.userId);
       const update = _getSubProfile({
         dogPreferredVetId: v2.vetId,
-        dogWeightKg: 31, // TODO: Change this to 32 to test latest_values
+        dogWeightKg: 32,
       });
       const res = await updateSubProfile(actor1, d1.dogId, update);
 
