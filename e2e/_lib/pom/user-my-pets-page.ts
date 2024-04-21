@@ -9,10 +9,6 @@ export class UserMyPetsPage {
     return this.ctx.website.urlOf(RoutePath.USER_MY_PETS);
   }
 
-  public locateDog(dogName: string): Locator {
-    return this.ctx.page.getByText(dogName, { exact: true });
-  }
-
   public dogCardItem(dogName: string): DogCardItem {
     return new DogCardItem(this.ctx, dogName);
   }
