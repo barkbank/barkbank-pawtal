@@ -530,12 +530,37 @@ export async function fetchDogOwnerId(
 export async function fetchDogInfo(
   dbPool: Pool,
   dogId: string,
-): Promise<{ userId: string; dogProfile: DogProfile; subProfile: SubProfile }> {
+): Promise<{
+  userId: string;
+  dogProfile: DogProfile;
+  subProfile: SubProfile;
+  profileModificationTime: Date;
+}> {
   const { userId } = await fetchDogOwnerId(dbPool, dogId);
   const actor = getUserActor(dbPool, userId);
   const { result } = await getDogProfile(actor, dogId);
   const dogProfile = result!;
   const { dogBreed, dogBirthday, dogGender, dogDea1Point1, ...subProfile } =
     dogProfile;
-  return { userId, dogProfile, subProfile };
+  const { profileModificationTime } = await _getProfileModificationTime(
+    dbPool,
+    dogId,
+  );
+  return { userId, dogProfile, subProfile, profileModificationTime };
+}
+
+async function _getProfileModificationTime(
+  dbPool: Pool,
+  dogId: string,
+): Promise<{ profileModificationTime: Date }> {
+  const res = await dbQuery<{ profileModificationTime: Date }>(
+    dbPool,
+    `
+    select profile_modification_time as "profileModificationTime"
+    from dogs
+    where dog_id = $1
+    `,
+    [dogId],
+  );
+  return res.rows[0];
 }

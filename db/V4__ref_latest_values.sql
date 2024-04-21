@@ -6,7 +6,8 @@ CREATE VIEW latest_values AS (
             tReport.dog_weight_kg,
             tReport.dog_body_conditioning_score,
             tReport.dog_reported_ineligibility,
-            tReport.ineligibility_expiry_time
+            tReport.ineligibility_expiry_time,
+            tReport.visit_time
         FROM (
             SELECT
                 dog_id,
@@ -99,12 +100,16 @@ CREATE VIEW latest_values AS (
     SELECT
         tDog.dog_id,
         tUser.user_id,
-        COALESCE(tLatest.dog_weight_kg, tDog.dog_weight_kg) as latest_dog_weight_kg,
-        tLatest.dog_body_conditioning_score as latest_dog_body_conditioning_score,
+        CASE
+            WHEN tReport.visit_time IS NULL THEN tDog.dog_weight_kg
+            WHEN tReport.visit_time > tDog.profile_modification_time THEN tReport.dog_weight_kg
+            ELSE tDog.dog_weight_kg
+        END as latest_dog_weight_kg,
+        tReport.dog_body_conditioning_score as latest_dog_body_conditioning_score,
         COALESCE(tHeartworm.latest_dog_heartworm_result, 'NIL') as latest_dog_heartworm_result,
         tHeartworm.latest_dog_heartworm_observation_time,
-        tLatest.dog_reported_ineligibility as latest_dog_reported_ineligibility,
-        tLatest.ineligibility_expiry_time as latest_ineligibility_expiry_time,
+        tReport.dog_reported_ineligibility as latest_dog_reported_ineligibility,
+        tReport.ineligibility_expiry_time as latest_ineligibility_expiry_time,
         CASE
             WHEN tDea1Point1.dog_dea1_point1 IS NOT NULL THEN tDea1Point1.dog_dea1_point1
             WHEN tDog.dog_dea1_point1 = 'POSITIVE' THEN 'POSITIVE'::t_pos_neg_nil
@@ -115,7 +120,7 @@ CREATE VIEW latest_values AS (
         tDonation.latest_blood_donation_time
     FROM dogs as tDog
     LEFT JOIN users as tUser on tDog.user_id = tUser.user_id
-    LEFT JOIN mLatestReports as tLatest on tDog.dog_id = tLatest.dog_id
+    LEFT JOIN mLatestReports as tReport on tDog.dog_id = tReport.dog_id
     LEFT JOIN mLatestHeartwormReports as tHeartworm on tDog.dog_id = tHeartworm.dog_id
     LEFT JOIN mLatestDea1Point1 as tDea1Point1 on tDog.dog_id = tDea1Point1.dog_id
     LEFT JOIN mAgeCalculations as tAge on tDog.dog_id = tAge.dog_id

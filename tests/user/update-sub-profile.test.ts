@@ -1,13 +1,8 @@
 import { SubProfile } from "@/lib/user/user-models";
 import { withDb } from "../_db_helpers";
-import {
-  CALL_OUTCOME,
-  YES_NO_UNKNOWN,
-  YesNoUnknown,
-} from "@/lib/data/db-enums";
+import { CALL_OUTCOME, YES_NO_UNKNOWN } from "@/lib/data/db-enums";
 import {
   fetchDogInfo,
-  getDogMapper,
   getUserActor,
   insertCall,
   insertDog,
@@ -16,8 +11,6 @@ import {
   insertVet,
 } from "../_fixtures";
 import { updateSubProfile } from "@/lib/user/actions/update-sub-profile";
-import { Pool } from "pg";
-import { dbQuery } from "@/lib/data/db-utils";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 
 describe("updateSubProfile", () => {
@@ -35,20 +28,28 @@ describe("updateSubProfile", () => {
         CALL_OUTCOME.APPOINTMENT,
       );
       const r1 = await insertReport(dbPool, c1.callId, { dogWeightKg: 31 });
+      const { profileModificationTime: profileModificationTimeBeforeUpdate } =
+        await fetchDogInfo(dbPool, d1.dogId);
 
       // WHEN
       const v2 = await insertVet(2, dbPool);
       const actor1 = getUserActor(dbPool, u1.userId);
       const update = _getSubProfile({
         dogPreferredVetId: v2.vetId,
-        dogWeightKg: 31, // TODO: Change this to 32 to test latest_values
+        dogWeightKg: 32,
       });
       const res = await updateSubProfile(actor1, d1.dogId, update);
 
       // THEN
       expect(res).toEqual("OK_UPDATED");
-      const { subProfile } = await fetchDogInfo(dbPool, d1.dogId);
+      const { subProfile, profileModificationTime } = await fetchDogInfo(
+        dbPool,
+        d1.dogId,
+      );
       expect(subProfile).toEqual(update);
+      expect(profileModificationTime.getTime()).toBeGreaterThan(
+        profileModificationTimeBeforeUpdate.getTime(),
+      );
     });
   });
   it("should return ERROR_UNAUTHORIZED when user does not own the dog", async () => {

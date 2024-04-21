@@ -118,7 +118,8 @@ async function updateDogFields(
     dog_weight_kg = $6,
     dog_dea1_point1 = $7,
     dog_ever_pregnant = $8,
-    dog_ever_received_transfusion = $9
+    dog_ever_received_transfusion = $9,
+    profile_modification_time = CURRENT_TIMESTAMP
   WHERE
     dog_id = $1
   RETURNING 1

@@ -16,6 +16,7 @@ import {
   DOG_ANTIGEN_PRESENCE,
   POS_NEG_NIL,
 } from "@/lib/data/db-enums";
+import { MILLIS_PER_DAY } from "@/lib/utilities/bark-millis";
 
 describe("getDogProfile", () => {
   it("should return ERROR_UNAUTHORIZED when user does not own the dog requested", async () => {
@@ -99,6 +100,7 @@ describe("getDogProfile", () => {
       const { reportId } = await insertReport(dbPool, callId, {
         dogWeightKg: 25,
         dogDea1Point1: POS_NEG_NIL.POSITIVE,
+        visitTime: new Date(Date.now() + MILLIS_PER_DAY),
       });
 
       // WHEN

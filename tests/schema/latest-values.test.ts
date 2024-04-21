@@ -18,59 +18,9 @@ import {
   parseDateTime,
 } from "@/lib/utilities/bark-time";
 import { getAgeMonths } from "@/lib/utilities/bark-age";
-import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
+import { MILLIS_PER_DAY, MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
 
 describe("latest_values", () => {
-  const USER_IDX = 84;
-  const DOG_IDX = 42;
-  const VET_IDX = 71;
-  const DAYS = 86400000;
-
-  async function initUserOnly(dbPool: Pool): Promise<{ userId: string }> {
-    const userRecord = await insertUser(USER_IDX, dbPool);
-    const userId = userRecord.userId;
-    return { userId };
-  }
-
-  async function initDog(
-    dbPool: Pool,
-    overrides?: {
-      userSpec?: Partial<UserSpec>;
-      dogSpec?: Partial<DogSpec>;
-    },
-  ): Promise<{ userId: string; dogId: string; vetId: string }> {
-    const userRecord = await insertUser(USER_IDX, dbPool, overrides?.userSpec);
-    const userId = userRecord.userId;
-    const dogGen = await insertDog(DOG_IDX, userId, dbPool, overrides?.dogSpec);
-    const dogId = dogGen.dogId;
-    const vet = await insertVet(VET_IDX, dbPool);
-    const vetId = vet.vetId;
-    await dbInsertDogVetPreference(dbPool, dogId, vetId);
-    return { userId, dogId, vetId };
-  }
-
-  async function addReport(
-    dbPool: Pool,
-    dogId: string,
-    vetId: string,
-    overrides?: {
-      reportSpec?: Partial<DbReportSpec>;
-    },
-  ): Promise<{ reportId: string }> {
-    const { callId } = await insertCall(
-      dbPool,
-      dogId,
-      vetId,
-      CALL_OUTCOME.APPOINTMENT,
-    );
-    const { reportId } = await insertReport(
-      dbPool,
-      callId,
-      overrides?.reportSpec,
-    );
-    return { reportId };
-  }
-
   it("should not have rows for users without dogs", async () => {
     await withDb(async (dbPool) => {
       const { userId } = await initUserOnly(dbPool);
@@ -110,20 +60,65 @@ describe("latest_values", () => {
         expect(res.rows[0].latest_dog_weight_kg).toBeNull();
       });
     });
-    it("should be the value from the latest report", async () => {
+    it("should use report value when visit-time is more recent than profile-modification-time", async () => {
       await withDb(async (dbPool) => {
+        // GIVEN record
         const { dogId, vetId } = await initDog(dbPool, {
           dogSpec: { dogWeightKg: 11.11 },
+          profileModificationTime: weeksAgo(52),
         });
-        await addReport(dbPool, dogId, vetId, {
-          reportSpec: { dogWeightKg: 22.22 },
+
+        // AND report 1
+        const r1 = await addReport(dbPool, dogId, vetId, {
+          reportSpec: { dogWeightKg: 22.22, visitTime: weeksAgo(26) },
         });
+
+        // AND report 2
+        const r2 = await addReport(dbPool, dogId, vetId, {
+          reportSpec: {
+            dogWeightKg: 33.33,
+            visitTime: weeksAgo(1), // <-- most recent
+          },
+        });
+
+        // WHEN
         const res = await dbQuery(
           dbPool,
           `select latest_dog_weight_kg from latest_values where dog_id = $1`,
           [dogId],
         );
-        expect(res.rows[0].latest_dog_weight_kg).toEqual(22.22);
+
+        // THEN expect the weight from the second report
+        expect(res.rows[0].latest_dog_weight_kg).toEqual(33.33);
+      });
+    });
+    it("should use dog-record value when dog-modification-time is more recent than visit-time", async () => {
+      await withDb(async (dbPool) => {
+        // GIVEN record
+        const { dogId, vetId } = await initDog(dbPool, {
+          dogSpec: { dogWeightKg: 11.11 },
+          profileModificationTime: weeksAgo(1), // <-- most recent
+        });
+
+        // AND report 1
+        await addReport(dbPool, dogId, vetId, {
+          reportSpec: { dogWeightKg: 22.22, visitTime: weeksAgo(52) },
+        });
+
+        // AND report 2
+        await addReport(dbPool, dogId, vetId, {
+          reportSpec: { dogWeightKg: 33.33, visitTime: weeksAgo(26) },
+        });
+
+        // WHEN
+        const res = await dbQuery(
+          dbPool,
+          `select latest_dog_weight_kg from latest_values where dog_id = $1`,
+          [dogId],
+        );
+
+        // THEN expect the weight from the dog record
+        expect(res.rows[0].latest_dog_weight_kg).toEqual(11.11);
       });
     });
   });
@@ -276,7 +271,7 @@ describe("latest_values", () => {
       await withDb(async (dbPool) => {
         // GIVEN a birthday that is slightly over 2 years and 3 months ago
         const ts = new Date().getTime();
-        const birthday = new Date(ts - (2 * 365 + 3 * 31) * DAYS);
+        const birthday = new Date(ts - (2 * 365 + 3 * 31) * MILLIS_PER_DAY);
 
         // AND a dog with that birthday
         const { dogId } = await initDog(dbPool, {
@@ -341,3 +336,71 @@ describe("latest_values", () => {
     });
   });
 });
+
+const USER_IDX = 84;
+const DOG_IDX = 42;
+const VET_IDX = 71;
+
+function weeksAgo(numWeeks: number): Date {
+  return new Date(Date.now() - numWeeks * MILLIS_PER_WEEK);
+}
+
+async function initUserOnly(dbPool: Pool): Promise<{ userId: string }> {
+  const userRecord = await insertUser(USER_IDX, dbPool);
+  const userId = userRecord.userId;
+  return { userId };
+}
+
+async function initDog(
+  dbPool: Pool,
+  overrides?: {
+    userSpec?: Partial<UserSpec>;
+    dogSpec?: Partial<DogSpec>;
+    profileModificationTime?: Date;
+  },
+): Promise<{ userId: string; dogId: string; vetId: string }> {
+  const userRecord = await insertUser(USER_IDX, dbPool, overrides?.userSpec);
+  const userId = userRecord.userId;
+  const dogGen = await insertDog(DOG_IDX, userId, dbPool, overrides?.dogSpec);
+  const dogId = dogGen.dogId;
+  const vet = await insertVet(VET_IDX, dbPool);
+  const vetId = vet.vetId;
+  await dbInsertDogVetPreference(dbPool, dogId, vetId);
+
+  // Modify the profile modification time if a value was provided.
+  const profileModificationTime = overrides?.profileModificationTime;
+  if (profileModificationTime !== undefined) {
+    await dbQuery(
+      dbPool,
+      `
+      update dogs
+      set profile_modification_time = $2
+      where dog_id = $1
+      `,
+      [dogId, profileModificationTime],
+    );
+  }
+  return { userId, dogId, vetId };
+}
+
+async function addReport(
+  dbPool: Pool,
+  dogId: string,
+  vetId: string,
+  overrides?: {
+    reportSpec?: Partial<DbReportSpec>;
+  },
+): Promise<{ reportId: string }> {
+  const { callId } = await insertCall(
+    dbPool,
+    dogId,
+    vetId,
+    CALL_OUTCOME.APPOINTMENT,
+  );
+  const { reportId } = await insertReport(
+    dbPool,
+    callId,
+    overrides?.reportSpec,
+  );
+  return { reportId };
+}
