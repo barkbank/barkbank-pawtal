@@ -1,29 +1,45 @@
-import { Locator, Page } from "@playwright/test";
-import { Website } from "./website";
+import { Locator } from "@playwright/test";
 import { RoutePath } from "@/lib/route-path";
 import { PomContext } from "./pom-context";
-import { urlOf } from "../e2e-test-utils";
-
-export function MyPets(page: Page): {
-  url: string;
-  dog: (name: string) => Locator;
-} {
-  return {
-    url: urlOf(RoutePath.USER_MY_PETS),
-    dog: (name: string) => page.getByText(name, {exact: true}),
-  };
-}
 
 export class UserMyPetsPage {
-  public ctx: PomContext;
-  public url: string;
+  constructor(public ctx: PomContext) {}
 
-  constructor(ctx: PomContext) {
-    this.ctx = ctx;
-    this.url = ctx.pawtal.urlOf(RoutePath.USER_MY_PETS);
+  public url(): string {
+    return this.ctx.website.urlOf(RoutePath.USER_MY_PETS);
   }
 
   public locateDog(dogName: string): Locator {
     return this.ctx.page.getByText(dogName, { exact: true });
+  }
+
+  public dogCardItem(dogName: string): DogCardItem {
+    return new DogCardItem(this.ctx, dogName);
+  }
+
+  public addPetButton(): Locator {
+    return this.ctx.page.getByRole("link", { name: "Add Pet" });
+  }
+}
+
+export class DogCardItem {
+  constructor(
+    public ctx: PomContext,
+    public dogName: string,
+  ) {}
+
+  public locator(): Locator {
+    return this.ctx.page
+      .getByText(this.dogName, { exact: true })
+      .locator("..")
+      .locator("..");
+  }
+
+  public editButton(): Locator {
+    return this.locator().getByRole("button", { name: "Edit" });
+  }
+
+  public viewButton(): Locator {
+    return this.locator().getByRole("button", { name: "View" });
   }
 }

@@ -3,5 +3,5 @@ import { Website } from "./website";
 
 export type PomContext = {
   page: Page;
-  pawtal: Website;
+  website: Website;
 };

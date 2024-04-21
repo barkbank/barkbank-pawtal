@@ -1,7 +1,6 @@
 import { generateRandomGUID } from "@/lib/utilities/bark-guid";
 import { formatDateTime, SINGAPORE_TIME_ZONE } from "@/lib/utilities/bark-time";
 import { sprintf } from "sprintf-js";
-import { Website } from "./pom/website";
 
 export const UI_LOCATOR = {
   NAV_BAR: "#bark-nav-bar",
@@ -12,10 +11,6 @@ export const UI_LOCATOR = {
 
 export function urlOf(path: string): string {
   return `http://localhost:3000${path}`;
-}
-
-export function getLocalhostWebsite(): Website {
-  return new Website("http://localhost:3000");
 }
 
 export function generateTestDogName(): string {
