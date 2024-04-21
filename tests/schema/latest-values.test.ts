@@ -97,30 +97,6 @@ describe("latest_values", () => {
           [dogId],
         );
 
-        // WIP: remove debug
-        {
-          const dogRecords = (
-            await dbQuery(
-              dbPool,
-              `select dog_modification_time from dogs where dog_id = $1`,
-              [dogId],
-            )
-          ).rows;
-          const medicalReports = (
-            await dbQuery(
-              dbPool,
-              `
-            select visit_time
-            from reports
-            where dog_id = $1
-            ORDER BY visit_time ASC
-            `,
-              [dogId],
-            )
-          ).rows;
-          console.log("WIP", { dogRecords, medicalReports });
-        }
-
         // THEN expect the weight from the second report
         expect(res.rows[0].latest_dog_weight_kg).toEqual(33.33);
       });
