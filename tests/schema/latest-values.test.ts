@@ -60,33 +60,24 @@ describe("latest_values", () => {
         expect(res.rows[0].latest_dog_weight_kg).toBeNull();
       });
     });
-    it("should use report value when visit-time is more recent than dog-modification-time", async () => {
+    it("should use report value when visit-time is more recent than profile-modification-time", async () => {
       await withDb(async (dbPool) => {
-        const currentTs = Date.now();
-        const oneWeekInTheFuture = new Date(currentTs + 1 * MILLIS_PER_WEEK);
-        const sixMonthsIntheFuture = new Date(
-          currentTs + (365 / 2) * MILLIS_PER_DAY,
-        );
-
-        // WIP: dog-modification-time is fragile. We need an explicit
-        // profile-modification-time that is set by register dog, add dog,
-        // update profile and update sub profile.
-
         // GIVEN record
         const { dogId, vetId } = await initDog(dbPool, {
           dogSpec: { dogWeightKg: 11.11 },
+          profileModificationTime: weeksAgo(52),
         });
 
         // AND report 1
         const r1 = await addReport(dbPool, dogId, vetId, {
-          reportSpec: { dogWeightKg: 22.22, visitTime: oneWeekInTheFuture },
+          reportSpec: { dogWeightKg: 22.22, visitTime: weeksAgo(26) },
         });
 
         // AND report 2
         const r2 = await addReport(dbPool, dogId, vetId, {
           reportSpec: {
             dogWeightKg: 33.33,
-            visitTime: sixMonthsIntheFuture, // <-- most recent
+            visitTime: weeksAgo(1), // <-- most recent
           },
         });
 
@@ -103,23 +94,20 @@ describe("latest_values", () => {
     });
     it("should use dog-record value when dog-modification-time is more recent than visit-time", async () => {
       await withDb(async (dbPool) => {
-        const currentTs = Date.now();
-        const sixMonthsAgo = new Date(currentTs - 26 * MILLIS_PER_WEEK);
-        const lastWeek = new Date(currentTs - 1 * MILLIS_PER_WEEK);
-
         // GIVEN record
         const { dogId, vetId } = await initDog(dbPool, {
-          dogSpec: { dogWeightKg: 11.11 }, // <-- most recent
+          dogSpec: { dogWeightKg: 11.11 },
+          profileModificationTime: weeksAgo(1), // <-- most recent
         });
 
         // AND report 1
         await addReport(dbPool, dogId, vetId, {
-          reportSpec: { dogWeightKg: 22.22, visitTime: sixMonthsAgo },
+          reportSpec: { dogWeightKg: 22.22, visitTime: weeksAgo(52) },
         });
 
         // AND report 2
         await addReport(dbPool, dogId, vetId, {
-          reportSpec: { dogWeightKg: 33.33, visitTime: lastWeek },
+          reportSpec: { dogWeightKg: 33.33, visitTime: weeksAgo(26) },
         });
 
         // WHEN
@@ -353,6 +341,10 @@ const USER_IDX = 84;
 const DOG_IDX = 42;
 const VET_IDX = 71;
 
+function weeksAgo(numWeeks: number): Date {
+  return new Date(Date.now() - numWeeks * MILLIS_PER_WEEK);
+}
+
 async function initUserOnly(dbPool: Pool): Promise<{ userId: string }> {
   const userRecord = await insertUser(USER_IDX, dbPool);
   const userId = userRecord.userId;
@@ -364,6 +356,7 @@ async function initDog(
   overrides?: {
     userSpec?: Partial<UserSpec>;
     dogSpec?: Partial<DogSpec>;
+    profileModificationTime?: Date;
   },
 ): Promise<{ userId: string; dogId: string; vetId: string }> {
   const userRecord = await insertUser(USER_IDX, dbPool, overrides?.userSpec);
@@ -373,6 +366,20 @@ async function initDog(
   const vet = await insertVet(VET_IDX, dbPool);
   const vetId = vet.vetId;
   await dbInsertDogVetPreference(dbPool, dogId, vetId);
+
+  // Modify the profile modification time if a value was provided.
+  const profileModificationTime = overrides?.profileModificationTime;
+  if (profileModificationTime !== undefined) {
+    await dbQuery(
+      dbPool,
+      `
+      update dogs
+      set profile_modification_time = $2
+      where dog_id = $1
+      `,
+      [dogId, profileModificationTime],
+    );
+  }
   return { userId, dogId, vetId };
 }
 

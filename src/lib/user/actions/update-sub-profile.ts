@@ -104,6 +104,7 @@ async function updateDogFields(
   const { dogEncryptedOii } = await dogMapper.mapDogOiiToDogSecureOii({
     dogName,
   });
+  // WIP: The query should set profile_modification_time to CURRENT_TIMESTAMP
   const sql = `
   UPDATE dogs
   SET

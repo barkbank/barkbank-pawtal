@@ -56,6 +56,10 @@ CREATE TABLE dogs (
   dog_participation_status t_participation_status NOT NULL DEFAULT 'PARTICIPATING',
   dog_pause_expiry_time TIMESTAMP WITH TIME ZONE DEFAULT NULL,
   dog_encrypted_reason TEXT NOT NULL DEFAULT '',
+
+  -- profile_modification_time is not updated by table triggers
+  profile_modification_time TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
   CONSTRAINT dog_weight_kg_is_null_or_positive CHECK (dog_weight_kg IS NULL OR dog_weight_kg > 0),
   CONSTRAINT dog_participation_check CHECK (
     (dog_participation_status = 'PARTICIPATING' AND dog_pause_expiry_time IS NULL AND dog_encrypted_reason = '' )

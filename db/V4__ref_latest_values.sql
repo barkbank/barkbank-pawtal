@@ -102,7 +102,7 @@ CREATE VIEW latest_values AS (
         tUser.user_id,
         CASE
             WHEN tReport.visit_time IS NULL THEN tDog.dog_weight_kg
-            WHEN tReport.visit_time > tDog.dog_modification_time THEN tReport.dog_weight_kg
+            WHEN tReport.visit_time > tDog.profile_modification_time THEN tReport.dog_weight_kg
             ELSE tDog.dog_weight_kg
         END as latest_dog_weight_kg,
         tReport.dog_body_conditioning_score as latest_dog_body_conditioning_score,
