@@ -9,12 +9,15 @@ import { UTC_DATE_OPTION, parseDateTime } from "@/lib/utilities/bark-time";
 import { submitDog } from "../_actions/submit-dog";
 import { useRouter } from "next/navigation";
 import { RoutePath } from "@/lib/route-path";
+import { Err, Ok, Result } from "@/lib/utilities/result";
 
 export default function AddDogForm(props: { vetOptions: BarkFormOption[] }) {
   const router = useRouter();
   const { vetOptions } = props;
 
-  async function handleValues(values: DogFormData) {
+  async function handleValues(
+    values: DogFormData,
+  ): Promise<Result<true, string>> {
     const {
       dogBirthday: dogBirthdayString,
       dogWeightKg: dogWeightKgString,
@@ -28,18 +31,26 @@ export default function AddDogForm(props: { vetOptions: BarkFormOption[] }) {
       ...otherFields,
     };
     const { error } = await submitDog(dogProfile);
-    if (error) {
-      return error;
+    if (error !== undefined) {
+      if (error === "ERROR_UNAUTHORIZED") {
+        router.push(RoutePath.USER_LOGIN_PAGE);
+      }
+      return Err(error);
     }
     router.push(RoutePath.USER_MY_PETS);
-    return "";
+    return Ok(true);
+  }
+
+  async function handleCancel() {
+    router.push(RoutePath.USER_MY_PETS);
   }
 
   return (
     <GeneralDogForm
       formTitle="Add Dog"
       vetOptions={vetOptions}
-      handleValues={handleValues}
+      handleSubmit={handleValues}
+      handleCancel={handleCancel}
     />
   );
 }

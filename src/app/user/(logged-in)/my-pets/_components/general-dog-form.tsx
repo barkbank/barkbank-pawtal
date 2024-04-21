@@ -61,9 +61,11 @@ export default function GeneralDogForm(props: {
   formTitle: string;
   vetOptions: BarkFormOption[];
   prefillData?: DogFormData;
-  handleValues: (values: DogFormData) => Promise<string>;
+  handleSubmit: (values: DogFormData) => Promise<Result<true, string>>;
+  handleCancel: () => Promise<void>;
 }) {
-  const { formTitle, vetOptions, prefillData, handleValues } = props;
+  const { formTitle, vetOptions, prefillData, handleSubmit, handleCancel } =
+    props;
   const form = useForm<DogFormData>({
     resolver: zodResolver(
       FORM_SCHEMA.extend({
@@ -78,8 +80,12 @@ export default function GeneralDogForm(props: {
   });
 
   async function onSubmit(values: DogFormData) {
-    const errorMsg = await handleValues(values);
-    form.setError("root", { message: errorMsg });
+    const { error } = await handleSubmit(values);
+    if (error !== undefined) {
+      // TODO: The GeneralDogForm needs to specify the specifc types of errors
+      // because it is responsible for how the errors need to be displayed.
+      form.setError("root", { message: error });
+    }
   }
 
   return (
@@ -193,7 +199,12 @@ export default function GeneralDogForm(props: {
         <BarkFormError form={form} />
 
         <div className="mt-6 flex flex-col gap-3 md:flex-row-reverse md:justify-end">
-          <BarkButton className="w-full md:w-40" variant="brandInverse">
+          <BarkButton
+            className="w-full md:w-40"
+            variant="brandInverse"
+            type="button"
+            onClick={handleCancel}
+          >
             Cancel
           </BarkButton>
           <BarkButton className="w-full md:w-40" variant="brand" type="submit">
