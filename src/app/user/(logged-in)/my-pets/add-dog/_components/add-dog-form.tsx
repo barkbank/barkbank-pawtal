@@ -31,7 +31,10 @@ export default function AddDogForm(props: { vetOptions: BarkFormOption[] }) {
       ...otherFields,
     };
     const { error } = await submitDog(dogProfile);
-    if (error) {
+    if (error !== undefined) {
+      if (error === "ERROR_UNAUTHORIZED") {
+        router.push(RoutePath.USER_LOGIN_PAGE);
+      }
       return Err(error);
     }
     router.push(RoutePath.USER_MY_PETS);

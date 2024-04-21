@@ -81,7 +81,9 @@ export default function GeneralDogForm(props: {
 
   async function onSubmit(values: DogFormData) {
     const { error } = await handleSubmit(values);
-    if (error) {
+    if (error !== undefined) {
+      // TODO: The GeneralDogForm needs to specify the specifc types of errors
+      // because it is responsible for how the errors need to be displayed.
       form.setError("root", { message: error });
     }
   }
