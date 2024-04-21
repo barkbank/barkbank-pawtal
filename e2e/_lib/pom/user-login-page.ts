@@ -1,7 +1,30 @@
-import { Locator, expect } from "@playwright/test";
+import { Locator, expect, Page } from "@playwright/test";
 import { RoutePath } from "@/lib/route-path";
 import { UserMyPetsPage } from "./user-my-pets-page";
 import { PomContext } from "./pom-context";
+import { urlOf } from "../e2e-test-utils";
+
+export function UserLogin(page: Page): {
+  url: string;
+  emailField: Locator;
+  otpField: Locator;
+  sendMeAnOtpButton: Locator;
+  loginButton: Locator;
+  otpSentMessage: Locator;
+  registerLink: Locator;
+} {
+  return {
+    url: urlOf(RoutePath.USER_LOGIN_PAGE),
+    emailField: page.getByLabel("Please provide your email"),
+    otpField: page.getByLabel("Enter OTP"),
+    sendMeAnOtpButton: page.getByRole("button", {
+      name: "Send me an OTP",
+    }),
+    loginButton: page.getByRole("button", { name: "Login" }),
+    otpSentMessage: page.getByText("An OTP has been sent to"),
+    registerLink: page.getByRole("link", { name: "register here" }),
+  };
+}
 
 export class UserLoginPage {
   public ctx: PomContext;
