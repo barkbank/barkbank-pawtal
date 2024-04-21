@@ -31,10 +31,8 @@ export async function getMyPets(actor: UserActor): Promise<MyDog[]> {
       )) as appointments
     FROM mUserDogs as tDog
     LEFT JOIN calls as tCall on tDog.dog_id = tCall.dog_id
-    LEFT JOIN reports as tReport on tCall.call_id = tReport.call_id
     LEFT JOIN vets as tVet on tCall.vet_id = tVet.vet_id
     WHERE tCall.call_outcome = 'APPOINTMENT'
-    AND tReport.report_id IS NULL
     GROUP BY tDog.dog_id
   )
   SELECT

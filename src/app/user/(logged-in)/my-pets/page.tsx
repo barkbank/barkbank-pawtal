@@ -256,7 +256,11 @@ export default async function Page() {
           isLastCard={idx === ary.length - 1}
         />
       ))}
-      <BarkButton className="mt-3 w-full" variant="brandInverse">
+      <BarkButton
+        className="mt-3 w-full"
+        variant="brandInverse"
+        href={RoutePath.USER_ADD_DOG}
+      >
         Add Pet
       </BarkButton>
     </div>

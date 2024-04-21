@@ -13,6 +13,8 @@ export const CALL_OUTCOME = {
   APPOINTMENT: "APPOINTMENT",
   DECLINED: "DECLINED",
   OPT_OUT: "OPT_OUT",
+  REPORTED: "REPORTED",
+  CANCELLED: "CANCELLED",
 } as const;
 
 export type CallOutcome = ObjectValues<typeof CALL_OUTCOME>;

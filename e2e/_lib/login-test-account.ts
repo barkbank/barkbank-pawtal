@@ -1,16 +1,6 @@
 import { RoutePath } from "@/lib/route-path";
 import { expect, Page } from "@playwright/test";
-
-export function urlOf(path: string): string {
-  return `http://localhost:3000${path}`;
-}
-
-export const UI_LOCATOR = {
-  NAV_BAR: "#bark-nav-bar",
-  NAV_MENU_BUTTON: "#bark-nav-menu-button",
-  SIDEBAR: "#bark-sidebar",
-  FOOTER: "#bark-footer",
-} as const;
+import { urlOf } from "./e2e-test-utils";
 
 export const UI_USER = {
   USER_EMAIL: "test_user@user.com",
