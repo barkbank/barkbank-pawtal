@@ -63,26 +63,30 @@ describe("latest_values", () => {
     it("should use report value when visit-time is more recent than dog-modification-time", async () => {
       await withDb(async (dbPool) => {
         const currentTs = Date.now();
-        const oneYearAgo = new Date(currentTs - 52 * MILLIS_PER_WEEK);
-        const sixMonthsAgo = new Date(currentTs - 26 * MILLIS_PER_WEEK);
-        const lastWeek = new Date(currentTs - 1 * MILLIS_PER_WEEK);
+        const oneWeekInTheFuture = new Date(currentTs + 1 * MILLIS_PER_WEEK);
+        const sixMonthsIntheFuture = new Date(
+          currentTs + (365 / 2) * MILLIS_PER_DAY,
+        );
+
+        // WIP: dog-modification-time is fragile. We need an explicit
+        // profile-modification-time that is set by register dog, add dog,
+        // update profile and update sub profile.
 
         // GIVEN record
         const { dogId, vetId } = await initDog(dbPool, {
           dogSpec: { dogWeightKg: 11.11 },
-          dogModificationTime: oneYearAgo,
         });
 
         // AND report 1
-        await addReport(dbPool, dogId, vetId, {
-          reportSpec: { dogWeightKg: 22.22, visitTime: sixMonthsAgo },
+        const r1 = await addReport(dbPool, dogId, vetId, {
+          reportSpec: { dogWeightKg: 22.22, visitTime: oneWeekInTheFuture },
         });
 
         // AND report 2
-        await addReport(dbPool, dogId, vetId, {
+        const r2 = await addReport(dbPool, dogId, vetId, {
           reportSpec: {
             dogWeightKg: 33.33,
-            visitTime: lastWeek, // <-- most recent
+            visitTime: sixMonthsIntheFuture, // <-- most recent
           },
         });
 
@@ -93,6 +97,30 @@ describe("latest_values", () => {
           [dogId],
         );
 
+        // WIP: remove debug
+        {
+          const dogRecords = (
+            await dbQuery(
+              dbPool,
+              `select dog_modification_time from dogs where dog_id = $1`,
+              [dogId],
+            )
+          ).rows;
+          const medicalReports = (
+            await dbQuery(
+              dbPool,
+              `
+            select visit_time
+            from reports
+            where dog_id = $1
+            ORDER BY visit_time ASC
+            `,
+              [dogId],
+            )
+          ).rows;
+          console.log("WIP", { dogRecords, medicalReports });
+        }
+
         // THEN expect the weight from the second report
         expect(res.rows[0].latest_dog_weight_kg).toEqual(33.33);
       });
@@ -102,12 +130,10 @@ describe("latest_values", () => {
         const currentTs = Date.now();
         const sixMonthsAgo = new Date(currentTs - 26 * MILLIS_PER_WEEK);
         const lastWeek = new Date(currentTs - 1 * MILLIS_PER_WEEK);
-        const yesterday = new Date(currentTs - 1 * MILLIS_PER_DAY);
 
         // GIVEN record
         const { dogId, vetId } = await initDog(dbPool, {
-          dogSpec: { dogWeightKg: 11.11 },
-          dogModificationTime: yesterday, // <-- most recent
+          dogSpec: { dogWeightKg: 11.11 }, // <-- most recent
         });
 
         // AND report 1
@@ -362,7 +388,6 @@ async function initDog(
   overrides?: {
     userSpec?: Partial<UserSpec>;
     dogSpec?: Partial<DogSpec>;
-    dogModificationTime?: Date;
   },
 ): Promise<{ userId: string; dogId: string; vetId: string }> {
   const userRecord = await insertUser(USER_IDX, dbPool, overrides?.userSpec);
@@ -372,21 +397,7 @@ async function initDog(
   const vet = await insertVet(VET_IDX, dbPool);
   const vetId = vet.vetId;
   await dbInsertDogVetPreference(dbPool, dogId, vetId);
-  if (overrides?.dogModificationTime !== undefined) {
-    await setDogModificationTime(dbPool, dogId, overrides.dogModificationTime);
-  }
   return { userId, dogId, vetId };
-}
-
-async function setDogModificationTime(
-  dbPool: Pool,
-  dogId: string,
-  dogModificationTime: Date,
-) {
-  const sql = `
-  update dogs set dog_modification_time = $2 where dog_id = $1 returning 1
-  `;
-  const res = await dbQuery(dbPool, sql, [dogId, dogModificationTime]);
 }
 
 async function addReport(
