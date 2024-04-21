@@ -27,6 +27,8 @@ describe("updateDogProfile", () => {
       const d1 = await insertDog(1, u1.userId, dbPool);
       const v1 = await insertVet(1, dbPool);
       await dbInsertDogVetPreference(dbPool, d1.dogId, v1.vetId);
+      const { profileModificationTime: profileModificationTimeBeforeUpdate } =
+        await fetchDogInfo(dbPool, d1.dogId);
 
       // WHEN
       const v2 = await insertVet(2, dbPool);
@@ -38,8 +40,14 @@ describe("updateDogProfile", () => {
 
       // THEN
       expect(res).toEqual("OK_UPDATED");
-      const { dogProfile: registration } = await fetchDogInfo(dbPool, d1.dogId);
-      expect(registration).toEqual(update);
+      const { dogProfile, profileModificationTime } = await fetchDogInfo(
+        dbPool,
+        d1.dogId,
+      );
+      expect(dogProfile).toEqual(update);
+      expect(profileModificationTime.getTime()).toBeGreaterThan(
+        profileModificationTimeBeforeUpdate.getTime(),
+      );
     });
   });
   it("should return ERROR_REPORT_EXISTS when there is an existing report for the dog", async () => {

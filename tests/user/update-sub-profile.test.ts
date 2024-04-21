@@ -28,6 +28,8 @@ describe("updateSubProfile", () => {
         CALL_OUTCOME.APPOINTMENT,
       );
       const r1 = await insertReport(dbPool, c1.callId, { dogWeightKg: 31 });
+      const { profileModificationTime: profileModificationTimeBeforeUpdate } =
+        await fetchDogInfo(dbPool, d1.dogId);
 
       // WHEN
       const v2 = await insertVet(2, dbPool);
@@ -40,8 +42,14 @@ describe("updateSubProfile", () => {
 
       // THEN
       expect(res).toEqual("OK_UPDATED");
-      const { subProfile } = await fetchDogInfo(dbPool, d1.dogId);
+      const { subProfile, profileModificationTime } = await fetchDogInfo(
+        dbPool,
+        d1.dogId,
+      );
       expect(subProfile).toEqual(update);
+      expect(profileModificationTime.getTime()).toBeGreaterThan(
+        profileModificationTimeBeforeUpdate.getTime(),
+      );
     });
   });
   it("should return ERROR_UNAUTHORIZED when user does not own the dog", async () => {
