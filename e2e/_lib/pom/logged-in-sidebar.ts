@@ -3,7 +3,7 @@ import { PomContext } from "./pom-context";
 import { UserMyAccountPage } from "./user-my-account-page";
 import { RoutePath } from "@/lib/route-path";
 
-export class SidebarPOM {
+export class LoggedInSidebar {
   constructor(public ctx: PomContext) {}
 
   public locator(): Locator {
