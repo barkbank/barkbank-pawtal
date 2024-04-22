@@ -1,39 +1,37 @@
 import { Locator, expect } from "@playwright/test";
 import { RoutePath } from "@/lib/route-path";
 import { UserMyPetsPage } from "./user-my-pets-page";
-import { PomContext } from "./pom-context";
+import { PawtalPage } from "./pawtal-page";
 
-export class UserLoginPage {
-  constructor(private ctx: PomContext) {}
-
+export class UserLoginPage extends PawtalPage {
   public url(): string {
-    return this.ctx.website.urlOf(RoutePath.USER_LOGIN_PAGE);
+    return this.website().urlOf(RoutePath.USER_LOGIN_PAGE);
   }
 
   public emailField(): Locator {
-    return this.ctx.page.getByLabel("Please provide your email");
+    return this.page().getByLabel("Please provide your email");
   }
 
   public sendMeAnOtpButton(): Locator {
-    return this.ctx.page.getByRole("button", {
+    return this.page().getByRole("button", {
       name: "Send me an OTP",
     });
   }
 
   public otpSentMessage(): Locator {
-    return this.ctx.page.getByText("An OTP has been sent to");
+    return this.page().getByText("An OTP has been sent to");
   }
 
   public otpField(): Locator {
-    return this.ctx.page.getByLabel("Enter OTP");
+    return this.page().getByLabel("Enter OTP");
   }
 
   public loginButton(): Locator {
-    return this.ctx.page.getByRole("button", { name: "Login" });
+    return this.page().getByRole("button", { name: "Login" });
   }
 
   public registerLink(): Locator {
-    return this.ctx.page.getByRole("link", { name: "register here" });
+    return this.page().getByRole("link", { name: "register here" });
   }
 
   public async doLogin(userEmail: string): Promise<UserMyPetsPage> {
@@ -42,8 +40,9 @@ export class UserLoginPage {
     await expect(this.otpSentMessage()).toBeVisible();
     await this.otpField().fill("000000");
     await this.loginButton().click();
-    const nextPage = new UserMyPetsPage(this.ctx);
-    await expect(this.ctx.page).toHaveURL(nextPage.url());
+    const nextPage = new UserMyPetsPage(this.context());
+
+    await expect(this.page()).toHaveURL(nextPage.url());
     return nextPage;
   }
 }
