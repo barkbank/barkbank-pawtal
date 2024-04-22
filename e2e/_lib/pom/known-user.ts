@@ -7,6 +7,7 @@ export type KnownUser = {
   userName: string;
   userEmail: string;
   userPhoneNumber: string;
+  userResidency: string;
   userDogs: KnownDog[];
 };
 
@@ -15,6 +16,7 @@ export function getKnownUser(): KnownUser {
     userName: "Tess Yu Ser",
     userEmail: "test_user@user.com",
     userPhoneNumber: "+65 30002000",
+    userResidency: "Singapore",
     userDogs: [
       {
         dogName: "Mape",

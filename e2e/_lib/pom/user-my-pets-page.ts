@@ -1,12 +1,17 @@
 import { Locator } from "@playwright/test";
 import { RoutePath } from "@/lib/route-path";
 import { PomContext } from "./pom-context";
+import { SidebarPOM } from "./sidebar-pom";
 
 export class UserMyPetsPage {
   constructor(public ctx: PomContext) {}
 
   public url(): string {
     return this.ctx.website.urlOf(RoutePath.USER_MY_PETS);
+  }
+
+  public sidebar(): SidebarPOM {
+    return new SidebarPOM(this.ctx);
   }
 
   public dogCardItem(dogName: string): DogCardItem {
