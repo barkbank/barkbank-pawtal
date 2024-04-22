@@ -25,7 +25,9 @@ export async function registerTestUser(args: { page: Page }): Promise<{
   const context = await initPomContext(page);
 
   await page.goto(context.website.urlOf(RoutePath.USER_REGISTRATION));
-  await expect(page).toHaveURL(context.website.urlOf(RoutePath.USER_REGISTRATION));
+  await expect(page).toHaveURL(
+    context.website.urlOf(RoutePath.USER_REGISTRATION),
+  );
 
   // Pet Form
   await page.getByLabel("What's your dog's name?").fill(dogName);
@@ -64,8 +66,18 @@ export async function registerTestUser(args: { page: Page }): Promise<{
 
   // Final
   await page.getByRole("button", { name: "Enter My Dashboard" }).click();
-  await expect(page).toHaveURL(context.website.urlOf(RoutePath.USER_DEFAULT_LOGGED_IN_PAGE));
+  await expect(page).toHaveURL(
+    context.website.urlOf(RoutePath.USER_DEFAULT_LOGGED_IN_PAGE),
+  );
   const userMyPetsPage = new UserMyPetsPage(context);
   await userMyPetsPage.checkUrl();
-  return { guid, userName, userEmail, userPhoneNumber, dogName, dogBreed, userMyPetsPage };
+  return {
+    guid,
+    userName,
+    userEmail,
+    userPhoneNumber,
+    dogName,
+    dogBreed,
+    userMyPetsPage,
+  };
 }
