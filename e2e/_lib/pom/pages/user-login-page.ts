@@ -1,9 +1,9 @@
 import { Locator, expect } from "@playwright/test";
 import { RoutePath } from "@/lib/route-path";
 import { UserMyPetsPage } from "./user-my-pets-page";
-import { PawtalPage } from "./pawtal-page";
+import { PomPage } from "../core/pom-page";
 
-export class UserLoginPage extends PawtalPage {
+export class UserLoginPage extends PomPage {
   public url(): string {
     return this.website().urlOf(RoutePath.USER_LOGIN_PAGE);
   }

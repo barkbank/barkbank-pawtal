@@ -1,9 +1,10 @@
 import { Locator } from "@playwright/test";
 import { RoutePath } from "@/lib/route-path";
-import { PomComponent, PomContext } from "./pom-core";
-import { PawtalPage } from "./pawtal-page";
+import { PomContext } from "../core/pom-object";
+import { PomComponent } from "../core/pom-component";
+import { PomPage } from "../core/pom-page";
 
-export class UserMyPetsPage extends PawtalPage {
+export class UserMyPetsPage extends PomPage {
   public url(): string {
     return this.website().urlOf(RoutePath.USER_MY_PETS);
   }

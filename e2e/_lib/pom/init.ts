@@ -1,9 +1,10 @@
 import { Page } from "@playwright/test";
-import { Website } from "./website";
-import { PomContext } from "./pom-core";
+import { Website } from "./core/website";
+import { PomContext, PomObject } from "./core/pom-object";
 import { KnownUser, getKnownUser } from "./known-user";
-import { UserMyPetsPage } from "./user-my-pets-page";
-import { UserLoginPage } from "./user-login-page";
+import { UserMyPetsPage } from "./pages/user-my-pets-page";
+import { UserLoginPage } from "./pages/user-login-page";
+import { SidebarComponent } from "./layout/sidebar-component";
 
 export function getTestWebsite(): Website {
   return new Website("http://localhost:3000");
@@ -27,4 +28,8 @@ export async function loginKnownUser(page: Page): Promise<{
   const loginPage = new UserLoginPage(ctx);
   const petsPage = await loginPage.doLogin(knownUser.userEmail);
   return { knownUser, petsPage };
+}
+
+export function sidebarOf(pomObject: PomObject): SidebarComponent {
+  return new SidebarComponent(pomObject.context());
 }
