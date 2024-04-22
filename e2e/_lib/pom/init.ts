@@ -2,9 +2,10 @@ import { Page } from "@playwright/test";
 import { Website } from "./core/website";
 import { PomContext, PomObject } from "./core/pom-object";
 import { KnownUser, getKnownUser } from "./known-user";
-import { UserMyPetsPage } from "./pages/user-my-pets-page";
 import { UserLoginPage } from "./pages/user-login-page";
 import { SidebarComponent } from "./layout/sidebar-component";
+import { PomPage } from "./core/pom-page";
+import { NavbarComponent } from "./layout/navbar-component";
 
 export function getTestWebsite(): Website {
   return new Website("http://localhost:3000");
@@ -21,15 +22,19 @@ export async function initPomContext(page: Page): Promise<PomContext> {
 
 export async function loginKnownUser(page: Page): Promise<{
   knownUser: KnownUser;
-  petsPage: UserMyPetsPage;
+  pomPage: PomPage;
 }> {
   const ctx = await initPomContext(page);
   const knownUser = getKnownUser();
   const loginPage = new UserLoginPage(ctx);
-  const petsPage = await loginPage.doLogin(knownUser.userEmail);
-  return { knownUser, petsPage };
+  const pomPage = await loginPage.doLogin(knownUser.userEmail);
+  return { knownUser, pomPage };
 }
 
 export function sidebarOf(pomObject: PomObject): SidebarComponent {
   return new SidebarComponent(pomObject.context());
+}
+
+export function navbarOf(pomObject: PomObject): NavbarComponent {
+  return new NavbarComponent(pomObject.context());
 }

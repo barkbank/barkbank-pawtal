@@ -41,8 +41,7 @@ export class UserLoginPage extends PomPage {
     await this.otpField().fill("000000");
     await this.loginButton().click();
     const nextPage = new UserMyPetsPage(this.context());
-
-    await expect(this.page()).toHaveURL(nextPage.url());
+    await nextPage.checkUrl();
     return nextPage;
   }
 }
