@@ -1,8 +1,8 @@
 import { expect } from "@playwright/test";
-import { PomPage } from "../core/pom-page";
-import { NavbarComponent } from "../layout/navbar-component";
-import { UserLoginPage } from "../pages/user-login-page";
-import { LogoutPage } from "../pages/logout-page";
+import { PomPage } from "../pom/core/pom-page";
+import { NavbarComponent } from "../pom/layout/navbar-component";
+import { UserLoginPage } from "../pom/pages/user-login-page";
+import { LogoutPage } from "../pom/pages/logout-page";
 
 export async function doLogoutSequence(
   pomPage: PomPage,

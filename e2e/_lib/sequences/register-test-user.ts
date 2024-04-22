@@ -1,7 +1,7 @@
 import { RoutePath } from "@/lib/route-path";
 import { generateRandomGUID } from "@/lib/utilities/bark-guid";
 import { Page, expect } from "@playwright/test";
-import { urlOf, getTestBirthday } from "../../e2e-test-utils";
+import { urlOf, getTestBirthday } from "../e2e-test-utils";
 
 export async function registerTestUser(args: { page: Page }): Promise<{
   guid: string;
