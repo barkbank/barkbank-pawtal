@@ -1,4 +1,4 @@
-import { Page } from "@playwright/test";
+import { Locator, Page } from "@playwright/test";
 import { PomContext } from "./pom-context";
 
 export class UserMyAccountPage {
@@ -6,5 +6,9 @@ export class UserMyAccountPage {
 
   public page(): Page {
     return this.ctx.page;
+  }
+
+  public exactText(text: string): Locator {
+    return this.ctx.page.getByText(text, { exact: true });
   }
 }

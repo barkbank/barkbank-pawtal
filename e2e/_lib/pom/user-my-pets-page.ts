@@ -36,6 +36,10 @@ export class DogCardItem {
       .locator("..");
   }
 
+  public exactText(text: string): Locator {
+    return this.locator().getByText(text, { exact: true });
+  }
+
   public editButton(): Locator {
     return this.locator().getByRole("button", { name: "Edit" });
   }

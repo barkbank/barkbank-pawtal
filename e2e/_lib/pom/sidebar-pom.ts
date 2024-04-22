@@ -16,7 +16,9 @@ export class SidebarPOM {
 
   public async clickMyAccount(): Promise<UserMyAccountPage> {
     await this.sidebarOption("My Account").click();
-    await expect(this.ctx.page).toHaveURL(this.ctx.website.urlOf(RoutePath.USER_MY_ACCOUNT_PAGE));
+    await expect(this.ctx.page).toHaveURL(
+      this.ctx.website.urlOf(RoutePath.USER_MY_ACCOUNT_PAGE),
+    );
     return new UserMyAccountPage(this.ctx);
   }
 }

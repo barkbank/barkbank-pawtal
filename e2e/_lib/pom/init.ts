@@ -19,12 +19,12 @@ export async function initPomContext(page: Page): Promise<PomContext> {
 }
 
 export async function loginKnownUser(page: Page): Promise<{
-  knownUser: KnownUser,
-  petsPage: UserMyPetsPage,
+  knownUser: KnownUser;
+  petsPage: UserMyPetsPage;
 }> {
   const ctx = await initPomContext(page);
   const knownUser = getKnownUser();
   const loginPage = new UserLoginPage(ctx);
   const petsPage = await loginPage.doLogin(knownUser.userEmail);
-  return {knownUser, petsPage};
+  return { knownUser, petsPage };
 }
