@@ -10,7 +10,7 @@ test("user can cancel logout", async ({ page }) => {
 
   // Navigate to My Account page first. We expect to return here if we cancel
   // the logout.
-  await gotoUserMyAccountPage({context});
+  await gotoUserMyAccountPage({ context });
 
   const nav = new NavbarComponent(context);
   if (await nav.hamburgerButton().isVisible()) {

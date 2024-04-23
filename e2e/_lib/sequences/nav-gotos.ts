@@ -3,7 +3,6 @@ import { SidebarComponent } from "../pom/layout/sidebar-component";
 import { UserMyAccountPage } from "../pom/pages/user-my-account-page";
 import { UserMyPetsPage } from "../pom/pages/user-my-pets-page";
 
-
 export async function gotoUserMyAccountPage(args: {
   context: PomContext;
 }): Promise<UserMyAccountPage> {
