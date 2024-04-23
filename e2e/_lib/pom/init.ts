@@ -31,10 +31,16 @@ export async function loginKnownUser(page: Page): Promise<{
   return { knownUser, pomPage };
 }
 
+/**
+ * @deprecated Use new SidebarComponent directly.
+ */
 export function sidebarOf(pomObject: PomObject): SidebarComponent {
   return new SidebarComponent(pomObject.context());
 }
 
+/**
+ * @deprecated Use new NavbarComponent directly.
+ */
 export function navbarOf(pomObject: PomObject): NavbarComponent {
   return new NavbarComponent(pomObject.context());
 }
