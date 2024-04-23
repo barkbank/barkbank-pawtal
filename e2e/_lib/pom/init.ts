@@ -1,10 +1,8 @@
 import { Page } from "@playwright/test";
 import { Website } from "./core/website";
-import { PomContext, PomObject } from "./core/pom-object";
+import { PomContext } from "./core/pom-object";
 import { getKnownUser } from "./known-user";
 import { PomUser } from "./entities";
-import { SidebarComponent } from "./layout/sidebar-component";
-import { NavbarComponent } from "./layout/navbar-component";
 import { UserMyPetsPage } from "./pages/user-my-pets-page";
 import { doUserLoginSequence } from "../sequences/user-login-sequence";
 
