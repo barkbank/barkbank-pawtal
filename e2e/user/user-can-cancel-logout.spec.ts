@@ -1,12 +1,12 @@
 import { test, expect } from "@playwright/test";
-import { loginKnownUser } from "../_lib/pom/init";
+import { initLoginKnownUser } from "../_lib/pom/init";
 import { NavbarComponent } from "../_lib/pom/layout/navbar-component";
 import { LogoutPage } from "../_lib/pom/pages/logout-page";
 import { SidebarComponent } from "../_lib/pom/layout/sidebar-component";
 import { UserMyAccountPage } from "../_lib/pom/pages/user-my-account-page";
 
 test("user can cancel logout", async ({ page }) => {
-  const { pomPage } = await loginKnownUser(page);
+  const { pomPage } = await initLoginKnownUser(page);
   const ctx = pomPage.context();
 
   const sb = new SidebarComponent(ctx);
