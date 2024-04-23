@@ -1,15 +1,19 @@
 import { expect } from "@playwright/test";
-import { PomPage } from "../pom/core/pom-page";
 import { NavbarComponent } from "../pom/layout/navbar-component";
 import { UserLoginPage } from "../pom/pages/user-login-page";
 import { LogoutPage } from "../pom/pages/logout-page";
+import { PomContext } from "../pom/core/pom-object";
 
-export async function doLogoutSequence(
-  pomPage: PomPage,
-): Promise<UserLoginPage> {
-  const ctx = pomPage.context();
+/**
+ * @param args.context Should have a Logout option in the Navbar
+ * @returns UserLoginPage
+ */
+export async function doLogoutSequence(args: {
+  context: PomContext;
+}): Promise<UserLoginPage> {
+  const { context } = args;
 
-  const navbar = new NavbarComponent(ctx);
+  const navbar = new NavbarComponent(context);
   await expect(navbar.locator()).toBeVisible();
   if (await navbar.hamburgerButton().isVisible()) {
     await navbar.hamburgerButton().click();
@@ -17,11 +21,11 @@ export async function doLogoutSequence(
   await expect(navbar.logoutLink()).toBeVisible();
   await navbar.logoutLink().click();
 
-  const logoutPage = new LogoutPage(ctx);
+  const logoutPage = new LogoutPage(context);
   await logoutPage.checkUrl();
   await logoutPage.logoutButton().click();
 
-  const userLoginPage = new UserLoginPage(ctx);
+  const userLoginPage = new UserLoginPage(context);
   await userLoginPage.checkUrl();
   return userLoginPage;
 }

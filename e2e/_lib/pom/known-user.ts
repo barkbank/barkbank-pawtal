@@ -1,17 +1,9 @@
-export type KnownDog = {
-  dogName: string;
-  dogStatus: string;
-};
+import { PomUser } from "./entities";
 
-export type KnownUser = {
-  userName: string;
-  userEmail: string;
-  userPhoneNumber: string;
-  userResidency: string;
-  userDogs: KnownDog[];
-};
-
-export function getKnownUser(): KnownUser {
+/**
+ * @returns Details of the known user that make local-accounts creates.
+ */
+export function getKnownUser(): PomUser {
   return {
     userName: "Tess Yu Ser",
     userEmail: "test_user@user.com",

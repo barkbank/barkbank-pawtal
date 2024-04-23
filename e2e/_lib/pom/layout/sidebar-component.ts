@@ -1,28 +1,23 @@
 import { Locator } from "@playwright/test";
 import { PomComponent } from "../core/pom-component";
-import { UserMyAccountPage } from "../pages/user-my-account-page";
-import { UserMyPetsPage } from "../pages/user-my-pets-page";
 
 export class SidebarComponent extends PomComponent {
   locator(): Locator {
     return this.page().locator("#bark-sidebar");
   }
 
-  sidebarOption(name: string): Locator {
+  myAcountOption(): Locator {
+    return this.sidebarOption("My Account");
+  }
+
+  myPetsOption(): Locator {
+    return this.sidebarOption("My Pets");
+  }
+
+  // Note: This should not be used directly from outside the SidebarComponent.
+  // It may not always be this simple. So the sidebar POM should be responsible
+  // for mapping expected options to Locator objects.
+  private sidebarOption(name: string): Locator {
     return this.locator().getByRole("link", { name });
-  }
-
-  async gotoMyAccount(): Promise<UserMyAccountPage> {
-    await this.sidebarOption("My Account").click();
-    const dest = new UserMyAccountPage(this.context());
-    await dest.checkUrl();
-    return dest;
-  }
-
-  async gotoMyPets(): Promise<UserMyPetsPage> {
-    await this.sidebarOption("My Pets").click();
-    const dest = new UserMyPetsPage(this.context());
-    await dest.checkUrl();
-    return dest;
   }
 }
