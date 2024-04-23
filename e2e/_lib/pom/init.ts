@@ -1,23 +1,10 @@
 import { Page } from "@playwright/test";
-import { Website } from "./core/website";
 import { PomContext } from "./core/pom-object";
 import { getKnownUser } from "./known-user";
 import { PomUser } from "./entities";
 import { UserMyPetsPage } from "./pages/user-my-pets-page";
 import { doUserLoginSequence } from "../sequences/user-login-sequence";
-
-function _initWebsite(): Website {
-  return new Website("http://localhost:3000");
-}
-
-/**
- * Create and initialise a PomContext at the root of the test website.
- */
-export async function initPomContext(page: Page): Promise<PomContext> {
-  const website = _initWebsite();
-  await page.goto(website.urlOf("/"));
-  return { page, website };
-}
+import { initPomContext } from "./init/init-pom-context";
 
 /**
  * Initialise page and login as the Known User.
