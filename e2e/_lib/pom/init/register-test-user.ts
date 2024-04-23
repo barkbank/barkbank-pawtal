@@ -22,7 +22,7 @@ export async function registerTestUser(args: { page: Page }): Promise<{
   const dogBreed = "REGISTERED DOG";
 
   const { page } = args;
-  const context = await initPomContext(page);
+  const context = await initPomContext({ page });
 
   await page.goto(context.website.urlOf(RoutePath.USER_REGISTRATION));
   await expect(page).toHaveURL(

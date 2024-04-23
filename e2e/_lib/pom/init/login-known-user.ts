@@ -16,7 +16,7 @@ export async function loginKnownUser(page: Page): Promise<{
   knownUser: PomUser;
   pomPage: UserMyPetsPage;
 }> {
-  const context = await initPomContext(page);
+  const context = await initPomContext({ page });
   const knownUser = getKnownUser();
   const { userEmail } = knownUser;
   const pomPage = await doUserLoginSequence({ context, userEmail });
