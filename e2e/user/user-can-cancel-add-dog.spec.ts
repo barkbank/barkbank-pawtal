@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { registerTestUser } from "../_lib/sequences/register-test-user";
+import { registerTestUser } from "../_lib/pom/init/register-test-user";
 import { getTestBirthday } from "../_lib/e2e-test-utils";
 import { generateTestDogName } from "../_lib/e2e-test-utils";
 import { urlOf } from "../_lib/e2e-test-utils";
