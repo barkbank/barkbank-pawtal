@@ -39,10 +39,3 @@ export async function initLoginKnownUser(page: Page): Promise<{
 }
 
 // WIP: initNewRegisteredUser(page: Page) -> {PomContext, PomUser, UserMyPetsPage}
-
-/**
- * @deprecated Use new NavbarComponent directly.
- */
-export function navbarOf(pomObject: PomObject): NavbarComponent {
-  return new NavbarComponent(pomObject.context());
-}
