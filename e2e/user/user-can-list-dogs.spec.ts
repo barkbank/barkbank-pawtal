@@ -1,9 +1,8 @@
 import { test, expect } from "@playwright/test";
-import { initLoginKnownUser, sidebarOf } from "../_lib/pom/init";
+import { initLoginKnownUser } from "../_lib/pom/init";
 
 test("user can list their dogs", async ({ page }) => {
-  const { knownUser, pomPage } = await initLoginKnownUser(page);
-  const petsPage = await sidebarOf(pomPage).gotoMyPets();
+  const { knownUser, pomPage: petsPage } = await initLoginKnownUser(page);
   for (const dog of knownUser.userDogs) {
     const { dogName, dogStatus } = dog;
     const card = petsPage.dogCardItem(dogName);

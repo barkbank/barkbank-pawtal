@@ -2,29 +2,29 @@ import { test, expect } from "@playwright/test";
 import { initLoginKnownUser } from "../_lib/pom/init";
 import { NavbarComponent } from "../_lib/pom/layout/navbar-component";
 import { LogoutPage } from "../_lib/pom/pages/logout-page";
-import { SidebarComponent } from "../_lib/pom/layout/sidebar-component";
 import { UserMyAccountPage } from "../_lib/pom/pages/user-my-account-page";
+import { gotoUserMyAccountPage } from "../_lib/sequences/nav-gotos";
 
 test("user can cancel logout", async ({ page }) => {
-  const { pomPage } = await initLoginKnownUser(page);
-  const ctx = pomPage.context();
+  const { context } = await initLoginKnownUser(page);
 
-  const sb = new SidebarComponent(ctx);
-  await sb.gotoMyAccount();
+  // Navigate to My Account page first. We expect to return here if we cancel
+  // the logout.
+  await gotoUserMyAccountPage({context});
 
-  const nav = new NavbarComponent(ctx);
+  const nav = new NavbarComponent(context);
   if (await nav.hamburgerButton().isVisible()) {
     await nav.hamburgerButton().click();
   }
   await expect(nav.logoutLink()).toBeVisible();
   await nav.logoutLink().click();
 
-  const logoutPage = new LogoutPage(ctx);
+  const logoutPage = new LogoutPage(context);
   await logoutPage.checkUrl();
   await expect(logoutPage.cancelButton()).toBeVisible();
   await logoutPage.cancelButton().click();
 
   // Should be back at my account page.
-  const myAccountPage = new UserMyAccountPage(ctx);
+  const myAccountPage = new UserMyAccountPage(context);
   await myAccountPage.checkUrl();
 });
