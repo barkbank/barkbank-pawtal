@@ -4,8 +4,10 @@ import { Page, expect } from "@playwright/test";
 import { getTestBirthday } from "../../e2e-test-utils";
 import { initPomContext } from "./init-pom-context";
 import { UserMyPetsPage } from "../pages/user-my-pets-page";
+import { PomContext } from "../core/pom-object";
 
 export async function registerTestUser(args: { page: Page }): Promise<{
+  context: PomContext;
   guid: string;
   userName: string;
   userEmail: string;
@@ -71,7 +73,8 @@ export async function registerTestUser(args: { page: Page }): Promise<{
   );
   const userMyPetsPage = new UserMyPetsPage(context);
   await userMyPetsPage.checkUrl();
-  return {
+  const result = {
+    context,
     guid,
     userName,
     userEmail,
@@ -80,4 +83,6 @@ export async function registerTestUser(args: { page: Page }): Promise<{
     dogBreed,
     userMyPetsPage,
   };
+  console.log(result);
+  return result;
 }
