@@ -1,7 +1,9 @@
 import { RoutePath } from "@/lib/route-path";
 import { generateRandomGUID } from "@/lib/utilities/bark-guid";
 import { Page, expect } from "@playwright/test";
-import { urlOf, getTestBirthday } from "./e2e-test-utils";
+import { getTestBirthday } from "../e2e-test-utils";
+import { initPomContext } from "../pom/init";
+import { UserMyPetsPage } from "../pom/pages/user-my-pets-page";
 
 export async function registerTestUser(args: { page: Page }): Promise<{
   guid: string;
@@ -10,6 +12,7 @@ export async function registerTestUser(args: { page: Page }): Promise<{
   userPhoneNumber: string;
   dogName: string;
   dogBreed: string;
+  userMyPetsPage: UserMyPetsPage;
 }> {
   const guid = generateRandomGUID(8);
   const userName = `Alice (${guid})`;
@@ -19,8 +22,12 @@ export async function registerTestUser(args: { page: Page }): Promise<{
   const dogBreed = "REGISTERED DOG";
 
   const { page } = args;
-  await page.goto(urlOf(RoutePath.USER_REGISTRATION));
-  await expect(page).toHaveURL(urlOf(RoutePath.USER_REGISTRATION));
+  const context = await initPomContext(page);
+
+  await page.goto(context.website.urlOf(RoutePath.USER_REGISTRATION));
+  await expect(page).toHaveURL(
+    context.website.urlOf(RoutePath.USER_REGISTRATION),
+  );
 
   // Pet Form
   await page.getByLabel("What's your dog's name?").fill(dogName);
@@ -57,7 +64,20 @@ export async function registerTestUser(args: { page: Page }): Promise<{
   await page.getByLabel("Disclaimer").click();
   await page.getByRole("button", { name: "Submit" }).click();
 
+  // Final
   await page.getByRole("button", { name: "Enter My Dashboard" }).click();
-  await expect(page).toHaveURL(urlOf(RoutePath.USER_DEFAULT_LOGGED_IN_PAGE));
-  return { guid, userName, userEmail, userPhoneNumber, dogName, dogBreed };
+  await expect(page).toHaveURL(
+    context.website.urlOf(RoutePath.USER_DEFAULT_LOGGED_IN_PAGE),
+  );
+  const userMyPetsPage = new UserMyPetsPage(context);
+  await userMyPetsPage.checkUrl();
+  return {
+    guid,
+    userName,
+    userEmail,
+    userPhoneNumber,
+    dogName,
+    dogBreed,
+    userMyPetsPage,
+  };
 }
