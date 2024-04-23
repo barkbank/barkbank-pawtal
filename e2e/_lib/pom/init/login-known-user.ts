@@ -11,11 +11,12 @@ import { initPomContext } from "./init-pom-context";
  *
  * The known user has an account that's prepopulated by make local-accounts.
  */
-export async function loginKnownUser(page: Page): Promise<{
+export async function loginKnownUser(args: { page: Page }): Promise<{
   context: PomContext;
   knownUser: PomUser;
   pomPage: UserMyPetsPage;
 }> {
+  const { page } = args;
   const context = await initPomContext({ page });
   const knownUser = getKnownUser();
   const { userEmail } = knownUser;
