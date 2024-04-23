@@ -36,8 +36,10 @@ export function BarkH5(props: { children: React.ReactNode }) {
   );
 }
 
-export function BarkP(props: { children: React.ReactNode }) {
+export function BarkP(props: { children: React.ReactNode; classes?: string }) {
   return (
-    <p className="leading-7 [&:not(:first-child)]:mt-6">{props.children}</p>
+    <p className={`${props.classes} leading-7 [&:not(:first-child)]:mt-6`}>
+      {props.children}
+    </p>
   );
 }

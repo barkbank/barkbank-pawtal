@@ -30,4 +30,13 @@ export const IMG_PATH = {
   LETTER: "/images/letter.svg",
   LOCATION_MARKER: "/images/location-marker.svg",
   PHONE: "/images/phone.svg",
+  WEIGHING_MACHINE: "/images/weighing-machine.svg",
+  BIRTHDAY_CAKE: "/images/birthday-cake.svg",
+  LOTUS: "/images/lotus.svg",
+  HEALTH_CARE: "/images/health-care.svg",
+  BLOOD_TEST: "/images/blood-test.svg",
+  VACCINE: "/images/vaccine.svg",
+  SMILING_DOG: "/images/smiling-dog.svg",
+  DRUGS: "/images/drugs.svg",
+  BLOOD_TRANSFUSION: "/images/blood-transfusion.svg",
 } as const;
