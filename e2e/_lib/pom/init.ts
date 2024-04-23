@@ -41,13 +41,6 @@ export async function initLoginKnownUser(page: Page): Promise<{
 // WIP: initNewRegisteredUser(page: Page) -> {PomContext, PomUser, UserMyPetsPage}
 
 /**
- * @deprecated Use new SidebarComponent directly.
- */
-export function sidebarOf(pomObject: PomObject): SidebarComponent {
-  return new SidebarComponent(pomObject.context());
-}
-
-/**
  * @deprecated Use new NavbarComponent directly.
  */
 export function navbarOf(pomObject: PomObject): NavbarComponent {
