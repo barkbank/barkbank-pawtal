@@ -75,19 +75,19 @@ Run `make local-accounts` to create the following accounts in the local deployme
 The number of dogs created for a user is that user's index modulo 5.
 So user1 to user4 will get 1, 2, 3, and 4 dogs respectively, while user5 will get 0 dogs.
 
-## Development
+## Backend Development
 
-### First, run `make` to ensure everything works
+1. First, run `make` to ensure everything works. Running `make` does a couple of things. It will run `npm install`, format the code using Prettier, start a database for unit tests, run the unit tests, and then tear down the unit test database.
 
-Running `make` does a couple of things. It will run `npm install`, format the code using Prettier, start a database for unit tests, run the unit tests, and then tear down the unit test database.
+2. Second, write your code, and add tests.
 
-### Second, coding
+3. Repeat, run `make` again to test and auto format the code, make changes, and so on and so forth.
 
-Write your code, and don't forget tests.
+## Frontend Development
 
-### Repeat, run `make` again!
+1. Start the Playwright application using `make run-playwright`. (It is also possible to run all the tests using `make test-ui`, but I find the visual tool more useful for development.)
 
-Rinse and repeat. Run `make` to test and auto format the code, make changes, and so on and so forth.
+2. Make your changes, add the UI tests. They live in the `e2e` directory.
 
 ## Dev deployment
 
