@@ -50,11 +50,13 @@ export function BarkDockLayout(props: {
   children: React.ReactNode;
 }) {
   const currentPath = usePathname();
+  // note: when adjusting the height of the dock, make sure to update the bottom
+  // padding of the footer
   return (
     <div className="">
       {/* Content */}
       <div className="">{props.children}</div>
-      {/* Sidebar */}
+      {/* Dock */}
       <div
         id="bark-dock"
         className="fixed bottom-0 left-0 flex h-16 w-full flex-row items-center justify-center gap-6 bg-brand"

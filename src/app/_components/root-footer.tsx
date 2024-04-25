@@ -40,12 +40,12 @@ const RootFooter = () => {
       ? [...footerRoutes, ...loginPages]
       : footerRoutes;
 
-  // Note: So that the dock does not block the footer, a mb-20 margin is added.
-  // This is set to mb-0 for md screens and up.
+  // Note: So that the dock does not block the footer, a pb-16 padding is added.
+  // This is set to pb-0 for md screens and up.
   return (
     <div
       id="bark-footer"
-      className="mb-20 flex w-full flex-col items-center justify-center bg-grey md:mb-0 md:flex-row"
+      className="pb-16 flex w-full flex-col items-center justify-center bg-grey md:pb-0 md:flex-row"
     >
       {routes.map((route) => {
         return (
