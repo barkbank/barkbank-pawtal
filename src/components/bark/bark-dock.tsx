@@ -54,7 +54,7 @@ export function BarkDockLayout(props: {
   return (
     <div className="flex flex-row" id="bark-sidebar">
       {/* Sidebar */}
-      <div className="flex min-h-screen w-[78px] flex-col items-center bg-brand px-[10px] py-[12px] md:w-[220px]">
+      <div className="flex min-h-screen w-[78px] flex-col items-center bg-slate-200 px-[10px] py-[12px] md:w-[220px]">
         {props.routes.map((route) => {
           return (
             <DockOption
