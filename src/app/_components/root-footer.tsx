@@ -39,10 +39,13 @@ const RootFooter = () => {
     status === "unauthenticated"
       ? [...footerRoutes, ...loginPages]
       : footerRoutes;
+
+  // Note: So that the dock does not block the footer, a mb-20 margin is added.
+  // This is set to mb-0 for md screens and up.
   return (
     <div
       id="bark-footer"
-      className="flex w-full flex-col items-center justify-center bg-grey md:flex-row"
+      className="mb-20 flex w-full flex-col items-center justify-center bg-grey md:mb-0 md:flex-row"
     >
       {routes.map((route) => {
         return (
