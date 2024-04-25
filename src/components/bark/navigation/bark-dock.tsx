@@ -53,12 +53,12 @@ export function BarkDockLayout(props: {
   // note: when adjusting the height of the dock, make sure to update the bottom
   // padding of the footer
   return (
-    <div className="">
+    <div>
       {/* Content */}
-      <div className="">{props.children}</div>
+      <div>{props.children}</div>
+
       {/* Dock */}
       <div
-        id="bark-dock"
         className="fixed bottom-0 left-0 flex h-16 w-full flex-row items-center justify-center gap-6 bg-brand"
       >
         {props.routes.map((route) => {

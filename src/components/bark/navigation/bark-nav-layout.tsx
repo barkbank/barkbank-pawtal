@@ -11,13 +11,13 @@ export default function BarkNavLayout(props: {
   const { routes, children } = props;
 
   return (
-    <>
+    <div id="bark-nav">
       <div className="md:hidden">
         <BarkDockLayout routes={routes}>{props.children}</BarkDockLayout>
       </div>
       <div className="hidden md:block">
         <BarkSidebarLayout routes={routes}>{props.children}</BarkSidebarLayout>
       </div>
-    </>
+    </div>
   );
 }
