@@ -52,7 +52,7 @@ export function BarkSidebarLayout(props: {
 }) {
   const currentPath = usePathname();
   return (
-    <div className="flex flex-row" id="bark-sidebar">
+    <div className="flex flex-row">
       {/* Sidebar */}
       <div className="flex min-h-screen w-[78px] flex-col items-center bg-brand px-[10px] py-[12px] md:w-[220px]">
         {props.routes.map((route) => {
