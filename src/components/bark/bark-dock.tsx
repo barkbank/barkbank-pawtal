@@ -19,28 +19,27 @@ function DockOption(props: { route: BarkSidebarRoute; currentPath: string }) {
   })();
   return (
     <Link href={route.href}>
-      <div
-        className={clsx(
-          "flex w-[58px] flex-col items-center justify-center gap-[7px] rounded-[20px] px-[16px] py-[16px]",
-          {
-            "bg-brand text-brand-white": !isActive,
-            "bg-brand-white text-brand": isActive,
-          },
-        )}
-      >
-        {/* Icon */}
-        <Image
-          src={iconSrc}
-          alt={`Icon for the ${route.label} option`}
-          width={30}
-          height={30}
-          className="h-[24px] w-[24px]"
-        />
-
-        {/* Label - WIP: try small font */}
-        <div className="hidden w-full text-center text-[14px] font-[700] leading-[20px]">
-          {route.label}
+      <div className="flex flex-col items-center justify-center gap-1 ">
+        <div
+          className={clsx(
+            "flex w-8 flex-col items-center justify-center rounded-[16px] px-1 py-1",
+            {
+              "bg-brand text-brand-white": !isActive,
+              "bg-brand-white text-brand": isActive,
+            },
+          )}
+        >
+          {/* Icon */}
+          <Image
+            src={iconSrc}
+            alt={`Icon for the ${route.label} option`}
+            width={30}
+            height={30}
+            className="h-6 w-6"
+          />
         </div>
+        {/* Label */}
+        <div className="w-full text-xs text-white">{route.label}</div>
       </div>
     </Link>
   );
@@ -58,7 +57,7 @@ export function BarkDockLayout(props: {
       {/* Sidebar */}
       <div
         id="bark-dock"
-        className="fixed bottom-0 left-0 flex h-20 w-full flex-row items-center justify-center bg-brand"
+        className="fixed bottom-0 left-0 flex h-16 w-full flex-row items-center justify-center gap-6 bg-brand"
       >
         {props.routes.map((route) => {
           return (
