@@ -21,7 +21,7 @@ function DockOption(props: { route: BarkSidebarRoute; currentPath: string }) {
     <Link href={route.href}>
       <div
         className={clsx(
-          "flex w-[58px] flex-col items-center justify-center gap-[7px] rounded-[20px] px-[16px] py-[16px] md:w-[200px] md:px-[20px]",
+          "flex w-[58px] flex-col items-center justify-center gap-[7px] rounded-[20px] px-[16px] py-[16px]",
           {
             "bg-brand text-brand-white": !isActive,
             "bg-brand-white text-brand": isActive,
@@ -34,11 +34,11 @@ function DockOption(props: { route: BarkSidebarRoute; currentPath: string }) {
           alt={`Icon for the ${route.label} option`}
           width={30}
           height={30}
-          className="h-[24px] w-[24px] md:h-[30px] md:w-[30px]"
+          className="h-[24px] w-[24px]"
         />
 
-        {/* Label */}
-        <div className="hidden w-full text-center text-[14px] font-[700] leading-[20px] md:block">
+        {/* Label - WIP: try small font */}
+        <div className="hidden w-full text-center text-[14px] font-[700] leading-[20px]">
           {route.label}
         </div>
       </div>
