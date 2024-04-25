@@ -29,7 +29,7 @@ export function BarkNavLayout(props: {
         </div>
 
         {/* Content */}
-        <div className="w-full flex-1">{props.children}</div>
+        <div className="min-h-screen w-full flex-1">{props.children}</div>
       </div>
 
       {/* Dock */}
