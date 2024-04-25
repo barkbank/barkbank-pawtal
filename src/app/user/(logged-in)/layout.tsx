@@ -1,5 +1,6 @@
 "use server";
 
+import { BarkDockLayout } from "@/components/bark/bark-dock";
 import {
   BarkSidebarLayout,
   BarkSidebarRoute,
@@ -37,6 +38,13 @@ export default async function Layout(props: { children: React.ReactNode }) {
     },
   ];
   return (
-    <BarkSidebarLayout routes={routes}>{props.children}</BarkSidebarLayout>
+    <>
+      <div className="md:hidden">
+        <BarkDockLayout routes={routes}>{props.children}</BarkDockLayout>
+      </div>
+      <div className="hidden md:block">
+        <BarkSidebarLayout routes={routes}>{props.children}</BarkSidebarLayout>
+      </div>
+    </>
   );
 }
