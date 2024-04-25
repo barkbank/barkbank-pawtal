@@ -4,7 +4,10 @@ import Link from "next/link";
 import Image from "next/image";
 import clsx from "clsx";
 
-export function DockOption(props: { route: BarkNavRoute; currentPath: string; }) {
+export function DockOption(props: {
+  route: BarkNavRoute;
+  currentPath: string;
+}) {
   const { route, currentPath } = props;
   const isActive = currentPath.startsWith(route.href);
   const iconSrc = (() => {
@@ -23,7 +26,7 @@ export function DockOption(props: { route: BarkNavRoute; currentPath: string; })
             {
               "bg-brand text-brand-white": !isActive,
               "bg-brand-white text-brand": isActive,
-            }
+            },
           )}
         >
           {/* Icon */}
@@ -32,7 +35,8 @@ export function DockOption(props: { route: BarkNavRoute; currentPath: string; })
             alt={`Icon for the ${route.label} option`}
             width={30}
             height={30}
-            className="h-6 w-6" />
+            className="h-6 w-6"
+          />
         </div>
         {/* Label */}
         <div className="w-full text-xs text-white">{route.label}</div>

@@ -4,7 +4,10 @@ import Link from "next/link";
 import Image from "next/image";
 import clsx from "clsx";
 
-export function SideOption(props: { route: BarkNavRoute; currentPath: string; }) {
+export function SideOption(props: {
+  route: BarkNavRoute;
+  currentPath: string;
+}) {
   const { route, currentPath } = props;
   const isActive = currentPath.startsWith(route.href);
   const iconSrc = (() => {
@@ -22,7 +25,7 @@ export function SideOption(props: { route: BarkNavRoute; currentPath: string; })
           {
             "bg-brand text-brand-white": !isActive,
             "bg-brand-white text-brand": isActive,
-          }
+          },
         )}
       >
         {/* Icon */}
@@ -31,7 +34,8 @@ export function SideOption(props: { route: BarkNavRoute; currentPath: string; })
           alt={`Icon for the ${route.label} option`}
           width={30}
           height={30}
-          className="h-[24px] w-[24px] md:h-[30px] md:w-[30px]" />
+          className="h-[24px] w-[24px] md:h-[30px] md:w-[30px]"
+        />
 
         {/* Label */}
         <div className="hidden w-full text-center text-[14px] font-[700] leading-[20px] md:block">

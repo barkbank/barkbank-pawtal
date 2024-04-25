@@ -16,7 +16,7 @@ export function BarkDockLayout(props: {
     <div>
       <div className="flex flex-row">
         {/* Sidebar */}
-        <div className="hidden md:flex min-h-screen w-[78px] flex-col items-center bg-brand px-[10px] py-[12px] md:w-[220px]">
+        <div className="hidden min-h-screen w-[78px] flex-col items-center bg-brand px-[10px] py-[12px] md:flex md:w-[220px]">
           {props.routes.map((route) => {
             return (
               <SideOption
@@ -33,9 +33,7 @@ export function BarkDockLayout(props: {
       </div>
 
       {/* Dock */}
-      <div
-        className="fixed bottom-0 left-0 flex h-16 w-full flex-row items-center justify-center gap-6 bg-brand"
-      >
+      <div className="fixed bottom-0 left-0 flex h-16 w-full flex-row items-center justify-center gap-6 bg-brand">
         {props.routes.map((route) => {
           return (
             <DockOption
