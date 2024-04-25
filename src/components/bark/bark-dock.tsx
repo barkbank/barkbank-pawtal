@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import clsx from "clsx";
 import { IMG_PATH } from "@/lib/image-path";
-import { BarkNavRoute } from "./bark-sidebar";
+import { BarkNavRoute } from "./bark-nav-route";
 
 function DockOption(props: { route: BarkNavRoute; currentPath: string }) {
   const { route, currentPath } = props;

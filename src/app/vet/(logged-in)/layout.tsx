@@ -1,9 +1,7 @@
 "use server";
 
-import {
-  BarkSidebarLayout,
-  BarkNavRoute,
-} from "@/components/bark/bark-sidebar";
+import { BarkSidebarLayout } from "@/components/bark/bark-sidebar";
+import { BarkNavRoute } from "@/components/bark/bark-nav-route";
 import { getAuthenticatedVetActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";

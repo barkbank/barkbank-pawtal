@@ -1,9 +1,7 @@
 "use server";
 
-import {
-  BarkSidebarLayout,
-  BarkNavRoute,
-} from "@/components/bark/bark-sidebar";
+import { BarkSidebarLayout } from "@/components/bark/bark-sidebar";
+import { BarkNavRoute } from "@/components/bark/bark-nav-route";
 import { getAuthenticatedAdminActor } from "@/lib/auth";
 import { IMG_PATH } from "@/lib/image-path";
 import { RoutePath } from "@/lib/route-path";

@@ -5,13 +5,7 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import clsx from "clsx";
 import { IMG_PATH } from "@/lib/image-path";
-
-export type BarkNavRoute = {
-  label: string;
-  href: string;
-  iconSrc?: string;
-  iconLightSrc?: string;
-};
+import { BarkNavRoute } from "./bark-nav-route";
 
 function SideOption(props: { route: BarkNavRoute; currentPath: string }) {
   const { route, currentPath } = props;
