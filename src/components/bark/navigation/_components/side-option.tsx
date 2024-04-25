@@ -1,3 +1,5 @@
+"use client";
+
 import { IMG_PATH } from "@/lib/image-path";
 import { BarkNavRoute } from "../bark-nav-route";
 import Link from "next/link";

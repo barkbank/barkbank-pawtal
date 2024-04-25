@@ -1,10 +1,10 @@
 "use server";
 
+import { BarkNavLayout } from "@/components/bark/navigation/bark-nav-layout";
 import { BarkNavRoute } from "@/components/bark/navigation/bark-nav-route";
 import { getAuthenticatedVetActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
-import BarkNavLayout from "@/components/bark/navigation/bark-nav-layout";
 
 export default async function Layout(props: { children: React.ReactNode }) {
   const actor = await getAuthenticatedVetActor();
