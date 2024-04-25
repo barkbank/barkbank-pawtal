@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { BarkNavRoute } from "./bark-nav-route";
 import { DockOption } from "./_components/dock-option";
+import { SideOption } from "./_components/side-option";
 
 export function BarkDockLayout(props: {
   routes: BarkNavRoute[];
@@ -13,8 +14,23 @@ export function BarkDockLayout(props: {
   // padding of the footer
   return (
     <div>
-      {/* Content */}
-      <div>{props.children}</div>
+      <div className="flex flex-row">
+        {/* Sidebar */}
+        <div className="hidden md:flex min-h-screen w-[78px] flex-col items-center bg-brand px-[10px] py-[12px] md:w-[220px]">
+          {props.routes.map((route) => {
+            return (
+              <SideOption
+                key={route.label}
+                route={route}
+                currentPath={currentPath}
+              />
+            );
+          })}
+        </div>
+
+        {/* Content */}
+        <div className="w-full flex-1">{props.children}</div>
+      </div>
 
       {/* Dock */}
       <div
