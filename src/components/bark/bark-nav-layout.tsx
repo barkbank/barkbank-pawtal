@@ -4,8 +4,11 @@ import { BarkNavRoute } from "./bark-nav-route";
 import { BarkDockLayout } from "./bark-dock";
 import { BarkSidebarLayout } from "./bark-sidebar";
 
-export default function BarkNavLayout(props: { routes: BarkNavRoute[], children: React.ReactNode }) {
-  const {routes, children} = props;
+export default function BarkNavLayout(props: {
+  routes: BarkNavRoute[];
+  children: React.ReactNode;
+}) {
+  const { routes, children } = props;
 
   return (
     <>

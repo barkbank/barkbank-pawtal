@@ -32,7 +32,5 @@ export default async function Layout(props: { children: React.ReactNode }) {
       iconLightSrc: IMG_PATH.SIDEBAR_KEY_LIGHT,
     },
   ];
-  return (
-    <BarkNavLayout routes={routes}>{props.children}</BarkNavLayout>
-  );
+  return <BarkNavLayout routes={routes}>{props.children}</BarkNavLayout>;
 }

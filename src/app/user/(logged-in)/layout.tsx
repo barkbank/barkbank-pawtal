@@ -34,7 +34,5 @@ export default async function Layout(props: { children: React.ReactNode }) {
       href: RoutePath.USER_PROCESS,
     },
   ];
-  return (
-      <BarkNavLayout routes={routes}>{props.children}</BarkNavLayout>
-  );
+  return <BarkNavLayout routes={routes}>{props.children}</BarkNavLayout>;
 }

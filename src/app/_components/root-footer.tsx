@@ -45,7 +45,7 @@ const RootFooter = () => {
   return (
     <div
       id="bark-footer"
-      className="pb-16 flex w-full flex-col items-center justify-center bg-grey md:pb-0 md:flex-row"
+      className="flex w-full flex-col items-center justify-center bg-grey pb-16 md:flex-row md:pb-0"
     >
       {routes.map((route) => {
         return (

@@ -25,7 +25,5 @@ export default async function Layout(props: { children: React.ReactNode }) {
       href: RoutePath.VET_DASHBOARD_PAGE,
     },
   ];
-  return (
-    <BarkNavLayout routes={routes}>{props.children}</BarkNavLayout>
-  );
+  return <BarkNavLayout routes={routes}>{props.children}</BarkNavLayout>;
 }
