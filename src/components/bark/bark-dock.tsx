@@ -5,9 +5,9 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import clsx from "clsx";
 import { IMG_PATH } from "@/lib/image-path";
-import { BarkSidebarRoute } from "./bark-sidebar";
+import { BarkNavRoute } from "./bark-sidebar";
 
-function DockOption(props: { route: BarkSidebarRoute; currentPath: string }) {
+function DockOption(props: { route: BarkNavRoute; currentPath: string }) {
   const { route, currentPath } = props;
   const isActive = currentPath.startsWith(route.href);
   const iconSrc = (() => {
@@ -46,7 +46,7 @@ function DockOption(props: { route: BarkSidebarRoute; currentPath: string }) {
 }
 
 export function BarkDockLayout(props: {
-  routes: BarkSidebarRoute[];
+  routes: BarkNavRoute[];
   children: React.ReactNode;
 }) {
   const currentPath = usePathname();

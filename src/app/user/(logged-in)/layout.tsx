@@ -3,7 +3,7 @@
 import { BarkDockLayout } from "@/components/bark/bark-dock";
 import {
   BarkSidebarLayout,
-  BarkSidebarRoute,
+  BarkNavRoute,
 } from "@/components/bark/bark-sidebar";
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { IMG_PATH } from "@/lib/image-path";
@@ -15,7 +15,7 @@ export default async function Layout(props: { children: React.ReactNode }) {
   if (actor === null) {
     redirect(RoutePath.USER_LOGIN_PAGE);
   }
-  const routes: BarkSidebarRoute[] = [
+  const routes: BarkNavRoute[] = [
     {
       label: "My Pets",
       href: RoutePath.USER_MY_PETS,

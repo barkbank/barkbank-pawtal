@@ -2,7 +2,7 @@
 
 import {
   BarkSidebarLayout,
-  BarkSidebarRoute,
+  BarkNavRoute,
 } from "@/components/bark/bark-sidebar";
 import { getAuthenticatedVetActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
@@ -13,7 +13,7 @@ export default async function Layout(props: { children: React.ReactNode }) {
   if (!actor) {
     redirect(RoutePath.VET_LOGIN_PAGE);
   }
-  const routes: BarkSidebarRoute[] = [
+  const routes: BarkNavRoute[] = [
     {
       label: "Root 1",
       href: RoutePath.ROOT,

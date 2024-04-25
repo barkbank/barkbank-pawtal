@@ -2,7 +2,7 @@
 
 import {
   BarkSidebarLayout,
-  BarkSidebarRoute,
+  BarkNavRoute,
 } from "@/components/bark/bark-sidebar";
 import { getAuthenticatedAdminActor } from "@/lib/auth";
 import { IMG_PATH } from "@/lib/image-path";
@@ -14,7 +14,7 @@ export default async function Layout(props: { children: React.ReactNode }) {
   if (actor === null) {
     redirect(RoutePath.ADMIN_LOGIN_PAGE);
   }
-  const routes: BarkSidebarRoute[] = [
+  const routes: BarkNavRoute[] = [
     {
       label: "Dashboard",
       href: RoutePath.ADMIN_DASHBOARD_PAGE,

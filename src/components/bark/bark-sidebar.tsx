@@ -6,14 +6,14 @@ import Image from "next/image";
 import clsx from "clsx";
 import { IMG_PATH } from "@/lib/image-path";
 
-export type BarkSidebarRoute = {
+export type BarkNavRoute = {
   label: string;
   href: string;
   iconSrc?: string;
   iconLightSrc?: string;
 };
 
-function SideOption(props: { route: BarkSidebarRoute; currentPath: string }) {
+function SideOption(props: { route: BarkNavRoute; currentPath: string }) {
   const { route, currentPath } = props;
   const isActive = currentPath.startsWith(route.href);
   const iconSrc = (() => {
@@ -53,7 +53,7 @@ function SideOption(props: { route: BarkSidebarRoute; currentPath: string }) {
 }
 
 export function BarkSidebarLayout(props: {
-  routes: BarkSidebarRoute[];
+  routes: BarkNavRoute[];
   children: React.ReactNode;
 }) {
   const currentPath = usePathname();
