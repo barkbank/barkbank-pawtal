@@ -1,12 +1,11 @@
 "use server";
 
-import { BarkDockLayout } from "@/components/bark/bark-dock";
-import { BarkSidebarLayout } from "@/components/bark/bark-sidebar";
 import { BarkNavRoute } from "@/components/bark/bark-nav-route";
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { IMG_PATH } from "@/lib/image-path";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
+import BarkNavLayout from "@/components/bark/bark-nav-layout";
 
 export default async function Layout(props: { children: React.ReactNode }) {
   const actor = await getAuthenticatedUserActor();
@@ -36,13 +35,6 @@ export default async function Layout(props: { children: React.ReactNode }) {
     },
   ];
   return (
-    <>
-      <div className="md:hidden">
-        <BarkDockLayout routes={routes}>{props.children}</BarkDockLayout>
-      </div>
-      <div className="hidden md:block">
-        <BarkSidebarLayout routes={routes}>{props.children}</BarkSidebarLayout>
-      </div>
-    </>
+      <BarkNavLayout routes={routes}>{props.children}</BarkNavLayout>
   );
 }

@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
-import { BarkNavRoute } from "../../components/bark/bark-nav";
 import { RoutePath } from "@/lib/route-path";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import { BarkNavRoute } from "@/components/bark/bark-nav-route";
 
 const footerRoutes: BarkNavRoute[] = [
   {

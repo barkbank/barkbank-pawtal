@@ -12,9 +12,9 @@ function SideOption(props: { route: BarkNavRoute; currentPath: string }) {
   const isActive = currentPath.startsWith(route.href);
   const iconSrc = (() => {
     if (isActive) {
-      return route.iconSrc || IMG_PATH.SIDEBAR_SQUARE;
+      return route.iconSrc || IMG_PATH.SIDEBAR_DOG;
     } else {
-      return route.iconLightSrc || IMG_PATH.SIDEBAR_SQUARE_LIGHT;
+      return route.iconLightSrc || IMG_PATH.SIDEBAR_DOG_LIGHT;
     }
   })();
   return (
