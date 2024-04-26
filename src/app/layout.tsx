@@ -21,7 +21,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={clsx(siteFont.className, "flex min-h-screen flex-col justify-between")}
+        className={clsx(
+          siteFont.className,
+          "flex min-h-screen flex-col justify-between",
+        )}
       >
         <BarkAuthProvider>
           <RootHeader />
