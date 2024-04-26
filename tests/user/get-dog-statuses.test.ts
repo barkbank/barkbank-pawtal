@@ -10,7 +10,7 @@ import {
   SERVICE_STATUS,
   YES_NO_UNKNOWN,
 } from "@/lib/data/db-enums";
-import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
+import { dateAgo } from "../_time_helpers";
 
 describe("getDogStatuses", () => {
   it("should return ERROR_UNAUTHORIZED when the user does not own the requested dog", async () => {
@@ -39,7 +39,7 @@ describe("getDogStatuses", () => {
       const u1 = await insertUser(1, dbPool);
       const d2 = await insertDog(2, u1.userId, dbPool, {
         dogBreed: "Happy Dog",
-        dogBirthday: new Date(Date.now() - 3 * 53 * MILLIS_PER_WEEK),
+        dogBirthday: dateAgo({ numYears: 3 }),
         dogGender: DOG_GENDER.MALE,
         dogEverPregnant: YES_NO_UNKNOWN.NO,
         dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
