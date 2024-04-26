@@ -18,7 +18,7 @@ import {
   parseDateTime,
 } from "@/lib/utilities/bark-time";
 import { getAgeMonths } from "@/lib/utilities/bark-age";
-import { MILLIS_PER_DAY, MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
+import { dateAgo, weeksAgo } from "../_time_helpers";
 
 describe("latest_values", () => {
   it("should not have rows for users without dogs", async () => {
@@ -269,9 +269,8 @@ describe("latest_values", () => {
   describe("latest_dog_age_months", () => {
     it("should return the dog's age in months", async () => {
       await withDb(async (dbPool) => {
-        // GIVEN a birthday that is slightly over 2 years and 3 months ago
-        const ts = new Date().getTime();
-        const birthday = new Date(ts - (2 * 365 + 3 * 31) * MILLIS_PER_DAY);
+        // GIVEN a birthday that is around 2 years and 3 months ago
+        const birthday = dateAgo({ numYears: 2, numMonths: 3 });
 
         // AND a dog with that birthday
         const { dogId } = await initDog(dbPool, {
@@ -318,8 +317,8 @@ describe("latest_values", () => {
     it("should be latest time a blood donation was done", async () => {
       await withDb(async (dbPool) => {
         const { dogId, vetId } = await initDog(dbPool);
-        const twoYearsAgo = new Date(Date.now() - 2 * 52 * MILLIS_PER_WEEK);
-        const oneYearAgo = new Date(Date.now() - 1 * 52 * MILLIS_PER_WEEK);
+        const twoYearsAgo = dateAgo({ numYears: 2 });
+        const oneYearAgo = dateAgo({ numYears: 1 });
         await addReport(dbPool, dogId, vetId, {
           reportSpec: { visitTime: twoYearsAgo, dogDidDonateBlood: true },
         });
@@ -340,10 +339,6 @@ describe("latest_values", () => {
 const USER_IDX = 84;
 const DOG_IDX = 42;
 const VET_IDX = 71;
-
-function weeksAgo(numWeeks: number): Date {
-  return new Date(Date.now() - numWeeks * MILLIS_PER_WEEK);
-}
 
 async function initUserOnly(dbPool: Pool): Promise<{ userId: string }> {
   const userRecord = await insertUser(USER_IDX, dbPool);
