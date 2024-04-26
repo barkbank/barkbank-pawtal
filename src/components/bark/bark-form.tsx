@@ -91,7 +91,12 @@ export function BarkFormInput(props: {
           <div className="flex items-end gap-2">
             <div className="flex-grow">
               <FormControl>
-                <Input className="text-base" placeholder={placeholder} type={type} {...field} />
+                <Input
+                  className="text-base"
+                  placeholder={placeholder}
+                  type={type}
+                  {...field}
+                />
               </FormControl>
             </div>
             {children}
@@ -124,7 +129,12 @@ export function BarkFormDateInput(props: {
           <FormControl>
             <Popover>
               <div className="relative">
-                <Input className="text-base" placeholder={placeholder} type="text" {...field} />
+                <Input
+                  className="text-base"
+                  placeholder={placeholder}
+                  type="text"
+                  {...field}
+                />
                 <PopoverTrigger asChild>
                   <Button
                     variant={"outline"}
