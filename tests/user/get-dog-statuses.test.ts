@@ -1,6 +1,16 @@
 import { getDogStatuses } from "@/lib/user/actions/get-dog-statuses";
 import { withDb } from "../_db_helpers";
 import { getUserActor, insertDog, insertUser } from "../_fixtures";
+import { DogStatuses } from "@/lib/user/user-models";
+import {
+  DOG_GENDER,
+  MEDICAL_STATUS,
+  PARTICIPATION_STATUS,
+  PROFILE_STATUS,
+  SERVICE_STATUS,
+  YES_NO_UNKNOWN,
+} from "@/lib/data/db-enums";
+import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
 
 describe("getDogStatuses", () => {
   it("should return ERROR_UNAUTHORIZED when the user does not own the requested dog", async () => {
@@ -24,13 +34,27 @@ describe("getDogStatuses", () => {
       expect(error).toEqual("ERROR_MISSING_DOG");
     });
   });
-  it("WIP: should return statuses of the requested dog", async () => {
+  it("should return statuses of the requested dog", async () => {
     await withDb(async (dbPool) => {
       const u1 = await insertUser(1, dbPool);
-      const d2 = await insertDog(2, u1.userId, dbPool, {});
+      const d2 = await insertDog(2, u1.userId, dbPool, {
+        dogBreed: "Happy Dog",
+        dogBirthday: new Date(Date.now() - 3 * 53 * MILLIS_PER_WEEK),
+        dogGender: DOG_GENDER.MALE,
+        dogEverPregnant: YES_NO_UNKNOWN.NO,
+        dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
+        dogWeightKg: 28.88,
+      });
       const actor = getUserActor(dbPool, u1.userId);
       const { result, error } = await getDogStatuses(actor, d2.dogId);
-      expect(result).toEqual({});
+      const expected: DogStatuses = {
+        dogServiceStatus: SERVICE_STATUS.AVAILABLE,
+        dogMedicalStatus: MEDICAL_STATUS.ELIGIBLE,
+        dogParticipationStatus: PARTICIPATION_STATUS.PARTICIPATING,
+        dogProfileStatus: PROFILE_STATUS.COMPLETE,
+        numPendingReports: 0,
+      };
+      expect(result).toEqual(expected);
       expect(error).toBeUndefined();
     });
   });
