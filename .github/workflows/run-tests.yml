@@ -39,4 +39,6 @@ jobs:
           node-version: '20'
       - run: npm install
       - run: npm run fmt
+      - run: git diff
+      - run: git status
       - run: git status -s | grep -q . && exit 1
