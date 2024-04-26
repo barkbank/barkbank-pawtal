@@ -42,3 +42,12 @@ jobs:
       - run: git diff
       - run: git status
       - run: bash scripts/test_git_status_is_empty.sh
+  ensure-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm install
+      - run: npm run lint
