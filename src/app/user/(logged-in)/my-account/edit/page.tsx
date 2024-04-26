@@ -4,8 +4,6 @@ import { getAuthenticatedUserActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { getMyAccount } from "@/lib/user/actions/get-my-account";
 import { redirect } from "next/navigation";
-import { UserResidency } from "@/lib/data/db-enums";
-import { MyAccount } from "@/lib/user/user-models";
 
 export default async function Page() {
   const actor = await getAuthenticatedUserActor();

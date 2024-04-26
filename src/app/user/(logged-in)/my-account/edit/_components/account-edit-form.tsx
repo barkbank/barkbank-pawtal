@@ -79,6 +79,7 @@ export default function AccountEditForm({
           <BarkButton
             className="inline-block h-[60px]"
             variant={"brandInverse"}
+            type="button"
             onClick={async () => router.push(RoutePath.USER_MY_ACCOUNT_PAGE)}
           >
             Cancel
