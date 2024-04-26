@@ -95,5 +95,3 @@ export type SubProfile = {
   dogEverReceivedTransfusion: YesNoUnknown;
   dogPreferredVetId: string;
 };
-
-// WIP: Remove me
