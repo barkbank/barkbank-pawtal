@@ -66,7 +66,6 @@ export type DogStatuses = {
   dogMedicalStatus: MedicalStatus;
   dogParticipationStatus: ParticipationStatus;
   numPendingReports: number;
-  // WIP: Add the other fields.
 };
 
 /**
