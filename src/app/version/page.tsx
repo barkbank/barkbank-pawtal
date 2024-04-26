@@ -1,6 +1,6 @@
 import path from "path";
 import fs from "fs";
-import { BarkH1, BarkH2, BarkP } from "@/components/bark/bark-typography";
+import { BarkH1 } from "@/components/bark/bark-typography";
 
 export default async function Page() {
   const filePath = path.resolve(
