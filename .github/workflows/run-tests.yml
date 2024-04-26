@@ -39,6 +39,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - run: git merge origin/main
+      - run: git branch
+      - run: git log
       - run: npm install
       - run: npm run test
