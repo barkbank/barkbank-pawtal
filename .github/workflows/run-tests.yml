@@ -41,4 +41,4 @@ jobs:
       - run: npm run fmt
       - run: git diff
       - run: git status
-      - run: git status -s | grep -q . && exit 1
+      - run: bash scripts/test_git_status_is_empty.sh
