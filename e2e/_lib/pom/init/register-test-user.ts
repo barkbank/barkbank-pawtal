@@ -14,6 +14,8 @@ export async function registerTestUser(args: { page: Page }): Promise<{
   userPhoneNumber: string;
   dogName: string;
   dogBreed: string;
+  dogBirthday: string;
+  dogWeightKg: string;
   userMyPetsPage: UserMyPetsPage;
 }> {
   const guid = generateRandomGUID(8);
@@ -22,6 +24,8 @@ export async function registerTestUser(args: { page: Page }): Promise<{
   const userPhoneNumber = guid;
   const dogName = `Bob (${guid})`;
   const dogBreed = "REGISTERED DOG";
+  const dogBirthday = getTestBirthday(5);
+  const dogWeightKg = "31.4";
 
   const { page } = args;
   const context = await initPomContext({ page });
@@ -34,9 +38,9 @@ export async function registerTestUser(args: { page: Page }): Promise<{
   // Pet Form
   await page.getByLabel("What's your dog's name?").fill(dogName);
   await page.getByLabel("What's your dog's breed?").fill(dogBreed);
-  await page.locator('input[name="dogBirthday"]').fill(getTestBirthday(5));
+  await page.locator('input[name="dogBirthday"]').fill(dogBirthday);
   await page.getByRole("button", { name: "Male", exact: true }).click();
-  await page.getByLabel("What's your dog's weight? (KG)").fill("31.4");
+  await page.getByLabel("What's your dog's weight? (KG)").fill(dogWeightKg);
   await page
     .getByText("Do you know it's blood type?I")
     .getByLabel("I don't know")
@@ -81,6 +85,8 @@ export async function registerTestUser(args: { page: Page }): Promise<{
     userPhoneNumber,
     dogName,
     dogBreed,
+    dogBirthday,
+    dogWeightKg,
     userMyPetsPage,
   };
   console.log(result);
