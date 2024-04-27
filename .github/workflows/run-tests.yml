@@ -38,10 +38,7 @@ jobs:
         with:
           node-version: "20"
       - run: npm install
-      - run: npm run fmt
-      - run: git diff
-      - run: git status
-      - run: bash scripts/test_git_status_is_empty.sh
+      - run: bash scripts/test_code_is_pretty.sh
   ensure-lint:
     runs-on: ubuntu-latest
     steps:
