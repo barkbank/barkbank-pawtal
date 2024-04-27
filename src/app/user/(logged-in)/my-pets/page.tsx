@@ -196,7 +196,11 @@ function ActionBlock(props: { dog: MyDog }) {
   }
   return (
     <div className="flex flex-col gap-3">
-      <BarkButton variant="brandInverse" className="w-full" href={RoutePath.USER_EDIT_DOG(dogId)}>
+      <BarkButton
+        variant="brandInverse"
+        className="w-full"
+        href={RoutePath.USER_EDIT_DOG(dogId)}
+      >
         Edit
       </BarkButton>
       <BarkButton variant="brandInverse" className="w-full">

@@ -10,8 +10,10 @@ export class RoutePath {
   static readonly USER_ADD_DOG = "/user/my-pets/add-dog";
   static readonly USER_MY_ACCOUNT_EDIT = "/user/my-account/edit";
   static readonly USER_MY_ACCOUNT_PAGE = "/user/my-account";
-  static readonly USER_VIEW_DOG = (dogId: string) => `/user/my-pets/dogs/${dogId}`;
-  static readonly USER_EDIT_DOG = (dogId: string) => `/user/my-pets/dogs/${dogId}/edit`;
+  static readonly USER_VIEW_DOG = (dogId: string) =>
+    `/user/my-pets/dogs/${dogId}`;
+  static readonly USER_EDIT_DOG = (dogId: string) =>
+    `/user/my-pets/dogs/${dogId}/edit`;
   static readonly USER_CRITERIA = "/user/criteria";
   static readonly USER_PROCESS = "/user/process";
 
