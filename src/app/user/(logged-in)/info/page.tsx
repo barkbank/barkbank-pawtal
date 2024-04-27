@@ -1,17 +1,17 @@
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
-import {
-  BarkH2,
-  BarkH3,
-  BarkH4,
-  BarkH5,
-  BarkP,
-} from "@/components/bark/bark-typography";
+import { BarkH2, BarkH5, BarkP } from "@/components/bark/bark-typography";
 import { IMG_PATH } from "@/lib/image-path";
 import Image from "next/image";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
-const criteras = [
+const criterias = [
   { text: ">20KG in weight", imgUrl: IMG_PATH.WEIGHING_MACHINE },
   {
     text: "Between 1 to 8 years old",
@@ -57,6 +57,54 @@ const registrationSteps = [
   },
 ];
 
+const faqs = [
+  {
+    question: "How often can my dog donate blood?",
+    answer:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nunc sed augue lacus viverra vitae congue eu. Quam nulla porttitor massa id neque. Laoreet non curabitur gravida arcu ac. Eget duis at tellus at urna condimentum mattis. Cursus mattis molestie a iaculis. Egestas tellus rutrum tellus pellentesque eu tincidunt tortor. Amet massa vitae tortor condimentum lacinia quis vel eros. Feugiat nisl pretium fusce id velit ut. Diam vel quam elementum pulvinar etiam non quam lacus. Etiam non quam lacus suspendisse faucibus. Tempus imperdiet nulla malesuada pellentesque.",
+  },
+  {
+    question: "How often can my dog donate blood?",
+    answer:
+      "Dogs can donate blood every 3 months. However, the frequency of donation is subject to the discretion of the attending veterinarian.",
+  },
+  {
+    question: "How often can my dog donate blood?",
+    answer:
+      "Dogs can donate blood every 3 months. However, the frequency of donation is subject to the discretion of the attending veterinarian.",
+  },
+  {
+    question: "How often can my dog donate blood?",
+    answer:
+      "Dogs can donate blood every 3 months. However, the frequency of donation is subject to the discretion of the attending veterinarian.",
+  },
+  {
+    question: "How often can my dog donate blood?",
+    answer:
+      "Dogs can donate blood every 3 months. However, the frequency of donation is subject to the discretion of the attending veterinarian.",
+  },
+  {
+    question: "How often can my dog donate blood?",
+    answer:
+      "Dogs can donate blood every 3 months. However, the frequency of donation is subject to the discretion of the attending veterinarian.",
+  },
+  {
+    question: "How often can my dog donate blood?",
+    answer:
+      "Dogs can donate blood every 3 months. However, the frequency of donation is subject to the discretion of the attending veterinarian.",
+  },
+  {
+    question: "How often can my dog donate blood?",
+    answer:
+      "Dogs can donate blood every 3 months. However, the frequency of donation is subject to the discretion of the attending veterinarian.",
+  },
+  {
+    question: "How often can my dog donate blood?",
+    answer:
+      "Dogs can donate blood every 3 months. However, the frequency of donation is subject to the discretion of the attending veterinarian.",
+  },
+];
+
 export default async function Page() {
   const actor = await getAuthenticatedUserActor();
   if (!actor) {
@@ -65,8 +113,10 @@ export default async function Page() {
   return (
     <main className="flex flex-col 2xl:items-center">
       <section className="mx-[60px] my-[60px]">
-        <div className="max-w-7xl py-[45px] text-center">
-          <BarkH2>Criteria For Blood Donation</BarkH2>
+        <div className=" py-[45px]  text-center xl:w-auto">
+          <span className="self-center">
+            <BarkH2>Criteria For Blood Donation</BarkH2>
+          </span>
           <BarkP>
             To be eligible for blood donation, dogs must meet specific criteria
             to ensure the safety of both donors and recipients. It is advisable
@@ -75,10 +125,10 @@ export default async function Page() {
           </BarkP>
         </div>
         <div className="mb-[60px] grid grid-cols-1 place-items-center gap-[60px] px-4 sm:grid-cols-2 lg:grid-cols-3">
-          {criteras.map((criteria, i) => (
+          {criterias.map((criteria, i) => (
             <div
               key={criteria.text}
-              className={`flex flex-col items-center gap-y-4 ${criteras.length % 2 !== 0 && i === criteras.length - 1 ? "sm:col-span-2 lg:col-span-1" : ""}`}
+              className={`flex flex-col items-center gap-y-4 ${criterias.length % 2 !== 0 && i === criterias.length - 1 ? "sm:col-span-2 lg:col-span-1" : ""}`}
             >
               <Image
                 src={criteria.imgUrl}
@@ -121,6 +171,31 @@ export default async function Page() {
             </div>
           ))}
         </article>
+      </section>
+      <section className="mx-[60px] my-[80px] flex max-w-7xl flex-col items-center gap-[50px] ">
+        <div className="mb-[21px] text-center sm:col-span-2 md:col-span-3 lg:mt-[40px]">
+          <BarkH2>Frequently Asked Questions</BarkH2>
+        </div>
+        <div className="grid grid-cols-1 gap-[30px] sm:grid-cols-2 md:grid-cols-3">
+          {faqs.map(({ question, answer }) => (
+            <Accordion
+              key={question}
+              orientation="vertical"
+              type="single"
+              collapsible
+              className="p-[25px] sm:max-w-[333px]"
+            >
+              <AccordionItem
+                className="border-none"
+                key={question}
+                value={answer}
+              >
+                <AccordionTrigger>{question}</AccordionTrigger>
+                <AccordionContent>{answer}</AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          ))}
+        </div>
       </section>
     </main>
   );
