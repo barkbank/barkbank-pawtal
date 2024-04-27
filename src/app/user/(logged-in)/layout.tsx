@@ -1,20 +1,18 @@
 "use server";
 
-import {
-  BarkSidebarLayout,
-  BarkSidebarRoute,
-} from "@/components/bark/bark-sidebar";
+import { BarkNavRoute } from "@/components/bark/navigation/bark-nav-route";
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { IMG_PATH } from "@/lib/image-path";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
+import { BarkNavLayout } from "@/components/bark/navigation/bark-nav-layout";
 
 export default async function Layout(props: { children: React.ReactNode }) {
   const actor = await getAuthenticatedUserActor();
   if (actor === null) {
     redirect(RoutePath.USER_LOGIN_PAGE);
   }
-  const routes: BarkSidebarRoute[] = [
+  const routes: BarkNavRoute[] = [
     {
       label: "My Pets",
       href: RoutePath.USER_MY_PETS,
@@ -42,7 +40,5 @@ export default async function Layout(props: { children: React.ReactNode }) {
       href: RoutePath.USER_PROCESS,
     },
   ];
-  return (
-    <BarkSidebarLayout routes={routes}>{props.children}</BarkSidebarLayout>
-  );
+  return <BarkNavLayout routes={routes}>{props.children}</BarkNavLayout>;
 }

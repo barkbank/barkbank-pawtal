@@ -4,6 +4,7 @@ import "./globals.css";
 import BarkAuthProvider from "@/components/bark/bark-auth";
 import RootHeader from "@/app/_components/root-header";
 import RootFooter from "@/app/_components/root-footer";
+import clsx from "clsx";
 
 const siteFont = Montserrat({ subsets: ["latin"] });
 
@@ -20,7 +21,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${siteFont.className} flex min-h-screen flex-col justify-between`}
+        className={clsx(
+          siteFont.className,
+          "flex min-h-screen flex-col justify-between",
+        )}
       >
         <BarkAuthProvider>
           <RootHeader />

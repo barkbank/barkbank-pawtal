@@ -1,9 +1,7 @@
 "use server";
 
-import {
-  BarkSidebarLayout,
-  BarkSidebarRoute,
-} from "@/components/bark/bark-sidebar";
+import { BarkNavLayout } from "@/components/bark/navigation/bark-nav-layout";
+import { BarkNavRoute } from "@/components/bark/navigation/bark-nav-route";
 import { getAuthenticatedVetActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
@@ -13,21 +11,19 @@ export default async function Layout(props: { children: React.ReactNode }) {
   if (!actor) {
     redirect(RoutePath.VET_LOGIN_PAGE);
   }
-  const routes: BarkSidebarRoute[] = [
+  const routes: BarkNavRoute[] = [
     {
       label: "Root 1",
-      href: RoutePath.ROOT,
+      href: RoutePath.VET_DASHBOARD_PAGE,
     },
     {
       label: "Root 2",
-      href: RoutePath.ROOT,
+      href: RoutePath.VET_LOGIN_PAGE,
     },
     {
       label: "Root 3",
-      href: RoutePath.ROOT,
+      href: RoutePath.VET_DASHBOARD_PAGE,
     },
   ];
-  return (
-    <BarkSidebarLayout routes={routes}>{props.children}</BarkSidebarLayout>
-  );
+  return <BarkNavLayout routes={routes}>{props.children}</BarkNavLayout>;
 }

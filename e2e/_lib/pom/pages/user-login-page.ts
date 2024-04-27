@@ -1,6 +1,5 @@
-import { Locator, expect } from "@playwright/test";
+import { Locator } from "@playwright/test";
 import { RoutePath } from "@/lib/route-path";
-import { UserMyPetsPage } from "./user-my-pets-page";
 import { PomPage } from "../core/pom-page";
 
 export class UserLoginPage extends PomPage {
@@ -32,16 +31,5 @@ export class UserLoginPage extends PomPage {
 
   public registerLink(): Locator {
     return this.page().getByRole("link", { name: "register here" });
-  }
-
-  public async doLogin(userEmail: string): Promise<UserMyPetsPage> {
-    await this.emailField().fill(userEmail);
-    await this.sendMeAnOtpButton().click();
-    await expect(this.otpSentMessage()).toBeVisible();
-    await this.otpField().fill("000000");
-    await this.loginButton().click();
-    const nextPage = new UserMyPetsPage(this.context());
-    await nextPage.checkUrl();
-    return nextPage;
   }
 }

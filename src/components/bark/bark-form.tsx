@@ -1,5 +1,4 @@
 import { UseFormReturn } from "react-hook-form";
-import { format } from "date-fns";
 import {
   Form,
   FormControl,
@@ -92,7 +91,12 @@ export function BarkFormInput(props: {
           <div className="flex items-end gap-2">
             <div className="flex-grow">
               <FormControl>
-                <Input placeholder={placeholder} type={type} {...field} />
+                <Input
+                  className="text-base"
+                  placeholder={placeholder}
+                  type={type}
+                  {...field}
+                />
               </FormControl>
             </div>
             {children}
@@ -125,7 +129,12 @@ export function BarkFormDateInput(props: {
           <FormControl>
             <Popover>
               <div className="relative">
-                <Input placeholder={placeholder} type="text" {...field} />
+                <Input
+                  className="text-base"
+                  placeholder={placeholder}
+                  type="text"
+                  {...field}
+                />
                 <PopoverTrigger asChild>
                   <Button
                     variant={"outline"}

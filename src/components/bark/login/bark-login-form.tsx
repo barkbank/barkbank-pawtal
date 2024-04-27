@@ -14,11 +14,9 @@ import {
 import { useState } from "react";
 import { SignInResponse, signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { RoutePath } from "@/lib/route-path";
 import { sendLoginOtp } from "@/lib/server-actions/send-login-otp";
 import { AccountType } from "@/lib/auth-models";
 import { FormMessage } from "@/components/ui/form";
-import Link from "next/link";
 
 const FORM_SCHEMA = z.object({
   email: z.string().email(),

@@ -5,7 +5,6 @@ import { sprintf } from "sprintf-js";
 export const UI_LOCATOR = {
   NAV_BAR: "#bark-nav-bar",
   NAV_MENU_BUTTON: "#bark-nav-menu-button",
-  SIDEBAR: "#bark-sidebar",
   FOOTER: "#bark-footer",
 } as const;
 

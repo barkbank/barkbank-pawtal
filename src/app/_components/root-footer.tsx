@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
-import { BarkNavRoute } from "../../components/bark/bark-nav";
 import { RoutePath } from "@/lib/route-path";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import { BarkNavRoute } from "@/components/bark/navigation/bark-nav-route";
 
 const footerRoutes: BarkNavRoute[] = [
   {
@@ -39,10 +39,13 @@ const RootFooter = () => {
     status === "unauthenticated"
       ? [...footerRoutes, ...loginPages]
       : footerRoutes;
+
+  // Note: So that the dock does not block the footer, a pb-16 padding is added.
+  // This is set to pb-0 for md screens and up.
   return (
     <div
       id="bark-footer"
-      className="flex w-full flex-col items-center justify-center bg-grey md:flex-row"
+      className="flex w-full flex-col items-center justify-center bg-grey pb-16 md:flex-row md:pb-0"
     >
       {routes.map((route) => {
         return (
