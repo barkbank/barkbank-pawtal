@@ -11,7 +11,10 @@ type AddDogResult = {
 
 type AddDogError = "FAILED";
 
-export async function addMyDog(actor: UserActor, dogProfile: DogProfile): Promise<Result<AddDogResult, AddDogError>> {
+export async function addMyDog(
+  actor: UserActor,
+  dogProfile: DogProfile,
+): Promise<Result<AddDogResult, AddDogError>> {
   const { userId, dbPool, dogMapper } = actor.getParams();
   const { dogName, dogPreferredVetId, ...otherFields } = dogProfile;
   const { dogEncryptedOii } = await dogMapper.mapDogOiiToDogSecureOii({
