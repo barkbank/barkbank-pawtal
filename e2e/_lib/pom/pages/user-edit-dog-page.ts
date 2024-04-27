@@ -8,11 +8,11 @@ export class UserEditDogPage extends PomDynamicPage {
   }
 
   dogNameField(): Locator {
-    return this.page().getByLabel('Name');
+    return this.page().getByLabel("Name");
   }
 
   dogBreedField(): Locator {
-    return this.page().getByLabel('Breed');
+    return this.page().getByLabel("Breed");
   }
 
   dogBirthdayField(): Locator {
