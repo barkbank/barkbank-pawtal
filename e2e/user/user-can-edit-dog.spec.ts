@@ -9,11 +9,10 @@ test("user can edit dog profile", async ({ page }) => {
 
   const pg1 = new UserMyPetsPage(context);
   await pg1.checkUrl();
-
-  const card1 = pg1.dogCardItem(dogName);
-  await expect(card1.locator()).toBeVisible();
-  await expect(card1.editButton()).toBeVisible();
-  await card1.editButton().click();
+  const pg1card = pg1.dogCardItem(dogName);
+  await expect(pg1card.locator()).toBeVisible();
+  await expect(pg1card.editButton()).toBeVisible();
+  await pg1card.editButton().click();
 
   const pg2 = new UserEditDogPage(context);
   await pg2.checkUrl();
@@ -30,15 +29,15 @@ test("user can edit dog profile", async ({ page }) => {
 
   const pg3 = new UserMyPetsPage(context);
   await pg3.checkUrl();
-  const card3 = pg3.dogCardItem("Thomas Green");
-  await expect(card3.locator()).toBeVisible();
-  await expect(card3.editButton()).toBeVisible();
-  await card3.editButton().click();
+  const pg3card = pg3.dogCardItem("Thomas Green");
+  await expect(pg3card.locator()).toBeVisible();
+  await expect(pg3card.editButton()).toBeVisible();
+  await pg3card.editButton().click();
 
   const pg4 = new UserEditDogPage(context);
   await pg4.checkUrl();
   await expect(pg4.dogNameField()).toHaveValue("Thomas Green");
-  await expect(pg2.dogBreedField()).toHaveValue("Royal Canine");
-  await expect(pg2.dogBirthdayField()).toHaveValue("1968-08-28");
-  await expect(pg2.dogWeightField()).toHaveValue("16.827");
+  await expect(pg4.dogBreedField()).toHaveValue("Royal Canine");
+  await expect(pg4.dogBirthdayField()).toHaveValue("1968-08-28");
+  await expect(pg4.dogWeightField()).toHaveValue("16.827");
 });
