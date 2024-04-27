@@ -16,7 +16,7 @@ export async function submitDog(
   }
   const res = await addMyDog(actor, dogProfile);
   if (res.error === undefined) {
-    revalidatePath(RoutePath.USER_MY_PETS, "page");
+    revalidatePath(RoutePath.USER_MY_PETS, "layout");
   }
   return res;
 }

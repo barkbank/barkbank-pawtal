@@ -38,7 +38,7 @@ export class DogCardItem extends PomComponent {
   }
 
   public editButton(): Locator {
-    return this.locator().getByRole("button", { name: "Edit" });
+    return this.locator().getByRole("link", { name: "Edit" });
   }
 
   public viewButton(): Locator {
