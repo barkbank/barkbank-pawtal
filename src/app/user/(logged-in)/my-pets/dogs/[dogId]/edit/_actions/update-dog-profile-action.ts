@@ -25,7 +25,7 @@ export async function updateDogProfileAction(args: {
   }
   const res = await updateDogProfile(actor, dogId, dogProfile);
   if (res === "OK_UPDATED") {
-    revalidatePath(RoutePath.USER_MY_PETS, "page");
+    revalidatePath(RoutePath.USER_MY_PETS, "layout");
   }
   return res;
 }
