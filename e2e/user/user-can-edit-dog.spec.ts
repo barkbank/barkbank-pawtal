@@ -40,4 +40,6 @@ test("user can edit dog profile", async ({ page }) => {
   await expect(pg4.dogBreedField()).toHaveValue("Royal Canine");
   await expect(pg4.dogBirthdayField()).toHaveValue("1968-08-28");
   await expect(pg4.dogWeightField()).toHaveValue("16.827");
+
+  // TODO: In future, also check the UserViewDogPage.
 });
