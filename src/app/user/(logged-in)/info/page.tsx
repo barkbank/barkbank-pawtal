@@ -1,7 +1,13 @@
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
-import { BarkH2, BarkP } from "@/components/bark/bark-typography";
+import {
+  BarkH2,
+  BarkH3,
+  BarkH4,
+  BarkH5,
+  BarkP,
+} from "@/components/bark/bark-typography";
 import { IMG_PATH } from "@/lib/image-path";
 import Image from "next/image";
 
@@ -29,6 +35,25 @@ const criteras = [
   {
     text: "Never received a blood transfusion, donated blood >3 months ago",
     imgUrl: IMG_PATH.BLOOD_TRANSFUSION,
+  },
+];
+
+const registrationSteps = [
+  {
+    heading: "Registration",
+    text: "Begin by registering your dog on Bark Bank’s Canine Blood Registry Pawtal, completing your contact information, providing basic medical details about your dog, and selecting your preferred vet donation point.",
+  },
+  {
+    heading: "Appointment Scheduling",
+    text: "Once registered, your vet will schedule an appointment for health screening, blood profiling test, and blood donation.",
+  },
+  {
+    heading: "Vet Appointment",
+    text: "Head to your scheduled vet appointment with your dog at the designated time for a health check and blood donation.",
+  },
+  {
+    heading: "Medical Report",
+    text: "Your vet will update your dog’s medical details directly on the Pawtal after the appointment.",
   },
 ];
 
@@ -64,6 +89,36 @@ export default async function Page() {
             <p className="max-w-[60%] text-center">{criteria.text}</p>
           </div>
         ))}
+      </section>
+      <section className="bg-beige flex flex-col items-center px-[60px] py-[30px] xl:flex-row">
+        <Image
+          width={129}
+          height={151}
+          src={IMG_PATH.DOG_GETTING_TRANSFUSION}
+          alt="dog getting blood transfusion"
+          className="mb-[60px] lg:mb-0 lg:h-[300px] lg:w-[300px] xl:mr-[60px]"
+        />
+        <article className="flex flex-col lg:grid lg:grid-cols-2">
+          <div className="mb-[21px] text-center md:col-span-2 lg:mt-[40px] xl:place-self-start">
+            <BarkH2>Blood Donation Drive Process</BarkH2>
+          </div>
+          {registrationSteps.map((step, index) => (
+            <div
+              key={step.heading}
+              className="mb-[40px] flex flex-col items-center last:mb-0 lg:flex-row lg:items-start "
+            >
+              <div className="mb-[20px] flex min-h-11 min-w-11 items-center justify-center rounded-full bg-brand lg:mr-[20px] lg:self-start">
+                <span className="font-bold text-brand-white">{index + 1}</span>
+              </div>
+              <div>
+                <span className="text-center lg:text-left">
+                  <BarkH5>{step.heading}</BarkH5>
+                </span>
+                <p>{step.text}</p>
+              </div>
+            </div>
+          ))}
+        </article>
       </section>
     </main>
   );

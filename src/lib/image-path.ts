@@ -39,4 +39,5 @@ export const IMG_PATH = {
   SMILING_DOG: "/images/smiling-dog.svg",
   DRUGS: "/images/drugs.svg",
   BLOOD_TRANSFUSION: "/images/blood-transfusion.svg",
+  DOG_GETTING_TRANSFUSION: "/images/dog-getting-transfusion.svg",
 } as const;

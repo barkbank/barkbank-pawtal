@@ -14,7 +14,7 @@ export function BarkH2(props: { children: React.ReactNode }) {
   );
 }
 
-export function BarkH3(props: { children: React.ReactNode }) {
+export function BarkH3(props: { children: React.ReactNode, }) {
   return (
     <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
       {props.children}
@@ -32,7 +32,9 @@ export function BarkH4(props: { children: React.ReactNode }) {
 
 export function BarkH5(props: { children: React.ReactNode }) {
   return (
-    <h5 className="scroll-m-20 text-base font-semibold tracking-tight"></h5>
+    <h5 className="scroll-m-20 text-base font-semibold tracking-tight">
+      {props.children}
+    </h5>
   );
 }
 
