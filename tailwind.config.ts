@@ -62,6 +62,9 @@ const config = {
           DEFAULT: "hsl(var(--grey))",
           "60": "hsl(var(--grey-60))",
         },
+        beige: {
+          DEFAULT: "hsl(var(--beige))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
