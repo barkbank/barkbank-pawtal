@@ -64,33 +64,35 @@ export default async function Page() {
   }
   return (
     <main className="flex flex-col 2xl:items-center">
-      <section className="mx-[60px] mt-[60px] max-w-7xl py-[45px] text-center">
-        <BarkH2>Criteria For Blood Donation</BarkH2>
-        <BarkP>
-          To be eligible for blood donation, dogs must meet specific criteria to
-          ensure the safety of both donors and recipients. It is advisable to
-          consult with your veterinarian for a comprehensive understanding of
-          these criteria. The following are the typical criteria:
-        </BarkP>
+      <section className="mx-[60px] my-[60px]">
+        <div className="max-w-7xl py-[45px] text-center">
+          <BarkH2>Criteria For Blood Donation</BarkH2>
+          <BarkP>
+            To be eligible for blood donation, dogs must meet specific criteria
+            to ensure the safety of both donors and recipients. It is advisable
+            to consult with your veterinarian for a comprehensive understanding
+            of these criteria. The following are the typical criteria:
+          </BarkP>
+        </div>
+        <div className="mb-[60px] grid grid-cols-1 place-items-center gap-[60px] px-4 sm:grid-cols-2 lg:grid-cols-3">
+          {criteras.map((criteria, i) => (
+            <div
+              key={criteria.text}
+              className={`flex flex-col items-center gap-y-4 ${criteras.length % 2 !== 0 && i === criteras.length - 1 ? "sm:col-span-2 lg:col-span-1" : ""}`}
+            >
+              <Image
+                src={criteria.imgUrl}
+                alt="criteria icon"
+                className="lg:h-[100px] lg:w-[100px]"
+                width={50}
+                height={50}
+              />
+              <p className="max-w-[60%] text-center">{criteria.text}</p>
+            </div>
+          ))}
+        </div>
       </section>
-      <section className="mb-[60px] grid grid-cols-1 place-items-center gap-[60px] px-4 sm:grid-cols-2 lg:grid-cols-3">
-        {criteras.map((criteria, i) => (
-          <div
-            key={criteria.text}
-            className={`flex flex-col items-center gap-y-4 ${criteras.length % 2 !== 0 && i === criteras.length - 1 ? "sm:col-span-2 lg:col-span-1" : ""}`}
-          >
-            <Image
-              src={criteria.imgUrl}
-              alt="criteria icon"
-              className="lg:h-[100px] lg:w-[100px]"
-              width={50}
-              height={50}
-            />
-            <p className="max-w-[60%] text-center">{criteria.text}</p>
-          </div>
-        ))}
-      </section>
-      <section className="bg-beige flex flex-col items-center px-[60px] py-[30px] xl:flex-row">
+      <section className="flex flex-col items-center bg-beige px-[60px] py-[30px] xl:flex-row">
         <Image
           width={129}
           height={151}
