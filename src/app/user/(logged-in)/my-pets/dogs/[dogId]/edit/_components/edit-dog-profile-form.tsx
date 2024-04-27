@@ -47,7 +47,7 @@ export default function EditDogProfileForm(props: {
 
   return (
     <GeneralDogForm
-      formTitle="Add Dog"
+      formTitle="Edit Dog"
       vetOptions={vetOptions}
       handleSubmit={handleValues}
       handleCancel={handleCancel}

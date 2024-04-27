@@ -1,6 +1,10 @@
+"use server";
+
 import { getAuthenticatedUserActor } from "@/lib/auth";
+import { RoutePath } from "@/lib/route-path";
 import { updateDogProfile } from "@/lib/user/actions/update-dog-profile";
 import { DogProfile } from "@/lib/user/user-models";
+import { revalidatePath } from "next/cache";
 
 type ResponseCode =
   | "ERROR_NOT_LOGGED_IN"
@@ -20,5 +24,8 @@ export async function updateDogProfileAction(args: {
     return "ERROR_NOT_LOGGED_IN";
   }
   const res = await updateDogProfile(actor, dogId, dogProfile);
+  if (res === "OK_UPDATED") {
+    revalidatePath(RoutePath.USER_MY_PETS, "page");
+  }
   return res;
 }
