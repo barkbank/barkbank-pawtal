@@ -5,6 +5,7 @@ import { getTestBirthday } from "../../e2e-test-utils";
 import { initPomContext } from "./init-pom-context";
 import { UserMyPetsPage } from "../pages/user-my-pets-page";
 import { PomContext } from "../core/pom-object";
+import { UserRegistrationPage } from "../pages/user-registration-page";
 
 export async function registerTestUser(args: { page: Page }): Promise<{
   context: PomContext;
@@ -30,53 +31,38 @@ export async function registerTestUser(args: { page: Page }): Promise<{
   const { page } = args;
   const context = await initPomContext({ page });
 
-  await page.goto(context.website.urlOf(RoutePath.USER_REGISTRATION));
-  await expect(page).toHaveURL(
-    context.website.urlOf(RoutePath.USER_REGISTRATION),
-  );
+  const pg = new UserRegistrationPage(context);
+  await page.goto(pg.url());
+  await pg.checkUrl();
 
   // Pet Form
-  await page.getByLabel("What's your dog's name?").fill(dogName);
-  await page.getByLabel("What's your dog's breed?").fill(dogBreed);
-  await page.locator('input[name="dogBirthday"]').fill(dogBirthday);
-  await page.getByRole("button", { name: "Male", exact: true }).click();
-  await page.getByLabel("What's your dog's weight? (KG)").fill(dogWeightKg);
-  await page
-    .getByText("Do you know it's blood type?I")
-    .getByLabel("I don't know")
-    .click();
-  await page
-    .getByText("Has it received blood transfusion before?I don't knowYesNo")
-    .locator('[id="\\:R11rrrqkq\\:-form-item"]')
-    .getByRole("button", { name: "No", exact: true })
-    .click();
-  await page
-    .getByText("Has your dog been pregnant before?I don't knowYesNo")
-    .locator('[id="\\:R15rrrqkq\\:-form-item"]')
-    .getByRole("button", { name: "No", exact: true })
-    .click();
-  await page.getByLabel("Vet Clinic 1").click();
-  await page.getByRole("button", { name: "Next" }).click();
+  await pg.dogNameField().fill(dogName);
+  await pg.dogBreedField().fill(dogBreed);
+  await pg.dogBirthdayField().fill(dogBirthday);
+  await pg.dogGender_MALE().click();
+  await pg.dogWeightField().fill(dogWeightKg);
+  await pg.dogBloodType_UNKNOWN().click();
+  await pg.dogEverReceivedTransfusion_NO().click();
+  await pg.dogEverPregnant_NO().click();
+  await pg.dogPreferredVet_VetClinic1().click();
+  await pg.nextButton().click();
 
   // Human Form
-  await page
-    .getByText("Are you currently based in Singapore?YesNo")
-    .getByRole("button", { name: "Yes" })
-    .click();
-  await page.getByLabel("How would you like to be").fill(userName);
-  await page.getByLabel("What number can we reach you").fill(userPhoneNumber);
-  await page.getByLabel("Please provide a login email").fill(userEmail);
-  await page.getByLabel("Enter OTP").fill("000000");
-  await page.getByLabel("Disclaimer").click();
-  await page.getByRole("button", { name: "Submit" }).click();
+  await pg.userResidency_SINGAPORE().click();
+  await pg.userNameField().fill(userName);
+  await pg.userPhoneNumberField().fill(userPhoneNumber);
+  await pg.userEmailField().fill(userEmail);
+  await pg.otpField().fill("000000");
+  await pg.disclaimerCheckbox().click();
+  await pg.submitButton().click();
 
   // Final
-  await page.getByRole("button", { name: "Enter My Dashboard" }).click();
-  await expect(page).toHaveURL(
-    context.website.urlOf(RoutePath.USER_DEFAULT_LOGGED_IN_PAGE),
-  );
+  await pg.enterDashboardButton().click();
+
+  // Should be at my pets
   const userMyPetsPage = new UserMyPetsPage(context);
   await userMyPetsPage.checkUrl();
+
   const result = {
     context,
     guid,
