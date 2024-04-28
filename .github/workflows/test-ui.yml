@@ -1,0 +1,56 @@
+name: test-ui
+run-name: ${{ github.actor }} is running playwright
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+jobs:
+  test-ui:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15.2
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: postgres
+        ports:
+          - 5800:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: install dependencies
+        run: npm ci
+
+      # ref: https://playwright.dev/docs/ci-intro
+      - name: install playwright browsers
+        run: npx playwright install --with-deps
+
+      - name: install flyway
+        run: |
+          sudo apt-get update
+          sudo apt-get -y install wget
+          wget -qO- https://download.red-gate.com/maven/release/com/redgate/flyway/flyway-commandline/10.2.0/flyway-commandline-10.2.0-linux-x64.tar.gz | tar -xvz
+          ln -s $(pwd)/flyway-10.2.0/flyway /usr/local/bin
+      - name: run migrations
+        run: flyway -url=jdbc:postgresql://localhost:5800/postgres -locations=db -user=postgres -password=password migrate
+
+      - name: test
+        run: |
+          cat env.template > .env.local
+          npm run dev &
+          sleep 5
+          npx node scripts/setup-dev-data.js
+          npx playwright test --project "Mobile Chrome" --project "chromium"
+
+      - name: save playwright report
+        uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
