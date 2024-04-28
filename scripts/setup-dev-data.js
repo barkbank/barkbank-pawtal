@@ -23,6 +23,7 @@ function doRequest(method, path, body) {
             const jsonData = JSON.parse(responseData);
             resolve(jsonData);
           } catch (error) {
+            console.log(responseData);
             reject(error);
           }
         });
