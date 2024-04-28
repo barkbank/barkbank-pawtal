@@ -23,14 +23,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-      - run: npm install
-
-      # ref: https://playwright.dev/docs/ci-intro
       - name: install dependencies
         run: npm ci
+
+      # ref: https://playwright.dev/docs/ci-intro
       - name: install playwright browsers
         run: npx playwright install --with-deps
-      # - run: npx playwright install chromium firefox webkit
 
       - name: install flyway
         run: |
@@ -40,13 +38,15 @@ jobs:
           ln -s $(pwd)/flyway-10.2.0/flyway /usr/local/bin
       - name: run migrations
         run: flyway -url=jdbc:postgresql://localhost:5800/postgres -locations=db -user=postgres -password=password migrate
-      - run: cat env.template > .env.local
+
       - name: test
         run: |
+          cat env.template > .env.local
           npm run dev &
           sleep 5
           npx node scripts/setup-dev-data.js
           npx playwright test --project "Mobile Chrome" --project "chromium"
+
       - name: save playwright report
         uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
