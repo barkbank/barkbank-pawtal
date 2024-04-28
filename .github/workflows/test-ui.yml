@@ -41,14 +41,12 @@ jobs:
       - name: run migrations
         run: flyway -url=jdbc:postgresql://localhost:5800/postgres -locations=db -user=postgres -password=password migrate
       - run: cat env.template > .env.local
-      - name: start dev pawtal in the background
+      - name: test
         run: |
           npm run dev &
           sleep 5
-      # - name: create local accounts
-      #   run: npx node scripts/setup-dev-data.js
-      - name: run playwright tests
-        run: npx playwright test --project "Mobile Chrome" --project "chromium"
+          npx node scripts/setup-dev-data.js
+          npx playwright test --project "Mobile Chrome" --project "chromium"
       - name: save playwright report
         uses: actions/upload-artifact@v4
         if: ${{ !cancelled() }}
