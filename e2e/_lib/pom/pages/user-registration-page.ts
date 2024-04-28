@@ -7,6 +7,14 @@ export class UserRegistrationPage extends PomPage {
     return this.website().urlOf(RoutePath.USER_REGISTRATION);
   }
 
+  dogFormHeader(): Locator {
+    return this.page().locator("form").getByText("Tell us about your pet", {exact: true});
+  }
+
+  ownerFormHeader(): Locator {
+    return this.page().locator("form").getByText("Add your details", {exact: true});
+  }
+
   dogNameField(): Locator {
     return this.page().getByLabel("What's your dog's name?");
   }
