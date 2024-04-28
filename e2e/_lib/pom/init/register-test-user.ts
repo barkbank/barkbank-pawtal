@@ -1,6 +1,5 @@
-import { RoutePath } from "@/lib/route-path";
 import { generateRandomGUID } from "@/lib/utilities/bark-guid";
-import { Page, expect } from "@playwright/test";
+import { Page } from "@playwright/test";
 import { getTestBirthday } from "../../e2e-test-utils";
 import { initPomContext } from "./init-pom-context";
 import { UserMyPetsPage } from "../pages/user-my-pets-page";
