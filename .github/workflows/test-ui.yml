@@ -1,4 +1,4 @@
-name: run-tests
+name: test-ui
 run-name: ${{ github.actor }} is running UI tests
 on:
   push:
