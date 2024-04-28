@@ -19,11 +19,11 @@ function doRequest(method, path, body) {
           responseData += chunk;
         });
         res.on("end", () => {
+          console.log({ responseData });
           try {
             const jsonData = JSON.parse(responseData);
             resolve(jsonData);
           } catch (error) {
-            console.log(responseData);
             reject(error);
           }
         });
