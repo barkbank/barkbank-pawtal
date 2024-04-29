@@ -8,12 +8,6 @@ export const BARK_CODE = {
   OK: "OK",
 
   /**
-   * When an operation failed for server related reasons. Conceptually, this
-   * maps to a 500 server error.
-   */
-  FAILED: "FAILED",
-
-  /**
    * When the caller is not logged-in at all or as the wrong correct account
    * type.
    */
@@ -36,4 +30,15 @@ export const BARK_CODE = {
    * the user is not the owner of the dog.
    */
   ERROR_WRONG_OWNER: "ERROR_WRONG_OWNER",
+
+  /**
+   * When a database query failed.
+   */
+  FAILURE_DB_QUERY: "FAILURE_DB_QUERY",
+
+  /**
+   * When an operation failed for server related reasons. Conceptually, this
+   * maps to a 500 server error.
+   */
+  FAILED: "FAILED",
 } as const;
