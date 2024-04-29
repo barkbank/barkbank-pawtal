@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { loginKnownUser } from "../_lib/init/login-known-user";
-import { NavbarComponent } from "../_lib/pom/layout/navbar-component";
+import { HeaderComponent } from "../_lib/pom/layout/header-component";
 import { LogoutPage } from "../_lib/pom/pages/logout-page";
 import { UserMyAccountPage } from "../_lib/pom/pages/user-my-account-page";
 import { gotoUserMyAccountPage } from "../_lib/sequences/nav-gotos";
@@ -12,12 +12,12 @@ test("user can cancel logout", async ({ page }) => {
   // the logout.
   await gotoUserMyAccountPage({ context });
 
-  const nav = new NavbarComponent(context);
-  if (await nav.hamburgerButton().isVisible()) {
-    await nav.hamburgerButton().click();
+  const header = new HeaderComponent(context);
+  if (await header.hamburgerButton().isVisible()) {
+    await header.hamburgerButton().click();
   }
-  await expect(nav.logoutLink()).toBeVisible();
-  await nav.logoutLink().click();
+  await expect(header.logoutLink()).toBeVisible();
+  await header.logoutLink().click();
 
   const logoutPage = new LogoutPage(context);
   await logoutPage.checkUrl();
