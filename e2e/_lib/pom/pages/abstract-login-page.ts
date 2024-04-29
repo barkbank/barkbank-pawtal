@@ -29,10 +29,10 @@ export abstract class AbstractLoginPage extends PomPage {
   }
 
   invalidEmailErrorMessage(): Locator {
-    return this.page().getByText('Invalid email');
+    return this.page().getByText("Invalid email");
   }
 
   otpCannotBeEmptyErrorMessage(): Locator {
-    return this.page().getByText('OTP cannot be empty');
+    return this.page().getByText("OTP cannot be empty");
   }
 }
