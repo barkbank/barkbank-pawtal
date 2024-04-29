@@ -3,10 +3,7 @@ import { dbQuery } from "@/lib/data/db-utils";
 import { MyAccount } from "../user-models";
 import { UserResidency } from "@/lib/data/db-enums";
 
-// WIP: Change return type to Promise<MyAccount> There's no reason why zero rows should be returned.
-export async function getMyAccount(
-  actor: UserActor,
-): Promise<MyAccount | null> {
+export async function getMyAccount(actor: UserActor): Promise<MyAccount> {
   const { userId, dbPool, userMapper } = actor.getParams();
 
   const sql = `
@@ -27,9 +24,6 @@ export async function getMyAccount(
     userResidency: UserResidency;
   };
   const res = await dbQuery<Row>(dbPool, sql, [userId]);
-  if (res.rows.length === 0) {
-    return null;
-  }
   const { userHashedEmail, userEncryptedPii, ...otherFields } = res.rows[0];
 
   const { userName, userEmail, userPhoneNumber } =

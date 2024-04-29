@@ -7,14 +7,10 @@ import { redirect } from "next/navigation";
 
 export default async function Page() {
   const actor = await getAuthenticatedUserActor();
-  if (!actor) {
+  if (actor === null) {
     redirect(RoutePath.USER_LOGIN_PAGE);
   }
   const account = await getMyAccount(actor);
-  if (!account) {
-    redirect(RoutePath.USER_LOGIN_PAGE);
-  }
-
   const { userName, userPhoneNumber, userResidency } = account;
   const props = { userName, userPhoneNumber, userResidency };
 

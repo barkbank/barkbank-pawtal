@@ -3,7 +3,6 @@
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
-import { buttonVariants } from "@/components/ui/button";
 import { IMG_PATH } from "@/lib/image-path";
 import { getMyLatestCall } from "@/lib/user/actions/get-my-latest-call";
 import { getMyAccount } from "@/lib/user/actions/get-my-account";
@@ -13,18 +12,14 @@ import Image from "next/image";
 
 import { capitalize } from "lodash";
 import { formatDateTime, SINGAPORE_TIME_ZONE } from "@/lib/utilities/bark-time";
-import Link from "next/link";
 import { BarkButton } from "@/components/bark/bark-button";
 
 export default async function Page() {
   const actor = await getAuthenticatedUserActor();
-  if (!actor) {
+  if (actor === null) {
     redirect(RoutePath.USER_LOGIN_PAGE);
   }
   const account = await getMyAccount(actor);
-  if (!account) {
-    redirect(RoutePath.USER_LOGIN_PAGE);
-  }
   const {
     userCreationTime,
     userResidency,

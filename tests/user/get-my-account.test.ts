@@ -2,6 +2,7 @@ import { getMyAccount } from "@/lib/user/actions/get-my-account";
 import { withDb } from "../_db_helpers";
 import { getUserActor, insertUser } from "../_fixtures";
 import { USER_RESIDENCY } from "@/lib/data/db-enums";
+import { expectError } from "../_helpers";
 
 describe("getMyAccount", () => {
   it("should return the correct user details", async () => {
@@ -19,11 +20,12 @@ describe("getMyAccount", () => {
       expect(userPhoneNumber).toEqual("+65 10000001");
     });
   });
-  it("should return null if the user does not exist", async () => {
+  it("should fail if the user does not exist", async () => {
     await withDb(async (dbPool) => {
       const actor = getUserActor(dbPool, "99999999");
-      const account = await getMyAccount(actor);
-      expect(account).toBeNull();
+      await expectError(async () => {
+        await getMyAccount(actor);
+      });
     });
   });
 });
