@@ -1,5 +1,9 @@
 import { PomUser } from "./entities";
 
+// WIP: create e2e/_lib/known-entities
+// WIP: move this into _lib/known-entities/known-user.ts
+// WIP: define _lib/known-entities/known-vet.ts
+// WIP: define _lib/known-entities/known-admin.ts
 /**
  * @returns Details of the known user that make local-accounts creates.
  */

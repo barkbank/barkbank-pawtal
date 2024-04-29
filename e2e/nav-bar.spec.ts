@@ -4,6 +4,7 @@ import { UI_LOCATOR } from "./_lib/e2e-test-utils";
 import { urlOf } from "./_lib/e2e-test-utils";
 import { RoutePath } from "@/lib/route-path";
 
+// WIP: rewrite as e2e/header/header-for-visitors.spec.ts
 test.describe("nav bar when not logged-in", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(urlOf(RoutePath.USER_LOGIN_PAGE));
@@ -36,6 +37,7 @@ test.describe("nav bar when not logged-in", () => {
   });
 });
 
+// WIP: rewrite as e2e/header/header-for-logged-in-user.spec.ts
 test.describe("nav bar when logged-in as user", () => {
   test.beforeEach(async ({ page }) => {
     await loginTestUser({ page });
@@ -69,6 +71,7 @@ test.describe("nav bar when logged-in as user", () => {
   });
 });
 
+// WIP: delete, because it is a clone of user-can-logout
 test.describe("nav bar logout flow", () => {
   test("for user", async ({ page }) => {
     // Given logged in user

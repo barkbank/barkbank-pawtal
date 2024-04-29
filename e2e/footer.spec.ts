@@ -4,6 +4,7 @@ import { UI_LOCATOR } from "./_lib/e2e-test-utils";
 import { urlOf } from "./_lib/e2e-test-utils";
 import { RoutePath } from "@/lib/route-path";
 
+// WIP: rewrite as e2e/footer/footer-for-visitors.spec.ts
 test.describe("footer when not logged-in", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(urlOf(RoutePath.ROOT));
@@ -22,6 +23,7 @@ test.describe("footer when not logged-in", () => {
   });
 });
 
+// WIP: rewrite as e2e/footer/footer-for-logged-in-user.spec.ts
 test.describe("footer when logged-in as a user", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto(urlOf(RoutePath.ROOT));

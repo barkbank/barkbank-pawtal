@@ -2,6 +2,7 @@ import { RoutePath } from "@/lib/route-path";
 import { expect, Page } from "@playwright/test";
 import { urlOf } from "./e2e-test-utils";
 
+// WIP: remove this when no longer used
 export const UI_USER = {
   USER_EMAIL: "test_user@user.com",
   USER_NAME: "Tess Yu Ser",
@@ -11,14 +12,17 @@ export const UI_USER = {
   PERMANENTLY_INELIGIBLE_DOG_NAME: "Perry",
 } as const;
 
+// WIP: remove this when no longer used
 export const UI_VET = {
   VET_EMAIL: "vet1@vet.com",
 };
 
+// WIP: remove this when no longer used
 export const UI_ADMIN = {
   ADMIN_EMAIL: "admin1@admin.com",
 };
 
+// WIP: delete this. It has been replaced with loginKnownUser.
 export async function loginTestUser(args: { page: Page }) {
   const { page } = args;
   await page.goto(urlOf(RoutePath.USER_LOGIN_PAGE));
@@ -30,6 +34,8 @@ export async function loginTestUser(args: { page: Page }) {
   await expect(page).toHaveURL(urlOf(RoutePath.USER_DEFAULT_LOGGED_IN_PAGE));
 }
 
+// WIP: add known-vet.ts
+// WIP: rewrite this as loginKnownVet in pom/init/login-known-vet
 export async function loginTestVet(args: { page: Page }) {
   const { page } = args;
   await page.goto(urlOf(RoutePath.VET_LOGIN_PAGE));
@@ -41,6 +47,8 @@ export async function loginTestVet(args: { page: Page }) {
   await expect(page).toHaveURL(urlOf(RoutePath.VET_DEFAULT_LOGGED_IN_PAGE));
 }
 
+// WIP: add known-admin.ts
+// WIP: rewrite this as loginKnownAdmin in pom/init/login-known-admin
 export async function loginTestAdmin(args: { page: Page }) {
   const { page } = args;
   await page.goto(urlOf(RoutePath.ADMIN_LOGIN_PAGE));
