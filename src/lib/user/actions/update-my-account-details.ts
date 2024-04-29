@@ -9,28 +9,30 @@ import { UserActor } from "../user-actor";
 import { MyAccountDetailsUpdate } from "../user-models";
 import { PoolClient } from "pg";
 import { guaranteed } from "@/lib/utilities/bark-utils";
+import { BARK_CODE } from "@/lib/utilities/bark-code";
 
 type Context = {
   actor: UserActor;
   update: MyAccountDetailsUpdate;
 };
 
-// WIP: Define the return type
+type ResponseCode = typeof BARK_CODE.OK | typeof BARK_CODE.FAILED;
+
 export async function updateMyAccountDetails(
   actor: UserActor,
   update: MyAccountDetailsUpdate,
-) {
+): Promise<ResponseCode> {
   const ctx: Context = { actor, update };
   const { dbPool } = actor.getParams();
   const conn = await dbPool.connect();
   try {
     await dbBegin(conn);
     const resUpdate = await updateAccountFields(conn, ctx);
-    if (resUpdate !== "OK") {
+    if (resUpdate !== BARK_CODE.OK) {
       return resUpdate;
     }
     await dbCommit(conn);
-    return "OK_UPDATED";
+    return BARK_CODE.OK;
   } finally {
     await dbRollback(conn);
     await dbRelease(conn);
@@ -40,7 +42,7 @@ export async function updateMyAccountDetails(
 async function updateAccountFields(
   conn: PoolClient,
   ctx: Context,
-): Promise<"OK" | "FAILURE_DB_UPDATE"> {
+): Promise<ResponseCode> {
   const { actor, update } = ctx;
   const { userId, userMapper } = actor.getParams();
   const { userName, userPhoneNumber, userResidency } = update;
@@ -71,7 +73,7 @@ async function updateAccountFields(
   ]);
 
   if (res.rows.length !== 1) {
-    return "FAILURE_DB_UPDATE";
+    return BARK_CODE.FAILED;
   }
-  return "OK";
+  return BARK_CODE.OK;
 }

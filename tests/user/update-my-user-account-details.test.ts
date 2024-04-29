@@ -18,7 +18,7 @@ describe("updateMyAccountDetails", () => {
       };
 
       const res = await updateMyAccountDetails(actor, update);
-      expect(res).toEqual("OK_UPDATED");
+      expect(res).toEqual("OK");
 
       const account = await getMyAccount(actor);
       // console.log(JSON.stringify(account));
