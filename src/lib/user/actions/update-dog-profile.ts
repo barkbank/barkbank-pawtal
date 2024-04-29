@@ -13,6 +13,7 @@ import {
   dbInsertDogVetPreference,
 } from "@/lib/data/db-dogs";
 
+// WIP: Use BARK_CODE
 type Response =
   | "OK_UPDATED"
   | "ERROR_REPORT_EXISTS"

@@ -8,6 +8,7 @@ import { MyAccountDetailsUpdate } from "@/lib/user/user-models";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
+// WIP: Use BARK_CODE
 export type UpdateAccountDetailsResponse =
   | "STATUS_204_UPDATED"
   | "STATUS_500_INTERNAL_SERVER_ERROR";

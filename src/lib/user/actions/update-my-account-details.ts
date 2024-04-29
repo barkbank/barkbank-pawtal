@@ -15,6 +15,7 @@ type Context = {
   update: MyAccountDetailsUpdate;
 };
 
+// WIP: Define the return type
 export async function updateMyAccountDetails(
   actor: UserActor,
   update: MyAccountDetailsUpdate,

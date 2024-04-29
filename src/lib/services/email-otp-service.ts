@@ -19,6 +19,7 @@ type Request = {
   accountType: AccountType | null;
 };
 
+// WIP: use BARK_CODE
 type ResponseCode = "OK" | "NO_ACCOUNT" | "SEND_FAILED";
 
 export class EmailOtpService {

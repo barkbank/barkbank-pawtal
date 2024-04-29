@@ -3,6 +3,7 @@ import { dbQuery } from "@/lib/data/db-utils";
 import { MyAccount } from "../user-models";
 import { UserResidency } from "@/lib/data/db-enums";
 
+// WIP: Change return type to Promise<MyAccount> There's no reason why zero rows should be returned.
 export async function getMyAccount(
   actor: UserActor,
 ): Promise<MyAccount | null> {

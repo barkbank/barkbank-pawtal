@@ -6,6 +6,7 @@ import { updateDogProfile } from "@/lib/user/actions/update-dog-profile";
 import { DogProfile } from "@/lib/user/user-models";
 import { revalidatePath } from "next/cache";
 
+// WIP: Use BARK_CODE
 type ResponseCode =
   | "ERROR_NOT_LOGGED_IN"
   | "OK_UPDATED"

@@ -3,6 +3,7 @@
 import APP from "@/lib/app";
 import { AccountType } from "../auth-models";
 
+// WIP: Use BARK_CODE
 type ResponseCode = "OK" | "NO_ACCOUNT" | "SEND_FAILED";
 
 export async function sendLoginOtp(args: {

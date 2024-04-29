@@ -43,6 +43,7 @@ export type RegistrationRequest = {
   dogPreferredVetId?: string;
 };
 
+// WIP: Use BARK_CODE
 export type RegistrationResponse =
   | "STATUS_201_CREATED"
   | "STATUS_401_INVALID_OTP"

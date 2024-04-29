@@ -7,6 +7,7 @@ import { DogProfile } from "@/lib/user/user-models";
 import { Err, Result } from "@/lib/utilities/result";
 import { revalidatePath } from "next/cache";
 
+// WIP: Use BARK_CODE
 export async function submitDog(
   dogProfile: DogProfile,
 ): Promise<Result<{ dogId: string }, "FAILED" | "ERROR_UNAUTHORIZED">> {
