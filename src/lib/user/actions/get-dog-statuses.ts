@@ -8,8 +8,11 @@ import {
   ServiceStatus,
 } from "@/lib/data/db-enums";
 import { dbQuery } from "@/lib/data/db-utils";
+import { BARK_CODE } from "@/lib/utilities/bark-code";
 
-type ErrorCode = "ERROR_UNAUTHORIZED" | "ERROR_MISSING_DOG";
+type ErrorCode =
+  | typeof BARK_CODE.ERROR_DOG_NOT_FOUND
+  | typeof BARK_CODE.ERROR_WRONG_OWNER;
 
 export async function getDogStatuses(
   actor: UserActor,
@@ -19,11 +22,11 @@ export async function getDogStatuses(
   const ctx: Context = { actor, dogId };
   const row: Row | null = await fetchRow(ctx);
   if (row === null) {
-    return Err("ERROR_MISSING_DOG");
+    return Err(BARK_CODE.ERROR_DOG_NOT_FOUND);
   }
   const { ownerUserId, ...otherFields } = row;
   if (ownerUserId !== userId) {
-    return Err("ERROR_UNAUTHORIZED");
+    return Err(BARK_CODE.ERROR_WRONG_OWNER);
   }
   return Ok(otherFields);
 }
