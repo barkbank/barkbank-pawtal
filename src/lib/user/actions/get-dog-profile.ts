@@ -7,8 +7,11 @@ import {
   DogGender,
   YesNoUnknown,
 } from "@/lib/data/db-enums";
+import { BARK_CODE } from "@/lib/utilities/bark-code";
 
-type ErrorCode = "ERROR_UNAUTHORIZED" | "ERROR_MISSING_DOG";
+type ErrorCode =
+  | typeof BARK_CODE.ERROR_DOG_NOT_FOUND
+  | typeof BARK_CODE.ERROR_WRONG_OWNER;
 
 export async function getDogProfile(
   actor: UserActor,
@@ -54,11 +57,11 @@ export async function getDogProfile(
   };
   const res = await dbQuery<Row>(dbPool, sql, [dogId]);
   if (res.rows.length === 0) {
-    return Err("ERROR_MISSING_DOG");
+    return Err(BARK_CODE.ERROR_DOG_NOT_FOUND);
   }
   const { dogOwnerId, dogEncryptedOii, ...otherFields } = res.rows[0];
   if (dogOwnerId !== userId) {
-    return Err("ERROR_UNAUTHORIZED");
+    return Err(BARK_CODE.ERROR_WRONG_OWNER);
   }
   const { dogName } = await dogMapper.mapDogSecureOiiToDogOii({
     dogEncryptedOii,

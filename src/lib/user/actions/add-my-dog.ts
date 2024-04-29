@@ -32,7 +32,7 @@ export async function addMyDog(
     await dbCommit(conn);
     return Ok({ dogId });
   } catch {
-    return Err("FAILED");
+    return Err(BARK_CODE.FAILED);
   } finally {
     await dbRollback(conn);
     await dbRelease(conn);
