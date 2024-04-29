@@ -1,12 +1,8 @@
-name: test-ui
-run-name: ${{ github.actor }} is running playwright
+name: x-playwright
 on:
-  push:
-    branches:
-      - main
-  pull_request:
+  workflow_call:
 jobs:
-  test-ui:
+  playwright:
     strategy:
       matrix:
         project:
