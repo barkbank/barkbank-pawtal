@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test";
-import { PomContext } from "../core/pom-object";
-import { Website } from "../core/website";
+import { PomContext } from "../pom/core/pom-object";
+import { Website } from "../pom/core/website";
 
 /**
  * Create and initialise a PomContext at the root of the test website.

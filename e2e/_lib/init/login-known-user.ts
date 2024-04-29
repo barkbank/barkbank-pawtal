@@ -1,9 +1,9 @@
 import { Page } from "@playwright/test";
-import { PomContext } from "../core/pom-object";
-import { getKnownUser } from "../../known-entities/known-user";
-import { PomUser } from "../entities";
-import { UserMyPetsPage } from "../pages/user-my-pets-page";
-import { doUserLoginSequence } from "../../sequences/user-login-sequence";
+import { PomContext } from "../pom/core/pom-object";
+import { getKnownUser } from "../known-entities/known-user";
+import { PomUser } from "../pom/entities";
+import { UserMyPetsPage } from "../pom/pages/user-my-pets-page";
+import { doUserLoginSequence } from "../sequences/user-login-sequence";
 import { initPomContext } from "./init-pom-context";
 
 /**

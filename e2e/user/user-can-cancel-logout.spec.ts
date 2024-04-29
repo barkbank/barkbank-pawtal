@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { loginKnownUser } from "../_lib/pom/init/login-known-user";
+import { loginKnownUser } from "../_lib/init/login-known-user";
 import { NavbarComponent } from "../_lib/pom/layout/navbar-component";
 import { LogoutPage } from "../_lib/pom/pages/logout-page";
 import { UserMyAccountPage } from "../_lib/pom/pages/user-my-account-page";

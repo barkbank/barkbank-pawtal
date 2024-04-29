@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { initPomContext } from "../_lib/pom/init/init-pom-context";
+import { initPomContext } from "../_lib/init/init-pom-context";
 import { UserLoginPage } from "../_lib/pom/pages/user-login-page";
 import { UserRegistrationPage } from "../_lib/pom/pages/user-registration-page";
 import { getTestBirthday } from "../_lib/e2e-test-utils";
