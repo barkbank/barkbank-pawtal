@@ -27,4 +27,12 @@ export abstract class AbstractLoginPage extends PomPage {
   public registerLink(): Locator {
     return this.page().getByRole("link", { name: "register here" });
   }
+
+  invalidEmailErrorMessage(): Locator {
+    return this.page().getByText('Invalid email');
+  }
+
+  otpCannotBeEmptyErrorMessage(): Locator {
+    return this.page().getByText('OTP cannot be empty');
+  }
 }

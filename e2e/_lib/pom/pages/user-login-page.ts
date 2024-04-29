@@ -10,4 +10,8 @@ export class UserLoginPage extends AbstractLoginPage {
   public registerLink(): Locator {
     return this.page().getByRole("link", { name: "register here" });
   }
+
+  userAccountDoesNotExistErrorMessage(): Locator {
+    return this.page().getByText("User account does not exist.");
+  }
 }
