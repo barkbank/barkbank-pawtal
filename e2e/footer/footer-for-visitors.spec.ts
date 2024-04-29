@@ -5,6 +5,6 @@ import { FooterComponent } from "../_lib/pom/layout/footer-component";
 test("footer for visitors", async ({ page }) => {
   const context = await initPomContext({ page });
   const footer = new FooterComponent(context);
-  expect(footer.vetLoginLink()).toBeVisible();
-  expect(footer.adminLoginLink()).toBeVisible();
+  await expect(footer.vetLoginLink()).toBeVisible();
+  await expect(footer.adminLoginLink()).toBeVisible();
 });
