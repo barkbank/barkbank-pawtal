@@ -21,7 +21,7 @@ export async function updateAccountDetails(
   }
 
   const response = await updateMyAccountDetails(actor, request);
-  if (response === "OK_UPDATED") {
+  if (response === "OK") {
     revalidatePath("/user/(logged-in)/my-account");
     return "STATUS_204_UPDATED";
   }
