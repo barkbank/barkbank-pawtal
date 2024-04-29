@@ -1,4 +1,4 @@
-import { PomUser } from "./entities";
+import { PomUser } from "../pom/entities";
 
 // WIP: create e2e/_lib/known-entities
 // WIP: move this into _lib/known-entities/known-user.ts
