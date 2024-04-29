@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { loginKnownUser } from "../_lib/pom/init/login-known-user";
+import { loginKnownUser } from "../_lib/init/login-known-user";
 
 test("user can list their dogs", async ({ page }) => {
   const { knownUser, pomPage: petsPage } = await loginKnownUser({ page });

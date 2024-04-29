@@ -1,5 +1,5 @@
 import { expect } from "@playwright/test";
-import { NavbarComponent } from "../pom/layout/navbar-component";
+import { HeaderComponent } from "../pom/layout/header-component";
 import { UserLoginPage } from "../pom/pages/user-login-page";
 import { LogoutPage } from "../pom/pages/logout-page";
 import { PomContext } from "../pom/core/pom-object";
@@ -13,7 +13,7 @@ export async function doLogoutSequence(args: {
 }): Promise<UserLoginPage> {
   const { context } = args;
 
-  const navbar = new NavbarComponent(context);
+  const navbar = new HeaderComponent(context);
   await expect(navbar.locator()).toBeVisible();
   if (await navbar.hamburgerButton().isVisible()) {
     await navbar.hamburgerButton().click();

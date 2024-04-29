@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { gotoUserMyAccountPage } from "../_lib/sequences/nav-gotos";
 import { UserMyAccountEditPage } from "../_lib/pom/pages/user-my-account-edit-page";
-import { registerTestUser } from "../_lib/pom/init/register-test-user";
+import { registerTestUser } from "../_lib/init/register-test-user";
 
 test("user can register, edit account details, but click cancel, and should see their details unchanged", async ({
   page,

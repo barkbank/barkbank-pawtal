@@ -3,7 +3,7 @@ import { PomPage } from "../core/pom-page";
 import { Locator } from "@playwright/test";
 
 export class UserMyAccountEditPage extends PomPage {
-  public url(): string {
+  url(): string {
     return this.website().urlOf(RoutePath.USER_MY_ACCOUNT_EDIT);
   }
 

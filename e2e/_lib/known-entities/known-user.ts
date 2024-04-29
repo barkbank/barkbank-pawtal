@@ -1,4 +1,4 @@
-import { PomUser } from "./entities";
+import { PomUser } from "../pom/entities";
 
 /**
  * @returns Details of the known user that make local-accounts creates.

@@ -11,8 +11,15 @@ export type PomUser = {
   userDogs: PomDog[];
 };
 
-// Stub for future extension
-export type PomVet = {};
+export type PomVet = {
+  vetEmail: string;
+  vetName: string;
+  vetPhoneNumber: string;
+  vetAddress: string;
+};
 
-// Stub for future extension
-export type PomAdmin = {};
+export type PomAdmin = {
+  adminName: string;
+  adminEmail: string;
+  adminPhoneNumber: string;
+};

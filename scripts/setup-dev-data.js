@@ -30,6 +30,7 @@ function doRequest(method, path, body) {
       },
     );
     if (body) {
+      console.log(body);
       req.write(JSON.stringify(body));
     }
     req.end();

@@ -1,10 +1,10 @@
 import { generateRandomGUID } from "@/lib/utilities/bark-guid";
 import { Page } from "@playwright/test";
-import { getTestBirthday } from "../../e2e-test-utils";
+import { getTestBirthday } from "../e2e-test-utils";
 import { initPomContext } from "./init-pom-context";
-import { UserMyPetsPage } from "../pages/user-my-pets-page";
-import { PomContext } from "../core/pom-object";
-import { UserRegistrationPage } from "../pages/user-registration-page";
+import { UserMyPetsPage } from "../pom/pages/user-my-pets-page";
+import { PomContext } from "../pom/core/pom-object";
+import { UserRegistrationPage } from "../pom/pages/user-registration-page";
 
 export async function registerTestUser(args: { page: Page }): Promise<{
   context: PomContext;
