@@ -4,12 +4,13 @@ import { DogProfile } from "../user-models";
 import { dbBegin, dbCommit, dbRelease, dbRollback } from "@/lib/data/db-utils";
 import { DogSpec } from "@/lib/data/db-models";
 import { dbInsertDog, dbInsertDogVetPreference } from "@/lib/data/db-dogs";
+import { BARK_CODE } from "@/lib/utilities/bark-code";
 
 type AddDogResult = {
   dogId: string;
 };
 
-type AddDogError = "FAILED";
+type AddDogError = typeof BARK_CODE.FAILED;
 
 export async function addMyDog(
   actor: UserActor,
