@@ -20,6 +20,12 @@ export const BARK_CODE = {
   ERROR_NOT_LOGGED_IN: "ERROR_NOT_LOGGED_IN",
 
   /**
+   * When the operation needs to retrieve a specified user, but there is no such
+   * user on record.
+   */
+  ERROR_USER_NOT_FOUND: "ERROR_USER_NOT_FOUND",
+
+  /**
    * When the operation is for a specified dog (typically by dogId), but there
    * is no such dog.
    */

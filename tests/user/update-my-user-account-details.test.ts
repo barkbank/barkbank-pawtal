@@ -20,10 +20,10 @@ describe("updateMyAccountDetails", () => {
       const res = await updateMyAccountDetails(actor, update);
       expect(res).toEqual("OK");
 
-      const account = await getMyAccount(actor);
-      // console.log(JSON.stringify(account));
-      const { userName, userPhoneNumber, userResidency } = account!;
+      const { result: account, error } = await getMyAccount(actor);
+      expect(error).toBeUndefined();
 
+      const { userName, userPhoneNumber, userResidency } = account!;
       expect(userName).toEqual(update.userName);
       expect(userPhoneNumber).toEqual(update.userPhoneNumber);
       expect(userResidency).toEqual(update.userResidency);

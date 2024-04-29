@@ -2,8 +2,12 @@ import { UserActor } from "../user-actor";
 import { dbQuery } from "@/lib/data/db-utils";
 import { MyAccount } from "../user-models";
 import { UserResidency } from "@/lib/data/db-enums";
+import { Err, Ok, Result } from "@/lib/utilities/result";
+import { BARK_CODE } from "@/lib/utilities/bark-code";
 
-export async function getMyAccount(actor: UserActor): Promise<MyAccount> {
+export async function getMyAccount(
+  actor: UserActor,
+): Promise<Result<MyAccount, typeof BARK_CODE.ERROR_USER_NOT_FOUND>> {
   const { userId, dbPool, userMapper } = actor.getParams();
 
   const sql = `
@@ -24,6 +28,9 @@ export async function getMyAccount(actor: UserActor): Promise<MyAccount> {
     userResidency: UserResidency;
   };
   const res = await dbQuery<Row>(dbPool, sql, [userId]);
+  if (res.rows.length !== 1) {
+    return Err(BARK_CODE.ERROR_USER_NOT_FOUND);
+  }
   const { userHashedEmail, userEncryptedPii, ...otherFields } = res.rows[0];
 
   const { userName, userEmail, userPhoneNumber } =
@@ -32,10 +39,10 @@ export async function getMyAccount(actor: UserActor): Promise<MyAccount> {
       userEncryptedPii,
     });
 
-  return {
+  return Ok({
     userName,
     userEmail,
     userPhoneNumber,
     ...otherFields,
-  };
+  });
 }

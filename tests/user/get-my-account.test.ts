@@ -9,10 +9,11 @@ describe("getMyAccount", () => {
     await withDb(async (dbPool) => {
       const { userId } = await insertUser(1, dbPool);
       const actor = getUserActor(dbPool, userId);
-      const account = await getMyAccount(actor);
+
+      const { result: account, error } = await getMyAccount(actor);
+      expect(error).toBeUndefined();
 
       const { userName, userEmail, userPhoneNumber, ...otherFields } = account!;
-
       expect(otherFields.userCreationTime).toBeDefined();
       expect(userName).toEqual("User 1");
       expect(userEmail).toEqual("user1@user.com");
@@ -20,12 +21,12 @@ describe("getMyAccount", () => {
       expect(userPhoneNumber).toEqual("+65 10000001");
     });
   });
-  it("should fail if the user does not exist", async () => {
+  it("should return ERROR_USER_NOT_FOUND if the user does not exist", async () => {
     await withDb(async (dbPool) => {
       const actor = getUserActor(dbPool, "99999999");
-      await expectError(async () => {
-        await getMyAccount(actor);
-      });
+      const { result, error } = await getMyAccount(actor);
+      expect(result).toBeUndefined();
+      expect(error).toEqual("ERROR_USER_NOT_FOUND");
     });
   });
 });

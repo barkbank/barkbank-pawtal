@@ -10,7 +10,10 @@ export default async function Page() {
   if (actor === null) {
     redirect(RoutePath.USER_LOGIN_PAGE);
   }
-  const account = await getMyAccount(actor);
+  const { result: account, error } = await getMyAccount(actor);
+  if (error !== undefined) {
+    redirect(RoutePath.USER_LOGIN_PAGE);
+  }
   const { userName, userPhoneNumber, userResidency } = account;
   const props = { userName, userPhoneNumber, userResidency };
 
