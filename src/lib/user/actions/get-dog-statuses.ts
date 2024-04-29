@@ -10,14 +10,15 @@ import {
 import { dbQuery } from "@/lib/data/db-utils";
 import { BARK_CODE } from "@/lib/utilities/bark-code";
 
-type ErrorCode =
-  | typeof BARK_CODE.ERROR_DOG_NOT_FOUND
-  | typeof BARK_CODE.ERROR_WRONG_OWNER;
-
 export async function getDogStatuses(
   actor: UserActor,
   dogId: string,
-): Promise<Result<DogStatuses, ErrorCode>> {
+): Promise<
+  Result<
+    DogStatuses,
+    typeof BARK_CODE.ERROR_DOG_NOT_FOUND | typeof BARK_CODE.ERROR_WRONG_OWNER
+  >
+> {
   const { userId } = actor.getParams();
   const ctx: Context = { actor, dogId };
   const row: Row | null = await fetchRow(ctx);

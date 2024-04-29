@@ -6,16 +6,17 @@ import { DogSpec } from "@/lib/data/db-models";
 import { dbInsertDog, dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import { BARK_CODE } from "@/lib/utilities/bark-code";
 
-type AddDogResult = {
-  dogId: string;
-};
-
-type AddDogError = typeof BARK_CODE.FAILED;
-
 export async function addMyDog(
   actor: UserActor,
   dogProfile: DogProfile,
-): Promise<Result<AddDogResult, AddDogError>> {
+): Promise<
+  Result<
+    {
+      dogId: string;
+    },
+    typeof BARK_CODE.FAILED
+  >
+> {
   const { userId, dbPool, dogMapper } = actor.getParams();
   const { dogName, dogPreferredVetId, ...otherFields } = dogProfile;
   const { dogEncryptedOii } = await dogMapper.mapDogOiiToDogSecureOii({

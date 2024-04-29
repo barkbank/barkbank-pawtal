@@ -21,7 +21,8 @@ export default async function Page(props: { params: { dogId: string } }) {
     actor,
     dogId,
   );
-  if (error) {
+  if (error !== undefined) {
+    // TODO: show some error on the page?
     redirect(RoutePath.USER_MY_PETS);
   }
 

@@ -9,14 +9,15 @@ import {
 } from "@/lib/data/db-enums";
 import { BARK_CODE } from "@/lib/utilities/bark-code";
 
-type ErrorCode =
-  | typeof BARK_CODE.ERROR_DOG_NOT_FOUND
-  | typeof BARK_CODE.ERROR_WRONG_OWNER;
-
 export async function getDogProfile(
   actor: UserActor,
   dogId: string,
-): Promise<Result<DogProfile, ErrorCode>> {
+): Promise<
+  Result<
+    DogProfile,
+    typeof BARK_CODE.ERROR_DOG_NOT_FOUND | typeof BARK_CODE.ERROR_WRONG_OWNER
+  >
+> {
   const { dbPool, userId, dogMapper } = actor.getParams();
   const sql = `
   SELECT
