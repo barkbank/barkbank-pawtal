@@ -2,16 +2,6 @@ import { generateRandomGUID } from "@/lib/utilities/bark-guid";
 import { formatDateTime, SINGAPORE_TIME_ZONE } from "@/lib/utilities/bark-time";
 import { sprintf } from "sprintf-js";
 
-export const UI_LOCATOR = {
-  NAV_BAR: "#bark-nav-bar",
-  NAV_MENU_BUTTON: "#bark-nav-menu-button",
-  FOOTER: "#bark-footer",
-} as const;
-
-export function urlOf(path: string): string {
-  return `http://localhost:3000${path}`;
-}
-
 export function generateTestDogName(): string {
   const tsid = formatDateTime(new Date(), {
     format: "d MMM yyyy",
