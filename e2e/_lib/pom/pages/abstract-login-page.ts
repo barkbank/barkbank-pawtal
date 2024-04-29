@@ -2,29 +2,29 @@ import { Locator } from "@playwright/test";
 import { PomPage } from "../core/pom-page";
 
 export abstract class AbstractLoginPage extends PomPage {
-  public emailField(): Locator {
+  emailField(): Locator {
     return this.page().getByLabel("Please provide your email");
   }
 
-  public sendMeAnOtpButton(): Locator {
+  sendMeAnOtpButton(): Locator {
     return this.page().getByRole("button", {
       name: "Send me an OTP",
     });
   }
 
-  public otpSentMessage(): Locator {
+  otpSentMessage(): Locator {
     return this.page().getByText("An OTP has been sent to");
   }
 
-  public otpField(): Locator {
+  otpField(): Locator {
     return this.page().getByLabel("Enter OTP");
   }
 
-  public loginButton(): Locator {
+  loginButton(): Locator {
     return this.page().getByRole("button", { name: "Login" });
   }
 
-  public registerLink(): Locator {
+  registerLink(): Locator {
     return this.page().getByRole("link", { name: "register here" });
   }
 

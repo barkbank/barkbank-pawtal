@@ -5,15 +5,15 @@ import { PomComponent } from "../core/pom-component";
 import { PomPage } from "../core/pom-page";
 
 export class UserMyPetsPage extends PomPage {
-  public url(): string {
+  url(): string {
     return this.website().urlOf(RoutePath.USER_MY_PETS);
   }
 
-  public dogCardItem(dogName: string): DogCardItem {
+  dogCardItem(dogName: string): DogCardItem {
     return new DogCardItem(this.context(), dogName);
   }
 
-  public addPetButton(): Locator {
+  addPetButton(): Locator {
     return this.page().getByRole("link", { name: "Add Pet" });
   }
 }
@@ -26,22 +26,22 @@ export class DogCardItem extends PomComponent {
     super(ctx);
   }
 
-  public locator(): Locator {
+  locator(): Locator {
     return this.page()
       .getByText(this.dogName, { exact: true })
       .locator("..")
       .locator("..");
   }
 
-  public exactText(text: string): Locator {
+  exactText(text: string): Locator {
     return this.locator().getByText(text, { exact: true });
   }
 
-  public editButton(): Locator {
+  editButton(): Locator {
     return this.locator().getByRole("link", { name: "Edit" });
   }
 
-  public viewButton(): Locator {
+  viewButton(): Locator {
     return this.locator().getByRole("button", { name: "View" });
   }
 }
