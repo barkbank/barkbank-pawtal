@@ -7,7 +7,7 @@ import {
   ProfileStatus,
   ServiceStatus,
 } from "@/lib/data/db-enums";
-import { dbQuery } from "@/lib/data/db-utils";
+import { dbResultQuery } from "@/lib/data/db-utils";
 import { BARK_CODE } from "@/lib/utilities/bark-code";
 
 export async function getDogStatuses(
@@ -16,16 +16,18 @@ export async function getDogStatuses(
 ): Promise<
   Result<
     DogStatuses,
-    typeof BARK_CODE.ERROR_DOG_NOT_FOUND | typeof BARK_CODE.ERROR_WRONG_OWNER
+    | typeof BARK_CODE.ERROR_DOG_NOT_FOUND
+    | typeof BARK_CODE.ERROR_WRONG_OWNER
+    | typeof BARK_CODE.FAILURE_DB_QUERY
   >
 > {
   const { userId } = actor.getParams();
   const ctx: Context = { actor, dogId };
-  const row: Row | null = await fetchRow(ctx);
-  if (row === null) {
-    return Err(BARK_CODE.ERROR_DOG_NOT_FOUND);
+  const { result, error } = await fetchRow(ctx);
+  if (error !== undefined) {
+    return Err(error);
   }
-  const { ownerUserId, ...otherFields } = row;
+  const { ownerUserId, ...otherFields } = result;
   if (ownerUserId !== userId) {
     return Err(BARK_CODE.ERROR_WRONG_OWNER);
   }
@@ -46,7 +48,14 @@ type Row = {
   numPendingReports: number;
 };
 
-async function fetchRow(ctx: Context): Promise<Row | null> {
+async function fetchRow(
+  ctx: Context,
+): Promise<
+  Result<
+    Row,
+    typeof BARK_CODE.ERROR_DOG_NOT_FOUND | typeof BARK_CODE.FAILURE_DB_QUERY
+  >
+> {
   const { actor, dogId } = ctx;
   const { dbPool } = actor.getParams();
   const sql = `
@@ -71,9 +80,12 @@ async function fetchRow(ctx: Context): Promise<Row | null> {
   LEFT JOIN mCallStats as tCall on tStatus.dog_id = tCall.dog_id
   WHERE tStatus.dog_id = $1
   `;
-  const res = await dbQuery<Row>(dbPool, sql, [dogId]);
-  if (res.rows.length == 0) {
-    return null;
+  const { result: res, error } = await dbResultQuery<Row>(dbPool, sql, [dogId]);
+  if (error !== undefined) {
+    return Err(error);
   }
-  return res.rows[0];
+  if (res.rows.length == 0) {
+    return Err(BARK_CODE.ERROR_DOG_NOT_FOUND);
+  }
+  return Ok(res.rows[0]);
 }

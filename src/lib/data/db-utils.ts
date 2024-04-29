@@ -70,7 +70,7 @@ export async function dbResultQuery<T extends QueryResultRow = any>(
     const result = await dbQuery<T>(ctx, sql, params);
     return Ok(result);
   } catch {
-    return Err(BARK_CODE.FAILURE_DB_QUERY)
+    return Err(BARK_CODE.FAILURE_DB_QUERY);
   }
 }
 

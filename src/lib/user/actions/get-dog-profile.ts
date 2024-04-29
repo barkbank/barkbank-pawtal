@@ -1,4 +1,4 @@
-import { dbQuery, dbResultQuery } from "@/lib/data/db-utils";
+import { dbResultQuery } from "@/lib/data/db-utils";
 import { UserActor } from "../user-actor";
 import { DogProfile } from "../user-models";
 import { Err, Ok, Result } from "@/lib/utilities/result";
@@ -15,7 +15,9 @@ export async function getDogProfile(
 ): Promise<
   Result<
     DogProfile,
-    typeof BARK_CODE.ERROR_DOG_NOT_FOUND | typeof BARK_CODE.ERROR_WRONG_OWNER | typeof BARK_CODE.FAILURE_DB_QUERY
+    | typeof BARK_CODE.ERROR_DOG_NOT_FOUND
+    | typeof BARK_CODE.ERROR_WRONG_OWNER
+    | typeof BARK_CODE.FAILURE_DB_QUERY
   >
 > {
   const { dbPool, userId, dogMapper } = actor.getParams();
@@ -56,7 +58,7 @@ export async function getDogProfile(
     dogEverReceivedTransfusion: YesNoUnknown;
     dogPreferredVetId: string;
   };
-  const {result: res, error} = await dbResultQuery<Row>(dbPool, sql, [dogId]);
+  const { result: res, error } = await dbResultQuery<Row>(dbPool, sql, [dogId]);
   if (error !== undefined) {
     return Err(error);
   }
