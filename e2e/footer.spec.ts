@@ -4,25 +4,6 @@ import { UI_LOCATOR } from "./_lib/e2e-test-utils";
 import { urlOf } from "./_lib/e2e-test-utils";
 import { RoutePath } from "@/lib/route-path";
 
-// WIP: rewrite as e2e/footer/footer-for-visitors.spec.ts
-test.describe("footer when not logged-in", () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto(urlOf(RoutePath.ROOT));
-  });
-  test("it should show options to login as vet", async ({ page }) => {
-    await expect(
-      page.locator(UI_LOCATOR.FOOTER).getByRole("link", { name: "Vet Login" }),
-    ).toBeVisible();
-  });
-  test("it should show options to login as admin", async ({ page }) => {
-    await expect(
-      page
-        .locator(UI_LOCATOR.FOOTER)
-        .getByRole("link", { name: "Admin Login" }),
-    ).toBeVisible();
-  });
-});
-
 // WIP: rewrite as e2e/footer/footer-for-logged-in-user.spec.ts
 test.describe("footer when logged-in as a user", () => {
   test.beforeEach(async ({ page }) => {
