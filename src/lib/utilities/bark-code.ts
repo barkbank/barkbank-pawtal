@@ -10,6 +10,7 @@ export const BARK_CODE = {
   /**
    * When an operation failed and there is no more detail than that.
    */
+  // WIP: some of these are exceptions.
   FAILED: "FAILED",
 
   /**
@@ -37,7 +38,25 @@ export const BARK_CODE = {
   ERROR_WRONG_OWNER: "ERROR_WRONG_OWNER",
 
   /**
+   * When an attempt is made to update a full profile but it is not allowed.
+   * Full profile updates are allowed only before the first medical report is
+   * received.
+   */
+  ERROR_CANNOT_UPDATE_FULL_PROFILE: "ERROR_CANNOT_UPDATE_FULL_PROFILE",
+
+  /**
+   * When an attempt is made to update a sub profile, but caller should be
+   * updating the full profile instead.
+   */
+  ERROR_SHOULD_UPDATE_FULL_PROFILE: "ERROR_SHOULD_UPDATE_FULL_PROFILE",
+
+  /**
    * When a database query failed.
    */
   DB_QUERY_FAILURE: "DB_QUERY_FAILURE",
+
+  /**
+   * An exception happned.
+   */
+  EXCEPTION: "EXCEPTION",
 } as const;
