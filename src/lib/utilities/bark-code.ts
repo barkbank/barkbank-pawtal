@@ -1,5 +1,5 @@
 /**
- * Standard codes for actor actions and server actions.
+ * Standard error or response codes.
  */
 export const CODE = {
   /**
