@@ -11,7 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { updateAccountDetails } from "../_action/update-my-account-details";
+import { postMyAccountDetails } from "../_action/post-my-account-details";
 import { MyAccountDetailsUpdate } from "@/lib/user/user-models";
 import React, { ButtonHTMLAttributes } from "react";
 import { BarkButton } from "@/components/bark/bark-button";
@@ -48,7 +48,7 @@ export default function AccountEditForm({
     setUpdateError("");
     const request: MyAccountDetailsUpdate = values;
 
-    const response = await updateAccountDetails(request);
+    const response = await postMyAccountDetails(request);
     if (response === "STATUS_204_UPDATED") {
       router.push(RoutePath.USER_MY_ACCOUNT_PAGE);
       return;

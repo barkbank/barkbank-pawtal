@@ -12,7 +12,7 @@ export type UpdateAccountDetailsResponse =
   | "STATUS_204_UPDATED"
   | "STATUS_500_INTERNAL_SERVER_ERROR";
 
-export async function updateAccountDetails(
+export async function postMyAccountDetails(
   request: MyAccountDetailsUpdate,
 ): Promise<UpdateAccountDetailsResponse> {
   const actor = await getAuthenticatedUserActor();
