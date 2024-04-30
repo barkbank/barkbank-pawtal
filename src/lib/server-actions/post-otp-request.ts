@@ -2,14 +2,14 @@
 
 import APP from "@/lib/app";
 import { AccountType } from "../auth-models";
+import { CODE } from "../utilities/bark-code";
 
-// WIP: Use BARK_CODE
-type ResponseCode = "OK" | "NO_ACCOUNT" | "SEND_FAILED";
-
-export async function sendLoginOtp(args: {
+export async function postOtpRequest(args: {
   emailAddress: string;
   accountType: AccountType | null;
-}): Promise<ResponseCode> {
+}): Promise<
+  typeof CODE.OK | typeof CODE.ERROR_ACCOUNT_NOT_FOUND | typeof CODE.FAILED
+> {
   const emailOtpService = await APP.getEmailOtpService();
   return emailOtpService.sendOtp(args);
 }

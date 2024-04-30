@@ -14,9 +14,10 @@ import {
 import { useState } from "react";
 import { SignInResponse, signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { sendLoginOtp } from "@/lib/server-actions/send-login-otp";
+import { postOtpRequest } from "@/lib/server-actions/post-otp-request";
 import { AccountType } from "@/lib/auth-models";
 import { FormMessage } from "@/components/ui/form";
+import { CODE } from "@/lib/utilities/bark-code";
 
 const FORM_SCHEMA = z.object({
   email: z.string().email(),
@@ -67,11 +68,14 @@ export default function BarkLoginForm(props: {
     form.clearErrors("otp");
     const validEmail = validateEmail(email);
     if (validEmail) {
-      const res = await sendLoginOtp({ emailAddress: validEmail, accountType });
-      if (res === "OK") {
+      const res = await postOtpRequest({
+        emailAddress: validEmail,
+        accountType,
+      });
+      if (res === CODE.OK) {
         setRecipientEmail(validEmail);
         setEmailOtpError("");
-      } else if (res === "NO_ACCOUNT") {
+      } else if (res === CODE.ERROR_ACCOUNT_NOT_FOUND) {
         setRecipientEmail("");
         setEmailOtpError(noAccountErrorMessage);
       } else {

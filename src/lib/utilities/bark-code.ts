@@ -13,6 +13,11 @@ export const CODE = {
   FAILED: "FAILED",
 
   /**
+   * When an expected account cannot be found. e.g. when sending OTP.
+   */
+  ERROR_ACCOUNT_NOT_FOUND: "ERROR_ACCOUNT_NOT_FOUND",
+
+  /**
    * When an attempt is made to register an account that already exists.
    */
   ERROR_ACCOUNT_ALREADY_EXISTS: "ERROR_ACCOUNT_ALREADY_EXISTS",
