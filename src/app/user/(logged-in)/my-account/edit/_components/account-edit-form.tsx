@@ -11,7 +11,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { postMyAccountDetails } from "../_action/put-my-account-details";
+import { postMyAccountDetails } from "../_action/post-my-account-details";
 import { MyAccountDetailsUpdate } from "@/lib/user/user-models";
 import React from "react";
 import { BarkButton } from "@/components/bark/bark-button";
