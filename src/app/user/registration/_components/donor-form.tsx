@@ -27,6 +27,7 @@ import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { IMG_PATH } from "@/lib/image-path";
 import { AccountType } from "@/lib/auth-models";
+import { CODE } from "@/lib/utilities/bark-code";
 
 const FORM_SCHEMA = z.object({
   dogName: z.string(),
@@ -114,14 +115,14 @@ export default function DonorForm(props: {
     setRegistrationError("");
     const req = getRegistrationRequest();
     const res = await registerNewUser(req);
-    if (res === "STATUS_401_INVALID_OTP") {
+    if (res === CODE.ERROR_INVALID_OTP) {
       setRegistrationError(
         "The OTP submitted is invalid. Please request for another and try again.",
       );
       setCurrentStep(STEPS.OWNER);
       return;
     }
-    if (res === "STATUS_409_USER_EXISTS") {
+    if (res === CODE.ERROR_ACCOUNT_ALREADY_EXISTS) {
       setRegistrationError(
         <p>
           Account already exists. Please{" "}
@@ -134,10 +135,7 @@ export default function DonorForm(props: {
       setCurrentStep(STEPS.OWNER);
       return;
     }
-    if (
-      res === "STATUS_500_INTERNAL_SERVER_ERROR" ||
-      res === "STATUS_503_DB_CONTENTION"
-    ) {
+    if (res !== CODE.OK) {
       setRegistrationError(
         "Oops! Something went wrong at the Pawtal! Please request for another OTP and try again.",
       );
