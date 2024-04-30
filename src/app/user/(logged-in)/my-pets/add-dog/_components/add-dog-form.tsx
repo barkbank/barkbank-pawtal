@@ -6,7 +6,7 @@ import GeneralDogForm, {
 } from "../../_components/general-dog-form";
 import { DogProfile } from "@/lib/user/user-models";
 import { UTC_DATE_OPTION, parseDateTime } from "@/lib/utilities/bark-time";
-import { submitDog } from "../_actions/submit-dog";
+import { postDogProfile } from "../_actions/post-dog-profile";
 import { useRouter } from "next/navigation";
 import { RoutePath } from "@/lib/route-path";
 import { Err, Ok, Result } from "@/lib/utilities/result";
@@ -31,7 +31,7 @@ export default function AddDogForm(props: { vetOptions: BarkFormOption[] }) {
       dogWeightKg,
       ...otherFields,
     };
-    const { error } = await submitDog(dogProfile);
+    const { error } = await postDogProfile(dogProfile);
     if (error === CODE.ERROR_NOT_LOGGED_IN) {
       router.push(RoutePath.USER_LOGIN_PAGE);
       return Err(error);

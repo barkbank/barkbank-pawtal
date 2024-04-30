@@ -8,8 +8,7 @@ import { CODE } from "@/lib/utilities/bark-code";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { revalidatePath } from "next/cache";
 
-// WIP: rename to postDogProfile
-export async function submitDog(
+export async function postDogProfile(
   dogProfile: DogProfile,
 ): Promise<
   Result<
