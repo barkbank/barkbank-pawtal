@@ -66,6 +66,7 @@ async function updateAccountFields(
     RETURNING
       1
   `;
+  // WIP: use dbResultQuery
   const res = await dbQuery(conn, sql, [
     userId,
     userResidency,
@@ -73,6 +74,7 @@ async function updateAccountFields(
   ]);
 
   if (res.rows.length !== 1) {
+    // WIP: this should be failure user not found
     return BARK_CODE.FAILED;
   }
   return BARK_CODE.OK;

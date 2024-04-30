@@ -64,6 +64,7 @@ async function checkOwnership(
 ): Promise<"OK" | "ERROR_MISSING_DOG" | "ERROR_UNAUTHORIZED"> {
   const { actor, dogId, dogProfile: update } = ctx;
   const sql = `SELECT user_id as "ownerUserId" FROM dogs WHERE dog_id = $1`;
+  // WIP: Use dbResultQuery
   const res = await dbQuery<{ ownerUserId: string }>(conn, sql, [dogId]);
   if (res.rows.length === 0) {
     return "ERROR_MISSING_DOG";
@@ -82,6 +83,7 @@ async function checkExistingReport(
 ): Promise<"OK" | "ERROR_REPORT_EXISTS"> {
   const { dogId, dogProfile: update } = ctx;
   const sql = `SELECT COUNT(1)::integer as "numReports" FROM reports WHERE dog_id = $1`;
+  // WIP: Use dbResultQuery
   const res = await dbQuery<{ numReports: number }>(conn, sql, [dogId]);
   const { numReports } = res.rows[0];
   if (numReports > 0) {
@@ -125,6 +127,7 @@ async function updateDogFields(
     dog_id = $1
   RETURNING 1
   `;
+  // WIP: Use dbResultQuery
   const res = await dbQuery(conn, sql, [
     dogId,
     dogEncryptedOii,
@@ -137,6 +140,7 @@ async function updateDogFields(
     dogEverReceivedTransfusion,
   ]);
   if (res.rows.length !== 1) {
+    // WIP: this should be dog not found.
     return "FAILURE_DB_UPDATE";
   }
   return "OK";
@@ -148,6 +152,7 @@ async function updateVetPreference(
 ): Promise<"OK"> {
   const { dogId, dogProfile } = ctx;
   const { dogPreferredVetId: vetId } = dogProfile;
+  // WIP: Catch exceptions here and interpret as ERROR_EXCEPTION
   await dbDeleteDogVetPreferences(conn, dogId);
   if (vetId !== "") {
     await dbInsertDogVetPreference(conn, dogId, vetId);

@@ -31,14 +31,15 @@ export const BARK_CODE = {
    */
   ERROR_WRONG_OWNER: "ERROR_WRONG_OWNER",
 
+  // WIP: Change to ERROR_DB_QUERY
   /**
    * When a database query failed.
    */
   FAILURE_DB_QUERY: "FAILURE_DB_QUERY",
 
+  // WIP: Rename to ERROR_EXCEPTION
   /**
-   * When an operation failed for server related reasons. Conceptually, this
-   * maps to a 500 server error.
+   * When an exception is caught.
    */
   FAILED: "FAILED",
 } as const;

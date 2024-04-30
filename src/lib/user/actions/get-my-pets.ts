@@ -58,6 +58,7 @@ export async function getMyPets(actor: UserActor): Promise<MyDog[]> {
     dogParticipationStatus: ParticipationStatus;
     dogAppointments: MyDogAppointment[];
   };
+  // WIP: Use dbResultQuery
   const res = await dbQuery<Row>(dbPool, sql, [userId]);
   const futureDogs = res.rows.map(async (row) => {
     const { dogEncryptedOii, ...otherFields } = row;
