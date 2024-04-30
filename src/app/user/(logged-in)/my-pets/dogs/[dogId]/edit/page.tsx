@@ -25,7 +25,7 @@ export default async function Page(props: { params: { dogId: string } }) {
     return (
       <div className="m-3">
         <p>
-          Failed to load your dog's profile. Please refresh the page to try
+          Failed to load your dog&apos;s profile. Please refresh the page to try
           again.
         </p>
       </div>
