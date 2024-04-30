@@ -1,5 +1,5 @@
 import { UserActor } from "../user-actor";
-import { dbQuery } from "@/lib/data/db-utils";
+import { dbResultQuery } from "@/lib/data/db-utils";
 import { MyAccount } from "../user-models";
 import { UserResidency } from "@/lib/data/db-enums";
 import { Err, Ok, Result } from "@/lib/utilities/result";
@@ -7,7 +7,12 @@ import { BARK_CODE } from "@/lib/utilities/bark-code";
 
 export async function getMyAccount(
   actor: UserActor,
-): Promise<Result<MyAccount, typeof BARK_CODE.ERROR_USER_NOT_FOUND>> {
+): Promise<
+  Result<
+    MyAccount,
+    typeof BARK_CODE.ERROR_USER_NOT_FOUND | typeof BARK_CODE.FAILURE_DB_QUERY
+  >
+> {
   const { userId, dbPool, userMapper } = actor.getParams();
 
   const sql = `
@@ -27,7 +32,12 @@ export async function getMyAccount(
     userEncryptedPii: string;
     userResidency: UserResidency;
   };
-  const res = await dbQuery<Row>(dbPool, sql, [userId]);
+  const { result: res, error } = await dbResultQuery<Row>(dbPool, sql, [
+    userId,
+  ]);
+  if (error !== undefined) {
+    return Err(error);
+  }
   if (res.rows.length !== 1) {
     return Err(BARK_CODE.ERROR_USER_NOT_FOUND);
   }
