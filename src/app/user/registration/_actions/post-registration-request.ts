@@ -4,7 +4,7 @@ import APP from "@/lib/app";
 import { RegistrationRequest } from "@/lib/services/registration";
 import { CODE } from "@/lib/utilities/bark-code";
 
-export async function registerNewUser(
+export async function postRegistrationRequest(
   request: RegistrationRequest,
 ): Promise<
   | typeof CODE.OK

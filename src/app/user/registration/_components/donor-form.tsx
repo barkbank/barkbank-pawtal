@@ -14,7 +14,7 @@ import Link from "next/link";
 import { RoutePath } from "@/lib/route-path";
 import { useRouter } from "next/navigation";
 import { BarkFormOption } from "@/components/bark/bark-form";
-import { registerNewUser } from "@/app/user/registration/_actions/register-new-user";
+import { postRegistrationRequest } from "@/app/user/registration/_actions/post-registration-request";
 import { RegistrationRequest } from "@/lib/services/registration";
 import {
   DogAntigenPresence,
@@ -114,7 +114,7 @@ export default function DonorForm(props: {
   async function doRegistration(): Promise<void> {
     setRegistrationError("");
     const req = getRegistrationRequest();
-    const res = await registerNewUser(req);
+    const res = await postRegistrationRequest(req);
     if (res === CODE.ERROR_INVALID_OTP) {
       setRegistrationError(
         "The OTP submitted is invalid. Please request for another and try again.",
