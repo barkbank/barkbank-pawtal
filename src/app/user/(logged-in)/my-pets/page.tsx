@@ -250,7 +250,16 @@ export default async function Page() {
   if (!actor) {
     redirect(RoutePath.USER_LOGIN_PAGE);
   }
-  const dogs = await getMyPets(actor);
+  const { result: dogs, error } = await getMyPets(actor);
+  if (error !== undefined) {
+    return (
+      <div className="m-3">
+        <p className="text-base">
+          Failed to load pet data. Please refresh the page to try again.
+        </p>
+      </div>
+    );
+  }
   return (
     <div className="m-3">
       {dogs.map((dog, idx, ary) => (

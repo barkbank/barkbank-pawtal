@@ -31,10 +31,13 @@ describe("getMyLatestCall", () => {
       jest.setSystemTime(currentTime);
       await insertCall(dbPool, dogId, vetId, "APPOINTMENT");
 
-      const call = await getMyLatestCall(getUserActor(dbPool, userId));
+      const { result, error } = await getMyLatestCall(
+        getUserActor(dbPool, userId),
+      );
+      expect(error).toBeUndefined();
 
       expect(
-        currentTime.getTime() - call?.userLastContactedTime?.getTime()!,
+        currentTime.getTime() - result?.userLastContactedTime?.getTime()!,
       ).toBeLessThan(1000);
     });
   });
@@ -53,10 +56,13 @@ describe("getMyLatestCall", () => {
       jest.setSystemTime(currentTime);
       await insertCall(dbPool, dogId2, vetId, "OPT_OUT");
 
-      const call = await getMyLatestCall(getUserActor(dbPool, userId));
+      const { result, error } = await getMyLatestCall(
+        getUserActor(dbPool, userId),
+      );
+      expect(error).toBeUndefined();
 
       expect(
-        currentTime.getTime() - call?.userLastContactedTime?.getTime()!,
+        currentTime.getTime() - result?.userLastContactedTime?.getTime()!,
       ).toBeLessThan(1000);
     });
   });
@@ -64,8 +70,11 @@ describe("getMyLatestCall", () => {
     await withDb(async (dbPool) => {
       const { userId } = await insertUser(1, dbPool);
       await insertDog(1, userId, dbPool);
-      const call = await getMyLatestCall(getUserActor(dbPool, userId));
-      expect(call?.userLastContactedTime).toBeNull();
+      const { result, error } = await getMyLatestCall(
+        getUserActor(dbPool, userId),
+      );
+      expect(error).toBeUndefined();
+      expect(result?.userLastContactedTime).toBeNull();
     });
   });
 });

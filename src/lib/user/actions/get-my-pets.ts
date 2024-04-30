@@ -1,4 +1,4 @@
-import { dbQuery } from "../../data/db-utils";
+import { dbQuery, dbResultQuery } from "../../data/db-utils";
 import { MyDog, MyDogAppointment } from "../user-models";
 import { UserActor } from "../user-actor";
 import {
@@ -8,8 +8,12 @@ import {
   ProfileStatus,
   ServiceStatus,
 } from "@/lib/data/db-enums";
+import { Err, Ok, Result } from "@/lib/utilities/result";
+import { CODE } from "@/lib/utilities/bark-code";
 
-export async function getMyPets(actor: UserActor): Promise<MyDog[]> {
+export async function getMyPets(
+  actor: UserActor,
+): Promise<Result<MyDog[], typeof CODE.DB_QUERY_FAILURE>> {
   const { userId, dbPool, dogMapper } = actor.getParams();
   const sql = `
   WITH
@@ -58,8 +62,11 @@ export async function getMyPets(actor: UserActor): Promise<MyDog[]> {
     dogParticipationStatus: ParticipationStatus;
     dogAppointments: MyDogAppointment[];
   };
-  const res = await dbQuery<Row>(dbPool, sql, [userId]);
-  const futureDogs = res.rows.map(async (row) => {
+  const { result, error } = await dbResultQuery<Row>(dbPool, sql, [userId]);
+  if (error !== undefined) {
+    return Err(error);
+  }
+  const futureDogs = result.rows.map(async (row) => {
     const { dogEncryptedOii, ...otherFields } = row;
     const { dogName } = await dogMapper.mapDogSecureOiiToDogOii({
       dogEncryptedOii,
@@ -70,5 +77,6 @@ export async function getMyPets(actor: UserActor): Promise<MyDog[]> {
     };
     return myDog;
   });
-  return Promise.all(futureDogs);
+  const pets = await Promise.all(futureDogs);
+  return Ok(pets);
 }

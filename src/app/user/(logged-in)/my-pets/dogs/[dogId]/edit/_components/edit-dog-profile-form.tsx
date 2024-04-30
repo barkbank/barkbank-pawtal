@@ -13,7 +13,8 @@ import { Err, Ok, Result } from "@/lib/utilities/result";
 import GeneralDogForm, {
   DogFormData,
 } from "../../../../_components/general-dog-form";
-import { updateDogProfileAction } from "../_actions/update-dog-profile-action";
+import { postDogProfileUpdate } from "../_actions/post-dog-profile-update";
+import { CODE } from "@/lib/utilities/bark-code";
 
 export default function EditDogProfileForm(props: {
   vetOptions: BarkFormOption[];
@@ -27,12 +28,12 @@ export default function EditDogProfileForm(props: {
     values: DogFormData,
   ): Promise<Result<true, string>> {
     const dogProfile = toDogProfile(values);
-    const res = await updateDogProfileAction({ dogId, dogProfile });
-    if (res === "ERROR_NOT_LOGGED_IN") {
+    const res = await postDogProfileUpdate({ dogId, dogProfile });
+    if (res === CODE.ERROR_NOT_LOGGED_IN) {
       router.push(RoutePath.USER_LOGIN_PAGE);
       return Err(res);
     }
-    if (res !== "OK_UPDATED") {
+    if (res !== CODE.OK) {
       return Err(res);
     }
     router.push(RoutePath.USER_MY_PETS);

@@ -19,7 +19,7 @@ import {
 import { MILLIS_PER_DAY } from "@/lib/utilities/bark-millis";
 
 describe("getDogProfile", () => {
-  it("should return ERROR_UNAUTHORIZED when user does not own the dog requested", async () => {
+  it("should return ERROR_WRONG_OWNER when user does not own the dog requested", async () => {
     await withDb(async (dbPool) => {
       // Given user u1 owns d1
       const u1 = await insertUser(1, dbPool);
@@ -31,11 +31,11 @@ describe("getDogProfile", () => {
       const { result, error } = await getDogProfile(u2Actor, d1.dogId);
 
       // Then
-      expect(error).toEqual("ERROR_UNAUTHORIZED");
+      expect(error).toEqual("ERROR_WRONG_OWNER");
       expect(result).toBeUndefined();
     });
   });
-  it("should return ERROR_MISSING_DOG when dog does not exist", async () => {
+  it("should return ERROR_DOG_NOT_FOUND when dog does not exist", async () => {
     await withDb(async (dbPool) => {
       // Given u1
       const u1 = await insertUser(1, dbPool);
@@ -46,7 +46,7 @@ describe("getDogProfile", () => {
       const { result, error } = await getDogProfile(actor, noSuchDogId);
 
       // Then
-      expect(error).toEqual("ERROR_MISSING_DOG");
+      expect(error).toEqual("ERROR_DOG_NOT_FOUND");
       expect(result).toBeUndefined();
     });
   });

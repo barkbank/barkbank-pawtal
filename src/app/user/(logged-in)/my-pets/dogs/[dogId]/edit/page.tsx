@@ -21,8 +21,15 @@ export default async function Page(props: { params: { dogId: string } }) {
     actor,
     dogId,
   );
-  if (error) {
-    redirect(RoutePath.USER_MY_PETS);
+  if (error !== undefined) {
+    return (
+      <div className="m-3">
+        <p>
+          Failed to load your dog&apos;s profile. Please refresh the page to try
+          again.
+        </p>
+      </div>
+    );
   }
 
   const vetOptions = await APP.getDbPool().then(getVetFormOptions);

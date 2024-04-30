@@ -3,7 +3,6 @@
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
-import { buttonVariants } from "@/components/ui/button";
 import { IMG_PATH } from "@/lib/image-path";
 import { getMyLatestCall } from "@/lib/user/actions/get-my-latest-call";
 import { getMyAccount } from "@/lib/user/actions/get-my-account";
@@ -13,16 +12,11 @@ import Image from "next/image";
 
 import { capitalize } from "lodash";
 import { formatDateTime, SINGAPORE_TIME_ZONE } from "@/lib/utilities/bark-time";
-import Link from "next/link";
 import { BarkButton } from "@/components/bark/bark-button";
 
 export default async function Page() {
   const actor = await getAuthenticatedUserActor();
-  if (!actor) {
-    redirect(RoutePath.USER_LOGIN_PAGE);
-  }
-  const account = await getMyAccount(actor);
-  if (!account) {
+  if (actor === null) {
     redirect(RoutePath.USER_LOGIN_PAGE);
   }
   const {
@@ -31,12 +25,27 @@ export default async function Page() {
     userName,
     userEmail,
     userPhoneNumber,
-  } = account;
+  } = await getMyAccount(actor).then(({ result, error }) => {
+    if (error !== undefined) {
+      redirect(RoutePath.USER_LOGIN_PAGE);
+    }
+    return result;
+  });
 
-  let latestCall = (await getMyLatestCall(actor))?.userLastContactedTime;
-  const latestCallText = latestCall
-    ? formatDistanceStrict(latestCall, new Date(), { addSuffix: true })
-    : "N.A";
+  const latestCallText = await getMyLatestCall(actor).then(
+    ({ result, error }) => {
+      if (error !== undefined) {
+        return "N.A";
+      }
+      const { userLastContactedTime } = result;
+      if (userLastContactedTime === null) {
+        return "N.A";
+      }
+      return formatDistanceStrict(userLastContactedTime, new Date(), {
+        addSuffix: true,
+      });
+    },
+  );
 
   const userCreationTimeText = formatDateTime(userCreationTime, {
     format: "dd MMM yyyy",

@@ -2,32 +2,24 @@
 
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
-import { getMyAccount } from "@/lib/user/actions/get-my-account";
 import { updateMyAccountDetails } from "@/lib/user/actions/update-my-account-details";
 import { MyAccountDetailsUpdate } from "@/lib/user/user-models";
+import { CODE } from "@/lib/utilities/bark-code";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-export type UpdateAccountDetailsResponse =
-  | "STATUS_204_UPDATED"
-  | "STATUS_500_INTERNAL_SERVER_ERROR";
-
-export async function updateAccountDetails(
+export async function postMyAccountDetails(
   request: MyAccountDetailsUpdate,
-): Promise<UpdateAccountDetailsResponse> {
+): Promise<typeof CODE.OK | typeof CODE.FAILED> {
   const actor = await getAuthenticatedUserActor();
-  if (!actor) {
-    redirect(RoutePath.USER_LOGIN_PAGE);
-  }
-  const account = await getMyAccount(actor);
-  if (!account) {
+  if (actor === null) {
     redirect(RoutePath.USER_LOGIN_PAGE);
   }
 
   const response = await updateMyAccountDetails(actor, request);
-  if (response === "OK_UPDATED") {
+  if (response === CODE.OK) {
     revalidatePath("/user/(logged-in)/my-account");
-    return "STATUS_204_UPDATED";
+    return CODE.OK;
   }
-  return "STATUS_500_INTERNAL_SERVER_ERROR";
+  return CODE.FAILED;
 }

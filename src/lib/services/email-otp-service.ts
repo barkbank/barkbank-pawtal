@@ -4,6 +4,7 @@ import { AccountType } from "../auth-models";
 import { UserActorFactory } from "../user/user-actor-factory";
 import { VetActorFactory } from "../vet/vet-actor-factory";
 import { AdminActorFactory } from "../admin/admin-actor-factory";
+import { CODE } from "../utilities/bark-code";
 
 export type EmailOtpServiceConfig = {
   emailService: EmailService;
@@ -19,8 +20,6 @@ type Request = {
   accountType: AccountType | null;
 };
 
-type ResponseCode = "OK" | "NO_ACCOUNT" | "SEND_FAILED";
-
 export class EmailOtpService {
   private config: EmailOtpServiceConfig;
 
@@ -28,9 +27,13 @@ export class EmailOtpService {
     this.config = config;
   }
 
-  public async sendOtp(request: Request): Promise<ResponseCode> {
+  public async sendOtp(
+    request: Request,
+  ): Promise<
+    typeof CODE.OK | typeof CODE.ERROR_ACCOUNT_NOT_FOUND | typeof CODE.FAILED
+  > {
     const accountCheck = await this.checkAccountExists(request);
-    if (accountCheck !== "OK") {
+    if (accountCheck !== CODE.OK) {
       return accountCheck;
     }
     const { otpService, sender, emailService } = this.config;
@@ -45,14 +48,14 @@ export class EmailOtpService {
     };
     const { error } = await emailService.sendEmail(email);
     if (error !== undefined) {
-      return "SEND_FAILED";
+      return CODE.FAILED;
     }
-    return "OK";
+    return CODE.OK;
   }
 
   private async checkAccountExists(
     request: Request,
-  ): Promise<"OK" | "NO_ACCOUNT"> {
+  ): Promise<typeof CODE.OK | typeof CODE.ERROR_ACCOUNT_NOT_FOUND> {
     const { accountType } = request;
     if (accountType === AccountType.USER) {
       return this.checkUserAccountExists(request);
@@ -64,35 +67,35 @@ export class EmailOtpService {
       return this.checkAdminAccountExists(request);
     }
     if (accountType === null) {
-      return "OK";
+      return CODE.OK;
     }
-    return "NO_ACCOUNT";
+    return CODE.ERROR_ACCOUNT_NOT_FOUND;
   }
 
   private async checkUserAccountExists(
     request: Request,
-  ): Promise<"OK" | "NO_ACCOUNT"> {
+  ): Promise<typeof CODE.OK | typeof CODE.ERROR_ACCOUNT_NOT_FOUND> {
     const { userActorFactory } = this.config;
     const { emailAddress } = request;
     const actor = await userActorFactory.getUserActor(emailAddress);
-    return actor === null ? "NO_ACCOUNT" : "OK";
+    return actor === null ? CODE.ERROR_ACCOUNT_NOT_FOUND : CODE.OK;
   }
 
   private async checkVetAccountExists(
     request: Request,
-  ): Promise<"OK" | "NO_ACCOUNT"> {
+  ): Promise<typeof CODE.OK | typeof CODE.ERROR_ACCOUNT_NOT_FOUND> {
     const { vetActorFactory } = this.config;
     const { emailAddress } = request;
     const actor = await vetActorFactory.getVetActor(emailAddress);
-    return actor === null ? "NO_ACCOUNT" : "OK";
+    return actor === null ? CODE.ERROR_ACCOUNT_NOT_FOUND : CODE.OK;
   }
 
   private async checkAdminAccountExists(
     request: Request,
-  ): Promise<"OK" | "NO_ACCOUNT"> {
+  ): Promise<typeof CODE.OK | typeof CODE.ERROR_ACCOUNT_NOT_FOUND> {
     const { adminActorFactory } = this.config;
     const { emailAddress } = request;
     const actor = await adminActorFactory.getAdminActor(emailAddress);
-    return actor === null ? "NO_ACCOUNT" : "OK";
+    return actor === null ? CODE.ERROR_ACCOUNT_NOT_FOUND : CODE.OK;
   }
 }
