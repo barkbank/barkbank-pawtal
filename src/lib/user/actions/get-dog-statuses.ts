@@ -51,10 +51,7 @@ type Row = {
 async function fetchRow(
   ctx: Context,
 ): Promise<
-  Result<
-    Row,
-    typeof CODE.ERROR_DOG_NOT_FOUND | typeof CODE.DB_QUERY_FAILURE
-  >
+  Result<Row, typeof CODE.ERROR_DOG_NOT_FOUND | typeof CODE.DB_QUERY_FAILURE>
 > {
   const { actor, dogId } = ctx;
   const { dbPool } = actor.getParams();
