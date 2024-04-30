@@ -68,10 +68,4 @@ export const CODE = {
    * When a database query failed.
    */
   DB_QUERY_FAILURE: "DB_QUERY_FAILURE",
-
-  /**
-   * An exception happned.
-   */
-  // WIP: just use FAILED.
-  EXCEPTION: "EXCEPTION",
 } as const;

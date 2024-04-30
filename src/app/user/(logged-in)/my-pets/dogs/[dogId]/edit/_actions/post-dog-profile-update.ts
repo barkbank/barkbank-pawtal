@@ -17,7 +17,7 @@ export async function postDogProfileUpdate(args: {
   | typeof CODE.ERROR_WRONG_OWNER
   | typeof CODE.ERROR_DOG_NOT_FOUND
   | typeof CODE.DB_QUERY_FAILURE
-  | typeof CODE.EXCEPTION
+  | typeof CODE.FAILED
 > {
   const { dogId, dogProfile } = args;
   const actor = await getAuthenticatedUserActor();
@@ -25,9 +25,9 @@ export async function postDogProfileUpdate(args: {
     return CODE.ERROR_NOT_LOGGED_IN;
   }
   const res = await updateDogProfile(actor, dogId, dogProfile);
-  if (res === CODE.OK) {
-    revalidatePath(RoutePath.USER_MY_PETS, "layout");
-    return CODE.OK;
+  if (res !== CODE.OK) {
+    return res;
   }
-  return res;
+  revalidatePath(RoutePath.USER_MY_PETS, "layout");
+  return CODE.OK;
 }

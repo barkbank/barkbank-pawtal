@@ -30,7 +30,7 @@ export async function updateDogProfile(
   | typeof CODE.ERROR_WRONG_OWNER
   | typeof CODE.ERROR_DOG_NOT_FOUND
   | typeof CODE.DB_QUERY_FAILURE
-  | typeof CODE.EXCEPTION
+  | typeof CODE.FAILED
 > {
   const { dbPool } = actor.getParams();
   const ctx: Context = { actor, dogId, dogProfile };
@@ -178,7 +178,7 @@ async function updateDogFields(
 async function updateVetPreference(
   conn: PoolClient,
   ctx: Context,
-): Promise<typeof CODE.OK | typeof CODE.EXCEPTION> {
+): Promise<typeof CODE.OK | typeof CODE.FAILED> {
   try {
     const { dogId, dogProfile } = ctx;
     const { dogPreferredVetId: vetId } = dogProfile;
@@ -188,6 +188,6 @@ async function updateVetPreference(
     }
     return CODE.OK;
   } catch {
-    return CODE.EXCEPTION;
+    return CODE.FAILED;
   }
 }
