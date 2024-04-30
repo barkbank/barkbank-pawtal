@@ -15,6 +15,7 @@ type ResponseCode =
   | "ERROR_MISSING_DOG"
   | "FAILURE_DB_UPDATE";
 
+// WIP: rename to postDogProfileUpdate
 export async function updateDogProfileAction(args: {
   dogId: string;
   dogProfile: DogProfile;

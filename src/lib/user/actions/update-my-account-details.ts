@@ -1,8 +1,8 @@
 import {
   dbBegin,
   dbCommit,
-  dbQuery,
   dbRelease,
+  dbResultQuery,
   dbRollback,
 } from "@/lib/data/db-utils";
 import { UserActor } from "../user-actor";
@@ -16,13 +16,14 @@ type Context = {
   update: MyAccountDetailsUpdate;
 };
 
-type ResponseCode = typeof BARK_CODE.OK | typeof BARK_CODE.FAILED;
-
-// WIP: inline the response codes
 export async function updateMyAccountDetails(
   actor: UserActor,
   update: MyAccountDetailsUpdate,
-): Promise<ResponseCode> {
+): Promise<
+  | typeof BARK_CODE.OK
+  | typeof BARK_CODE.ERROR_USER_NOT_FOUND
+  | typeof BARK_CODE.FAILURE_DB_QUERY
+> {
   const ctx: Context = { actor, update };
   const { dbPool } = actor.getParams();
   const conn = await dbPool.connect();
@@ -43,11 +44,16 @@ export async function updateMyAccountDetails(
 async function updateAccountFields(
   conn: PoolClient,
   ctx: Context,
-): Promise<ResponseCode> {
+): Promise<
+  | typeof BARK_CODE.OK
+  | typeof BARK_CODE.ERROR_USER_NOT_FOUND
+  | typeof BARK_CODE.FAILURE_DB_QUERY
+> {
   const { actor, update } = ctx;
   const { userId, userMapper } = actor.getParams();
   const { userName, userPhoneNumber, userResidency } = update;
 
+  // TODO: this query does not use the "conn" and so it is not part of the transaction.
   const userPii = guaranteed(await actor.getOwnUserPii());
   const userEmail = userPii.userEmail;
 
@@ -67,16 +73,16 @@ async function updateAccountFields(
     RETURNING
       1
   `;
-  // WIP: use dbResultQuery
-  const res = await dbQuery(conn, sql, [
+  const { result, error } = await dbResultQuery(conn, sql, [
     userId,
     userResidency,
     userEncryptedPii,
   ]);
-
-  if (res.rows.length !== 1) {
-    // WIP: this should be failure user not found
-    return BARK_CODE.FAILED;
+  if (error !== undefined) {
+    return error;
+  }
+  if (result.rows.length !== 1) {
+    return BARK_CODE.ERROR_USER_NOT_FOUND;
   }
   return BARK_CODE.OK;
 }

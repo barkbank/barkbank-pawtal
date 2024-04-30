@@ -8,6 +8,11 @@ export const BARK_CODE = {
   OK: "OK",
 
   /**
+   * When an operation failed and there is no more detail than that.
+   */
+  FAILED: "FAILED",
+
+  /**
    * When the caller is not logged-in at all or as the wrong correct account
    * type.
    */
@@ -36,10 +41,4 @@ export const BARK_CODE = {
    * When a database query failed.
    */
   FAILURE_DB_QUERY: "FAILURE_DB_QUERY",
-
-  // WIP: Rename to ERROR_EXCEPTION
-  /**
-   * When an exception is caught.
-   */
-  FAILED: "FAILED",
 } as const;
