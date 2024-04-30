@@ -10,6 +10,7 @@ import { submitDog } from "../_actions/submit-dog";
 import { useRouter } from "next/navigation";
 import { RoutePath } from "@/lib/route-path";
 import { Err, Ok, Result } from "@/lib/utilities/result";
+import { CODE } from "@/lib/utilities/bark-code";
 
 export default function AddDogForm(props: { vetOptions: BarkFormOption[] }) {
   const router = useRouter();
@@ -31,10 +32,11 @@ export default function AddDogForm(props: { vetOptions: BarkFormOption[] }) {
       ...otherFields,
     };
     const { error } = await submitDog(dogProfile);
+    if (error === CODE.ERROR_NOT_LOGGED_IN) {
+      router.push(RoutePath.USER_LOGIN_PAGE);
+      return Err(error);
+    }
     if (error !== undefined) {
-      if (error === "ERROR_UNAUTHORIZED") {
-        router.push(RoutePath.USER_LOGIN_PAGE);
-      }
       return Err(error);
     }
     router.push(RoutePath.USER_MY_PETS);

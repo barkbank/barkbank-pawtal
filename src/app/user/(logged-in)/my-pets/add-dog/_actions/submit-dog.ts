@@ -4,21 +4,27 @@ import { getAuthenticatedUserActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { addMyDog } from "@/lib/user/actions/add-my-dog";
 import { DogProfile } from "@/lib/user/user-models";
-import { Err, Result } from "@/lib/utilities/result";
+import { CODE } from "@/lib/utilities/bark-code";
+import { Err, Ok, Result } from "@/lib/utilities/result";
 import { revalidatePath } from "next/cache";
 
-// WIP: Use BARK_CODE
 // WIP: rename to postDogProfile
 export async function submitDog(
   dogProfile: DogProfile,
-): Promise<Result<{ dogId: string }, "FAILED" | "ERROR_UNAUTHORIZED">> {
+): Promise<
+  Result<
+    { dogId: string },
+    typeof CODE.ERROR_NOT_LOGGED_IN | typeof CODE.FAILED
+  >
+> {
   const actor = await getAuthenticatedUserActor();
   if (actor === null) {
-    return Err("ERROR_UNAUTHORIZED");
+    return Err(CODE.ERROR_NOT_LOGGED_IN);
   }
-  const res = await addMyDog(actor, dogProfile);
-  if (res.error === undefined) {
-    revalidatePath(RoutePath.USER_MY_PETS, "layout");
+  const { result, error } = await addMyDog(actor, dogProfile);
+  if (error !== undefined) {
+    return Err(CODE.FAILED);
   }
-  return res;
+  revalidatePath(RoutePath.USER_MY_PETS, "layout");
+  return Ok(result);
 }

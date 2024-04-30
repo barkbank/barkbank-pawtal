@@ -14,7 +14,7 @@ export async function addMyDog(
     {
       dogId: string;
     },
-    typeof CODE.EXCEPTION
+    typeof CODE.FAILED
   >
 > {
   const { userId, dbPool, dogMapper } = actor.getParams();
@@ -33,7 +33,7 @@ export async function addMyDog(
     await dbCommit(conn);
     return Ok({ dogId });
   } catch {
-    return Err(CODE.EXCEPTION);
+    return Err(CODE.FAILED);
   } finally {
     await dbRollback(conn);
     await dbRelease(conn);

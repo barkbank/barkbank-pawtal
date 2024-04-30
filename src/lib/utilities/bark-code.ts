@@ -10,7 +10,6 @@ export const CODE = {
   /**
    * When an operation failed and there is no more detail than that.
    */
-  // WIP: some of these are exceptions.
   FAILED: "FAILED",
 
   /**
@@ -68,5 +67,6 @@ export const CODE = {
   /**
    * An exception happned.
    */
+  // WIP: just use FAILED.
   EXCEPTION: "EXCEPTION",
 } as const;
