@@ -14,7 +14,7 @@ import { updateSubProfile } from "@/lib/user/actions/update-sub-profile";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 
 describe("updateSubProfile", () => {
-  it("should return OK_UPDATED when successfully updated dog details", async () => {
+  it("should return OK when successfully updated dog details", async () => {
     await withDb(async (dbPool) => {
       // GIVEN users u1 with dog d1 and preferred vet v1
       const u1 = await insertUser(1, dbPool);
@@ -41,7 +41,7 @@ describe("updateSubProfile", () => {
       const res = await updateSubProfile(actor1, d1.dogId, update);
 
       // THEN
-      expect(res).toEqual("OK_UPDATED");
+      expect(res).toEqual("OK");
       const { subProfile, profileModificationTime } = await fetchDogInfo(
         dbPool,
         d1.dogId,
@@ -52,7 +52,7 @@ describe("updateSubProfile", () => {
       );
     });
   });
-  it("should return ERROR_UNAUTHORIZED when user does not own the dog", async () => {
+  it("should return ERROR_WRONG_OWNER when user does not own the dog", async () => {
     await withDb(async (dbPool) => {
       const u1 = await insertUser(1, dbPool);
       const d1 = await insertDog(1, u1.userId, dbPool);
@@ -62,27 +62,27 @@ describe("updateSubProfile", () => {
       const update = _getSubProfile();
       const actor = getUserActor(dbPool, u2.userId);
       const res = await updateSubProfile(actor, d1.dogId, update);
-      expect(res).toEqual("ERROR_UNAUTHORIZED");
+      expect(res).toEqual("ERROR_WRONG_OWNER");
     });
   });
-  it("should return ERROR_MISSING_REPORT when dog does not have an existing report", async () => {
+  it("should return ERROR_SHOULD_UPDATE_FULL_PROFILE when dog does not have an existing report", async () => {
     await withDb(async (dbPool) => {
       const u1 = await insertUser(1, dbPool);
       const d1 = await insertDog(1, u1.userId, dbPool);
       const update = _getSubProfile();
       const actor = getUserActor(dbPool, u1.userId);
       const res = await updateSubProfile(actor, d1.dogId, update);
-      expect(res).toEqual("ERROR_MISSING_REPORT");
+      expect(res).toEqual("ERROR_SHOULD_UPDATE_FULL_PROFILE");
     });
   });
-  it("should return ERROR_MISSING_DOG dog not found", async () => {
+  it("should return ERROR_DOG_NOT_FOUND dog not found", async () => {
     await withDb(async (dbPool) => {
       const u1 = await insertUser(1, dbPool);
       const unknownDogId = "123";
       const update = _getSubProfile();
       const actor = getUserActor(dbPool, u1.userId);
       const res = await updateSubProfile(actor, unknownDogId, update);
-      expect(res).toEqual("ERROR_MISSING_DOG");
+      expect(res).toEqual("ERROR_DOG_NOT_FOUND");
     });
   });
 });

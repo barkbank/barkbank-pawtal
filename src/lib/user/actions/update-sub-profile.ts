@@ -4,22 +4,15 @@ import { SubProfile } from "../user-models";
 import {
   dbBegin,
   dbCommit,
-  dbQuery,
   dbRelease,
+  dbResultQuery,
   dbRollback,
 } from "@/lib/data/db-utils";
 import {
   dbDeleteDogVetPreferences,
   dbInsertDogVetPreference,
 } from "@/lib/data/db-dogs";
-
-// WIP: Use BARK_CODE
-type Response =
-  | "OK_UPDATED"
-  | "ERROR_UNAUTHORIZED"
-  | "ERROR_MISSING_DOG"
-  | "ERROR_MISSING_REPORT"
-  | "FAILURE_DB_UPDATE";
+import { BARK_CODE } from "@/lib/utilities/bark-code";
 
 type Context = {
   actor: UserActor;
@@ -27,32 +20,41 @@ type Context = {
   subProfile: SubProfile;
 };
 
-// WIP: inline the response codes
 export async function updateSubProfile(
   actor: UserActor,
   dogId: string,
   subProfile: SubProfile,
-): Promise<Response> {
+): Promise<
+  | typeof BARK_CODE.OK
+  | typeof BARK_CODE.DB_QUERY_FAILURE
+  | typeof BARK_CODE.ERROR_WRONG_OWNER
+  | typeof BARK_CODE.ERROR_DOG_NOT_FOUND
+  | typeof BARK_CODE.ERROR_SHOULD_UPDATE_FULL_PROFILE
+  | typeof BARK_CODE.EXCEPTION
+> {
   const ctx: Context = { actor, dogId, subProfile };
   const { dbPool } = actor.getParams();
   const conn = await dbPool.connect();
   try {
     await dbBegin(conn);
     const resOwnership = await checkOwnership(conn, ctx);
-    if (resOwnership !== "OK") {
+    if (resOwnership !== BARK_CODE.OK) {
       return resOwnership;
     }
     const resCheckReports = await checkExistingReport(conn, ctx);
-    if (resCheckReports !== "OK") {
+    if (resCheckReports !== BARK_CODE.OK) {
       return resCheckReports;
     }
     const resUpdate = await updateDogFields(conn, ctx);
-    if (resUpdate !== "OK") {
+    if (resUpdate !== BARK_CODE.OK) {
       return resUpdate;
     }
-    await updateVetPreference(conn, ctx);
+    const resPref = await updateVetPreference(conn, ctx);
+    if (resPref !== BARK_CODE.OK) {
+      return resPref;
+    }
     await dbCommit(conn);
-    return "OK_UPDATED";
+    return BARK_CODE.OK;
   } finally {
     await dbRollback(conn);
     await dbRelease(conn);
@@ -62,45 +64,70 @@ export async function updateSubProfile(
 async function checkOwnership(
   conn: PoolClient,
   ctx: Context,
-): Promise<"OK" | "ERROR_MISSING_DOG" | "ERROR_UNAUTHORIZED"> {
+): Promise<
+  | typeof BARK_CODE.OK
+  | typeof BARK_CODE.DB_QUERY_FAILURE
+  | typeof BARK_CODE.ERROR_DOG_NOT_FOUND
+  | typeof BARK_CODE.ERROR_WRONG_OWNER
+> {
   const { actor, dogId, subProfile } = ctx;
   const sql = `SELECT user_id as "ownerUserId" FROM dogs WHERE dog_id = $1`;
-  // WIP: use dbResultQuery
-  const res = await dbQuery<{ ownerUserId: string }>(conn, sql, [dogId]);
-  if (res.rows.length === 0) {
-    return "ERROR_MISSING_DOG";
+  const { result, error } = await dbResultQuery<{ ownerUserId: string }>(
+    conn,
+    sql,
+    [dogId],
+  );
+  if (error !== undefined) {
+    return error;
   }
-  const { ownerUserId } = res.rows[0];
+  if (result.rows.length === 0) {
+    return BARK_CODE.ERROR_DOG_NOT_FOUND;
+  }
+  const { ownerUserId } = result.rows[0];
   const isOwner = actor.getUserId() === ownerUserId;
   if (!isOwner) {
-    return "ERROR_UNAUTHORIZED";
+    return BARK_CODE.ERROR_WRONG_OWNER;
   }
-  return "OK";
+  return BARK_CODE.OK;
 }
 
 async function checkExistingReport(
   conn: PoolClient,
   ctx: Context,
-): Promise<"OK" | "ERROR_MISSING_REPORT"> {
+): Promise<
+  | typeof BARK_CODE.OK
+  | typeof BARK_CODE.DB_QUERY_FAILURE
+  | typeof BARK_CODE.ERROR_SHOULD_UPDATE_FULL_PROFILE
+> {
   const { dogId, subProfile } = ctx;
   const sql = `
   SELECT COUNT(1)::integer as "numReports"
   FROM reports
   WHERE dog_id = $1
   `;
-  // WIP: use dbResultQuery
-  const res = await dbQuery<{ numReports: number }>(conn, sql, [dogId]);
-  const { numReports } = res.rows[0];
-  if (numReports === 0) {
-    return "ERROR_MISSING_REPORT";
+  const { result, error } = await dbResultQuery<{ numReports: number }>(
+    conn,
+    sql,
+    [dogId],
+  );
+  if (error !== undefined) {
+    return error;
   }
-  return "OK";
+  const { numReports } = result.rows[0];
+  if (numReports === 0) {
+    return BARK_CODE.ERROR_SHOULD_UPDATE_FULL_PROFILE;
+  }
+  return BARK_CODE.OK;
 }
 
 async function updateDogFields(
   conn: PoolClient,
   ctx: Context,
-): Promise<"OK" | "FAILURE_DB_UPDATE"> {
+): Promise<
+  | typeof BARK_CODE.OK
+  | typeof BARK_CODE.DB_QUERY_FAILURE
+  | typeof BARK_CODE.ERROR_DOG_NOT_FOUND
+> {
   const { dogId, subProfile, actor } = ctx;
   const { dogMapper } = actor.getParams();
   const { dogName, dogWeightKg, dogEverPregnant, dogEverReceivedTransfusion } =
@@ -120,30 +147,35 @@ async function updateDogFields(
     dog_id = $1
   RETURNING 1
   `;
-  // WIP: use dbResultQuery
-  const res = await dbQuery(conn, sql, [
+  const { result, error } = await dbResultQuery(conn, sql, [
     dogId,
     dogEncryptedOii,
     dogWeightKg,
     dogEverPregnant,
     dogEverReceivedTransfusion,
   ]);
-  if (res.rows.length !== 1) {
-    return "FAILURE_DB_UPDATE";
+  if (error !== undefined) {
+    return error;
   }
-  return "OK";
+  if (result.rows.length !== 1) {
+    return BARK_CODE.ERROR_DOG_NOT_FOUND;
+  }
+  return BARK_CODE.OK;
 }
 
-// WIP: Use ERROR_EXCEPTION here
 async function updateVetPreference(
   conn: PoolClient,
   ctx: Context,
-): Promise<"OK"> {
-  const { dogId, subProfile } = ctx;
-  const { dogPreferredVetId: vetId } = subProfile;
-  await dbDeleteDogVetPreferences(conn, dogId);
-  if (vetId !== "") {
-    await dbInsertDogVetPreference(conn, dogId, vetId);
+): Promise<typeof BARK_CODE.OK | typeof BARK_CODE.EXCEPTION> {
+  try {
+    const { dogId, subProfile } = ctx;
+    const { dogPreferredVetId: vetId } = subProfile;
+    await dbDeleteDogVetPreferences(conn, dogId);
+    if (vetId !== "") {
+      await dbInsertDogVetPreference(conn, dogId, vetId);
+    }
+    return BARK_CODE.OK;
+  } catch {
+    return BARK_CODE.EXCEPTION;
   }
-  return "OK";
 }
