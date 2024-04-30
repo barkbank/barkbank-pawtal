@@ -60,46 +60,55 @@ const registrationSteps = [
 const faqs = [
   {
     question: "How often can my dog donate blood?",
+    questionSubtext: "Things on a very small scale behave like nothing",
     answer:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Nunc sed augue lacus viverra vitae congue eu. Quam nulla porttitor massa id neque. Laoreet non curabitur gravida arcu ac. Eget duis at tellus at urna condimentum mattis. Cursus mattis molestie a iaculis. Egestas tellus rutrum tellus pellentesque eu tincidunt tortor. Amet massa vitae tortor condimentum lacinia quis vel eros. Feugiat nisl pretium fusce id velit ut. Diam vel quam elementum pulvinar etiam non quam lacus. Etiam non quam lacus suspendisse faucibus. Tempus imperdiet nulla malesuada pellentesque.",
   },
   {
     question: "How often can my dog donate blood?",
+    questionSubtext: "Things on a very small scale behave like nothing",
     answer:
       "Dogs can donate blood every 3 months. However, the frequency of donation is subject to the discretion of the attending veterinarian.",
   },
   {
     question: "How often can my dog donate blood?",
+    questionSubtext: "Things on a very small scale behave like nothing",
     answer:
       "Dogs can donate blood every 3 months. However, the frequency of donation is subject to the discretion of the attending veterinarian.",
   },
   {
     question: "How often can my dog donate blood?",
+    questionSubtext: "Things on a very small scale behave like nothing",
     answer:
       "Dogs can donate blood every 3 months. However, the frequency of donation is subject to the discretion of the attending veterinarian.",
   },
   {
     question: "How often can my dog donate blood?",
+    questionSubtext: "Things on a very small scale behave like nothing",
     answer:
       "Dogs can donate blood every 3 months. However, the frequency of donation is subject to the discretion of the attending veterinarian.",
   },
   {
     question: "How often can my dog donate blood?",
+    questionSubtext: "Things on a very small scale behave like nothing",
     answer:
       "Dogs can donate blood every 3 months. However, the frequency of donation is subject to the discretion of the attending veterinarian.",
   },
   {
     question: "How often can my dog donate blood?",
+    questionSubtext: "Things on a very small scale behave like nothing",
     answer:
       "Dogs can donate blood every 3 months. However, the frequency of donation is subject to the discretion of the attending veterinarian.",
   },
   {
     question: "How often can my dog donate blood?",
+    questionSubtext: "Things on a very small scale behave like nothing",
     answer:
       "Dogs can donate blood every 3 months. However, the frequency of donation is subject to the discretion of the attending veterinarian.",
   },
   {
     question: "How often can my dog donate blood?",
+    questionSubtext: "Things on a very small scale behave like nothing",
     answer:
       "Dogs can donate blood every 3 months. However, the frequency of donation is subject to the discretion of the attending veterinarian.",
   },
@@ -177,7 +186,7 @@ export default async function Page() {
           <BarkH2>Frequently Asked Questions</BarkH2>
         </div>
         <div className="grid grid-cols-1 gap-[30px] sm:grid-cols-2 md:grid-cols-3">
-          {faqs.map(({ question, answer }) => (
+          {faqs.map(({ question, questionSubtext, answer }) => (
             <Accordion
               key={question}
               orientation="vertical"
@@ -190,7 +199,12 @@ export default async function Page() {
                 key={question}
                 value={answer}
               >
-                <AccordionTrigger>{question}</AccordionTrigger>
+                <AccordionTrigger>
+                  <div className="flex flex-col gap-y-1 text-start">
+                    <p className="font-bold">{question}</p>
+                    <p className="font-thin text-[grey]">{questionSubtext}</p>
+                  </div>
+                </AccordionTrigger>
                 <AccordionContent>{answer}</AccordionContent>
               </AccordionItem>
             </Accordion>
