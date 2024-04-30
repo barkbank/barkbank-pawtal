@@ -15,7 +15,7 @@ import { postMyAccountDetails } from "../_action/post-my-account-details";
 import { MyAccountDetailsUpdate } from "@/lib/user/user-models";
 import React from "react";
 import { BarkButton } from "@/components/bark/bark-button";
-import { BARK_CODE } from "@/lib/utilities/bark-code";
+import { CODE } from "@/lib/utilities/bark-code";
 
 const FORM_SCHEMA = z.object({
   userName: z.string().min(1, { message: "Name cannot be empty" }),
@@ -50,7 +50,7 @@ export default function AccountEditForm({
     const request: MyAccountDetailsUpdate = values;
 
     const response = await postMyAccountDetails(request);
-    if (response === BARK_CODE.OK) {
+    if (response === CODE.OK) {
       router.push(RoutePath.USER_MY_ACCOUNT_PAGE);
       return;
     }

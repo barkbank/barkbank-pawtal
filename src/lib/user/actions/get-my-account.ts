@@ -3,14 +3,14 @@ import { dbResultQuery } from "@/lib/data/db-utils";
 import { MyAccount } from "../user-models";
 import { UserResidency } from "@/lib/data/db-enums";
 import { Err, Ok, Result } from "@/lib/utilities/result";
-import { BARK_CODE } from "@/lib/utilities/bark-code";
+import { CODE } from "@/lib/utilities/bark-code";
 
 export async function getMyAccount(
   actor: UserActor,
 ): Promise<
   Result<
     MyAccount,
-    typeof BARK_CODE.ERROR_USER_NOT_FOUND | typeof BARK_CODE.DB_QUERY_FAILURE
+    typeof CODE.ERROR_USER_NOT_FOUND | typeof CODE.DB_QUERY_FAILURE
   >
 > {
   const { userId, dbPool, userMapper } = actor.getParams();
@@ -39,7 +39,7 @@ export async function getMyAccount(
     return Err(error);
   }
   if (res.rows.length !== 1) {
-    return Err(BARK_CODE.ERROR_USER_NOT_FOUND);
+    return Err(CODE.ERROR_USER_NOT_FOUND);
   }
   const { userHashedEmail, userEncryptedPii, ...otherFields } = res.rows[0];
 

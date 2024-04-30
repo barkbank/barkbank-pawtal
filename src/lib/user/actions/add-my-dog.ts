@@ -4,7 +4,7 @@ import { DogProfile } from "../user-models";
 import { dbBegin, dbCommit, dbRelease, dbRollback } from "@/lib/data/db-utils";
 import { DogSpec } from "@/lib/data/db-models";
 import { dbInsertDog, dbInsertDogVetPreference } from "@/lib/data/db-dogs";
-import { BARK_CODE } from "@/lib/utilities/bark-code";
+import { CODE } from "@/lib/utilities/bark-code";
 
 export async function addMyDog(
   actor: UserActor,
@@ -14,7 +14,7 @@ export async function addMyDog(
     {
       dogId: string;
     },
-    typeof BARK_CODE.EXCEPTION
+    typeof CODE.EXCEPTION
   >
 > {
   const { userId, dbPool, dogMapper } = actor.getParams();
@@ -33,7 +33,7 @@ export async function addMyDog(
     await dbCommit(conn);
     return Ok({ dogId });
   } catch {
-    return Err(BARK_CODE.EXCEPTION);
+    return Err(CODE.EXCEPTION);
   } finally {
     await dbRollback(conn);
     await dbRelease(conn);

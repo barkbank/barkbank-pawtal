@@ -9,7 +9,7 @@ import { UserActor } from "../user-actor";
 import { MyAccountDetailsUpdate } from "../user-models";
 import { PoolClient } from "pg";
 import { guaranteed } from "@/lib/utilities/bark-utils";
-import { BARK_CODE } from "@/lib/utilities/bark-code";
+import { CODE } from "@/lib/utilities/bark-code";
 
 type Context = {
   actor: UserActor;
@@ -20,9 +20,9 @@ export async function updateMyAccountDetails(
   actor: UserActor,
   update: MyAccountDetailsUpdate,
 ): Promise<
-  | typeof BARK_CODE.OK
-  | typeof BARK_CODE.ERROR_USER_NOT_FOUND
-  | typeof BARK_CODE.DB_QUERY_FAILURE
+  | typeof CODE.OK
+  | typeof CODE.ERROR_USER_NOT_FOUND
+  | typeof CODE.DB_QUERY_FAILURE
 > {
   const ctx: Context = { actor, update };
   const { dbPool } = actor.getParams();
@@ -30,11 +30,11 @@ export async function updateMyAccountDetails(
   try {
     await dbBegin(conn);
     const resUpdate = await updateAccountFields(conn, ctx);
-    if (resUpdate !== BARK_CODE.OK) {
+    if (resUpdate !== CODE.OK) {
       return resUpdate;
     }
     await dbCommit(conn);
-    return BARK_CODE.OK;
+    return CODE.OK;
   } finally {
     await dbRollback(conn);
     await dbRelease(conn);
@@ -45,9 +45,9 @@ async function updateAccountFields(
   conn: PoolClient,
   ctx: Context,
 ): Promise<
-  | typeof BARK_CODE.OK
-  | typeof BARK_CODE.ERROR_USER_NOT_FOUND
-  | typeof BARK_CODE.DB_QUERY_FAILURE
+  | typeof CODE.OK
+  | typeof CODE.ERROR_USER_NOT_FOUND
+  | typeof CODE.DB_QUERY_FAILURE
 > {
   const { actor, update } = ctx;
   const { userId, userMapper } = actor.getParams();
@@ -82,7 +82,7 @@ async function updateAccountFields(
     return error;
   }
   if (result.rows.length !== 1) {
-    return BARK_CODE.ERROR_USER_NOT_FOUND;
+    return CODE.ERROR_USER_NOT_FOUND;
   }
-  return BARK_CODE.OK;
+  return CODE.OK;
 }

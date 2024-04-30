@@ -8,7 +8,7 @@ import {
   ServiceStatus,
 } from "@/lib/data/db-enums";
 import { dbResultQuery } from "@/lib/data/db-utils";
-import { BARK_CODE } from "@/lib/utilities/bark-code";
+import { CODE } from "@/lib/utilities/bark-code";
 
 export async function getDogStatuses(
   actor: UserActor,
@@ -16,9 +16,9 @@ export async function getDogStatuses(
 ): Promise<
   Result<
     DogStatuses,
-    | typeof BARK_CODE.ERROR_DOG_NOT_FOUND
-    | typeof BARK_CODE.ERROR_WRONG_OWNER
-    | typeof BARK_CODE.DB_QUERY_FAILURE
+    | typeof CODE.ERROR_DOG_NOT_FOUND
+    | typeof CODE.ERROR_WRONG_OWNER
+    | typeof CODE.DB_QUERY_FAILURE
   >
 > {
   const { userId } = actor.getParams();
@@ -29,7 +29,7 @@ export async function getDogStatuses(
   }
   const { ownerUserId, ...otherFields } = result;
   if (ownerUserId !== userId) {
-    return Err(BARK_CODE.ERROR_WRONG_OWNER);
+    return Err(CODE.ERROR_WRONG_OWNER);
   }
   return Ok(otherFields);
 }
@@ -53,7 +53,7 @@ async function fetchRow(
 ): Promise<
   Result<
     Row,
-    typeof BARK_CODE.ERROR_DOG_NOT_FOUND | typeof BARK_CODE.DB_QUERY_FAILURE
+    typeof CODE.ERROR_DOG_NOT_FOUND | typeof CODE.DB_QUERY_FAILURE
   >
 > {
   const { actor, dogId } = ctx;
@@ -85,7 +85,7 @@ async function fetchRow(
     return Err(error);
   }
   if (res.rows.length == 0) {
-    return Err(BARK_CODE.ERROR_DOG_NOT_FOUND);
+    return Err(CODE.ERROR_DOG_NOT_FOUND);
   }
   return Ok(res.rows[0]);
 }

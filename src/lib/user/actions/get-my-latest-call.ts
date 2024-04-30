@@ -2,14 +2,14 @@ import { UserActor } from "../user-actor";
 import { dbResultQuery } from "@/lib/data/db-utils";
 import { MyLastContactedTime } from "../user-models";
 import { Err, Ok, Result } from "@/lib/utilities/result";
-import { BARK_CODE } from "@/lib/utilities/bark-code";
+import { CODE } from "@/lib/utilities/bark-code";
 
 export async function getMyLatestCall(
   actor: UserActor,
 ): Promise<
   Result<
     MyLastContactedTime,
-    typeof BARK_CODE.ERROR_USER_NOT_FOUND | typeof BARK_CODE.DB_QUERY_FAILURE
+    typeof CODE.ERROR_USER_NOT_FOUND | typeof CODE.DB_QUERY_FAILURE
   >
 > {
   const { userId, dbPool } = actor.getParams();
@@ -35,7 +35,7 @@ export async function getMyLatestCall(
     return Err(error);
   }
   if (res.rows.length === 0) {
-    return Err(BARK_CODE.ERROR_USER_NOT_FOUND);
+    return Err(CODE.ERROR_USER_NOT_FOUND);
   }
   return Ok(res.rows[0]);
 }

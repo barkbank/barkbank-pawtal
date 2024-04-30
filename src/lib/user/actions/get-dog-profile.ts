@@ -7,7 +7,7 @@ import {
   DogGender,
   YesNoUnknown,
 } from "@/lib/data/db-enums";
-import { BARK_CODE } from "@/lib/utilities/bark-code";
+import { CODE } from "@/lib/utilities/bark-code";
 
 export async function getDogProfile(
   actor: UserActor,
@@ -15,9 +15,9 @@ export async function getDogProfile(
 ): Promise<
   Result<
     DogProfile,
-    | typeof BARK_CODE.ERROR_DOG_NOT_FOUND
-    | typeof BARK_CODE.ERROR_WRONG_OWNER
-    | typeof BARK_CODE.DB_QUERY_FAILURE
+    | typeof CODE.ERROR_DOG_NOT_FOUND
+    | typeof CODE.ERROR_WRONG_OWNER
+    | typeof CODE.DB_QUERY_FAILURE
   >
 > {
   const { dbPool, userId, dogMapper } = actor.getParams();
@@ -63,11 +63,11 @@ export async function getDogProfile(
     return Err(error);
   }
   if (res.rows.length === 0) {
-    return Err(BARK_CODE.ERROR_DOG_NOT_FOUND);
+    return Err(CODE.ERROR_DOG_NOT_FOUND);
   }
   const { dogOwnerId, dogEncryptedOii, ...otherFields } = res.rows[0];
   if (dogOwnerId !== userId) {
-    return Err(BARK_CODE.ERROR_WRONG_OWNER);
+    return Err(CODE.ERROR_WRONG_OWNER);
   }
   const { dogName } = await dogMapper.mapDogSecureOiiToDogOii({
     dogEncryptedOii,

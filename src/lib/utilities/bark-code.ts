@@ -1,7 +1,7 @@
 /**
  * Standard codes for actor actions and server actions.
  */
-export const BARK_CODE = {
+export const CODE = {
   /**
    * Success
    */

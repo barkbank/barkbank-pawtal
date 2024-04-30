@@ -14,7 +14,7 @@ import GeneralDogForm, {
   DogFormData,
 } from "../../../../_components/general-dog-form";
 import { postDogProfileUpdate } from "../_actions/post-dog-profile-update";
-import { BARK_CODE } from "@/lib/utilities/bark-code";
+import { CODE } from "@/lib/utilities/bark-code";
 
 export default function EditDogProfileForm(props: {
   vetOptions: BarkFormOption[];
@@ -29,11 +29,11 @@ export default function EditDogProfileForm(props: {
   ): Promise<Result<true, string>> {
     const dogProfile = toDogProfile(values);
     const res = await postDogProfileUpdate({ dogId, dogProfile });
-    if (res === BARK_CODE.ERROR_NOT_LOGGED_IN) {
+    if (res === CODE.ERROR_NOT_LOGGED_IN) {
       router.push(RoutePath.USER_LOGIN_PAGE);
       return Err(res);
     }
-    if (res !== BARK_CODE.OK) {
+    if (res !== CODE.OK) {
       return Err(res);
     }
     router.push(RoutePath.USER_MY_PETS);

@@ -1,7 +1,7 @@
 import { Pool, PoolClient, QueryResult, QueryResultRow } from "pg";
 import { SlowQueryService } from "./db-slow-query";
 import { Err, Ok, Result } from "../utilities/result";
-import { BARK_CODE } from "../utilities/bark-code";
+import { CODE } from "../utilities/bark-code";
 
 export type DbContext = Pool | PoolClient;
 
@@ -65,12 +65,12 @@ export async function dbResultQuery<T extends QueryResultRow = any>(
   ctx: DbContext,
   sql: string,
   params: any[],
-): Promise<Result<QueryResult<T>, typeof BARK_CODE.DB_QUERY_FAILURE>> {
+): Promise<Result<QueryResult<T>, typeof CODE.DB_QUERY_FAILURE>> {
   try {
     const result = await dbQuery<T>(ctx, sql, params);
     return Ok(result);
   } catch {
-    return Err(BARK_CODE.DB_QUERY_FAILURE);
+    return Err(CODE.DB_QUERY_FAILURE);
   }
 }
 
