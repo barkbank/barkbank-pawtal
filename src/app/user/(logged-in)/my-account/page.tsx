@@ -19,22 +19,33 @@ export default async function Page() {
   if (actor === null) {
     redirect(RoutePath.USER_LOGIN_PAGE);
   }
-  const { result: account, error } = await getMyAccount(actor);
-  if (error !== undefined) {
-    redirect(RoutePath.USER_LOGIN_PAGE);
-  }
   const {
     userCreationTime,
     userResidency,
     userName,
     userEmail,
     userPhoneNumber,
-  } = account;
+  } = await getMyAccount(actor).then(({ result, error }) => {
+    if (error !== undefined) {
+      redirect(RoutePath.USER_LOGIN_PAGE);
+    }
+    return result;
+  });
 
-  let latestCall = (await getMyLatestCall(actor))?.userLastContactedTime;
-  const latestCallText = latestCall
-    ? formatDistanceStrict(latestCall, new Date(), { addSuffix: true })
-    : "N.A";
+  const latestCallText = await getMyLatestCall(actor).then(
+    ({ result, error }) => {
+      if (error !== undefined) {
+        return "N.A";
+      }
+      const { userLastContactedTime } = result;
+      if (userLastContactedTime === null) {
+        return "N.A";
+      }
+      return formatDistanceStrict(userLastContactedTime, new Date(), {
+        addSuffix: true,
+      });
+    },
+  );
 
   const userCreationTimeText = formatDateTime(userCreationTime, {
     format: "dd MMM yyyy",
