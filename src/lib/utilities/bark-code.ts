@@ -36,9 +36,8 @@ export const BARK_CODE = {
    */
   ERROR_WRONG_OWNER: "ERROR_WRONG_OWNER",
 
-  // WIP: Change to ERROR_DB_QUERY
   /**
    * When a database query failed.
    */
-  FAILURE_DB_QUERY: "FAILURE_DB_QUERY",
+  DB_QUERY_FAILURE: "DB_QUERY_FAILURE",
 } as const;

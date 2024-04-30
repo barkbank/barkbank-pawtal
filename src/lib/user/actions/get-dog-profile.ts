@@ -17,7 +17,7 @@ export async function getDogProfile(
     DogProfile,
     | typeof BARK_CODE.ERROR_DOG_NOT_FOUND
     | typeof BARK_CODE.ERROR_WRONG_OWNER
-    | typeof BARK_CODE.FAILURE_DB_QUERY
+    | typeof BARK_CODE.DB_QUERY_FAILURE
   >
 > {
   const { dbPool, userId, dogMapper } = actor.getParams();

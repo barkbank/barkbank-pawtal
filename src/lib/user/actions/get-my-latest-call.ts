@@ -9,7 +9,7 @@ export async function getMyLatestCall(
 ): Promise<
   Result<
     MyLastContactedTime,
-    typeof BARK_CODE.ERROR_USER_NOT_FOUND | typeof BARK_CODE.FAILURE_DB_QUERY
+    typeof BARK_CODE.ERROR_USER_NOT_FOUND | typeof BARK_CODE.DB_QUERY_FAILURE
   >
 > {
   const { userId, dbPool } = actor.getParams();

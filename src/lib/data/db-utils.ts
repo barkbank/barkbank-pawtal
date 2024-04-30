@@ -65,12 +65,12 @@ export async function dbResultQuery<T extends QueryResultRow = any>(
   ctx: DbContext,
   sql: string,
   params: any[],
-): Promise<Result<QueryResult<T>, typeof BARK_CODE.FAILURE_DB_QUERY>> {
+): Promise<Result<QueryResult<T>, typeof BARK_CODE.DB_QUERY_FAILURE>> {
   try {
     const result = await dbQuery<T>(ctx, sql, params);
     return Ok(result);
   } catch {
-    return Err(BARK_CODE.FAILURE_DB_QUERY);
+    return Err(BARK_CODE.DB_QUERY_FAILURE);
   }
 }
 
