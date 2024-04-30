@@ -7,8 +7,7 @@ import { DogProfile } from "@/lib/user/user-models";
 import { BARK_CODE } from "@/lib/utilities/bark-code";
 import { revalidatePath } from "next/cache";
 
-// WIP: rename to postDogProfileUpdate
-export async function updateDogProfileAction(args: {
+export async function postDogProfileUpdate(args: {
   dogId: string;
   dogProfile: DogProfile;
 }): Promise<
