@@ -18,6 +18,7 @@ type Context = {
 
 type ResponseCode = typeof BARK_CODE.OK | typeof BARK_CODE.FAILED;
 
+// WIP: inline the response codes
 export async function updateMyAccountDetails(
   actor: UserActor,
   update: MyAccountDetailsUpdate,

@@ -9,6 +9,7 @@ import {
   ServiceStatus,
 } from "@/lib/data/db-enums";
 
+// WIP: convert to Result with error codes
 export async function getMyPets(actor: UserActor): Promise<MyDog[]> {
   const { userId, dbPool, dogMapper } = actor.getParams();
   const sql = `

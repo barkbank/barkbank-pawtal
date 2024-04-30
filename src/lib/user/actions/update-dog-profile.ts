@@ -27,6 +27,7 @@ type Context = {
   dogProfile: DogProfile;
 };
 
+// WIP: inline the response codes
 export async function updateDogProfile(
   actor: UserActor,
   dogId: string,
