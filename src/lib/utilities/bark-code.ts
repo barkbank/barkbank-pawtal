@@ -14,6 +14,16 @@ export const CODE = {
   FAILED: "FAILED",
 
   /**
+   * When an attempt is made to register an account that already exists.
+   */
+  ERROR_ACCOUNT_ALREADY_EXISTS: "ERROR_ACCOUNT_ALREADY_EXISTS",
+
+  /**
+   * When OTP is invalid.
+   */
+  ERROR_INVALID_OTP: "ERROR_INVALID_OTP",
+
+  /**
    * When the caller is not logged-in at all or as the wrong correct account
    * type.
    */
