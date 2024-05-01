@@ -39,6 +39,14 @@ export class UserViewDogPage extends PomDynamicPage {
     return this.profileItem("Ever Received Blood");
   }
 
+  editButton(): Locator {
+    return this.page().getByRole("link", { name: "Edit" });
+  }
+
+  backButton(): Locator {
+    return this.page().getByRole("link", { name: "Back" });
+  }
+
   private profileItem(label: string): Locator {
     return this.page()
       .getByRole("heading", { name: `${label}:` })
