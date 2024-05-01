@@ -6,7 +6,6 @@ import {
   PROFILE_STATUS,
 } from "@/lib/data/db-enums";
 import { getHighlightedStatus } from "@/lib/dog/get-highlighted-status";
-import { MyDog } from "@/lib/user/user-models";
 import clsx from "clsx";
 import {
   BarkStatusServiceUnavailable,
