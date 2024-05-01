@@ -19,6 +19,7 @@ function doRequest(method, path, body) {
           responseData += chunk;
         });
         res.on("end", () => {
+          console.log({ responseData });
           try {
             const jsonData = JSON.parse(responseData);
             resolve(jsonData);
@@ -29,6 +30,7 @@ function doRequest(method, path, body) {
       },
     );
     if (body) {
+      console.log(body);
       req.write(JSON.stringify(body));
     }
     req.end();
@@ -381,9 +383,9 @@ function getDogFields(idx, overrides) {
 const MILLIS_PER_YEAR = 365 * 86400 * 1000;
 const MILLIS_PER_MONTH = MILLIS_PER_YEAR / 12;
 
-function getIncompleteDogOverrides() {
+function getIncompleteDogOverrides(dogName) {
   return {
-    dogName: "Bentley",
+    dogName,
     dogBreed: "",
     dogBirthday: formatBirthday(new Date(Date.now() - 3 * MILLIS_PER_YEAR)),
     dogGender: "MALE",
@@ -394,9 +396,9 @@ function getIncompleteDogOverrides() {
   };
 }
 
-function getEligibleDogOverrides() {
+function getEligibleDogOverrides(dogName) {
   return {
-    dogName: "Mape",
+    dogName,
     dogBreed: "Singapore Special",
     dogBirthday: formatBirthday(new Date(Date.now() - 2 * MILLIS_PER_YEAR)),
     dogGender: "FEMALE",
@@ -407,9 +409,9 @@ function getEligibleDogOverrides() {
   };
 }
 
-function getIneligibleDogOverrides() {
+function getIneligibleDogOverrides(dogName) {
   return {
-    dogName: "Ridley",
+    dogName,
     dogBreed: "Singapore Special",
     dogBirthday: formatBirthday(new Date(Date.now() - 3 * MILLIS_PER_MONTH)),
     dogGender: "FEMALE",
@@ -420,9 +422,9 @@ function getIneligibleDogOverrides() {
   };
 }
 
-function getPermanentlyIneligibleDogOverrides() {
+function getPermanentlyIneligibleDogOverrides(dogName) {
   return {
-    dogName: "Perry",
+    dogName,
     dogBreed: "Singapore Special",
     dogBirthday: formatBirthday(new Date(Date.now() - 10 * MILLIS_PER_YEAR)),
     dogGender: "MALE",
@@ -602,11 +604,13 @@ function deleteData() {
 
 function createUiTestUserAccount() {
   const toCreate = [
-    getIncompleteDogOverrides(),
-    getEligibleDogOverrides(),
-    getIneligibleDogOverrides(),
-    getPermanentlyIneligibleDogOverrides(),
+    getIncompleteDogOverrides("Bentley"),
+    getEligibleDogOverrides("Mape"),
+    getIneligibleDogOverrides("Ridley"),
+    getPermanentlyIneligibleDogOverrides("Perry"),
+    getEligibleDogOverrides("Klaus"),
   ];
+  const appointmentDogName = "Klaus";
   return Promise.resolve()
     .then(() => {
       const userEmail = "test_user@user.com";
@@ -657,6 +661,29 @@ function createUiTestUserAccount() {
         });
       });
       return Promise.all(insertions).then(() => state);
+    })
+    .then((state) => {
+      const { vetId, dogs } = state;
+      const dog = dogs.filter((dog) => dog.dogName === appointmentDogName)[0];
+      const sql = `
+      insert into calls(
+        dog_id, vet_id, call_outcome, encrypted_opt_out_reason
+      )
+      values (
+        $1, $2, 'APPOINTMENT', ''
+      )
+      returning call_id as "callId"
+      `;
+      return doQuery(sql, [dog.dogId, vetId]).then((res) => {
+        const { callId } = res.rows[0];
+        console.log(
+          `Scheduled appointment for ${appointmentDogName} (callId: ${callId})`,
+        );
+        return {
+          ...state,
+          appointment: { dogName: appointmentDogName, callId },
+        };
+      });
     })
     .then((state) => {
       console.log("Created test user:", state);

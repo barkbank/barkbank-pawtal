@@ -1,19 +1,25 @@
-import { dbQuery } from "@/lib/data/db-utils";
+import { dbResultQuery } from "@/lib/data/db-utils";
 import { UserActor } from "../user-actor";
-import { DogProfile } from "../user-models";
+import { DogProfile } from "@/lib/dog/dog-models";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import {
   DogAntigenPresence,
   DogGender,
   YesNoUnknown,
 } from "@/lib/data/db-enums";
-
-type ErrorCode = "ERROR_UNAUTHORIZED" | "ERROR_MISSING_DOG";
+import { CODE } from "@/lib/utilities/bark-code";
 
 export async function getDogProfile(
   actor: UserActor,
   dogId: string,
-): Promise<Result<DogProfile, ErrorCode>> {
+): Promise<
+  Result<
+    DogProfile,
+    | typeof CODE.ERROR_DOG_NOT_FOUND
+    | typeof CODE.ERROR_WRONG_OWNER
+    | typeof CODE.DB_QUERY_FAILURE
+  >
+> {
   const { dbPool, userId, dogMapper } = actor.getParams();
   const sql = `
   SELECT
@@ -52,13 +58,16 @@ export async function getDogProfile(
     dogEverReceivedTransfusion: YesNoUnknown;
     dogPreferredVetId: string;
   };
-  const res = await dbQuery<Row>(dbPool, sql, [dogId]);
+  const { result: res, error } = await dbResultQuery<Row>(dbPool, sql, [dogId]);
+  if (error !== undefined) {
+    return Err(error);
+  }
   if (res.rows.length === 0) {
-    return Err("ERROR_MISSING_DOG");
+    return Err(CODE.ERROR_DOG_NOT_FOUND);
   }
   const { dogOwnerId, dogEncryptedOii, ...otherFields } = res.rows[0];
   if (dogOwnerId !== userId) {
-    return Err("ERROR_UNAUTHORIZED");
+    return Err(CODE.ERROR_WRONG_OWNER);
   }
   const { dogName } = await dogMapper.mapDogSecureOiiToDogOii({
     dogEncryptedOii,

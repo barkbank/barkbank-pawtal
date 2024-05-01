@@ -1,5 +1,6 @@
-import { dbQuery } from "../../data/db-utils";
-import { MyDog, MyDogAppointment } from "../user-models";
+import { dbQuery, dbResultQuery } from "../../data/db-utils";
+import { MyDog } from "../user-models";
+import { DogAppointment } from "@/lib/dog/dog-models";
 import { UserActor } from "../user-actor";
 import {
   DogGender,
@@ -8,8 +9,13 @@ import {
   ProfileStatus,
   ServiceStatus,
 } from "@/lib/data/db-enums";
+import { Err, Ok, Result } from "@/lib/utilities/result";
+import { CODE } from "@/lib/utilities/bark-code";
+import { DogStatuses } from "@/lib/dog/dog-models";
 
-export async function getMyPets(actor: UserActor): Promise<MyDog[]> {
+export async function getMyPets(
+  actor: UserActor,
+): Promise<Result<MyDog[], typeof CODE.DB_QUERY_FAILURE>> {
   const { userId, dbPool, dogMapper } = actor.getParams();
   const sql = `
   WITH
@@ -25,6 +31,7 @@ export async function getMyPets(actor: UserActor): Promise<MyDog[]> {
     SELECT
       tDog.dog_id,
       json_agg(json_build_object(
+        'dogId', tCall.dog_id,
         'callId', tCall.call_id,
         'vetId', tVet.vet_id,
         'vetName', tVet.vet_name
@@ -56,19 +63,40 @@ export async function getMyPets(actor: UserActor): Promise<MyDog[]> {
     dogProfileStatus: ProfileStatus;
     dogMedicalStatus: MedicalStatus;
     dogParticipationStatus: ParticipationStatus;
-    dogAppointments: MyDogAppointment[];
+    dogAppointments: DogAppointment[];
   };
-  const res = await dbQuery<Row>(dbPool, sql, [userId]);
-  const futureDogs = res.rows.map(async (row) => {
-    const { dogEncryptedOii, ...otherFields } = row;
+  const { result, error } = await dbResultQuery<Row>(dbPool, sql, [userId]);
+  if (error !== undefined) {
+    return Err(error);
+  }
+  const futureDogs = result.rows.map(async (row) => {
+    const {
+      dogEncryptedOii,
+      dogServiceStatus,
+      dogProfileStatus,
+      dogMedicalStatus,
+      dogParticipationStatus,
+      dogAppointments,
+      ...otherFields
+    } = row;
     const { dogName } = await dogMapper.mapDogSecureOiiToDogOii({
       dogEncryptedOii,
     });
+    const dogStatuses: DogStatuses = {
+      dogServiceStatus,
+      dogProfileStatus,
+      dogMedicalStatus,
+      dogParticipationStatus,
+      numPendingReports: dogAppointments.length,
+    };
     const myDog: MyDog = {
       dogName,
+      dogAppointments,
+      dogStatuses,
       ...otherFields,
     };
     return myDog;
   });
-  return Promise.all(futureDogs);
+  const pets = await Promise.all(futureDogs);
+  return Ok(pets);
 }

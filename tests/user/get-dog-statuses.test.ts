@@ -1,7 +1,7 @@
 import { getDogStatuses } from "@/lib/user/actions/get-dog-statuses";
 import { withDb } from "../_db_helpers";
 import { getUserActor, insertDog, insertUser } from "../_fixtures";
-import { DogStatuses } from "@/lib/user/user-models";
+import { DogStatuses } from "@/lib/dog/dog-models";
 import {
   DOG_GENDER,
   MEDICAL_STATUS,
@@ -13,7 +13,7 @@ import {
 import { dateAgo } from "../_time_helpers";
 
 describe("getDogStatuses", () => {
-  it("should return ERROR_UNAUTHORIZED when the user does not own the requested dog", async () => {
+  it("should return ERROR_WRONG_OWNER when the user does not own the requested dog", async () => {
     await withDb(async (dbPool) => {
       const u1 = await insertUser(1, dbPool);
       const u2 = await insertUser(2, dbPool);
@@ -21,17 +21,17 @@ describe("getDogStatuses", () => {
       const actor = getUserActor(dbPool, u1.userId);
       const { result, error } = await getDogStatuses(actor, d3.dogId);
       expect(result).toBeUndefined();
-      expect(error).toEqual("ERROR_UNAUTHORIZED");
+      expect(error).toEqual("ERROR_WRONG_OWNER");
     });
   });
-  it("should return ERROR_MISSING_DOG when the requested dog does not exist", async () => {
+  it("should return ERROR_DOG_NOT_FOUND when the requested dog does not exist", async () => {
     await withDb(async (dbPool) => {
       const u1 = await insertUser(1, dbPool);
       const noSuchDogId = "1234567";
       const actor = getUserActor(dbPool, u1.userId);
       const { result, error } = await getDogStatuses(actor, noSuchDogId);
       expect(result).toBeUndefined();
-      expect(error).toEqual("ERROR_MISSING_DOG");
+      expect(error).toEqual("ERROR_DOG_NOT_FOUND");
     });
   });
   it("should return statuses of the requested dog", async () => {

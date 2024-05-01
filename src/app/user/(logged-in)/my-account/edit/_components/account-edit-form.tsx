@@ -11,10 +11,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { updateAccountDetails } from "../_action/update-my-account-details";
+import { postMyAccountDetails } from "../_action/post-my-account-details";
 import { MyAccountDetailsUpdate } from "@/lib/user/user-models";
-import React, { ButtonHTMLAttributes } from "react";
+import React from "react";
 import { BarkButton } from "@/components/bark/bark-button";
+import { CODE } from "@/lib/utilities/bark-code";
 
 const FORM_SCHEMA = z.object({
   userName: z.string().min(1, { message: "Name cannot be empty" }),
@@ -48,8 +49,8 @@ export default function AccountEditForm({
     setUpdateError("");
     const request: MyAccountDetailsUpdate = values;
 
-    const response = await updateAccountDetails(request);
-    if (response === "STATUS_204_UPDATED") {
+    const response = await postMyAccountDetails(request);
+    if (response === CODE.OK) {
       router.push(RoutePath.USER_MY_ACCOUNT_PAGE);
       return;
     }

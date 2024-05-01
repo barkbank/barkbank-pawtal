@@ -1,5 +1,5 @@
 import { test } from "@playwright/test";
-import { loginKnownUser } from "../_lib/pom/init/login-known-user";
+import { loginKnownUser } from "../_lib/init/login-known-user";
 import { doLogoutSequence } from "../_lib/sequences/logout-sequence";
 
 test("user can logout", async ({ page }) => {

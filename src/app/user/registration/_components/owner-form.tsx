@@ -11,7 +11,7 @@ import {
   BarkFormSingleCheckbox,
   BarkFormSubmitButton,
 } from "@/components/bark/bark-form";
-import { sendLoginOtp } from "@/lib/server-actions/send-login-otp";
+import { postOtpRequest } from "@/lib/server-actions/post-otp-request";
 import { isValidEmail } from "@/lib/utilities/bark-utils";
 import { USER_RESIDENCY } from "@/lib/data/db-enums";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -60,7 +60,8 @@ export default function OwnerForm(props: {
     const { userEmail } = form.getValues();
     form.clearErrors("emailOtp");
     if (isValidEmail(userEmail)) {
-      await sendLoginOtp({ emailAddress: userEmail, accountType: null });
+      // TODO: if the result of postOtpRequest is FAILED, we should ask user to request for another.
+      await postOtpRequest({ emailAddress: userEmail, accountType: null });
       setRecipientEmail(userEmail);
       form.clearErrors("userEmail");
     } else {

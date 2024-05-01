@@ -9,7 +9,7 @@ import {
   insertUser,
   insertVet,
 } from "../_fixtures";
-import { DogProfile } from "@/lib/user/user-models";
+import { DogProfile } from "@/lib/dog/dog-models";
 import { UTC_DATE_OPTION, parseDateTime } from "@/lib/utilities/bark-time";
 import {
   CALL_OUTCOME,
@@ -20,7 +20,7 @@ import {
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 
 describe("updateDogProfile", () => {
-  it("should return OK_UPDATED when update was successful", async () => {
+  it("should return OK when update was successful", async () => {
     await withDb(async (dbPool) => {
       // GIVEN users u1 with dog d1 and preferred vet v1
       const u1 = await insertUser(1, dbPool);
@@ -39,7 +39,7 @@ describe("updateDogProfile", () => {
       const res = await updateDogProfile(actor1, d1.dogId, update);
 
       // THEN
-      expect(res).toEqual("OK_UPDATED");
+      expect(res).toEqual("OK");
       const { dogProfile, profileModificationTime } = await fetchDogInfo(
         dbPool,
         d1.dogId,
@@ -50,7 +50,7 @@ describe("updateDogProfile", () => {
       );
     });
   });
-  it("should return ERROR_REPORT_EXISTS when there is an existing report for the dog", async () => {
+  it("should return ERROR_CANNOT_UPDATE_FULL_PROFILE when there is an existing report for the dog", async () => {
     await withDb(async (dbPool) => {
       // GIVEN users u1 with dog d1 with report
       const u1 = await insertUser(1, dbPool);
@@ -70,10 +70,10 @@ describe("updateDogProfile", () => {
       const res = await updateDogProfile(actor1, d1.dogId, _getDogProfile());
 
       // THEN
-      expect(res).toEqual("ERROR_REPORT_EXISTS");
+      expect(res).toEqual("ERROR_CANNOT_UPDATE_FULL_PROFILE");
     });
   });
-  it("should return ERROR_UNAUTHORIZED when the user is not the dog owner", async () => {
+  it("should return ERROR_WRONG_OWNER when the user is not the dog owner", async () => {
     await withDb(async (dbPool) => {
       // GIVEN users u1 and u2
       const u1 = await insertUser(1, dbPool);
@@ -87,10 +87,10 @@ describe("updateDogProfile", () => {
       const res = await updateDogProfile(actor1, d2.dogId, _getDogProfile());
 
       // THEN
-      expect(res).toEqual("ERROR_UNAUTHORIZED");
+      expect(res).toEqual("ERROR_WRONG_OWNER");
     });
   });
-  it("should return ERROR_MISSING_DOG when the dog does not exist", async () => {
+  it("should return ERROR_DOG_NOT_FOUND when the dog does not exist", async () => {
     await withDb(async (dbPool) => {
       // GIVEN users u1 with no dog
       const u1 = await insertUser(1, dbPool);
@@ -105,7 +105,7 @@ describe("updateDogProfile", () => {
       );
 
       // THEN
-      expect(res).toEqual("ERROR_MISSING_DOG");
+      expect(res).toEqual("ERROR_DOG_NOT_FOUND");
     });
   });
 });

@@ -1,0 +1,14 @@
+name: pipeline
+run-name: pipeline started by ${{ github.actor }}
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+jobs:
+  unit-tests:
+    uses: ./.github/workflows/x-unit-tests.yml
+  playwright:
+    uses: ./.github/workflows/x-playwright.yml
+  checks:
+    uses: ./.github/workflows/x-checks.yml

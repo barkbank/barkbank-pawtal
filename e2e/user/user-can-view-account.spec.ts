@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { loginKnownUser } from "../_lib/pom/init/login-known-user";
+import { loginKnownUser } from "../_lib/init/login-known-user";
 import { gotoUserMyAccountPage } from "../_lib/sequences/nav-gotos";
 
 test("user can view their account", async ({ page }) => {

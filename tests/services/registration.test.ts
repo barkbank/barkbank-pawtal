@@ -28,7 +28,7 @@ import { HarnessOtpService } from "../_harness";
 import { dbQuery } from "@/lib/data/db-utils";
 
 describe("RegistrationHandler", () => {
-  it("should return STATUS_201_CREATED when user account is successfully created", async () => {
+  it("should return OK when user account is successfully created", async () => {
     await withDb(async (dbPool) => {
       // GIVEN a standard request
       const preferredVet = await insertVet(42, dbPool);
@@ -40,7 +40,7 @@ describe("RegistrationHandler", () => {
       const response = await handler.handle(request);
 
       // THEN
-      expect(response).toEqual("STATUS_201_CREATED");
+      expect(response).toEqual("OK");
 
       // AND a user should be created
       const userHashedEmail = await config.emailHashService.getHashHex(
@@ -78,7 +78,7 @@ describe("RegistrationHandler", () => {
     });
   });
 
-  it("should return STATUS_401_INVALID_OTP when OTP is invalid", async () => {
+  it("should return ERROR_INVALID_OTP when OTP is invalid", async () => {
     await withDb(async (dbPool) => {
       // GIVEN a request with invalid OTP
       const preferredVet = await insertVet(42, dbPool);
@@ -92,7 +92,7 @@ describe("RegistrationHandler", () => {
       const response = await handler.handle(request);
 
       // THEN
-      expect(response).toEqual("STATUS_401_INVALID_OTP");
+      expect(response).toEqual("ERROR_INVALID_OTP");
 
       // AND no records created
       const resUsers = await dbQuery(dbPool, `SELECT 1 FROM users`, []);
@@ -108,7 +108,7 @@ describe("RegistrationHandler", () => {
     });
   });
 
-  it("should return STATUS_409_USER_EXISTS when user already exists", async () => {
+  it("should return ERROR_ACCOUNT_ALREADY_EXISTS when user already exists", async () => {
     await withDb(async (dbPool) => {
       // GIVEN a request for a user that already exists
       const preferredVet = await insertVet(42, dbPool);
@@ -125,13 +125,13 @@ describe("RegistrationHandler", () => {
       const response = await handler.handle(request);
 
       // THEN
-      expect(response).toEqual("STATUS_409_USER_EXISTS");
+      expect(response).toEqual("ERROR_ACCOUNT_ALREADY_EXISTS");
     });
   });
 });
 
 describe("RegistrationHandler without vet id", () => {
-  it("should return STATUS_201_CREATED when user account is successfully created", async () => {
+  it("should return OK when user account is successfully created", async () => {
     await withDb(async (dbPool) => {
       // GIVEN a standard request
       const request = getRegistrationRequest(undefined);
@@ -142,7 +142,7 @@ describe("RegistrationHandler without vet id", () => {
       const response = await handler.handle(request);
 
       // THEN
-      expect(response).toEqual("STATUS_201_CREATED");
+      expect(response).toEqual("OK");
 
       // AND a user should be created
       const userHashedEmail = await config.emailHashService.getHashHex(

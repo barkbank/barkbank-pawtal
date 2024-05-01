@@ -1,20 +1,22 @@
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { UserActor } from "../user-actor";
-import { DogProfile } from "../user-models";
+import { DogProfile } from "@/lib/dog/dog-models";
 import { dbBegin, dbCommit, dbRelease, dbRollback } from "@/lib/data/db-utils";
 import { DogSpec } from "@/lib/data/db-models";
 import { dbInsertDog, dbInsertDogVetPreference } from "@/lib/data/db-dogs";
-
-type AddDogResult = {
-  dogId: string;
-};
-
-type AddDogError = "FAILED";
+import { CODE } from "@/lib/utilities/bark-code";
 
 export async function addMyDog(
   actor: UserActor,
   dogProfile: DogProfile,
-): Promise<Result<AddDogResult, AddDogError>> {
+): Promise<
+  Result<
+    {
+      dogId: string;
+    },
+    typeof CODE.FAILED
+  >
+> {
   const { userId, dbPool, dogMapper } = actor.getParams();
   const { dogName, dogPreferredVetId, ...otherFields } = dogProfile;
   const { dogEncryptedOii } = await dogMapper.mapDogOiiToDogSecureOii({
@@ -31,7 +33,7 @@ export async function addMyDog(
     await dbCommit(conn);
     return Ok({ dogId });
   } catch {
-    return Err("FAILED");
+    return Err(CODE.FAILED);
   } finally {
     await dbRollback(conn);
     await dbRelease(conn);

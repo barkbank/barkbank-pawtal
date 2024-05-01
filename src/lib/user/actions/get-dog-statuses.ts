@@ -1,29 +1,35 @@
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { UserActor } from "../user-actor";
-import { DogStatuses } from "../user-models";
+import { DogStatuses } from "@/lib/dog/dog-models";
 import {
   MedicalStatus,
   ParticipationStatus,
   ProfileStatus,
   ServiceStatus,
 } from "@/lib/data/db-enums";
-import { dbQuery } from "@/lib/data/db-utils";
-
-type ErrorCode = "ERROR_UNAUTHORIZED" | "ERROR_MISSING_DOG";
+import { dbResultQuery } from "@/lib/data/db-utils";
+import { CODE } from "@/lib/utilities/bark-code";
 
 export async function getDogStatuses(
   actor: UserActor,
   dogId: string,
-): Promise<Result<DogStatuses, ErrorCode>> {
+): Promise<
+  Result<
+    DogStatuses,
+    | typeof CODE.ERROR_DOG_NOT_FOUND
+    | typeof CODE.ERROR_WRONG_OWNER
+    | typeof CODE.DB_QUERY_FAILURE
+  >
+> {
   const { userId } = actor.getParams();
   const ctx: Context = { actor, dogId };
-  const row: Row | null = await fetchRow(ctx);
-  if (row === null) {
-    return Err("ERROR_MISSING_DOG");
+  const { result, error } = await fetchRow(ctx);
+  if (error !== undefined) {
+    return Err(error);
   }
-  const { ownerUserId, ...otherFields } = row;
+  const { ownerUserId, ...otherFields } = result;
   if (ownerUserId !== userId) {
-    return Err("ERROR_UNAUTHORIZED");
+    return Err(CODE.ERROR_WRONG_OWNER);
   }
   return Ok(otherFields);
 }
@@ -42,7 +48,11 @@ type Row = {
   numPendingReports: number;
 };
 
-async function fetchRow(ctx: Context): Promise<Row | null> {
+async function fetchRow(
+  ctx: Context,
+): Promise<
+  Result<Row, typeof CODE.ERROR_DOG_NOT_FOUND | typeof CODE.DB_QUERY_FAILURE>
+> {
   const { actor, dogId } = ctx;
   const { dbPool } = actor.getParams();
   const sql = `
@@ -67,9 +77,12 @@ async function fetchRow(ctx: Context): Promise<Row | null> {
   LEFT JOIN mCallStats as tCall on tStatus.dog_id = tCall.dog_id
   WHERE tStatus.dog_id = $1
   `;
-  const res = await dbQuery<Row>(dbPool, sql, [dogId]);
-  if (res.rows.length == 0) {
-    return null;
+  const { result: res, error } = await dbResultQuery<Row>(dbPool, sql, [dogId]);
+  if (error !== undefined) {
+    return Err(error);
   }
-  return res.rows[0];
+  if (res.rows.length == 0) {
+    return Err(CODE.ERROR_DOG_NOT_FOUND);
+  }
+  return Ok(res.rows[0]);
 }

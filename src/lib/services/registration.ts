@@ -17,6 +17,7 @@ import { DogMapper } from "@/lib/data/dog-mapper";
 import { UserMapper } from "@/lib/data/user-mapper";
 import { HashService } from "@/lib/services/hash";
 import { OtpService } from "@/lib/services/otp";
+import { CODE } from "../utilities/bark-code";
 
 export type RegistrationServiceConfig = {
   dbPool: Pool;
@@ -43,13 +44,6 @@ export type RegistrationRequest = {
   dogPreferredVetId?: string;
 };
 
-export type RegistrationResponse =
-  | "STATUS_201_CREATED"
-  | "STATUS_401_INVALID_OTP"
-  | "STATUS_409_USER_EXISTS"
-  | "STATUS_500_INTERNAL_SERVER_ERROR"
-  | "STATUS_503_DB_CONTENTION";
-
 export class RegistrationService {
   private config: RegistrationServiceConfig;
   constructor(config: RegistrationServiceConfig) {
@@ -58,10 +52,15 @@ export class RegistrationService {
 
   public async handle(
     request: RegistrationRequest,
-  ): Promise<RegistrationResponse> {
+  ): Promise<
+    | typeof CODE.OK
+    | typeof CODE.ERROR_INVALID_OTP
+    | typeof CODE.ERROR_ACCOUNT_ALREADY_EXISTS
+    | typeof CODE.FAILED
+  > {
     const isValidOtp = await this.isValidOtp(request);
     if (!isValidOtp) {
-      return "STATUS_401_INVALID_OTP";
+      return CODE.ERROR_INVALID_OTP;
     }
 
     const conn = await this.config.dbPool.connect();
@@ -73,7 +72,7 @@ export class RegistrationService {
       );
       if (hasExistingUser) {
         await dbRollback(conn);
-        return "STATUS_409_USER_EXISTS";
+        return CODE.ERROR_ACCOUNT_ALREADY_EXISTS;
       }
       const dogGen = await this.registerDog(conn, request, userGen.userId);
       const allInserted = await this.registerVetPreference(
@@ -83,13 +82,13 @@ export class RegistrationService {
       );
       if (!allInserted) {
         await dbRollback(conn);
-        return "STATUS_503_DB_CONTENTION";
+        return CODE.FAILED;
       }
       await dbCommit(conn);
-      return "STATUS_201_CREATED";
+      return CODE.OK;
     } catch (error: unknown) {
       await dbRollback(conn);
-      return "STATUS_500_INTERNAL_SERVER_ERROR";
+      return CODE.FAILED;
     } finally {
       await dbRelease(conn);
     }
