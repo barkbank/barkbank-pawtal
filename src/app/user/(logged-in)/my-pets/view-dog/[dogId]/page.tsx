@@ -10,10 +10,16 @@ import {
   YES_NO_UNKNOWN,
   YesNoUnknown,
 } from "@/lib/data/db-enums";
-import { DogAppointment, DogProfile, DogStatuses } from "@/lib/dog/dog-models";
+import {
+  DogAppointment,
+  DogPreferredVet,
+  DogProfile,
+  DogStatuses,
+} from "@/lib/dog/dog-models";
 import { IMG_PATH } from "@/lib/image-path";
 import { RoutePath } from "@/lib/route-path";
 import { getDogAppointments } from "@/lib/user/actions/get-dog-appointments";
+import { getDogPreferredVet } from "@/lib/user/actions/get-dog-preferred-vet";
 import { getDogProfile } from "@/lib/user/actions/get-dog-profile";
 import { getDogStatuses } from "@/lib/user/actions/get-dog-statuses";
 import { UserActor } from "@/lib/user/user-actor";
@@ -33,19 +39,25 @@ async function getPageData(
       dogProfile: DogProfile;
       dogStatuses: DogStatuses;
       dogAppointments: DogAppointment[];
+      dogPreferredVet: DogPreferredVet | null;
     },
     | typeof CODE.ERROR_DOG_NOT_FOUND
     | typeof CODE.ERROR_WRONG_OWNER
     | typeof CODE.DB_QUERY_FAILURE
+    | typeof CODE.ERROR_MORE_THAN_ONE_PREFERRED_VET
   >
 > {
-  const [resDogProfile, resDogStatuses, resDogAppointments] = await Promise.all(
-    [
-      getDogProfile(actor, dogId),
-      getDogStatuses(actor, dogId),
-      getDogAppointments(actor, dogId),
-    ],
-  );
+  const [
+    resDogProfile,
+    resDogStatuses,
+    resDogAppointments,
+    resDogPreferredVet,
+  ] = await Promise.all([
+    getDogProfile(actor, dogId),
+    getDogStatuses(actor, dogId),
+    getDogAppointments(actor, dogId),
+    getDogPreferredVet(actor, dogId),
+  ]);
 
   if (resDogProfile.error !== undefined) {
     return Err(resDogProfile.error);
@@ -56,10 +68,14 @@ async function getPageData(
   if (resDogAppointments.error !== undefined) {
     return Err(resDogAppointments.error);
   }
+  if (resDogPreferredVet.error !== undefined) {
+    return Err(resDogPreferredVet.error);
+  }
   return Ok({
     dogProfile: resDogProfile.result,
     dogStatuses: resDogStatuses.result,
     dogAppointments: resDogAppointments.result,
+    dogPreferredVet: resDogPreferredVet.result,
   });
 }
 
@@ -149,6 +165,14 @@ function formatBirthday(dogBirthday: Date): string {
   return formatDateTime(dogBirthday, UTC_DATE_OPTION);
 }
 
+function formatPreferredVet(dogPreferredVet: DogPreferredVet | null): string {
+  if (dogPreferredVet === null) {
+    return "No preferred vet";
+  }
+  const { vetName, vetAddress } = dogPreferredVet;
+  return `${vetName} (${vetAddress})`;
+}
+
 export default async function Page(props: { params: { dogId: string } }) {
   const { dogId } = props.params;
   const actor = await getAuthenticatedUserActor();
@@ -159,7 +183,7 @@ export default async function Page(props: { params: { dogId: string } }) {
   if (error !== undefined) {
     redirect(RoutePath.USER_MY_PETS);
   }
-  const { dogProfile, dogStatuses, dogAppointments } = result;
+  const { dogProfile, dogStatuses, dogAppointments, dogPreferredVet } = result;
 
   const {
     dogName,
@@ -238,6 +262,11 @@ export default async function Page(props: { params: { dogId: string } }) {
             eligible.
           </Warning>
         )}
+
+        <ProfileItem
+          label="Preferred Vet"
+          value={formatPreferredVet(dogPreferredVet)}
+        />
 
         <div className="flex w-full flex-col gap-3 md:flex-row">
           <BarkButton

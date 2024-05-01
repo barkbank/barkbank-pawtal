@@ -36,6 +36,7 @@ test("user can view dog", async ({ page }) => {
   await expect(pg2.dogEverReceivedTransfusionItem()).toContainText(
     "No, never received blood transfusion",
   );
+  await expect(pg2.dogPreferredVetItem()).toContainText("Vet Clinic 1");
 });
 
 function formatDogBirthday(dogBirthday: string): string {

@@ -65,6 +65,11 @@ export const CODE = {
   ERROR_SHOULD_UPDATE_FULL_PROFILE: "ERROR_SHOULD_UPDATE_FULL_PROFILE",
 
   /**
+   * When we find there is more than one preferred vet.
+   */
+  ERROR_MORE_THAN_ONE_PREFERRED_VET: "ERROR_MORE_THAN_ONE_PREFERRED_VET",
+
+  /**
    * When a database query failed.
    */
   DB_QUERY_FAILURE: "DB_QUERY_FAILURE",
