@@ -10,7 +10,10 @@ import { IMG_PATH } from "@/lib/image-path";
 import { DOG_GENDER, PROFILE_STATUS } from "@/lib/data/db-enums";
 import { mapStatusSetToHighlightedStatus } from "@/lib/data/status-mapper";
 import { BarkButton } from "@/components/bark/bark-button";
-import { StatusBlock, toStatusSet } from "@/components/bark/bark-status-block";
+import {
+  BarkStatusBlock,
+  toStatusSet,
+} from "@/components/bark/bark-status-block";
 
 function ActionBlock(props: { dog: MyDog }) {
   const { dog } = props;
@@ -66,7 +69,7 @@ function DogCard(props: { dog: MyDog; cardIdx: number; isLastCard: boolean }) {
           <div className="text-grey-100 text-lg font-semibold leading-9">
             {dog.dogName}
           </div>
-          <StatusBlock dog={dog} />
+          <BarkStatusBlock dog={dog} />
         </div>
 
         {/* Buttons */}

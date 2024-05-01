@@ -49,7 +49,7 @@ function StatusMessage(props: {
   );
 }
 
-export function StatusBlock(props: { dog: MyDog }) {
+export function BarkStatusBlock(props: { dog: MyDog }) {
   const { dog } = props;
   const statusSet = toStatusSet(dog);
   const highlightedStatus = mapStatusSetToHighlightedStatus(statusSet);
