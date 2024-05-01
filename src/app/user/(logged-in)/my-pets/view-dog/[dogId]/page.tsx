@@ -1,3 +1,4 @@
+import { BarkButton } from "@/components/bark/bark-button";
 import { BarkDogAvatar } from "@/components/bark/bark-dog-avatar";
 import { BarkStatusBlock } from "@/components/bark/bark-status-block";
 import { getAuthenticatedUserActor } from "@/lib/auth";
@@ -16,12 +17,12 @@ import { getDogAppointments } from "@/lib/user/actions/get-dog-appointments";
 import { getDogProfile } from "@/lib/user/actions/get-dog-profile";
 import { getDogStatuses } from "@/lib/user/actions/get-dog-statuses";
 import { UserActor } from "@/lib/user/user-actor";
-import { getAgeMonths, getAgeYears } from "@/lib/utilities/bark-age";
+import { getAgeMonths } from "@/lib/utilities/bark-age";
 import { CODE } from "@/lib/utilities/bark-code";
+import { UTC_DATE_OPTION, formatDateTime } from "@/lib/utilities/bark-time";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import Image from "next/image";
 import { redirect } from "next/navigation";
-import { sprintf } from "sprintf-js";
 
 async function getPageData(
   actor: UserActor,
@@ -66,10 +67,8 @@ function ProfileItem(props: { label: string; value: string | number | null }) {
   const { label, value } = props;
   return (
     <div className="w-full">
-      {/* <div className="flex flex-row items-center gap-3"> */}
       <h2 className="text-base">{label}:</h2>
       <p className="flex-1 text-base font-bold">{value}</p>
-      {/* </div> */}
     </div>
   );
 }
@@ -146,6 +145,10 @@ function formatTransfusionHistory(
   return "Unknown";
 }
 
+function formatBirthday(dogBirthday: Date): string {
+  return formatDateTime(dogBirthday, UTC_DATE_OPTION);
+}
+
 export default async function Page(props: { params: { dogId: string } }) {
   const { dogId } = props.params;
   const actor = await getAuthenticatedUserActor();
@@ -172,10 +175,10 @@ export default async function Page(props: { params: { dogId: string } }) {
   const dogAgeMonths = getAgeMonths(dogBirthday, new Date());
 
   return (
-    <div className="m-3">
-      <div className="flex flex-col items-center justify-center gap-3 md:flex-row">
+    <div className="m-3 flex flex-col md:items-start">
+      <div className="flex flex-row items-start justify-center gap-3">
         <BarkDogAvatar gender={dogGender} className="align" />
-        <div className="flex flex-col items-center justify-center gap-3 md:items-start md:justify-start">
+        <div className="flex flex-col items-start justify-center gap-3">
           <h1 className="text-3xl">{dogName}</h1>
           <BarkStatusBlock
             dogName={dogName}
@@ -184,7 +187,7 @@ export default async function Page(props: { params: { dogId: string } }) {
           />
         </div>
       </div>
-      <div className="mt-3 flex flex-col items-start justify-start gap-3">
+      <div className="mt-3 flex w-full flex-col items-start justify-start gap-3 rounded-md p-3 shadow-md shadow-slate-400">
         <ProfileItem label="Breed" value={dogBreed} />
         <ProfileItem label="Weight" value={formatWeight(dogWeightKg)} />
         {dogBreed === "" && dogWeightKg === null && (
@@ -200,6 +203,7 @@ export default async function Page(props: { params: { dogId: string } }) {
         )}
 
         <ProfileItem label="Sex" value={formatGender(dogGender)} />
+        <ProfileItem label="Birthday" value={formatBirthday(dogBirthday)} />
         <ProfileItem label="Age" value={formatAge(dogAgeMonths)} />
         {dogAgeMonths < 12 && (
           <Warning icon={IMG_PATH.CIRCLE_BLUE_PAUSE}>
@@ -234,6 +238,23 @@ export default async function Page(props: { params: { dogId: string } }) {
             eligible.
           </Warning>
         )}
+
+        <div className="flex w-full flex-col gap-3 md:flex-row">
+          <BarkButton
+            className="w-full md:w-40"
+            variant="brandInverse"
+            href={RoutePath.USER_MY_PETS}
+          >
+            Back
+          </BarkButton>
+          <BarkButton
+            className="w-full md:w-40"
+            variant="brandInverse"
+            href={RoutePath.USER_EDIT_DOG(dogId)}
+          >
+            Edit
+          </BarkButton>
+        </div>
       </div>
     </div>
   );

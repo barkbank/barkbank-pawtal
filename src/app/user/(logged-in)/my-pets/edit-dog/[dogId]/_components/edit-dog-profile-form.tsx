@@ -37,12 +37,12 @@ export default function EditDogProfileForm(props: {
     if (res !== CODE.OK) {
       return Err(res);
     }
-    router.push(RoutePath.USER_MY_PETS);
+    router.back();
     return Ok(true);
   }
 
   async function handleCancel() {
-    router.push(RoutePath.USER_MY_PETS);
+    router.back();
   }
 
   const prefillData = toDogFormData(existingDogProfile);
