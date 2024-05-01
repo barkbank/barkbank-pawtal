@@ -18,6 +18,7 @@ import {
   BarkStatusTemporarilyIneligible,
   BarkStatusEligible,
 } from "./bark-status";
+import { DogAppointment, DogStatuses } from "@/lib/dog/dog-models";
 
 function StatusMessage(props: {
   children: React.ReactNode;
@@ -35,8 +36,12 @@ function StatusMessage(props: {
   );
 }
 
-export function BarkStatusBlock(props: { dog: MyDog }) {
-  const { dogName, dogAppointments, dogStatuses } = props.dog;
+export function BarkStatusBlock(props: {
+  dogName: string;
+  dogStatuses: DogStatuses;
+  dogAppointments: DogAppointment[];
+}) {
+  const { dogName, dogAppointments, dogStatuses } = props;
   const highlightedStatus = getHighlightedStatus(dogStatuses);
 
   if (highlightedStatus === SERVICE_STATUS.UNAVAILABLE) {

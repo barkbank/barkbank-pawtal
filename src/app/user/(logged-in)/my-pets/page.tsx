@@ -45,6 +45,7 @@ function ActionBlock(props: { dog: MyDog }) {
 
 function DogCard(props: { dog: MyDog; cardIdx: number; isLastCard: boolean }) {
   const { dog, cardIdx, isLastCard } = props;
+  const { dogName, dogStatuses, dogAppointments } = dog;
   const imgSrc =
     dog.dogGender === DOG_GENDER.MALE
       ? IMG_PATH.BROWN_DOG_AVATAR
@@ -66,7 +67,11 @@ function DogCard(props: { dog: MyDog; cardIdx: number; isLastCard: boolean }) {
           <div className="text-grey-100 text-lg font-semibold leading-9">
             {dog.dogName}
           </div>
-          <BarkStatusBlock dog={dog} />
+          <BarkStatusBlock
+            dogName={dogName}
+            dogStatuses={dogStatuses}
+            dogAppointments={dogAppointments}
+          />
         </div>
 
         {/* Buttons */}
