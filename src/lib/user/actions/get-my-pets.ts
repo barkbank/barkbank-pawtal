@@ -1,5 +1,6 @@
 import { dbQuery, dbResultQuery } from "../../data/db-utils";
-import { MyDog, MyDogAppointment } from "../user-models";
+import { MyDog } from "../user-models";
+import { DogAppointment } from "@/lib/dog/dog-models";
 import { UserActor } from "../user-actor";
 import {
   DogGender,
@@ -30,6 +31,7 @@ export async function getMyPets(
     SELECT
       tDog.dog_id,
       json_agg(json_build_object(
+        'dogId', tCall.dog_id,
         'callId', tCall.call_id,
         'vetId', tVet.vet_id,
         'vetName', tVet.vet_name
@@ -61,7 +63,7 @@ export async function getMyPets(
     dogProfileStatus: ProfileStatus;
     dogMedicalStatus: MedicalStatus;
     dogParticipationStatus: ParticipationStatus;
-    dogAppointments: MyDogAppointment[];
+    dogAppointments: DogAppointment[];
   };
   const { result, error } = await dbResultQuery<Row>(dbPool, sql, [userId]);
   if (error !== undefined) {

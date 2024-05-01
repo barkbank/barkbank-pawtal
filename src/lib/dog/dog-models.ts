@@ -46,3 +46,13 @@ export type SubProfile = {
   dogEverReceivedTransfusion: YesNoUnknown;
   dogPreferredVetId: string;
 };
+
+/**
+ * An appointment
+ */
+export type DogAppointment = {
+  dogId: string;
+  callId: string;
+  vetId: string;
+  vetName: string;
+};

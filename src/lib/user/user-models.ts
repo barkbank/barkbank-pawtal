@@ -6,6 +6,7 @@ import {
   DogGender,
   UserResidency,
 } from "../data/db-enums";
+import { DogAppointment } from "../dog/dog-models";
 import { DogStatuses } from "../dog/dog-models";
 
 export type MyAccount = {
@@ -26,12 +27,6 @@ export type MyAccountDetailsUpdate = {
   userResidency: UserResidency;
 };
 
-export type MyDogAppointment = {
-  callId: string;
-  vetId: string;
-  vetName: string;
-};
-
 /**
  * Summary details of a user's dog for the My Pets view.
  */
@@ -43,7 +38,7 @@ export type MyDog = {
   dogMedicalStatus: MedicalStatus;
   dogServiceStatus: ServiceStatus;
   dogParticipationStatus: ParticipationStatus;
-  dogAppointments: MyDogAppointment[];
+  dogAppointments: DogAppointment[];
   dogStatuses: DogStatuses;
 };
 
