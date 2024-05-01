@@ -1,6 +1,7 @@
 export type PomDog = {
   dogName: string;
   dogStatus: string;
+  vetName?: string;
 };
 
 export type PomUser = {

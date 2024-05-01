@@ -26,6 +26,11 @@ export function getKnownUser(): PomUser {
         dogName: "Bentley",
         dogStatus: "Profile Incomplete",
       },
+      {
+        dogName: "Klaus",
+        dogStatus: "Awaiting Report",
+        vetName: "Vet Clinic 1",
+      },
     ],
   };
 }
