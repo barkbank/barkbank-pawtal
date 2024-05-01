@@ -8,7 +8,7 @@ import {
 import {
   StatusSet,
   mapStatusSetToHighlightedStatus,
-} from "@/lib/data/status-mapper";
+} from "@/lib/dog/status-mapper";
 import { MyDog } from "@/lib/user/user-models";
 import clsx from "clsx";
 import {

@@ -8,7 +8,7 @@ import { MyDog } from "@/lib/user/user-models";
 import Image from "next/image";
 import { IMG_PATH } from "@/lib/image-path";
 import { DOG_GENDER, PROFILE_STATUS } from "@/lib/data/db-enums";
-import { mapStatusSetToHighlightedStatus } from "@/lib/data/status-mapper";
+import { mapStatusSetToHighlightedStatus } from "@/lib/dog/status-mapper";
 import { BarkButton } from "@/components/bark/bark-button";
 import {
   BarkStatusBlock,

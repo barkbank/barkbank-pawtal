@@ -8,7 +8,7 @@ import {
   SCHEDULING_STATUS,
   SERVICE_STATUS,
   ServiceStatus,
-} from "./db-enums";
+} from "../data/db-enums";
 
 export type StatusSet = {
   serviceStatus: ServiceStatus;
