@@ -1,6 +1,6 @@
 import { dbResultQuery } from "@/lib/data/db-utils";
 import { UserActor } from "../user-actor";
-import { DogProfile } from "../user-models";
+import { DogProfile } from "@/lib/dog/dog-models";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import {
   DogAntigenPresence,

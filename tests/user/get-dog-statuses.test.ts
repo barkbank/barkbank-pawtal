@@ -1,7 +1,7 @@
 import { getDogStatuses } from "@/lib/user/actions/get-dog-statuses";
 import { withDb } from "../_db_helpers";
 import { getUserActor, insertDog, insertUser } from "../_fixtures";
-import { DogStatuses } from "@/lib/user/user-models";
+import { DogStatuses } from "@/lib/dog/dog-models";
 import {
   DOG_GENDER,
   MEDICAL_STATUS,

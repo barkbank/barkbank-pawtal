@@ -1,6 +1,6 @@
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { UserActor } from "../user-actor";
-import { DogStatuses } from "../user-models";
+import { DogStatuses } from "@/lib/dog/dog-models";
 import {
   MedicalStatus,
   ParticipationStatus,
