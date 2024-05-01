@@ -94,7 +94,7 @@ describe("getMyPets", () => {
       const actor = getUserActor(dbPool, userId);
       const { result: dogs, error } = await getMyPets(actor);
       expect(error).toBeUndefined();
-      expect(dogs![0].dogParticipationStatus).toEqual(
+      expect(dogs![0].dogStatuses.dogParticipationStatus).toEqual(
         PARTICIPATION_STATUS.PAUSED,
       );
     });
@@ -117,7 +117,7 @@ describe("getMyPets", () => {
       const actor = getUserActor(dbPool, userId);
       const { result: dogs, error } = await getMyPets(actor);
       expect(error).toBeUndefined();
-      expect(dogs![0].dogParticipationStatus).toEqual(
+      expect(dogs![0].dogStatuses.dogParticipationStatus).toEqual(
         PARTICIPATION_STATUS.PARTICIPATING,
       );
     });

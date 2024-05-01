@@ -91,10 +91,6 @@ export async function getMyPets(
     };
     const myDog: MyDog = {
       dogName,
-      dogServiceStatus,
-      dogProfileStatus,
-      dogMedicalStatus,
-      dogParticipationStatus,
       dogAppointments,
       dogStatuses,
       ...otherFields,

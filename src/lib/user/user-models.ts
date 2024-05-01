@@ -34,10 +34,6 @@ export type MyDog = {
   dogId: string;
   dogName: string;
   dogGender: DogGender;
-  dogProfileStatus: ProfileStatus;
-  dogMedicalStatus: MedicalStatus;
-  dogServiceStatus: ServiceStatus;
-  dogParticipationStatus: ParticipationStatus;
   dogAppointments: DogAppointment[];
   dogStatuses: DogStatuses;
 };
