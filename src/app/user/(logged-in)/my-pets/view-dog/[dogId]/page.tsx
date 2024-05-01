@@ -16,5 +16,5 @@ export default async function Page(props: { params: { dogId: string } }) {
     <div className="m-3">
       <p>View Dog {dogId}</p>
     </div>
-  )
+  );
 }

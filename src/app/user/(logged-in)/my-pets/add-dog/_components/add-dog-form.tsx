@@ -8,7 +8,10 @@ import { useRouter } from "next/navigation";
 import { RoutePath } from "@/lib/route-path";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { CODE } from "@/lib/utilities/bark-code";
-import { DogFormData, GeneralDogForm } from "../../_components/general-dog-form";
+import {
+  DogFormData,
+  GeneralDogForm,
+} from "../../_components/general-dog-form";
 
 export default function AddDogForm(props: { vetOptions: BarkFormOption[] }) {
   const router = useRouter();
