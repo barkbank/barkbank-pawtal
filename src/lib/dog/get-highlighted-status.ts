@@ -1,26 +1,11 @@
 import {
   MEDICAL_STATUS,
-  MedicalStatus,
   PARTICIPATION_STATUS,
   PROFILE_STATUS,
-  ParticipationStatus,
-  ProfileStatus,
   SCHEDULING_STATUS,
   SERVICE_STATUS,
-  ServiceStatus,
 } from "../data/db-enums";
 import { DogStatuses } from "./dog-models";
-
-/**
- * @deprecated - use DogStatuses instead.
- */
-export type StatusSet = {
-  serviceStatus: ServiceStatus;
-  profileStatus: ProfileStatus;
-  medicalStatus: MedicalStatus;
-  participationStatus: ParticipationStatus;
-  numPendingReports: number;
-};
 
 export type HighlightedStatus =
   | typeof SERVICE_STATUS.UNAVAILABLE
