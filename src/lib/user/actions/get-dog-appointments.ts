@@ -84,8 +84,7 @@ async function checkOwnership(
 async function fetchAppointments(
   ctx: Context,
 ): Promise<Result<DogAppointment[], typeof CODE.DB_QUERY_FAILURE>> {
-  const { actor, dogId, conn } = ctx;
-  const { userId } = actor.getParams();
+  const { dogId, conn } = ctx;
   const sql = `
   SELECT
     tCall.dog_id as "dogId",
