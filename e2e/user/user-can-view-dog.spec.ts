@@ -3,7 +3,6 @@ import { registerTestUser } from "../_lib/init/register-test-user";
 import { UserMyPetsPage } from "../_lib/pom/pages/user-my-pets-page";
 import { UserViewDogPage } from "../_lib/pom/pages/user-view-dog-page";
 import {
-  UTC,
   UTC_DATE_OPTION,
   formatDateTime,
   parseDateTime,
