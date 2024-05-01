@@ -76,8 +76,11 @@ function ProfileItem(props: { label: string; value: string | number | null }) {
 
 function Warning(props: { children: React.ReactNode; icon: string }) {
   const { children, icon } = props;
+
+  // Note: -mt-3 because warnings are outside the profile item. It should match
+  // the gap of the flex-col
   return (
-    <div className="flex flex-row items-center justify-center gap-3">
+    <div className="-mt-3 flex flex-row items-center justify-center gap-3">
       <Image src={icon} width={16} height={16} alt="Warning Icon" />
       <p className="text-sm italic">{children}</p>
     </div>
@@ -113,10 +116,10 @@ function formatPregnancyHistory(
     return "N.A.";
   }
   if (dogEverPregnant === YES_NO_UNKNOWN.YES) {
-    return "Yes, Ever Pregnant";
+    return "Yes, ever pregnant";
   }
   if (dogEverPregnant === YES_NO_UNKNOWN.NO) {
-    return "No, Never Pregnant";
+    return "No, never pregnant";
   }
   return "Unknown";
 }
@@ -167,8 +170,6 @@ export default async function Page(props: { params: { dogId: string } }) {
   } = dogProfile;
 
   const dogAgeMonths = getAgeMonths(dogBirthday, new Date());
-
-  // TODO: Preferred Vet
 
   return (
     <div className="m-3">
