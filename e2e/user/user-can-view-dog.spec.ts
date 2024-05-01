@@ -21,6 +21,9 @@ test("user can view dog", async ({ page }) => {
   await expect(
     pg2.page().getByRole("heading", { name: dogName }),
   ).toBeVisible();
+  await expect(
+    pg2.page().getByText(`is eligible for blood donation`),
+  ).toContainText(dogName);
   await expect(pg2.dogBreedItem()).toContainText(dogBreed);
   await expect(pg2.dogWeightItem()).toContainText(dogWeightKg);
   await expect(pg2.dogGenderItem()).toContainText("Male");
