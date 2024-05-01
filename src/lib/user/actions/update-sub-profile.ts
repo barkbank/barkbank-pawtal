@@ -1,6 +1,6 @@
 import { PoolClient } from "pg";
 import { UserActor } from "../user-actor";
-import { SubProfile } from "../user-models";
+import { SubProfile } from "@/lib/dog/dog-models";
 import {
   dbBegin,
   dbCommit,

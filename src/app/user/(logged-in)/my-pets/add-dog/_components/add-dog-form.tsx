@@ -1,7 +1,7 @@
 "use client";
 
 import { BarkFormOption } from "@/components/bark/bark-form";
-import { DogProfile } from "@/lib/user/user-models";
+import { DogProfile } from "@/lib/dog/dog-models";
 import { UTC_DATE_OPTION, parseDateTime } from "@/lib/utilities/bark-time";
 import { postDogProfile } from "../_actions/post-dog-profile";
 import { useRouter } from "next/navigation";

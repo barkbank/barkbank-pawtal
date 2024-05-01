@@ -1,4 +1,4 @@
-import { DogProfile } from "@/lib/user/user-models";
+import { DogProfile } from "@/lib/dog/dog-models";
 import { withDb } from "../_db_helpers";
 import {
   fetchDogInfo,

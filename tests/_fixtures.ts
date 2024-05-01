@@ -76,7 +76,8 @@ import {
 } from "@/lib/services/email-otp-service";
 import { VetActor, VetActorConfig } from "@/lib/vet/vet-actor";
 import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
-import { DogProfile, SubProfile } from "@/lib/user/user-models";
+import { DogProfile } from "@/lib/dog/dog-models";
+import { SubProfile } from "@/lib/dog/dog-models";
 import { getDogProfile } from "@/lib/user/actions/get-dog-profile";
 
 export function ensureTimePassed(): void {

@@ -1,4 +1,4 @@
-import { SubProfile } from "@/lib/user/user-models";
+import { SubProfile } from "@/lib/dog/dog-models";
 import { withDb } from "../_db_helpers";
 import { CALL_OUTCOME, YES_NO_UNKNOWN } from "@/lib/data/db-enums";
 import {

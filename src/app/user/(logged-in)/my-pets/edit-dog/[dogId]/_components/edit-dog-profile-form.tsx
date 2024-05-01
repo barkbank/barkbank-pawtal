@@ -1,7 +1,7 @@
 "use client";
 
 import { BarkFormOption } from "@/components/bark/bark-form";
-import { DogProfile } from "@/lib/user/user-models";
+import { DogProfile } from "@/lib/dog/dog-models";
 import {
   UTC_DATE_OPTION,
   formatDateTime,
