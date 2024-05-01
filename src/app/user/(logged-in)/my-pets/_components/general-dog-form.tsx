@@ -57,7 +57,7 @@ const EMPTY_VALUES: Partial<DogFormData> = {
   dogPreferredVetId: "",
 };
 
-export default function GeneralDogForm(props: {
+export function GeneralDogForm(props: {
   formTitle: string;
   vetOptions: BarkFormOption[];
   prefillData?: DogFormData;
