@@ -12,7 +12,7 @@ import { CALL_OUTCOME } from "@/lib/data/db-enums";
 import { DogAppointment } from "@/lib/dog/dog-models";
 
 describe("getDogAppointments", () => {
-  it("should reutrn ERROR_DOG_NOT_FOUND when dog cannot be found", async () => {
+  it("should return ERROR_DOG_NOT_FOUND when dog cannot be found", async () => {
     await withDb(async (dbPool) => {
       const u1 = await insertUser(1, dbPool);
       const unknownDogId = "12345";
@@ -22,7 +22,7 @@ describe("getDogAppointments", () => {
       expect(result).toBeUndefined();
     });
   });
-  it("should reutrn ERROR_WRONG_OWNER if the user does not own the dog", async () => {
+  it("should return ERROR_WRONG_OWNER if the user does not own the dog", async () => {
     await withDb(async (dbPool) => {
       const u1 = await insertUser(1, dbPool);
       const owner = await insertUser(2, dbPool);
