@@ -10,6 +10,9 @@ import {
   ServiceStatus,
 } from "../data/db-enums";
 
+/**
+ * @deprecated - use DogStatuses instead.
+ */
 export type StatusSet = {
   serviceStatus: ServiceStatus;
   profileStatus: ProfileStatus;
