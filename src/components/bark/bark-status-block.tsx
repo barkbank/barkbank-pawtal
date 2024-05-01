@@ -5,10 +5,7 @@ import {
   MEDICAL_STATUS,
   PROFILE_STATUS,
 } from "@/lib/data/db-enums";
-import {
-  StatusSet,
-  getHighlightedStatus,
-} from "@/lib/dog/get-highlighted-status";
+import { getHighlightedStatus } from "@/lib/dog/get-highlighted-status";
 import { MyDog } from "@/lib/user/user-models";
 import clsx from "clsx";
 import {
@@ -21,17 +18,6 @@ import {
   BarkStatusTemporarilyIneligible,
   BarkStatusEligible,
 } from "./bark-status";
-
-export function toStatusSet(dog: MyDog): StatusSet {
-  const statusSet: StatusSet = {
-    serviceStatus: dog.dogServiceStatus,
-    profileStatus: dog.dogProfileStatus,
-    medicalStatus: dog.dogMedicalStatus,
-    numPendingReports: dog.dogAppointments.length,
-    participationStatus: dog.dogParticipationStatus,
-  };
-  return statusSet;
-}
 
 function StatusMessage(props: {
   children: React.ReactNode;
@@ -50,10 +36,8 @@ function StatusMessage(props: {
 }
 
 export function BarkStatusBlock(props: { dog: MyDog }) {
-  const { dog } = props;
-  const statusSet = toStatusSet(dog);
-  const highlightedStatus = getHighlightedStatus(statusSet);
-  const { dogName, dogAppointments } = dog;
+  const { dogName, dogAppointments, dogStatuses } = props.dog;
+  const highlightedStatus = getHighlightedStatus(dogStatuses);
 
   if (highlightedStatus === SERVICE_STATUS.UNAVAILABLE) {
     return (
@@ -162,9 +146,7 @@ export function BarkStatusBlock(props: { dog: MyDog }) {
   // Logically it should not be possible to get to this part. However, if it
   // does, we will mention that the status is eligible, but we will not mention
   // vet appointments.
-  console.log(
-    `unexpected dog status. StatusSet = ${JSON.stringify(statusSet)} HighlightedStatus = ${highlightedStatus}`,
-  );
+  console.warn("unexpected dog status", { dogStatuses, highlightedStatus });
   return (
     <div>
       <BarkStatusEligible />

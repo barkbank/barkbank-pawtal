@@ -10,15 +10,12 @@ import { IMG_PATH } from "@/lib/image-path";
 import { DOG_GENDER, PROFILE_STATUS } from "@/lib/data/db-enums";
 import { getHighlightedStatus } from "@/lib/dog/get-highlighted-status";
 import { BarkButton } from "@/components/bark/bark-button";
-import {
-  BarkStatusBlock,
-  toStatusSet,
-} from "@/components/bark/bark-status-block";
+import { BarkStatusBlock } from "@/components/bark/bark-status-block";
 
 function ActionBlock(props: { dog: MyDog }) {
   const { dog } = props;
   const { dogId } = dog;
-  const highlightedStatus = getHighlightedStatus(toStatusSet(dog));
+  const highlightedStatus = getHighlightedStatus(dog.dogStatuses);
   if (highlightedStatus === PROFILE_STATUS.INCOMPLETE) {
     return (
       <BarkButton variant="brand" className="w-full">

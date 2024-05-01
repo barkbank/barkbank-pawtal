@@ -9,6 +9,7 @@ import {
   SERVICE_STATUS,
   ServiceStatus,
 } from "../data/db-enums";
+import { DogStatuses } from "./dog-models";
 
 /**
  * @deprecated - use DogStatuses instead.
@@ -32,37 +33,42 @@ export type HighlightedStatus =
   | typeof MEDICAL_STATUS.ELIGIBLE
   | typeof MEDICAL_STATUS.UNKNOWN;
 
-export function getHighlightedStatus(statusSet: StatusSet): HighlightedStatus {
+/**
+ * https://www.notion.so/Status-Definitions-1863858b32eb4016b73d1ddc6c16d26f?pvs=4#e0ef6804a6704fa19d7966ba2b830a17
+ */
+export function getHighlightedStatus(
+  dogStatuses: DogStatuses,
+): HighlightedStatus {
   const {
-    serviceStatus,
-    profileStatus,
-    medicalStatus,
-    participationStatus,
+    dogServiceStatus,
+    dogProfileStatus,
+    dogMedicalStatus,
+    dogParticipationStatus,
     numPendingReports,
-  } = statusSet;
-  if (serviceStatus === SERVICE_STATUS.UNAVAILABLE) {
-    return serviceStatus;
+  } = dogStatuses;
+  if (dogServiceStatus === SERVICE_STATUS.UNAVAILABLE) {
+    return dogServiceStatus;
   }
   if (numPendingReports > 0) {
     return SCHEDULING_STATUS.PENDING_REPORT;
   }
-  if (participationStatus === PARTICIPATION_STATUS.OPTED_OUT) {
-    return participationStatus;
+  if (dogParticipationStatus === PARTICIPATION_STATUS.OPTED_OUT) {
+    return dogParticipationStatus;
   }
-  if (participationStatus === PARTICIPATION_STATUS.PAUSED) {
-    return participationStatus;
+  if (dogParticipationStatus === PARTICIPATION_STATUS.PAUSED) {
+    return dogParticipationStatus;
   }
-  if (medicalStatus === MEDICAL_STATUS.PERMANENTLY_INELIGIBLE) {
-    return medicalStatus;
+  if (dogMedicalStatus === MEDICAL_STATUS.PERMANENTLY_INELIGIBLE) {
+    return dogMedicalStatus;
   }
-  if (profileStatus === PROFILE_STATUS.INCOMPLETE) {
-    return profileStatus;
+  if (dogProfileStatus === PROFILE_STATUS.INCOMPLETE) {
+    return dogProfileStatus;
   }
-  if (medicalStatus === MEDICAL_STATUS.TEMPORARILY_INELIGIBLE) {
-    return medicalStatus;
+  if (dogMedicalStatus === MEDICAL_STATUS.TEMPORARILY_INELIGIBLE) {
+    return dogMedicalStatus;
   }
-  if (medicalStatus === MEDICAL_STATUS.ELIGIBLE) {
-    return medicalStatus;
+  if (dogMedicalStatus === MEDICAL_STATUS.ELIGIBLE) {
+    return dogMedicalStatus;
   }
   return MEDICAL_STATUS.UNKNOWN;
 }
