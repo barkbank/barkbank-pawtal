@@ -5,12 +5,12 @@ import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
 import { getMyPets } from "@/lib/user/actions/get-my-pets";
 import { MyDog } from "@/lib/user/user-models";
-import Image from "next/image";
 import { IMG_PATH } from "@/lib/image-path";
 import { DOG_GENDER, PROFILE_STATUS } from "@/lib/data/db-enums";
 import { getHighlightedStatus } from "@/lib/dog/get-highlighted-status";
 import { BarkButton } from "@/components/bark/bark-button";
 import { BarkStatusBlock } from "@/components/bark/bark-status-block";
+import { BarkDogAvatar } from "@/components/bark/bark-dog-avatar";
 
 function ActionBlock(props: { dog: MyDog }) {
   const { dog } = props;
@@ -54,13 +54,7 @@ function DogCard(props: { dog: MyDog; cardIdx: number; isLastCard: boolean }) {
     <>
       <div className="mt-3 flex flex-col place-items-center gap-3 rounded-md px-3 py-3 shadow-sm shadow-slate-400 first:mt-0 md:flex-row">
         {/* Avatar */}
-        <Image
-          src={imgSrc}
-          alt="Generic dog avatar for dog details"
-          width={100}
-          height={100}
-          className=""
-        />
+        <BarkDogAvatar gender={dog.dogGender} />
 
         {/* Details */}
         <div className="flex-1">

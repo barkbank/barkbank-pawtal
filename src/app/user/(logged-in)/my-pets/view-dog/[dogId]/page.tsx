@@ -1,3 +1,4 @@
+import { BarkDogAvatar } from "@/components/bark/bark-dog-avatar";
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { DogAppointment, DogProfile, DogStatuses } from "@/lib/dog/dog-models";
 import { RoutePath } from "@/lib/route-path";
@@ -62,6 +63,7 @@ export default async function Page(props: { params: { dogId: string } }) {
 
   return (
     <div className="m-3">
+      <BarkDogAvatar gender={dogProfile.dogGender} />
       <p>View Dog {dogId}</p>
       <pre className="text-xs">{JSON.stringify(result, null, 2)}</pre>
     </div>
