@@ -14,6 +14,8 @@ export class RoutePath {
     `/user/my-pets/view-dog/${dogId}`;
   static readonly USER_EDIT_DOG = (dogId: string) =>
     `/user/my-pets/edit-dog/${dogId}`;
+  static readonly USER_VIEW_DOG_REGEX =
+    /.*[/]user[/]my-pets[/]view-dog[/][0-9]+/;
   static readonly USER_EDIT_DOG_REGEX =
     /.*[/]user[/]my-pets[/]edit-dog[/][0-9]+/;
   static readonly USER_CRITERIA = "/user/criteria";

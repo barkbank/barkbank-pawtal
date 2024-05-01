@@ -203,7 +203,11 @@ function ActionBlock(props: { dog: MyDog }) {
       >
         Edit
       </BarkButton>
-      <BarkButton variant="brandInverse" className="w-full">
+      <BarkButton
+        variant="brandInverse"
+        className="w-full"
+        href={RoutePath.USER_VIEW_DOG(dogId)}
+      >
         View
       </BarkButton>
     </div>
