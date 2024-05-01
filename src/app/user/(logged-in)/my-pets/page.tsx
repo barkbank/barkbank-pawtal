@@ -8,7 +8,7 @@ import { MyDog } from "@/lib/user/user-models";
 import Image from "next/image";
 import { IMG_PATH } from "@/lib/image-path";
 import { DOG_GENDER, PROFILE_STATUS } from "@/lib/data/db-enums";
-import { mapStatusSetToHighlightedStatus } from "@/lib/dog/status-mapper";
+import { getHighlightedStatus } from "@/lib/dog/get-highlighted-status";
 import { BarkButton } from "@/components/bark/bark-button";
 import {
   BarkStatusBlock,
@@ -18,7 +18,7 @@ import {
 function ActionBlock(props: { dog: MyDog }) {
   const { dog } = props;
   const { dogId } = dog;
-  const highlightedStatus = mapStatusSetToHighlightedStatus(toStatusSet(dog));
+  const highlightedStatus = getHighlightedStatus(toStatusSet(dog));
   if (highlightedStatus === PROFILE_STATUS.INCOMPLETE) {
     return (
       <BarkButton variant="brand" className="w-full">

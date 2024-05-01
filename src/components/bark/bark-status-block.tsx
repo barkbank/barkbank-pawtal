@@ -7,8 +7,8 @@ import {
 } from "@/lib/data/db-enums";
 import {
   StatusSet,
-  mapStatusSetToHighlightedStatus,
-} from "@/lib/dog/status-mapper";
+  getHighlightedStatus,
+} from "@/lib/dog/get-highlighted-status";
 import { MyDog } from "@/lib/user/user-models";
 import clsx from "clsx";
 import {
@@ -52,7 +52,7 @@ function StatusMessage(props: {
 export function BarkStatusBlock(props: { dog: MyDog }) {
   const { dog } = props;
   const statusSet = toStatusSet(dog);
-  const highlightedStatus = mapStatusSetToHighlightedStatus(statusSet);
+  const highlightedStatus = getHighlightedStatus(statusSet);
   const { dogName, dogAppointments } = dog;
 
   if (highlightedStatus === SERVICE_STATUS.UNAVAILABLE) {

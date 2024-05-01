@@ -29,7 +29,7 @@ export type HighlightedStatus =
   | typeof MEDICAL_STATUS.ELIGIBLE
   | typeof MEDICAL_STATUS.UNKNOWN;
 
-export function mapStatusSetToHighlightedStatus(
+export function getHighlightedStatus(
   statusSet: StatusSet,
 ): HighlightedStatus {
   const {
