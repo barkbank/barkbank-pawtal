@@ -11,11 +11,11 @@ export class RoutePath {
   static readonly USER_MY_ACCOUNT_EDIT = "/user/my-account/edit";
   static readonly USER_MY_ACCOUNT_PAGE = "/user/my-account";
   static readonly USER_VIEW_DOG = (dogId: string) =>
-    `/user/my-pets/dogs/${dogId}`;
+    `/user/my-pets/view-dog/${dogId}`;
   static readonly USER_EDIT_DOG = (dogId: string) =>
-    `/user/my-pets/dogs/${dogId}/edit`;
+    `/user/my-pets/edit-dog/${dogId}`;
   static readonly USER_EDIT_DOG_REGEX =
-    /.*[/]user[/]my-pets[/]dogs[/][0-9]+[/]edit/;
+    /.*[/]user[/]my-pets[/]edit-dog[/][0-9]+/;
   static readonly USER_CRITERIA = "/user/criteria";
   static readonly USER_PROCESS = "/user/process";
 
