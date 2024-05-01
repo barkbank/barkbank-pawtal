@@ -10,6 +10,7 @@ import {
 } from "@/lib/data/db-enums";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { CODE } from "@/lib/utilities/bark-code";
+import { DogStatuses } from "@/lib/dog/dog-models";
 
 export async function getMyPets(
   actor: UserActor,
@@ -67,12 +68,33 @@ export async function getMyPets(
     return Err(error);
   }
   const futureDogs = result.rows.map(async (row) => {
-    const { dogEncryptedOii, ...otherFields } = row;
+    const {
+      dogEncryptedOii,
+      dogServiceStatus,
+      dogProfileStatus,
+      dogMedicalStatus,
+      dogParticipationStatus,
+      dogAppointments,
+      ...otherFields
+    } = row;
     const { dogName } = await dogMapper.mapDogSecureOiiToDogOii({
       dogEncryptedOii,
     });
+    const dogStatuses: DogStatuses = {
+      dogServiceStatus,
+      dogProfileStatus,
+      dogMedicalStatus,
+      dogParticipationStatus,
+      numPendingReports: dogAppointments.length,
+    };
     const myDog: MyDog = {
       dogName,
+      dogServiceStatus,
+      dogProfileStatus,
+      dogMedicalStatus,
+      dogParticipationStatus,
+      dogAppointments,
+      dogStatuses,
       ...otherFields,
     };
     return myDog;

@@ -6,6 +6,7 @@ import {
   DogGender,
   UserResidency,
 } from "../data/db-enums";
+import { DogStatuses } from "../dog/dog-models";
 
 export type MyAccount = {
   userCreationTime: Date;
@@ -43,6 +44,7 @@ export type MyDog = {
   dogServiceStatus: ServiceStatus;
   dogParticipationStatus: ParticipationStatus;
   dogAppointments: MyDogAppointment[];
+  dogStatuses: DogStatuses;
 };
 
 /**
