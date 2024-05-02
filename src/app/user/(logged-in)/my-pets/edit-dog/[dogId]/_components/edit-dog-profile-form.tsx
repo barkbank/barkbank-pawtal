@@ -28,8 +28,12 @@ export default function EditDogProfileForm(props: {
   async function handleValues(
     values: DogFormData,
   ): Promise<Result<true, string>> {
+    const t0 = Date.now();
     const dogProfile = toDogProfile(values);
     const res = await postDogProfileUpdate({ dogId, dogProfile });
+    const t1 = Date.now();
+    const postDogProfileUpdateElapsedMs = t1 - t0;
+    console.log({ postDogProfileUpdateElapsedMs });
     if (res === CODE.ERROR_NOT_LOGGED_IN) {
       router.push(RoutePath.USER_LOGIN_PAGE);
       return Err(res);
