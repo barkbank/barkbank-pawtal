@@ -18,7 +18,11 @@ function ActionBlock(props: { dog: MyDog }) {
   const highlightedStatus = getHighlightedStatus(dog.dogStatuses);
   if (highlightedStatus === PROFILE_STATUS.INCOMPLETE) {
     return (
-      <BarkButton variant="brand" className="w-full">
+      <BarkButton
+        variant="brand"
+        className="w-full"
+        href={RoutePath.USER_EDIT_DOG(dogId)}
+      >
         Complete Profile
       </BarkButton>
     );
