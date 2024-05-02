@@ -31,10 +31,6 @@ export default async function Layout(props: { children: React.ReactNode }) {
       iconSrc: IMG_PATH.SIDE_BAR_INFO,
       iconLightSrc: IMG_PATH.SIDE_BAR_INFO_LIGHT,
     },
-    {
-      label: "Process",
-      href: RoutePath.USER_PROCESS,
-    },
   ];
   return <BarkNavLayout routes={routes}>{props.children}</BarkNavLayout>;
 }
