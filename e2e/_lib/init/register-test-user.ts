@@ -6,7 +6,10 @@ import { UserMyPetsPage } from "../pom/pages/user-my-pets-page";
 import { PomContext } from "../pom/core/pom-object";
 import { UserRegistrationPage } from "../pom/pages/user-registration-page";
 
-export async function registerTestUser(args: { page: Page }): Promise<{
+export async function registerTestUser(args: {
+  page: Page;
+  isIncomplete?: boolean;
+}): Promise<{
   context: PomContext;
   guid: string;
   userName: string;
@@ -27,7 +30,7 @@ export async function registerTestUser(args: { page: Page }): Promise<{
   const dogBirthday = getTestBirthday(5);
   const dogWeightKg = "31.4";
 
-  const { page } = args;
+  const { page, isIncomplete } = args;
   const context = await initPomContext({ page });
 
   const pg = new UserRegistrationPage(context);
@@ -38,11 +41,21 @@ export async function registerTestUser(args: { page: Page }): Promise<{
   await pg.dogNameField().fill(dogName);
   await pg.dogBreedField().fill(dogBreed);
   await pg.dogBirthdayField().fill(dogBirthday);
-  await pg.dogGender_MALE().click();
   await pg.dogWeightField().fill(dogWeightKg);
-  await pg.dogBloodType_UNKNOWN().click();
-  await pg.dogEverReceivedTransfusion_NO().click();
-  await pg.dogEverPregnant_NO().click();
+
+  if (isIncomplete === true) {
+    // Create profile that is incomplete
+    await pg.dogGender_FEMALE().click();
+    await pg.dogBloodType_UNKNOWN().click();
+    await pg.dogEverReceivedTransfusion_UNKNOWN().click();
+    await pg.dogEverPregnant_UNKNOWN().click();
+  } else {
+    await pg.dogGender_MALE().click();
+    await pg.dogBloodType_UNKNOWN().click();
+    await pg.dogEverReceivedTransfusion_NO().click();
+    await pg.dogEverPregnant_NO().click();
+  }
+
   await pg.dogPreferredVet_VetClinic1().click();
   await pg.nextButton().click();
 
@@ -74,6 +87,6 @@ export async function registerTestUser(args: { page: Page }): Promise<{
     dogWeightKg,
     userMyPetsPage,
   };
-  console.log(result);
+  // console.log(result);
   return result;
 }

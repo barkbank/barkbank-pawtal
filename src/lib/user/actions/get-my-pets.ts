@@ -1,4 +1,4 @@
-import { dbQuery, dbResultQuery } from "../../data/db-utils";
+import { dbResultQuery } from "../../data/db-utils";
 import { MyDog } from "../user-models";
 import { DogAppointment } from "@/lib/dog/dog-models";
 import { UserActor } from "../user-actor";
