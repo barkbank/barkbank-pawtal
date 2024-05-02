@@ -1,3 +1,5 @@
+import clsx from "clsx";
+
 export function BarkH1(props: { children: React.ReactNode }) {
   return (
     <h1 className="scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl">
@@ -32,12 +34,16 @@ export function BarkH4(props: { children: React.ReactNode }) {
 
 export function BarkH5(props: { children: React.ReactNode }) {
   return (
-    <h5 className="scroll-m-20 text-base font-semibold tracking-tight"></h5>
+    <h5 className="scroll-m-20 text-base font-semibold tracking-tight">
+      {props.children}
+    </h5>
   );
 }
 
-export function BarkP(props: { children: React.ReactNode }) {
+export function BarkP(props: { children: React.ReactNode; classes?: string }) {
   return (
-    <p className="leading-7 [&:not(:first-child)]:mt-6">{props.children}</p>
+    <p className={clsx("leading-7 [&:not(:first-child)]:mt-6", props.classes)}>
+      {props.children}
+    </p>
   );
 }
