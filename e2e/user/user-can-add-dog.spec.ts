@@ -4,6 +4,7 @@ import { getTestBirthday } from "../_lib/e2e-test-utils";
 import { generateTestDogName } from "../_lib/e2e-test-utils";
 import { UserAddDogPage } from "../_lib/pom/pages/user-add-dog-page";
 import { UserMyPetsPage } from "../_lib/pom/pages/user-my-pets-page";
+import { ToastComponent } from "../_lib/pom/layout/toast-component";
 
 test("user can register, login, add dog, and see it in my-pets", async ({
   page,
@@ -31,6 +32,19 @@ test("user can register, login, add dog, and see it in my-pets", async ({
   await pg2.dogEverPregnantOption_NO().click();
   await pg2.dogPreferredVetOption_1().click();
   await pg2.saveButton().click();
+
+  const toast = new ToastComponent(context);
+  await expect(toast.locator()).toBeVisible();
+  await expect(
+    toast.locator().getByText("Adding...", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    toast.locator().getByText("Added!", { exact: true }),
+  ).toBeVisible();
+  await toast.closeButton().click();
+  await expect(
+    toast.locator().getByText("Added!", { exact: true }),
+  ).not.toBeVisible();
 
   // THEN
   const pg3 = new UserMyPetsPage(context);

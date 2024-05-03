@@ -17,7 +17,8 @@ import {
   GeneralDogForm,
 } from "../../../_components/general-dog-form";
 import { useToast } from "@/components/ui/use-toast";
-import { TOAST_DELAY_MILLIS } from "@/app/_lib/toast-delay";
+import { MINIMUM_TOAST_MILLIS } from "@/app/_lib/toast-delay";
+import { asyncSleep } from "@/lib/utilities/async-sleep";
 
 export default function EditDogProfileForm(props: {
   vetOptions: BarkFormOption[];
@@ -31,22 +32,18 @@ export default function EditDogProfileForm(props: {
   async function handleValues(
     values: DogFormData,
   ): Promise<Result<true, string>> {
-    const t0 = Date.now();
     const dogProfile = toDogProfile(values);
     const { dogName } = dogProfile;
 
-    const delayedToast = setTimeout(() => {
-      toast({
-        title: "Saving...",
-        description: `Profile for ${dogName} is being saved.`,
-        variant: "brandInfo",
-      });
-    }, TOAST_DELAY_MILLIS);
-    const res = await postDogProfileUpdate({ dogId, dogProfile });
-    clearTimeout(delayedToast);
-    const t1 = Date.now();
-    const postDogProfileUpdateElapsedMs = t1 - t0;
-    console.log({ postDogProfileUpdateElapsedMs });
+    toast({
+      title: "Saving...",
+      description: `Profile for ${dogName} is being saved.`,
+      variant: "brandInfo",
+    });
+    const [res, _] = await Promise.all([
+      postDogProfileUpdate({ dogId, dogProfile }),
+      asyncSleep(MINIMUM_TOAST_MILLIS),
+    ]);
     if (res === CODE.ERROR_NOT_LOGGED_IN) {
       router.push(RoutePath.USER_LOGIN_PAGE);
       return Err(res);

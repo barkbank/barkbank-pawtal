@@ -13,7 +13,8 @@ import {
   GeneralDogForm,
 } from "../../_components/general-dog-form";
 import { useToast } from "@/components/ui/use-toast";
-import { TOAST_DELAY_MILLIS } from "@/app/_lib/toast-delay";
+import { MINIMUM_TOAST_MILLIS } from "@/app/_lib/toast-delay";
+import { asyncSleep } from "@/lib/utilities/async-sleep";
 
 export default function AddDogForm(props: { vetOptions: BarkFormOption[] }) {
   const router = useRouter();
@@ -36,15 +37,17 @@ export default function AddDogForm(props: { vetOptions: BarkFormOption[] }) {
       ...otherFields,
     };
     const { dogName } = dogProfile;
-    const delayedToast = setTimeout(() => {
-      toast({
-        title: "Adding...",
-        description: `Profile for ${dogName} is being added.`,
-        variant: "brandInfo",
-      });
-    }, TOAST_DELAY_MILLIS);
-    const { error } = await postDogProfile(dogProfile);
-    clearTimeout(delayedToast);
+    toast({
+      title: "Adding...",
+      description: `Profile for ${dogName} is being added.`,
+      variant: "brandInfo",
+    });
+
+    const [{ error }, _] = await Promise.all([
+      postDogProfile(dogProfile),
+      asyncSleep(MINIMUM_TOAST_MILLIS),
+    ]);
+
     if (error === CODE.ERROR_NOT_LOGGED_IN) {
       router.push(RoutePath.USER_LOGIN_PAGE);
       return Err(error);
