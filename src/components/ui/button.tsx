@@ -19,13 +19,13 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         brandInverse:
-          "text-brand font-bold border-2 border-brand bg-brand-light hover:bg-brand hover:text-white w-[160px] shadow-button",
+          "text-brand font-bold border-2 border-brand bg-brand-light hover:bg-brand hover:text-white sm:w-[160px] shadow-button",
         brand:
-          "text-white font-bold border-2 border-brand bg-brand hover:bg-brand-light hover:text-brand w-[160px] shadow-button",
+          "text-white font-bold border-2 border-brand bg-brand hover:bg-brand-light hover:text-brand sm:w-[160px] shadow-button",
         brandSelectedChoice:
-          "bg-brand-selected-choice text-primary-foreground w-[160px]",
+          "bg-brand-selected-choice text-primary-foreground sm:w-[160px]",
         brandChoice:
-          "border border-input bg-background hover:bg-accent hover:text-accent-foreground w-[160px]",
+          "border border-input bg-background hover:bg-accent hover:text-accent-foreground sm:w-[160px]",
       },
       size: {
         default: "h-10 px-4 py-2",
