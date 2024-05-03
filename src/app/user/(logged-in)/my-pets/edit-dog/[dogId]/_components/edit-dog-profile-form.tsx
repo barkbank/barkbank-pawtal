@@ -35,13 +35,14 @@ export default function EditDogProfileForm(props: {
     const dogProfile = toDogProfile(values);
     const { dogName } = dogProfile;
 
+    // TODO: Where to put the 250 value? Let's wait for other use cases to see where makes sense.
     const delayedToast = setTimeout(() => {
       toast({
         title: "Saving...",
         description: `Profile for ${dogName} is being saved.`,
         variant: "brandInfo",
       });
-    }, 100); // WIP: save this constant somewhere.
+    }, 250);
     const res = await postDogProfileUpdate({ dogId, dogProfile });
     clearTimeout(delayedToast);
     const t1 = Date.now();
