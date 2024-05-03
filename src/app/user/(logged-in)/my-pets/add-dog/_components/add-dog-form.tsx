@@ -13,6 +13,7 @@ import {
   GeneralDogForm,
 } from "../../_components/general-dog-form";
 import { useToast } from "@/components/ui/use-toast";
+import { TOAST_DELAY_MILLIS } from "@/app/_lib/toast-delay";
 
 export default function AddDogForm(props: { vetOptions: BarkFormOption[] }) {
   const router = useRouter();
@@ -35,14 +36,13 @@ export default function AddDogForm(props: { vetOptions: BarkFormOption[] }) {
       ...otherFields,
     };
     const {dogName} = dogProfile;
-    // TODO: Where to put the 250 value? Let's wait for other use cases to see where makes sense.
     const delayedToast = setTimeout(() => {
       toast({
         title: "Adding...",
         description: `Profile for ${dogName} is being added.`,
         variant: "brandInfo",
       });
-    }, 250);
+    }, TOAST_DELAY_MILLIS);
     const { error } = await postDogProfile(dogProfile);
     clearTimeout(delayedToast);
     if (error === CODE.ERROR_NOT_LOGGED_IN) {

@@ -17,6 +17,7 @@ import {
   GeneralDogForm,
 } from "../../../_components/general-dog-form";
 import { useToast } from "@/components/ui/use-toast";
+import { TOAST_DELAY_MILLIS } from "@/app/_lib/toast-delay";
 
 export default function EditDogProfileForm(props: {
   vetOptions: BarkFormOption[];
@@ -34,14 +35,13 @@ export default function EditDogProfileForm(props: {
     const dogProfile = toDogProfile(values);
     const { dogName } = dogProfile;
 
-    // TODO: Where to put the 250 value? Let's wait for other use cases to see where makes sense.
     const delayedToast = setTimeout(() => {
       toast({
         title: "Saving...",
         description: `Profile for ${dogName} is being saved.`,
         variant: "brandInfo",
       });
-    }, 250);
+    }, TOAST_DELAY_MILLIS);
     const res = await postDogProfileUpdate({ dogId, dogProfile });
     clearTimeout(delayedToast);
     const t1 = Date.now();
