@@ -17,7 +17,6 @@ import {
   GeneralDogForm,
 } from "../../../_components/general-dog-form";
 import { useToast } from "@/components/ui/use-toast";
-import { useState } from "react";
 
 export default function EditDogProfileForm(props: {
   vetOptions: BarkFormOption[];
