@@ -17,7 +17,7 @@ import { TOAST_DELAY_MILLIS } from "@/app/_lib/toast-delay";
 
 export default function AddDogForm(props: { vetOptions: BarkFormOption[] }) {
   const router = useRouter();
-  const {toast} = useToast();
+  const { toast } = useToast();
   const { vetOptions } = props;
 
   async function handleValues(
@@ -35,7 +35,7 @@ export default function AddDogForm(props: { vetOptions: BarkFormOption[] }) {
       dogWeightKg,
       ...otherFields,
     };
-    const {dogName} = dogProfile;
+    const { dogName } = dogProfile;
     const delayedToast = setTimeout(() => {
       toast({
         title: "Adding...",
