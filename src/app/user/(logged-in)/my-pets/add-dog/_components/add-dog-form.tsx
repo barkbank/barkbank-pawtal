@@ -12,9 +12,12 @@ import {
   DogFormData,
   GeneralDogForm,
 } from "../../_components/general-dog-form";
+import { useToast } from "@/components/ui/use-toast";
+import { TOAST_DELAY_MILLIS } from "@/app/_lib/toast-delay";
 
 export default function AddDogForm(props: { vetOptions: BarkFormOption[] }) {
   const router = useRouter();
+  const { toast } = useToast();
   const { vetOptions } = props;
 
   async function handleValues(
@@ -32,7 +35,16 @@ export default function AddDogForm(props: { vetOptions: BarkFormOption[] }) {
       dogWeightKg,
       ...otherFields,
     };
+    const { dogName } = dogProfile;
+    const delayedToast = setTimeout(() => {
+      toast({
+        title: "Adding...",
+        description: `Profile for ${dogName} is being added.`,
+        variant: "brandInfo",
+      });
+    }, TOAST_DELAY_MILLIS);
     const { error } = await postDogProfile(dogProfile);
+    clearTimeout(delayedToast);
     if (error === CODE.ERROR_NOT_LOGGED_IN) {
       router.push(RoutePath.USER_LOGIN_PAGE);
       return Err(error);
@@ -40,6 +52,11 @@ export default function AddDogForm(props: { vetOptions: BarkFormOption[] }) {
     if (error !== undefined) {
       return Err(error);
     }
+    toast({
+      title: "Added!",
+      description: `Profile for ${dogName} has been added.`,
+      variant: "brandSuccess",
+    });
     router.push(RoutePath.USER_MY_PETS);
     return Ok(true);
   }
