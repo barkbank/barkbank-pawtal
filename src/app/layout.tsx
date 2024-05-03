@@ -5,6 +5,7 @@ import BarkAuthProvider from "@/components/bark/bark-auth";
 import RootHeader from "@/app/_components/root-header";
 import RootFooter from "@/app/_components/root-footer";
 import clsx from "clsx";
+import { Toaster } from "@/components/ui/toaster";
 
 const siteFont = Montserrat({ subsets: ["latin"] });
 
@@ -30,6 +31,7 @@ export default function RootLayout({
           <RootHeader />
           {children}
           <RootFooter />
+          <Toaster />
         </BarkAuthProvider>
       </body>
     </html>
