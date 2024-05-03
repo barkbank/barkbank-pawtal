@@ -2,6 +2,7 @@ import { test, expect } from "@playwright/test";
 import { registerTestUser } from "../_lib/init/register-test-user";
 import { UserMyPetsPage } from "../_lib/pom/pages/user-my-pets-page";
 import { UserEditDogPage } from "../_lib/pom/pages/user-edit-dog-page";
+import { ToastComponent } from "../_lib/pom/layout/toast-component";
 
 test("user can edit dog profile", async ({ page }) => {
   const { context, dogName, dogBreed, dogBirthday, dogWeightKg } =
@@ -26,6 +27,19 @@ test("user can edit dog profile", async ({ page }) => {
   await pg2.dogBirthdayField().fill("1968-08-28");
   await pg2.dogWeightField().fill("16.827");
   await pg2.saveButton().click();
+
+  const toast = new ToastComponent(context);
+  await expect(toast.locator()).toBeVisible();
+  await expect(
+    toast.locator().getByText("Saving...", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    toast.locator().getByText("Saved!", { exact: true }),
+  ).toBeVisible();
+  await toast.closeButton().click();
+  await expect(
+    toast.locator().getByText("Saved!", { exact: true }),
+  ).not.toBeVisible();
 
   const pg3 = new UserMyPetsPage(context);
   await pg3.checkUrl();

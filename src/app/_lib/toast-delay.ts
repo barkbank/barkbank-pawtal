@@ -4,3 +4,8 @@
  * Saved or Added.
  */
 export const TOAST_DELAY_MILLIS = 250;
+
+/**
+ * The minimum number of milliseconds to display a toast.
+ */
+export const MINIMUM_TOAST_MILLIS = 1337;
