@@ -20,7 +20,6 @@ export async function postDogProfileUpdate(args: {
   | typeof CODE.FAILED
 > {
   const { dogId, dogProfile } = args;
-  await new Promise((resolve) => setTimeout(resolve, 2000)); // WIP: remove this false delay
   const actor = await getAuthenticatedUserActor();
   if (actor === null) {
     return CODE.ERROR_NOT_LOGGED_IN;
