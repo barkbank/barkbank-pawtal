@@ -75,7 +75,7 @@ export default function AccountEditForm({
             { label: "No", value: USER_RESIDENCY.OTHER },
           ]}
         />
-        <div className="mt-6 flex flex-col gap-2 sm:flex-row">
+        <div className="mt-6 flex flex-col gap-2 md:flex-row">
           <BarkButton variant="brand">Save</BarkButton>
           <BarkButton
             className="inline-block h-[60px]"
