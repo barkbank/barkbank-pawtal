@@ -33,7 +33,7 @@ export function BarkNavLayout(props: {
       </div>
 
       {/* Dock */}
-      <div className="fixed bottom-0 left-0 flex h-16 w-full flex-row items-center justify-center gap-6 bg-brand md:hidden">
+      <div className="fixed bottom-0 left-0 flex h-16 w-full flex-row items-center justify-center gap-6 bg-brand opacity-80 md:hidden">
         {props.routes.map((route) => {
           return (
             <DockOption
