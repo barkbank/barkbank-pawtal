@@ -68,7 +68,6 @@ export default function OwnerForm(props: {
     const { userEmail } = form.getValues();
     form.clearErrors("emailOtp");
     if (isValidEmail(userEmail)) {
-      setOtpState({ status: "PENDING", email: userEmail });
       form.clearErrors("userEmail");
       const res = await postOtpRequest({
         emailAddress: userEmail,
