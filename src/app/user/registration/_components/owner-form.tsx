@@ -4,6 +4,7 @@ import {
   BarkForm,
   BarkFormButton,
   BarkFormError,
+  BarkFormErrorParagraph,
   BarkFormHeader,
   BarkFormInput,
   BarkFormParagraph,
@@ -15,9 +16,10 @@ import { postOtpRequest } from "@/lib/server-actions/post-otp-request";
 import { isValidEmail } from "@/lib/utilities/bark-utils";
 import { USER_RESIDENCY } from "@/lib/data/db-enums";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { CODE } from "@/lib/utilities/bark-code";
 
 const FORM_SCHEMA = z.object({
   userName: z.string().min(1, { message: "Name cannot be empty" }),
@@ -50,7 +52,13 @@ export default function OwnerForm(props: {
     nextLabel,
     prevLabel,
   } = props;
-  const [recipientEmail, setRecipientEmail] = React.useState<string>("");
+  const [otpState, setOtpState] = useState<{
+    status: "PENDING" | "SEND_SUCCESS" | "SEND_FAILED";
+    email: string;
+  }>({
+    status: "PENDING",
+    email: "",
+  });
   const form = useForm<FormDataType>({
     resolver: zodResolver(FORM_SCHEMA),
     defaultValues,
@@ -60,12 +68,19 @@ export default function OwnerForm(props: {
     const { userEmail } = form.getValues();
     form.clearErrors("emailOtp");
     if (isValidEmail(userEmail)) {
-      // TODO: if the result of postOtpRequest is FAILED, we should ask user to request for another.
-      await postOtpRequest({ emailAddress: userEmail, accountType: null });
-      setRecipientEmail(userEmail);
+      setOtpState({ status: "PENDING", email: userEmail });
       form.clearErrors("userEmail");
+      const res = await postOtpRequest({
+        emailAddress: userEmail,
+        accountType: null,
+      });
+      if (res !== CODE.OK) {
+        setOtpState({ status: "SEND_FAILED", email: userEmail });
+      } else {
+        setOtpState({ status: "SEND_SUCCESS", email: userEmail });
+      }
     } else {
-      setRecipientEmail("");
+      setOtpState({ status: "PENDING", email: "" });
       form.setError("userEmail", { message: "Invalid email address" });
     }
   }
@@ -111,10 +126,15 @@ export default function OwnerForm(props: {
           type="email"
         />
         <BarkFormButton onClick={onRequestOtp}>Send me an OTP</BarkFormButton>
-        {recipientEmail !== "" && (
+        {otpState.status === "SEND_SUCCESS" && (
           <BarkFormParagraph>
-            An OTP has been sent to {recipientEmail}
+            An OTP has been sent to {otpState.email}
           </BarkFormParagraph>
+        )}
+        {otpState.status === "SEND_FAILED" && (
+          <BarkFormErrorParagraph>
+            Failed to send OTP. Please request another.
+          </BarkFormErrorParagraph>
         )}
         <BarkFormInput
           form={form}

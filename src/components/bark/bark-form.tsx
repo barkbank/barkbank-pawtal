@@ -59,6 +59,10 @@ export function BarkFormParagraph(props: { children: React.ReactNode }) {
   return <p className="mt-3 text-sm text-muted-foreground">{props.children}</p>;
 }
 
+export function BarkFormErrorParagraph(props: { children: React.ReactNode }) {
+  return <p className="mt-3 text-sm text-destructive">{props.children}</p>;
+}
+
 // Use form.setError("root", {message: "..."}) to set the error.
 export function BarkFormError(props: { form: UseFormReturn<any> }) {
   const { form } = props;
