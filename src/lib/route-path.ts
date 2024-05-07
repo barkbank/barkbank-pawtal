@@ -25,8 +25,8 @@ export class RoutePath {
   static readonly USER_DEFAULT_LOGGED_IN_PAGE = RoutePath.USER_MY_PETS;
 
   static readonly VET_LOGIN_PAGE = "/vet/login";
-  static readonly VET_SCHEDULE_APPOINTMENTS = "/vet/schedule-appointments";
-  static readonly VET_ADD_REPORTS = "/vet/add-reports";
+  static readonly VET_SCHEDULE_APPOINTMENTS = "/vet/schedule";
+  static readonly VET_ADD_REPORTS = "/vet/report";
   static readonly VET_DEFAULT_LOGGED_IN_PAGE =
     RoutePath.VET_SCHEDULE_APPOINTMENTS;
 
