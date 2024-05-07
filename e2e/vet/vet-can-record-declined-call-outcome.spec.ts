@@ -3,11 +3,9 @@ import { registerTestUser } from "../_lib/init/register-test-user";
 import { doLogoutSequence } from "../_lib/sequences/logout-sequence";
 import { loginKnownVet } from "../_lib/init/login-known-vet";
 import { VetSchedulePage } from "../_lib/pom/pages/vet-schedule-page";
-import { NavComponent } from "../_lib/pom/layout/nav-component";
-import { HeaderComponent } from "../_lib/pom/layout/header-component";
 import { isMobile } from "../_lib/e2e-test-utils";
 
-test("vet can schedule appointment", async ({ page }) => {
+test("vet can record DECLINED call outcome", async ({ page }) => {
   const { context, userEmail, dogName } = await registerTestUser({ page });
   await doLogoutSequence({ context });
   await loginKnownVet({ page });
@@ -16,7 +14,7 @@ test("vet can schedule appointment", async ({ page }) => {
   await expect(pg1.dogCard(dogName)).toBeVisible();
 
   if (await isMobile(context)) {
-    // TODO: Currently cannot schedule appointments when screen is mobile sized.
+    // TODO: Currently cannot record declined appointments when screen is mobile sized.
     return;
   }
 
@@ -24,7 +22,11 @@ test("vet can schedule appointment", async ({ page }) => {
   await expect(
     pg1.contactDetails().getByText(userEmail, { exact: true }),
   ).toBeVisible();
-  await pg1.scheduledButton().click();
-  await expect(pg1.callCardScheduledBadge()).toBeVisible();
-  await expect(pg1.dogCardScheduledBadge(dogName)).toBeVisible();
+  await pg1.declinedButton().click();
+  await expect(pg1.callCardDeclinedBadge()).toBeVisible();
+  await expect(pg1.dogCardDeclinedBadge(dogName)).toBeVisible();
+
+  // THEN WHEN the page is reloaded, the dog card should still be visible.
+  await pg1.page().reload();
+  await expect(pg1.dogCard(dogName)).toBeVisible();
 });
