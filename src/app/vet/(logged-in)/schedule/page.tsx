@@ -6,7 +6,7 @@ import { AppointmentScheduler } from "./_components/appointment-scheduler";
 
 export default async function Page() {
   const actor = await getAuthenticatedVetActor();
-  if (!actor) {
+  if (actor === null) {
     redirect(RoutePath.VET_LOGIN_PAGE);
   }
   const availableDogs = await getAvailableDogs(actor);
