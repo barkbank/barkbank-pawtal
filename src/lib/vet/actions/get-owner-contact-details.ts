@@ -2,29 +2,33 @@ import { Err, Ok, Result } from "@/lib/utilities/result";
 import { VetActor } from "../vet-actor";
 import { OwnerContactDetails } from "../vet-models";
 import { dbQuery } from "@/lib/data/db-utils";
-
-type ErrorCode = "ERROR_UNAUTHORIZED" | "ERROR_NO_DOG";
+import { CODE } from "@/lib/utilities/bark-code";
 
 /**
  * Get contact details of a dog's owner.
  *
  * @param actor Vet Actor
  * @param dogId Dog ID
- * @returns ERROR_UNAUTHORIZED when vet is not a preferred vet.
- * @returns ERROR_NO_DOG when dogId matches no dog.
+ * @returns ERROR_NOT_PREFERRED_VET when vet is not a preferred vet.
+ * @returns ERROR_DOG_NOT_FOUND when dogId matches no dog.
  * @returns owner contact details otherwise.
  */
 export async function getOwnerContactDetails(
   actor: VetActor,
   dogId: string,
-): Promise<Result<OwnerContactDetails, ErrorCode>> {
+): Promise<
+  Result<
+    OwnerContactDetails,
+    typeof CODE.ERROR_DOG_NOT_FOUND | typeof CODE.ERROR_NOT_PREFERRED_VET
+  >
+> {
   const ctx: Context = { actor, dogId };
   const row: Row | null = await fetchRow(ctx);
   if (row === null) {
-    return Err("ERROR_NO_DOG");
+    return Err(CODE.ERROR_DOG_NOT_FOUND);
   }
   if (row.isPreferredVet === false) {
-    return Err("ERROR_UNAUTHORIZED");
+    return Err(CODE.ERROR_NOT_PREFERRED_VET);
   }
   const res = await toOwnerContactDetails(ctx, row);
   return Ok(res);
