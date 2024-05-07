@@ -71,7 +71,7 @@ export function CallCard(props: {
   }
 
   return (
-    <div className="flex w-full flex-col gap-6 p-6">
+    <div className="flex w-full flex-col gap-6 p-6" id="vet-schedule-call-card">
       <div className="flex flex-row items-start justify-between">
         <BarkUserContactDetails
           details={{
