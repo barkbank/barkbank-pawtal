@@ -7,12 +7,13 @@ export function BarkButton(props: {
   variant: "brand" | "brandInverse";
   className?: string;
   href?: string;
-  onClick?: () => Promise<void>;
+  onClick?: (() => Promise<void>) | (() => void);
   type?: "button" | "submit" | "reset";
+  disabled?: boolean;
 }) {
-  const { children, variant, className, type, href, onClick } = props;
+  const { children, variant, className, type, disabled, href, onClick } = props;
 
-  if (href !== undefined) {
+  if (href !== undefined && disabled !== true) {
     return (
       <Link
         className={clsx("h-[60px]", className, buttonVariants({ variant }))}
@@ -29,6 +30,7 @@ export function BarkButton(props: {
         variant={variant}
         onClick={onClick}
         type={type}
+        disabled={disabled}
       >
         {children}
       </Button>
@@ -39,6 +41,7 @@ export function BarkButton(props: {
       className={clsx("h-[60px]", className)}
       variant={variant}
       type={type}
+      disabled={disabled}
     >
       {children}
     </Button>

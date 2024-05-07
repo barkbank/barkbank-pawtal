@@ -76,9 +76,11 @@ export default function AccountEditForm({
           ]}
         />
         <div className="mt-6 flex flex-col gap-2 md:flex-row">
-          <BarkButton variant="brand">Save</BarkButton>
+          <BarkButton variant="brand" className="w-full md:w-40">
+            Save
+          </BarkButton>
           <BarkButton
-            className="inline-block h-[60px]"
+            className="inline-block h-[60px] w-full md:w-40"
             variant={"brandInverse"}
             type="button"
             onClick={async () => router.push(RoutePath.USER_MY_ACCOUNT_PAGE)}
