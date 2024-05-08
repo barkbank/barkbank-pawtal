@@ -45,6 +45,9 @@ export class RoutePath {
   static readonly BE_A_DONOR = "/be-a-donor";
   static readonly INFO = "/info";
 
+  static readonly API_VET_DOG_OWNER_DETAILS = (dogId: string) =>
+    `/api/vet/dog-owners/${dogId}`;
+
   static readonly WEBSITE_FAQ_URL = "https://www.barkbank.co/faq";
   static readonly WEBSITE_URL = "https://www.barkbank.co/";
 }

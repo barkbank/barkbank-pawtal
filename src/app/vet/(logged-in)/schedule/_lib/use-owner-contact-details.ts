@@ -1,3 +1,4 @@
+import { RoutePath } from "@/lib/route-path";
 import { OwnerContactDetails } from "@/lib/vet/vet-models";
 import useSWR from "swr";
 
@@ -7,7 +8,7 @@ async function fetchOwnerContactDetails(
   if (dogIdKey === "") {
     return undefined;
   }
-  const url = `/api/vet/dog-owners/${dogIdKey}`;
+  const url = RoutePath.API_VET_DOG_OWNER_DETAILS(dogIdKey);
   const res = await fetch(url);
   const data: { ownerContactDetails: OwnerContactDetails } = await res.json();
   const { ownerContactDetails } = data;
