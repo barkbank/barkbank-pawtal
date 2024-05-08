@@ -35,8 +35,18 @@ export function CallCard(props: {
       </div>
     );
   }
+  const { result, error } = data;
+  if (error !== undefined) {
+    return (
+      <div>
+        <p className="text-destructive">
+          Failed to load owner contact details. Error code: {error}
+        </p>
+      </div>
+    );
+  }
   const { userName, userEmail, userPhoneNumber, vetUserLastContactedTime } =
-    data;
+    result;
 
   // TODO: (Maybe) Add userResidency to OwnerContactDetails. For now, hardcoding
   // is safe because all available dogs have owners residing in Singapore.
