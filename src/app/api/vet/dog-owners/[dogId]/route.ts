@@ -6,13 +6,13 @@ import { CODE } from "@/lib/utilities/bark-code";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Record<string, string> },
+  args: { params: { dogId: string } },
 ): Promise<NextResponse> {
   const actor = await getAuthenticatedVetActor();
   if (actor === null) {
     return NextResponse.json({}, { status: HttpStatus.HTTP_401_UNAUTHORIZED });
   }
-  const { dogId } = params;
+  const { dogId } = args.params;
   const { result: ownerContactDetails, error } = await getOwnerContactDetails(
     actor,
     dogId,
