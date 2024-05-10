@@ -26,3 +26,23 @@ export function getAgeMonths(fromTime: Date, toTime: Date): number {
   }
   return ageMonths;
 }
+
+export function getAgeYearsAndMonths(
+  fromTime: Date,
+  toTime: Date,
+): { years: number; months: number } {
+  const ageMonths = getAgeMonths(fromTime, toTime);
+  const years = Math.floor(ageMonths / 12);
+  const months = ageMonths % 12;
+  return { years, months };
+}
+
+export function getFormattedAge(fromTime: Date, toTime: Date): string {
+  const { years, months } = getAgeYearsAndMonths(fromTime, toTime);
+  const yearUnit = years === 1 ? "year" : "years";
+  const monthUnit = months === 1 ? "month" : "months";
+  if (months === 0) {
+    return `${years} ${yearUnit}`;
+  }
+  return `${years} ${yearUnit} ${months} ${monthUnit}`;
+}

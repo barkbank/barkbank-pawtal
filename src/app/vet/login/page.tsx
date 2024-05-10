@@ -10,7 +10,7 @@ export default async function Page() {
     <BarkLoginPage
       title={"Vet Login"}
       accountType={AccountType.VET}
-      successPath={RoutePath.VET_DASHBOARD_PAGE}
+      successPath={RoutePath.VET_DEFAULT_LOGGED_IN_PAGE}
       logoSrc={IMG_PATH.PAW_PRINT}
       noAccountErrorMessage="Vet account does not exist"
     />

@@ -52,6 +52,12 @@ export const CODE = {
   ERROR_WRONG_OWNER: "ERROR_WRONG_OWNER",
 
   /**
+   * When a vet actor attempts to retrieve information related a dog, but the
+   * vet is not a preferred vet of the dog.
+   */
+  ERROR_NOT_PREFERRED_VET: "ERROR_NOT_PREFERRED_VET",
+
+  /**
    * When an attempt is made to update a full profile but it is not allowed.
    * Full profile updates are allowed only before the first medical report is
    * received.

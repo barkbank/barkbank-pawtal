@@ -2,6 +2,7 @@ import { Pool, PoolClient, QueryResult, QueryResultRow } from "pg";
 import { SlowQueryService } from "./db-slow-query";
 import { Err, Ok, Result } from "../utilities/result";
 import { CODE } from "../utilities/bark-code";
+import { asyncSleep } from "../utilities/async-sleep";
 
 export type DbContext = Pool | PoolClient;
 
@@ -38,6 +39,10 @@ async function timedDbQuery<T extends QueryResultRow>(
     const res = await ctx.query<T>(sql, params);
     const t1 = _SLOW_QUERY_SINGLETON.getTs();
     _SLOW_QUERY_SINGLETON.submit(sql, t1 - t0);
+
+    // A delay to simulate slow networks. Only works in dev deployments.
+    await asyncSleep(parseInt(process.env.DEV_DB_DELAY_MILLIS ?? "0"));
+
     return res;
   } catch (error) {
     console.error(`SQL: ${sql}`, error);

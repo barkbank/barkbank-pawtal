@@ -57,6 +57,7 @@ const config = {
           light: "hsl(var(--brand-light-pink))",
           white: "hsl(var(--brand-white))",
           "selected-choice": "hsl(var(--brand-selected-choice))",
+          brown: "hsl(var(--brand-brown))",
         },
         grey: {
           DEFAULT: "hsl(var(--grey))",

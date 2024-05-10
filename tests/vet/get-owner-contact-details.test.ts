@@ -15,6 +15,7 @@ import {
 import { OwnerContactDetails } from "@/lib/vet/vet-models";
 import { getOwnerContactDetails } from "@/lib/vet/actions/get-owner-contact-details";
 import { CALL_OUTCOME } from "@/lib/data/db-enums";
+import { CODE } from "@/lib/utilities/bark-code";
 
 describe("getOwnerContactDetails", () => {
   it("should return a dog's owner contact details", async () => {
@@ -59,7 +60,7 @@ describe("getOwnerContactDetails", () => {
       expect(result?.vetUserLastContactedTime).toEqual(c1.callCreationTime);
     });
   });
-  it("should return ERROR_UNAUTHORIZED when vet is not a preferred vet", async () => {
+  it("should return ERROR_NOT_PREFERRED_VET when vet is not a preferred vet", async () => {
     await withDb(async (dbPool) => {
       // GIVEN
       const { vetId } = await insertVet(1, dbPool);
@@ -73,11 +74,11 @@ describe("getOwnerContactDetails", () => {
       const { result, error } = await getOwnerContactDetails(actor, dogId);
 
       // THEN
-      expect(error).toEqual("ERROR_UNAUTHORIZED");
+      expect(error).toEqual(CODE.ERROR_NOT_PREFERRED_VET);
       expect(result).toBeUndefined();
     });
   });
-  it("should return ERROR_UNAUTHORIZED when vet is a preferred vet of the owner BUT for another dog", async () => {
+  it("should return ERROR_NOT_PREFERRED_VET when vet is a preferred vet of the owner BUT for another dog", async () => {
     await withDb(async (dbPool) => {
       // GIVEN vets v1 and v2
       const v1 = await insertVet(1, dbPool);
@@ -99,11 +100,11 @@ describe("getOwnerContactDetails", () => {
       const { result, error } = await getOwnerContactDetails(actor, d2.dogId);
 
       // THEN
-      expect(error).toEqual("ERROR_UNAUTHORIZED");
+      expect(error).toEqual(CODE.ERROR_NOT_PREFERRED_VET);
       expect(result).toBeUndefined();
     });
   });
-  it("should return ERROR_NO_DOG when dogId matches no dog", async () => {
+  it("should return ERROR_DOG_NOT_FOUND when dogId matches no dog", async () => {
     await withDb(async (dbPool) => {
       // GIVEN
       const { vetId } = await insertVet(1, dbPool);
@@ -114,7 +115,7 @@ describe("getOwnerContactDetails", () => {
       const { result, error } = await getOwnerContactDetails(actor, dogId);
 
       // THEN
-      expect(error).toEqual("ERROR_NO_DOG");
+      expect(error).toEqual(CODE.ERROR_DOG_NOT_FOUND);
       expect(result).toBeUndefined();
     });
   });

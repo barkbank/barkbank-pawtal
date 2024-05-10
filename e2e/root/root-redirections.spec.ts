@@ -24,7 +24,9 @@ test("should redirect logged-in user to my pets page", async ({ page }) => {
 test("should redirect logged-in vet to vet dashboard", async ({ page }) => {
   const { context } = await loginKnownVet({ page });
   const rootUrl = context.website.urlOf("/");
-  const expectedUrl = context.website.urlOf(RoutePath.VET_DASHBOARD_PAGE);
+  const expectedUrl = context.website.urlOf(
+    RoutePath.VET_SCHEDULE_APPOINTMENTS,
+  );
   await page.goto(rootUrl);
   await expect(page).toHaveURL(expectedUrl);
 });
