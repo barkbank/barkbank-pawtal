@@ -17,21 +17,11 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
   });
   const { dogs, selectedDogId, outcomes } = schedulerState;
 
-  function selectDog(dogId: string) {
-    if (selectedDogId === dogId) {
-      closeCallCard();
-    } else {
-      setSchedulerState({
-        ...schedulerState,
-        selectedDogId: dogId,
-      });
-    }
-  }
-
-  function closeCallCard() {
+  function toggleDogSelection(dogId: string) {
+    const toggledSelectedDogId = selectedDogId === dogId ? null : dogId;
     setSchedulerState({
       ...schedulerState,
-      selectedDogId: null,
+      selectedDogId: toggledSelectedDogId,
     });
   }
 
@@ -71,7 +61,7 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
         <DogCard
           dog={dog}
           key={dog.dogId}
-          onSelect={() => selectDog(dog.dogId)}
+          onSelect={() => toggleDogSelection(dog.dogId)}
           selectedDogId={selectedDogId}
           outcome={outcomes[dog.dogId]}
         >
