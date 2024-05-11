@@ -54,6 +54,20 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
       />
     );
 
+  const dogCardList = (
+    <div className="flex flex-col gap-3">
+      {dogs.map((dog) => (
+        <DogCard
+          dog={dog}
+          key={dog.dogId}
+          onSelect={() => selectDog(dog.dogId)}
+          selectedDogId={selectedDogId}
+          outcome={outcomes[dog.dogId]}
+        />
+      ))}
+    </div>
+  );
+
   // TODO: If an appointment invitation was declined within the last 7 days, the related outcomes[dogId] should be set to DECLINED.
   // TODO: Should have option to sort dog cards by - Lightest First; Heaviest First; Oldest First; Youngest First; Most recently created;
   // TODO: Should have option to exclude dogs contacted in the - Last 7 days; Last 30 days; Last 90 days
@@ -62,17 +76,7 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
     <div className="m-3 flex flex-col gap-3 md:flex-row">
       {/* List of dog cards */}
       <ScrollArea className="max-h-full md:max-h-[calc(100vh*7/8)] md:w-1/2 md:rounded-md md:bg-slate-100 md:p-3 md:shadow-inner">
-        <div className="flex flex-col gap-3">
-          {dogs.map((dog) => (
-            <DogCard
-              dog={dog}
-              key={dog.dogId}
-              onSelect={() => selectDog(dog.dogId)}
-              selectedDogId={selectedDogId}
-              outcome={outcomes[dog.dogId]}
-            />
-          ))}
-        </div>
+        {dogCardList}
       </ScrollArea>
 
       {/* Right-side Pane */}
