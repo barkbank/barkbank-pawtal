@@ -7,8 +7,6 @@ import { SchedulerOutcome, SchedulerState } from "../_lib/scheduler-models";
 import { useState } from "react";
 import { CallCard } from "./call-card";
 import { CALL_OUTCOME } from "@/lib/data/db-enums";
-import { BarkButton } from "@/components/bark/bark-button";
-import { Separator } from "@/components/ui/separator";
 
 export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
   const [schedulerState, setSchedulerState] = useState<SchedulerState>({
@@ -93,9 +91,7 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
   // TODO: Should have option to exclude dogs contacted in the - Last 7 days; Last 30 days; Last 90 days
   // TODO: Should have option to exclude owners contacted in the - Last 7 days; Last 30 days; Last 90 days
 
-  const mobileLayout = <div className="p-2">{dogCardList}</div>;
-
-  const desktopLayout = (
+  return (
     <div className="m-3 flex flex-col gap-3 md:flex-row">
       {/* List of dog cards */}
       <ScrollArea
@@ -116,6 +112,4 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
       )}
     </div>
   );
-
-  return <div>{desktopLayout}</div>;
 }
