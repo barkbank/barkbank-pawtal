@@ -92,25 +92,8 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
             selectedDogId={selectedDogId}
             outcome={outcomes[dog.dogId]}
           >
-            {selectedDogId === dog.dogId && (
-              <div className="bg-blue shadow-sm">
-                <CallCard
-                  dogId={selectedDogId}
-                  outcome={outcomes[selectedDogId]}
-                  onScheduled={() => {
-                    recordCallOutcome({
-                      dogId: selectedDogId,
-                      callOutcome: CALL_OUTCOME.APPOINTMENT,
-                    });
-                  }}
-                  onDeclined={() => {
-                    recordCallOutcome({
-                      dogId: selectedDogId,
-                      callOutcome: CALL_OUTCOME.DECLINED,
-                    });
-                  }}
-                />
-              </div>
+            {callCard !== undefined && selectedDogId === dog.dogId && (
+              callCard
             )}
           </DogCard>
         </div>
@@ -118,52 +101,14 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
     </div>
   );
 
-  const mobileLayout2 = (
-    <div className="relative">
-      {dogCardList}
-      {selectedDogId !== null && (
-        <div className="fixed left-0 top-[100px] w-full bg-brand-brown">
-          <BarkButton variant="brandInverse" onClick={() => closeCallCard()}>
-            Close
-          </BarkButton>
-          {callCard}
-        </div>
-      )}
-    </div>
-  );
-
-  const mobileLayout5 =
-    selectedDogId === null ? (
-      <div className="p-2">{dogCardList}</div>
-    ) : (
-      <div className="">
-        <BarkButton variant="brandInverse" onClick={() => closeCallCard()}>
-          Close
-        </BarkButton>
-        {callCard}
-      </div>
-    );
-
-  const mobileLayout = <div className="p-2">{mobileDogCardList}</div>;
-
-  const mobileLayout4 =
-    selectedDogId === null ? (
-      <div className="">
-        <ScrollArea className="h-screen">{dogCardList}</ScrollArea>
-      </div>
-    ) : (
-      <div className="">
-        <BarkButton variant="brandInverse" onClick={() => closeCallCard()}>
-          Close
-        </BarkButton>
-        {callCard}
-      </div>
-    );
 
   // TODO: If an appointment invitation was declined within the last 7 days, the related outcomes[dogId] should be set to DECLINED.
   // TODO: Should have option to sort dog cards by - Lightest First; Heaviest First; Oldest First; Youngest First; Most recently created;
   // TODO: Should have option to exclude dogs contacted in the - Last 7 days; Last 30 days; Last 90 days
   // TODO: Should have option to exclude owners contacted in the - Last 7 days; Last 30 days; Last 90 days
+
+  const mobileLayout = <div className="p-2">{mobileDogCardList}</div>;
+
   const desktopLayout = (
     <div className="m-3 flex flex-col gap-3 md:flex-row">
       {/* List of dog cards */}
