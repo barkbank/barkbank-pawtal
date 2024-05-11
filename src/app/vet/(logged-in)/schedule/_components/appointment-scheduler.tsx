@@ -47,7 +47,7 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
     setSchedulerState(state);
   }
 
-  const callCard =
+  const selectedDogCallCard =
     selectedDogId === null ? undefined : (
       <CallCard
         dogId={selectedDogId}
@@ -67,7 +67,7 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
       />
     );
 
-  const dogCardList = (
+  const desktopDogCardList = (
     <div className="flex flex-col gap-3">
       {dogs.map((dog) => (
         <DogCard
@@ -92,8 +92,8 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
             selectedDogId={selectedDogId}
             outcome={outcomes[dog.dogId]}
           >
-            {callCard !== undefined && selectedDogId === dog.dogId && (
-              callCard
+            {selectedDogCallCard !== undefined && selectedDogId === dog.dogId && (
+              selectedDogCallCard
             )}
           </DogCard>
         </div>
@@ -113,13 +113,13 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
     <div className="m-3 flex flex-col gap-3 md:flex-row">
       {/* List of dog cards */}
       <ScrollArea className="max-h-full md:max-h-[calc(100vh*7/8)] md:w-1/2 md:rounded-md md:bg-slate-100 md:p-3 md:shadow-inner">
-        {dogCardList}
+        {desktopDogCardList}
       </ScrollArea>
 
       {/* Right-side Pane */}
       {selectedDogId !== null && (
         <div className="hidden rounded-md bg-brand-brown p-3 shadow-sm shadow-slate-400 md:block md:min-h-[calc(100vh*7/8)] md:w-1/2">
-          {callCard}
+          {selectedDogCallCard}
         </div>
       )}
     </div>
