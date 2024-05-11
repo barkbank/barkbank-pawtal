@@ -8,39 +8,40 @@ export class VetSchedulePage extends PomPage {
   }
 
   dogCard(dogName: string): Locator {
-    return this
-    .page()
+    return this.page()
       .getByText(dogName, { exact: true })
       .locator("..")
       .locator("..");
   }
 
   dogCardScheduledBadge(dogName: string): Locator {
-    return this
-    .page()
+    return this.page()
       .getByText(dogName, { exact: true })
       .locator("..")
-    .locator('.vet-appointment-scheduler-scheduled-badge');
+      .locator(".vet-appointment-scheduler-scheduled-badge");
   }
 
   dogCardDeclinedBadge(dogName: string): Locator {
-    return this
-    .page()
+    return this.page()
       .getByText(dogName, { exact: true })
       .locator("..")
-    .locator('.vet-appointment-scheduler-declined-badge');
+      .locator(".vet-appointment-scheduler-declined-badge");
   }
 
   rightSidePane(): Locator {
-    return this.page().locator("#vet-appointment-scheduler-right-side-pane")
+    return this.page().locator("#vet-appointment-scheduler-right-side-pane");
   }
 
   rightSidePaneScheduledBadge(): Locator {
-    return this.rightSidePane().locator('.vet-appointment-scheduler-scheduled-badge');
+    return this.rightSidePane().locator(
+      ".vet-appointment-scheduler-scheduled-badge",
+    );
   }
 
   rightSidePaneDeclinedBadge(): Locator {
-    return this.rightSidePane().locator('.vet-appointment-scheduler-declined-badge');
+    return this.rightSidePane().locator(
+      ".vet-appointment-scheduler-declined-badge",
+    );
   }
 
   rightSidePaneScheduledButton(): Locator {
