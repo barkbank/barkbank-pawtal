@@ -34,6 +34,26 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
     setSchedulerState(state);
   }
 
+  const callCard =
+    selectedDogId === null ? undefined : (
+      <CallCard
+        dogId={selectedDogId}
+        outcome={outcomes[selectedDogId]}
+        onScheduled={() => {
+          recordCallOutcome({
+            dogId: selectedDogId,
+            callOutcome: CALL_OUTCOME.APPOINTMENT,
+          });
+        }}
+        onDeclined={() => {
+          recordCallOutcome({
+            dogId: selectedDogId,
+            callOutcome: CALL_OUTCOME.DECLINED,
+          });
+        }}
+      />
+    );
+
   // TODO: If an appointment invitation was declined within the last 7 days, the related outcomes[dogId] should be set to DECLINED.
   // TODO: Should have option to sort dog cards by - Lightest First; Heaviest First; Oldest First; Youngest First; Most recently created;
   // TODO: Should have option to exclude dogs contacted in the - Last 7 days; Last 30 days; Last 90 days
@@ -58,22 +78,7 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
       {/* Right-side Pane */}
       {selectedDogId !== null && (
         <div className="hidden rounded-md bg-brand-brown p-3 shadow-sm shadow-slate-400 md:block md:min-h-[calc(100vh*7/8)] md:w-1/2">
-          <CallCard
-            dogId={selectedDogId}
-            outcome={outcomes[selectedDogId]}
-            onScheduled={() => {
-              recordCallOutcome({
-                dogId: selectedDogId,
-                callOutcome: CALL_OUTCOME.APPOINTMENT,
-              });
-            }}
-            onDeclined={() => {
-              recordCallOutcome({
-                dogId: selectedDogId,
-                callOutcome: CALL_OUTCOME.DECLINED,
-              });
-            }}
-          />
+          {callCard}
         </div>
       )}
     </div>
