@@ -67,21 +67,7 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
       />
     );
 
-  const desktopDogCardList = (
-    <div className="flex flex-col gap-3">
-      {dogs.map((dog) => (
-        <DogCard
-          dog={dog}
-          key={dog.dogId}
-          onSelect={() => selectDog(dog.dogId)}
-          selectedDogId={selectedDogId}
-          outcome={outcomes[dog.dogId]}
-        />
-      ))}
-    </div>
-  );
-
-  const mobileDogCardList = (
+  const dogCardList = (
     <div className="flex flex-col gap-3">
       {dogs.map((dog) => (
         <div>
@@ -93,8 +79,11 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
             outcome={outcomes[dog.dogId]}
           >
             {selectedDogCallCard !== undefined &&
-              selectedDogId === dog.dogId &&
-              selectedDogCallCard}
+              selectedDogId === dog.dogId && (
+                <div className="md:hidden">
+                  {selectedDogCallCard}
+                </div>
+            )}
           </DogCard>
         </div>
       ))}
@@ -106,13 +95,13 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
   // TODO: Should have option to exclude dogs contacted in the - Last 7 days; Last 30 days; Last 90 days
   // TODO: Should have option to exclude owners contacted in the - Last 7 days; Last 30 days; Last 90 days
 
-  const mobileLayout = <div className="p-2">{mobileDogCardList}</div>;
+  const mobileLayout = <div className="p-2">{dogCardList}</div>;
 
   const desktopLayout = (
     <div className="m-3 flex flex-col gap-3 md:flex-row">
       {/* List of dog cards */}
       <ScrollArea className="max-h-full md:max-h-[calc(100vh*7/8)] md:w-1/2 md:rounded-md md:bg-slate-100 md:p-3 md:shadow-inner">
-        {desktopDogCardList}
+        {dogCardList}
       </ScrollArea>
 
       {/* Right-side Pane */}
