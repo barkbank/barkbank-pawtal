@@ -8,6 +8,7 @@ import { useState } from "react";
 import { CallCard } from "./call-card";
 import { CALL_OUTCOME } from "@/lib/data/db-enums";
 import { BarkButton } from "@/components/bark/bark-button";
+import { Separator } from "@/components/ui/separator";
 
 export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
   const [schedulerState, setSchedulerState] = useState<SchedulerState>({
@@ -19,10 +20,14 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
   const { dogs, selectedDogId, outcomes } = schedulerState;
 
   function selectDog(dogId: string) {
-    setSchedulerState({
-      ...schedulerState,
-      selectedDogId: dogId,
-    });
+    if (selectedDogId === dogId) {
+      closeCallCard();
+    } else {
+      setSchedulerState({
+        ...schedulerState,
+        selectedDogId: dogId,
+      });
+    }
   }
 
   function closeCallCard() {
@@ -76,6 +81,43 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
     </div>
   );
 
+  const mobileDogCardList = (
+    <div className="flex flex-col gap-3">
+      {dogs.map((dog) => (
+        <div>
+          <DogCard
+            dog={dog}
+            key={dog.dogId}
+            onSelect={() => selectDog(dog.dogId)}
+            selectedDogId={selectedDogId}
+            outcome={outcomes[dog.dogId]}
+          >
+            {selectedDogId === dog.dogId && (
+              <div className="bg-blue shadow-sm">
+                <CallCard
+                  dogId={selectedDogId}
+                  outcome={outcomes[selectedDogId]}
+                  onScheduled={() => {
+                    recordCallOutcome({
+                      dogId: selectedDogId,
+                      callOutcome: CALL_OUTCOME.APPOINTMENT,
+                    });
+                  }}
+                  onDeclined={() => {
+                    recordCallOutcome({
+                      dogId: selectedDogId,
+                      callOutcome: CALL_OUTCOME.DECLINED,
+                    });
+                  }}
+                />
+              </div>
+            )}
+          </DogCard>
+        </div>
+      ))}
+    </div>
+  );
+
   const mobileLayout2 = (
     <div className="relative">
       {dogCardList}
@@ -90,7 +132,7 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
     </div>
   );
 
-  const mobileLayout =
+  const mobileLayout5 =
     selectedDogId === null ? (
       <div className="p-2">{dogCardList}</div>
     ) : (
@@ -101,6 +143,8 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
         {callCard}
       </div>
     );
+
+  const mobileLayout = <div className="p-2">{mobileDogCardList}</div>;
 
   const mobileLayout4 =
     selectedDogId === null ? (

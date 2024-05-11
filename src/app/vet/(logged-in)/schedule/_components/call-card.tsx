@@ -92,8 +92,10 @@ export function CallCard(props: {
             userLastContactedTime,
           }}
         />
-        {outcome === CALL_OUTCOME.APPOINTMENT && <ScheduledBadge />}
-        {outcome === CALL_OUTCOME.DECLINED && <DeclinedBadge />}
+        <div className="hidden md:block">
+          {outcome === CALL_OUTCOME.APPOINTMENT && <ScheduledBadge />}
+          {outcome === CALL_OUTCOME.DECLINED && <DeclinedBadge />}
+        </div>
       </div>
 
       <Separator className="border border-gray-400" />

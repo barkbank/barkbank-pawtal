@@ -12,8 +12,9 @@ export function DogCard(props: {
   onSelect: () => void;
   selectedDogId: string | null;
   outcome: SchedulerOutcome | undefined;
+  children?: React.ReactNode;
 }) {
-  const { dog, onSelect, selectedDogId, outcome } = props;
+  const { dog, onSelect, selectedDogId, outcome, children } = props;
   const { dogName, dogId } = dog;
   // TODO: when the latest call-outcome related to the dog is DECLINED, the dog card should indicate how long ago that was.
   return (
@@ -47,6 +48,8 @@ export function DogCard(props: {
         <Item label="Gender" value={getGender(dog)} />
         <Item label="Was ever pregnant" value={getEverPregnant(dog)} />
       </div>
+
+      {children}
     </div>
   );
 }
