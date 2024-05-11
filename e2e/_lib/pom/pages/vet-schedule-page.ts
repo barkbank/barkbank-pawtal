@@ -13,24 +13,6 @@ export class VetSchedulePage extends PomPage {
     return new VetSchedulePageDogCard(this.context(), dogName);
   }
 
-  dogCardScheduledBadge(dogName: string): Locator {
-    return this.page()
-      .getByText(dogName, { exact: true })
-      .locator("..")
-      .locator(".vet-appointment-scheduler-scheduled-badge");
-  }
-
-  dogCardDeclinedBadge(dogName: string): Locator {
-    return this.page()
-      .getByText(dogName, { exact: true })
-      .locator("..")
-      .locator(".vet-appointment-scheduler-declined-badge");
-  }
-
-  dogList(): Locator {
-    return this.page().locator("#vet-appointment-scheduler-dog-list");
-  }
-
   rightSidePane(): VetSchedulePageRightSidePane {
     return new VetSchedulePageRightSidePane(this.context());
   }
