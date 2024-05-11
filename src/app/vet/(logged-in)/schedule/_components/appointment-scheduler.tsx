@@ -92,15 +92,14 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
             selectedDogId={selectedDogId}
             outcome={outcomes[dog.dogId]}
           >
-            {selectedDogCallCard !== undefined && selectedDogId === dog.dogId && (
-              selectedDogCallCard
-            )}
+            {selectedDogCallCard !== undefined &&
+              selectedDogId === dog.dogId &&
+              selectedDogCallCard}
           </DogCard>
         </div>
       ))}
     </div>
   );
-
 
   // TODO: If an appointment invitation was declined within the last 7 days, the related outcomes[dogId] should be set to DECLINED.
   // TODO: Should have option to sort dog cards by - Lightest First; Heaviest First; Oldest First; Youngest First; Most recently created;
