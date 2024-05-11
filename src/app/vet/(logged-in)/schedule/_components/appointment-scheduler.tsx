@@ -68,20 +68,17 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
   const dogCardList = (
     <div className="flex flex-col gap-3">
       {dogs.map((dog) => (
-        <div>
-          <DogCard
-            dog={dog}
-            key={dog.dogId}
-            onSelect={() => selectDog(dog.dogId)}
-            selectedDogId={selectedDogId}
-            outcome={outcomes[dog.dogId]}
-          >
-            {selectedDogCallCard !== undefined &&
-              selectedDogId === dog.dogId && (
-                <div className="md:hidden">{selectedDogCallCard}</div>
-              )}
-          </DogCard>
-        </div>
+        <DogCard
+          dog={dog}
+          key={dog.dogId}
+          onSelect={() => selectDog(dog.dogId)}
+          selectedDogId={selectedDogId}
+          outcome={outcomes[dog.dogId]}
+        >
+          {selectedDogCallCard !== undefined && selectedDogId === dog.dogId && (
+            <div className="md:hidden">{selectedDogCallCard}</div>
+          )}
+        </DogCard>
       ))}
     </div>
   );
