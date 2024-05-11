@@ -8,44 +8,46 @@ export class VetSchedulePage extends PomPage {
   }
 
   dogCard(dogName: string): Locator {
-    return this.page()
+    return this
+    .page()
       .getByText(dogName, { exact: true })
       .locator("..")
       .locator("..");
   }
 
   dogCardScheduledBadge(dogName: string): Locator {
-    return this.dogCard(dogName).getByText("Scheduled");
+    return this
+    .page()
+      .getByText(dogName, { exact: true })
+      .locator("..")
+    .locator('.vet-appointment-scheduler-scheduled-badge');
   }
 
   dogCardDeclinedBadge(dogName: string): Locator {
-    return this.dogCard(dogName).getByText("Declined");
-  }
-
-  contactDetails(): Locator {
-    return this.page()
-      .getByText("Singapore", { exact: true })
+    return this
+    .page()
+      .getByText(dogName, { exact: true })
       .locator("..")
-      .locator("..");
+    .locator('.vet-appointment-scheduler-declined-badge');
   }
 
-  callCardScheduledBadge(): Locator {
-    return this.page()
-      .locator("#vet-schedule-call-card div")
-      .filter({ hasText: /^Scheduled$/ });
+  rightSidePane(): Locator {
+    return this.page().locator("#vet-appointment-scheduler-right-side-pane")
   }
 
-  callCardDeclinedBadge(): Locator {
-    return this.page()
-      .locator("#vet-schedule-call-card div")
-      .filter({ hasText: /^Declined$/ });
+  rightSidePaneScheduledBadge(): Locator {
+    return this.rightSidePane().locator('.vet-appointment-scheduler-scheduled-badge');
   }
 
-  scheduledButton(): Locator {
-    return this.page().getByRole("button", { name: "Scheduled" });
+  rightSidePaneDeclinedBadge(): Locator {
+    return this.rightSidePane().locator('.vet-appointment-scheduler-declined-badge');
   }
 
-  declinedButton(): Locator {
-    return this.page().getByRole("button", { name: "Declined" });
+  rightSidePaneScheduledButton(): Locator {
+    return this.rightSidePane().getByRole("button", { name: "Scheduled" });
+  }
+
+  rightSidePaneDeclinedButton(): Locator {
+    return this.rightSidePane().getByRole("button", { name: "Declined" });
   }
 }

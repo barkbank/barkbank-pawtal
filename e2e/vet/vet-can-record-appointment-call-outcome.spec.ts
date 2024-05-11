@@ -22,12 +22,12 @@ test("vet can record APPOINTMENT call outcome", async ({ page }) => {
   // button...
   await pg1.dogCard(dogName).click();
   await expect(
-    pg1.contactDetails().getByText(userEmail, { exact: true }),
+    pg1.rightSidePane().getByText(userEmail, { exact: true }),
   ).toBeVisible();
-  await pg1.scheduledButton().click();
+  await pg1.rightSidePaneScheduledButton().click();
 
   // THEN the call-card and dog-card should have "Scheduled" badges.
-  await expect(pg1.callCardScheduledBadge()).toBeVisible();
+  await expect(pg1.rightSidePaneScheduledBadge()).toBeVisible();
   await expect(pg1.dogCardScheduledBadge(dogName)).toBeVisible();
 
   // THEN WHEN the page is reloaded, the dog card should no longer be visible

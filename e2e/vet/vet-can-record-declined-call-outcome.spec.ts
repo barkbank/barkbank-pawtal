@@ -20,10 +20,10 @@ test("vet can record DECLINED call outcome", async ({ page }) => {
 
   await pg1.dogCard(dogName).click();
   await expect(
-    pg1.contactDetails().getByText(userEmail, { exact: true }),
+    pg1.rightSidePane().getByText(userEmail, { exact: true }),
   ).toBeVisible();
-  await pg1.declinedButton().click();
-  await expect(pg1.callCardDeclinedBadge()).toBeVisible();
+  await pg1.rightSidePaneDeclinedButton().click();
+  await expect(pg1.rightSidePaneDeclinedBadge()).toBeVisible();
   await expect(pg1.dogCardDeclinedBadge(dogName)).toBeVisible();
 
   // THEN WHEN the page is reloaded, the dog card should still be visible.

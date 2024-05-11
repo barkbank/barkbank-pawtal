@@ -98,7 +98,7 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
   const mobileLayout = <div className="p-2">{dogCardList}</div>;
 
   const desktopLayout = (
-    <div className="m-3 flex flex-col gap-3 md:flex-row">
+    <div id="vet-appointment-scheduler-dog-list" className="m-3 flex flex-col gap-3 md:flex-row">
       {/* List of dog cards */}
       <ScrollArea className="max-h-full md:max-h-[calc(100vh*7/8)] md:w-1/2 md:rounded-md md:bg-slate-100 md:p-3 md:shadow-inner">
         {dogCardList}
@@ -106,7 +106,7 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
 
       {/* Right-side Pane */}
       {selectedDogId !== null && (
-        <div className="hidden rounded-md bg-brand-brown p-3 shadow-sm shadow-slate-400 md:block md:min-h-[calc(100vh*7/8)] md:w-1/2">
+        <div id="vet-appointment-scheduler-right-side-pane" className="hidden rounded-md bg-brand-brown p-3 shadow-sm shadow-slate-400 md:block md:min-h-[calc(100vh*7/8)] md:w-1/2">
           {selectedDogCallCard}
         </div>
       )}
@@ -115,8 +115,9 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
 
   return (
     <div>
-      <div className="hidden md:block">{desktopLayout}</div>
-      <div className="md:hidden">{mobileLayout}</div>
+      {desktopLayout}
+      {/* <div className="hidden md:block">{desktopLayout}</div>
+      <div className="md:hidden">{mobileLayout}</div> */}
     </div>
   );
 }
