@@ -1,4 +1,4 @@
-import { Locator, Page } from "@playwright/test";
+import { Page } from "@playwright/test";
 import { Website } from "./website";
 
 export type PomContext = {
@@ -19,9 +19,5 @@ export class PomObject {
 
   website(): Website {
     return this.ctx.website;
-  }
-
-  exactText(text: string): Locator {
-    return this.page().getByText(text, { exact: true });
   }
 }

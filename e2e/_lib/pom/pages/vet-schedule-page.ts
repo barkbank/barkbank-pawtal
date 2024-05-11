@@ -1,51 +1,79 @@
 import { RoutePath } from "@/lib/route-path";
 import { PomPage } from "../core/pom-page";
 import { Locator } from "@playwright/test";
+import { PomComponent } from "../core/pom-component";
+import { PomContext } from "../core/pom-object";
 
 export class VetSchedulePage extends PomPage {
   url(): string {
     return this.website().urlOf(RoutePath.VET_SCHEDULE_APPOINTMENTS);
   }
 
-  dogCard(dogName: string): Locator {
+  dogCard(dogName: string): VetSchedulePageDogCard {
+    return new VetSchedulePageDogCard(this.context(), dogName);
+  }
+
+  rightSidePane(): VetSchedulePageRightSidePane {
+    return new VetSchedulePageRightSidePane(this.context());
+  }
+}
+
+export class VetSchedulePageRightSidePane extends PomComponent {
+  locator(): Locator {
+    return this.page().locator("#vet-appointment-scheduler-right-side-pane");
+  }
+
+  scheduledBadge(): Locator {
+    return this.locator().locator(".vet-appointment-scheduler-scheduled-badge");
+  }
+
+  declinedBadge(): Locator {
+    return this.locator().locator(".vet-appointment-scheduler-declined-badge");
+  }
+
+  scheduleButton(): Locator {
+    return this.locator().getByRole("button", { name: "Schedule" });
+  }
+
+  declineButton(): Locator {
+    return this.locator().getByRole("button", { name: "Decline" });
+  }
+}
+
+export class VetSchedulePageDogCard extends PomComponent {
+  constructor(
+    context: PomContext,
+    public dogName: string,
+  ) {
+    super(context);
+  }
+
+  locator(): Locator {
     return this.page()
-      .getByText(dogName, { exact: true })
+      .getByText(this.dogName, { exact: true })
       .locator("..")
       .locator("..");
   }
 
-  dogCardScheduledBadge(dogName: string): Locator {
-    return this.dogCard(dogName).getByText("Scheduled");
-  }
-
-  dogCardDeclinedBadge(dogName: string): Locator {
-    return this.dogCard(dogName).getByText("Declined");
-  }
-
-  contactDetails(): Locator {
+  scheduledBadge(): Locator {
     return this.page()
-      .getByText("Singapore", { exact: true })
+      .getByText(this.dogName, { exact: true })
       .locator("..")
-      .locator("..");
+      .locator(".vet-appointment-scheduler-scheduled-badge");
   }
 
-  callCardScheduledBadge(): Locator {
+  declinedBadge(): Locator {
     return this.page()
-      .locator("#vet-schedule-call-card div")
-      .filter({ hasText: /^Scheduled$/ });
+      .getByText(this.dogName, { exact: true })
+      .locator("..")
+      .locator(".vet-appointment-scheduler-declined-badge");
   }
 
-  callCardDeclinedBadge(): Locator {
-    return this.page()
-      .locator("#vet-schedule-call-card div")
-      .filter({ hasText: /^Declined$/ });
+  scheduleButton(): Locator {
+    return this.locator().getByRole("button", { name: "Schedule" });
   }
 
-  scheduledButton(): Locator {
-    return this.page().getByRole("button", { name: "Scheduled" });
-  }
-
-  declinedButton(): Locator {
-    return this.page().getByRole("button", { name: "Declined" });
+  declineButton(): Locator {
+    return this.locator().getByRole("button", { name: "Decline" });
   }
 }

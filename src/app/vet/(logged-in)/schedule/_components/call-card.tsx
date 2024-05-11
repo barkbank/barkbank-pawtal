@@ -81,7 +81,7 @@ export function CallCard(props: {
   }
 
   return (
-    <div className="flex w-full flex-col gap-6 p-6" id="vet-schedule-call-card">
+    <div className="flex w-full flex-col gap-6 p-6">
       <div className="flex flex-row items-start justify-between">
         <BarkUserContactDetails
           details={{
@@ -92,8 +92,10 @@ export function CallCard(props: {
             userLastContactedTime,
           }}
         />
-        {outcome === CALL_OUTCOME.APPOINTMENT && <ScheduledBadge />}
-        {outcome === CALL_OUTCOME.DECLINED && <DeclinedBadge />}
+        <div className="hidden md:block">
+          {outcome === CALL_OUTCOME.APPOINTMENT && <ScheduledBadge />}
+          {outcome === CALL_OUTCOME.DECLINED && <DeclinedBadge />}
+        </div>
       </div>
 
       <Separator className="border border-gray-400" />

@@ -22,7 +22,7 @@ export function getTestBirthday(ageYears: number): string {
   return ymd;
 }
 
-export async function isMobile(context: PomContext): Promise<boolean> {
+export async function getIsMobile(context: PomContext): Promise<boolean> {
   const header = new HeaderComponent(context);
   const hamburger = header.hamburgerButton();
   const hasHamburger = await hamburger.isVisible();
