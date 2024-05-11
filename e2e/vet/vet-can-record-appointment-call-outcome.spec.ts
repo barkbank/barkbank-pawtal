@@ -3,7 +3,7 @@ import { registerTestUser } from "../_lib/init/register-test-user";
 import { doLogoutSequence } from "../_lib/sequences/logout-sequence";
 import { loginKnownVet } from "../_lib/init/login-known-vet";
 import { VetSchedulePage } from "../_lib/pom/pages/vet-schedule-page";
-import { isMobile } from "../_lib/e2e-test-utils";
+import { getIsMobile } from "../_lib/e2e-test-utils";
 
 test("vet can record APPOINTMENT call outcome", async ({ page }) => {
   const { context, userEmail, dogName } = await registerTestUser({ page });
@@ -11,27 +11,24 @@ test("vet can record APPOINTMENT call outcome", async ({ page }) => {
   await loginKnownVet({ page });
   const pg1 = new VetSchedulePage(context);
   await pg1.checkUrl();
-  await expect(pg1.dogCard(dogName)).toBeVisible();
+  await expect(pg1.dogCard(dogName).locator()).toBeVisible();
 
-  if (await isMobile(context)) {
-    // TODO: Currently cannot schedule appointments when screen is mobile sized.
-    return;
-  }
+  await pg1.dogCard(dogName).locator().click();
 
-  // WHEN an APPOINTMENT call outcome is recorded bu clicking on the Scheduled
-  // button...
-  await pg1.dogCard(dogName).click();
-  await expect(
-    pg1.rightSidePane().getByText(userEmail, { exact: true }),
-  ).toBeVisible();
-  await pg1.rightSidePaneScheduledButton().click();
+  const isMobile = await getIsMobile(context);
+  const activityArea = isMobile ? pg1.dogCard(dogName) : pg1.rightSidePane();
+  await expect(activityArea.exactText(userEmail)).toBeVisible();
+  await expect(activityArea.scheduleButton()).toBeVisible();
 
-  // THEN the call-card and dog-card should have "Scheduled" badges.
-  await expect(pg1.rightSidePaneScheduledBadge()).toBeVisible();
-  await expect(pg1.dogCardScheduledBadge(dogName)).toBeVisible();
+  await activityArea.scheduleButton().click();
+  await expect(activityArea.scheduledBadge()).toBeVisible();
+  await expect(pg1.dogCard(dogName).scheduledBadge()).toBeVisible();
+
+  await expect(activityArea.scheduleButton()).toBeDisabled();
+  await expect(activityArea.declineButton()).toBeDisabled();
 
   // THEN WHEN the page is reloaded, the dog card should no longer be visible
   // because it is no longer available for scheduling.
   await pg1.page().reload();
-  await expect(pg1.dogCard(dogName)).not.toBeVisible();
+  await expect(pg1.dogCard(dogName).locator()).not.toBeVisible();
 });
