@@ -1,0 +1,15 @@
+version: 1.0
+runtime: nodejs18
+build:
+  commands:
+    pre-build:
+      - npm install
+    build:
+      - npm run build
+run:
+  command: npm start
+  network:
+    port: 3000
+
+# Ref1: https://docs.aws.amazon.com/apprunner/latest/dg/config-file-ref.html
+# Ref2: https://docs.aws.amazon.com/apprunner/latest/dg/service-source-code-nodejs-releases.html
