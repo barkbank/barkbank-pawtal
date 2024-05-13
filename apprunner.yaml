@@ -10,3 +10,6 @@ run:
   command: npm start
   network:
     port: 3000
+
+# Ref1: https://docs.aws.amazon.com/apprunner/latest/dg/config-file-ref.html
+# Ref2: https://docs.aws.amazon.com/apprunner/latest/dg/service-source-code-nodejs-releases.html
