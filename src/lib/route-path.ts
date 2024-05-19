@@ -26,7 +26,7 @@ export class RoutePath {
 
   static readonly VET_LOGIN_PAGE = "/vet/login";
   static readonly VET_SCHEDULE_APPOINTMENTS = "/vet/schedule";
-  static readonly VET_ADD_REPORTS = "/vet/report";
+  static readonly VET_REPORTS = "/vet/reports";
   static readonly VET_DEFAULT_LOGGED_IN_PAGE =
     RoutePath.VET_SCHEDULE_APPOINTMENTS;
 
