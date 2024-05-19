@@ -1,4 +1,6 @@
-CREATE VIEW latest_values AS (
+CREATE VIEW latest_values
+WITH (security_invoker=on)
+AS (
     WITH
     mLatestReports as (
         SELECT

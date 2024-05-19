@@ -54,6 +54,7 @@ export async function withDb(testBody: (db: pg.Pool) => Promise<void>) {
   const db = new pg.Pool(getPoolConfig(dbName));
   await migrate(db, "db/V1__ref_types.sql");
   await migrate(db, "db/V2__ref_tables.sql");
+  await migrate(db, "db/V2_1__enable_rls.sql");
   await migrate(db, "db/V3__ref_triggers.sql");
   await migrate(db, "db/V4__ref_latest_values.sql");
   await migrate(db, "db/V5__ref_dog_statuses.sql");
