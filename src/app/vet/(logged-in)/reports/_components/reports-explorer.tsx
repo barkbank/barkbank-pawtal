@@ -1,8 +1,26 @@
 "use client";
 
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { X } from "lucide-react";
+import {
+  ClipboardPenLineIcon,
+  Eye,
+  NotebookIcon,
+  PenSquare,
+  Plus,
+  PlusCircle,
+  PlusSquare,
+  ShareIcon,
+  X,
+} from "lucide-react";
 
 type Report = {
   callId: string;
@@ -85,6 +103,32 @@ const REPORTS: Report[] = [
   },
 ];
 
+const ReportCard = ({ report }: { report: Report }) => {
+  const { callId, status, dogName, dogBreed, ownerName } = report;
+
+  return (
+    <Card key={callId} className="shadow-md">
+      <CardHeader>
+        <CardTitle>{dogName}</CardTitle>
+        <CardDescription>Report is {status}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p>Breed: {dogBreed}</p>
+        <p>Owner: {ownerName}</p>
+      </CardContent>
+      <CardFooter className="flex flex-row justify-between">
+        <Eye />
+        <PenSquare />
+        <Plus />
+        <PlusCircle />
+        <NotebookIcon />
+        <ShareIcon />
+        <PlusSquare />
+        <ClipboardPenLineIcon />
+      </CardFooter>
+    </Card>
+  );
+};
 export function ReportsExplorer() {
   return (
     <div className="m-3">
@@ -94,17 +138,11 @@ export function ReportsExplorer() {
           <X />
         </div>
         <Separator />
-        {REPORTS.map((report) => {
-          const { callId, status, dogName, dogBreed, ownerName } = report;
-          return (
-            <div
-              key={callId}
-              className="rounded-md p-3 shadow-sm shadow-slate-400"
-            >
-              {status} | {dogName} | {ownerName}
-            </div>
-          );
-        })}
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+          {REPORTS.map((report) => (
+            <ReportCard key={report.callId} report={report} />
+          ))}
+        </div>
       </div>
     </div>
   );
