@@ -1,4 +1,6 @@
-CREATE VIEW dog_statuses AS (
+CREATE VIEW dog_statuses
+WITH (security_invoker=on)
+AS (
     WITH
     mServiceStatuses as (
         SELECT
