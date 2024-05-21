@@ -99,19 +99,19 @@ const ReportCell = (props: { children: React.ReactNode }) => {
 
 const ReportCellLabel = (props: { children: React.ReactNode }) => {
   const { children } = props;
-  return <div className="md:hidden">{children}</div>;
+  return <div className="lg:hidden">{children}</div>;
 };
 
 const ReportCellValue = (props: { children: React.ReactNode }) => {
   const { children } = props;
-  return <div className="font-semibold md:font-normal">{children}</div>;
+  return <div className="font-semibold lg:font-normal">{children}</div>;
 };
 
 const ReportListHeader = () => {
   return (
-    <div className="top-20 hidden grid-cols-1 gap-3 rounded-md bg-brand-brown p-3 shadow-md md:sticky md:grid md:grid-cols-5">
-      {/* <div className="sticky top-[72px] grid grid-cols-1 gap-3 px-3 py-3 backdrop-blur-sm md:grid-cols-4"> */}
+    <div className="top-20 hidden grid-cols-1 gap-3 rounded-md bg-brand-brown p-3 shadow-md lg:sticky lg:grid lg:grid-cols-6">
       <ReportHeaderCell>Status</ReportHeaderCell>
+      <ReportHeaderCell>Date</ReportHeaderCell>
       <ReportHeaderCell>Dog</ReportHeaderCell>
       <ReportHeaderCell>Breed</ReportHeaderCell>
       <ReportHeaderCell>Owner</ReportHeaderCell>
@@ -122,6 +122,7 @@ const ReportListHeader = () => {
 
 const ReportListItem = ({ report }: { report: Report }) => {
   const { callId, status, dogName, dogBreed, ownerName } = report;
+  const reportDate = status === "PENDING" ? "" : "28 Apr 2024";
   const actionIcons = (() => {
     if (status === "PENDING") {
       return (
@@ -146,12 +147,16 @@ const ReportListItem = ({ report }: { report: Report }) => {
   })();
 
   return (
-    <div className="grid grid-cols-1 gap-3 rounded-md p-3 shadow-md md:grid-cols-5 md:shadow-none md:hover:bg-slate-100">
+    <div className="grid grid-cols-1 gap-3 rounded-md p-3 shadow-md lg:grid-cols-6 lg:shadow-none lg:hover:bg-slate-100">
       <ReportCell>
         <ReportCellLabel>Status:</ReportCellLabel>
         <ReportCellValue>
           <Badge>{status}</Badge>
         </ReportCellValue>
+      </ReportCell>
+      <ReportCell>
+        <ReportCellLabel>Date:</ReportCellLabel>
+        <ReportCellValue>{reportDate}</ReportCellValue>
       </ReportCell>
       <ReportCell>
         <ReportCellLabel>Dog:</ReportCellLabel>
