@@ -1,26 +1,10 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import {
-  ClipboardPenLineIcon,
-  Eye,
-  NotebookIcon,
-  PenSquare,
-  Plus,
-  PlusCircle,
-  PlusSquare,
-  ShareIcon,
-  X,
-} from "lucide-react";
+import { X } from "lucide-react";
+import Link from "next/link";
 
 type Report = {
   callId: string;
@@ -103,33 +87,93 @@ const REPORTS: Report[] = [
   },
 ];
 
-const ReportCard = ({ report }: { report: Report }) => {
-  const { callId, status, dogName, dogBreed, ownerName } = report;
+const ReportHeaderCell = (props: { children: React.ReactNode }) => {
+  const { children } = props;
+  return <div className="font-semibold">{children}</div>;
+};
 
+const ReportCell = (props: { children: React.ReactNode }) => {
+  const { children } = props;
+  return <div className="flex flex-row gap-3">{children}</div>;
+};
+
+const ReportCellLabel = (props: { children: React.ReactNode }) => {
+  const { children } = props;
+  return <div className="md:hidden">{children}</div>;
+};
+
+const ReportCellValue = (props: { children: React.ReactNode }) => {
+  const { children } = props;
+  return <div className="font-semibold md:font-normal">{children}</div>;
+};
+
+const ReportListHeader = () => {
   return (
-    <Card key={callId} className="shadow-md">
-      <CardHeader>
-        <CardTitle>{dogName}</CardTitle>
-        <CardDescription>Report is {status}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <p>Breed: {dogBreed}</p>
-        <p>Owner: {ownerName}</p>
-      </CardContent>
-      <CardFooter className="flex flex-row justify-between">
-        <Eye />
-        <PenSquare />
-        <Plus />
-        <PlusCircle />
-        <NotebookIcon />
-        <ShareIcon />
-        <PlusSquare />
-        <ClipboardPenLineIcon />
-      </CardFooter>
-    </Card>
+    <div className="top-20 hidden grid-cols-1 gap-3 rounded-md bg-brand-brown p-3 shadow-md md:sticky md:grid md:grid-cols-5">
+      {/* <div className="sticky top-[72px] grid grid-cols-1 gap-3 px-3 py-3 backdrop-blur-sm md:grid-cols-4"> */}
+      <ReportHeaderCell>Status</ReportHeaderCell>
+      <ReportHeaderCell>Dog</ReportHeaderCell>
+      <ReportHeaderCell>Breed</ReportHeaderCell>
+      <ReportHeaderCell>Owner</ReportHeaderCell>
+      <ReportHeaderCell>Actions</ReportHeaderCell>
+    </div>
   );
 };
-export function ReportsExplorer() {
+
+const ReportListItem = ({ report }: { report: Report }) => {
+  const { callId, status, dogName, dogBreed, ownerName } = report;
+  const actionIcons = (() => {
+    if (status === "PENDING") {
+      return (
+        <div className="flex flex-row gap-3">
+          <Link
+            href={`/vet/submit-report/${callId}`}
+            className="text-green-800"
+          >
+            Submit
+          </Link>
+        </div>
+      );
+    } else {
+      return (
+        <div className="flex flex-row gap-3">
+          <Link href={`/vet/view-report/${callId}`} className="text-blue-800">
+            View
+          </Link>
+        </div>
+      );
+    }
+  })();
+
+  return (
+    <div className="grid grid-cols-1 gap-3 rounded-md p-3 shadow-md hover:bg-slate-100 md:grid-cols-5 md:shadow-none">
+      <ReportCell>
+        <ReportCellLabel>Status:</ReportCellLabel>
+        <ReportCellValue>
+          <Badge>{status}</Badge>
+        </ReportCellValue>
+      </ReportCell>
+      <ReportCell>
+        <ReportCellLabel>Dog:</ReportCellLabel>
+        <ReportCellValue>{dogName}</ReportCellValue>
+      </ReportCell>
+      <ReportCell>
+        <ReportCellLabel>Breed:</ReportCellLabel>
+        <ReportCellValue>{dogBreed}</ReportCellValue>
+      </ReportCell>
+      <ReportCell>
+        <ReportCellLabel>Owner:</ReportCellLabel>
+        <ReportCellValue>{ownerName}</ReportCellValue>
+      </ReportCell>
+      <ReportCell>
+        <ReportCellLabel>Actions:</ReportCellLabel>
+        <ReportCellValue>{actionIcons}</ReportCellValue>
+      </ReportCell>
+    </div>
+  );
+};
+
+export const ReportsExplorer = () => {
   return (
     <div className="m-3">
       <div className="flex flex-col gap-3">
@@ -138,12 +182,13 @@ export function ReportsExplorer() {
           <X />
         </div>
         <Separator />
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+        <div className="flex flex-col gap-0">
+          <ReportListHeader />
           {REPORTS.map((report) => (
-            <ReportCard key={report.callId} report={report} />
+            <ReportListItem key={report.callId} report={report} />
           ))}
         </div>
       </div>
     </div>
   );
-}
+};
