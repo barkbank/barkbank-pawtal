@@ -146,7 +146,7 @@ const ReportListItem = ({ report }: { report: Report }) => {
   })();
 
   return (
-    <div className="grid grid-cols-1 gap-3 rounded-md p-3 shadow-md hover:bg-slate-100 md:grid-cols-5 md:shadow-none">
+    <div className="grid grid-cols-1 gap-3 rounded-md p-3 shadow-md md:grid-cols-5 md:shadow-none md:hover:bg-slate-100">
       <ReportCell>
         <ReportCellLabel>Status:</ReportCellLabel>
         <ReportCellValue>
@@ -178,7 +178,7 @@ export const ReportsExplorer = () => {
     <div className="m-3">
       <div className="flex flex-col gap-3">
         <div className="flex flex-row items-center gap-3">
-          <Input type="text" placeholder="Search..." />
+          <Input type="text" placeholder="Search..." className="text-base" />
           <X />
         </div>
         <Separator />
