@@ -76,6 +76,11 @@ export const CODE = {
   ERROR_MORE_THAN_ONE_PREFERRED_VET: "ERROR_MORE_THAN_ONE_PREFERRED_VET",
 
   /**
+   * When a requested report cannot be found.
+   */
+  ERROR_REPORT_NOT_FOUND: "ERROR_REPORT_NOT_FOUND",
+
+  /**
    * When a database query failed.
    */
   DB_QUERY_FAILURE: "DB_QUERY_FAILURE",
