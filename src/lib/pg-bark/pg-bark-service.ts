@@ -12,14 +12,14 @@ export class PgBarkService implements BarkService {
   constructor(private config: PgBarkServiceConfig) {}
 
   async createReport(
-    callId: string,
+    appointmentId: string,
     reportData: BarkReportData,
   ): Promise<
     Result<
       { reportId: string },
-      typeof CODE.ERROR_CALL_NOT_FOUND | typeof CODE.STORAGE_FAILURE
+      typeof CODE.ERROR_APPOINTMENT_NOT_FOUND | typeof CODE.STORAGE_FAILURE
     >
   > {
-    return Err(CODE.ERROR_CALL_NOT_FOUND);
+    return Err(CODE.ERROR_APPOINTMENT_NOT_FOUND);
   }
 }

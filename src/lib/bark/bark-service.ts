@@ -6,16 +6,16 @@ export interface BarkService {
   /**
    * Create a report.
    *
-   * @param callId ID of the call for which the report has been written.
+   * @param appointmentId ID of the appointment for which the report has been written.
    * @param reportData Details of the report.
    */
   createReport(
-    callId: string,
+    appointmentId: string,
     reportData: BarkReportData,
   ): Promise<
     Result<
       { reportId: string },
-      typeof CODE.ERROR_CALL_NOT_FOUND | typeof CODE.STORAGE_FAILURE
+      typeof CODE.ERROR_APPOINTMENT_NOT_FOUND | typeof CODE.STORAGE_FAILURE
     >
   >;
   // getReport(

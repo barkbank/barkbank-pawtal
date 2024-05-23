@@ -81,9 +81,10 @@ export const CODE = {
   ERROR_REPORT_NOT_FOUND: "ERROR_REPORT_NOT_FOUND",
 
   /**
-   * When a callId was provided that does not refer to any known call.
+   * When an appointment ID was provided that does not refer to an appointment
+   * on record.
    */
-  ERROR_CALL_NOT_FOUND: "ERROR_CALL_NOT_FOUND",
+  ERROR_APPOINTMENT_NOT_FOUND: "ERROR_APPOINTMENT_NOT_FOUND",
 
   /**
    * When an error occured that is because of the underlying persistence layer.
