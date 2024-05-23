@@ -11,6 +11,22 @@ export type PgBarkServiceConfig = {
 export class PgBarkService implements BarkService {
   constructor(private config: PgBarkServiceConfig) {}
 
+  async addAppointment(args: {
+    dogId: string;
+    vetId: string;
+  }): Promise<
+    Result<
+      { appointmentId: string },
+      | typeof CODE.ERROR_DOG_NOT_FOUND
+      | typeof CODE.ERROR_VET_NOT_FOUND
+      | typeof CODE.ERROR_NOT_PREFERRED_VET
+      | typeof CODE.ERROR_APPOINTMENT_ALREADY_EXISTS
+      | typeof CODE.STORAGE_FAILURE
+    >
+  > {
+    return Err(CODE.ERROR_DOG_NOT_FOUND);
+  }
+
   async createReport(args: {
     appointmentId: string;
     reportData: BarkReportData;
