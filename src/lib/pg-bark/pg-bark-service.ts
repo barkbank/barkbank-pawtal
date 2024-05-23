@@ -11,10 +11,10 @@ export type PgBarkServiceConfig = {
 export class PgBarkService implements BarkService {
   constructor(private config: PgBarkServiceConfig) {}
 
-  async createReport(
-    appointmentId: string,
-    reportData: BarkReportData,
-  ): Promise<
+  async createReport(args: {
+    appointmentId: string;
+    reportData: BarkReportData;
+  }): Promise<
     Result<
       { reportId: string },
       typeof CODE.ERROR_APPOINTMENT_NOT_FOUND | typeof CODE.STORAGE_FAILURE

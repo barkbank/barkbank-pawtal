@@ -7,10 +7,10 @@ describe("createReport", () => {
     await withService(async ({ service }) => {
       const noSuchAppointmentId = "123456";
       const reportData = mockReportData();
-      const { result, error } = await service.createReport(
-        noSuchAppointmentId,
+      const { result, error } = await service.createReport({
+        appointmentId: noSuchAppointmentId,
         reportData,
-      );
+      });
       expect(result).toBeUndefined();
       expect(error).toEqual(CODE.ERROR_APPOINTMENT_NOT_FOUND);
     });
