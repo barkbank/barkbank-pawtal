@@ -1,5 +1,5 @@
 import { CODE } from "@/lib/utilities/bark-code";
-import { withService } from "./with-service";
+import { withService } from "./_service";
 
 describe("addAppointment", () => {
   it("should return ERROR_DOG_NOT_FOUND when specified dog cannot be found", async () => {

@@ -1,14 +1,14 @@
-import { withService } from "./with-service";
-import { mockReportData } from "./bark-mocks";
+import { withService } from "./_service";
+import { mockReportData } from "./_mocks";
 import { CODE } from "@/lib/utilities/bark-code";
 
 describe("createReport", () => {
-  it("should return ERROR_APPOINTMENT_NOT_FOUND when the provided appointment ID does not reference a known appointment", async () => {
+  it("should return ERROR_APPOINTMENT_NOT_FOUND when appointment cannot be found", async () => {
     await withService(async ({ service }) => {
-      const noSuchAppointmentId = "123456";
+      const appointmentId = "12345";
       const reportData = mockReportData();
       const { result, error } = await service.createReport({
-        appointmentId: noSuchAppointmentId,
+        appointmentId,
         reportData,
       });
       expect(result).toBeUndefined();
