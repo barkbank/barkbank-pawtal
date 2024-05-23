@@ -14,7 +14,7 @@ export interface BarkService {
     reportData: BarkReportData,
   ): Promise<
     Result<
-      BarkReport,
+      { reportId: string },
       typeof CODE.ERROR_CALL_NOT_FOUND | typeof CODE.STORAGE_FAILURE
     >
   >;
