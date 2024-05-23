@@ -8,7 +8,7 @@ export type BarkReportData = {
   dogDea1Point1: PosNegNil;
   ineligibilityStatus: ReportedIneligibility;
   ineligibilityReason: string;
-  ineligibilityExpiryTime: Date;
+  ineligibilityExpiryTime: Date | null;
   dogDidDonateBlood: boolean;
 };
 

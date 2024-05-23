@@ -1,9 +1,16 @@
+import { Pool } from "pg";
 import { BarkReportData, BarkReport } from "../bark/bark-models";
 import { BarkService } from "../bark/bark-service";
 import { CODE } from "../utilities/bark-code";
-import { Result } from "../utilities/result";
+import { Err, Result } from "../utilities/result";
+
+export type PgBarkServiceConfig = {
+  dbPool: Pool;
+};
 
 export class PgBarkService implements BarkService {
+  constructor(private config: PgBarkServiceConfig) {}
+
   async createReport(
     callId: string,
     reportData: BarkReportData,
@@ -13,6 +20,6 @@ export class PgBarkService implements BarkService {
       typeof CODE.ERROR_CALL_NOT_FOUND | typeof CODE.STORAGE_FAILURE
     >
   > {
-    throw new Error("Not implemented");
+    return Err(CODE.ERROR_CALL_NOT_FOUND);
   }
 }
