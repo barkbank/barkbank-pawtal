@@ -81,6 +81,16 @@ export const CODE = {
   ERROR_REPORT_NOT_FOUND: "ERROR_REPORT_NOT_FOUND",
 
   /**
+   * When a callId was provided that does not refer to any known call.
+   */
+  ERROR_CALL_NOT_FOUND: "ERROR_CALL_NOT_FOUND",
+
+  /**
+   * When an error occured that is because of the underlying persistence layer.
+   */
+  STORAGE_FAILURE: "STORAGE_FAILURE",
+
+  /**
    * When a database query failed.
    */
   DB_QUERY_FAILURE: "DB_QUERY_FAILURE",
