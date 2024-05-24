@@ -41,4 +41,17 @@ describe("addAppointment", () => {
       expect(appointmentId).toBeTruthy();
     });
   });
+  it("should return ERROR_APPOINTMENT_ALREADY_EXISTS when appointment already exists", async () => {
+    await withService(async ({ service, context }) => {
+      const { vetId } = await givenVet(context);
+      const { dogId } = await givenDog(context, { preferredVetId: vetId });
+      // Make first appointment
+      await service.addAppointment({ dogId, vetId });
+
+      // Second appointment should get error.
+      const { result, error } = await service.addAppointment({ dogId, vetId });
+      expect(result).toBeUndefined();
+      expect(error).toEqual(CODE.ERROR_APPOINTMENT_ALREADY_EXISTS);
+    });
+  });
 });
