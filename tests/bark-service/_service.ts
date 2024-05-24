@@ -3,14 +3,14 @@ import { PgBarkService } from "@/lib/pg-bark/pg-bark-service";
 import { withDb } from "../_db_helpers";
 import { Pool } from "pg";
 
-type InternalServiceTestContext = {
+export type ServiceTestContext = {
   dbPool: Pool;
 };
 
 export async function withService(
   testBody: (args: {
     service: BarkService;
-    context: InternalServiceTestContext;
+    context: ServiceTestContext;
   }) => Promise<void>,
 ) {
   await withDb(async (dbPool) => {
