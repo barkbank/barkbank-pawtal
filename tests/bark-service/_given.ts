@@ -1,4 +1,4 @@
-import { insertDog, insertUser } from "../_fixtures";
+import { insertDog, insertUser, insertVet } from "../_fixtures";
 import { ServiceTestContext } from "./_service";
 
 export async function givenUser(
@@ -36,4 +36,12 @@ export async function givenDog(
   })();
   const { dogId } = await insertDog(idx, ownerUserId, dbPool);
   return { dogId, ownerUserId };
+}
+
+export async function givenVet(
+  context: ServiceTestContext,
+): Promise<{ vetId: string }> {
+  const { dbPool } = context;
+  const { vetId } = await insertVet(1, dbPool);
+  return { vetId };
 }
