@@ -17,6 +17,19 @@ export interface BarkService {
     >
   >;
 
+  hasAppointment(args: {
+    dogId: string;
+    vetId: string;
+  }): Promise<
+    Result<
+      { hasAppointment: boolean },
+      | typeof CODE.ERROR_DOG_NOT_FOUND
+      | typeof CODE.ERROR_VET_NOT_FOUND
+      | typeof CODE.ERROR_NOT_PREFERRED_VET
+      | typeof CODE.STORAGE_FAILURE
+    >
+  >;
+
   createReport(args: {
     appointmentId: string;
     reportData: BarkReportData;

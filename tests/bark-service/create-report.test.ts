@@ -31,7 +31,8 @@ describe("createReport", () => {
       expect(error).toBeUndefined();
       const { reportId } = result!;
       expect(reportId).toBeTruthy();
-      // WIP: expect no outstanding appointment for {dogId, vetId}
+      const res2 = await service.hasAppointment({ dogId, vetId });
+      expect(res2?.result?.hasAppointment).toBe(false);
     });
   });
 });

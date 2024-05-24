@@ -8,6 +8,7 @@ import { createReport } from "./_impls/create-report";
 import { DogMapper } from "../data/dog-mapper";
 import { UserMapper } from "../data/user-mapper";
 import { EncryptionService } from "../services/encryption";
+import { hasAppointment } from "./_impls/has-appointment";
 
 export type PgBarkServiceConfig = {
   dbPool: Pool;
@@ -33,6 +34,21 @@ export class PgBarkService implements BarkService {
     >
   > {
     return addAppointment(this.config, args);
+  }
+
+  hasAppointment(args: {
+    dogId: string;
+    vetId: string;
+  }): Promise<
+    Result<
+      { hasAppointment: boolean },
+      | typeof CODE.ERROR_DOG_NOT_FOUND
+      | typeof CODE.ERROR_VET_NOT_FOUND
+      | typeof CODE.ERROR_NOT_PREFERRED_VET
+      | typeof CODE.STORAGE_FAILURE
+    >
+  > {
+    return hasAppointment(this.config, args);
   }
 
   createReport(args: {
