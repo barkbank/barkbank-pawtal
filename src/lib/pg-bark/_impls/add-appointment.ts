@@ -1,8 +1,9 @@
-import { Err, Result } from "@/lib/utilities/result";
+import { Err, Ok, Result } from "@/lib/utilities/result";
 import { CODE } from "@/lib/utilities/bark-code";
 import { PgBarkServiceConfig } from "../pg-bark-service";
-import { dbBegin, dbRelease } from "@/lib/data/db-utils";
+import { dbBegin, dbRelease, dbResultQuery } from "@/lib/data/db-utils";
 import { checkPreferredVet } from "../_checks/check-preferred-vet";
+import { loadSql } from "../_sql/load-sql";
 
 export async function addAppointment(
   config: PgBarkServiceConfig,
@@ -24,10 +25,24 @@ export async function addAppointment(
   const { dogId, vetId } = args;
   try {
     await dbBegin(conn);
-    const chk1 = await checkPreferredVet({ conn, dogId, vetId });
-    if (chk1 !== CODE.OK) {
-      return Err(chk1);
+    const res1 = await checkPreferredVet({ conn, dogId, vetId });
+    if (res1 !== CODE.OK) {
+      return Err(res1);
     }
+    const sql = loadSql("add-appointment");
+    const { result, error } = await dbResultQuery<{ appointmentId: string }>(
+      conn,
+      sql,
+      [dogId, vetId],
+    );
+    if (error === CODE.DB_QUERY_FAILURE) {
+      return Err(CODE.STORAGE_FAILURE);
+    }
+    if (result.rows.length !== 1) {
+      return Err(CODE.STORAGE_FAILURE);
+    }
+    const { appointmentId } = result.rows[0];
+    return Ok({ appointmentId });
   } finally {
     await dbRelease(conn);
   }

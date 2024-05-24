@@ -1,3 +1,4 @@
+import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import { insertDog, insertUser, insertVet } from "../_fixtures";
 import { ServiceTestContext } from "./_service";
 
@@ -18,6 +19,7 @@ export async function givenDog(
   options?: {
     dogIdx?: number;
     userId?: string;
+    preferredVetId?: string;
   },
 ): Promise<{
   dogId: string;
@@ -25,7 +27,7 @@ export async function givenDog(
 }> {
   const { dbPool } = context;
   const args = options ?? {};
-  const { dogIdx } = args;
+  const { dogIdx, preferredVetId } = args;
   const idx = dogIdx ?? 1;
   const ownerUserId = await (async () => {
     if (args.userId !== undefined) {
@@ -35,6 +37,9 @@ export async function givenDog(
     return res.userId;
   })();
   const { dogId } = await insertDog(idx, ownerUserId, dbPool);
+  if (preferredVetId !== undefined) {
+    await dbInsertDogVetPreference(dbPool, dogId, preferredVetId);
+  }
   return { dogId, ownerUserId };
 }
 

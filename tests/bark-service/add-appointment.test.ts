@@ -30,4 +30,15 @@ describe("addAppointment", () => {
       expect(error).toEqual(CODE.ERROR_NOT_PREFERRED_VET);
     });
   });
+  it("should return appointment id", async () => {
+    await withService(async ({ service, context }) => {
+      const { vetId } = await givenVet(context);
+      const { dogId } = await givenDog(context, { preferredVetId: vetId });
+      const { result, error } = await service.addAppointment({ dogId, vetId });
+      expect(result).not.toBeUndefined();
+      expect(error).toBeUndefined();
+      const { appointmentId } = result!;
+      expect(appointmentId).toBeTruthy();
+    });
+  });
 });
