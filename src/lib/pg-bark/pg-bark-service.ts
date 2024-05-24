@@ -3,6 +3,8 @@ import { BarkReportData } from "../bark/bark-models";
 import { BarkService } from "../bark/bark-service";
 import { CODE } from "../utilities/bark-code";
 import { Err, Result } from "../utilities/result";
+import { addAppointment } from "./_impls/add-appointment";
+import { createReport } from "./_impls/create-report";
 
 export type PgBarkServiceConfig = {
   dbPool: Pool;
@@ -11,7 +13,7 @@ export type PgBarkServiceConfig = {
 export class PgBarkService implements BarkService {
   constructor(private config: PgBarkServiceConfig) {}
 
-  async addAppointment(args: {
+  addAppointment(args: {
     dogId: string;
     vetId: string;
   }): Promise<
@@ -24,10 +26,10 @@ export class PgBarkService implements BarkService {
       | typeof CODE.STORAGE_FAILURE
     >
   > {
-    return Err(CODE.ERROR_DOG_NOT_FOUND);
+    return addAppointment(this.config, args);
   }
 
-  async createReport(args: {
+  createReport(args: {
     appointmentId: string;
     reportData: BarkReportData;
   }): Promise<
@@ -36,6 +38,6 @@ export class PgBarkService implements BarkService {
       typeof CODE.ERROR_APPOINTMENT_NOT_FOUND | typeof CODE.STORAGE_FAILURE
     >
   > {
-    return Err(CODE.ERROR_APPOINTMENT_NOT_FOUND);
+    return createReport(this.config, args);
   }
 }
