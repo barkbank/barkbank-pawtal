@@ -1,9 +1,8 @@
-import { Err, Result } from "@/lib/utilities/result";
+import { Err, Ok, Result } from "@/lib/utilities/result";
 import { CODE } from "@/lib/utilities/bark-code";
 import { PgBarkServiceConfig } from "../pg-bark-service";
 import { BarkReportData } from "@/lib/bark/bark-models";
 import { PoolClient } from "pg";
-import { DogMapper } from "@/lib/data/dog-mapper";
 import {
   dbBegin,
   dbCommit,
@@ -12,6 +11,7 @@ import {
   dbRollback,
 } from "@/lib/data/db-utils";
 import { loadSql } from "../_sql/load-sql";
+import { EncryptionService } from "@/lib/services/encryption";
 
 export async function createReport(
   config: PgBarkServiceConfig,
@@ -25,18 +25,27 @@ export async function createReport(
     typeof CODE.ERROR_APPOINTMENT_NOT_FOUND | typeof CODE.STORAGE_FAILURE
   >
 > {
-  const { dbPool, dogMapper } = config;
+  const { dbPool, textEncryptionService } = config;
   const { appointmentId, reportData } = args;
   const conn = await dbPool.connect();
-  const ctx: _Context = { conn, dogMapper, appointmentId };
+  const ctx: _Context = {
+    conn,
+    textEncryptionService,
+    appointmentId,
+    reportData,
+  };
   try {
     await dbBegin(conn);
     const checkResult = await checkAppointmentExists(ctx);
     if (checkResult !== CODE.OK) {
       return Err(checkResult);
     }
+    const { result, error } = await insertReportAndUpdateCall(ctx);
+    if (error !== undefined) {
+      return Err(error);
+    }
     await dbCommit(conn);
-    return Err(CODE.STORAGE_FAILURE);
+    return Ok(result);
   } catch {
     await dbRollback(conn);
     return Err(CODE.STORAGE_FAILURE);
@@ -47,8 +56,9 @@ export async function createReport(
 
 type _Context = {
   conn: PoolClient;
-  dogMapper: DogMapper;
+  textEncryptionService: EncryptionService;
   appointmentId: string;
+  reportData: BarkReportData;
 };
 
 async function checkAppointmentExists(
@@ -76,4 +86,50 @@ async function checkAppointmentExists(
     return CODE.ERROR_APPOINTMENT_NOT_FOUND;
   }
   return CODE.OK;
+}
+
+async function insertReportAndUpdateCall(
+  ctx: _Context,
+): Promise<Result<{ reportId: string }, typeof CODE.STORAGE_FAILURE>> {
+  const { conn, textEncryptionService, appointmentId, reportData } = ctx;
+  const {
+    visitTime,
+    dogWeightKg,
+    dogBodyConditioningScore,
+    dogDidDonateBlood,
+    dogHeartworm,
+    dogDea1Point1,
+    ineligibilityStatus,
+    ineligibilityReason,
+    ineligibilityExpiryTime,
+  } = reportData;
+  const encryptedIneligibilityReason =
+    ineligibilityReason === ""
+      ? ""
+      : await textEncryptionService.getEncryptedData(ineligibilityReason);
+  const sql = loadSql("insert-report-update-call");
+  const { result, error } = await dbResultQuery<{ reportId: string }>(
+    conn,
+    sql,
+    [
+      appointmentId,
+      visitTime,
+      dogWeightKg,
+      dogBodyConditioningScore,
+      dogDidDonateBlood,
+      dogHeartworm,
+      dogDea1Point1,
+      ineligibilityStatus,
+      encryptedIneligibilityReason,
+      ineligibilityExpiryTime,
+    ],
+  );
+  if (error === CODE.DB_QUERY_FAILURE) {
+    return Err(CODE.STORAGE_FAILURE);
+  }
+  if (result.rows.length !== 1) {
+    return Err(CODE.STORAGE_FAILURE);
+  }
+  const { reportId } = result.rows[0];
+  return Ok({ reportId });
 }
