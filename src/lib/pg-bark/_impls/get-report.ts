@@ -2,7 +2,7 @@ import { BarkReport } from "@/lib/bark/bark-models";
 import { CODE } from "@/lib/utilities/bark-code";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { PgBarkServiceConfig } from "../pg-bark-service";
-import { loadSql } from "../_sql/load-sql";
+import { SQL_QUERY, loadSql } from "../_sql/load-sql";
 import { dbResultQuery } from "@/lib/data/db-utils";
 
 export async function getReport(
@@ -16,7 +16,7 @@ export async function getReport(
 > {
   const { dbPool } = config;
   const { reportId } = args;
-  const sql = loadSql("select-report");
+  const sql = loadSql(SQL_QUERY.SELECT_REPORT);
   type Row = Omit<BarkReport, "ineligibilityReason"> & {
     encryptedIneligibilityReason: string;
   };

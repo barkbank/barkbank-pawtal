@@ -2,7 +2,7 @@ import { Err, Ok, Result } from "@/lib/utilities/result";
 import { CODE } from "@/lib/utilities/bark-code";
 import { PgBarkServiceConfig } from "../pg-bark-service";
 import { dbResultQuery } from "@/lib/data/db-utils";
-import { loadSql } from "../_sql/load-sql";
+import { SQL_QUERY, loadSql } from "../_sql/load-sql";
 
 export async function hasAppointment(
   config: PgBarkServiceConfig,
@@ -21,7 +21,7 @@ export async function hasAppointment(
 > {
   const { dbPool } = config;
   const { dogId, vetId } = args;
-  const sql = loadSql("select-can-schedule");
+  const sql = loadSql(SQL_QUERY.SELECT_CAN_SCHEDULE);
   const { result, error } = await dbResultQuery<{
     dogExists: boolean;
     vetExists: boolean;

@@ -10,7 +10,7 @@ import {
   dbResultQuery,
   dbRollback,
 } from "@/lib/data/db-utils";
-import { loadSql } from "../_sql/load-sql";
+import { SQL_QUERY, loadSql } from "../_sql/load-sql";
 import { EncryptionService } from "@/lib/services/encryption";
 
 export async function createReport(
@@ -69,7 +69,7 @@ async function checkAppointmentExists(
   | typeof CODE.STORAGE_FAILURE
 > {
   const { conn, appointmentId } = ctx;
-  const sql = loadSql("select-appointment-exists");
+  const sql = loadSql(SQL_QUERY.SELECT_APPOINTMENT_EXISTS);
   const { result, error } = await dbResultQuery<{ appointmentExists: boolean }>(
     conn,
     sql,
@@ -108,7 +108,7 @@ async function insertReportAndUpdateCall(
     ineligibilityReason === ""
       ? ""
       : await textEncryptionService.getEncryptedData(ineligibilityReason);
-  const sql = loadSql("insert-report-update-call");
+  const sql = loadSql(SQL_QUERY.INSERT_REPORT_UPDATE_CALL);
   const { result, error } = await dbResultQuery<{ reportId: string }>(
     conn,
     sql,

@@ -8,7 +8,7 @@ import {
   dbResultQuery,
   dbRollback,
 } from "@/lib/data/db-utils";
-import { loadSql } from "../_sql/load-sql";
+import { SQL_QUERY, loadSql } from "../_sql/load-sql";
 import { PoolClient } from "pg";
 
 export async function addAppointment(
@@ -65,7 +65,7 @@ async function checkCanSchedule(args: {
   | typeof CODE.STORAGE_FAILURE
 > {
   const { conn, dogId, vetId } = args;
-  const sql = loadSql("select-can-schedule");
+  const sql = loadSql(SQL_QUERY.SELECT_CAN_SCHEDULE);
   const { result, error } = await dbResultQuery<{
     dogExists: boolean;
     vetExists: boolean;
@@ -101,7 +101,7 @@ async function insertAppointment(args: {
   vetId: string;
 }): Promise<Result<{ appointmentId: string }, typeof CODE.STORAGE_FAILURE>> {
   const { conn, dogId, vetId } = args;
-  const sql = loadSql("insert-appointment");
+  const sql = loadSql(SQL_QUERY.INSERT_APPOINTMENT);
   const { result, error } = await dbResultQuery<{ appointmentId: string }>(
     conn,
     sql,
