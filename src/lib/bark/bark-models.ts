@@ -13,7 +13,9 @@ export type BarkReportData = {
 };
 
 export type BarkReport = BarkReportData & {
-  callId: string;
+  reportId: string;
+  reportCreationTime: Date;
+  appointmentId: string;
   dogId: string;
   vetId: string;
 };
