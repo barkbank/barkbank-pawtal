@@ -49,8 +49,5 @@ export interface BarkService {
     >
   >;
 
-  // updateReport(
-  //   reportId: string,
-  //   reportData: BarkReportData,
-  // ): Promise<Result<BarkReport, typeof CODE.FAILED>>;
+  // WIP: updateReport(args: {reportId: string; reportData: BarkReportData}): Promise<typeof CODE.OK | typeof CODE.ERROR_REPORT_NOT_FOUND | typeof CODE.STORAGE_FAILURE>;
 }
