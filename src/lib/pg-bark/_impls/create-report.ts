@@ -88,7 +88,6 @@ async function checkAppointmentExists(
   return CODE.OK;
 }
 
-// WIP: Split this into insertReport and updateCall
 async function insertReportAndUpdateCall(
   ctx: _Context,
 ): Promise<Result<{ reportId: string }, typeof CODE.STORAGE_FAILURE>> {
