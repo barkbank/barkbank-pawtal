@@ -19,6 +19,7 @@ describe("getReport", () => {
         reportData,
       });
       const { reportId } = res2.result!;
+      console.log({ reportId });
       const { result, error } = await service.getReport({ reportId });
       expect(error).toBeUndefined();
       const { report } = result!;
@@ -28,6 +29,7 @@ describe("getReport", () => {
         vetId,
         reportId,
         reportCreationTime: report.reportCreationTime,
+        reportModificationTime: report.reportModificationTime,
         ...reportData,
       };
       expect(report).toEqual(expectedReport);

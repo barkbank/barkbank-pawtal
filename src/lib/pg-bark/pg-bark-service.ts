@@ -9,6 +9,7 @@ import { DogMapper } from "../data/dog-mapper";
 import { UserMapper } from "../data/user-mapper";
 import { EncryptionService } from "../services/encryption";
 import { hasAppointment } from "./_impls/has-appointment";
+import { getReport } from "./_impls/get-report";
 
 export type PgBarkServiceConfig = {
   dbPool: Pool;
@@ -28,8 +29,7 @@ export class PgBarkService implements BarkService {
       typeof CODE.ERROR_REPORT_NOT_FOUND | typeof CODE.STORAGE_FAILURE
     >
   > {
-    // WIP: Implement getReport
-    throw new Error("Method not implemented.");
+    return getReport(this.config, args);
   }
 
   addAppointment(args: {
