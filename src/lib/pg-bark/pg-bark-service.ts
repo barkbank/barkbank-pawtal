@@ -3,7 +3,6 @@ import { BarkReport, BarkReportData } from "../bark/bark-models";
 import { BarkService } from "../bark/bark-service";
 import { CODE } from "../utilities/bark-code";
 import { Result } from "../utilities/result";
-import { addAppointment } from "./_impls/add-appointment";
 import { createReport } from "./_impls/create-report";
 import { DogMapper } from "../data/dog-mapper";
 import { UserMapper } from "../data/user-mapper";
@@ -11,6 +10,7 @@ import { EncryptionService } from "../services/encryption";
 import { hasAppointment } from "./_impls/has-appointment";
 import { getReport } from "./_impls/get-report";
 import { updateReport } from "./_impls/update-report";
+import { addAppointment } from "./_impls/alternative-add-appointment";
 
 export type PgBarkServiceConfig = {
   dbPool: Pool;

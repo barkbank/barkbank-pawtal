@@ -2,8 +2,10 @@ import { Err, Ok, Result } from "@/lib/utilities/result";
 import { CODE } from "@/lib/utilities/bark-code";
 import { PgBarkServiceConfig } from "../pg-bark-service";
 import {
+  DbContext,
   dbBegin,
   dbCommit,
+  dbQuery,
   dbRelease,
   dbResultQuery,
   dbRollback,
