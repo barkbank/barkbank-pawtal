@@ -7,6 +7,7 @@ export const SQL_QUERY = {
   SELECT_APPOINTMENT_EXISTS: "select-appointment-exists",
   SELECT_CAN_SCHEDULE: "select-can-schedule",
   SELECT_REPORT: "select-report",
+  UPDATE_REPORT: "update-report",
 } as const;
 
 export type SqlQueryName = ObjectValues<typeof SQL_QUERY>;
