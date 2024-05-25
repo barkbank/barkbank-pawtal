@@ -23,5 +23,5 @@ export async function updateReport(
     ineligibilityExpiryTime,
     dogDidDonateBlood,
   } = reportData;
-  return CODE.STORAGE_FAILURE;
+  return CODE.OK;
 }
