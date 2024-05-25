@@ -10,6 +10,7 @@ import { UserMapper } from "../data/user-mapper";
 import { EncryptionService } from "../services/encryption";
 import { hasAppointment } from "./_impls/has-appointment";
 import { getReport } from "./_impls/get-report";
+import { updateReport } from "./_impls/update-report";
 
 export type PgBarkServiceConfig = {
   dbPool: Pool;
@@ -73,5 +74,16 @@ export class PgBarkService implements BarkService {
     >
   > {
     return createReport(this.config, args);
+  }
+
+  updateReport(args: {
+    reportId: string;
+    reportData: BarkReportData;
+  }): Promise<
+    | typeof CODE.OK
+    | typeof CODE.ERROR_REPORT_NOT_FOUND
+    | typeof CODE.STORAGE_FAILURE
+  > {
+    return updateReport(this.config, args);
   }
 }
