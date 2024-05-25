@@ -1,6 +1,6 @@
 import { CODE } from "../utilities/bark-code";
 import { Result } from "../utilities/result";
-import { BarkReportData } from "./bark-models";
+import { BarkReport, BarkReportData } from "./bark-models";
 
 export interface BarkService {
   addAppointment(args: {
@@ -40,9 +40,15 @@ export interface BarkService {
     >
   >;
 
-  // getReport(
-  //   reportId: string,
-  // ): Promise<Result<BarkReport, typeof CODE.ERROR_REPORT_NOT_FOUND>>;
+  getReport(args: {
+    reportId: string;
+  }): Promise<
+    Result<
+      { report: BarkReport },
+      typeof CODE.ERROR_REPORT_NOT_FOUND | typeof CODE.STORAGE_FAILURE
+    >
+  >;
+
   // updateReport(
   //   reportId: string,
   //   reportData: BarkReportData,

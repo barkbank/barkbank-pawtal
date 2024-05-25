@@ -1,5 +1,5 @@
 import { Pool } from "pg";
-import { BarkReportData } from "../bark/bark-models";
+import { BarkReport, BarkReportData } from "../bark/bark-models";
 import { BarkService } from "../bark/bark-service";
 import { CODE } from "../utilities/bark-code";
 import { Result } from "../utilities/result";
@@ -19,6 +19,18 @@ export type PgBarkServiceConfig = {
 
 export class PgBarkService implements BarkService {
   constructor(private config: PgBarkServiceConfig) {}
+
+  getReport(args: {
+    reportId: string;
+  }): Promise<
+    Result<
+      { report: BarkReport },
+      typeof CODE.ERROR_REPORT_NOT_FOUND | typeof CODE.STORAGE_FAILURE
+    >
+  > {
+    // WIP: Implement getReport
+    throw new Error("Method not implemented.");
+  }
 
   addAppointment(args: {
     dogId: string;
