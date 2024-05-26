@@ -1,12 +1,12 @@
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { CODE } from "@/lib/utilities/bark-code";
-import { PgBarkServiceConfig } from "../pg-bark-service";
 import { dbBegin, dbCommit, dbRelease, dbRollback } from "@/lib/data/db-utils";
-import { selectAppointmentSituation } from "../../bark/queries/select-appointment-situation";
-import { insertAppointment } from "../../bark/queries/insert-appointment";
+import { selectAppointmentSituation } from "../queries/select-appointment-situation";
+import { insertAppointment } from "../queries/insert-appointment";
+import { BarkContext } from "../bark-context";
 
-export async function addAppointment(
-  config: PgBarkServiceConfig,
+export async function BarkAction_addAppointment(
+  context: BarkContext,
   args: {
     dogId: string;
     vetId: string;
@@ -21,7 +21,7 @@ export async function addAppointment(
     | typeof CODE.STORAGE_FAILURE
   >
 > {
-  const conn = await config.dbPool.connect();
+  const conn = await context.dbPool.connect();
   const { dogId, vetId } = args;
   try {
     await dbBegin(conn);

@@ -1,11 +1,11 @@
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { CODE } from "@/lib/utilities/bark-code";
-import { PgBarkServiceConfig } from "../pg-bark-service";
 import { dbResultQuery } from "@/lib/data/db-utils";
-import { SQL_QUERY, loadSql } from "../_sql/load-sql";
+import { SQL_QUERY, loadSql } from "../../pg-bark/_sql/load-sql";
+import { BarkContext } from "@/lib/bark/bark-context";
 
-export async function hasAppointment(
-  config: PgBarkServiceConfig,
+export async function BarkAction_hasAppointment(
+  context: BarkContext,
   args: {
     dogId: string;
     vetId: string;
@@ -19,7 +19,7 @@ export async function hasAppointment(
     | typeof CODE.STORAGE_FAILURE
   >
 > {
-  const { dbPool } = config;
+  const { dbPool } = context;
   const { dogId, vetId } = args;
   const sql = loadSql(SQL_QUERY.SELECT_CAN_SCHEDULE);
   const { result, error } = await dbResultQuery<{

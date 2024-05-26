@@ -1,14 +1,17 @@
-import { withService } from "./_service";
+import { withBarkContext } from "./_service";
 import { mockReportData } from "./_mocks";
 import { CODE } from "@/lib/utilities/bark-code";
 import { givenDog, givenVet } from "./_given";
+import { BarkAction_createReport } from "@/lib/bark/actions/create-report";
+import { BarkAction_addAppointment } from "@/lib/bark/actions/add-appointment";
+import { BarkAction_hasAppointment } from "@/lib/bark/actions/has-appointment";
 
-describe("createReport", () => {
+describe("BarkAction_createReport", () => {
   it("should return ERROR_APPOINTMENT_NOT_FOUND when appointment cannot be found", async () => {
-    await withService(async ({ service }) => {
+    await withBarkContext(async ({ context }) => {
       const appointmentId = "12345";
       const reportData = mockReportData();
-      const { result, error } = await service.createReport({
+      const { result, error } = await BarkAction_createReport(context, {
         appointmentId,
         reportData,
       });
@@ -17,13 +20,13 @@ describe("createReport", () => {
     });
   });
   it("should save report data", async () => {
-    await withService(async ({ service, context }) => {
-      const { vetId } = await givenVet(context);
-      const { dogId } = await givenDog(context, { preferredVetId: vetId });
-      const res1 = await service.addAppointment({ dogId, vetId });
+    await withBarkContext(async ({ context, testContext }) => {
+      const { vetId } = await givenVet(testContext);
+      const { dogId } = await givenDog(testContext, { preferredVetId: vetId });
+      const res1 = await BarkAction_addAppointment(context, { dogId, vetId });
       const { appointmentId } = res1.result!;
       const reportData = mockReportData();
-      const { result, error } = await service.createReport({
+      const { result, error } = await BarkAction_createReport(context, {
         appointmentId,
         reportData,
       });
@@ -31,7 +34,7 @@ describe("createReport", () => {
       expect(error).toBeUndefined();
       const { reportId } = result!;
       expect(reportId).toBeTruthy();
-      const res2 = await service.hasAppointment({ dogId, vetId });
+      const res2 = await BarkAction_hasAppointment(context, { dogId, vetId });
       expect(res2?.result?.hasAppointment).toBe(false);
     });
   });

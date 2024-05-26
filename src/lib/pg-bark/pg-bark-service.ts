@@ -7,10 +7,10 @@ import { BarkAction_createReport } from "../bark/actions/create-report";
 import { DogMapper } from "../data/dog-mapper";
 import { UserMapper } from "../data/user-mapper";
 import { EncryptionService } from "../services/encryption";
-import { hasAppointment } from "./_impls/has-appointment";
+import { BarkAction_hasAppointment } from "../bark/actions/has-appointment";
 import { getReport } from "./_impls/get-report";
 import { updateReport } from "./_impls/update-report";
-import { addAppointment } from "./_impls/alternative-add-appointment";
+import { BarkAction_addAppointment } from "../bark/actions/alternative-add-appointment";
 
 export type PgBarkServiceConfig = {
   dbPool: Pool;
@@ -46,7 +46,7 @@ export class PgBarkService implements BarkService {
       | typeof CODE.STORAGE_FAILURE
     >
   > {
-    return addAppointment(this.config, args);
+    return BarkAction_addAppointment(this.config, args);
   }
 
   hasAppointment(args: {
@@ -61,7 +61,7 @@ export class PgBarkService implements BarkService {
       | typeof CODE.STORAGE_FAILURE
     >
   > {
-    return hasAppointment(this.config, args);
+    return BarkAction_hasAppointment(this.config, args);
   }
 
   createReport(args: {
