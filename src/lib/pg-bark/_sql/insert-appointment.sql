@@ -1,3 +1,4 @@
+-- WIP: remove this sql
 -- (dogId, vetId)
 
 INSERT INTO calls (dog_id, vet_id, call_outcome, encrypted_opt_out_reason)

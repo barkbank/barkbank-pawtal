@@ -4,6 +4,7 @@ import { DbContext, dbQuery } from "@/lib/data/db-utils";
 /**
  * Updates an appointment status to REPORTED or CANCELLED.
  */
+// WIP: use zod to specify arg and row schemas
 export async function updateAppointment(
   dbContext: DbContext,
   args: {

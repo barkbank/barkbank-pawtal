@@ -1,3 +1,5 @@
+-- WIP: remove this sql
+
 WITH
 mCallDetails as (
     SELECT call_id, dog_id, vet_id

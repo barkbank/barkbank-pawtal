@@ -12,6 +12,7 @@ export const SQL_QUERY = {
 
 export type SqlQueryName = ObjectValues<typeof SQL_QUERY>;
 
+// WIP: remove the load-sql file
 export function loadSql(queryName: SqlQueryName): string {
   return dbLoadSql(`src/lib/pg-bark/_sql/${queryName}.sql`);
 }

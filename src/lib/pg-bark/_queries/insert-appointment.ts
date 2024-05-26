@@ -1,5 +1,6 @@
 import { DbContext, dbQuery } from "@/lib/data/db-utils";
 
+// WIP: use zod to specify arg and row schemas
 export async function insertAppointment(
   dbContext: DbContext,
   args: { dogId: string; vetId: string },

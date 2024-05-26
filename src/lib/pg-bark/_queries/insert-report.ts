@@ -1,6 +1,7 @@
 import { PosNegNil, ReportedIneligibility } from "@/lib/data/db-enums";
 import { DbContext, dbQuery } from "@/lib/data/db-utils";
 
+// WIP: use zod to specify arg and row schemas
 export async function insertReport(
   dbContext: DbContext,
   args: {

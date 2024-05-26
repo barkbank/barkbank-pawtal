@@ -1,3 +1,5 @@
+-- WIP: remove this SQL
+
 -- (appointmentId)
 
 SELECT
