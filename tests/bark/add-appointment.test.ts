@@ -1,7 +1,7 @@
 import { CODE } from "@/lib/utilities/bark-code";
 import { withBarkContext } from "./_context";
 import { givenDog, givenVet } from "./_given";
-import { BarkAction_addAppointment } from "@/lib/bark/actions/add-appointment";
+import { BarkAction_addAppointment } from "@/lib/bark/operations/add-appointment";
 
 describe("BarkAction_addAppointment", () => {
   it("should return ERROR_DOG_NOT_FOUND when specified dog cannot be found", async () => {

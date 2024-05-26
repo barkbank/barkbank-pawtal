@@ -3,10 +3,10 @@ import { givenDog, givenVet } from "./_given";
 import { withBarkContext } from "./_context";
 import { mockReportData } from "./_mocks";
 import { CODE } from "@/lib/utilities/bark-code";
-import { BarkAction_addAppointment } from "@/lib/bark/actions/add-appointment";
-import { BarkAction_createReport } from "@/lib/bark/actions/create-report";
-import { BarkAction_getReport } from "@/lib/bark/actions/get-report";
-import { BarkAction_updateReport } from "@/lib/bark/actions/update-report";
+import { BarkAction_addAppointment } from "@/lib/bark/operations/add-appointment";
+import { BarkAction_createReport } from "@/lib/bark/operations/create-report";
+import { BarkAction_getReport } from "@/lib/bark/operations/get-report";
+import { BarkAction_updateReport } from "@/lib/bark/operations/update-report";
 
 describe("BarkAction_updateReport", () => {
   it("should update report data to the new values", async () => {

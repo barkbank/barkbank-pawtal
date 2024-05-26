@@ -2,9 +2,9 @@ import { withBarkContext } from "./_context";
 import { mockReportData } from "./_mocks";
 import { CODE } from "@/lib/utilities/bark-code";
 import { givenDog, givenVet } from "./_given";
-import { BarkAction_createReport } from "@/lib/bark/actions/create-report";
-import { BarkAction_addAppointment } from "@/lib/bark/actions/add-appointment";
-import { BarkAction_hasAppointment } from "@/lib/bark/actions/has-appointment";
+import { BarkAction_createReport } from "@/lib/bark/operations/create-report";
+import { BarkAction_addAppointment } from "@/lib/bark/operations/add-appointment";
+import { BarkAction_hasAppointment } from "@/lib/bark/operations/has-appointment";
 
 describe("BarkAction_createReport", () => {
   it("should return ERROR_APPOINTMENT_NOT_FOUND when appointment cannot be found", async () => {

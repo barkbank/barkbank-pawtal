@@ -2,9 +2,9 @@ import { BarkReport, BarkReportData } from "@/lib/bark/bark-models";
 import { givenDog, givenVet } from "./_given";
 import { mockReportData } from "./_mocks";
 import { withBarkContext } from "./_context";
-import { BarkAction_addAppointment } from "@/lib/bark/actions/add-appointment";
-import { BarkAction_createReport } from "@/lib/bark/actions/create-report";
-import { BarkAction_getReport } from "@/lib/bark/actions/get-report";
+import { BarkAction_addAppointment } from "@/lib/bark/operations/add-appointment";
+import { BarkAction_createReport } from "@/lib/bark/operations/create-report";
+import { BarkAction_getReport } from "@/lib/bark/operations/get-report";
 
 describe("BarkAction_getReport", () => {
   it("should return the report", async () => {
