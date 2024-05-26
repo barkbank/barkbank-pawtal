@@ -27,9 +27,6 @@ export async function BarkAction_hasAppointment(
   if (!situation.vetExists) {
     return Err(CODE.ERROR_VET_NOT_FOUND);
   }
-  if (!situation.isPreferredVet) {
-    return Err(CODE.ERROR_NOT_PREFERRED_VET);
-  }
   const hasAppointment = situation.hasExistingAppointment;
   return Ok({ hasAppointment });
 }
