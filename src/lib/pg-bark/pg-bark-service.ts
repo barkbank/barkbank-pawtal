@@ -3,7 +3,7 @@ import { BarkReport, BarkReportData } from "../bark/bark-models";
 import { BarkService } from "../bark/bark-service";
 import { CODE } from "../utilities/bark-code";
 import { Result } from "../utilities/result";
-import { createReport } from "./_impls/create-report";
+import { BarkAction_createReport } from "../bark/actions/create-report";
 import { DogMapper } from "../data/dog-mapper";
 import { UserMapper } from "../data/user-mapper";
 import { EncryptionService } from "../services/encryption";
@@ -73,7 +73,7 @@ export class PgBarkService implements BarkService {
       typeof CODE.ERROR_APPOINTMENT_NOT_FOUND | typeof CODE.STORAGE_FAILURE
     >
   > {
-    return createReport(this.config, args);
+    return BarkAction_createReport(this.config, args);
   }
 
   updateReport(args: {

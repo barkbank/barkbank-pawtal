@@ -1,15 +1,15 @@
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { CODE } from "@/lib/utilities/bark-code";
-import { PgBarkServiceConfig } from "../pg-bark-service";
 import { BarkReportData } from "@/lib/bark/bark-models";
 import { dbBegin, dbCommit, dbRelease, dbRollback } from "@/lib/data/db-utils";
-import { selectPendingAppointmentExists } from "../_queries/select-pending-appointment-exists";
-import { insertReport } from "../_queries/insert-report";
-import { updateAppointment } from "../_queries/update-appointment";
+import { selectPendingAppointmentExists } from "../../pg-bark/_queries/select-pending-appointment-exists";
+import { insertReport } from "../../pg-bark/_queries/insert-report";
+import { updateAppointment } from "../../pg-bark/_queries/update-appointment";
 import { CALL_OUTCOME } from "@/lib/data/db-enums";
+import { BarkContext } from "@/lib/bark/bark-context";
 
-export async function createReport(
-  config: PgBarkServiceConfig,
+export async function BarkAction_createReport(
+  context: BarkContext,
   args: {
     appointmentId: string;
     reportData: BarkReportData;
@@ -20,7 +20,7 @@ export async function createReport(
     typeof CODE.ERROR_APPOINTMENT_NOT_FOUND | typeof CODE.STORAGE_FAILURE
   >
 > {
-  const { dbPool, textEncryptionService } = config;
+  const { dbPool, textEncryptionService } = context;
   const { appointmentId, reportData } = args;
   const { ineligibilityReason, ...otherFields } = reportData;
   const conn = await dbPool.connect();
