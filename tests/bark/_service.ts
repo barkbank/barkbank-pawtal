@@ -13,7 +13,7 @@ export type ServiceTestContext = {
   dbPool: Pool;
 };
 
-export type BarkTestContext = {dbPool: Pool};
+export type BarkTestContext = { dbPool: Pool };
 
 export async function withService(
   testBody: (args: {

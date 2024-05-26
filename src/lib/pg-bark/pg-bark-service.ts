@@ -10,7 +10,7 @@ import { EncryptionService } from "../services/encryption";
 import { BarkAction_hasAppointment } from "../bark/actions/has-appointment";
 import { getReport } from "./_impls/get-report";
 import { updateReport } from "./_impls/update-report";
-import { BarkAction_addAppointment } from "../bark/actions/alternative-add-appointment";
+import { BarkAction_addAppointment } from "../bark/actions/add-appointment";
 
 export type PgBarkServiceConfig = {
   dbPool: Pool;
