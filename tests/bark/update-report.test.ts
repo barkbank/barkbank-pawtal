@@ -1,23 +1,27 @@
 import { BarkReport, BarkReportData } from "@/lib/bark/bark-models";
 import { givenDog, givenVet } from "./_given";
-import { withService } from "./_service";
+import { withBarkContext } from "./_service";
 import { mockReportData } from "./_mocks";
 import { CODE } from "@/lib/utilities/bark-code";
+import { BarkAction_addAppointment } from "@/lib/bark/actions/add-appointment";
+import { BarkAction_createReport } from "@/lib/bark/actions/create-report";
+import { BarkAction_getReport } from "@/lib/bark/actions/get-report";
+import { BarkAction_updateReport } from "@/lib/bark/actions/update-report";
 
-describe("updateReport", () => {
+describe("BarkAction_updateReport", () => {
   it("should update report data to the new values", async () => {
-    await withService(async ({ service, context }) => {
+    await withBarkContext(async ({ context, testContext }) => {
       // GIVEN an existing report
-      const { vetId } = await givenVet(context);
-      const { dogId } = await givenDog(context, { preferredVetId: vetId });
-      const res1 = await service.addAppointment({ dogId, vetId });
+      const { vetId } = await givenVet(testContext);
+      const { dogId } = await givenDog(testContext, { preferredVetId: vetId });
+      const res1 = await BarkAction_addAppointment(context, { dogId, vetId });
       const { appointmentId } = res1.result!;
       const originalReportData: BarkReportData = {
         ...mockReportData(),
         ineligibilityReason: "test reason",
         dogBodyConditioningScore: 1,
       };
-      const res2 = await service.createReport({
+      const res2 = await BarkAction_createReport(context, {
         appointmentId,
         reportData: originalReportData,
       });
@@ -30,14 +34,16 @@ describe("updateReport", () => {
         ineligibilityReason: "new reason",
         dogBodyConditioningScore: 10,
       };
-      const res3 = await service.updateReport({
+      const res3 = await BarkAction_updateReport(context, {
         reportId,
         reportData: modifiedReportData,
       });
       expect(res3).toEqual(CODE.OK);
 
       // THEN expect the modifications to be persisted.
-      const { result, error } = await service.getReport({ reportId });
+      const { result, error } = await BarkAction_getReport(context, {
+        reportId,
+      });
       expect(error).toBeUndefined();
       const { report } = result!;
       const expectedReport: BarkReport = {
