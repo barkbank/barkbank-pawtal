@@ -1,6 +1,9 @@
 import { CALL_OUTCOME } from "@/lib/data/db-enums";
 import { DbContext, dbQuery } from "@/lib/data/db-utils";
 
+/**
+ * Updates an appointment status to REPORTED or CANCELLED.
+ */
 export async function updateAppointment(
   dbContext: DbContext,
   args: {
