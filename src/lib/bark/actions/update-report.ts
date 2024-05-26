@@ -1,19 +1,20 @@
 import { BarkReportData } from "@/lib/bark/bark-models";
-import { PgBarkServiceConfig } from "../pg-bark-service";
+import { PgBarkServiceConfig } from "../../pg-bark/pg-bark-service";
 import { CODE } from "@/lib/utilities/bark-code";
 import { Err, Ok, Result } from "@/lib/utilities/result";
-import { SQL_QUERY, loadSql } from "../_sql/load-sql";
+import { SQL_QUERY, loadSql } from "../../pg-bark/_sql/load-sql";
 import { dbResultQuery } from "@/lib/data/db-utils";
+import { BarkContext } from "../bark-context";
 
-export async function updateReport(
-  config: PgBarkServiceConfig,
+export async function BarkAction_updateReport(
+  context: BarkContext,
   args: { reportId: string; reportData: BarkReportData },
 ): Promise<
   | typeof CODE.OK
   | typeof CODE.ERROR_REPORT_NOT_FOUND
   | typeof CODE.STORAGE_FAILURE
 > {
-  const { dbPool } = config;
+  const { dbPool } = context;
   const { reportId, reportData } = args;
   const {
     visitTime,
@@ -26,7 +27,7 @@ export async function updateReport(
     ineligibilityExpiryTime,
     dogDidDonateBlood,
   } = reportData;
-  const res1 = await encryptReason(config, ineligibilityReason);
+  const res1 = await encryptReason(context, ineligibilityReason);
   if (res1.error !== undefined) {
     return res1.error;
   }
