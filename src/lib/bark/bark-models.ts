@@ -20,3 +20,7 @@ export type BarkReport = BarkReportData & {
   dogId: string;
   vetId: string;
 };
+
+export type EncryptedBarkReport = Omit<BarkReport, "ineligibilityReason"> & {
+  encryptedIneligibilityReason: string;
+};

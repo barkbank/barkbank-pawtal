@@ -1,8 +1,13 @@
--- WIP: remove this SQL
+import { DbContext, dbQuery } from "@/lib/data/db-utils";
+import { EncryptedBarkReport } from "../bark-models";
 
--- (reportId) => BarkReport
-
-SELECT
+export async function selectReport(
+  dbContext: DbContext,
+  args: { reportId: string },
+): Promise<EncryptedBarkReport> {
+  const { reportId } = args;
+  const sql = `
+  SELECT
     report_id as "reportId",
     report_creation_time as "reportCreationTime",
     report_modification_time as "reportModificationTime",
@@ -24,5 +29,9 @@ SELECT
     encrypted_ineligibility_reason as "encryptedIneligibilityReason",
     ineligibility_expiry_time as "ineligibilityExpiryTime"
 
-FROM reports
-WHERE report_id = $1
+  FROM reports
+  WHERE report_id = $1
+  `;
+  const res = await dbQuery<EncryptedBarkReport>(dbContext, sql, [reportId]);
+  return res.rows[0];
+}
