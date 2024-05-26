@@ -1,12 +1,14 @@
 import { BarkReport } from "@/lib/bark/bark-models";
 import { CODE } from "@/lib/utilities/bark-code";
 import { Err, Ok, Result } from "@/lib/utilities/result";
-import { PgBarkServiceConfig } from "../pg-bark-service";
-import { SQL_QUERY, loadSql } from "../_sql/load-sql";
+import { PgBarkServiceConfig } from "../../pg-bark/pg-bark-service";
+import { SQL_QUERY, loadSql } from "../../pg-bark/_sql/load-sql";
 import { dbResultQuery } from "@/lib/data/db-utils";
+import { BarkContext } from "@/lib/bark/bark-context";
 
-export async function getReport(
-  config: PgBarkServiceConfig,
+// WIP: simplify getReport
+export async function BarkAction_getReport(
+  context: BarkContext,
   args: { reportId: string },
 ): Promise<
   Result<
@@ -14,7 +16,7 @@ export async function getReport(
     typeof CODE.ERROR_REPORT_NOT_FOUND | typeof CODE.STORAGE_FAILURE
   >
 > {
-  const { dbPool } = config;
+  const { dbPool } = context;
   const { reportId } = args;
   const sql = loadSql(SQL_QUERY.SELECT_REPORT);
   type Row = Omit<BarkReport, "ineligibilityReason"> & {
@@ -35,7 +37,7 @@ export async function getReport(
   const row: Row = result.rows[0];
   const { encryptedIneligibilityReason, ...otherFields } = row;
   const decryptionResult = await decryptReason(
-    config,
+    context,
     encryptedIneligibilityReason,
   );
   if (decryptionResult.error !== undefined) {

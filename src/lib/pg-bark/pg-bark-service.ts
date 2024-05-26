@@ -8,10 +8,11 @@ import { DogMapper } from "../data/dog-mapper";
 import { UserMapper } from "../data/user-mapper";
 import { EncryptionService } from "../services/encryption";
 import { BarkAction_hasAppointment } from "../bark/actions/has-appointment";
-import { getReport } from "./_impls/get-report";
+import { BarkAction_getReport } from "../bark/actions/get-report";
 import { updateReport } from "./_impls/update-report";
 import { BarkAction_addAppointment } from "../bark/actions/add-appointment";
 
+// WIP: remove PgBarkServiceConfig
 export type PgBarkServiceConfig = {
   dbPool: Pool;
   userMapper: UserMapper;
@@ -30,7 +31,7 @@ export class PgBarkService implements BarkService {
       typeof CODE.ERROR_REPORT_NOT_FOUND | typeof CODE.STORAGE_FAILURE
     >
   > {
-    return getReport(this.config, args);
+    return BarkAction_getReport(this.config, args);
   }
 
   addAppointment(args: {
