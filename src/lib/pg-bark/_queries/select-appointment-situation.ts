@@ -1,15 +1,27 @@
 import { DbContext, dbQuery } from "@/lib/data/db-utils";
+import { z } from "zod";
+
+const ArgSchema = z.object({
+  dogId: z.string(),
+  vetId: z.string(),
+});
+
+type ArgType = z.infer<typeof ArgSchema>;
+
+const RowSchema = z.object({
+  dogExists: z.boolean(),
+  vetExists: z.boolean(),
+  isPreferredVet: z.boolean(),
+  hasExistingAppointment: z.boolean(),
+});
+
+type RowType = z.infer<typeof RowSchema>;
 
 export async function selectAppointmentSituation(
   dbContext: DbContext,
-  args: { dogId: string; vetId: string },
-): Promise<{
-  dogExists: boolean;
-  vetExists: boolean;
-  isPreferredVet: boolean;
-  hasExistingAppointment: boolean;
-}> {
-  const { dogId, vetId } = args;
+  args: ArgType,
+): Promise<RowType> {
+  const { dogId, vetId } = ArgSchema.parse(args);
   const sql = `
   WITH
   mCountMatchingDogs as (
@@ -47,11 +59,6 @@ export async function selectAppointmentSituation(
     mCountMatchingPreferences,
     mCountPendingAppointments
   `;
-  const res = await dbQuery<{
-    dogExists: boolean;
-    vetExists: boolean;
-    isPreferredVet: boolean;
-    hasExistingAppointment: boolean;
-  }>(dbContext, sql, [dogId, vetId]);
-  return res.rows[0];
+  const res = await dbQuery<RowType>(dbContext, sql, [dogId, vetId]);
+  return RowSchema.parse(res.rows[0]);
 }

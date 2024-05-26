@@ -41,7 +41,8 @@ export async function addAppointment(
     const result = await insertAppointment(conn, { dogId, vetId });
     await dbCommit(conn);
     return Ok(result);
-  } catch {
+  } catch (exc) {
+    console.error(exc);
     await dbRollback(conn);
     return Err(CODE.STORAGE_FAILURE);
   } finally {
