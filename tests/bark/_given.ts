@@ -1,9 +1,9 @@
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import { insertDog, insertUser, insertVet } from "../_fixtures";
-import { ServiceTestContext } from "./_service";
+import { BarkTestContext } from "./_service";
 
 export async function givenUser(
-  context: ServiceTestContext,
+  context: BarkTestContext,
   options?: { userIdx?: number },
 ): Promise<{ userId: string }> {
   const { dbPool } = context;
@@ -15,7 +15,7 @@ export async function givenUser(
 }
 
 export async function givenDog(
-  context: ServiceTestContext,
+  context: BarkTestContext,
   options?: {
     dogIdx?: number;
     userId?: string;
@@ -44,7 +44,7 @@ export async function givenDog(
 }
 
 export async function givenVet(
-  context: ServiceTestContext,
+  context: BarkTestContext,
 ): Promise<{ vetId: string }> {
   const { dbPool } = context;
   const { vetId } = await insertVet(1, dbPool);
