@@ -1,6 +1,6 @@
 import { DbContext, dbQuery } from "@/lib/data/db-utils";
 
-export async function selectAppointmentStats(
+export async function selectAppointmentSituation(
   dbContext: DbContext,
   args: { dogId: string; vetId: string },
 ): Promise<{

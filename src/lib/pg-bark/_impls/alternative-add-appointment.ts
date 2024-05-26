@@ -2,7 +2,7 @@ import { Err, Ok, Result } from "@/lib/utilities/result";
 import { CODE } from "@/lib/utilities/bark-code";
 import { PgBarkServiceConfig } from "../pg-bark-service";
 import { dbBegin, dbCommit, dbRelease, dbRollback } from "@/lib/data/db-utils";
-import { selectAppointmentStats } from "../_queries/select-appointment-stats";
+import { selectAppointmentSituation } from "../_queries/select-appointment-situation";
 import { insertAppointment } from "../_queries/insert-appointment";
 
 export async function addAppointment(
@@ -25,7 +25,7 @@ export async function addAppointment(
   const { dogId, vetId } = args;
   try {
     await dbBegin(conn);
-    const stats = await selectAppointmentStats(conn, { dogId, vetId });
+    const stats = await selectAppointmentSituation(conn, { dogId, vetId });
     if (!stats.dogExists) {
       return Err(CODE.ERROR_DOG_NOT_FOUND);
     }
