@@ -2,7 +2,6 @@ import { ObjectValues } from "@/lib/utilities/object-values";
 import { dbLoadSql } from "../../data/db-load-sql";
 
 export const SQL_QUERY = {
-  SELECT_CAN_SCHEDULE: "select-can-schedule",
   UPDATE_REPORT: "update-report",
 } as const;
 
