@@ -25,17 +25,17 @@ export async function BarkAction_addAppointment(
   const { dogId, vetId } = args;
   try {
     await dbBegin(conn);
-    const stats = await selectAppointmentSituation(conn, { dogId, vetId });
-    if (!stats.dogExists) {
+    const situation = await selectAppointmentSituation(conn, { dogId, vetId });
+    if (!situation.dogExists) {
       return Err(CODE.ERROR_DOG_NOT_FOUND);
     }
-    if (!stats.vetExists) {
+    if (!situation.vetExists) {
       return Err(CODE.ERROR_VET_NOT_FOUND);
     }
-    if (!stats.isPreferredVet) {
+    if (!situation.isPreferredVet) {
       return Err(CODE.ERROR_NOT_PREFERRED_VET);
     }
-    if (stats.hasExistingAppointment) {
+    if (situation.hasExistingAppointment) {
       return Err(CODE.ERROR_APPOINTMENT_ALREADY_EXISTS);
     }
     const result = await insertAppointment(conn, { dogId, vetId });
