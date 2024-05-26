@@ -1,6 +1,6 @@
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import { insertDog, insertUser, insertVet } from "../_fixtures";
-import { BarkTestContext } from "./_service";
+import { BarkTestContext } from "./_context";
 
 export async function givenUser(
   context: BarkTestContext,
