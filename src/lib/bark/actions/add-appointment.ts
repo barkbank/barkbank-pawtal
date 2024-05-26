@@ -18,7 +18,7 @@ export async function BarkAction_addAppointment(
     | typeof CODE.ERROR_VET_NOT_FOUND
     | typeof CODE.ERROR_NOT_PREFERRED_VET
     | typeof CODE.ERROR_APPOINTMENT_ALREADY_EXISTS
-    | typeof CODE.STORAGE_FAILURE
+    | typeof CODE.FAILED
   >
 > {
   const conn = await context.dbPool.connect();
@@ -41,10 +41,10 @@ export async function BarkAction_addAppointment(
     const result = await insertAppointment(conn, { dogId, vetId });
     await dbCommit(conn);
     return Ok(result);
-  } catch (exc) {
-    console.error(exc);
+  } catch (err) {
+    console.error(err);
     await dbRollback(conn);
-    return Err(CODE.STORAGE_FAILURE);
+    return Err(CODE.FAILED);
   } finally {
     await dbRelease(conn);
   }

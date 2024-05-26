@@ -93,11 +93,6 @@ export const CODE = {
   ERROR_APPOINTMENT_ALREADY_EXISTS: "ERROR_APPOINTMENT_ALREADY_EXISTS",
 
   /**
-   * When an error occured that is because of the underlying persistence layer.
-   */
-  STORAGE_FAILURE: "STORAGE_FAILURE",
-
-  /**
    * When a database query failed.
    */
   DB_QUERY_FAILURE: "DB_QUERY_FAILURE",

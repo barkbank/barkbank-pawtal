@@ -26,8 +26,8 @@ export async function BarkAction_getReport(
       ineligibilityReason,
     };
     return Ok({ report });
-  } catch (e) {
-    console.error(e);
+  } catch (err) {
+    console.error(err);
     return Err(CODE.FAILED);
   }
 }

@@ -15,18 +15,26 @@ export async function BarkAction_hasAppointment(
     | typeof CODE.ERROR_DOG_NOT_FOUND
     | typeof CODE.ERROR_VET_NOT_FOUND
     | typeof CODE.ERROR_NOT_PREFERRED_VET
-    | typeof CODE.STORAGE_FAILURE
+    | typeof CODE.FAILED
   >
 > {
   const { dbPool } = context;
   const { dogId, vetId } = args;
-  const situation = await selectAppointmentSituation(dbPool, { dogId, vetId });
-  if (!situation.dogExists) {
-    return Err(CODE.ERROR_DOG_NOT_FOUND);
+  try {
+    const situation = await selectAppointmentSituation(dbPool, {
+      dogId,
+      vetId,
+    });
+    if (!situation.dogExists) {
+      return Err(CODE.ERROR_DOG_NOT_FOUND);
+    }
+    if (!situation.vetExists) {
+      return Err(CODE.ERROR_VET_NOT_FOUND);
+    }
+    const hasAppointment = situation.hasExistingAppointment;
+    return Ok({ hasAppointment });
+  } catch (err) {
+    console.error(err);
+    return Err(CODE.FAILED);
   }
-  if (!situation.vetExists) {
-    return Err(CODE.ERROR_VET_NOT_FOUND);
-  }
-  const hasAppointment = situation.hasExistingAppointment;
-  return Ok({ hasAppointment });
 }

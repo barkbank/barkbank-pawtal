@@ -30,8 +30,8 @@ export async function BarkAction_updateReport(
       return CODE.ERROR_REPORT_NOT_FOUND;
     }
     return CODE.OK;
-  } catch (e) {
-    console.error(e);
+  } catch (err) {
+    console.error(err);
     return CODE.FAILED;
   }
 }

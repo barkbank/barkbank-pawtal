@@ -17,7 +17,7 @@ export async function BarkAction_createReport(
 ): Promise<
   Result<
     { reportId: string },
-    typeof CODE.ERROR_APPOINTMENT_NOT_FOUND | typeof CODE.STORAGE_FAILURE
+    typeof CODE.ERROR_APPOINTMENT_NOT_FOUND | typeof CODE.FAILED
   >
 > {
   const { dbPool, textEncryptionService } = context;
@@ -45,10 +45,10 @@ export async function BarkAction_createReport(
     });
     await dbCommit(conn);
     return Ok({ reportId });
-  } catch (e) {
-    console.error(e);
+  } catch (err) {
+    console.error(err);
     await dbRollback(conn);
-    return Err(CODE.STORAGE_FAILURE);
+    return Err(CODE.FAILED);
   } finally {
     await dbRelease(conn);
   }
