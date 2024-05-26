@@ -21,6 +21,7 @@ export async function BarkAction_hasAppointment(
 > {
   const { dbPool } = context;
   const { dogId, vetId } = args;
+  // WIP: do not use loadSql
   const sql = loadSql(SQL_QUERY.SELECT_CAN_SCHEDULE);
   const { result, error } = await dbResultQuery<{
     dogExists: boolean;

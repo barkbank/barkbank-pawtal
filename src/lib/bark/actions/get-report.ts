@@ -18,6 +18,7 @@ export async function BarkAction_getReport(
 > {
   const { dbPool } = context;
   const { reportId } = args;
+  // WIP: do not use loadSql
   const sql = loadSql(SQL_QUERY.SELECT_REPORT);
   type Row = Omit<BarkReport, "ineligibilityReason"> & {
     encryptedIneligibilityReason: string;

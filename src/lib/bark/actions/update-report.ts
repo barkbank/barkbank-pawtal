@@ -32,6 +32,7 @@ export async function BarkAction_updateReport(
     return res1.error;
   }
   const { encryptedIneligibilityReason } = res1.result;
+  // WIP: do not use loadSql
   const sql = loadSql(SQL_QUERY.UPDATE_REPORT);
   const { result, error } = await dbResultQuery<{
     reportModificationTime: Date;
