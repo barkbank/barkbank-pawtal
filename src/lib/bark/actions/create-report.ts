@@ -2,9 +2,9 @@ import { Err, Ok, Result } from "@/lib/utilities/result";
 import { CODE } from "@/lib/utilities/bark-code";
 import { BarkReportData } from "@/lib/bark/bark-models";
 import { dbBegin, dbCommit, dbRelease, dbRollback } from "@/lib/data/db-utils";
-import { selectPendingAppointmentExists } from "../../pg-bark/_queries/select-pending-appointment-exists";
-import { insertReport } from "../../pg-bark/_queries/insert-report";
-import { updateAppointment } from "../../pg-bark/_queries/update-appointment";
+import { selectPendingAppointmentExists } from "../queries/select-pending-appointment-exists";
+import { insertReport } from "../queries/insert-report";
+import { updateAppointment } from "../queries/update-appointment";
 import { CALL_OUTCOME } from "@/lib/data/db-enums";
 import { BarkContext } from "@/lib/bark/bark-context";
 

@@ -2,8 +2,8 @@ import { Err, Ok, Result } from "@/lib/utilities/result";
 import { CODE } from "@/lib/utilities/bark-code";
 import { PgBarkServiceConfig } from "../pg-bark-service";
 import { dbBegin, dbCommit, dbRelease, dbRollback } from "@/lib/data/db-utils";
-import { selectAppointmentSituation } from "../_queries/select-appointment-situation";
-import { insertAppointment } from "../_queries/insert-appointment";
+import { selectAppointmentSituation } from "../../bark/queries/select-appointment-situation";
+import { insertAppointment } from "../../bark/queries/insert-appointment";
 
 export async function addAppointment(
   config: PgBarkServiceConfig,
