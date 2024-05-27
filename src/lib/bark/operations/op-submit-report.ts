@@ -7,6 +7,7 @@ import { insertReport } from "../queries/insert-report";
 import { updateAppointment } from "../queries/update-appointment";
 import { CALL_OUTCOME } from "@/lib/data/db-enums";
 import { BarkContext } from "@/lib/bark/bark-context";
+import { toEncryptedBarkReportData } from "../mappers/to-encrypted-bark-report-data";
 
 /**
  * Submits a medical report for a specified appointment and progresses that
@@ -24,13 +25,15 @@ export async function opSubmitReport(
     typeof CODE.ERROR_APPOINTMENT_NOT_FOUND | typeof CODE.FAILED
   >
 > {
-  const { dbPool, textEncryptionService } = context;
+  const { dbPool } = context;
   const { appointmentId, reportData } = args;
-  const { ineligibilityReason, ...otherFields } = reportData;
   const conn = await dbPool.connect();
   try {
-    const encryptedIneligibilityReason =
-      await textEncryptionService.getEncryptedData(ineligibilityReason);
+    const encryptedReportData = await toEncryptedBarkReportData(
+      context,
+      reportData,
+    );
+
     await dbBegin(conn);
     const { exists } = await selectPendingAppointmentExists(conn, {
       appointmentId,
@@ -40,8 +43,7 @@ export async function opSubmitReport(
     }
     const { reportId } = await insertReport(conn, {
       appointmentId,
-      encryptedIneligibilityReason,
-      ...otherFields,
+      encryptedReportData,
     });
     await updateAppointment(conn, {
       appointmentId,

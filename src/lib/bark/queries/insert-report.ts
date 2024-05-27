@@ -1,23 +1,15 @@
-import { PosNegNil, ReportedIneligibility } from "@/lib/data/db-enums";
 import { DbContext, dbQuery } from "@/lib/data/db-utils";
+import { EncryptedBarkReportData } from "../bark-models";
 
 export async function insertReport(
   dbContext: DbContext,
   args: {
     appointmentId: string;
-    visitTime: Date;
-    dogWeightKg: number;
-    dogBodyConditioningScore: number;
-    dogHeartworm: PosNegNil;
-    dogDea1Point1: PosNegNil;
-    ineligibilityStatus: ReportedIneligibility;
-    encryptedIneligibilityReason: string;
-    ineligibilityExpiryTime: Date | null;
-    dogDidDonateBlood: boolean;
+    encryptedReportData: EncryptedBarkReportData;
   },
 ): Promise<{ reportId: string }> {
+  const { appointmentId, encryptedReportData } = args;
   const {
-    appointmentId,
     visitTime,
     dogWeightKg,
     dogBodyConditioningScore,
@@ -27,7 +19,7 @@ export async function insertReport(
     encryptedIneligibilityReason,
     ineligibilityExpiryTime,
     dogDidDonateBlood,
-  } = args;
+  } = encryptedReportData;
   const sql = `
   WITH
   mAppointmentDetails as (
