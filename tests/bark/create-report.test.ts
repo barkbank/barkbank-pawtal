@@ -5,6 +5,7 @@ import { givenDog, givenVet } from "./_given";
 import { BarkAction_createReport } from "@/lib/bark/operations/create-report";
 import { BarkAction_addAppointment } from "@/lib/bark/operations/add-appointment";
 import { BarkAction_hasAppointment } from "@/lib/bark/operations/has-appointment";
+import { selectAppointmentSituation } from "@/lib/bark/queries/select-appointment-situation";
 
 describe("BarkAction_createReport", () => {
   it("should return ERROR_APPOINTMENT_NOT_FOUND when appointment cannot be found", async () => {
@@ -20,7 +21,7 @@ describe("BarkAction_createReport", () => {
     });
   });
   it("should save report data", async () => {
-    await withBarkContext(async ({ context, testContext }) => {
+    await withBarkContext(async ({ context, testContext, dbContext }) => {
       const { vetId } = await givenVet(testContext);
       const { dogId } = await givenDog(testContext, { preferredVetId: vetId });
       const res1 = await BarkAction_addAppointment(context, { dogId, vetId });
@@ -34,8 +35,11 @@ describe("BarkAction_createReport", () => {
       expect(error).toBeUndefined();
       const { reportId } = result!;
       expect(reportId).toBeTruthy();
-      const res2 = await BarkAction_hasAppointment(context, { dogId, vetId });
-      expect(res2?.result?.hasAppointment).toBe(false);
+      const { hasExistingAppointment } = await selectAppointmentSituation(
+        dbContext,
+        { dogId, vetId },
+      );
+      expect(hasExistingAppointment).toBe(false);
     });
   });
 });
