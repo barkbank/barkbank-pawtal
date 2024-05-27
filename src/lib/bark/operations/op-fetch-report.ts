@@ -4,7 +4,10 @@ import { Err, Ok, Result } from "@/lib/utilities/result";
 import { BarkContext } from "@/lib/bark/bark-context";
 import { selectReport } from "../queries/select-report";
 
-export async function BarkAction_getReport(
+/**
+ * Fetch report by ID
+ */
+export async function opFetchReport(
   context: BarkContext,
   args: { reportId: string },
 ): Promise<

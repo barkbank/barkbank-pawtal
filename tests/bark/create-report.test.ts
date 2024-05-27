@@ -23,7 +23,10 @@ describe("opSubmitMedicalReport", () => {
     await withBarkContext(async ({ context, testContext, dbContext }) => {
       const { vetId } = await givenVet(testContext);
       const { dogId } = await givenDog(testContext, { preferredVetId: vetId });
-      const res1 = await opRecordAppointmentCallOutcome(context, { dogId, vetId });
+      const res1 = await opRecordAppointmentCallOutcome(context, {
+        dogId,
+        vetId,
+      });
       const { appointmentId } = res1.result!;
       const reportData = mockReportData();
       const { result, error } = await opSubmitMedicalReport(context, {

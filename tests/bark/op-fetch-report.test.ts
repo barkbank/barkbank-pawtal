@@ -4,14 +4,17 @@ import { mockReportData } from "./_mocks";
 import { withBarkContext } from "./_context";
 import { opRecordAppointmentCallOutcome } from "@/lib/bark/operations/op-record-appointment-call-outcome";
 import { opSubmitMedicalReport } from "@/lib/bark/operations/op-submit-medical-report";
-import { BarkAction_getReport } from "@/lib/bark/operations/get-report";
+import { opFetchReport } from "@/lib/bark/operations/op-fetch-report";
 
-describe("BarkAction_getReport", () => {
+describe("opFetchReport", () => {
   it("should return the report", async () => {
     await withBarkContext(async ({ context, testContext }) => {
       const { vetId } = await givenVet(testContext);
       const { dogId } = await givenDog(testContext, { preferredVetId: vetId });
-      const res1 = await opRecordAppointmentCallOutcome(context, { dogId, vetId });
+      const res1 = await opRecordAppointmentCallOutcome(context, {
+        dogId,
+        vetId,
+      });
       const { appointmentId } = res1.result!;
       const reportData: BarkReportData = {
         ...mockReportData(),
@@ -23,7 +26,7 @@ describe("BarkAction_getReport", () => {
       });
       const { reportId } = res2.result!;
       console.log({ reportId });
-      const { result, error } = await BarkAction_getReport(context, {
+      const { result, error } = await opFetchReport(context, {
         reportId,
       });
       expect(error).toBeUndefined();

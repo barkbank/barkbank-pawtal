@@ -5,7 +5,7 @@ import { mockReportData } from "./_mocks";
 import { CODE } from "@/lib/utilities/bark-code";
 import { opRecordAppointmentCallOutcome } from "@/lib/bark/operations/op-record-appointment-call-outcome";
 import { opSubmitMedicalReport } from "@/lib/bark/operations/op-submit-medical-report";
-import { BarkAction_getReport } from "@/lib/bark/operations/get-report";
+import { opFetchReport } from "@/lib/bark/operations/op-fetch-report";
 import { BarkAction_updateReport } from "@/lib/bark/operations/update-report";
 
 describe("BarkAction_updateReport", () => {
@@ -14,7 +14,10 @@ describe("BarkAction_updateReport", () => {
       // GIVEN an existing report
       const { vetId } = await givenVet(testContext);
       const { dogId } = await givenDog(testContext, { preferredVetId: vetId });
-      const res1 = await opRecordAppointmentCallOutcome(context, { dogId, vetId });
+      const res1 = await opRecordAppointmentCallOutcome(context, {
+        dogId,
+        vetId,
+      });
       const { appointmentId } = res1.result!;
       const originalReportData: BarkReportData = {
         ...mockReportData(),
@@ -41,7 +44,7 @@ describe("BarkAction_updateReport", () => {
       expect(res3).toEqual(CODE.OK);
 
       // THEN expect the modifications to be persisted.
-      const { result, error } = await BarkAction_getReport(context, {
+      const { result, error } = await opFetchReport(context, {
         reportId,
       });
       expect(error).toBeUndefined();
