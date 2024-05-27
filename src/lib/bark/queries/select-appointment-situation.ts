@@ -47,7 +47,7 @@ export async function selectAppointmentSituation(
     AND dog_id = $1
     AND vet_id = $2
   )
-  
+
   SELECT
     num_matching_dogs = 1 as "dogExists",
     num_matching_vets = 1 as "vetExists",
