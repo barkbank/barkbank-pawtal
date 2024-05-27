@@ -3,7 +3,7 @@ import { givenDog, givenVet } from "./_given";
 import { mockReportData } from "./_mocks";
 import { withBarkContext } from "./_context";
 import { opRecordAppointmentCallOutcome } from "@/lib/bark/operations/op-record-appointment-call-outcome";
-import { opSubmitMedicalReport } from "@/lib/bark/operations/op-submit-medical-report";
+import { opSubmitReport } from "@/lib/bark/operations/op-submit-report";
 import { opFetchReport } from "@/lib/bark/operations/op-fetch-report";
 
 describe("opFetchReport", () => {
@@ -20,7 +20,7 @@ describe("opFetchReport", () => {
         ...mockReportData(),
         ineligibilityReason: "test reason",
       };
-      const res2 = await opSubmitMedicalReport(context, {
+      const res2 = await opSubmitReport(context, {
         appointmentId,
         reportData,
       });

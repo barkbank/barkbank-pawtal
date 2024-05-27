@@ -4,7 +4,7 @@ import { withBarkContext } from "./_context";
 import { mockReportData } from "./_mocks";
 import { CODE } from "@/lib/utilities/bark-code";
 import { opRecordAppointmentCallOutcome } from "@/lib/bark/operations/op-record-appointment-call-outcome";
-import { opSubmitMedicalReport } from "@/lib/bark/operations/op-submit-medical-report";
+import { opSubmitReport } from "@/lib/bark/operations/op-submit-report";
 import { opFetchReport } from "@/lib/bark/operations/op-fetch-report";
 import { BarkAction_updateReport } from "@/lib/bark/operations/update-report";
 
@@ -24,7 +24,7 @@ describe("BarkAction_updateReport", () => {
         ineligibilityReason: "test reason",
         dogBodyConditioningScore: 1,
       };
-      const res2 = await opSubmitMedicalReport(context, {
+      const res2 = await opSubmitReport(context, {
         appointmentId,
         reportData: originalReportData,
       });
