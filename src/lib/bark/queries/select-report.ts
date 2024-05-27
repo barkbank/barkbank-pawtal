@@ -4,7 +4,7 @@ import { EncryptedBarkReport } from "../bark-models";
 export async function selectReport(
   dbContext: DbContext,
   args: { reportId: string },
-): Promise<EncryptedBarkReport> {
+): Promise<EncryptedBarkReport | null> {
   const { reportId } = args;
   const sql = `
   SELECT
@@ -33,5 +33,8 @@ export async function selectReport(
   WHERE report_id = $1
   `;
   const res = await dbQuery<EncryptedBarkReport>(dbContext, sql, [reportId]);
+  if (res.rows.length === 0) {
+    return null;
+  }
   return res.rows[0];
 }

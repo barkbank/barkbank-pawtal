@@ -20,9 +20,12 @@ export async function opFetchReport(
   const { dbPool } = context;
   const { reportId } = args;
   try {
-    const encryptedReport: EncryptedBarkReport = await selectReport(dbPool, {
+    const encryptedReport = await selectReport(dbPool, {
       reportId,
     });
+    if (encryptedReport === null) {
+      return Err(CODE.ERROR_REPORT_NOT_FOUND);
+    }
     const report = await toBarkReport(context, encryptedReport);
     return Ok({ report });
   } catch (err) {
