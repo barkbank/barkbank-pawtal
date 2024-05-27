@@ -2,7 +2,7 @@ import { BarkReport, BarkReportData } from "@/lib/bark/bark-models";
 import { givenDog, givenVet } from "./_given";
 import { mockReportData } from "./_mocks";
 import { withBarkContext } from "./_context";
-import { BarkAction_addAppointment } from "@/lib/bark/operations/add-appointment";
+import { opRecordAppointmentCallOutcome } from "@/lib/bark/operations/op-record-appointment-call-outcome";
 import { BarkAction_createReport } from "@/lib/bark/operations/create-report";
 import { BarkAction_getReport } from "@/lib/bark/operations/get-report";
 
@@ -11,7 +11,7 @@ describe("BarkAction_getReport", () => {
     await withBarkContext(async ({ context, testContext }) => {
       const { vetId } = await givenVet(testContext);
       const { dogId } = await givenDog(testContext, { preferredVetId: vetId });
-      const res1 = await BarkAction_addAppointment(context, { dogId, vetId });
+      const res1 = await opRecordAppointmentCallOutcome(context, { dogId, vetId });
       const { appointmentId } = res1.result!;
       const reportData: BarkReportData = {
         ...mockReportData(),

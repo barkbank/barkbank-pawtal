@@ -5,7 +5,7 @@ import { selectAppointmentSituation } from "../queries/select-appointment-situat
 import { insertAppointment } from "../queries/insert-appointment";
 import { BarkContext } from "../bark-context";
 
-export async function BarkAction_addAppointment(
+export async function opRecordAppointmentCallOutcome(
   context: BarkContext,
   args: {
     dogId: string;
