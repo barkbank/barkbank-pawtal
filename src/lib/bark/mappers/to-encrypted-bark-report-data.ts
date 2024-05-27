@@ -8,7 +8,9 @@ export async function toEncryptedBarkReportData(
   const { textEncryptionService } = context;
   const { ineligibilityReason, ...otherFields } = reportData;
   const encryptedIneligibilityReason =
-    await textEncryptionService.getEncryptedData(ineligibilityReason);
+    ineligibilityReason === ""
+      ? ""
+      : await textEncryptionService.getEncryptedData(ineligibilityReason);
   const encryptedReportData: EncryptedBarkReportData = {
     ...otherFields,
     encryptedIneligibilityReason,

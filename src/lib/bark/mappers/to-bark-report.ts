@@ -7,9 +7,12 @@ export async function toBarkReport(
 ): Promise<BarkReport> {
   const { textEncryptionService } = context;
   const { encryptedIneligibilityReason, ...otherFields } = encrypted;
-  const ineligibilityReason = await textEncryptionService.getDecryptedData(
-    encryptedIneligibilityReason,
-  );
+  const ineligibilityReason =
+    encryptedIneligibilityReason === ""
+      ? ""
+      : await textEncryptionService.getDecryptedData(
+          encryptedIneligibilityReason,
+        );
   const report = {
     ...otherFields,
     ineligibilityReason,
