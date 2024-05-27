@@ -3,7 +3,7 @@ import { givenDog, givenVet } from "./_given";
 import { mockReportData } from "./_mocks";
 import { withBarkContext } from "./_context";
 import { opRecordAppointmentCallOutcome } from "@/lib/bark/operations/op-record-appointment-call-outcome";
-import { BarkAction_createReport } from "@/lib/bark/operations/create-report";
+import { opSubmitMedicalReport } from "@/lib/bark/operations/op-submit-medical-report";
 import { BarkAction_getReport } from "@/lib/bark/operations/get-report";
 
 describe("BarkAction_getReport", () => {
@@ -17,7 +17,7 @@ describe("BarkAction_getReport", () => {
         ...mockReportData(),
         ineligibilityReason: "test reason",
       };
-      const res2 = await BarkAction_createReport(context, {
+      const res2 = await opSubmitMedicalReport(context, {
         appointmentId,
         reportData,
       });

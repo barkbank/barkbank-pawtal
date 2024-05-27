@@ -8,7 +8,11 @@ import { updateAppointment } from "../queries/update-appointment";
 import { CALL_OUTCOME } from "@/lib/data/db-enums";
 import { BarkContext } from "@/lib/bark/bark-context";
 
-export async function BarkAction_createReport(
+/**
+ * Submits a medical report for a specified appointment and progresses that
+ * appointment's status to REPORTED.
+ */
+export async function opSubmitMedicalReport(
   context: BarkContext,
   args: {
     appointmentId: string;
