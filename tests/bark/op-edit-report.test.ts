@@ -6,9 +6,9 @@ import { CODE } from "@/lib/utilities/bark-code";
 import { opRecordAppointmentCallOutcome } from "@/lib/bark/operations/op-record-appointment-call-outcome";
 import { opSubmitReport } from "@/lib/bark/operations/op-submit-report";
 import { opFetchReport } from "@/lib/bark/operations/op-fetch-report";
-import { BarkAction_updateReport } from "@/lib/bark/operations/update-report";
+import { opEditReport } from "@/lib/bark/operations/op-edit-report";
 
-describe("BarkAction_updateReport", () => {
+describe("opEditReport", () => {
   it("should update report data to the new values", async () => {
     await withBarkContext(async ({ context, testContext }) => {
       // GIVEN an existing report
@@ -37,7 +37,7 @@ describe("BarkAction_updateReport", () => {
         ineligibilityReason: "new reason",
         dogBodyConditioningScore: 10,
       };
-      const res3 = await BarkAction_updateReport(context, {
+      const res3 = await opEditReport(context, {
         reportId,
         reportData: modifiedReportData,
       });

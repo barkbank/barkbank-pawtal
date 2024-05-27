@@ -6,7 +6,7 @@ import { CODE } from "@/lib/utilities/bark-code";
 import { BarkContext } from "../bark-context";
 import { updateReport } from "../queries/update-report";
 
-export async function BarkAction_updateReport(
+export async function opEditReport(
   context: BarkContext,
   args: { reportId: string; reportData: BarkReportData },
 ): Promise<
