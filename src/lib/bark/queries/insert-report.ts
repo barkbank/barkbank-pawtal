@@ -1,5 +1,10 @@
 import { DbContext, dbQuery } from "@/lib/data/db-utils";
 import { EncryptedBarkReportData } from "../bark-models";
+import { z } from "zod";
+
+const RowSchema = z.object({
+  reportId: z.string(),
+});
 
 export async function insertReport(
   dbContext: DbContext,
@@ -55,7 +60,7 @@ export async function insertReport(
     RETURNING report_id
   )
 
-  SELECT report_id as "reportId" FROM mInsertion
+  SELECT report_id::text as "reportId" FROM mInsertion
   `;
   const res = await dbQuery<{ reportId: string }>(dbContext, sql, [
     appointmentId,
@@ -69,5 +74,5 @@ export async function insertReport(
     ineligibilityExpiryTime,
     dogDidDonateBlood,
   ]);
-  return res.rows[0];
+  return RowSchema.parse(res.rows[0]);
 }
