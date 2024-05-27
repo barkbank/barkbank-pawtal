@@ -34,26 +34,27 @@ export const CODE = {
   ERROR_NOT_LOGGED_IN: "ERROR_NOT_LOGGED_IN",
 
   /**
-   * When the operation needs to retrieve a specified user, but there is no such
-   * user on record.
+   * When a specified user cannot be found.
    */
   ERROR_USER_NOT_FOUND: "ERROR_USER_NOT_FOUND",
 
   /**
-   * When the operation is for a specified dog (typically by dogId), but there
-   * is no such dog.
+   * When a specified dog cannot be found.
    */
   ERROR_DOG_NOT_FOUND: "ERROR_DOG_NOT_FOUND",
 
   /**
-   * When a user actor attempts to retrieve or mutate a dog related record, but
-   * the user is not the owner of the dog.
+   * When a specified vet cannot be found.
+   */
+  ERROR_VET_NOT_FOUND: "ERROR_VET_NOT_FOUND",
+
+  /**
+   * When a user is not the owner of a specified dog.
    */
   ERROR_WRONG_OWNER: "ERROR_WRONG_OWNER",
 
   /**
-   * When a vet actor attempts to retrieve information related a dog, but the
-   * vet is not a preferred vet of the dog.
+   * When a vet is not a preferred vet of a specified dog.
    */
   ERROR_NOT_PREFERRED_VET: "ERROR_NOT_PREFERRED_VET",
 
@@ -74,6 +75,22 @@ export const CODE = {
    * When we find there is more than one preferred vet.
    */
   ERROR_MORE_THAN_ONE_PREFERRED_VET: "ERROR_MORE_THAN_ONE_PREFERRED_VET",
+
+  /**
+   * When a requested report cannot be found.
+   */
+  ERROR_REPORT_NOT_FOUND: "ERROR_REPORT_NOT_FOUND",
+
+  /**
+   * When an appointment ID was provided that does not refer to an appointment
+   * on record.
+   */
+  ERROR_APPOINTMENT_NOT_FOUND: "ERROR_APPOINTMENT_NOT_FOUND",
+
+  /**
+   * When an appointment already exists for some specified dog and vet.
+   */
+  ERROR_APPOINTMENT_ALREADY_EXISTS: "ERROR_APPOINTMENT_ALREADY_EXISTS",
 
   /**
    * When a database query failed.
