@@ -1,7 +1,4 @@
-import {
-  BarkReportData,
-  EncryptedBarkReportData,
-} from "@/lib/bark/bark-models";
+import { BarkReportData } from "@/lib/bark/bark-models";
 import { CODE } from "@/lib/utilities/bark-code";
 import { BarkContext } from "../bark-context";
 import { updateReport } from "../queries/update-report";
