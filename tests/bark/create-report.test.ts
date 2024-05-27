@@ -4,7 +4,6 @@ import { CODE } from "@/lib/utilities/bark-code";
 import { givenDog, givenVet } from "./_given";
 import { BarkAction_createReport } from "@/lib/bark/operations/create-report";
 import { BarkAction_addAppointment } from "@/lib/bark/operations/add-appointment";
-import { BarkAction_hasAppointment } from "@/lib/bark/operations/has-appointment";
 import { selectAppointmentSituation } from "@/lib/bark/queries/select-appointment-situation";
 
 describe("BarkAction_createReport", () => {
