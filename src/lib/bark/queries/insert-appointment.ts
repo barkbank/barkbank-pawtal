@@ -1,4 +1,9 @@
 import { DbContext, dbQuery } from "@/lib/data/db-utils";
+import { z } from "zod";
+
+const RowSchema = z.object({
+  appointmentId: z.string(),
+});
 
 export async function insertAppointment(
   dbContext: DbContext,
@@ -14,5 +19,5 @@ export async function insertAppointment(
     dogId,
     vetId,
   ]);
-  return res.rows[0];
+  return RowSchema.parse(res.rows[0]);
 }
