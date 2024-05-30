@@ -1,7 +1,7 @@
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import { getDogMapper, insertDog, insertUser, insertVet } from "../_fixtures";
 import { BarkTestContext } from "./_context";
-import { DogGender } from "@/lib/data/db-enums";
+import { DOG_GENDER, DogGender, YES_NO_UNKNOWN } from "@/lib/data/db-enums";
 import { dbQuery } from "@/lib/data/db-utils";
 
 export async function givenUser(
@@ -37,7 +37,10 @@ export async function givenDog(
     const res = await givenUser(context, { userIdx: idx });
     return res.userId;
   })();
-  const { dogId } = await insertDog(idx, ownerUserId, dbPool);
+  const { dogId } = await insertDog(idx, ownerUserId, dbPool, {
+    dogGender: DOG_GENDER.MALE,
+    dogEverPregnant: YES_NO_UNKNOWN.NO,
+  });
   if (preferredVetId !== undefined) {
     await dbInsertDogVetPreference(dbPool, dogId, preferredVetId);
   }

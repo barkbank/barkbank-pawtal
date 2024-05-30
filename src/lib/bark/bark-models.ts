@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { DOG_GENDER, PosNegNil, ReportedIneligibility } from "../data/db-enums";
 
 export type BarkAppointment = {
@@ -9,6 +10,20 @@ export type BarkAppointment = {
   dogGender: typeof DOG_GENDER.MALE | typeof DOG_GENDER.FEMALE;
   ownerName: string;
 };
+
+export const EncryptedBarkAppointmentSchema = z.object({
+  appointmentId: z.string(),
+  vetId: z.string(),
+  dogId: z.string(),
+  dogEncryptedOii: z.string(),
+  dogBreed: z.string(),
+  dogGender: z.enum([DOG_GENDER.MALE, DOG_GENDER.FEMALE]),
+  userEncryptedPii: z.string(),
+});
+
+export type EncryptedBarkAppointment = z.infer<
+  typeof EncryptedBarkAppointmentSchema
+>;
 
 export type BarkReportData = {
   visitTime: Date;
