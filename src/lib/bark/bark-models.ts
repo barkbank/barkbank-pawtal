@@ -1,4 +1,14 @@
-import { PosNegNil, ReportedIneligibility } from "../data/db-enums";
+import { DOG_GENDER, PosNegNil, ReportedIneligibility } from "../data/db-enums";
+
+export type BarkAppointment = {
+  appointmentId: string;
+  vetId: string;
+  dogId: string;
+  dogName: string;
+  dogBreed: string;
+  dogGender: typeof DOG_GENDER.MALE | typeof DOG_GENDER.FEMALE;
+  ownerName: string;
+};
 
 export type BarkReportData = {
   visitTime: Date;
