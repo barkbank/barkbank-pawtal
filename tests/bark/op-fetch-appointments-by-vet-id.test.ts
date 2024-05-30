@@ -8,6 +8,8 @@ describe("opFetchAppointmentsByVetId", () => {
     await withBarkContext(async ({ context, testContext }) => {
       const v1 = await givenVet(testContext, { vetIdx: 1 });
       const v2 = await givenVet(testContext, { vetIdx: 2 });
+      const v3 = await givenVet(testContext, { vetIdx: 3 });
+
       const d1 = await givenDog(testContext, {
         dogIdx: 1,
         preferredVetId: v1.vetId,
@@ -26,6 +28,9 @@ describe("opFetchAppointmentsByVetId", () => {
       });
       const l1 = await opFetchAppointmentsByVetId(context, { vetId: v1.vetId });
       const l2 = await opFetchAppointmentsByVetId(context, { vetId: v2.vetId });
+      const l3 = await opFetchAppointmentsByVetId(context, { vetId: v3.vetId });
+
+      expect(l3.result!.appointments).toEqual([]);
 
       expect(l1.result!.appointments.length).toEqual(1);
       expect(l1.result!.appointments[0].appointmentId).toEqual(
