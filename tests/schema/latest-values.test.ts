@@ -297,8 +297,14 @@ describe("latest_values", () => {
           birthday,
           res.rows[0].current_timestamp,
         );
-        expect(expectedMonths).toEqual(2 * 12 + 3);
-        expect(res.rows[0].latest_dog_age_months).toEqual(expectedMonths);
+        const latestDogAgeMonths = res.rows[0].latest_dog_age_months;
+        console.debug({ birthday, expectedMonths, latestDogAgeMonths });
+        expect(latestDogAgeMonths).toEqual(expectedMonths);
+
+        // NOTE: We cannot simply compare with 2*12+3 because dateAgo assumes
+        // months are 30 days. So on 30 May 2024, this assertion will fail.
+        //
+        // expect(expectedMonths).toEqual(2 * 12 + 3);
       });
     });
   });
