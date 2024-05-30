@@ -1,9 +1,10 @@
 import { withDb } from "../_db_helpers";
 import { Pool } from "pg";
 import {
-  getDogMapper,
+  getEmailHashService,
+  getOiiEncryptionService,
+  getPiiEncryptionService,
   getTextEncryptionService,
-  getUserMapper,
 } from "../_fixtures";
 import { BarkContext } from "@/lib/bark/bark-context";
 import { DbContext } from "@/lib/data/db-utils";
@@ -18,13 +19,15 @@ export async function withBarkContext(
   }) => Promise<void>,
 ) {
   await withDb(async (dbPool) => {
-    const userMapper = getUserMapper();
-    const dogMapper = getDogMapper();
+    const emailHashService = getEmailHashService();
+    const piiEncryptionService = getPiiEncryptionService();
+    const oiiEncrypteionService = getOiiEncryptionService();
     const textEncryptionService = getTextEncryptionService();
     const context: BarkContext = {
       dbPool,
-      userMapper,
-      dogMapper,
+      emailHashService,
+      piiEncryptionService,
+      oiiEncrypteionService,
       textEncryptionService,
     };
     await testBody({ context, testContext: { dbPool }, dbContext: dbPool });
