@@ -43,6 +43,7 @@ import {
   EmailOtpServiceConfig,
 } from "./services/email-otp-service";
 import { VetActorConfig } from "./vet/vet-actor";
+import { BarkContext } from "./bark/bark-context";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -66,6 +67,7 @@ export class AppFactory {
   private promisedRegistrationService: Promise<RegistrationService> | null =
     null;
   private promisedEmailOtpService: Promise<EmailOtpService> | null = null;
+  private promisedBarkContext: Promise<BarkContext> | null = null;
 
   constructor(envs: NodeJS.Dict<string>) {
     this.envs = envs;
@@ -424,6 +426,36 @@ export class AppFactory {
       });
     }
     return this.promisedRegistrationService;
+  }
+
+  public getBarkContext(): Promise<BarkContext> {
+    if (this.promisedBarkContext === null) {
+      this.promisedBarkContext = new Promise(async (resolve) => {
+        const [
+          dbPool,
+          emailHashService,
+          piiEncryptionService,
+          oiiEncryptionService,
+          textEncryptionService,
+        ] = await Promise.all([
+          this.getDbPool(),
+          this.getEmailHashService(),
+          this.getPiiEncryptionService(),
+          this.getOiiEncryptionService(),
+          this.getTextEncryptionService(),
+        ]);
+        const context: BarkContext = {
+          dbPool,
+          emailHashService,
+          piiEncryptionService,
+          oiiEncryptionService,
+          textEncryptionService,
+        };
+        console.log("Created BarkContext");
+        resolve(context);
+      });
+    }
+    return this.promisedBarkContext;
   }
 }
 

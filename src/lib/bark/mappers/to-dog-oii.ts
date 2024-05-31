@@ -11,8 +11,8 @@ export async function toDogOii(
   context: BarkContext,
   dogEncryptedOii: string,
 ): Promise<ResultType> {
-  const { oiiEncrypteionService } = context;
+  const { oiiEncryptionService } = context;
   const jsonEncoded =
-    await oiiEncrypteionService.getDecryptedData(dogEncryptedOii);
+    await oiiEncryptionService.getDecryptedData(dogEncryptedOii);
   return ResultSchema.parse(JSON.parse(jsonEncoded));
 }

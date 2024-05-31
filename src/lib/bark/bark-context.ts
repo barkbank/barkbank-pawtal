@@ -6,6 +6,6 @@ export type BarkContext = {
   dbPool: Pool;
   emailHashService: HashService;
   piiEncryptionService: EncryptionService;
-  oiiEncrypteionService: EncryptionService;
+  oiiEncryptionService: EncryptionService;
   textEncryptionService: EncryptionService;
 };
