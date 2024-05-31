@@ -16,13 +16,13 @@ const Item = (props: { label: string; value: string }) => {
       {label}: <span className="font-semibold">{value}</span>
     </div>
   );
-}
+};
 
 const AppointmentCard = (props: { appointment: BarkAppointment }) => {
   const { appointmentId, dogName, dogGender, dogBreed, ownerName } =
     props.appointment;
   return (
-    <div className="rounded-md  p-3 shadow-sm shadow-slate-400 flex flex-col gap-2">
+    <div className="flex  flex-col gap-2 rounded-md p-3 shadow-sm shadow-slate-400">
       <div className="font-semibold">{dogName}</div>
       <Separator />
       <div className="grid grid-cols-1">
@@ -32,21 +32,21 @@ const AppointmentCard = (props: { appointment: BarkAppointment }) => {
       </div>
       <Separator />
       <div className="flex w-full flex-col gap-3 md:flex-row">
-          <BarkButton
-            className="w-full"
-            variant="brand"
-            href={RoutePath.VET_APPOINTMENTS_SUBMIT(appointmentId)}
-          >
-            Submit Report
-          </BarkButton>
-          <BarkButton
-            className="w-full"
-            variant="brandInverse"
-            href={RoutePath.VET_APPOINTMENTS_CANCEL(appointmentId)}
-          >
-            Cancel
-          </BarkButton>
-        </div>
+        <BarkButton
+          className="w-full"
+          variant="brand"
+          href={RoutePath.VET_APPOINTMENTS_SUBMIT(appointmentId)}
+        >
+          Submit Report
+        </BarkButton>
+        <BarkButton
+          className="w-full"
+          variant="brandInverse"
+          href={RoutePath.VET_APPOINTMENTS_CANCEL(appointmentId)}
+        >
+          Cancel
+        </BarkButton>
+      </div>
     </div>
   );
 };
