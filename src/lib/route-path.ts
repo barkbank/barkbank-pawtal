@@ -26,10 +26,17 @@ export class RoutePath {
 
   static readonly VET_LOGIN_PAGE = "/vet/login";
   static readonly VET_SCHEDULE_APPOINTMENTS = "/vet/schedule";
+
   static readonly VET_APPOINTMENTS_LIST = "/vet/appointments/list";
   static readonly VET_APPOINTMENTS_LIST_CANCELLED =
     "/vet/appointments/list-cancelled";
+  static readonly VET_APPOINTMENTS_SUBMIT = (appointmentId: string) =>
+    `/vet/appointments/submit/${appointmentId}`;
+  static readonly VET_APPOINTMENTS_CANCEL = (appointmentId: string) =>
+    `/vet/appointments/cancel/${appointmentId}`;
+
   static readonly VET_APPOINTMENTS = this.VET_APPOINTMENTS_LIST;
+
   static readonly VET_REPORTS = "/vet/reports";
   static readonly VET_DEFAULT_LOGGED_IN_PAGE =
     RoutePath.VET_SCHEDULE_APPOINTMENTS;
