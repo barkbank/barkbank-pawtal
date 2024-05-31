@@ -22,10 +22,10 @@ const AppointmentCard = (props: { appointment: BarkAppointment }) => {
   const { appointmentId, dogName, dogGender, dogBreed, ownerName } =
     props.appointment;
   return (
-    <div className="flex  flex-col gap-2 rounded-md p-3 shadow-sm shadow-slate-400">
+    <div className="flex flex-col gap-2 rounded-md p-3 shadow-sm shadow-slate-400">
       <div className="font-semibold">{dogName}</div>
       <Separator />
-      <div className="grid grid-cols-1">
+      <div className="flex flex-col">
         <Item label="Breed" value={dogBreed} />
         <Item label="Gender" value={dogGender} />
         <Item label="Owner" value={ownerName} />
