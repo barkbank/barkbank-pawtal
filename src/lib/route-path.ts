@@ -1,5 +1,3 @@
-import { AccountType } from "./auth-models";
-
 export class RoutePath {
   static readonly ROOT = "/";
   static readonly LOGOUT_PAGE = "/logout";
@@ -35,7 +33,7 @@ export class RoutePath {
   static readonly VET_APPOINTMENTS_CANCEL = (appointmentId: string) =>
     `/vet/appointments/cancel/${appointmentId}`;
 
-  static readonly VET_APPOINTMENTS = this.VET_APPOINTMENTS_LIST;
+  static readonly VET_APPOINTMENTS = "/vet/appointments";
 
   static readonly VET_REPORTS = "/vet/reports";
   static readonly VET_DEFAULT_LOGGED_IN_PAGE =
