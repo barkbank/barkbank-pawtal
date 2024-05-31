@@ -20,6 +20,12 @@ export default async function Layout(props: { children: React.ReactNode }) {
       iconLightSrc: IMG_PATH.SIDEBAR_CALENDAR_LIGHT,
     },
     {
+      label: "Appointments",
+      href: RoutePath.VET_APPOINTMENTS,
+      iconSrc: IMG_PATH.SIDEBAR_CALENDAR,
+      iconLightSrc: IMG_PATH.SIDEBAR_CALENDAR_LIGHT,
+    },
+    {
       label: "Reports",
       href: RoutePath.VET_REPORTS,
       iconSrc: IMG_PATH.SIDEBAR_ADD_REPORT,

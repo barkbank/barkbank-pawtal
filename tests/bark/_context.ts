@@ -21,13 +21,13 @@ export async function withBarkContext(
   await withDb(async (dbPool) => {
     const emailHashService = getEmailHashService();
     const piiEncryptionService = getPiiEncryptionService();
-    const oiiEncrypteionService = getOiiEncryptionService();
+    const oiiEncryptionService = getOiiEncryptionService();
     const textEncryptionService = getTextEncryptionService();
     const context: BarkContext = {
       dbPool,
       emailHashService,
       piiEncryptionService,
-      oiiEncrypteionService,
+      oiiEncryptionService,
       textEncryptionService,
     };
     await testBody({ context, testContext: { dbPool }, dbContext: dbPool });
