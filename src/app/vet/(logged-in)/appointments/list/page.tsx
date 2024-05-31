@@ -1,20 +1,55 @@
 import { BarkButton } from "@/components/bark/bark-button";
 import { BarkH1 } from "@/components/bark/bark-typography";
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import APP from "@/lib/app";
 import { getAuthenticatedVetActor } from "@/lib/auth";
 import { BarkAppointment } from "@/lib/bark/bark-models";
 import { opFetchAppointmentsByVetId } from "@/lib/bark/operations/op-fetch-appointments-by-vet-id";
 import { RoutePath } from "@/lib/route-path";
 import { CODE } from "@/lib/utilities/bark-code";
-import { capitalize } from "lodash";
 import { redirect } from "next/navigation";
+
+const Item = (props: { label: string; value: string }) => {
+  const { label, value } = props;
+  return (
+    <div>
+      {label}: <span className="font-semibold">{value}</span>
+    </div>
+  );
+}
+
+const AppointmentCard = (props: { appointment: BarkAppointment }) => {
+  const { appointmentId, dogName, dogGender, dogBreed, ownerName } =
+    props.appointment;
+  return (
+    <div className="rounded-md  p-3 shadow-sm shadow-slate-400 flex flex-col gap-2">
+      <div className="font-semibold">{dogName}</div>
+      <Separator />
+      <div className="grid grid-cols-1 xl:grid-cols-2">
+        <Item label="Breed" value={dogBreed} />
+        <Item label="Gender" value={dogGender} />
+        <Item label="Owner" value={ownerName} />
+      </div>
+      <Separator />
+      <div className="flex w-full flex-col gap-3 md:flex-row">
+          <BarkButton
+            className="w-full"
+            variant="brand"
+            href={RoutePath.VET_APPOINTMENTS_SUBMIT(appointmentId)}
+          >
+            Submit Report
+          </BarkButton>
+          <BarkButton
+            className="w-full"
+            variant="brandInverse"
+            href={RoutePath.VET_APPOINTMENTS_CANCEL(appointmentId)}
+          >
+            Cancel
+          </BarkButton>
+        </div>
+    </div>
+  );
+};
 
 export default async function Page() {
   const actor = await getAuthenticatedVetActor();
@@ -31,39 +66,6 @@ export default async function Page() {
     return <div>Failed to fetch appointments</div>;
   }
   const { appointments } = result;
-
-  const AppointmentCard = (props: { appointment: BarkAppointment }) => {
-    const { appointmentId, dogName, dogGender, dogBreed, ownerName } =
-      props.appointment;
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle>{dogName}</CardTitle>
-          <CardDescription>
-            A {capitalize(dogGender)} {dogBreed} owned by {ownerName}.
-          </CardDescription>
-        </CardHeader>
-        <CardFooter>
-          <div className="flex w-full flex-col gap-3 md:flex-row">
-            <BarkButton
-              className="w-full"
-              variant="brand"
-              href={RoutePath.VET_APPOINTMENTS_SUBMIT(appointmentId)}
-            >
-              Submit Report
-            </BarkButton>
-            <BarkButton
-              className="w-full"
-              variant="brandInverse"
-              href={RoutePath.VET_APPOINTMENTS_CANCEL(appointmentId)}
-            >
-              Cancel
-            </BarkButton>
-          </div>
-        </CardFooter>
-      </Card>
-    );
-  };
 
   return (
     <div className="m-3 flex flex-col gap-3">
