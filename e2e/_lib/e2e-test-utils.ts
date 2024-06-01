@@ -4,13 +4,64 @@ import { sprintf } from "sprintf-js";
 import { PomContext } from "./pom/core/pom-object";
 import { HeaderComponent } from "./pom/layout/header-component";
 
-export function generateTestDogName(): string {
+const MALE_DOG_NAMES = [
+  "Bailey",
+  "Barkus",
+  "Bear",
+  "Bentley",
+  "Buddy",
+  "Charlie",
+  "Cooper",
+  "Dingo",
+  "Duke",
+  "Jack",
+  "Max",
+  "Milo",
+  "Oliver",
+  "Peter",
+  "Rocky",
+  "Teddy",
+  "Toby",
+  "Woofus",
+  "Zeus",
+];
+
+const FEMALE_DOG_NAMES = [
+  "Aurora",
+  "Bella",
+  "Carol",
+  "Chloe",
+  "Daisy",
+  "Lily",
+  "Lola",
+  "Lucy",
+  "Luna",
+  "Maggie",
+  "Molly",
+  "Olive",
+  "Rosie",
+  "Ruby",
+  "Sadie",
+  "Sophie",
+  "Stella",
+  "Vella",
+  "Zoe",
+];
+
+export function generateTestDogName(options?: {
+  dogGender?: "MALE" | "FEMALE";
+}): string {
+  const dogGender = options?.dogGender ?? "MALE";
+  const nameList = dogGender === "MALE" ? MALE_DOG_NAMES : FEMALE_DOG_NAMES;
+  const n = nameList.length;
+  const i = Math.floor(Math.random() * n) % n;
+  const j = Math.floor(Math.random() * n) % n;
+  const dogName = `${nameList[i]} ${nameList[j]}`;
   const tsid = formatDateTime(new Date(), {
-    format: "d MMM yyyy",
+    format: "d MMM yyyy HH:mm",
     timeZone: SINGAPORE_TIME_ZONE,
   });
-  const guid = generateRandomGUID(6);
-  return `Kelper (${tsid}, ${guid})`;
+  return `${dogName} (${tsid})`;
 }
 
 export function getTestBirthday(ageYears: number): string {
