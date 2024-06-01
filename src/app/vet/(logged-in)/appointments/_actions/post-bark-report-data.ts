@@ -4,8 +4,10 @@ import APP from "@/lib/app";
 import { getAuthenticatedVetActor } from "@/lib/auth";
 import { BarkReportData } from "@/lib/bark/models/bark-report-data";
 import { opSubmitReport } from "@/lib/bark/operations/op-submit-report";
+import { RoutePath } from "@/lib/route-path";
 import { CODE } from "@/lib/utilities/bark-code";
 import { Err, Result } from "@/lib/utilities/result";
+import { revalidatePath } from "next/cache";
 
 export async function postBarkReportData(args: {
   appointmentId: string;
@@ -26,9 +28,13 @@ export async function postBarkReportData(args: {
   const { vetId: actorVetId } = actor.getParams();
   const { appointmentId, reportData } = args;
   const context = await APP.getBarkContext();
-  return opSubmitReport(context, {
+  const res = await opSubmitReport(context, {
     appointmentId,
     reportData,
     actorVetId,
   });
+  if (res.error === undefined) {
+    revalidatePath(RoutePath.VET_APPOINTMENTS, "layout");
+  }
+  return res;
 }
