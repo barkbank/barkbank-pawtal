@@ -77,9 +77,8 @@ export function SubmitReportForm(props: { appointment: BarkAppointment }) {
         <BarkFormInput
           form={form}
           name="dogWeightKg"
-          label="Weight"
+          label="Dog's Weight (KG)"
           type="text"
-          description="Please provide the dog's weight in KG"
         />
         <div className="mt-6">
           <BarkButton variant="brand" type="submit">
