@@ -1,17 +1,6 @@
-import { generateRandomGUID } from "@/lib/utilities/bark-guid";
-import { formatDateTime, SINGAPORE_TIME_ZONE } from "@/lib/utilities/bark-time";
 import { sprintf } from "sprintf-js";
 import { PomContext } from "./pom/core/pom-object";
 import { HeaderComponent } from "./pom/layout/header-component";
-
-export function generateTestDogName(): string {
-  const tsid = formatDateTime(new Date(), {
-    format: "d MMM yyyy",
-    timeZone: SINGAPORE_TIME_ZONE,
-  });
-  const guid = generateRandomGUID(6);
-  return `Kelper (${tsid}, ${guid})`;
-}
 
 export function getTestBirthday(ageYears: number): string {
   const ts = new Date();

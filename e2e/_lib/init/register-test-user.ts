@@ -1,17 +1,17 @@
-import { generateRandomGUID } from "@/lib/utilities/bark-guid";
 import { Page } from "@playwright/test";
 import { getTestBirthday } from "../e2e-test-utils";
 import { initPomContext } from "./init-pom-context";
 import { UserMyPetsPage } from "../pom/pages/user-my-pets-page";
 import { PomContext } from "../pom/core/pom-object";
 import { UserRegistrationPage } from "../pom/pages/user-registration-page";
+import { generateDog } from "../generate/generate-dog";
+import { generateUser } from "../generate/generate-user";
 
 export async function registerTestUser(args: {
   page: Page;
   isIncomplete?: boolean;
 }): Promise<{
   context: PomContext;
-  guid: string;
   userName: string;
   userEmail: string;
   userPhoneNumber: string;
@@ -21,16 +21,15 @@ export async function registerTestUser(args: {
   dogWeightKg: string;
   userMyPetsPage: UserMyPetsPage;
 }> {
-  const guid = generateRandomGUID(8);
-  const userName = `Alice (${guid})`;
-  const userEmail = `alice.${guid}@user.com`;
-  const userPhoneNumber = guid;
-  const dogName = `Bob (${guid})`;
-  const dogBreed = "REGISTERED DOG";
+  const { page, isIncomplete } = args;
+
+  const dogGender = isIncomplete ? "FEMALE" : "MALE";
+  const { dogName, dogBreed } = generateDog({ dogGender });
+  const { userName, userEmail, userPhoneNumber } = generateUser();
+
   const dogBirthday = getTestBirthday(5);
   const dogWeightKg = "31.4";
 
-  const { page, isIncomplete } = args;
   const context = await initPomContext({ page });
 
   const pg = new UserRegistrationPage(context);
@@ -77,7 +76,6 @@ export async function registerTestUser(args: {
 
   const result = {
     context,
-    guid,
     userName,
     userEmail,
     userPhoneNumber,
