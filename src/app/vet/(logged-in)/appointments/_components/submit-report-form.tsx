@@ -4,7 +4,10 @@ import { DateTimeField, DogWeightKgField } from "@/app/_lib/field-schemas";
 import { BarkButton } from "@/components/bark/bark-button";
 import { BarkForm, BarkFormInput } from "@/components/bark/bark-form";
 import { BarkAppointment } from "@/lib/bark/bark-models";
-import { BarkReportData } from "@/lib/bark/models/bark-report-data";
+import {
+  BarkReportData,
+  BarkReportDataSchema,
+} from "@/lib/bark/models/bark-report-data";
 import {
   SGT_ISO8601,
   SINGAPORE_TIME_ZONE,
@@ -33,27 +36,19 @@ const SubmitFormSchema = z.object({
 
 type SubmitFormType = z.infer<typeof SubmitFormSchema>;
 
-function toBarkReportData(formData: SubmitFormType): Partial<BarkReportData> {
-  return {
+function toBarkReportData(formData: SubmitFormType): BarkReportData {
+  const values = {
     visitTime: DateTimeField.parse(formData.visitTime),
     dogWeightKg: DogWeightKgField.parse(formData.dogWeightKg)!,
   };
-}
-
-function parseVisitTime(val: string): string | null {
-  try {
-    const d = parseCommonDateTime(val, SINGAPORE_TIME_ZONE);
-    return formatDateTime(d, {
-      format: "d MMM yyyy, h:mma",
-      timeZone: SINGAPORE_TIME_ZONE,
-    });
-  } catch {
-    return null;
-  }
+  console.log({ values });
+  return BarkReportDataSchema.parse(values);
 }
 
 export function SubmitReportForm(props: { appointment: BarkAppointment }) {
   const { appointment } = props;
+  const { appointmentId, dogName, dogBreed, dogGender, ownerName } =
+    appointment;
   const form = useForm<SubmitFormType>({
     resolver: zodResolver(SubmitFormSchema),
     defaultValues: {
@@ -62,22 +57,15 @@ export function SubmitReportForm(props: { appointment: BarkAppointment }) {
     },
   });
   const onSubmit = async (values: SubmitFormType) => {
-    const parsedVisitTime = parseCommonDateTime(
-      values.visitTime,
-      SINGAPORE_TIME_ZONE,
-    );
-    const sgtISO8601 = formatDateTime(parsedVisitTime, SGT_ISO8601);
-    const utcISO8601 = formatDateTime(parsedVisitTime, UTC_ISO8601);
-    console.log({ values, parsedVisitTime, utcISO8601, sgtISO8601 });
+    const reportData = toBarkReportData(values);
+    console.log(reportData);
   };
-  const placeholderTime = formatDateTime(new Date(), {
-    format: "d MMM yyyy h:mma",
-    timeZone: SINGAPORE_TIME_ZONE,
-  });
   return (
     <div>
-      <p>Form for submitting report for appointment:</p>
-      <pre>{JSON.stringify(appointment, null, 2)}</pre>
+      <p>Submitting report for appointment {appointmentId}.</p>
+      <p>
+        {dogName} is a {dogGender} {dogBreed} belonging to {ownerName}.
+      </p>
       <BarkForm form={form} onSubmit={onSubmit}>
         <BarkFormInput
           form={form}
