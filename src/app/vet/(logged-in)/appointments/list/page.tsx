@@ -18,6 +18,7 @@ const Item = (props: { label: string; value: string }) => {
   );
 };
 
+// TODO: Move into appointments/_components/appointment-card
 const AppointmentCard = (props: { appointment: BarkAppointment }) => {
   const { appointmentId, dogName, dogGender, dogBreed, ownerName } =
     props.appointment;
