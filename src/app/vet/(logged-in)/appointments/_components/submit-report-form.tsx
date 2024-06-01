@@ -9,6 +9,7 @@ import {
 import { BarkButton } from "@/components/bark/bark-button";
 import {
   BarkForm,
+  BarkFormError,
   BarkFormInput,
   BarkFormOption,
   BarkFormRadioGroup,
@@ -31,6 +32,10 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { postBarkReportData } from "../_actions/post-bark-report-data";
+import { redirect, useRouter } from "next/navigation";
+import { RoutePath } from "@/lib/route-path";
+import { revalidatePath } from "next/cache";
 
 const SubmitFormSchema = z.object({
   visitTime: DateTimeField.Schema,
@@ -85,9 +90,20 @@ export function SubmitReportForm(props: { appointment: BarkAppointment }) {
       ineligibilityExpiryTime: "",
     },
   });
+  const router = useRouter();
   const onSubmit = async (values: SubmitFormType) => {
     const reportData = toBarkReportData(values);
     console.log(reportData);
+    const { result, error } = await postBarkReportData({
+      appointmentId,
+      reportData,
+    });
+    if (error !== undefined) {
+      form.setError("root", { message: error });
+      return;
+    }
+    revalidatePath(RoutePath.VET_APPOINTMENTS, "layout");
+    router.push(RoutePath.VET_APPOINTMENTS_LIST);
   };
   return (
     <div>
@@ -209,6 +225,7 @@ export function SubmitReportForm(props: { appointment: BarkAppointment }) {
           label="Please indicate a date after which dog might be eligible again"
           type="text"
         />
+        <BarkFormError form={form} />
         <div className="mt-6">
           <BarkButton variant="brand" type="submit">
             Submit
