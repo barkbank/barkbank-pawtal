@@ -17,18 +17,9 @@ import {
   BarkReportData,
   BarkReportDataSchema,
 } from "@/lib/bark/models/bark-report-data";
-import {
-  SGT_ISO8601,
-  SINGAPORE_TIME_ZONE,
-  UTC_ISO8601,
-  formatDateTime,
-  parseCommonDateTime,
-} from "@/lib/utilities/bark-time";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
-const bcsValues = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const SubmitFormSchema = z.object({
   visitTime: DateTimeField.Schema,
@@ -72,15 +63,6 @@ export function SubmitReportForm(props: { appointment: BarkAppointment }) {
     const reportData = toBarkReportData(values);
     console.log(reportData);
   };
-  const bcsOptions: BarkFormOption[] = bcsValues.map<BarkFormOption>(
-    (value: number) => {
-      const option: BarkFormOption = {
-        value: `${value}`,
-        label: `${value}`,
-      };
-      return option;
-    },
-  );
   return (
     <div>
       <p>Submitting report for appointment {appointmentId}.</p>
@@ -106,7 +88,13 @@ export function SubmitReportForm(props: { appointment: BarkAppointment }) {
           name="dogBodyConditioningScore"
           label="Dog's Body Conditioning Score (BCS)"
           placeholder="Select BCS"
-          options={bcsOptions}
+          options={BodyConditioningScoreField.values.map((value: number) => {
+            const option: BarkFormOption = {
+              value: `${value}`,
+              label: `${value}`,
+            };
+            return option;
+          })}
           description="Body conditioning score is a value between 1 and 9"
         />
         <div className="mt-6">
