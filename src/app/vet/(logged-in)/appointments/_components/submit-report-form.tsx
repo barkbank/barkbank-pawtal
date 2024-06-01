@@ -28,7 +28,7 @@ const SubmitFormSchema = z.object({
   dogWeightKg: DogWeightKgField.Schema,
   dogBodyConditioningScore: BodyConditioningScoreField.Schema,
   dogHeartworm: PosNegNilSchema,
-  // dogDea1Point1: PosNegNilSchema,
+  dogDea1Point1: PosNegNilSchema,
   // ineligibilityStatus: ReportedIneligibilitySchema,
   // ineligibilityReason: z.string(),
   // ineligibilityExpiryTime: z.date().nullable(),
@@ -38,13 +38,14 @@ const SubmitFormSchema = z.object({
 type SubmitFormType = z.infer<typeof SubmitFormSchema>;
 
 function toBarkReportData(formData: SubmitFormType): BarkReportData {
+  const {visitTime, dogWeightKg, dogBodyConditioningScore, ...otherFields} = formData;
   const values = {
-    visitTime: DateTimeField.parse(formData.visitTime),
-    dogWeightKg: DogWeightKgField.parse(formData.dogWeightKg)!,
+    visitTime: DateTimeField.parse(visitTime),
+    dogWeightKg: DogWeightKgField.parse(dogWeightKg)!,
     dogBodyConditioningScore: BodyConditioningScoreField.parse(
-      formData.dogBodyConditioningScore,
+      dogBodyConditioningScore,
     ),
-    dogHeartworm: formData.dogHeartworm,
+    ...otherFields
   };
   console.log({ values });
   return BarkReportDataSchema.parse(values);
@@ -65,20 +66,6 @@ export function SubmitReportForm(props: { appointment: BarkAppointment }) {
     const reportData = toBarkReportData(values);
     console.log(reportData);
   };
-  const getPosNegNilOptions = (nilLabel: string) => [
-    {
-      value: POS_NEG_NIL.POSITIVE,
-      label: "Positive",
-    },
-    {
-      value: POS_NEG_NIL.NEGATIVE,
-      label: "Negative",
-    },
-    {
-      value: POS_NEG_NIL.NIL,
-      label: nilLabel,
-    },
-  ];
   return (
     <div>
       <p>Submitting report for appointment {appointmentId}.</p>
@@ -117,10 +104,42 @@ export function SubmitReportForm(props: { appointment: BarkAppointment }) {
           form={form}
           name="dogHeartworm"
           label="Heartworm Test Result"
-          options={getPosNegNilOptions("Did not test")}
+          options={[
+            {
+              value: POS_NEG_NIL.POSITIVE,
+              label: "Tested positive for heartworm",
+            },
+            {
+              value: POS_NEG_NIL.NEGATIVE,
+              label: "Tested negative for heartworm",
+            },
+            {
+              value: POS_NEG_NIL.NIL,
+              label: "Did not test",
+            },
+          ]}
           description="Please indicate the result of heartworm test, if any"
         />
-
+        <BarkFormRadioGroup
+          form={form}
+          name="dogDea1Point1"
+          label="Blood Test Result"
+          options={[
+            {
+              value: POS_NEG_NIL.POSITIVE,
+              label: "DEA 1.1 Positive",
+            },
+            {
+              value: POS_NEG_NIL.NEGATIVE,
+              label: "DEA 1.1 Negative",
+            },
+            {
+              value: POS_NEG_NIL.NIL,
+              label: "Did not test",
+            },
+          ]}
+          description="Please indicate the result of blood test, if any"
+        />
         <div className="mt-6">
           <BarkButton variant="brand" type="submit">
             Submit
