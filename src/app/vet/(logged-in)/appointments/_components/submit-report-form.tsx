@@ -2,6 +2,7 @@
 
 import {
   BodyConditioningScoreField,
+  DateField,
   DateTimeField,
   DogWeightKgField,
 } from "@/app/_lib/field-schemas";
@@ -13,13 +14,20 @@ import {
   BarkFormRadioGroup,
   BarkFormSelect,
   BarkFormSingleCheckbox,
+  BarkFormTextArea,
 } from "@/components/bark/bark-form";
 import { BarkAppointment } from "@/lib/bark/bark-models";
 import {
   BarkReportData,
   BarkReportDataSchema,
 } from "@/lib/bark/models/bark-report-data";
-import { POS_NEG_NIL, PosNegNilSchema } from "@/lib/data/db-enums";
+import {
+  POS_NEG_NIL,
+  PosNegNilSchema,
+  REPORTED_INELIGIBILITY,
+  ReportedIneligibilitySchema,
+  YES_NO_UNKNOWN,
+} from "@/lib/data/db-enums";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -30,23 +38,34 @@ const SubmitFormSchema = z.object({
   dogBodyConditioningScore: BodyConditioningScoreField.Schema,
   dogHeartworm: PosNegNilSchema,
   dogDea1Point1: PosNegNilSchema,
-  // ineligibilityStatus: ReportedIneligibilitySchema,
-  // ineligibilityReason: z.string(),
-  // ineligibilityExpiryTime: z.date().nullable(),
-  dogDidDonateBlood: z.boolean(),
+  ineligibilityStatus: ReportedIneligibilitySchema,
+  ineligibilityReason: z.string().min(0),
+  ineligibilityExpiryTime: DateField.getSchema({ optional: true }),
+  dogDidDonateBlood: z.enum([YES_NO_UNKNOWN.YES, YES_NO_UNKNOWN.NO]),
 });
 
 type SubmitFormType = z.infer<typeof SubmitFormSchema>;
 
 function toBarkReportData(formData: SubmitFormType): BarkReportData {
-  const { visitTime, dogWeightKg, dogBodyConditioningScore, ...otherFields } =
-    formData;
+  const {
+    visitTime,
+    dogWeightKg,
+    dogBodyConditioningScore,
+    dogDidDonateBlood,
+    ineligibilityExpiryTime,
+    ...otherFields
+  } = formData;
   const values = {
     visitTime: DateTimeField.parse(visitTime),
     dogWeightKg: DogWeightKgField.parse(dogWeightKg)!,
     dogBodyConditioningScore: BodyConditioningScoreField.parse(
       dogBodyConditioningScore,
     ),
+    dogDidDonateBlood: dogDidDonateBlood === "YES",
+    ineligibilityExpiryTime:
+      ineligibilityExpiryTime === ""
+        ? null
+        : DateField.parse(ineligibilityExpiryTime),
     ...otherFields,
   };
   console.log({ values });
@@ -62,6 +81,8 @@ export function SubmitReportForm(props: { appointment: BarkAppointment }) {
     defaultValues: {
       visitTime: "",
       dogWeightKg: "",
+      ineligibilityReason: "",
+      ineligibilityExpiryTime: "",
     },
   });
   const onSubmit = async (values: SubmitFormType) => {
@@ -142,11 +163,51 @@ export function SubmitReportForm(props: { appointment: BarkAppointment }) {
           ]}
           description="Please indicate the result of blood test, if any"
         />
-        <BarkFormSingleCheckbox
+        <BarkFormRadioGroup
           form={form}
           name="dogDidDonateBlood"
           label="Please indicate if dog donated blood"
-          optionLabel={`${dogName} donated blood`}
+          options={[
+            {
+              value: YES_NO_UNKNOWN.YES,
+              label: `Yes`,
+            },
+            {
+              value: YES_NO_UNKNOWN.NO,
+              label: `No`,
+            },
+          ]}
+        />
+        <BarkFormRadioGroup
+          form={form}
+          name="ineligibilityStatus"
+          label="Please indicate if dog is eligible for blood donation"
+          // placeholder="Select eligibility"
+          options={[
+            {
+              value: REPORTED_INELIGIBILITY.NIL,
+              label: `Eligible`,
+            },
+            {
+              value: REPORTED_INELIGIBILITY.TEMPORARILY_INELIGIBLE,
+              label: `Temporarily Ineligible`,
+            },
+            {
+              value: REPORTED_INELIGIBILITY.PERMANENTLY_INELIGIBLE,
+              label: `Permanently Ineligible`,
+            },
+          ]}
+        />
+        <BarkFormTextArea
+          form={form}
+          name="ineligibilityReason"
+          label="Please indicate a reason (if ineligible)"
+        />
+        <BarkFormInput
+          form={form}
+          name="ineligibilityExpiryTime"
+          label="Please indicate a date after which dog might be eligible again"
+          type="text"
         />
         <div className="mt-6">
           <BarkButton variant="brand" type="submit">

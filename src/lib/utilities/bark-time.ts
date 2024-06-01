@@ -124,6 +124,29 @@ export function parseCommonDateTime(
   throw new Error(`No common format for datetime value: ${dateTimeString}`);
 }
 
+const COMMON_DATE_FORMATS = [
+  "yyyy-MM-dd",
+  "dd MMM yyyy",
+  "d MMM yyyy",
+  "dd MMMM yyyy",
+  "d MMMM yyyy",
+  "MMMM do yyyy",
+  "MMM do yyyy",
+];
+
+export function parseCommonDate(dateString: string, timeZone: string): Date {
+  const val = removeConsecutiveSpaces(dateString);
+  for (const format of COMMON_DATE_FORMATS) {
+    try {
+      const parsedDate = parseDateTime(val, { format, timeZone });
+      return parsedDate;
+    } catch {
+      continue;
+    }
+  }
+  throw new Error(`No common format for date value: ${dateString}`);
+}
+
 /**
  * @deprecated
  */

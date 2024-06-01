@@ -1,6 +1,7 @@
 import { z } from "zod";
 import {
   SINGAPORE_TIME_ZONE,
+  parseCommonDate,
   parseCommonDateTime,
 } from "../../lib/utilities/bark-time";
 import {
@@ -26,6 +27,32 @@ export const DateTimeField = {
   ),
   parse: (value: string) => {
     return parseCommonDateTime(value, SINGAPORE_TIME_ZONE);
+  },
+};
+
+export const DateField = {
+  getSchema: (args?: { optional?: boolean }) =>
+    z.string().refine(
+      (value) => {
+        if (value.trim() === "") {
+          if (args?.optional === true) {
+            return true;
+          }
+          return false;
+        }
+        try {
+          parseCommonDate(value, SINGAPORE_TIME_ZONE);
+          return true;
+        } catch (err) {
+          return false;
+        }
+      },
+      {
+        message: "Unknown date format, try something like '16 Apr 2021'",
+      },
+    ),
+  parse: (value: string) => {
+    return parseCommonDate(value, SINGAPORE_TIME_ZONE);
   },
 };
 

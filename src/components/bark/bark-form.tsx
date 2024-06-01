@@ -370,7 +370,7 @@ export function BarkFormTextArea(props: {
       name={name}
       render={({ field }) => (
         <FormItem className="mt-6">
-          <FormLabel>{label}</FormLabel>
+          <FormLabel className="text-base">{label}</FormLabel>
           <FormControl>
             <Textarea
               placeholder={placeholder}
