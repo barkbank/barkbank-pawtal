@@ -11,6 +11,7 @@ export type BarkAppointment = {
   ownerName: string;
 };
 
+// TODO: Useful to define all models as Zod schemas. Reorganise these models accordingly.
 export const EncryptedBarkAppointmentSchema = z.object({
   appointmentId: z.string(),
   vetId: z.string(),
