@@ -3,7 +3,6 @@ import APP from "@/lib/app";
 import { getAuthenticatedVetActor } from "@/lib/auth";
 import { opFetchAppointment } from "@/lib/bark/operations/op-fetch-appointment";
 import { RoutePath } from "@/lib/route-path";
-import { CODE } from "@/lib/utilities/bark-code";
 import { redirect } from "next/navigation";
 import { SubmitReportForm } from "../../_components/submit-report-form";
 
