@@ -1,4 +1,4 @@
-import { format, parse } from "date-fns";
+import { format, isValid, parse } from "date-fns";
 import { utcToZonedTime, zonedTimeToUtc } from "date-fns-tz";
 
 export const UTC = "UTC";
@@ -21,6 +21,11 @@ const DEFAULT_DATE_TIME_OPTIONS: DateTimeOptions = {
 
 export const UTC_DATE_OPTION: DateTimeOptions = {
   format: "yyyy-MM-dd",
+  timeZone: UTC,
+} as const;
+
+export const UTC_DATETIME_OPTION: DateTimeOptions = {
+  format: "yyyy-MM-dd'T'HH:mm",
   timeZone: UTC,
 } as const;
 
@@ -51,6 +56,50 @@ export function formatDateTime(
   return dateTimeString;
 }
 
+const COMMON_DATE_TIME_FORMATS = [
+  "yyyy-MM-dd'T'HH:mm",
+  "yyyy-MM-dd HH:mm",
+
+  "dd MMM yyyy, HH:mm",
+  "dd MMM yyyy HH:mm",
+  "d MMM yyyy, HH:mm",
+  "d MMM yyyy HH:mm",
+
+  "dd MMMM yyyy, HH:mm",
+  "dd MMMM yyyy HH:mm",
+  "d MMMM yyyy, HH:mm",
+  "d MMMM yyyy HH:mm",
+
+  "dd MMM yyyy, h:mma",
+  "dd MMM yyyy, h:mm a",
+  "dd MMM yyyy h:mma",
+  "dd MMM yyyy h:mm a",
+
+  "dd MMMM yyyy, h:mma",
+  "dd MMMM yyyy, h:mm a",
+  "dd MMMM yyyy h:mma",
+  "dd MMMM yyyy h:mm a",
+
+  "MMMM do yyyy, h:mma",
+  "MMM do yyyy, h:mm a",
+];
+
+/**
+ * Parse common representations of date and time. This is not timezone aware.
+ */
+export function parseCommonDateTime(dateTimeString: string): Date {
+  for (const format of COMMON_DATE_TIME_FORMATS) {
+    const parsedDate = parse(dateTimeString, format, new Date());
+    if (isValid(parsedDate)) {
+      return parsedDate;
+    }
+  }
+  throw new Error(`Cannot understand datetime value: ${dateTimeString}`);
+}
+
+/**
+ * @deprecated
+ */
 export const BARK_UTC = {
   getDate: (year: number, month: number, day: number) => {
     return new Date(Date.UTC(year, month - 1, day));
