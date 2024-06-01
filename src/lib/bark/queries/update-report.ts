@@ -1,5 +1,8 @@
 import { DbContext, dbQuery } from "@/lib/data/db-utils";
-import { EncryptedBarkReportData } from "../models/encrypted-bark-report-data";
+import {
+  EncryptedBarkReportData,
+  EncryptedBarkReportDataSchema,
+} from "../models/encrypted-bark-report-data";
 
 export async function updateReport(
   dbContext: DbContext,
@@ -9,6 +12,8 @@ export async function updateReport(
   },
 ): Promise<{ numUpdated: number }> {
   const { reportId, encryptedReportData } = args;
+  const validatedData =
+    EncryptedBarkReportDataSchema.parse(encryptedReportData);
   const {
     visitTime,
     dogWeightKg,
@@ -19,7 +24,7 @@ export async function updateReport(
     encryptedIneligibilityReason,
     ineligibilityExpiryTime,
     dogDidDonateBlood,
-  } = encryptedReportData;
+  } = validatedData;
   const sql = `
   UPDATE reports
   SET

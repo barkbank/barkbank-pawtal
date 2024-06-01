@@ -6,7 +6,7 @@ export function mockReportData(): BarkReportData {
   return {
     visitTime: new Date(Date.now() - MILLIS_PER_WEEK),
     dogWeightKg: 25,
-    dogBodyConditioningScore: 8,
+    dogBodyConditioningScore: 9,
     dogHeartworm: POS_NEG_NIL.NEGATIVE,
     dogDea1Point1: POS_NEG_NIL.NEGATIVE,
     ineligibilityStatus: REPORTED_INELIGIBILITY.NIL,

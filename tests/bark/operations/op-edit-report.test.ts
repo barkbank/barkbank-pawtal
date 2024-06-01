@@ -37,7 +37,7 @@ describe("opEditReport", () => {
       const modifiedReportData: BarkReportData = {
         ...originalReportData,
         ineligibilityReason: "new reason",
-        dogBodyConditioningScore: 10,
+        dogBodyConditioningScore: 2,
       };
       const res3 = await opEditReport(context, {
         reportId,
