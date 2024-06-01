@@ -4,9 +4,8 @@ export function SubmitReportForm(props: { appointment: BarkAppointment }) {
   const { appointment } = props;
   return (
     <div>
-      <p>
-        Form for submitting report for appointment {JSON.stringify(appointment)}
-      </p>
+      <p>Form for submitting report for appointment:</p>
+      <pre>{JSON.stringify(appointment, null, 2)}</pre>
     </div>
   );
 }

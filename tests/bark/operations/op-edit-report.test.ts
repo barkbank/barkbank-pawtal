@@ -27,6 +27,7 @@ describe("opEditReport", () => {
       const res2 = await opSubmitReport(context, {
         appointmentId,
         reportData: originalReportData,
+        actorVetId: vetId,
       });
       const { reportId } = res2.result!;
       console.log({ reportId });

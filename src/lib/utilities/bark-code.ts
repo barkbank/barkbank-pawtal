@@ -13,6 +13,11 @@ export const CODE = {
   FAILED: "FAILED",
 
   /**
+   * When an actor is not allowed to execute an operation.
+   */
+  UNAUTHORIZED: "UNAUTHORIZED",
+
+  /**
    * When an expected account cannot be found. e.g. when sending OTP.
    */
   ERROR_ACCOUNT_NOT_FOUND: "ERROR_ACCOUNT_NOT_FOUND",

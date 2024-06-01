@@ -1,6 +1,14 @@
 import { z } from "zod";
 import { DOG_GENDER, PosNegNil, ReportedIneligibility } from "../data/db-enums";
 
+export const BarkAppointmentIdsSchema = z.object({
+  appointmentId: z.string(),
+  vetId: z.string(),
+  dogId: z.string(),
+});
+
+export type BarkAppointmentIds = z.infer<typeof BarkAppointmentIdsSchema>;
+
 export type BarkAppointment = {
   appointmentId: string;
   vetId: string;
