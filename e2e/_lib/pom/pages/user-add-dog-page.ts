@@ -30,6 +30,13 @@ export class UserAddDogPage extends PomPage {
       .getByLabel("Male", { exact: true });
   }
 
+  dogGenderOption_FEMALE(): Locator {
+    return this.page()
+      .getByText("Sex", { exact: true })
+      .locator("..")
+      .getByLabel("Female", { exact: true });
+  }
+
   dogBloodTypeOption_UNKNOWN(): Locator {
     return this.page()
       .getByText("Blood Type")

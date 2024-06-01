@@ -1,9 +1,9 @@
 import { test, expect } from "@playwright/test";
 import { registerTestUser } from "../_lib/init/register-test-user";
 import { getTestBirthday } from "../_lib/e2e-test-utils";
-import { generateTestDogName } from "../_lib/e2e-test-utils";
 import { UserMyPetsPage } from "../_lib/pom/pages/user-my-pets-page";
 import { UserAddDogPage } from "../_lib/pom/pages/user-add-dog-page";
+import { generateDog } from "../_lib/generate/generate-dog";
 
 test("user can register, login, add dog but cancel, and not should not see new dog in my-pets", async ({
   page,
@@ -17,14 +17,15 @@ test("user can register, login, add dog but cancel, and not should not see new d
   await pg2.checkUrl();
 
   // WHEN dog details are filled in
-  const dogName = generateTestDogName();
+  const dogGender = "FEMALE";
+  const { dogName, dogBreed } = generateDog({ dogGender });
   const dogBirthday = getTestBirthday(3);
   console.log("Generated Dog Details", { dogName, dogBirthday });
   await pg2.dogNameField().fill(dogName);
-  await pg2.dogBreedField().fill("Singapore Extra Dog");
+  await pg2.dogBreedField().fill(dogBreed);
   await pg2.dogBirthdayField().fill(dogBirthday);
   await pg2.dogWeightField().fill("25");
-  await pg2.dogGenderOption_MALE().click();
+  await pg2.dogGenderOption_FEMALE().click();
   await expect(pg2.dogBloodTypeOption_UNKNOWN()).toBeVisible();
   await pg2.dogBloodTypeOption_UNKNOWN().click();
   await pg2.dogEverReceivedTransfusionOption_NO().click();

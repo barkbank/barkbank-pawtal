@@ -1,15 +1,6 @@
 import { sprintf } from "sprintf-js";
 import { PomContext } from "./pom/core/pom-object";
 import { HeaderComponent } from "./pom/layout/header-component";
-import { generateDog } from "./generate/generate-dog";
-
-export function generateTestDogName(options?: {
-  dogGender?: "MALE" | "FEMALE";
-}): string {
-  const dogGender = options?.dogGender ?? "MALE";
-  const { dogName } = generateDog({ dogGender });
-  return dogName;
-}
 
 export function getTestBirthday(ageYears: number): string {
   const ts = new Date();
