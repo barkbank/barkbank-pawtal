@@ -13,9 +13,7 @@ import {
   BarkFormInput,
   BarkFormOption,
   BarkFormRadioGroup,
-  BarkFormSelect,
-  BarkFormSingleCheckbox,
-  BarkFormTextArea,
+  BarkFormSelect, BarkFormTextArea
 } from "@/components/bark/bark-form";
 import { BarkAppointment } from "@/lib/bark/bark-models";
 import {
@@ -33,9 +31,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { postBarkReportData } from "../_actions/post-bark-report-data";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { RoutePath } from "@/lib/route-path";
-import { revalidatePath } from "next/cache";
 
 const SubmitFormSchema = z.object({
   visitTime: DateTimeField.Schema,
@@ -102,7 +99,6 @@ export function SubmitReportForm(props: { appointment: BarkAppointment }) {
       form.setError("root", { message: error });
       return;
     }
-    revalidatePath(RoutePath.VET_APPOINTMENTS, "layout");
     router.push(RoutePath.VET_APPOINTMENTS_LIST);
   };
   return (
