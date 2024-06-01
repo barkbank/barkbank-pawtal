@@ -3,8 +3,7 @@ import { BarkContext } from "../bark-context";
 import { CODE } from "@/lib/utilities/bark-code";
 import { BarkAppointment } from "../bark-models";
 import { selectAppointmentsByVetId } from "../queries/select-appointments-by-vet-id";
-import { toUserPii } from "../mappers/to-user-pii";
-import { toDogOii } from "../mappers/to-dog-oii";
+import { toBarkAppointment } from "../mappers/to-bark-appointment";
 
 export async function opFetchAppointmentsByVetId(
   context: BarkContext,
@@ -18,10 +17,7 @@ export async function opFetchAppointmentsByVetId(
     });
     const promisedAppointments = encryptedAppointments.map(
       async (encrypted) => {
-        const { userEncryptedPii, dogEncryptedOii, ...otherFields } = encrypted;
-        const { userName } = await toUserPii(context, userEncryptedPii);
-        const { dogName } = await toDogOii(context, dogEncryptedOii);
-        return { ...otherFields, ownerName: userName, dogName };
+        return toBarkAppointment(context, encrypted);
       },
     );
     const appointments: BarkAppointment[] =
