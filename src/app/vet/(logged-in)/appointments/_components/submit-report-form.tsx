@@ -1,8 +1,17 @@
 "use client";
 
-import { DateTimeField, DogWeightKgField } from "@/app/_lib/field-schemas";
+import {
+  BodyConditioningScoreField,
+  DateTimeField,
+  DogWeightKgField,
+} from "@/app/_lib/field-schemas";
 import { BarkButton } from "@/components/bark/bark-button";
-import { BarkForm, BarkFormInput } from "@/components/bark/bark-form";
+import {
+  BarkForm,
+  BarkFormInput,
+  BarkFormOption,
+  BarkFormSelect,
+} from "@/components/bark/bark-form";
 import { BarkAppointment } from "@/lib/bark/bark-models";
 import {
   BarkReportData,
@@ -19,12 +28,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
+const bcsValues = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
 const SubmitFormSchema = z.object({
   visitTime: DateTimeField.Schema,
   dogWeightKg: DogWeightKgField.Schema,
-
-  // // BCS score range is 1-9 https://vcahospitals.com/know-your-pet/body-condition-scores
-  // dogBodyConditioningScore: z.number().min(1).max(9),
+  dogBodyConditioningScore: BodyConditioningScoreField.Schema,
 
   // dogHeartworm: PosNegNilSchema,
   // dogDea1Point1: PosNegNilSchema,
@@ -40,6 +49,9 @@ function toBarkReportData(formData: SubmitFormType): BarkReportData {
   const values = {
     visitTime: DateTimeField.parse(formData.visitTime),
     dogWeightKg: DogWeightKgField.parse(formData.dogWeightKg)!,
+    dogBodyConditioningScore: BodyConditioningScoreField.parse(
+      formData.dogBodyConditioningScore,
+    ),
   };
   console.log({ values });
   return BarkReportDataSchema.parse(values);
@@ -60,6 +72,15 @@ export function SubmitReportForm(props: { appointment: BarkAppointment }) {
     const reportData = toBarkReportData(values);
     console.log(reportData);
   };
+  const bcsOptions: BarkFormOption[] = bcsValues.map<BarkFormOption>(
+    (value: number) => {
+      const option: BarkFormOption = {
+        value: `${value}`,
+        label: `${value}`,
+      };
+      return option;
+    },
+  );
   return (
     <div>
       <p>Submitting report for appointment {appointmentId}.</p>
@@ -79,6 +100,14 @@ export function SubmitReportForm(props: { appointment: BarkAppointment }) {
           name="dogWeightKg"
           label="Dog's Weight (KG)"
           type="text"
+        />
+        <BarkFormSelect
+          form={form}
+          name="dogBodyConditioningScore"
+          label="Dog's Body Conditioning Score (BCS)"
+          placeholder="Select BCS"
+          options={bcsOptions}
+          description="Body conditioning score is a value between 1 and 9"
         />
         <div className="mt-6">
           <BarkButton variant="brand" type="submit">

@@ -3,7 +3,11 @@ import {
   SINGAPORE_TIME_ZONE,
   parseCommonDateTime,
 } from "../../lib/utilities/bark-time";
-import { isValidWeightKg, parseWeightKg } from "../../lib/utilities/bark-utils";
+import {
+  isIntegerString,
+  isValidWeightKg,
+  parseWeightKg,
+} from "../../lib/utilities/bark-utils";
 
 export const DateTimeField = {
   Schema: z.string().refine(
@@ -39,5 +43,24 @@ export const DogWeightKgField = {
   ),
   parse: (value: string) => {
     return parseWeightKg(value)!;
+  },
+};
+
+export const BodyConditioningScoreField = {
+  Schema: z.string().refine(
+    (value: string) => {
+      if (!isIntegerString(value)) return false;
+
+      const bcs = Number(value);
+      if (bcs < 1) return false;
+      if (bcs > 9) return false;
+      return true;
+    },
+    {
+      message: "BCS should be a value between 1-9",
+    },
+  ),
+  parse: (value: string) => {
+    return Number(value);
   },
 };
