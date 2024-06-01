@@ -1,5 +1,5 @@
 import { DbContext, dbQuery } from "@/lib/data/db-utils";
-import { EncryptedBarkReportData } from "../bark-models";
+import { EncryptedBarkReportData } from "../models/encrypted-bark-report-data";
 import { z } from "zod";
 
 const RowSchema = z.object({

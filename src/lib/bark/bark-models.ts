@@ -47,10 +47,3 @@ export type BarkReport = BarkReportData & {
 export type EncryptedBarkReport = Omit<BarkReport, "ineligibilityReason"> & {
   encryptedIneligibilityReason: string;
 };
-
-export type EncryptedBarkReportData = Omit<
-  BarkReportData,
-  "ineligibilityReason"
-> & {
-  encryptedIneligibilityReason: string;
-};
