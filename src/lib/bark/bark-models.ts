@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { DOG_GENDER, PosNegNil, ReportedIneligibility } from "../data/db-enums";
+import { DOG_GENDER } from "../data/db-enums";
+import { BarkReportData } from "./models/bark-report-data";
 
 export const BarkAppointmentIdsSchema = z.object({
   appointmentId: z.string(),
@@ -33,18 +34,6 @@ export const EncryptedBarkAppointmentSchema = z.object({
 export type EncryptedBarkAppointment = z.infer<
   typeof EncryptedBarkAppointmentSchema
 >;
-
-export type BarkReportData = {
-  visitTime: Date;
-  dogWeightKg: number;
-  dogBodyConditioningScore: number;
-  dogHeartworm: PosNegNil;
-  dogDea1Point1: PosNegNil;
-  ineligibilityStatus: ReportedIneligibility;
-  ineligibilityReason: string;
-  ineligibilityExpiryTime: Date | null;
-  dogDidDonateBlood: boolean;
-};
 
 export type BarkReport = BarkReportData & {
   reportId: string;

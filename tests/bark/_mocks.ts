@@ -1,4 +1,4 @@
-import { BarkReportData } from "@/lib/bark/bark-models";
+import { BarkReportData } from "@/lib/bark/models/bark-report-data";
 import { POS_NEG_NIL, REPORTED_INELIGIBILITY } from "@/lib/data/db-enums";
 import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
 

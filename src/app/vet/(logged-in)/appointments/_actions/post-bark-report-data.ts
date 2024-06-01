@@ -2,7 +2,7 @@
 
 import APP from "@/lib/app";
 import { getAuthenticatedVetActor } from "@/lib/auth";
-import { BarkReportData } from "@/lib/bark/bark-models";
+import { BarkReportData } from "@/lib/bark/models/bark-report-data";
 import { opSubmitReport } from "@/lib/bark/operations/op-submit-report";
 import { CODE } from "@/lib/utilities/bark-code";
 import { Err, Result } from "@/lib/utilities/result";

@@ -1,6 +1,6 @@
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { CODE } from "@/lib/utilities/bark-code";
-import { BarkReportData } from "@/lib/bark/bark-models";
+import { BarkReportData } from "../models/bark-report-data";
 import { dbBegin, dbCommit, dbRelease, dbRollback } from "@/lib/data/db-utils";
 import { selectAppointmentIds } from "../queries/select-appointment-ids";
 import { insertReport } from "../queries/insert-report";

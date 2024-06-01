@@ -1,4 +1,5 @@
-import { BarkReport, BarkReportData } from "@/lib/bark/bark-models";
+import { BarkReport } from "@/lib/bark/bark-models";
+import { BarkReportData } from "@/lib/bark/models/bark-report-data";
 import { givenDog, givenVet } from "../_given";
 import { withBarkContext } from "../_context";
 import { mockReportData } from "../_mocks";
