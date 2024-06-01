@@ -12,5 +12,5 @@ export async function opFetchAppointment(
     typeof CODE.FAILED | typeof CODE.ERROR_APPOINTMENT_NOT_FOUND
   >
 > {
-  return Err(CODE.FAILED);
+  return Err(CODE.ERROR_APPOINTMENT_NOT_FOUND);
 }
