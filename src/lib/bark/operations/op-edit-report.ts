@@ -1,4 +1,4 @@
-import { BarkReportData } from "@/lib/bark/bark-models";
+import { BarkReportData } from "../models/bark-report-data";
 import { CODE } from "@/lib/utilities/bark-code";
 import { BarkContext } from "../bark-context";
 import { updateReport } from "../queries/update-report";

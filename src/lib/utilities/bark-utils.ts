@@ -10,6 +10,11 @@ export function guaranteed<T>(arg: T | undefined | null): T {
   return arg;
 }
 
+export function isIntegerString(value: string): boolean {
+  const regex = /^\d+$/;
+  return !!regex.test(value);
+}
+
 export function isValidWeightKg(weightKg: string): boolean {
   const value = weightKg.trim();
   if (value === "") {

@@ -14,22 +14,23 @@ import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command";
-import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { CalendarIcon, Check, ChevronsUpDown } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import React from "react";
 import { BARK_UTC } from "@/lib/utilities/bark-time";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 export function BarkForm(props: {
   children: React.ReactNode;
@@ -91,7 +92,7 @@ export function BarkFormInput(props: {
       name={name}
       render={({ field }) => (
         <FormItem className="mt-6">
-          <FormLabel>{label}</FormLabel>
+          <FormLabel className="text-base">{label}</FormLabel>
           <div className="flex items-end gap-2">
             <div className="flex-grow">
               <FormControl>
@@ -113,6 +114,7 @@ export function BarkFormInput(props: {
   );
 }
 
+// TODO: Deprecate this. Use BarkFormInput and define a DateField in field-schemas.
 // Field value should be a YYYY-MM-DD string.
 export function BarkFormDateInput(props: {
   form: UseFormReturn<any>;
@@ -194,7 +196,7 @@ export function BarkFormSingleCheckbox(props: {
       name={name}
       render={({ field }) => (
         <FormItem className="mt-6">
-          <FormLabel>{label}</FormLabel>
+          <FormLabel className="text-base">{label}</FormLabel>
           <div className="flex flex-row items-start space-x-3 space-y-0">
             <FormControl>
               <Checkbox
@@ -220,6 +222,7 @@ export type BarkFormOption = {
   description?: string;
 };
 
+// TODO: Extract out the button layout into a BarkFormButtonRadioGroup
 export function BarkFormRadioGroup(props: {
   form: UseFormReturn<any>;
   name: string;
@@ -235,7 +238,7 @@ export function BarkFormRadioGroup(props: {
       name={name}
       render={({ field }) => (
         <FormItem className="mt-6 space-y-3">
-          <FormLabel>{label}</FormLabel>
+          <FormLabel className="text-base">{label}</FormLabel>
           <FormControl>
             {layout === "button" ? (
               <div className="flex space-x-2">
@@ -367,7 +370,7 @@ export function BarkFormTextArea(props: {
       name={name}
       render={({ field }) => (
         <FormItem className="mt-6">
-          <FormLabel>{label}</FormLabel>
+          <FormLabel className="text-base">{label}</FormLabel>
           <FormControl>
             <Textarea
               placeholder={placeholder}
@@ -433,69 +436,34 @@ export function BarkFormSelect(props: {
   placeholder?: string;
   description?: string;
 }) {
-  const [open, setOpen] = React.useState(false);
-
   const { form, label, name, options, placeholder, description } = props;
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <FormField
-        control={form.control}
-        name={name}
-        render={({ field }) => (
-          <FormItem className="mt-6 flex flex-col">
-            <FormLabel>{label}</FormLabel>
-
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                role="combobox"
-                aria-expanded={open}
-                className="justify-between"
-              >
-                {/* Convert to lowercase because shadcn convert current value to lowercase */}
-                {field.value
-                  ? options.find(
-                      (option) => option.value.toLowerCase() === field.value,
-                    )?.label
-                  : placeholder}
-                <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-              </Button>
-            </PopoverTrigger>
-
-            <PopoverContent className="w-[200px] p-0">
-              <Command>
-                <CommandInput placeholder="Search breed..." />
-                <CommandEmpty>No breed found.</CommandEmpty>
-                <CommandGroup>
+    <FormField
+      control={form.control}
+      name={name}
+      render={({ field }) => (
+        <FormItem className="mt-6">
+          <FormLabel className="text-base">{label}</FormLabel>
+          <FormControl>
+            <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder={placeholder} />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
                   {options.map((option) => (
-                    <CommandItem
-                      key={option.value}
-                      value={option.value}
-                      onSelect={(currentValue) => {
-                        field.onChange(currentValue);
-                        setOpen(false);
-                      }}
-                    >
-                      <Check
-                        className={cn(
-                          "mr-2 h-4 w-4",
-                          field.value === option.value
-                            ? "opacity-100"
-                            : "opacity-0",
-                        )}
-                      />
+                    <SelectItem key={option.label} value={option.value}>
                       {option.label}
-                    </CommandItem>
+                    </SelectItem>
                   ))}
-                </CommandGroup>
-              </Command>
-            </PopoverContent>
-
-            {description && <FormDescription>{description}</FormDescription>}
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-    </Popover>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </FormControl>
+          {description && <FormDescription>{description}</FormDescription>}
+          <FormMessage />
+        </FormItem>
+      )}
+    />
   );
 }

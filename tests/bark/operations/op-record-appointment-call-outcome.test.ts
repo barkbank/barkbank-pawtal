@@ -1,6 +1,6 @@
 import { CODE } from "@/lib/utilities/bark-code";
-import { withBarkContext } from "./_context";
-import { givenDog, givenVet } from "./_given";
+import { withBarkContext } from "../_context";
+import { givenDog, givenVet } from "../_given";
 import { opRecordAppointmentCallOutcome } from "@/lib/bark/operations/op-record-appointment-call-outcome";
 
 describe("opRecordAppointmentCallOutcome", () => {

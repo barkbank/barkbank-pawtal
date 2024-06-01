@@ -2,9 +2,11 @@ import {
   NEW_YORK_TIME_ZONE,
   SINGAPORE_TIME_ZONE,
   formatDateTime,
+  parseCommonDateTime,
   parseDateTime,
 } from "@/lib/utilities/bark-time";
-import { parseISO } from "date-fns";
+import { parse, parseISO } from "date-fns";
+import { Signpost } from "lucide-react";
 
 describe("bark-time parseDateTime", () => {
   it("should parse yyyy-MM-dd HH:mm strings into UTC Dates", () => {
@@ -43,5 +45,82 @@ describe("bark-time formatDateTime", () => {
       timeZone: NEW_YORK_TIME_ZONE,
     });
     expect(formatted).toEqual("Nov 6, 2017, 16:33:21");
+  });
+});
+
+describe("bark-time parseCommonDateTime", () => {
+  const getExpected = (val: string) => {
+    return parseDateTime(val, {
+      format: "yyyy-MM-dd'T'HH:mm",
+      timeZone: SINGAPORE_TIME_ZONE,
+    });
+  };
+  const getActual = (val: string) => {
+    return parseCommonDateTime(val, SINGAPORE_TIME_ZONE);
+  };
+  it("should understand 2021-05-03T10:25", () => {
+    const expected = getExpected("2021-05-03T10:25");
+    const actual = getActual("2021-05-03T10:25");
+    expect(actual).toEqual(expected);
+  });
+  it("should understand 23 May 2021, 10:25", () => {
+    const expected = getExpected("2021-05-23T10:25");
+    const actual = getActual("23 May 2021, 10:25");
+    expect(actual).toEqual(expected);
+  });
+  it("should understand 23 May 2021 10:25", () => {
+    const expected = getExpected("2021-05-23T10:25");
+    const actual = getActual("23 May 2021 10:25");
+    expect(actual).toEqual(expected);
+  });
+  it("should understand 3 May 2021, 10:25", () => {
+    const expected = getExpected("2021-05-03T10:25");
+    const actual = getActual("3 May 2021, 10:25");
+    expect(actual).toEqual(expected);
+  });
+  it("should understand 03 May 2021, 10:25", () => {
+    const expected = getExpected("2021-05-03T10:25");
+    const actual = getActual("03 May 2021, 10:25");
+    expect(actual).toEqual(expected);
+  });
+  it("should understand 23 May 2021, 10:25PM", () => {
+    const expected = getExpected("2021-05-23T22:25");
+    const actual = getActual("23 May 2021, 10:25PM");
+    expect(actual).toEqual(expected);
+  });
+  it("should understand 23 May 2021, 10:25 PM", () => {
+    const expected = getExpected("2021-05-23T22:25");
+    const actual = getActual("23 May 2021, 10:25 PM");
+    expect(actual).toEqual(expected);
+  });
+  it("should understand 23 May 2021 10:25 PM", () => {
+    const expected = getExpected("2021-05-23T22:25");
+    const actual = getActual("23 May 2021 10:25 PM");
+    expect(actual).toEqual(expected);
+  });
+  it("should understand May 23rd 2021, 10:25pm", () => {
+    const expected = getExpected("2021-05-23T22:25");
+    const actual = getActual("May 23rd 2021, 10:25pm");
+    expect(actual).toEqual(expected);
+  });
+  it("should understand 2021-05-03 10:25", () => {
+    const expected = getExpected("2021-05-03T10:25");
+    const actual = getActual("2021-05-03 10:25");
+    expect(actual).toEqual(expected);
+  });
+  it("should understand 4 August 2022, 13:30", () => {
+    const expected = getExpected("2022-08-04T13:30");
+    const actual = getActual("4 August 2022, 13:30");
+    expect(actual).toEqual(expected);
+  });
+  it("should understand 4 Aug 2022, 13:30", () => {
+    const expected = getExpected("2022-08-04T13:30");
+    const actual = getActual("4 Aug 2022, 13:30");
+    expect(actual).toEqual(expected);
+  });
+  it("should understand 6 December 2019 2pm", () => {
+    const expected = getExpected("2019-12-06T14:00");
+    const actual = getActual("6 December 2019 2pm");
+    expect(actual).toEqual(expected);
   });
 });

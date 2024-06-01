@@ -1,5 +1,14 @@
 import { z } from "zod";
-import { DOG_GENDER, PosNegNil, ReportedIneligibility } from "../data/db-enums";
+import { DOG_GENDER } from "../data/db-enums";
+import { BarkReportData } from "./models/bark-report-data";
+
+export const BarkAppointmentIdsSchema = z.object({
+  appointmentId: z.string(),
+  vetId: z.string(),
+  dogId: z.string(),
+});
+
+export type BarkAppointmentIds = z.infer<typeof BarkAppointmentIdsSchema>;
 
 export type BarkAppointment = {
   appointmentId: string;
@@ -11,6 +20,7 @@ export type BarkAppointment = {
   ownerName: string;
 };
 
+// TODO: Useful to define all models as Zod schemas. Reorganise these models accordingly.
 export const EncryptedBarkAppointmentSchema = z.object({
   appointmentId: z.string(),
   vetId: z.string(),
@@ -25,18 +35,6 @@ export type EncryptedBarkAppointment = z.infer<
   typeof EncryptedBarkAppointmentSchema
 >;
 
-export type BarkReportData = {
-  visitTime: Date;
-  dogWeightKg: number;
-  dogBodyConditioningScore: number;
-  dogHeartworm: PosNegNil;
-  dogDea1Point1: PosNegNil;
-  ineligibilityStatus: ReportedIneligibility;
-  ineligibilityReason: string;
-  ineligibilityExpiryTime: Date | null;
-  dogDidDonateBlood: boolean;
-};
-
 export type BarkReport = BarkReportData & {
   reportId: string;
   reportCreationTime: Date;
@@ -47,12 +45,5 @@ export type BarkReport = BarkReportData & {
 };
 
 export type EncryptedBarkReport = Omit<BarkReport, "ineligibilityReason"> & {
-  encryptedIneligibilityReason: string;
-};
-
-export type EncryptedBarkReportData = Omit<
-  BarkReportData,
-  "ineligibilityReason"
-> & {
   encryptedIneligibilityReason: string;
 };

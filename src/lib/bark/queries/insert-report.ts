@@ -1,5 +1,8 @@
 import { DbContext, dbQuery } from "@/lib/data/db-utils";
-import { EncryptedBarkReportData } from "../bark-models";
+import {
+  EncryptedBarkReportData,
+  EncryptedBarkReportDataSchema,
+} from "../models/encrypted-bark-report-data";
 import { z } from "zod";
 
 const RowSchema = z.object({
@@ -14,6 +17,8 @@ export async function insertReport(
   },
 ): Promise<{ reportId: string }> {
   const { appointmentId, encryptedReportData } = args;
+  const valdiatedData =
+    EncryptedBarkReportDataSchema.parse(encryptedReportData);
   const {
     visitTime,
     dogWeightKg,
@@ -24,7 +29,7 @@ export async function insertReport(
     encryptedIneligibilityReason,
     ineligibilityExpiryTime,
     dogDidDonateBlood,
-  } = encryptedReportData;
+  } = valdiatedData;
   const sql = `
   WITH
   mAppointmentDetails as (
