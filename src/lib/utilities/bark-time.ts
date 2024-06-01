@@ -1,10 +1,12 @@
-import { format, isValid, parse } from "date-fns";
-import { utcToZonedTime, zonedTimeToUtc } from "date-fns-tz";
+import { isValid, parse } from "date-fns";
+import { utcToZonedTime, zonedTimeToUtc, format } from "date-fns-tz";
+import { removeConsecutiveSpaces } from "./bark-strings";
 
 export const UTC = "UTC";
 export const SINGAPORE_TIME_ZONE = "Asia/Singapore";
 export const NEW_YORK_TIME_ZONE = "America/New_York";
 export const DEFAULT_DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm";
+export const ISO8601_FORMAT = "yyyy-MM-dd'T'HH:mm:ssXXX";
 
 export type DateTimeOptions = {
   /**
@@ -24,14 +26,22 @@ export const UTC_DATE_OPTION: DateTimeOptions = {
   timeZone: UTC,
 } as const;
 
-export const UTC_DATETIME_OPTION: DateTimeOptions = {
-  format: "yyyy-MM-dd'T'HH:mm",
+export const UTC_ISO8601: DateTimeOptions = {
+  format: "yyyy-MM-dd'T'HH:mm:ssXXX",
   timeZone: UTC,
 } as const;
 
+export const SGT_ISO8601: DateTimeOptions = {
+  format: "yyyy-MM-dd'T'HH:mm:ssXXX",
+  timeZone: SINGAPORE_TIME_ZONE,
+} as const;
+
 /**
+ * Parse a date time string. Note that the timezone indicates the timezone of
+ * the input string.
+ *
  * @param dateTimeString Date time string to parse
- * @param options Options for parsing the string
+ * @param options Options for parsing the string.
  * @returns UCT Date
  */
 export function parseDateTime(
@@ -42,6 +52,9 @@ export function parseDateTime(
   const refDate = new Date();
   const zonedTime = utcToZonedTime(refDate, opts.timeZone);
   const parsedTime = parse(dateTimeString, opts.format, zonedTime);
+  if (!isValid(parsedTime)) {
+    throw new Error(`Invalid date time input: ${dateTimeString}`);
+  }
   const utcTime = zonedTimeToUtc(parsedTime, opts.timeZone);
   return utcTime;
 }
@@ -52,7 +65,9 @@ export function formatDateTime(
 ): string {
   const opts = { ...DEFAULT_DATE_TIME_OPTIONS, ...options };
   const zonedTime = utcToZonedTime(utcTime, opts.timeZone);
-  const dateTimeString = format(zonedTime, opts.format);
+  const dateTimeString = format(zonedTime, opts.format, {
+    timeZone: opts.timeZone,
+  });
   return dateTimeString;
 }
 
@@ -80,21 +95,33 @@ const COMMON_DATE_TIME_FORMATS = [
   "dd MMMM yyyy h:mma",
   "dd MMMM yyyy h:mm a",
 
+  "dd MMMM yyyy, ha",
+  "dd MMMM yyyy, h a",
+  "dd MMMM yyyy ha",
+  "dd MMMM yyyy h a",
+
   "MMMM do yyyy, h:mma",
   "MMM do yyyy, h:mm a",
 ];
 
 /**
- * Parse common representations of date and time. This is not timezone aware.
+ * Parse common representations of date and time. The timezone indicates the
+ * zone of the input string.
  */
-export function parseCommonDateTime(dateTimeString: string): Date {
+export function parseCommonDateTime(
+  dateTimeString: string,
+  timeZone: string,
+): Date {
+  const val = removeConsecutiveSpaces(dateTimeString);
   for (const format of COMMON_DATE_TIME_FORMATS) {
-    const parsedDate = parse(dateTimeString, format, new Date());
-    if (isValid(parsedDate)) {
+    try {
+      const parsedDate = parseDateTime(val, { format, timeZone });
       return parsedDate;
+    } catch {
+      continue;
     }
   }
-  throw new Error(`Cannot understand datetime value: ${dateTimeString}`);
+  throw new Error(`No common format for datetime value: ${dateTimeString}`);
 }
 
 /**

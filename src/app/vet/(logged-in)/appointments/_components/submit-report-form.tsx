@@ -3,12 +3,36 @@
 import { BarkButton } from "@/components/bark/bark-button";
 import { BarkForm, BarkFormInput } from "@/components/bark/bark-form";
 import { BarkAppointment } from "@/lib/bark/bark-models";
+import { BarkReportData } from "@/lib/bark/models/bark-report-data";
+import {
+  ISO8601_FORMAT,
+  NEW_YORK_TIME_ZONE,
+  SGT_ISO8601,
+  SINGAPORE_TIME_ZONE,
+  UTC_ISO8601,
+  formatDateTime,
+  parseCommonDateTime,
+} from "@/lib/utilities/bark-time";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const SubmitFormSchema = z.object({
-  visitTime: z.string(),
+  visitTime: z.string().refine(
+    (value) => {
+      try {
+        parseCommonDateTime(value, SINGAPORE_TIME_ZONE);
+        return true;
+      } catch (err) {
+        console.error(err);
+        return false;
+      }
+    },
+    {
+      message:
+        "Unknown date time format, try something like '16 Apr 2021 4:30pm'",
+    },
+  ),
   // dogWeightKg: z.number(),
 
   // // BCS score range is 1-9 https://vcahospitals.com/know-your-pet/body-condition-scores
@@ -24,6 +48,24 @@ const SubmitFormSchema = z.object({
 
 type SubmitFormType = z.infer<typeof SubmitFormSchema>;
 
+function toBarkReportData(formData: SubmitFormType): Partial<BarkReportData> {
+  return {
+    visitTime: parseCommonDateTime(formData.visitTime, SINGAPORE_TIME_ZONE),
+  };
+}
+
+function parseVisitTime(val: string): string | null {
+  try {
+    const d = parseCommonDateTime(val, SINGAPORE_TIME_ZONE);
+    return formatDateTime(d, {
+      format: "d MMM yyyy, h:mma",
+      timeZone: SINGAPORE_TIME_ZONE,
+    });
+  } catch {
+    return null;
+  }
+}
+
 export function SubmitReportForm(props: { appointment: BarkAppointment }) {
   const { appointment } = props;
   const form = useForm<SubmitFormType>({
@@ -33,8 +75,18 @@ export function SubmitReportForm(props: { appointment: BarkAppointment }) {
     },
   });
   const onSubmit = async (values: SubmitFormType) => {
-    console.log({ values });
+    const parsedVisitTime = parseCommonDateTime(
+      values.visitTime,
+      SINGAPORE_TIME_ZONE,
+    );
+    const sgtISO8601 = formatDateTime(parsedVisitTime, SGT_ISO8601);
+    const utcISO8601 = formatDateTime(parsedVisitTime, UTC_ISO8601);
+    console.log({ values, parsedVisitTime, utcISO8601, sgtISO8601 });
   };
+  const placeholderTime = formatDateTime(new Date(), {
+    format: "d MMM yyyy h:mma",
+    timeZone: SINGAPORE_TIME_ZONE,
+  });
   return (
     <div>
       <p>Form for submitting report for appointment:</p>
@@ -45,6 +97,7 @@ export function SubmitReportForm(props: { appointment: BarkAppointment }) {
           name="visitTime"
           label="Visit Time"
           type="text"
+          description="Please provide the visit time, e.g. 16 Apr 2021 4:30pm"
         />
         <div className="mt-6">
           <BarkButton variant="brand" type="submit">
