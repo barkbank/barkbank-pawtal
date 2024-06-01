@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { ObjectValues } from "../utilities/object-values";
 
 export const DOG_STATUS = {
@@ -27,6 +28,8 @@ export const POS_NEG_NIL = {
 
 export type PosNegNil = ObjectValues<typeof POS_NEG_NIL>;
 
+export const PosNegNilSchema = z.nativeEnum(POS_NEG_NIL);
+
 export const REPORTED_INELIGIBILITY = {
   NIL: "NIL",
   TEMPORARILY_INELIGIBLE: "TEMPORARILY_INELIGIBLE",
@@ -34,6 +37,8 @@ export const REPORTED_INELIGIBILITY = {
 } as const;
 
 export type ReportedIneligibility = ObjectValues<typeof REPORTED_INELIGIBILITY>;
+
+export const ReportedIneligibilitySchema = z.nativeEnum(REPORTED_INELIGIBILITY);
 
 export const SERVICE_STATUS = {
   AVAILABLE: "AVAILABLE",
