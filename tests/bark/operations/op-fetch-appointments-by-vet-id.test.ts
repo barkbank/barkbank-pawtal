@@ -1,6 +1,6 @@
 import { opRecordAppointmentCallOutcome } from "@/lib/bark/operations/op-record-appointment-call-outcome";
-import { withBarkContext } from "./_context";
-import { givenDog, givenVet } from "./_given";
+import { withBarkContext } from "../_context";
+import { givenDog, givenVet } from "../_given";
 import { opFetchAppointmentsByVetId } from "@/lib/bark/operations/op-fetch-appointments-by-vet-id";
 
 describe("opFetchAppointmentsByVetId", () => {
