@@ -10,6 +10,7 @@ import {
   BarkForm,
   BarkFormInput,
   BarkFormOption,
+  BarkFormRadioGroup,
   BarkFormSelect,
 } from "@/components/bark/bark-form";
 import { BarkAppointment } from "@/lib/bark/bark-models";
@@ -17,6 +18,7 @@ import {
   BarkReportData,
   BarkReportDataSchema,
 } from "@/lib/bark/models/bark-report-data";
+import { POS_NEG_NIL, PosNegNilSchema } from "@/lib/data/db-enums";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -25,8 +27,7 @@ const SubmitFormSchema = z.object({
   visitTime: DateTimeField.Schema,
   dogWeightKg: DogWeightKgField.Schema,
   dogBodyConditioningScore: BodyConditioningScoreField.Schema,
-
-  // dogHeartworm: PosNegNilSchema,
+  dogHeartworm: PosNegNilSchema,
   // dogDea1Point1: PosNegNilSchema,
   // ineligibilityStatus: ReportedIneligibilitySchema,
   // ineligibilityReason: z.string(),
@@ -43,6 +44,7 @@ function toBarkReportData(formData: SubmitFormType): BarkReportData {
     dogBodyConditioningScore: BodyConditioningScoreField.parse(
       formData.dogBodyConditioningScore,
     ),
+    dogHeartworm: formData.dogHeartworm,
   };
   console.log({ values });
   return BarkReportDataSchema.parse(values);
@@ -63,6 +65,20 @@ export function SubmitReportForm(props: { appointment: BarkAppointment }) {
     const reportData = toBarkReportData(values);
     console.log(reportData);
   };
+  const getPosNegNilOptions = (nilLabel: string) => [
+    {
+      value: POS_NEG_NIL.POSITIVE,
+      label: "Positive",
+    },
+    {
+      value: POS_NEG_NIL.NEGATIVE,
+      label: "Negative",
+    },
+    {
+      value: POS_NEG_NIL.NIL,
+      label: nilLabel,
+    },
+  ];
   return (
     <div>
       <p>Submitting report for appointment {appointmentId}.</p>
@@ -97,6 +113,14 @@ export function SubmitReportForm(props: { appointment: BarkAppointment }) {
           })}
           description="Body conditioning score is a value between 1 and 9"
         />
+        <BarkFormRadioGroup
+          form={form}
+          name="dogHeartworm"
+          label="Heartworm Test Result"
+          options={getPosNegNilOptions("Did not test")}
+          description="Please indicate the result of heartworm test, if any"
+        />
+
         <div className="mt-6">
           <BarkButton variant="brand" type="submit">
             Submit

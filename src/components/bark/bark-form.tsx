@@ -238,7 +238,7 @@ export function BarkFormRadioGroup(props: {
       name={name}
       render={({ field }) => (
         <FormItem className="mt-6 space-y-3">
-          <FormLabel>{label}</FormLabel>
+          <FormLabel className="text-base">{label}</FormLabel>
           <FormControl>
             {layout === "button" ? (
               <div className="flex space-x-2">
