@@ -196,7 +196,7 @@ export function BarkFormSingleCheckbox(props: {
       name={name}
       render={({ field }) => (
         <FormItem className="mt-6">
-          <FormLabel>{label}</FormLabel>
+          <FormLabel className="text-base">{label}</FormLabel>
           <div className="flex flex-row items-start space-x-3 space-y-0">
             <FormControl>
               <Checkbox

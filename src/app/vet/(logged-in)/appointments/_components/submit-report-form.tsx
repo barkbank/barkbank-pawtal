@@ -12,6 +12,7 @@ import {
   BarkFormOption,
   BarkFormRadioGroup,
   BarkFormSelect,
+  BarkFormSingleCheckbox,
 } from "@/components/bark/bark-form";
 import { BarkAppointment } from "@/lib/bark/bark-models";
 import {
@@ -32,20 +33,21 @@ const SubmitFormSchema = z.object({
   // ineligibilityStatus: ReportedIneligibilitySchema,
   // ineligibilityReason: z.string(),
   // ineligibilityExpiryTime: z.date().nullable(),
-  // dogDidDonateBlood: z.boolean(),
+  dogDidDonateBlood: z.boolean(),
 });
 
 type SubmitFormType = z.infer<typeof SubmitFormSchema>;
 
 function toBarkReportData(formData: SubmitFormType): BarkReportData {
-  const {visitTime, dogWeightKg, dogBodyConditioningScore, ...otherFields} = formData;
+  const { visitTime, dogWeightKg, dogBodyConditioningScore, ...otherFields } =
+    formData;
   const values = {
     visitTime: DateTimeField.parse(visitTime),
     dogWeightKg: DogWeightKgField.parse(dogWeightKg)!,
     dogBodyConditioningScore: BodyConditioningScoreField.parse(
       dogBodyConditioningScore,
     ),
-    ...otherFields
+    ...otherFields,
   };
   console.log({ values });
   return BarkReportDataSchema.parse(values);
@@ -139,6 +141,12 @@ export function SubmitReportForm(props: { appointment: BarkAppointment }) {
             },
           ]}
           description="Please indicate the result of blood test, if any"
+        />
+        <BarkFormSingleCheckbox
+          form={form}
+          name="dogDidDonateBlood"
+          label="Please indicate if dog donated blood"
+          optionLabel={`${dogName} donated blood`}
         />
         <div className="mt-6">
           <BarkButton variant="brand" type="submit">
