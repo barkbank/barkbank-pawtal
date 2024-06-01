@@ -1,12 +1,11 @@
 "use client";
 
+import { DateTimeField, DogWeightKgField } from "@/app/_lib/field-schemas";
 import { BarkButton } from "@/components/bark/bark-button";
 import { BarkForm, BarkFormInput } from "@/components/bark/bark-form";
 import { BarkAppointment } from "@/lib/bark/bark-models";
 import { BarkReportData } from "@/lib/bark/models/bark-report-data";
 import {
-  ISO8601_FORMAT,
-  NEW_YORK_TIME_ZONE,
   SGT_ISO8601,
   SINGAPORE_TIME_ZONE,
   UTC_ISO8601,
@@ -18,22 +17,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const SubmitFormSchema = z.object({
-  visitTime: z.string().refine(
-    (value) => {
-      try {
-        parseCommonDateTime(value, SINGAPORE_TIME_ZONE);
-        return true;
-      } catch (err) {
-        console.error(err);
-        return false;
-      }
-    },
-    {
-      message:
-        "Unknown date time format, try something like '16 Apr 2021 4:30pm'",
-    },
-  ),
-  // dogWeightKg: z.number(),
+  visitTime: DateTimeField.Schema,
+  dogWeightKg: DogWeightKgField.Schema,
 
   // // BCS score range is 1-9 https://vcahospitals.com/know-your-pet/body-condition-scores
   // dogBodyConditioningScore: z.number().min(1).max(9),
@@ -50,7 +35,8 @@ type SubmitFormType = z.infer<typeof SubmitFormSchema>;
 
 function toBarkReportData(formData: SubmitFormType): Partial<BarkReportData> {
   return {
-    visitTime: parseCommonDateTime(formData.visitTime, SINGAPORE_TIME_ZONE),
+    visitTime: DateTimeField.parse(formData.visitTime),
+    dogWeightKg: DogWeightKgField.parse(formData.dogWeightKg)!,
   };
 }
 
@@ -72,6 +58,7 @@ export function SubmitReportForm(props: { appointment: BarkAppointment }) {
     resolver: zodResolver(SubmitFormSchema),
     defaultValues: {
       visitTime: "",
+      dogWeightKg: "",
     },
   });
   const onSubmit = async (values: SubmitFormType) => {
@@ -98,6 +85,13 @@ export function SubmitReportForm(props: { appointment: BarkAppointment }) {
           label="Visit Time"
           type="text"
           description="Please provide the visit time, e.g. 16 Apr 2021 4:30pm"
+        />
+        <BarkFormInput
+          form={form}
+          name="dogWeightKg"
+          label="Weight"
+          type="text"
+          description="Please provide the dog's weight in KG"
         />
         <div className="mt-6">
           <BarkButton variant="brand" type="submit">
