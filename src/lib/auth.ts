@@ -1,3 +1,5 @@
+import "server-only";
+
 import { NextAuthOptions, getServerSession } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import APP from "./app";
