@@ -1,5 +1,3 @@
-"use server";
-
 import { AdminActor } from "@/lib/admin/admin-actor";
 import { getAuthenticatedAdminActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
