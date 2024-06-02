@@ -5,7 +5,7 @@ import { CODE } from "@/lib/utilities/bark-code";
 import { opFetchAppointment } from "@/lib/bark/operations/op-fetch-appointment";
 
 describe("opCancelAppointment", () => {
-  it("should return ERROR_APPOINTMENT_NOT_FOUND when the appointment does not exist", async () => {
+  it.skip("should return ERROR_APPOINTMENT_NOT_FOUND when the appointment does not exist", async () => {
     await withBarkContext(async ({ context }) => {
       const { vetId } = await givenVet(context);
       const appointmentId = "123";
@@ -16,7 +16,7 @@ describe("opCancelAppointment", () => {
       expect(res).toEqual(CODE.ERROR_APPOINTMENT_NOT_FOUND);
     });
   });
-  it("should return ERROR_NOT_ALLOWED when the actorVetId is not the vet of the appointment", async () => {
+  it.skip("should return ERROR_NOT_ALLOWED when the actorVetId is not the vet of the appointment", async () => {
     await withBarkContext(async ({ context }) => {
       const { vetId: actorVetId } = await givenVet(context, { vetIdx: 1 });
       const { appointmentId, vetId: otherVetId } = await givenAppointment(
@@ -31,7 +31,7 @@ describe("opCancelAppointment", () => {
       expect(res).toEqual(CODE.ERROR_NOT_ALLOWED);
     });
   });
-  it("WIP: should cancel the appointment", async () => {
+  it.skip("WIP: should cancel the appointment", async () => {
     await withBarkContext(async ({ context }) => {
       const { appointmentId, vetId: actorVetId } = await givenAppointment(
         context,

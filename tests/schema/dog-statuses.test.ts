@@ -9,11 +9,8 @@ import {
 } from "../_fixtures";
 import { dbQuery } from "@/lib/data/db-utils";
 import { DbReportSpec, DogSpec, UserSpec } from "@/lib/data/db-models";
-import {
-  DOG_GENDER,
-  PARTICIPATION_STATUS,
-  YES_NO_UNKNOWN,
-} from "@/lib/data/db-enums";
+import { PARTICIPATION_STATUS, YES_NO_UNKNOWN } from "@/lib/data/db-enums";
+import { DOG_GENDER } from "@/lib/bark/models/dog-gender";
 import { USER_RESIDENCY } from "@/lib/data/db-enums";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import {

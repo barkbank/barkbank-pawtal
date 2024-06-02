@@ -1,4 +1,13 @@
-import { DOG_GENDER } from "@/lib/data/db-enums";
+import { DOG_GENDER } from "./dog-gender";
+import { z } from "zod";
+
+export const BarkAppointmentSchema = z.object({
+  appointmentId: z.string(),
+  vetId: z.string(),
+  dogId: z.string(),
+  dogName: z.string(),
+  dogBreed: z.string(),
+});
 
 export type BarkAppointment = {
   appointmentId: string;

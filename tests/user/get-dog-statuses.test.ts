@@ -3,13 +3,13 @@ import { withDb } from "../_db_helpers";
 import { getUserActor, insertDog, insertUser } from "../_fixtures";
 import { DogStatuses } from "@/lib/dog/dog-models";
 import {
-  DOG_GENDER,
   MEDICAL_STATUS,
   PARTICIPATION_STATUS,
   PROFILE_STATUS,
   SERVICE_STATUS,
   YES_NO_UNKNOWN,
 } from "@/lib/data/db-enums";
+import { DOG_GENDER } from "@/lib/bark/models/dog-gender";
 import { dateAgo } from "../_time_helpers";
 
 describe("getDogStatuses", () => {

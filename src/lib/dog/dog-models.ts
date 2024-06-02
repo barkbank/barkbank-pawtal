@@ -1,12 +1,12 @@
 import {
   DogAntigenPresence,
-  DogGender,
   MedicalStatus,
   ParticipationStatus,
   ProfileStatus,
   ServiceStatus,
   YesNoUnknown,
 } from "../data/db-enums";
+import { DogGender } from "../bark/models/dog-gender";
 
 /**
  * The different statuses of a dog.

@@ -7,11 +7,8 @@ import {
   insertVet,
 } from "../_fixtures";
 import { UTC_DATE_OPTION, parseDateTime } from "@/lib/utilities/bark-time";
-import {
-  DOG_ANTIGEN_PRESENCE,
-  DOG_GENDER,
-  YES_NO_UNKNOWN,
-} from "@/lib/data/db-enums";
+import { DOG_ANTIGEN_PRESENCE, YES_NO_UNKNOWN } from "@/lib/data/db-enums";
+import { DOG_GENDER } from "@/lib/bark/models/dog-gender";
 import { addMyDog } from "@/lib/user/actions/add-my-dog";
 
 describe("addMyDog", () => {

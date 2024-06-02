@@ -14,9 +14,9 @@ import { UTC_DATE_OPTION, parseDateTime } from "@/lib/utilities/bark-time";
 import {
   CALL_OUTCOME,
   DOG_ANTIGEN_PRESENCE,
-  DOG_GENDER,
   YES_NO_UNKNOWN,
 } from "@/lib/data/db-enums";
+import { DOG_GENDER } from "@/lib/bark/models/dog-gender";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 
 describe("updateDogProfile", () => {

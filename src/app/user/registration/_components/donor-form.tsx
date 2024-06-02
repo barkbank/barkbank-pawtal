@@ -16,11 +16,8 @@ import { useRouter } from "next/navigation";
 import { BarkFormOption } from "@/components/bark/bark-form";
 import { postRegistrationRequest } from "@/app/user/registration/_actions/post-registration-request";
 import { RegistrationRequest } from "@/lib/services/registration";
-import {
-  DogAntigenPresence,
-  DogGender,
-  YesNoUnknown,
-} from "@/lib/data/db-enums";
+import { DogAntigenPresence, YesNoUnknown } from "@/lib/data/db-enums";
+import { DogGender } from "@/lib/bark/models/dog-gender";
 import { UserResidency } from "@/lib/data/db-enums";
 import { BARK_UTC } from "@/lib/utilities/bark-time";
 import { signIn } from "next-auth/react";

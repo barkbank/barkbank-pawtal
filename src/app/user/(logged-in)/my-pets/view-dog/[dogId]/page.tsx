@@ -4,12 +4,11 @@ import { BarkStatusBlock } from "@/components/bark/bark-status-block";
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import {
   DOG_ANTIGEN_PRESENCE,
-  DOG_GENDER,
   DogAntigenPresence,
-  DogGender,
   YES_NO_UNKNOWN,
   YesNoUnknown,
 } from "@/lib/data/db-enums";
+import { DOG_GENDER, DogGender } from "@/lib/bark/models/dog-gender";
 import {
   DogAppointment,
   DogPreferredVet,

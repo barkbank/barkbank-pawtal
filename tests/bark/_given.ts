@@ -1,7 +1,8 @@
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import { getDogMapper, insertDog, insertUser, insertVet } from "../_fixtures";
 import { BarkTestContext } from "./_context";
-import { DOG_GENDER, DogGender, YES_NO_UNKNOWN } from "@/lib/data/db-enums";
+import { YES_NO_UNKNOWN } from "@/lib/data/db-enums";
+import { DOG_GENDER, DogGender } from "@/lib/bark/models/dog-gender";
 import { dbQuery } from "@/lib/data/db-utils";
 import { BarkContext } from "@/lib/bark/bark-context";
 import { opRecordAppointmentCallOutcome } from "@/lib/bark/operations/op-record-appointment-call-outcome";
