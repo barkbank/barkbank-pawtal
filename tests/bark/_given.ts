@@ -80,7 +80,7 @@ export async function givenVet(
 
 export async function givenAppointment(
   context: BarkContext,
-  options?: { idx?: number },
+  options?: { idx?: number; existingVetId?: string },
 ): Promise<{
   appointmentId: string;
   dogId: string;
@@ -89,8 +89,9 @@ export async function givenAppointment(
   dogBreed: string;
   dogGender: DogGender;
 }> {
-  const { idx } = options ?? {};
-  const { vetId } = await givenVet(context, { vetIdx: idx });
+  const { idx, existingVetId } = options ?? {};
+  const vetId =
+    existingVetId ?? (await givenVet(context, { vetIdx: idx })).vetId;
   const { dogId, dogName, dogBreed, dogGender } = await givenDog(context, {
     dogIdx: idx,
     preferredVetId: vetId,

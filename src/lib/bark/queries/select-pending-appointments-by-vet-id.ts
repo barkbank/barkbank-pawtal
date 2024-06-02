@@ -4,7 +4,7 @@ import {
   EncryptedBarkAppointmentSchema,
 } from "../models/encrypted-bark-appointment";
 
-export async function selectAppointmentsByVetId(
+export async function selectPendingAppointmentsByVetId(
   dbContext: DbContext,
   args: { vetId: string },
 ): Promise<EncryptedBarkAppointment[]> {
