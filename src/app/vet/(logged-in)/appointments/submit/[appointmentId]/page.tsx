@@ -26,6 +26,13 @@ export default async function Page(props: {
     );
   }
   const { appointment } = result;
+  if (appointment.vetId !== actor.getVetId()) {
+    return (
+      <div className="m-3">
+        <BarkError>FOBIDDEN</BarkError>
+      </div>
+    );
+  }
   return (
     <div className="m-3">
       <SubmitReportForm appointment={appointment} />
