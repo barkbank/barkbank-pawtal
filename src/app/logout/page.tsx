@@ -1,5 +1,3 @@
-"use server";
-
 import { getLoggedInSession } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";

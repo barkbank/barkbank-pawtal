@@ -1,5 +1,3 @@
-"use server";
-
 import { BarkH1 } from "@/components/bark/bark-typography";
 import { getAuthenticatedAdminActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";

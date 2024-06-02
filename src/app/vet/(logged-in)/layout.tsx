@@ -1,5 +1,3 @@
-"use server";
-
 import { BarkNavLayout } from "@/components/bark/navigation/bark-nav-layout";
 import { BarkNavRoute } from "@/components/bark/navigation/bark-nav-route";
 import { getAuthenticatedVetActor } from "@/lib/auth";
