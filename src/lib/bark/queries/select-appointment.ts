@@ -1,8 +1,8 @@
 import { DbContext, dbQuery } from "@/lib/data/db-utils";
 import {
   EncryptedBarkAppointment,
-  EncryptedBarkAppointmentSchema,
-} from "../bark-models";
+  EncryptedBarkAppointmentSchema
+} from "../models/encrypted-bark-appointment";
 
 export async function selectAppointment(
   dbContext: DbContext,
