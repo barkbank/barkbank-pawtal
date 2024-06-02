@@ -12,6 +12,10 @@ export async function selectAppointmentsByVetId(
   const sql = `
   SELECT
     tCall.call_id as "appointmentId",
+    CASE
+      WHEN tCall.call_outcome = 'APPOINTMENT' THEN 'PENDING'
+      ELSE tCall.call_outcome::text
+    END as "appointmentStatus",
     tCall.dog_id as "dogId",
     tCall.vet_id as "vetId",
     tDog.dog_breed as "dogBreed",
@@ -21,7 +25,7 @@ export async function selectAppointmentsByVetId(
   FROM calls as tCall
   LEFT JOIN dogs as tDog on tCall.dog_id = tDog.dog_id
   LEFT JOIN users as tUser on tDog.user_id = tUser.user_id
-  WHERE tCall.call_outcome = 'APPOINTMENT'
+  WHERE tCall.call_outcome IN ('APPOINTMENT', 'REPORTED', 'CANCELLED')
   AND tCall.vet_id = $1
   `;
   const res = await dbQuery<EncryptedBarkAppointment>(dbContext, sql, [vetId]);
