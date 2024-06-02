@@ -1,5 +1,9 @@
 import { DbContext, dbQuery } from "@/lib/data/db-utils";
 import { z } from "zod";
+import {
+  AppointmentSituation,
+  AppointmentSituationSchema,
+} from "../models/appointment-situation";
 
 const ArgSchema = z.object({
   dogId: z.string(),
@@ -8,19 +12,10 @@ const ArgSchema = z.object({
 
 type ArgType = z.infer<typeof ArgSchema>;
 
-const RowSchema = z.object({
-  dogExists: z.boolean(),
-  vetExists: z.boolean(),
-  isPreferredVet: z.boolean(),
-  hasExistingAppointment: z.boolean(),
-});
-
-type RowType = z.infer<typeof RowSchema>;
-
 export async function selectAppointmentSituation(
   dbContext: DbContext,
   args: ArgType,
-): Promise<RowType> {
+): Promise<AppointmentSituation> {
   const { dogId, vetId } = ArgSchema.parse(args);
   const sql = `
   WITH
@@ -59,6 +54,9 @@ export async function selectAppointmentSituation(
     mCountMatchingPreferences,
     mCountPendingAppointments
   `;
-  const res = await dbQuery<RowType>(dbContext, sql, [dogId, vetId]);
-  return RowSchema.parse(res.rows[0]);
+  const res = await dbQuery<AppointmentSituation>(dbContext, sql, [
+    dogId,
+    vetId,
+  ]);
+  return AppointmentSituationSchema.parse(res.rows[0]);
 }

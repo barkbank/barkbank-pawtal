@@ -1,15 +1,11 @@
-import { AppointmentStatusSchema } from "./appointment-status";
-import { SpecifiedDogGenderSchema } from "./dog-gender";
+import { BarkAppointmentSchema } from "./bark-appointment";
 import { z } from "zod";
 
-export const EncryptedBarkAppointmentSchema = z.object({
-  appointmentId: z.string(),
-  appointmentStatus: AppointmentStatusSchema,
-  vetId: z.string(),
-  dogId: z.string(),
+export const EncryptedBarkAppointmentSchema = BarkAppointmentSchema.omit({
+  dogName: true,
+  ownerName: true,
+}).extend({
   dogEncryptedOii: z.string(),
-  dogBreed: z.string(),
-  dogGender: SpecifiedDogGenderSchema,
   userEncryptedPii: z.string(),
 });
 

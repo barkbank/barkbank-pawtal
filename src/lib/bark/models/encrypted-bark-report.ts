@@ -1,5 +1,9 @@
-import { BarkReport } from "./bark-report";
+import { z } from "zod";
+import { EncryptedBarkReportDataSchema } from "./encrypted-bark-report-data";
+import { BarkReportMetadataSchema } from "./bark-report-metadata";
 
-export type EncryptedBarkReport = Omit<BarkReport, "ineligibilityReason"> & {
-  encryptedIneligibilityReason: string;
-};
+export const EncryptedBarkReportSchema = EncryptedBarkReportDataSchema.merge(
+  BarkReportMetadataSchema,
+);
+
+export type EncryptedBarkReport = z.infer<typeof EncryptedBarkReportSchema>;

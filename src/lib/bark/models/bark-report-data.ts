@@ -4,6 +4,9 @@ import {
 } from "@/lib/data/db-enums";
 import { z } from "zod";
 
+/**
+ * The data part of a report. These are values provided by a vet.
+ */
 export const BarkReportDataSchema = z.object({
   visitTime: z.date(),
   dogWeightKg: z.number(),

@@ -1,10 +1,9 @@
-import { BarkReportData } from "./bark-report-data";
+import { z } from "zod";
+import { BarkReportDataSchema } from "./bark-report-data";
+import { BarkReportMetadataSchema } from "./bark-report-metadata";
 
-export type BarkReport = BarkReportData & {
-  reportId: string;
-  reportCreationTime: Date;
-  reportModificationTime: Date;
-  appointmentId: string;
-  dogId: string;
-  vetId: string;
-};
+export const BarkReportSchema = BarkReportDataSchema.merge(
+  BarkReportMetadataSchema,
+);
+
+export type BarkReport = z.infer<typeof BarkReportSchema>;

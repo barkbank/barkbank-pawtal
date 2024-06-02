@@ -1,5 +1,8 @@
 import { DbContext, dbQuery } from "@/lib/data/db-utils";
-import { EncryptedBarkReport } from "../models/encrypted-bark-report";
+import {
+  EncryptedBarkReport,
+  EncryptedBarkReportSchema,
+} from "../models/encrypted-bark-report";
 
 export async function selectReport(
   dbContext: DbContext,
@@ -36,5 +39,5 @@ export async function selectReport(
   if (res.rows.length === 0) {
     return null;
   }
-  return res.rows[0];
+  return EncryptedBarkReportSchema.parse(res.rows[0]);
 }
