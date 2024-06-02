@@ -1,4 +1,4 @@
-import { DOG_GENDER } from "./dog-gender";
+import { SpecifiedDogGenderSchema } from "./dog-gender";
 import { z } from "zod";
 
 export const BarkAppointmentSchema = z.object({
@@ -7,14 +7,8 @@ export const BarkAppointmentSchema = z.object({
   dogId: z.string(),
   dogName: z.string(),
   dogBreed: z.string(),
+  dogGender: SpecifiedDogGenderSchema,
+  ownerName: z.string(),
 });
 
-export type BarkAppointment = {
-  appointmentId: string;
-  vetId: string;
-  dogId: string;
-  dogName: string;
-  dogBreed: string;
-  dogGender: typeof DOG_GENDER.MALE | typeof DOG_GENDER.FEMALE;
-  ownerName: string;
-};
+export type BarkAppointment = z.infer<typeof BarkAppointmentSchema>;
