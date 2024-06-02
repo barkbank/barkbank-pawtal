@@ -6,17 +6,31 @@ import { BarkAppointment } from "@/lib/bark/models/bark-appointment";
 import { postCancelAppointment } from "../_actions/post-cancel-appointment";
 import { useRouter } from "next/navigation";
 import { RoutePath } from "@/lib/route-path";
+import { useToast } from "@/components/ui/use-toast";
+import { CODE } from "@/lib/utilities/bark-code";
 
 export function CancelReportForm(props: { appointment: BarkAppointment }) {
   const router = useRouter();
+  const { toast } = useToast();
   const { appointment } = props;
   const { appointmentId, dogName, dogBreed, dogGender, ownerName } =
     appointment;
 
   const onConfirm = async () => {
     const res = await postCancelAppointment({ appointmentId });
-    // WIP: toast if res is not OK
-    router.push(RoutePath.VET_APPOINTMENTS_LIST);
+    if (res === CODE.ERROR_NOT_LOGGED_IN) {
+      router.push(RoutePath.VET_LOGIN_PAGE);
+    }
+    if (res !== CODE.OK) {
+      toast({
+        title: "Error",
+        description: `Code: ${res}`,
+        variant: "brandError",
+      });
+    }
+    if (res === CODE.OK) {
+      router.push(RoutePath.VET_APPOINTMENTS_LIST);
+    }
   };
 
   const onDoNotCancel = async () => {
