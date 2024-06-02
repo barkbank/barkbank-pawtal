@@ -4,8 +4,9 @@ import { givenAppointment, givenVet } from "../_given";
 import { CODE } from "@/lib/utilities/bark-code";
 import { opFetchAppointment } from "@/lib/bark/operations/op-fetch-appointment";
 import { APPOINTMENT_STATUS } from "@/lib/bark/models/appointment-status";
+import { opSubmitReport } from "@/lib/bark/operations/op-submit-report";
+import { mockReportData } from "../_mocks";
 
-// TODO: Test should return ERROR_ILLEGAL_STATE when appointment status is not PENDING.
 describe("opCancelAppointment", () => {
   it("should return ERROR_APPOINTMENT_NOT_FOUND when the appointment does not exist", async () => {
     await withBarkContext(async ({ context }) => {
@@ -49,6 +50,35 @@ describe("opCancelAppointment", () => {
       expect(appointment.appointmentStatus).toEqual(
         APPOINTMENT_STATUS.CANCELLED,
       );
+    });
+  });
+  it("should return ERROR_APPOINTMENT_IS_NOT_PENDING when appointment status is not PENDING (already submitted)", async () => {
+    await withBarkContext(async ({ context }) => {
+      const { appointmentId, vetId } = await givenAppointment(context);
+      await opSubmitReport(context, {
+        appointmentId,
+        reportData: mockReportData(),
+        actorVetId: vetId,
+      });
+      const res = await opCancelAppointment(context, {
+        appointmentId,
+        actorVetId: vetId,
+      });
+      expect(res).toEqual(CODE.ERROR_APPOINTMENT_IS_NOT_PENDING);
+    });
+  });
+  it("should return ERROR_APPOINTMENT_IS_NOT_PENDING when appointment status is not PENDING (already cancelled)", async () => {
+    await withBarkContext(async ({ context }) => {
+      const { appointmentId, vetId } = await givenAppointment(context);
+      await opCancelAppointment(context, {
+        appointmentId,
+        actorVetId: vetId,
+      });
+      const res = await opCancelAppointment(context, {
+        appointmentId,
+        actorVetId: vetId,
+      });
+      expect(res).toEqual(CODE.ERROR_APPOINTMENT_IS_NOT_PENDING);
     });
   });
 });

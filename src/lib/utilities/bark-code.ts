@@ -98,6 +98,12 @@ export const CODE = {
   ERROR_APPOINTMENT_ALREADY_EXISTS: "ERROR_APPOINTMENT_ALREADY_EXISTS",
 
   /**
+   * When attempting to cancel or submit-report for an appointment that is not
+   * in the PENDING state.
+   */
+  ERROR_APPOINTMENT_IS_NOT_PENDING: "ERROR_APPOINTMENT_IS_NOT_PENDING",
+
+  /**
    * When a database query failed.
    */
   DB_QUERY_FAILURE: "DB_QUERY_FAILURE",
