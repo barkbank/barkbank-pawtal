@@ -47,7 +47,7 @@ describe("opSubmitReport", () => {
       expect(hasExistingAppointment).toBe(false);
     });
   });
-  it("should return UNAUTHORIZED when the vet does not own the appointment", async () => {
+  it("should return ERROR_NOT_ALLOWED when the vet does not own the appointment", async () => {
     await withBarkContext(async ({ context }) => {
       const a1 = await givenAppointment(context, { idx: 1 });
       const v2 = await givenVet(context, { vetIdx: 2 });
@@ -57,7 +57,7 @@ describe("opSubmitReport", () => {
         reportData,
         actorVetId: v2.vetId,
       });
-      expect(error).toEqual(CODE.UNAUTHORIZED);
+      expect(error).toEqual(CODE.ERROR_NOT_ALLOWED);
       expect(result).toBeUndefined();
     });
   });

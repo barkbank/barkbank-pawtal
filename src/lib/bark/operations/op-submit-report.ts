@@ -24,7 +24,7 @@ export async function opSubmitReport(
   Result<
     { reportId: string },
     | typeof CODE.ERROR_APPOINTMENT_NOT_FOUND
-    | typeof CODE.UNAUTHORIZED
+    | typeof CODE.ERROR_NOT_ALLOWED
     | typeof CODE.FAILED
   >
 > {
@@ -45,7 +45,7 @@ export async function opSubmitReport(
       return Err(CODE.ERROR_APPOINTMENT_NOT_FOUND);
     }
     if (ids.vetId !== actorVetId) {
-      return Err(CODE.UNAUTHORIZED);
+      return Err(CODE.ERROR_NOT_ALLOWED);
     }
     const { reportId } = await insertReport(conn, {
       appointmentId,

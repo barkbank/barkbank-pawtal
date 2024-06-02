@@ -17,7 +17,7 @@ export async function postBarkReportData(args: {
     { reportId: string },
     | typeof CODE.ERROR_NOT_LOGGED_IN
     | typeof CODE.ERROR_APPOINTMENT_NOT_FOUND
-    | typeof CODE.UNAUTHORIZED
+    | typeof CODE.ERROR_NOT_ALLOWED
     | typeof CODE.FAILED
   >
 > {

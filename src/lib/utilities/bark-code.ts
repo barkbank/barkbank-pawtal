@@ -36,7 +36,7 @@ export const CODE = {
   /**
    * When an actor is not allowed to execute an operation.
    */
-  UNAUTHORIZED: "UNAUTHORIZED",
+  ERROR_NOT_ALLOWED: "ERROR_NOT_ALLOWED",
 
   /**
    * When a specified user cannot be found.
