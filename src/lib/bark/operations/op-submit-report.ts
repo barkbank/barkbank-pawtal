@@ -5,9 +5,9 @@ import { dbBegin, dbCommit, dbRelease, dbRollback } from "@/lib/data/db-utils";
 import { selectAppointmentIds } from "../queries/select-appointment-ids";
 import { insertReport } from "../queries/insert-report";
 import { updateAppointment } from "../queries/update-appointment";
-import { CALL_OUTCOME } from "@/lib/data/db-enums";
 import { BarkContext } from "@/lib/bark/bark-context";
 import { toEncryptedBarkReportData } from "../mappers/to-encrypted-bark-report-data";
+import { APPOINTMENT_STATUS } from "../models/appointment-status";
 
 /**
  * Submits a medical report for a specified appointment and progresses that
@@ -53,7 +53,7 @@ export async function opSubmitReport(
     });
     await updateAppointment(conn, {
       appointmentId,
-      appointmentStatus: CALL_OUTCOME.REPORTED,
+      appointmentStatus: APPOINTMENT_STATUS.REPORTED,
     });
     await dbCommit(conn);
     return Ok({ reportId });

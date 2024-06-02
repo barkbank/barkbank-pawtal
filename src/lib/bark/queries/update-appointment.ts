@@ -1,5 +1,5 @@
-import { CALL_OUTCOME } from "@/lib/data/db-enums";
 import { DbContext, dbQuery } from "@/lib/data/db-utils";
+import { APPOINTMENT_STATUS } from "../models/appointment-status";
 
 /**
  * Updates an appointment status to REPORTED or CANCELLED.
@@ -9,8 +9,8 @@ export async function updateAppointment(
   args: {
     appointmentId: string;
     appointmentStatus:
-      | typeof CALL_OUTCOME.REPORTED
-      | typeof CALL_OUTCOME.CANCELLED;
+      | typeof APPOINTMENT_STATUS.REPORTED
+      | typeof APPOINTMENT_STATUS.CANCELLED;
   },
 ): Promise<void> {
   const { appointmentId, appointmentStatus } = args;
