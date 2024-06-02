@@ -3,9 +3,9 @@ import {
   ParticipationStatus,
   ProfileStatus,
   ServiceStatus,
-  DogGender,
   UserResidency,
 } from "../data/db-enums";
+import { DogGender } from "../bark/models/dog-gender";
 import { DogAppointment } from "../dog/dog-models";
 import { DogStatuses } from "../dog/dog-models";
 

@@ -3,8 +3,8 @@ import { BarkH1 } from "@/components/bark/bark-typography";
 import { Separator } from "@/components/ui/separator";
 import APP from "@/lib/app";
 import { getAuthenticatedVetActor } from "@/lib/auth";
-import { BarkAppointment } from "@/lib/bark/bark-models";
-import { opFetchAppointmentsByVetId } from "@/lib/bark/operations/op-fetch-appointments-by-vet-id";
+import { BarkAppointment } from "@/lib/bark/models/bark-appointment";
+import { opFetchPendingAppointmentsByVetId } from "@/lib/bark/operations/op-fetch-pending-appointments-by-vet-id";
 import { RoutePath } from "@/lib/route-path";
 import { CODE } from "@/lib/utilities/bark-code";
 import { redirect } from "next/navigation";
@@ -60,7 +60,7 @@ export default async function Page() {
   const context = await APP.getBarkContext();
   const { vetId } = actor.getParams();
 
-  const { result, error } = await opFetchAppointmentsByVetId(context, {
+  const { result, error } = await opFetchPendingAppointmentsByVetId(context, {
     vetId,
   });
   if (error === CODE.FAILED) {

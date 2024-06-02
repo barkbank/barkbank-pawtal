@@ -12,7 +12,8 @@ import {
 } from "@/components/ui/table";
 import clsx from "clsx";
 import { BARK_UTC } from "@/lib/utilities/bark-time";
-import { DOG_GENDER, YES_NO_UNKNOWN } from "@/lib/data/db-enums";
+import { YES_NO_UNKNOWN } from "@/lib/data/db-enums";
+import { DOG_GENDER } from "@/lib/bark/models/dog-gender";
 import { IncompleteProfile } from "@/lib/admin/admin-models";
 
 function DataRow(props: { profile: IncompleteProfile }) {

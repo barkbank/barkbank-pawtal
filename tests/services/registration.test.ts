@@ -3,11 +3,8 @@ import { withDb } from "../_db_helpers";
 import { RegistrationRequest } from "@/lib/services/registration";
 import { RegistrationServiceConfig } from "@/lib/services/registration";
 import { RegistrationService } from "@/lib/services/registration";
-import {
-  DOG_ANTIGEN_PRESENCE,
-  DOG_GENDER,
-  YES_NO_UNKNOWN,
-} from "@/lib/data/db-enums";
+import { DOG_ANTIGEN_PRESENCE, YES_NO_UNKNOWN } from "@/lib/data/db-enums";
+import { DOG_GENDER } from "@/lib/bark/models/dog-gender";
 import { USER_RESIDENCY } from "@/lib/data/db-enums";
 import { guaranteed } from "@/lib/utilities/bark-utils";
 import { BARK_UTC } from "@/lib/utilities/bark-time";

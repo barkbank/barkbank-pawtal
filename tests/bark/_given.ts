@@ -1,7 +1,8 @@
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import { getDogMapper, insertDog, insertUser, insertVet } from "../_fixtures";
 import { BarkTestContext } from "./_context";
-import { DOG_GENDER, DogGender, YES_NO_UNKNOWN } from "@/lib/data/db-enums";
+import { YES_NO_UNKNOWN } from "@/lib/data/db-enums";
+import { DOG_GENDER, DogGender } from "@/lib/bark/models/dog-gender";
 import { dbQuery } from "@/lib/data/db-utils";
 import { BarkContext } from "@/lib/bark/bark-context";
 import { opRecordAppointmentCallOutcome } from "@/lib/bark/operations/op-record-appointment-call-outcome";
@@ -79,7 +80,7 @@ export async function givenVet(
 
 export async function givenAppointment(
   context: BarkContext,
-  options?: { idx?: number },
+  options?: { idx?: number; existingVetId?: string },
 ): Promise<{
   appointmentId: string;
   dogId: string;
@@ -88,8 +89,9 @@ export async function givenAppointment(
   dogBreed: string;
   dogGender: DogGender;
 }> {
-  const { idx } = options ?? {};
-  const { vetId } = await givenVet(context, { vetIdx: idx });
+  const { idx, existingVetId } = options ?? {};
+  const vetId =
+    existingVetId ?? (await givenVet(context, { vetIdx: idx })).vetId;
   const { dogId, dogName, dogBreed, dogGender } = await givenDog(context, {
     dogIdx: idx,
     preferredVetId: vetId,

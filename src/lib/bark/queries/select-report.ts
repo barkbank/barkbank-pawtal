@@ -1,5 +1,5 @@
 import { DbContext, dbQuery } from "@/lib/data/db-utils";
-import { EncryptedBarkReport } from "../bark-models";
+import { EncryptedBarkReport } from "../models/encrypted-bark-report";
 
 export async function selectReport(
   dbContext: DbContext,

@@ -1,5 +1,8 @@
 import { DbContext, dbQuery } from "@/lib/data/db-utils";
-import { BarkAppointmentIds, BarkAppointmentIdsSchema } from "../bark-models";
+import {
+  BarkAppointmentIds,
+  BarkAppointmentIdsSchema,
+} from "../models/bark-appointment-ids";
 
 export async function selectAppointmentIds(
   dbContext: DbContext,

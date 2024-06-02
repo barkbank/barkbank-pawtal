@@ -1,4 +1,5 @@
-import { DogGender, YesNoUnknown } from "../data/db-enums";
+import { YesNoUnknown } from "../data/db-enums";
+import { DogGender } from "../bark/models/dog-gender";
 
 export type AvailableDog = {
   dogId: string;

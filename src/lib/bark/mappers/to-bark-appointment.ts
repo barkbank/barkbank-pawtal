@@ -1,5 +1,6 @@
 import { BarkContext } from "../bark-context";
-import { BarkAppointment, EncryptedBarkAppointment } from "../bark-models";
+import { EncryptedBarkAppointment } from "../models/encrypted-bark-appointment";
+import { BarkAppointment } from "../models/bark-appointment";
 import { toDogOii } from "./to-dog-oii";
 import { toUserPii } from "./to-user-pii";
 

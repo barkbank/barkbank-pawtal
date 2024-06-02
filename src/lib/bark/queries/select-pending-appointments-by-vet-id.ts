@@ -2,9 +2,9 @@ import { DbContext, dbQuery } from "@/lib/data/db-utils";
 import {
   EncryptedBarkAppointment,
   EncryptedBarkAppointmentSchema,
-} from "../bark-models";
+} from "../models/encrypted-bark-appointment";
 
-export async function selectAppointmentsByVetId(
+export async function selectPendingAppointmentsByVetId(
   dbContext: DbContext,
   args: { vetId: string },
 ): Promise<EncryptedBarkAppointment[]> {
@@ -12,6 +12,7 @@ export async function selectAppointmentsByVetId(
   const sql = `
   SELECT
     tCall.call_id as "appointmentId",
+    'PENDING' as "appointmentStatus",
     tCall.dog_id as "dogId",
     tCall.vet_id as "vetId",
     tDog.dog_breed as "dogBreed",

@@ -3,12 +3,12 @@ import { MyDog } from "../user-models";
 import { DogAppointment } from "@/lib/dog/dog-models";
 import { UserActor } from "../user-actor";
 import {
-  DogGender,
   MedicalStatus,
   ParticipationStatus,
   ProfileStatus,
   ServiceStatus,
 } from "@/lib/data/db-enums";
+import { DogGender } from "@/lib/bark/models/dog-gender";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { CODE } from "@/lib/utilities/bark-code";
 import { DogStatuses } from "@/lib/dog/dog-models";

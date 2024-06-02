@@ -2,11 +2,8 @@ import { dbResultQuery } from "@/lib/data/db-utils";
 import { UserActor } from "../user-actor";
 import { DogProfile } from "@/lib/dog/dog-models";
 import { Err, Ok, Result } from "@/lib/utilities/result";
-import {
-  DogAntigenPresence,
-  DogGender,
-  YesNoUnknown,
-} from "@/lib/data/db-enums";
+import { DogAntigenPresence, YesNoUnknown } from "@/lib/data/db-enums";
+import { DogGender } from "@/lib/bark/models/dog-gender";
 import { CODE } from "@/lib/utilities/bark-code";
 
 export async function getDogProfile(

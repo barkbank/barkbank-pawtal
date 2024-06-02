@@ -1,7 +1,8 @@
 import { dbQuery } from "@/lib/data/db-utils";
 import { VetActor } from "../vet-actor";
 import { AvailableDog } from "../vet-models";
-import { DogGender, YesNoUnknown } from "@/lib/data/db-enums";
+import { YesNoUnknown } from "@/lib/data/db-enums";
+import { DogGender } from "@/lib/bark/models/dog-gender";
 
 /**
  * Get dogs that are available for scheduling.
