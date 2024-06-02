@@ -48,6 +48,7 @@ const AppointmentCard = (props: { appointment: BarkAppointment }) => {
           Cancel
         </BarkButton>
       </div>
+      <pre>WIP: {JSON.stringify(props.appointment, null, 2)}</pre>
     </div>
   );
 };
