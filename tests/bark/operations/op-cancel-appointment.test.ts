@@ -5,6 +5,7 @@ import { CODE } from "@/lib/utilities/bark-code";
 import { opFetchAppointment } from "@/lib/bark/operations/op-fetch-appointment";
 import { APPOINTMENT_STATUS } from "@/lib/bark/models/appointment-status";
 
+// TODO: Test should return ERROR_ILLEGAL_STATE when appointment status is not PENDING.
 describe("opCancelAppointment", () => {
   it("should return ERROR_APPOINTMENT_NOT_FOUND when the appointment does not exist", async () => {
     await withBarkContext(async ({ context }) => {

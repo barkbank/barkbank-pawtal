@@ -4,6 +4,8 @@ import { getAuthenticatedVetActor } from "@/lib/auth";
 import { opFetchAppointment } from "@/lib/bark/operations/op-fetch-appointment";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
+import { CancelReportForm } from "../../_components/cancel-report-form";
+import { APPOINTMENT_STATUS } from "@/lib/bark/models/appointment-status";
 
 export default async function Page(props: {
   params: { appointmentId: string };
@@ -32,6 +34,13 @@ export default async function Page(props: {
       </div>
     );
   }
+  if (appointment.appointmentStatus !== APPOINTMENT_STATUS.PENDING) {
+    redirect(RoutePath.VET_APPOINTMENTS_LIST);
+  }
 
-  return <div>Stub page for cancelling appointment {appointmentId}</div>;
+  return (
+    <div className="m-3">
+      <CancelReportForm appointment={appointment} />
+    </div>
+  );
 }

@@ -89,6 +89,7 @@ export function SubmitReportForm(props: { appointment: BarkAppointment }) {
     },
   });
   const router = useRouter();
+
   const onSubmit = async (values: SubmitFormType) => {
     const reportData = toBarkReportData(values);
     console.log(reportData);
@@ -102,6 +103,11 @@ export function SubmitReportForm(props: { appointment: BarkAppointment }) {
     }
     router.push(RoutePath.VET_APPOINTMENTS_LIST);
   };
+
+  const onCancel = async () => {
+    router.push(RoutePath.VET_APPOINTMENTS_LIST);
+  };
+
   return (
     <div>
       <p>Submitting report for appointment {appointmentId}.</p>
@@ -223,9 +229,16 @@ export function SubmitReportForm(props: { appointment: BarkAppointment }) {
           type="text"
         />
         <BarkFormError form={form} />
-        <div className="mt-6">
-          <BarkButton variant="brand" type="submit">
-            Submit
+        <div className="mt-6 flex w-full flex-col gap-3 md:flex-row">
+          <BarkButton className="w-full md:w-40" variant="brand" type="submit">
+            Submit Report
+          </BarkButton>
+          <BarkButton
+            className="w-full md:w-40"
+            variant="brandInverse"
+            onClick={onCancel}
+          >
+            Cancel
           </BarkButton>
         </div>
       </BarkForm>
