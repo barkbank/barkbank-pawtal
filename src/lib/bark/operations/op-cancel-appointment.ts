@@ -12,6 +12,7 @@ export async function opCancelAppointment(
   | typeof CODE.OK
   | typeof CODE.ERROR_APPOINTMENT_NOT_FOUND
   | typeof CODE.ERROR_NOT_ALLOWED
+  | typeof CODE.ERROR_APPOINTMENT_IS_NOT_PENDING
   | typeof CODE.FAILED
 > {
   const { dbPool } = context;
@@ -25,6 +26,9 @@ export async function opCancelAppointment(
     }
     if (res.vetId !== actorVetId) {
       return CODE.ERROR_NOT_ALLOWED;
+    }
+    if (res.appointmentStatus !== APPOINTMENT_STATUS.PENDING) {
+      return CODE.ERROR_APPOINTMENT_IS_NOT_PENDING;
     }
     await updateAppointment(conn, {
       appointmentId,

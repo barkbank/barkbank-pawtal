@@ -11,12 +11,16 @@ export async function selectAppointmentIds(
   const { appointmentId } = args;
   const sql = `
   SELECT
-    call_id as "appointmentId",
-    dog_id as "dogId",
-    vet_id as "vetId"
-  FROM calls
+    tCall.call_id as "appointmentId",
+    CASE
+      WHEN tCall.call_outcome = 'APPOINTMENT' THEN 'PENDING'
+      ELSE tCall.call_outcome::text
+    END as "appointmentStatus",
+    tCall.dog_id as "dogId",
+    tCall.vet_id as "vetId"
+  FROM calls as tCall
   WHERE call_id = $1
-  AND call_outcome = 'APPOINTMENT'
+  AND call_outcome IN ('APPOINTMENT', 'REPORTED', 'CANCELLED')
   `;
   const res = await dbQuery<BarkAppointmentIds>(dbContext, sql, [
     appointmentId,

@@ -25,6 +25,7 @@ export async function opSubmitReport(
     { reportId: string },
     | typeof CODE.ERROR_APPOINTMENT_NOT_FOUND
     | typeof CODE.ERROR_NOT_ALLOWED
+    | typeof CODE.ERROR_APPOINTMENT_IS_NOT_PENDING
     | typeof CODE.FAILED
   >
 > {
@@ -38,14 +39,17 @@ export async function opSubmitReport(
     );
 
     await dbBegin(conn);
-    const ids = await selectAppointmentIds(conn, {
+    const res = await selectAppointmentIds(conn, {
       appointmentId,
     });
-    if (ids === null) {
+    if (res === null) {
       return Err(CODE.ERROR_APPOINTMENT_NOT_FOUND);
     }
-    if (ids.vetId !== actorVetId) {
+    if (res.vetId !== actorVetId) {
       return Err(CODE.ERROR_NOT_ALLOWED);
+    }
+    if (res.appointmentStatus !== APPOINTMENT_STATUS.PENDING) {
+      return Err(CODE.ERROR_APPOINTMENT_IS_NOT_PENDING);
     }
     const { reportId } = await insertReport(conn, {
       appointmentId,
