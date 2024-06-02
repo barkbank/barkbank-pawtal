@@ -1,5 +1,3 @@
-"use server";
-
 import { BarkNavRoute } from "@/components/bark/navigation/bark-nav-route";
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { IMG_PATH } from "@/lib/image-path";

@@ -1,5 +1,3 @@
-"use server";
-
 import APP from "@/lib/app";
 import DonorForm from "./_components/donor-form";
 import { AccountType } from "@/lib/auth-models";

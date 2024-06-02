@@ -1,5 +1,3 @@
-"use server";
-
 import { RoutePath } from "@/lib/route-path";
 import BarkLoginPage from "@/components/bark/login/bark-login-page";
 import { AccountType } from "@/lib/auth-models";

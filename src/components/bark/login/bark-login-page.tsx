@@ -1,5 +1,3 @@
-"use server";
-
 import { isLoggedIn } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { BarkH1, BarkH2 } from "@/components/bark/bark-typography";

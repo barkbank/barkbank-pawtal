@@ -1,5 +1,3 @@
-"use server";
-
 import { RoutePath } from "@/lib/route-path";
 import EditDogProfileForm from "./_components/edit-dog-profile-form";
 import APP from "@/lib/app";
