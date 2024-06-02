@@ -6,7 +6,6 @@ import { opSubmitReport } from "@/lib/bark/operations/op-submit-report";
 import { opRecordAppointmentCallOutcome } from "@/lib/bark/operations/op-record-appointment-call-outcome";
 import { selectAppointmentSituation } from "@/lib/bark/queries/select-appointment-situation";
 
-// TODO: Test should return ERROR_ILLEGAL_STATE when appointment status is not PENDING.
 describe("opSubmitReport", () => {
   it("should return ERROR_APPOINTMENT_NOT_FOUND when appointment cannot be found", async () => {
     await withBarkContext(async ({ context }) => {
@@ -61,5 +60,8 @@ describe("opSubmitReport", () => {
       expect(error).toEqual(CODE.ERROR_NOT_ALLOWED);
       expect(result).toBeUndefined();
     });
+  });
+  it("WIP: should return ERROR_APPOINTMENT_IS_NOT_PENDING when appointment status is not PENDING", async () => {
+    await withBarkContext(async ({ context }) => {});
   });
 });
