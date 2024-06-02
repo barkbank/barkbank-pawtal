@@ -594,6 +594,7 @@ function generateAccounts() {
 
 function deleteData() {
   return Promise.resolve()
+    .then(() => doQuery(`delete from reports`, []))
     .then(() => doQuery(`delete from calls`, []))
     .then(() => doQuery(`delete from dogs`, []))
     .then(() => doQuery(`delete from users`, []))
