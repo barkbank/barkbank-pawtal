@@ -2,7 +2,7 @@ import { Err, Ok, Result } from "@/lib/utilities/result";
 import { CODE } from "@/lib/utilities/bark-code";
 import { BarkReportData } from "../models/bark-report-data";
 import { dbBegin, dbCommit, dbRelease, dbRollback } from "@/lib/data/db-utils";
-import { selectAppointmentIds } from "../queries/select-appointment-ids";
+import { selectAppointmentMetadata } from "../queries/select-appointment-metadata";
 import { insertReport } from "../queries/insert-report";
 import { updateAppointment } from "../queries/update-appointment";
 import { BarkContext } from "@/lib/bark/bark-context";
@@ -39,7 +39,7 @@ export async function opSubmitReport(
     );
 
     await dbBegin(conn);
-    const res = await selectAppointmentIds(conn, {
+    const res = await selectAppointmentMetadata(conn, {
       appointmentId,
     });
     if (res === null) {

@@ -1,13 +1,13 @@
 import { DbContext, dbQuery } from "@/lib/data/db-utils";
 import {
-  BarkAppointmentIds,
-  BarkAppointmentIdsSchema,
-} from "../models/bark-appointment-ids";
+  BarkAppointmentMetadata,
+  BarkAppointmentMetadataSchema,
+} from "../models/bark-appointment-metadata";
 
-export async function selectAppointmentIds(
+export async function selectAppointmentMetadata(
   dbContext: DbContext,
   args: { appointmentId: string },
-): Promise<BarkAppointmentIds | null> {
+): Promise<BarkAppointmentMetadata | null> {
   const { appointmentId } = args;
   const sql = `
   SELECT
@@ -22,11 +22,11 @@ export async function selectAppointmentIds(
   WHERE call_id = $1
   AND call_outcome IN ('APPOINTMENT', 'REPORTED', 'CANCELLED')
   `;
-  const res = await dbQuery<BarkAppointmentIds>(dbContext, sql, [
+  const res = await dbQuery<BarkAppointmentMetadata>(dbContext, sql, [
     appointmentId,
   ]);
   if (res.rows.length === 0) {
     return null;
   }
-  return BarkAppointmentIdsSchema.parse(res.rows[0]);
+  return BarkAppointmentMetadataSchema.parse(res.rows[0]);
 }

@@ -3,7 +3,7 @@ import { BarkContext } from "../bark-context";
 import { dbBegin, dbCommit, dbRelease, dbRollback } from "@/lib/data/db-utils";
 import { updateAppointment } from "../queries/update-appointment";
 import { APPOINTMENT_STATUS } from "../models/appointment-status";
-import { selectAppointmentIds } from "../queries/select-appointment-ids";
+import { selectAppointmentMetadata } from "../queries/select-appointment-metadata";
 
 export async function opCancelAppointment(
   context: BarkContext,
@@ -20,7 +20,7 @@ export async function opCancelAppointment(
   const conn = await dbPool.connect();
   try {
     await dbBegin(conn);
-    const res = await selectAppointmentIds(conn, { appointmentId });
+    const res = await selectAppointmentMetadata(conn, { appointmentId });
     if (res === null) {
       return CODE.ERROR_APPOINTMENT_NOT_FOUND;
     }
