@@ -1,10 +1,13 @@
-import { BarkReportData } from "./bark-report-data";
+import { z } from "zod";
+import { BarkReportDataSchema } from "./bark-report-data";
 
-export type BarkReport = BarkReportData & {
-  reportId: string;
-  reportCreationTime: Date;
-  reportModificationTime: Date;
-  appointmentId: string;
-  dogId: string;
-  vetId: string;
-};
+export const BarkReportSchema = BarkReportDataSchema.extend({
+  reportId: z.string(),
+  reportCreationTime: z.date(),
+  reportModificationTime: z.date(),
+  appointmentId: z.string(),
+  dogId: z.string(),
+  vetId: z.string(),
+});
+
+export type BarkReport = z.infer<typeof BarkReportSchema>;
