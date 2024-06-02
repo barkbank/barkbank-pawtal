@@ -26,21 +26,36 @@ export class RoutePath {
   static readonly VET_SCHEDULE_APPOINTMENTS = "/vet/schedule";
 
   static readonly VET_APPOINTMENTS_LIST = "/vet/appointments/list";
+
   static readonly VET_APPOINTMENTS_LIST_CANCELLED =
     "/vet/appointments/list-cancelled";
+
   static readonly VET_APPOINTMENTS_SUBMIT = (appointmentId: string) =>
     `/vet/appointments/submit/${appointmentId}`;
+
   static readonly VET_APPOINTMENTS_CANCEL = (appointmentId: string) =>
     `/vet/appointments/cancel/${appointmentId}`;
 
   static readonly VET_APPOINTMENTS_SUBMIT_REGEX =
     /.*[/]vet[/]appointments[/]submit[/][0-9]+/;
+
   static readonly VET_APPOINTMENTS_CANCEL_REGEX =
     /.*[/]vet[/]appointments[/]cancel[/][0-9]+/;
 
   static readonly VET_APPOINTMENTS = "/vet/appointments";
 
   static readonly VET_REPORTS = "/vet/reports";
+  static readonly VET_REPORTS_LIST = "/vet/reports/list";
+
+  static readonly VET_REPORTS_VIEW = (reportId: string) =>
+    `/vet/reports/view/${reportId}`;
+
+  static readonly VET_REPORTS_EDIT = (reportId: string) =>
+    `/vet/reports/edit/${reportId}`;
+
+  static readonly VET_REPORTS_VIEW_REGEX = /.*[/]vet[/]reports[/]view[/][0-9]+/;
+  static readonly VET_REPORTS_EDIT_REGEX = /.*[/]vet[/]reports[/]edit[/][0-9]+/;
+
   static readonly VET_DEFAULT_LOGGED_IN_PAGE =
     RoutePath.VET_SCHEDULE_APPOINTMENTS;
 
