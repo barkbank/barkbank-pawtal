@@ -1,6 +1,5 @@
 import { BarkReportData } from "./bark-report-data";
 
-
 export type BarkReport = BarkReportData & {
   reportId: string;
   reportCreationTime: Date;

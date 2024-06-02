@@ -1,7 +1,6 @@
 import { DOG_GENDER } from "@/lib/data/db-enums";
 import { z } from "zod";
 
-
 export const EncryptedBarkAppointmentSchema = z.object({
   appointmentId: z.string(),
   vetId: z.string(),

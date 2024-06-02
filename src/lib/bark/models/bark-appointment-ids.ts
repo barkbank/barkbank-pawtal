@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-
 export const BarkAppointmentIdsSchema = z.object({
   appointmentId: z.string(),
   vetId: z.string(),

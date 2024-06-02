@@ -1,6 +1,5 @@
 import { DOG_GENDER } from "@/lib/data/db-enums";
 
-
 export type BarkAppointment = {
   appointmentId: string;
   vetId: string;
