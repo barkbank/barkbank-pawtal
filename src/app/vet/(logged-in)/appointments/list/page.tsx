@@ -3,7 +3,7 @@ import { BarkH1 } from "@/components/bark/bark-typography";
 import { Separator } from "@/components/ui/separator";
 import APP from "@/lib/app";
 import { getAuthenticatedVetActor } from "@/lib/auth";
-import { BarkAppointment } from "@/lib/bark/bark-models";
+import { BarkAppointment } from "@/lib/bark/models/bark-appointment";
 import { opFetchAppointmentsByVetId } from "@/lib/bark/operations/op-fetch-appointments-by-vet-id";
 import { RoutePath } from "@/lib/route-path";
 import { CODE } from "@/lib/utilities/bark-code";

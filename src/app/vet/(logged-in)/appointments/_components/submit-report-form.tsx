@@ -16,7 +16,7 @@ import {
   BarkFormSelect,
   BarkFormTextArea,
 } from "@/components/bark/bark-form";
-import { BarkAppointment } from "@/lib/bark/bark-models";
+import { BarkAppointment } from "@/lib/bark/models/bark-appointment";
 import {
   BarkReportData,
   BarkReportDataSchema,

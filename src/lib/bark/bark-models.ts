@@ -2,24 +2,6 @@ import { z } from "zod";
 import { DOG_GENDER } from "../data/db-enums";
 import { BarkReportData } from "./models/bark-report-data";
 
-export const BarkAppointmentIdsSchema = z.object({
-  appointmentId: z.string(),
-  vetId: z.string(),
-  dogId: z.string(),
-});
-
-export type BarkAppointmentIds = z.infer<typeof BarkAppointmentIdsSchema>;
-
-export type BarkAppointment = {
-  appointmentId: string;
-  vetId: string;
-  dogId: string;
-  dogName: string;
-  dogBreed: string;
-  dogGender: typeof DOG_GENDER.MALE | typeof DOG_GENDER.FEMALE;
-  ownerName: string;
-};
-
 // TODO: Useful to define all models as Zod schemas. Reorganise these models accordingly.
 export const EncryptedBarkAppointmentSchema = z.object({
   appointmentId: z.string(),

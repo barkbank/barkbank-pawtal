@@ -1,7 +1,7 @@
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { BarkContext } from "../bark-context";
 import { CODE } from "@/lib/utilities/bark-code";
-import { BarkAppointment } from "../bark-models";
+import { BarkAppointment } from "../models/bark-appointment";
 import { selectAppointmentsByVetId } from "../queries/select-appointments-by-vet-id";
 import { toBarkAppointment } from "../mappers/to-bark-appointment";
 
