@@ -5,6 +5,7 @@ import { givenAppointment, givenDog, givenVet } from "../_given";
 import { opSubmitReport } from "@/lib/bark/operations/op-submit-report";
 import { opRecordAppointmentCallOutcome } from "@/lib/bark/operations/op-record-appointment-call-outcome";
 import { selectAppointmentSituation } from "@/lib/bark/queries/select-appointment-situation";
+import { opCancelAppointment } from "@/lib/bark/operations/op-cancel-appointment";
 
 describe("opSubmitReport", () => {
   it("should return ERROR_APPOINTMENT_NOT_FOUND when appointment cannot be found", async () => {
@@ -61,7 +62,39 @@ describe("opSubmitReport", () => {
       expect(result).toBeUndefined();
     });
   });
-  it("WIP: should return ERROR_APPOINTMENT_IS_NOT_PENDING when appointment status is not PENDING", async () => {
-    await withBarkContext(async ({ context }) => {});
+  it("should return ERROR_APPOINTMENT_IS_NOT_PENDING when appointment status is not PENDING (already submitted)", async () => {
+    await withBarkContext(async ({ context }) => {
+      const { appointmentId, vetId } = await givenAppointment(context);
+      await opSubmitReport(context, {
+        appointmentId,
+        reportData: mockReportData(),
+        actorVetId: vetId,
+      });
+      const { result, error } = await opSubmitReport(context, {
+        appointmentId,
+        reportData: mockReportData(),
+        actorVetId: vetId,
+      });
+      expect(error).toEqual(CODE.ERROR_APPOINTMENT_IS_NOT_PENDING);
+      expect(result).toBeUndefined();
+    });
+  });
+  it("should return ERROR_APPOINTMENT_IS_NOT_PENDING when appointment status is not PENDING (already cancelled)", async () => {
+    await withBarkContext(async ({ context }) => {
+      const { appointmentId, vetId } = await givenAppointment(context);
+      await opCancelAppointment(context, { appointmentId, actorVetId: vetId });
+      await opSubmitReport(context, {
+        appointmentId,
+        reportData: mockReportData(),
+        actorVetId: vetId,
+      });
+      const { result, error } = await opSubmitReport(context, {
+        appointmentId,
+        reportData: mockReportData(),
+        actorVetId: vetId,
+      });
+      expect(error).toEqual(CODE.ERROR_APPOINTMENT_IS_NOT_PENDING);
+      expect(result).toBeUndefined();
+    });
   });
 });
