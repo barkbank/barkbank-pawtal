@@ -33,6 +33,11 @@ export class RoutePath {
   static readonly VET_APPOINTMENTS_CANCEL = (appointmentId: string) =>
     `/vet/appointments/cancel/${appointmentId}`;
 
+  static readonly VET_APPOINTMENTS_SUBMIT_REGEX =
+    /.*[/]vet[/]appointments[/]submit[/][0-9]+/;
+  static readonly VET_APPOINTMENTS_CANCEL_REGEX =
+    /.*[/]vet[/]appointments[/]cancel[/][0-9]+/;
+
   static readonly VET_APPOINTMENTS = "/vet/appointments";
 
   static readonly VET_REPORTS = "/vet/reports";

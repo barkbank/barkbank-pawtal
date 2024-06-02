@@ -34,18 +34,18 @@ const AppointmentCard = (props: { appointment: BarkAppointment }) => {
       <Separator />
       <div className="flex w-full flex-col gap-3 md:flex-row">
         <BarkButton
-          className="w-full"
+          className="w-full md:w-48"
           variant="brand"
           href={RoutePath.VET_APPOINTMENTS_SUBMIT(appointmentId)}
         >
           Submit Report
         </BarkButton>
         <BarkButton
-          className="w-full"
+          className="w-full md:w-48"
           variant="brandInverse"
           href={RoutePath.VET_APPOINTMENTS_CANCEL(appointmentId)}
         >
-          Cancel
+          Cancel Appointment
         </BarkButton>
       </div>
     </div>

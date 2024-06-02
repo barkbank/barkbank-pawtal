@@ -14,6 +14,18 @@ export class NavComponent extends PomComponent {
     return this.navOption("My Pets");
   }
 
+  vetScheduleOption(): Locator {
+    return this.navOption("Schedule");
+  }
+
+  vetAppointmentsOption(): Locator {
+    return this.navOption("Appointments");
+  }
+
+  vetReportsOption(): Locator {
+    return this.navOption("Reports");
+  }
+
   // Note: This should not be used directly from outside the SidebarComponent.
   // It may not always be this simple. So the sidebar POM should be responsible
   // for mapping expected options to Locator objects.
