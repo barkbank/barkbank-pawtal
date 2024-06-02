@@ -8,6 +8,7 @@ import { BarkContext } from "@/lib/bark/bark-context";
 import { opRecordAppointmentCallOutcome } from "@/lib/bark/operations/op-record-appointment-call-outcome";
 import { opSubmitReport } from "@/lib/bark/operations/op-submit-report";
 import { mockReportData } from "./_mocks";
+import { BarkReportData } from "@/lib/bark/models/bark-report-data";
 
 export async function givenUser(
   context: BarkTestContext,
@@ -108,6 +109,7 @@ export async function givenReport(
   options?: { idx?: number; existingVetId?: string },
 ): Promise<{
   reportId: string;
+  reportData: BarkReportData;
   appointmentId: string;
   dogId: string;
   vetId: string;
@@ -116,11 +118,12 @@ export async function givenReport(
   dogGender: DogGender;
 }> {
   const res1 = await givenAppointment(context, options);
+  const reportData = mockReportData();
   const res2 = await opSubmitReport(context, {
     appointmentId: res1.appointmentId,
     actorVetId: res1.vetId,
-    reportData: mockReportData(),
+    reportData,
   });
   const reportId = res2.result!.reportId;
-  return { reportId, ...res1 };
+  return { reportId, reportData, ...res1 };
 }

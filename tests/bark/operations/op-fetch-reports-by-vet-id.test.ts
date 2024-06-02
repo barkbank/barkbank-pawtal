@@ -10,14 +10,14 @@ describe("opFetchReportsByVetId", () => {
       const { vetId } = await givenVet(context);
       const { result, error } = await opFetchReportsByVetId(context, { vetId });
       expect(error).toBeUndefined();
-      expect(result).toEqual([]);
+      expect(result).toEqual({ reports: [] });
     });
   });
   it("should return reports", async () => {
     await withBarkContext(async ({ context }) => {
       const { vetId } = await givenVet(context, { vetIdx: 999 });
-      const a1 = await givenReport(context, { existingVetId: vetId });
-      const a2 = await givenReport(context, { existingVetId: vetId });
+      const a1 = await givenReport(context, { idx: 1, existingVetId: vetId });
+      const a2 = await givenReport(context, { idx: 2, existingVetId: vetId });
       const { result, error } = await opFetchReportsByVetId(context, { vetId });
       expect(error).toBeUndefined();
       const { reports } = result!;
@@ -27,9 +27,7 @@ describe("opFetchReportsByVetId", () => {
       const report: BarkReport = reports.filter(
         (r) => r.appointmentId === a1.appointmentId,
       )[0];
-      const reportData = mockReportData();
-      expect(reportData).toMatchObject(report);
-      expect(report).toMatchObject(reportData);
+      expect(report).toMatchObject(a1.reportData);
     });
   });
 });
