@@ -1,5 +1,6 @@
 import { BarkContext } from "../bark-context";
-import { BarkReport, EncryptedBarkReport } from "../bark-models";
+import { EncryptedBarkReport } from "../bark-models";
+import { BarkReport } from "../models/bark-report";
 
 export async function toBarkReport(
   context: BarkContext,

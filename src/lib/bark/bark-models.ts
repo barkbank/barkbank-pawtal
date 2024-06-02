@@ -1,13 +1,4 @@
-import { BarkReportData } from "./models/bark-report-data";
-
-export type BarkReport = BarkReportData & {
-  reportId: string;
-  reportCreationTime: Date;
-  reportModificationTime: Date;
-  appointmentId: string;
-  dogId: string;
-  vetId: string;
-};
+import { BarkReport } from "./models/bark-report";
 
 export type EncryptedBarkReport = Omit<BarkReport, "ineligibilityReason"> & {
   encryptedIneligibilityReason: string;
