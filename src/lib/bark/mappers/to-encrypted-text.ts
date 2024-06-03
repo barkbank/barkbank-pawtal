@@ -8,6 +8,6 @@ export async function toEncryptedText(
     return "";
   }
   const { textEncryptionService } = context;
-  const encryptedText = await textEncryptionService.getDecryptedData(text);
+  const encryptedText = await textEncryptionService.getEncryptedData(text);
   return encryptedText;
 }
