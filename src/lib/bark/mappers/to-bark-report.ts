@@ -1,7 +1,7 @@
 import { BarkContext } from "../bark-context";
 import { EncryptedBarkReport } from "../models/encrypted-bark-report";
 import { BarkReport } from "../models/bark-report";
-import { toIneligibilityReason } from "./to-ineligibility-reason";
+import { toDecryptedText } from "./to-decrypted-text";
 import { toOwnerName } from "./to-owner-name";
 import { toDogName } from "./to-dog-name";
 
@@ -16,7 +16,7 @@ export async function toBarkReport(
     ...otherFields
   } = encrypted;
   const [ineligibilityReason, dogName, ownerName] = await Promise.all([
-    toIneligibilityReason(context, encryptedIneligibilityReason),
+    toDecryptedText(context, encryptedIneligibilityReason),
     toDogName(context, dogEncryptedOii),
     toOwnerName(context, userEncryptedPii),
   ]);
