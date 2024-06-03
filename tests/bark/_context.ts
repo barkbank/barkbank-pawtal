@@ -1,5 +1,4 @@
 import { withDb } from "../_db_helpers";
-import { Pool } from "pg";
 import {
   getEmailHashService,
   getOiiEncryptionService,
@@ -9,7 +8,8 @@ import {
 import { BarkContext } from "@/lib/bark/bark-context";
 import { DbContext } from "@/lib/data/db-utils";
 
-export type BarkTestContext = { dbPool: Pool };
+// TODO: Remove BarkTestContext, for now I have made it the same as BarkContext.
+export type BarkTestContext = BarkContext;
 
 export async function withBarkContext(
   testBody: (args: {
@@ -30,6 +30,6 @@ export async function withBarkContext(
       oiiEncryptionService,
       textEncryptionService,
     };
-    await testBody({ context, testContext: { dbPool }, dbContext: dbPool });
+    await testBody({ context, testContext: context, dbContext: dbPool });
   });
 }

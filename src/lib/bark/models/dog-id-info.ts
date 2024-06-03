@@ -1,0 +1,17 @@
+import { z } from "zod";
+import { DogGenderSchema } from "./dog-gender";
+
+/**
+ * Dog Identifiable Information (DII)
+ *
+ * These are a set of natural values that can be used to identify a dog.
+ */
+
+export const DogIdInfoSchema = z.object({
+  dogName: z.string(),
+  dogGender: DogGenderSchema,
+  dogBreed: z.string(),
+  ownerName: z.string(),
+});
+
+export type DogIdInfo = z.infer<typeof DogIdInfoSchema>;

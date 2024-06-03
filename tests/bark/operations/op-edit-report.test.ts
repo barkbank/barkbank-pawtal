@@ -14,7 +14,10 @@ describe("opEditReport", () => {
     await withBarkContext(async ({ context, testContext }) => {
       // GIVEN an existing report
       const { vetId } = await givenVet(testContext);
-      const { dogId } = await givenDog(testContext, { preferredVetId: vetId });
+      const { dogId, dogName, dogBreed, dogGender, ownerName } = await givenDog(
+        testContext,
+        { preferredVetId: vetId },
+      );
       const res1 = await opRecordAppointmentCallOutcome(context, {
         dogId,
         vetId,
@@ -58,6 +61,10 @@ describe("opEditReport", () => {
         reportId,
         reportCreationTime: report.reportCreationTime,
         reportModificationTime: report.reportModificationTime,
+        dogName,
+        dogBreed,
+        dogGender,
+        ownerName,
         ...modifiedReportData,
       };
       expect(report).toEqual(expectedReport);
