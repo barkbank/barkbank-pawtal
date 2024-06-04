@@ -4,14 +4,17 @@ import { BarkReport } from "@/lib/bark/models/bark-report";
 import { DOG_GENDER, SpecifiedDogGender } from "@/lib/bark/models/dog-gender";
 import { POS_NEG_NIL, PosNegNil } from "@/lib/data/db-enums";
 import { IMG_PATH } from "@/lib/image-path";
+import { RoutePath } from "@/lib/route-path";
 import clsx from "clsx";
 import { capitalize } from "lodash";
-import { CircleHelp, Droplets, Minus, Plus, Worm } from "lucide-react";
+import { CircleHelp, Droplets, Edit, Minus, Plus, Worm } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 export function ReportCard(props: { report: BarkReport }) {
   const { report } = props;
   const {
+    reportId,
     dogName,
     ownerName,
     dogBreed,
@@ -29,6 +32,9 @@ export function ReportCard(props: { report: BarkReport }) {
         {avatar}
         <h2 className="x-typography-card-header flex-1">{dogName}</h2>
         {getDonated(dogDidDonateBlood)}
+        <Link href={RoutePath.VET_REPORTS_EDIT(reportId)}>
+          <Edit />
+        </Link>
       </div>
       <p className="flex-1">
         <span className="font-semibold text-teal-600">{dogName}</span> is a{" "}

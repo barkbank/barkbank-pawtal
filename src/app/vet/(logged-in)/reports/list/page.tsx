@@ -30,7 +30,7 @@ export default async function Page() {
   const { reports } = result;
   return (
     <div className="m-3">
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
         {reports.map((report) => (
           <ReportCard key={report.reportId} report={report} />
         ))}
