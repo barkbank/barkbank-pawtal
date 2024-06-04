@@ -9,6 +9,7 @@ import { capitalize } from "lodash";
 import { Droplets, Edit, Worm } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { sprintf } from "sprintf-js";
 
 export function ReportCard(props: { report: BarkReport }) {
   const { report } = props;
@@ -36,14 +37,16 @@ export function ReportCard(props: { report: BarkReport }) {
         </Link>
       </div>
       <p className="flex-1">
-        <span className="font-semibold text-teal-600">{dogName}</span> is a{" "}
-        <span className="font-semibold text-amber-600">{dogWeightKg}kg</span>{" "}
-        <span className="font-semibold text-cyan-600">
+        <span className="font-semibold text-blue-500">{dogName}</span> is a{" "}
+        <span className="font-semibold text-blue-700">
+          {sprintf("%.0f", dogWeightKg)}kg
+        </span>{" "}
+        <span className="font-semibold text-blue-500">
           {capitalize(dogGender)}
         </span>{" "}
-        <span className="font-semibold text-orange-700">{dogBreed}</span>{" "}
+        <span className="font-semibold text-blue-700">{dogBreed}</span>{" "}
         belonging to{" "}
-        <span className="font-semibold text-purple-700">{ownerName}</span>.
+        <span className="font-semibold text-blue-500">{ownerName}</span>.
       </p>
       <div className="flex h-[24px] flex-row gap-3">
         {getHeartworm(dogHeartworm)}
