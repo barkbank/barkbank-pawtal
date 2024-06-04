@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { DogGenderSchema } from "./dog-gender";
 import { DogIdInfoSchema } from "./dog-id-info";
 
 /**
