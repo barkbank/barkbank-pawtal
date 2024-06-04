@@ -1,5 +1,12 @@
-export function BarkError(props: { children: React.ReactNode }) {
+import clsx from "clsx";
+
+export function BarkError(props: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
-    <div className="mt-3 text-base text-destructive">{props.children}</div>
+    <div className={clsx("text-base text-destructive", props.className)}>
+      {props.children}
+    </div>
   );
 }

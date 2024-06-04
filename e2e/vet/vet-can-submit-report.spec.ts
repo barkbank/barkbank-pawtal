@@ -4,6 +4,8 @@ import { doCreateAppointment } from "../_lib/sequences/do-create-appointment";
 import { VetAppointmentsListPage } from "../_lib/pom/pages/vet-appointments-list-page";
 import { VetCancelAppointmentPage } from "../_lib/pom/pages/vet-cancel-appointment-page";
 import { VetSubmitReportPage } from "../_lib/pom/pages/vet-submit-report-page";
+import { NavComponent } from "../_lib/pom/layout/nav-component";
+import { VetReportListPage } from "../_lib/pom/pages/vet-report-list-page";
 
 test("vet can submit report", async ({ page }) => {
   const context = await initPomContext({ page });
@@ -28,4 +30,10 @@ test("vet can submit report", async ({ page }) => {
   const pg3 = new VetAppointmentsListPage(context);
   await pg3.checkUrl();
   await expect(pg3.appointmentCard({ dogName }).locator()).not.toBeVisible();
+
+  const nav = new NavComponent(context);
+  await nav.vetReportsOption().click();
+
+  const pg4 = new VetReportListPage(context);
+  await expect(pg4.reportCard({ dogName }).locator()).toBeVisible();
 });

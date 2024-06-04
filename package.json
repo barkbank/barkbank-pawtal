@@ -34,7 +34,7 @@
     "date-fns-tz": "^2.0.1",
     "lodash": "^4.17.21",
     "lru-cache": "^10.2.0",
-    "lucide-react": "^0.331.0",
+    "lucide-react": "^0.358.0",
     "next": "^14.2.3",
     "next-auth": "^4.24.6",
     "nodemailer": "^6.9.9",

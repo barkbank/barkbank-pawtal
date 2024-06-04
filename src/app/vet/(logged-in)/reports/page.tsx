@@ -1,5 +1,6 @@
-import { ReportsExplorer } from "./_components/reports-explorer";
+import { redirect } from "next/navigation";
+import { RoutePath } from "@/lib/route-path";
 
 export default async function Page() {
-  return <ReportsExplorer />;
+  redirect(RoutePath.VET_REPORTS_LIST);
 }

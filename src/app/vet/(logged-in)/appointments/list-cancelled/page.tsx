@@ -7,5 +7,5 @@ export default async function Page() {
   if (actor === null) {
     redirect(RoutePath.VET_LOGIN_PAGE);
   }
-  return <div>Stub Page</div>;
+  return <div>TODO: Stub Page</div>;
 }

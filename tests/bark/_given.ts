@@ -1,47 +1,104 @@
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
-import { getDogMapper, insertDog, insertUser, insertVet } from "../_fixtures";
+import {
+  getDogMapper,
+  getUserSpec,
+  insertDog,
+  insertUser,
+  insertVet,
+  userPii,
+} from "../_fixtures";
 import { BarkTestContext } from "./_context";
 import { YES_NO_UNKNOWN } from "@/lib/data/db-enums";
-import { DOG_GENDER, DogGender } from "@/lib/bark/models/dog-gender";
+import {
+  DOG_GENDER,
+  DogGender,
+  DogGenderSchema,
+} from "@/lib/bark/models/dog-gender";
 import { dbQuery } from "@/lib/data/db-utils";
 import { BarkContext } from "@/lib/bark/bark-context";
 import { opRecordAppointmentCallOutcome } from "@/lib/bark/operations/op-record-appointment-call-outcome";
 import { opSubmitReport } from "@/lib/bark/operations/op-submit-report";
 import { mockReportData } from "./_mocks";
-import { BarkReportData } from "@/lib/bark/models/bark-report-data";
+import {
+  BarkReportData,
+  BarkReportDataSchema,
+} from "@/lib/bark/models/bark-report-data";
+import { z } from "zod";
+import { toUserPii } from "@/lib/bark/mappers/to-user-pii";
+
+const GivenUserSchema = z.object({
+  userId: z.string(),
+  userName: z.string(),
+  userEmail: z.string(),
+  userPhoneNumber: z.string(),
+});
+
+type GivenUserType = z.infer<typeof GivenUserSchema>;
 
 export async function givenUser(
   context: BarkTestContext,
   options?: { userIdx?: number },
-): Promise<{ userId: string }> {
+): Promise<GivenUserType> {
   const { dbPool } = context;
   const args = options ?? {};
   const { userIdx } = args;
   const idx = userIdx ?? 1;
   const { userId } = await insertUser(idx, dbPool);
-  return { userId };
+  const { userName, userEmail, userPhoneNumber } = userPii(idx);
+  return { userId, userName, userEmail, userPhoneNumber };
 }
+
+async function existingUser(
+  context: BarkTestContext,
+  userId: string,
+): Promise<GivenUserType> {
+  const { dbPool } = context;
+  const sql = `
+  SELECT
+    user_encrypted_pii as "userEncryptedPii"
+  FROM users
+  WHERE user_id = $1
+  `;
+  const res = await dbQuery<{ userEncryptedPii: string }>(dbPool, sql, [
+    userId,
+  ]);
+  const userEncryptedPii = res.rows[0].userEncryptedPii;
+  const flds = await toUserPii(context, userEncryptedPii);
+  return { userId, ...flds };
+}
+
+const GivenDogSchema = z.object({
+  dogId: z.string(),
+  dogName: z.string(),
+  dogBreed: z.string(),
+  dogGender: DogGenderSchema,
+  ownerUserId: z.string(),
+  ownerName: z.string(),
+});
+
+type GivenDogType = z.infer<typeof GivenDogSchema>;
 
 export async function givenDog(
   context: BarkTestContext,
   options?: { dogIdx?: number; userId?: string; preferredVetId?: string },
-): Promise<{
-  dogId: string;
-  ownerUserId: string;
-  dogName: string;
-  dogBreed: string;
-  dogGender: DogGender;
-}> {
+): Promise<GivenDogType> {
   const { dbPool } = context;
   const args = options ?? {};
   const { dogIdx, preferredVetId } = args;
   const idx = dogIdx ?? 1;
-  const ownerUserId = await (async () => {
+  const { ownerUserId, ownerName } = await (async () => {
     if (args.userId !== undefined) {
-      return args.userId;
+      const { userName } = await existingUser(context, args.userId);
+      return {
+        ownerUserId: args.userId,
+        ownerName: userName,
+      };
     }
     const res = await givenUser(context, { userIdx: idx });
-    return res.userId;
+    return {
+      ownerUserId: res.userId,
+      ownerName: res.userName,
+    };
   })();
   const { dogId } = await insertDog(idx, ownerUserId, dbPool, {
     dogGender: DOG_GENDER.MALE,
@@ -68,55 +125,67 @@ export async function givenDog(
   const { dogName } = await getDogMapper().mapDogSecureOiiToDogOii({
     dogEncryptedOii,
   });
-  return { dogId, dogName, dogBreed, dogGender, ownerUserId };
+  return { dogId, dogName, dogBreed, dogGender, ownerUserId, ownerName };
 }
+
+const GivenVetSchema = z.object({
+  vetId: z.string(),
+});
+
+type GivenVetType = z.infer<typeof GivenVetSchema>;
 
 export async function givenVet(
   context: BarkTestContext,
   options?: { vetIdx?: number },
-): Promise<{ vetId: string }> {
+): Promise<GivenVetType> {
   const { dbPool } = context;
   const { vetIdx } = options ?? {};
   const { vetId } = await insertVet(vetIdx ?? 1, dbPool);
   return { vetId };
 }
 
+const GivenAppointmentSchema = z
+  .object({
+    appointmentId: z.string(),
+  })
+  .merge(GivenVetSchema)
+  .merge(GivenDogSchema);
+
+type GivenAppointmentType = z.infer<typeof GivenAppointmentSchema>;
+
 export async function givenAppointment(
   context: BarkContext,
   options?: { idx?: number; existingVetId?: string },
-): Promise<{
-  appointmentId: string;
-  dogId: string;
-  vetId: string;
-  dogName: string;
-  dogBreed: string;
-  dogGender: DogGender;
-}> {
+): Promise<GivenAppointmentType> {
   const { idx, existingVetId } = options ?? {};
   const vetId =
     existingVetId ?? (await givenVet(context, { vetIdx: idx })).vetId;
-  const { dogId, dogName, dogBreed, dogGender } = await givenDog(context, {
+  const theDog = await givenDog(context, {
     dogIdx: idx,
     preferredVetId: vetId,
   });
-  const a1 = await opRecordAppointmentCallOutcome(context, { dogId, vetId });
+  const a1 = await opRecordAppointmentCallOutcome(context, {
+    dogId: theDog.dogId,
+    vetId,
+  });
   const appointmentId = a1.result!.appointmentId;
-  return { appointmentId, dogId, vetId, dogName, dogBreed, dogGender };
+  const result: GivenAppointmentType = { appointmentId, vetId, ...theDog };
+  return GivenAppointmentSchema.parse(result);
 }
+
+const GivenReportSchema = z
+  .object({
+    reportId: z.string(),
+    reportData: BarkReportDataSchema,
+  })
+  .merge(GivenAppointmentSchema);
+
+type GivenReportType = z.infer<typeof GivenReportSchema>;
 
 export async function givenReport(
   context: BarkContext,
   options?: { idx?: number; existingVetId?: string },
-): Promise<{
-  reportId: string;
-  reportData: BarkReportData;
-  appointmentId: string;
-  dogId: string;
-  vetId: string;
-  dogName: string;
-  dogBreed: string;
-  dogGender: DogGender;
-}> {
+): Promise<GivenReportType> {
   const res1 = await givenAppointment(context, options);
   const reportData = mockReportData();
   const res2 = await opSubmitReport(context, {
@@ -125,5 +194,6 @@ export async function givenReport(
     reportData,
   });
   const reportId = res2.result!.reportId;
-  return { reportId, reportData, ...res1 };
+  const result: GivenReportType = { reportId, reportData, ...res1 };
+  return GivenReportSchema.parse(result);
 }

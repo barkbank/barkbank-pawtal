@@ -11,7 +11,10 @@ describe("opFetchReport", () => {
   it("should return the report", async () => {
     await withBarkContext(async ({ context, testContext }) => {
       const { vetId } = await givenVet(testContext);
-      const { dogId } = await givenDog(testContext, { preferredVetId: vetId });
+      const { dogId, dogName, dogBreed, dogGender, ownerName } = await givenDog(
+        testContext,
+        { preferredVetId: vetId },
+      );
       const res1 = await opRecordAppointmentCallOutcome(context, {
         dogId,
         vetId,
@@ -40,6 +43,10 @@ describe("opFetchReport", () => {
         reportId,
         reportCreationTime: report.reportCreationTime,
         reportModificationTime: report.reportModificationTime,
+        dogName,
+        dogBreed,
+        dogGender,
+        ownerName,
         ...reportData,
       };
       expect(report).toEqual(expectedReport);

@@ -178,6 +178,7 @@ const ReportListItem = ({ report }: { report: Report }) => {
   );
 };
 
+// TODO: Remove when not needed. Kept as a reference for sticky bar. Considering using it for search bar in reports/list.
 export const ReportsExplorer = () => {
   return (
     <div className="m-3">
