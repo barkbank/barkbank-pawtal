@@ -1,5 +1,4 @@
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import { BarkReport } from "@/lib/bark/models/bark-report";
 import { DOG_GENDER, SpecifiedDogGender } from "@/lib/bark/models/dog-gender";
 import { POS_NEG_NIL, PosNegNil } from "@/lib/data/db-enums";
@@ -7,7 +6,7 @@ import { IMG_PATH } from "@/lib/image-path";
 import { RoutePath } from "@/lib/route-path";
 import clsx from "clsx";
 import { capitalize } from "lodash";
-import { CircleHelp, Droplets, Edit, Minus, Plus, Worm } from "lucide-react";
+import { Droplets, Edit, Worm } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
