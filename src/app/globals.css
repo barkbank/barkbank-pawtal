@@ -95,7 +95,3 @@
 .x-typography-card-header {
   @apply text-xl font-bold;
 }
-
-.x-text-bold {
-  @apply text-xl font-semibold;
-}
