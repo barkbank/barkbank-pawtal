@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { DogGenderSchema } from "./dog-gender";
+import { SpecifiedDogGenderSchema } from "./dog-gender";
 
 // TODO: Add preferredVetName - Useful when presented to Users.
 
@@ -10,7 +10,7 @@ import { DogGenderSchema } from "./dog-gender";
  */
 export const DogIdInfoSchema = z.object({
   dogName: z.string(),
-  dogGender: DogGenderSchema,
+  dogGender: SpecifiedDogGenderSchema,
   dogBreed: z.string(),
   ownerName: z.string(),
 });

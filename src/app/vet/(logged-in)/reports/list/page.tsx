@@ -5,8 +5,9 @@ import { BarkReport } from "@/lib/bark/models/bark-report";
 import { opFetchReportsByVetId } from "@/lib/bark/operations/op-fetch-reports-by-vet-id";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
+import { ReportCard } from "../_components/report-card";
 
-const ReportCard = (props: { report: BarkReport }) => {
+const xReportCard = (props: { report: BarkReport }) => {
   const { report } = props;
   return (
     <div className="rounded-md  p-3 shadow-sm shadow-slate-400">
@@ -29,7 +30,7 @@ export default async function Page() {
   const { reports } = result;
   return (
     <div className="m-3">
-      <div className="flex flex-col gap-3">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
         {reports.map((report) => (
           <ReportCard key={report.reportId} report={report} />
         ))}
