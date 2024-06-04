@@ -1,14 +1,16 @@
 import { z } from "zod";
 import { DogGenderSchema } from "./dog-gender";
+import { DogIdInfoSchema } from "./dog-id-info";
 
 /**
  * Encrypted version of DogIdInfo
  */
 
-export const EncryptedDogIdInfoSchema = z.object({
+export const EncryptedDogIdInfoSchema = DogIdInfoSchema.omit({
+  dogName: true,
+  ownerName: true,
+}).extend({
   dogEncryptedOii: z.string(),
-  dogGender: DogGenderSchema,
-  dogBreed: z.string(),
   userEncryptedPii: z.string(),
 });
 
