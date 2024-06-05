@@ -9,7 +9,7 @@ import { RoutePath } from "@/lib/route-path";
 import { useToast } from "@/components/ui/use-toast";
 import { CODE } from "@/lib/utilities/bark-code";
 
-export function CancelReportForm(props: { appointment: BarkAppointment }) {
+export function CancelAppointmentForm(props: { appointment: BarkAppointment }) {
   const router = useRouter();
   const { toast } = useToast();
   const { appointment } = props;
