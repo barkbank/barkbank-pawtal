@@ -39,7 +39,8 @@ export function ReportCard(props: { report: BarkReport }) {
         </Link>
       </div>
       <p className="flex-1">
-        Visit date: <span className="font-semibold">{toDateText(visitTime)}</span>
+        Visit date:{" "}
+        <span className="font-semibold">{toDateText(visitTime)}</span>
       </p>
       <p className="flex-1">
         <span className="font-semibold text-blue-500">{dogName}</span> is a{" "}
@@ -87,9 +88,9 @@ const getAvatar = (dogGender: SpecifiedDogGender) => {
 const toDateText = (visitTime: Date) => {
   return formatDateTime(visitTime, {
     timeZone: SINGAPORE_TIME_ZONE,
-    format: "d MMMM yyyy"
-  })
-}
+    format: "d MMMM yyyy",
+  });
+};
 
 const getHeartworm = (dogHeartworm: PosNegNil) => {
   if (dogHeartworm === POS_NEG_NIL.POSITIVE) {
