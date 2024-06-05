@@ -4,6 +4,7 @@ import { DOG_GENDER, SpecifiedDogGender } from "@/lib/bark/models/dog-gender";
 import { POS_NEG_NIL, PosNegNil } from "@/lib/data/db-enums";
 import { IMG_PATH } from "@/lib/image-path";
 import { RoutePath } from "@/lib/route-path";
+import { SINGAPORE_TIME_ZONE, formatDateTime } from "@/lib/utilities/bark-time";
 import clsx from "clsx";
 import { capitalize } from "lodash";
 import { Droplets, Edit, Worm } from "lucide-react";
@@ -15,6 +16,7 @@ export function ReportCard(props: { report: BarkReport }) {
   const { report } = props;
   const {
     reportId,
+    visitTime,
     dogName,
     ownerName,
     dogBreed,
@@ -36,6 +38,10 @@ export function ReportCard(props: { report: BarkReport }) {
           <Edit />
         </Link>
       </div>
+      <p className="flex-1">
+        Visit date:{" "}
+        <span className="font-semibold">{toDateText(visitTime)}</span>
+      </p>
       <p className="flex-1">
         <span className="font-semibold text-blue-500">{dogName}</span> is a{" "}
         <span className="font-semibold text-blue-700">
@@ -77,6 +83,13 @@ const getAvatar = (dogGender: SpecifiedDogGender) => {
       alt="Generic female dog avatar"
     />
   );
+};
+
+const toDateText = (visitTime: Date) => {
+  return formatDateTime(visitTime, {
+    timeZone: SINGAPORE_TIME_ZONE,
+    format: "d MMMM yyyy",
+  });
 };
 
 const getHeartworm = (dogHeartworm: PosNegNil) => {
