@@ -1,7 +1,17 @@
+import {
+  BarkStatusEligible,
+  BarkStatusIneligible,
+  BarkStatusTemporarilyIneligible,
+} from "@/components/bark/bark-status";
 import { Badge } from "@/components/ui/badge";
 import { BarkReport } from "@/lib/bark/models/bark-report";
 import { DOG_GENDER, SpecifiedDogGender } from "@/lib/bark/models/dog-gender";
-import { POS_NEG_NIL, PosNegNil } from "@/lib/data/db-enums";
+import {
+  POS_NEG_NIL,
+  PosNegNil,
+  REPORTED_INELIGIBILITY,
+  ReportedIneligibility,
+} from "@/lib/data/db-enums";
 import { IMG_PATH } from "@/lib/image-path";
 import { RoutePath } from "@/lib/route-path";
 import { SINGAPORE_TIME_ZONE, formatDateTime } from "@/lib/utilities/bark-time";
@@ -26,6 +36,7 @@ export function ReportCard(props: { report: BarkReport }) {
     dogDea1Point1,
     dogDidDonateBlood,
     dogWeightKg,
+    ineligibilityStatus,
   } = report;
   const avatar = getAvatar(dogGender);
   return (
@@ -38,6 +49,7 @@ export function ReportCard(props: { report: BarkReport }) {
           <Edit />
         </Link>
       </div>
+      {getReportedIneligibility(ineligibilityStatus)}
       <p className="flex-1">
         Visit date:{" "}
         <span className="font-semibold">{toDateText(visitTime)}</span>
@@ -152,4 +164,16 @@ const getDonated = (dogDidDonateBlood: boolean) => {
       <Droplets height={16} />
     </Badge>
   );
+};
+
+const getReportedIneligibility = (
+  reportedIneligibility: ReportedIneligibility,
+) => {
+  if (reportedIneligibility === REPORTED_INELIGIBILITY.TEMPORARILY_INELIGIBLE) {
+    return <BarkStatusTemporarilyIneligible />;
+  }
+  if (reportedIneligibility === REPORTED_INELIGIBILITY.PERMANENTLY_INELIGIBLE) {
+    return <BarkStatusIneligible />;
+  }
+  return <BarkStatusEligible />;
 };
