@@ -34,6 +34,7 @@ import { z } from "zod";
 import { postBarkReportData } from "../_actions/post-bark-report-data";
 import { useRouter } from "next/navigation";
 import { RoutePath } from "@/lib/route-path";
+import { capitalize } from "lodash";
 
 const SubmitFormSchema = z.object({
   visitTime: DateTimeField.Schema,
@@ -109,10 +110,12 @@ export function SubmitReportForm(props: { appointment: BarkAppointment }) {
   };
 
   return (
-    <div>
-      <p>Submitting report for appointment {appointmentId}.</p>
+    <div className="prose">
+      <h1>Submit Report</h1>
       <p>
-        {dogName} is a {dogGender} {dogBreed} belonging to {ownerName}.
+        Please fill in this form to submit a medical report for <b>{dogName}</b>
+        , a <b>{capitalize(dogGender)}</b> <b>{dogBreed}</b> belonging to{" "}
+        <b>{ownerName}</b>. (Appointment ID: {appointmentId})
       </p>
       <BarkForm form={form} onSubmit={onSubmit}>
         <BarkFormInput
