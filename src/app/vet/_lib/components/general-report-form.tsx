@@ -101,20 +101,26 @@ function toReportFormData(reportData: BarkReportData): ReportFormData {
   return ReportFormDataSchema.parse(formData);
 }
 
+const DEFAULT_REPORT_FORM_DATA = {
+  visitTime: "",
+  dogWeightKg: "",
+  ineligibilityReason: "",
+  ineligibilityExpiryTime: "",
+};
+
 export function GeneralReportForm(props: {
   purpose: "SUBMIT" | "EDIT";
   handleSubmit: (values: BarkReportData) => Promise<Result<true, string>>;
   handleCancel: () => Promise<void>;
+  reportData?: BarkReportData;
 }) {
-  const { purpose, handleSubmit, handleCancel } = props;
+  const { purpose, handleSubmit, handleCancel, reportData } = props;
   const form = useForm<ReportFormData>({
     resolver: zodResolver(ReportFormDataSchema),
-    defaultValues: {
-      visitTime: "",
-      dogWeightKg: "",
-      ineligibilityReason: "",
-      ineligibilityExpiryTime: "",
-    },
+    defaultValues:
+      reportData === undefined
+        ? DEFAULT_REPORT_FORM_DATA
+        : toReportFormData(reportData),
   });
 
   const onSubmit = async (values: ReportFormData) => {
