@@ -1,3 +1,5 @@
+"use server";
+
 import APP from "@/lib/app";
 import { getAuthenticatedVetActor } from "@/lib/auth";
 import { BarkReportData } from "@/lib/bark/models/bark-report-data";
