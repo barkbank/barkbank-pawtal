@@ -31,10 +31,10 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { postBarkReportData } from "../../../_lib/actions/post-bark-report-data";
 import { useRouter } from "next/navigation";
 import { RoutePath } from "@/lib/route-path";
 import { capitalize } from "lodash";
+import { postBarkReportData } from "../actions/post-bark-report-data";
 
 const SubmitFormSchema = z.object({
   visitTime: DateTimeField.Schema,
