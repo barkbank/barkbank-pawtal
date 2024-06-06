@@ -1,10 +1,10 @@
+import { ReportCard } from "@/app/vet/_lib/components/report-card";
 import { BarkError } from "@/components/bark/bark-error";
 import APP from "@/lib/app";
 import { getAuthenticatedVetActor } from "@/lib/auth";
 import { opFetchReportsByVetId } from "@/lib/bark/operations/op-fetch-reports-by-vet-id";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
-import { ReportCard } from "../_components/report-card";
 
 export default async function Page() {
   const actor = await getAuthenticatedVetActor();
