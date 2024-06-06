@@ -31,6 +31,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Result } from "@/lib/utilities/result";
+import {
+  SGT_ISO8601,
+  SGT_UI_DATE,
+  SGT_UI_DATE_TIME,
+  formatDateTime,
+} from "@/lib/utilities/bark-time";
 
 const ReportFormDataSchema = z.object({
   visitTime: DateTimeField.Schema,
@@ -70,6 +76,29 @@ function toBarkReportData(formData: ReportFormData): BarkReportData {
   };
   console.log({ values });
   return BarkReportDataSchema.parse(values);
+}
+
+function toBarkFormData(reportData: BarkReportData): ReportFormData {
+  const {
+    visitTime,
+    dogWeightKg,
+    dogBodyConditioningScore,
+    dogDidDonateBlood,
+    ineligibilityExpiryTime,
+    ...otherFields
+  } = reportData;
+  const formData: ReportFormData = {
+    visitTime: formatDateTime(visitTime, SGT_UI_DATE_TIME),
+    dogWeightKg: `${dogWeightKg}`,
+    dogBodyConditioningScore: `${dogBodyConditioningScore}`,
+    dogDidDonateBlood: dogDidDonateBlood ? "YES" : "NO",
+    ineligibilityExpiryTime:
+      ineligibilityExpiryTime === null
+        ? ""
+        : formatDateTime(ineligibilityExpiryTime, SGT_UI_DATE),
+    ...otherFields,
+  };
+  return ReportFormDataSchema.parse(formData);
 }
 
 export function GeneralReportForm(props: {
