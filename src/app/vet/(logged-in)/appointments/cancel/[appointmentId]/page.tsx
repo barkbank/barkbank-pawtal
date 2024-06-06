@@ -4,8 +4,8 @@ import { getAuthenticatedVetActor } from "@/lib/auth";
 import { opFetchAppointment } from "@/lib/bark/operations/op-fetch-appointment";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
-import { CancelAppointmentForm } from "../../_components/cancel-appointment-form";
 import { APPOINTMENT_STATUS } from "@/lib/bark/models/appointment-status";
+import { CancelAppointmentForm } from "@/app/vet/_lib/components/cancel-appointment-form";
 
 export default async function Page(props: {
   params: { appointmentId: string };
