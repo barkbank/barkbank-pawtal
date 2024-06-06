@@ -5,9 +5,32 @@ import { VetAppointmentsListPage } from "../_lib/pom/pages/vet-appointments-list
 import { VetSubmitReportPage } from "../_lib/pom/pages/vet-submit-report-page";
 import { NavComponent } from "../_lib/pom/layout/nav-component";
 import { VetReportListPage } from "../_lib/pom/pages/vet-report-list-page";
+import { PomContext } from "../_lib/pom/core/pom-object";
+import { VetEditReportPage } from "../_lib/pom/pages/vet-edit-report-page";
 
-test("vet can submit report", async ({ page }) => {
+test("vet can edit report", async ({ page }) => {
   const context = await initPomContext({ page });
+  const { dogName } = await givenSubmittedReport(context);
+
+  // Should be DEA1.1 Positive at first
+  const pg1 = new VetReportListPage(context);
+  await expect(pg1.reportCard({ dogName }).locator()).toBeVisible();
+  await expect(
+    pg1.reportCard({ dogName }).dea1Point1PositiveBadge(),
+  ).toBeVisible();
+
+  // Edit to DEA1.1 Negative
+  await navigateToEditReportPage(context, { dogName });
+  await changeBloodTypeToNegative(context);
+
+  // Should now be DEA1.1 Negative
+  await expect(pg1.reportCard({ dogName }).locator()).toBeVisible();
+  await expect(
+    pg1.reportCard({ dogName }).dea1Point1NegativeBadge(),
+  ).toBeVisible();
+});
+
+async function givenSubmittedReport(context: PomContext) {
   const { dogName } = await doCreateAppointment(context);
 
   const pg1 = new VetAppointmentsListPage(context);
@@ -35,4 +58,25 @@ test("vet can submit report", async ({ page }) => {
 
   const pg4 = new VetReportListPage(context);
   await expect(pg4.reportCard({ dogName }).locator()).toBeVisible();
-});
+  return { dogName };
+}
+
+async function navigateToEditReportPage(
+  context: PomContext,
+  args: { dogName: string },
+) {
+  const { dogName } = args;
+  const pg1 = new VetReportListPage(context);
+  const card = pg1.reportCard({ dogName });
+  await card.editLink().click();
+
+  const pg2 = new VetEditReportPage(context);
+  await pg2.checkUrl();
+}
+
+async function changeBloodTypeToNegative(context: PomContext) {
+  const pg1 = new VetEditReportPage(context);
+  await pg1.checkUrl();
+  await pg1.dogDea1Point1_NEGATIVE().click();
+  await pg1.submitButton().click();
+}

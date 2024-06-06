@@ -32,4 +32,16 @@ export class VetReportCardComponent extends PomComponent {
       .locator("..")
       .locator("..");
   }
+
+  editLink(): Locator {
+    return this.locator().getByRole("link");
+  }
+
+  dea1Point1NegativeBadge(): Locator {
+    return this.locator().getByText("DEA1.1 Negative");
+  }
+
+  dea1Point1PositiveBadge(): Locator {
+    return this.locator().getByText("DEA1.1 Positive");
+  }
 }
