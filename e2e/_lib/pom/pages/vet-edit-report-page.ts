@@ -2,14 +2,14 @@ import { RoutePath } from "@/lib/route-path";
 import { Locator } from "@playwright/test";
 import { VetGeneralReportForm } from "./vet-general-report-form";
 
-export class VetSubmitReportPage extends VetGeneralReportForm {
+export class VetEditReportPage extends VetGeneralReportForm {
   urlRegex(): RegExp {
-    return RoutePath.VET_APPOINTMENTS_SUBMIT_REGEX;
+    return RoutePath.VET_REPORTS_EDIT_REGEX;
   }
 
   submitButton(): Locator {
     return this.page().getByRole("button", {
-      name: "Submit Report",
+      name: "Edit Report",
       exact: true,
     });
   }

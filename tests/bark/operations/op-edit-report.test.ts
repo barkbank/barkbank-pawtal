@@ -1,6 +1,6 @@
 import { BarkReport } from "@/lib/bark/models/bark-report";
 import { BarkReportData } from "@/lib/bark/models/bark-report-data";
-import { givenDog, givenVet } from "../_given";
+import { givenDog, givenReport, givenVet } from "../_given";
 import { withBarkContext } from "../_context";
 import { mockReportData } from "../_mocks";
 import { CODE } from "@/lib/utilities/bark-code";
@@ -8,8 +8,22 @@ import { opRecordAppointmentCallOutcome } from "@/lib/bark/operations/op-record-
 import { opSubmitReport } from "@/lib/bark/operations/op-submit-report";
 import { opFetchReport } from "@/lib/bark/operations/op-fetch-report";
 import { opEditReport } from "@/lib/bark/operations/op-edit-report";
+import { SpecifiedDogGenderSchema } from "@/lib/bark/models/dog-gender";
 
 describe("opEditReport", () => {
+  it("should return ERROR_NOT_ALLOWED if attempting to edit another vet's report", async () => {
+    await withBarkContext(async ({ context }) => {
+      const { reportId } = await givenReport(context, { idx: 1 });
+      const { vetId } = await givenVet(context, { vetIdx: 2 });
+      const reportData = mockReportData();
+      const res = await opEditReport(context, {
+        reportId,
+        reportData,
+        actorVetId: vetId,
+      });
+      expect(res).toEqual(CODE.ERROR_NOT_ALLOWED);
+    });
+  });
   it("should update report data to the new values", async () => {
     await withBarkContext(async ({ context, testContext }) => {
       // GIVEN an existing report
@@ -45,6 +59,7 @@ describe("opEditReport", () => {
       const res3 = await opEditReport(context, {
         reportId,
         reportData: modifiedReportData,
+        actorVetId: vetId,
       });
       expect(res3).toEqual(CODE.OK);
 
@@ -63,7 +78,7 @@ describe("opEditReport", () => {
         reportModificationTime: report.reportModificationTime,
         dogName,
         dogBreed,
-        dogGender,
+        dogGender: SpecifiedDogGenderSchema.parse(dogGender),
         ownerName,
         ...modifiedReportData,
       };

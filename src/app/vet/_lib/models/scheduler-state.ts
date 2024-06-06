@@ -1,5 +1,5 @@
-import { CALL_OUTCOME } from "@/lib/data/db-enums";
 import { AvailableDog, OwnerContactDetails } from "@/lib/vet/vet-models";
+import { SchedulerOutcome } from "./scheduler-outcome";
 
 export type SchedulerState = {
   dogs: AvailableDog[];
@@ -7,7 +7,3 @@ export type SchedulerState = {
   ownerContactDetails: OwnerContactDetails | null;
   outcomes: Record<string, SchedulerOutcome>;
 };
-
-export type SchedulerOutcome =
-  | typeof CALL_OUTCOME.APPOINTMENT
-  | typeof CALL_OUTCOME.DECLINED;

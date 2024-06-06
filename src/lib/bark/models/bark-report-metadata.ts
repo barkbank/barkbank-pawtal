@@ -11,3 +11,5 @@ export const BarkReportMetadataSchema = z.object({
   dogId: z.string(),
   vetId: z.string(),
 });
+
+export type BarkReportMetadata = z.infer<typeof BarkReportMetadataSchema>;

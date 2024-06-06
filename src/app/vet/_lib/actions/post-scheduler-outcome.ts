@@ -1,11 +1,11 @@
 "use server";
 
-import { SchedulerOutcome } from "../_lib/scheduler-models";
 import { CODE } from "@/lib/utilities/bark-code";
 import { getAuthenticatedVetActor } from "@/lib/auth";
 import { recordCallOutcome } from "@/lib/vet/actions/record-call-outcome";
 import { revalidatePath } from "next/cache";
 import { RoutePath } from "@/lib/route-path";
+import { SchedulerOutcome } from "../models/scheduler-outcome";
 
 export async function postSchedulerOutcome(args: {
   dogId: string;

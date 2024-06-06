@@ -36,6 +36,16 @@ export const SGT_ISO8601: DateTimeOptions = {
   timeZone: SINGAPORE_TIME_ZONE,
 } as const;
 
+export const SGT_UI_DATE_TIME: DateTimeOptions = {
+  format: "d MMM yyyy h:mma",
+  timeZone: SINGAPORE_TIME_ZONE,
+} as const;
+
+export const SGT_UI_DATE: DateTimeOptions = {
+  format: "d MMM yyyy",
+  timeZone: SINGAPORE_TIME_ZONE,
+} as const;
+
 /**
  * Parse a date time string. Note that the timezone indicates the timezone of
  * the input string.

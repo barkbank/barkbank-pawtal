@@ -1,20 +1,10 @@
+import { ReportCard } from "@/app/vet/_lib/components/report-card";
 import { BarkError } from "@/components/bark/bark-error";
 import APP from "@/lib/app";
 import { getAuthenticatedVetActor } from "@/lib/auth";
-import { BarkReport } from "@/lib/bark/models/bark-report";
 import { opFetchReportsByVetId } from "@/lib/bark/operations/op-fetch-reports-by-vet-id";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
-import { ReportCard } from "../_components/report-card";
-
-const xReportCard = (props: { report: BarkReport }) => {
-  const { report } = props;
-  return (
-    <div className="rounded-md  p-3 shadow-sm shadow-slate-400">
-      Report: <pre>{JSON.stringify(report, null, 2)}</pre>
-    </div>
-  );
-};
 
 export default async function Page() {
   const actor = await getAuthenticatedVetActor();

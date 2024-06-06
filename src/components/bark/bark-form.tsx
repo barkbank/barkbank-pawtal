@@ -374,7 +374,7 @@ export function BarkFormTextArea(props: {
           <FormControl>
             <Textarea
               placeholder={placeholder}
-              className="resize-none"
+              className="resize-none text-base"
               {...field}
             />
           </FormControl>

@@ -1,17 +1,17 @@
 import { BarkButton } from "@/components/bark/bark-button";
-import { useOwnerContactDetails } from "../_lib/use-owner-contact-details";
+import { useOwnerContactDetails } from "../hooks/use-owner-contact-details";
 import { BarkUserContactDetails } from "@/components/bark/bark-user-contact-details";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CALL_OUTCOME, USER_RESIDENCY } from "@/lib/data/db-enums";
-import { SchedulerOutcome } from "../_lib/scheduler-models";
-import { DeclinedBadge, ScheduledBadge } from "./scheduler-badges";
-import { postSchedulerOutcome } from "../_actions/post-scheduler-outcome";
+import { SchedulerOutcome } from "@/app/vet/_lib/models/scheduler-outcome";
+import { postSchedulerOutcome } from "../actions/post-scheduler-outcome";
 import { CODE } from "@/lib/utilities/bark-code";
 import { useRouter } from "next/navigation";
 import { RoutePath } from "@/lib/route-path";
 import { useToast } from "@/components/ui/use-toast";
 import clsx from "clsx";
+import { DeclinedBadge, ScheduledBadge } from "./scheduler-badges";
 
 /**
  * This is the call card for capturing call outcomes
