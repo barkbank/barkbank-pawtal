@@ -3,7 +3,7 @@
 import { BarkButton } from "@/components/bark/bark-button";
 import { BarkH1 } from "@/components/bark/bark-typography";
 import { BarkAppointment } from "@/lib/bark/models/bark-appointment";
-import { postCancelAppointment } from "../_actions/post-cancel-appointment";
+import { postCancelAppointment } from "../../../_lib/actions/post-cancel-appointment";
 import { useRouter } from "next/navigation";
 import { RoutePath } from "@/lib/route-path";
 import { useToast } from "@/components/ui/use-toast";
