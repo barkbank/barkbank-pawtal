@@ -3,7 +3,8 @@
 import { AvailableDog } from "@/lib/vet/vet-models";
 import { DogCard } from "./dog-card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { SchedulerOutcome, SchedulerState } from "../_lib/scheduler-models";
+import { SchedulerState } from "../models/scheduler-state";
+import { SchedulerOutcome } from "@/app/vet/_lib/models/scheduler-outcome";
 import { useState } from "react";
 import { CallCard } from "./call-card";
 import { CALL_OUTCOME } from "@/lib/data/db-enums";

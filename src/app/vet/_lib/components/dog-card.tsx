@@ -5,7 +5,7 @@ import { getFormattedAge } from "@/lib/utilities/bark-age";
 import { AvailableDog } from "@/lib/vet/vet-models";
 import clsx from "clsx";
 import { capitalize } from "lodash";
-import { SchedulerOutcome } from "../_lib/scheduler-models";
+import { SchedulerOutcome } from "@/app/vet/_lib/models/scheduler-outcome";
 import { DeclinedBadge, ScheduledBadge } from "./scheduler-badges";
 
 export function DogCard(props: {
