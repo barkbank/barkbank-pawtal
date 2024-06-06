@@ -78,7 +78,7 @@ function toBarkReportData(formData: ReportFormData): BarkReportData {
   return BarkReportDataSchema.parse(values);
 }
 
-function toBarkFormData(reportData: BarkReportData): ReportFormData {
+function toReportFormData(reportData: BarkReportData): ReportFormData {
   const {
     visitTime,
     dogWeightKg,
