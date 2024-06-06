@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { RoutePath } from "@/lib/route-path";
 import { useToast } from "@/components/ui/use-toast";
 import { CODE } from "@/lib/utilities/bark-code";
+import { capitalize } from "lodash";
 
 export function CancelAppointmentForm(props: { appointment: BarkAppointment }) {
   const router = useRouter();
@@ -38,33 +39,28 @@ export function CancelAppointmentForm(props: { appointment: BarkAppointment }) {
   };
 
   return (
-    <div className="flex flex-col gap-3">
-      <BarkH1>Cancel Appointment?</BarkH1>
-      <div className="flex w-full flex-col gap-3 md:w-2/3">
-        <p>
-          Please confirm cancellation of appointment{" "}
-          <span className="font-semibold">{appointmentId}</span> for{" "}
-          <span className="font-semibold">{dogName}</span>, a{" "}
-          <span className="font-semibold">{dogGender}</span>{" "}
-          <span className="font-semibold">{dogBreed}</span> belonging to{" "}
-          <span className="font-semibold">{ownerName}</span>.
-        </p>
-        <div className="flex w-full flex-col gap-3 md:flex-row">
-          <BarkButton
-            className="w-full md:w-40"
-            variant="brand"
-            onClick={onConfirm}
-          >
-            Confirm
-          </BarkButton>
-          <BarkButton
-            className="w-full md:w-40"
-            variant="brandInverse"
-            onClick={onDoNotCancel}
-          >
-            Do not cancel
-          </BarkButton>
-        </div>
+    <div className="prose">
+      <h1>Cancel Appointment</h1>
+      <p>
+        Please confirm the cancellation of appointment with <b>{dogName}</b>, a{" "}
+        <b>{capitalize(dogGender)}</b> <b>{dogBreed}</b> belonging to{" "}
+        <b>{ownerName}</b>. (Appointment ID: {appointmentId})
+      </p>
+      <div className="flex w-full flex-col gap-3 md:flex-row">
+        <BarkButton
+          className="w-full md:w-40"
+          variant="brand"
+          onClick={onConfirm}
+        >
+          Confirm
+        </BarkButton>
+        <BarkButton
+          className="w-full md:w-40"
+          variant="brandInverse"
+          onClick={onDoNotCancel}
+        >
+          Do not cancel
+        </BarkButton>
       </div>
     </div>
   );
