@@ -19,9 +19,8 @@ import { RoutePath } from "@/lib/route-path";
 import { SINGAPORE_TIME_ZONE, formatDateTime } from "@/lib/utilities/bark-time";
 import clsx from "clsx";
 import { capitalize } from "lodash";
-import { Droplets, Edit, Worm } from "lucide-react";
+import { Droplets, Worm } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { sprintf } from "sprintf-js";
 
