@@ -44,7 +44,7 @@ export function ReportCard(props: { report: BarkReport }) {
   } = report;
   const avatar = getAvatar(dogGender);
   const gotoViewReport = () => {
-    router.push(RoutePath.VET_REPORTS_VIEW(reportId));
+    router.push(RoutePath.VET_REPORTS_EDIT(reportId));
   };
   return (
     <div
@@ -55,9 +55,6 @@ export function ReportCard(props: { report: BarkReport }) {
         {avatar}
         <h2 className="x-card-title flex-1">{dogName}</h2>
         {getDonated(dogDidDonateBlood)}
-        <Link href={RoutePath.VET_REPORTS_EDIT(reportId)}>
-          <Edit />
-        </Link>
       </div>
       {getReportedIneligibility(ineligibilityStatus)}
       <p className="flex-1">
