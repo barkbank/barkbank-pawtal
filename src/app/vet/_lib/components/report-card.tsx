@@ -40,7 +40,7 @@ export function ReportCard(props: { report: BarkReport }) {
   } = report;
   const avatar = getAvatar(dogGender);
   return (
-    <div className="x-rounded-card flex flex-col items-start justify-between gap-3">
+    <div className="x-rounded-card flex flex-col items-start justify-between gap-3 hover:bg-slate-100">
       <div className="flex w-full flex-row items-center justify-between gap-3">
         {avatar}
         <h2 className="x-typography-card-header flex-1">{dogName}</h2>
@@ -55,16 +55,16 @@ export function ReportCard(props: { report: BarkReport }) {
         <span className="font-semibold">{toDateText(visitTime)}</span>
       </p>
       <p className="flex-1">
-        <span className="font-semibold text-blue-500">{dogName}</span> is a{" "}
-        <span className="font-semibold text-blue-700">
+        <span className="font-semibold text-slate-700">{dogName}</span> is a{" "}
+        <span className="font-semibold text-slate-500">
           {sprintf("%.0f", dogWeightKg)}kg
         </span>{" "}
-        <span className="font-semibold text-blue-500">
+        <span className="font-semibold text-slate-700">
           {capitalize(dogGender)}
         </span>{" "}
-        <span className="font-semibold text-blue-700">{dogBreed}</span>{" "}
+        <span className="font-semibold text-slate-500">{dogBreed}</span>{" "}
         belonging to{" "}
-        <span className="font-semibold text-blue-500">{ownerName}</span>.
+        <span className="font-semibold text-slate-700">{ownerName}</span>.
       </p>
       <div className="flex h-[24px] flex-row gap-3">
         {getHeartworm(dogHeartworm)}
