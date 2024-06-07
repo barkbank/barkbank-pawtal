@@ -1,3 +1,5 @@
+"use client";
+
 import {
   BarkStatusEligible,
   BarkStatusIneligible,
@@ -20,9 +22,11 @@ import { capitalize } from "lodash";
 import { Droplets, Edit, Worm } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { sprintf } from "sprintf-js";
 
 export function ReportCard(props: { report: BarkReport }) {
+  const router = useRouter();
   const { report } = props;
   const {
     reportId,
@@ -39,8 +43,14 @@ export function ReportCard(props: { report: BarkReport }) {
     ineligibilityStatus,
   } = report;
   const avatar = getAvatar(dogGender);
+  const gotoViewReport = () => {
+    router.push(RoutePath.VET_REPORTS_VIEW(reportId));
+  };
   return (
-    <div className="x-rounded-card flex flex-col items-start justify-between gap-3 hover:bg-slate-100">
+    <div
+      className="x-rounded-card flex flex-col items-start justify-between gap-3 hover:bg-slate-100"
+      onClick={gotoViewReport}
+    >
       <div className="flex w-full flex-row items-center justify-between gap-3">
         {avatar}
         <h2 className="x-typography-card-header flex-1">{dogName}</h2>
