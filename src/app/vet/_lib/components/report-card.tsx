@@ -48,12 +48,12 @@ export function ReportCard(props: { report: BarkReport }) {
   };
   return (
     <div
-      className="x-rounded-card flex flex-col items-start justify-between gap-3 hover:bg-slate-100"
+      className="x-card x-card-bg flex flex-col items-start justify-between gap-3"
       onClick={gotoViewReport}
     >
       <div className="flex w-full flex-row items-center justify-between gap-3">
         {avatar}
-        <h2 className="x-typography-card-header flex-1">{dogName}</h2>
+        <h2 className="x-card-title flex-1">{dogName}</h2>
         {getDonated(dogDidDonateBlood)}
         <Link href={RoutePath.VET_REPORTS_EDIT(reportId)}>
           <Edit />
