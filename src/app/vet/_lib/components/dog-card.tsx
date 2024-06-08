@@ -8,6 +8,7 @@ import { capitalize } from "lodash";
 import { SchedulerOutcome } from "@/app/vet/_lib/models/scheduler-outcome";
 import { DeclinedBadge, ScheduledBadge } from "./scheduler-badges";
 import { DogAvatar } from "./dog-avatar";
+import { NA_TEXT } from "@/app/_lib/constants";
 
 export function DogCard(props: {
   dog: AvailableDog;
@@ -98,7 +99,7 @@ function getGender(dog: AvailableDog): string {
 function getEverPregnant(dog: AvailableDog): string {
   const { dogEverPregnant, dogGender } = dog;
   if (dogGender === DOG_GENDER.MALE) {
-    return "N/A";
+    return NA_TEXT;
   }
   return capitalize(dogEverPregnant);
 }
