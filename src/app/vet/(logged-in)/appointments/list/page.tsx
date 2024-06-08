@@ -1,5 +1,4 @@
-import { AppointmentCard } from "@/app/vet/_lib/components/appointment-card";
-import { BarkH1 } from "@/components/bark/bark-typography";
+import { AppointmentList } from "@/app/vet/_lib/components/appointment-list";
 import APP from "@/lib/app";
 import { getAuthenticatedVetActor } from "@/lib/auth";
 import { opFetchPendingAppointmentsByVetId } from "@/lib/bark/operations/op-fetch-pending-appointments-by-vet-id";
@@ -23,17 +22,5 @@ export default async function Page() {
   }
   const { appointments } = result;
 
-  return (
-    <div className="m-3 flex flex-col gap-3">
-      <BarkH1>Appointments</BarkH1>
-      <div className="flex flex-col gap-3">
-        {appointments.map((appointment) => {
-          const { appointmentId } = appointment;
-          return (
-            <AppointmentCard appointment={appointment} key={appointmentId} />
-          );
-        })}
-      </div>
-    </div>
-  );
+  return <AppointmentList appointments={appointments} />;
 }
