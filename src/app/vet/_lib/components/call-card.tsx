@@ -46,7 +46,6 @@ export function CallCard(props: {
     );
   }
 
-  // WIP: we omit the userEmail here, but the API is still sending it. We need to omit it from the API responses also.
   const { userName, userPhoneNumber, vetUserLastContactedTime } = result;
 
   // TODO: (Maybe) Add userResidency to OwnerContactDetails. For now, hardcoding
