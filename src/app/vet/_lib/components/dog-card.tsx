@@ -20,9 +20,9 @@ export function DogCard(props: {
   // TODO: when the latest call-outcome related to the dog is DECLINED, the dog card should indicate how long ago that was.
   return (
     <div
-      className={clsx("m-1 rounded-md  p-3 shadow-sm shadow-slate-400", {
-        "bg-white": dogId !== selectedDogId,
-        "bg-brand-brown": dogId === selectedDogId,
+      className={clsx("x-card m-1", {
+        "x-card-bg": dogId !== selectedDogId,
+        "x-card-bg-selected": dogId === selectedDogId,
       })}
       onClick={onSelect}
     >
@@ -30,7 +30,7 @@ export function DogCard(props: {
 
       {/* Name */}
       <div className="flex flex-row justify-between">
-        <div className="font-semibold">{dogName}</div>
+        <div className="x-card-title">{dogName}</div>
         {outcome === CALL_OUTCOME.APPOINTMENT && <ScheduledBadge />}
         {outcome === CALL_OUTCOME.DECLINED && <DeclinedBadge />}
       </div>

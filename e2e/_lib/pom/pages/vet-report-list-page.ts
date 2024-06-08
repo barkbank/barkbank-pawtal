@@ -6,7 +6,7 @@ import { Locator } from "@playwright/test";
 
 export class VetReportListPage extends PomPage {
   url(): string {
-    return this.website().urlOf(RoutePath.VET_APPOINTMENTS_LIST);
+    return this.website().urlOf(RoutePath.VET_REPORTS_LIST);
   }
 
   reportCard(args: { dogName: string }) {

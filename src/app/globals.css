@@ -88,10 +88,22 @@
   }
 }
 
-.x-rounded-card {
+/* Shape and padding of the standard card */
+.x-card {
   @apply rounded-md p-3 shadow-sm shadow-slate-400;
 }
 
-.x-typography-card-header {
-  @apply text-xl font-bold;
+/* Standard card background */
+.x-card-bg {
+  @apply bg-white md:hover:bg-slate-100;
+}
+
+/* Selected card background */
+.x-card-bg-selected {
+  @apply bg-brand-brown;
+}
+
+/* Card title text */
+.x-card-title {
+  @apply text-xl font-normal;
 }

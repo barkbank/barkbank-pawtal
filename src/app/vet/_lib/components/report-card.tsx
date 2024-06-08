@@ -1,3 +1,5 @@
+"use client";
+
 import {
   BarkStatusEligible,
   BarkStatusIneligible,
@@ -17,12 +19,13 @@ import { RoutePath } from "@/lib/route-path";
 import { SINGAPORE_TIME_ZONE, formatDateTime } from "@/lib/utilities/bark-time";
 import clsx from "clsx";
 import { capitalize } from "lodash";
-import { Droplets, Edit, Worm } from "lucide-react";
+import { Droplets, Worm } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { sprintf } from "sprintf-js";
 
 export function ReportCard(props: { report: BarkReport }) {
+  const router = useRouter();
   const { report } = props;
   const {
     reportId,
@@ -39,15 +42,18 @@ export function ReportCard(props: { report: BarkReport }) {
     ineligibilityStatus,
   } = report;
   const avatar = getAvatar(dogGender);
+  const gotoViewReport = () => {
+    router.push(RoutePath.VET_REPORTS_VIEW(reportId));
+  };
   return (
-    <div className="x-rounded-card flex flex-col items-start justify-between gap-3">
+    <div
+      className="x-card x-card-bg flex flex-col items-start justify-between gap-3"
+      onClick={gotoViewReport}
+    >
       <div className="flex w-full flex-row items-center justify-between gap-3">
         {avatar}
-        <h2 className="x-typography-card-header flex-1">{dogName}</h2>
+        <h2 className="x-card-title flex-1">{dogName}</h2>
         {getDonated(dogDidDonateBlood)}
-        <Link href={RoutePath.VET_REPORTS_EDIT(reportId)}>
-          <Edit />
-        </Link>
       </div>
       {getReportedIneligibility(ineligibilityStatus)}
       <p className="flex-1">
@@ -55,16 +61,16 @@ export function ReportCard(props: { report: BarkReport }) {
         <span className="font-semibold">{toDateText(visitTime)}</span>
       </p>
       <p className="flex-1">
-        <span className="font-semibold text-blue-500">{dogName}</span> is a{" "}
-        <span className="font-semibold text-blue-700">
+        <span className="font-semibold text-slate-700">{dogName}</span> is a{" "}
+        <span className="font-semibold text-slate-500">
           {sprintf("%.0f", dogWeightKg)}kg
         </span>{" "}
-        <span className="font-semibold text-blue-500">
+        <span className="font-semibold text-slate-700">
           {capitalize(dogGender)}
         </span>{" "}
-        <span className="font-semibold text-blue-700">{dogBreed}</span>{" "}
+        <span className="font-semibold text-slate-500">{dogBreed}</span>{" "}
         belonging to{" "}
-        <span className="font-semibold text-blue-500">{ownerName}</span>.
+        <span className="font-semibold text-slate-700">{ownerName}</span>.
       </p>
       <div className="flex h-[24px] flex-row gap-3">
         {getHeartworm(dogHeartworm)}

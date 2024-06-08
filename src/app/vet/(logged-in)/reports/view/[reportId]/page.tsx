@@ -1,3 +1,4 @@
+import { ReportView } from "@/app/vet/_lib/components/report-view";
 import { BarkError } from "@/components/bark/bark-error";
 import APP from "@/lib/app";
 import { getAuthenticatedVetActor } from "@/lib/auth";
@@ -23,8 +24,8 @@ export default async function Page(props: { params: { reportId: string } }) {
   }
   const { report } = result;
   return (
-    <div>
-      TODO: Stub Page <pre>{JSON.stringify(report, null, 2)}</pre>
+    <div className="m-3">
+      <ReportView report={report} />
     </div>
   );
 }

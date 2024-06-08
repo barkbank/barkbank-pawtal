@@ -6,7 +6,7 @@ import { VetSchedulePage } from "../pom/pages/vet-schedule-page";
 import { doLogoutSequence } from "./logout-sequence";
 import { getIsMobile } from "../e2e-test-utils";
 import { NavComponent } from "../pom/layout/nav-component";
-import { VetAppointmentsListPage } from "../pom/pages/vet-appointments-list-page";
+import { VetAppointmentListPage } from "../pom/pages/vet-appointment-list-page";
 
 export async function doCreateAppointment(
   context: PomContext,
@@ -29,7 +29,7 @@ export async function doCreateAppointment(
   const nav = new NavComponent(context);
   await nav.vetAppointmentsOption().click();
 
-  const pg2 = new VetAppointmentsListPage(context);
+  const pg2 = new VetAppointmentListPage(context);
   await pg2.checkUrl();
 
   console.log({

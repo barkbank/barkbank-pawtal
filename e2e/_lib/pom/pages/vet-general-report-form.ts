@@ -14,6 +14,10 @@ export abstract class VetGeneralReportForm extends PomDynamicPage {
     return this.page().getByRole("combobox");
   }
 
+  dogBcsOption5(): Locator {
+    return this.page().getByLabel("5", { exact: true });
+  }
+
   dogBcsOption8(): Locator {
     return this.page().getByLabel("8", { exact: true });
   }
@@ -54,6 +58,14 @@ export abstract class VetGeneralReportForm extends PomDynamicPage {
 
   dogEligibility_ELIGIBLE(): Locator {
     return this.page().getByLabel("Eligible", { exact: true });
+  }
+
+  dogEligibility_TEMPORARILY_INELIGIBLE(): Locator {
+    return this.page().getByLabel("Temporarily Ineligible", { exact: true });
+  }
+
+  dogEligibility_PERMANANTLY_INELIGIBLE(): Locator {
+    return this.page().getByLabel("Permanantly Ineligible", { exact: true });
   }
 
   ineligibilityReasonTextArea(): Locator {
