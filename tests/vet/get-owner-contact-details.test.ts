@@ -12,7 +12,10 @@ import {
   dbDeleteDogVetPreference,
   dbInsertDogVetPreference,
 } from "@/lib/data/db-dogs";
-import { OwnerContactDetails } from "@/lib/bark/models/owner-contact-details";
+import {
+  OwnerContactDetails,
+  OwnerContactDetailsSchema,
+} from "@/lib/bark/models/owner-contact-details";
 import { getOwnerContactDetails } from "@/lib/vet/actions/get-owner-contact-details";
 import { CALL_OUTCOME } from "@/lib/data/db-enums";
 import { CODE } from "@/lib/utilities/bark-code";
@@ -134,13 +137,12 @@ async function insertOwner(
   const { dogId } = await insertDog(idx, userId, dbPool);
   const { preferredVetId } = args;
   await dbInsertDogVetPreference(dbPool, dogId, preferredVetId);
-  const { userName, userEmail, userPhoneNumber } = await userPii(idx);
-  const ownerContactDetails: OwnerContactDetails = {
+  const { userName, userPhoneNumber } = await userPii(idx);
+  const ownerContactDetails = OwnerContactDetailsSchema.parse({
     dogId,
     userName,
-    userEmail,
     userPhoneNumber,
     vetUserLastContactedTime: null,
-  };
+  });
   return { userId, dogId, ownerContactDetails };
 }

@@ -1,7 +1,10 @@
 import { RoutePath } from "@/lib/route-path";
 import { CODE } from "@/lib/utilities/bark-code";
 import { Err, Ok, Result } from "@/lib/utilities/result";
-import { OwnerContactDetails } from "@/lib/bark/models/owner-contact-details";
+import {
+  OwnerContactDetails,
+  OwnerContactDetailsSchema,
+} from "@/lib/bark/models/owner-contact-details";
 import useSWR from "swr";
 
 type DataType = Result<
@@ -33,13 +36,15 @@ async function fetchOwnerContactDetails(dogIdKey: string): Promise<DataType> {
   const data: { ownerContactDetails: OwnerContactDetails } = await res.json();
   const { ownerContactDetails } = data;
   const { vetUserLastContactedTime, ...others } = ownerContactDetails;
-  return Ok({
-    ...others,
-    vetUserLastContactedTime:
-      vetUserLastContactedTime === null
-        ? null
-        : new Date(vetUserLastContactedTime),
-  });
+  return Ok(
+    OwnerContactDetailsSchema.parse({
+      ...others,
+      vetUserLastContactedTime:
+        vetUserLastContactedTime === null
+          ? null
+          : new Date(vetUserLastContactedTime),
+    }),
+  );
 }
 
 export function useOwnerContactDetails(dogId: string | null): {
