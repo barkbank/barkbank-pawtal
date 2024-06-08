@@ -9,7 +9,7 @@ export class VetReportEditPage extends VetGeneralReportForm {
 
   submitButton(): Locator {
     return this.page().getByRole("button", {
-      name: "Edit Report",
+      name: "Save Changes",
       exact: true,
     });
   }
