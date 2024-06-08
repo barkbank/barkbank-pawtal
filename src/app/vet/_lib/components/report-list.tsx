@@ -18,7 +18,7 @@ export function ReportList(props: { reports: BarkReport[] }) {
 
   const handleSearchReset = () => {
     setQuery("");
-  }
+  };
 
   function getReportTokens(report: BarkReport): string[] {
     const { dogName, dogBreed, ownerName } = report;
@@ -45,7 +45,7 @@ export function ReportList(props: { reports: BarkReport[] }) {
           value={query}
           onChange={handleSearchInputChange}
         />
-        <X className="cursor-pointer" onClick={handleSearchReset}/>
+        <X className="cursor-pointer" onClick={handleSearchReset} />
       </div>
       <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
         {matchingReports.map((report) => (
