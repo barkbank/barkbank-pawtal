@@ -37,6 +37,10 @@ describe("getMatchingItems", () => {
     });
   }
 
+  it("should match everything when query is empty string", () => {
+    expect(search("")).toEqual([ALICIA, BERNARD, BERNICE]);
+  });
+
   it("should return matching items", () => {
     expect(search("calling")).toEqual([BERNARD, BERNICE]);
     expect(search("bern")).toEqual([BERNARD, BERNICE]);
