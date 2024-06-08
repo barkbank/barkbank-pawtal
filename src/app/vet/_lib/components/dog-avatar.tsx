@@ -26,5 +26,5 @@ export function DogAvatar(props: { dogGender: DogGender }) {
       />
     );
   }
-  return (<Dog size={size}/>)
+  return <Dog size={size} />;
 }

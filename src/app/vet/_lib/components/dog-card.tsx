@@ -32,8 +32,8 @@ export function DogCard(props: {
       {/* Name */}
       <div className="flex flex-row justify-between">
         <div className="flex flex-row gap-3">
-        <DogAvatar dogGender={dogGender} />
-        <div className="x-card-title">{dogName}</div>
+          <DogAvatar dogGender={dogGender} />
+          <div className="x-card-title">{dogName}</div>
         </div>
         {outcome === CALL_OUTCOME.APPOINTMENT && <ScheduledBadge />}
         {outcome === CALL_OUTCOME.DECLINED && <DeclinedBadge />}
