@@ -10,9 +10,9 @@ import { VetAppointmentListPage } from "../pom/pages/vet-appointment-list-page";
 
 export async function doCreateAppointment(
   context: PomContext,
-): Promise<{ dogName: string; userEmail: string }> {
+): Promise<{ dogName: string }> {
   const page = context.page;
-  const { userEmail, dogName } = await registerTestUser({ page });
+  const { dogName, userName } = await registerTestUser({ page });
   await doLogoutSequence({ context });
   await loginKnownVet({ page });
   const pg1 = new VetSchedulePage(context);
@@ -22,7 +22,7 @@ export async function doCreateAppointment(
   await pg1.dogCard(dogName).locator().click();
   const isMobile = await getIsMobile(context);
   const activityArea = isMobile ? pg1.dogCard(dogName) : pg1.rightSidePane();
-  await expect(activityArea.exactText(userEmail)).toBeVisible();
+  await expect(activityArea.exactText(userName)).toBeVisible();
   await expect(activityArea.scheduleButton()).toBeVisible();
   await activityArea.scheduleButton().click();
 
@@ -34,9 +34,8 @@ export async function doCreateAppointment(
 
   console.log({
     dogName,
-    userEmail,
     _msg: "Created appointment and navigated to appointments list page.",
   });
 
-  return { dogName, userEmail };
+  return { dogName };
 }
