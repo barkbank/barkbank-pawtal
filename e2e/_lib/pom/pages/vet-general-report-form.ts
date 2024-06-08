@@ -69,7 +69,7 @@ export abstract class VetGeneralReportForm extends PomDynamicPage {
   }
 
   ineligibilityReasonTextArea(): Locator {
-    return this.page().getByLabel("Please indicate a reason (if");
+    return this.page().getByLabel("Please indicate if there are reasons");
   }
 
   ineligibilityExpiryDateField(): Locator {

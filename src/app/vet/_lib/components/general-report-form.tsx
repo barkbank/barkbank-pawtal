@@ -217,6 +217,11 @@ export function GeneralReportForm(props: {
           },
         ]}
       />
+      <BarkFormTextArea
+        form={form}
+        name="ineligibilityReason"
+        label="Please indicate if there are reasons why this dog might be ineligible for blood donation"
+      />
       <BarkFormRadioGroup
         form={form}
         name="ineligibilityStatus"
@@ -236,11 +241,6 @@ export function GeneralReportForm(props: {
             label: `Permanently Ineligible`,
           },
         ]}
-      />
-      <BarkFormTextArea
-        form={form}
-        name="ineligibilityReason"
-        label="Please indicate a reason (if ineligible)"
       />
       <BarkFormInput
         form={form}
