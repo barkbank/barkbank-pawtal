@@ -153,7 +153,7 @@ export function ReportView(props: { report: BarkReport }) {
       </div>
       <div className="x-card flex flex-col gap-3">
         {fields.map((field) => (
-          <FieldItem field={field} />
+          <FieldItem key={field.label} field={field} />
         ))}
       </div>
       <div className="flex w-full flex-col gap-3 md:flex-row">
