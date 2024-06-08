@@ -25,12 +25,12 @@ export function EditReportForm(props: { report: BarkReport }) {
     if (res !== CODE.OK) {
       return Err(res);
     }
-    router.push(RoutePath.VET_REPORTS_LIST);
+    router.push(RoutePath.VET_REPORTS_VIEW(reportId));
     return Ok(true);
   }
 
   async function handleCancel(): Promise<void> {
-    router.push(RoutePath.VET_REPORTS_LIST);
+    router.push(RoutePath.VET_REPORTS_VIEW(reportId));
   }
 
   return (
