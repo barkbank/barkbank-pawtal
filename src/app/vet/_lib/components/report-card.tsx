@@ -16,7 +16,11 @@ import {
 } from "@/lib/data/db-enums";
 import { IMG_PATH } from "@/lib/image-path";
 import { RoutePath } from "@/lib/route-path";
-import { SINGAPORE_TIME_ZONE, formatDateTime } from "@/lib/utilities/bark-time";
+import {
+  SGT_UI_DATE_TIME,
+  SINGAPORE_TIME_ZONE,
+  formatDateTime,
+} from "@/lib/utilities/bark-time";
 import clsx from "clsx";
 import { capitalize } from "lodash";
 import { Droplets, Worm } from "lucide-react";
@@ -56,10 +60,7 @@ export function ReportCard(props: { report: BarkReport }) {
         {getDonated(dogDidDonateBlood)}
       </div>
       {getReportedIneligibility(ineligibilityStatus)}
-      <p className="flex-1">
-        Visit date:{" "}
-        <span className="font-semibold">{toDateText(visitTime)}</span>
-      </p>
+      <p>Visit Time: {formatDateTime(visitTime, SGT_UI_DATE_TIME)}</p>
       <p className="flex-1">
         <span className="font-semibold text-slate-700">{dogName}</span> is a{" "}
         <span className="font-semibold text-slate-500">

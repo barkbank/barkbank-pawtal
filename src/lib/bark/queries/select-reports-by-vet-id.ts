@@ -42,6 +42,7 @@ export async function selectReportsByVetId(
   LEFT JOIN dogs as tDog on tReport.dog_id = tDog.dog_id
   LEFT JOIN users as tUser on tDog.user_id = tUser.user_id
   WHERE vet_id = $1
+  ORDER BY tReport.visit_time DESC
   `;
   const res = await dbQuery<EncryptedBarkReport>(dbContext, sql, [vetId]);
   return res.rows.map((row) => EncryptedBarkReportSchema.parse(row));
