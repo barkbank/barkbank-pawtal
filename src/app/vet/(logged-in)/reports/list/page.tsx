@@ -19,5 +19,5 @@ export default async function Page() {
     return <BarkError className="m-3">Failed to fetch reports.</BarkError>;
   }
   const { reports } = result;
-  return <ReportList reports={reports} />
+  return <ReportList reports={reports} />;
 }

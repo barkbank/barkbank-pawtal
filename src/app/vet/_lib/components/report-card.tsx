@@ -14,9 +14,7 @@ import {
   ReportedIneligibility,
 } from "@/lib/data/db-enums";
 import { RoutePath } from "@/lib/route-path";
-import {
-  SGT_UI_DATE_TIME, formatDateTime
-} from "@/lib/utilities/bark-time";
+import { SGT_UI_DATE_TIME, formatDateTime } from "@/lib/utilities/bark-time";
 import clsx from "clsx";
 import { capitalize } from "lodash";
 import { Droplets, Worm } from "lucide-react";
