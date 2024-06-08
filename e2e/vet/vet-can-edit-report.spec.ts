@@ -6,7 +6,7 @@ import { VetSubmitReportPage } from "../_lib/pom/pages/vet-submit-report-page";
 import { NavComponent } from "../_lib/pom/layout/nav-component";
 import { VetReportListPage } from "../_lib/pom/pages/vet-report-list-page";
 import { PomContext } from "../_lib/pom/core/pom-object";
-import { VetEditReportPage } from "../_lib/pom/pages/vet-edit-report-page";
+import { VetReportEditPage } from "../_lib/pom/pages/vet-report-edit-page";
 import { VetReportViewPage } from "../_lib/pom/pages/vet-report-view-page";
 
 test("vet can edit report", async ({ page }) => {
@@ -75,7 +75,7 @@ async function changeBloodTypeToNegative(
 
   const pgList = new VetReportListPage(context);
   const pgView = new VetReportViewPage(context);
-  const pgEdit = new VetEditReportPage(context);
+  const pgEdit = new VetReportEditPage(context);
 
   await pgList.checkUrl();
   await pgList.reportCard({ dogName }).locator().click();
