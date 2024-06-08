@@ -7,6 +7,10 @@ export class VetReportViewPage extends PomDynamicPage {
     return RoutePath.VET_REPORTS_VIEW_REGEX;
   }
 
+  field(label: string): Locator {
+    return this.page().getByText(`${label}:`, { exact: true }).locator("..");
+  }
+
   backButton(): Locator {
     return this.page().getByRole("link", { name: "Back", exact: true });
   }
