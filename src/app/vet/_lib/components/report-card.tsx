@@ -104,13 +104,6 @@ const getAvatar = (dogGender: SpecifiedDogGender) => {
   );
 };
 
-const toDateText = (visitTime: Date) => {
-  return formatDateTime(visitTime, {
-    timeZone: SINGAPORE_TIME_ZONE,
-    format: "d MMMM yyyy",
-  });
-};
-
 const getHeartworm = (dogHeartworm: PosNegNil) => {
   if (dogHeartworm === POS_NEG_NIL.POSITIVE) {
     return (
