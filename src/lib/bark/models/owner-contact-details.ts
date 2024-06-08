@@ -1,11 +1,15 @@
-export type OwnerContactDetails = {
-  dogId: string;
-  userName: string;
-  userEmail: string;
-  userPhoneNumber: string;
+import { z } from "zod";
+
+export const OwnerContactDetailsSchema = z.object({
+  dogId: z.string(),
+  userName: z.string(),
+  userEmail: z.string().email(),
+  userPhoneNumber: z.string(),
 
   /**
    * The last time the vet contacted the user.
    */
-  vetUserLastContactedTime: Date | null;
-};
+  vetUserLastContactedTime: z.date().nullable(),
+});
+
+export type OwnerContactDetails = z.infer<typeof OwnerContactDetailsSchema>;
