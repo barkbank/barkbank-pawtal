@@ -7,7 +7,7 @@ export function getMatchingItems<T>(args: {
   const queryTokens = query.split(" ").map((x) => x.toLowerCase());
   const matchingItems = [];
   for (const item of items) {
-    const itemStrings = getStrings(item).map((x) => x.toLocaleLowerCase());
+    const itemStrings = getStrings(item).map((x) => x.toLowerCase());
     if (allNeedlesMatchAtLeastOneString(queryTokens, itemStrings)) {
       matchingItems.push(item);
     }
