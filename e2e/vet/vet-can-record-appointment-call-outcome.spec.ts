@@ -6,7 +6,7 @@ import { VetSchedulePage } from "../_lib/pom/pages/vet-schedule-page";
 import { getIsMobile } from "../_lib/e2e-test-utils";
 
 test("vet can record APPOINTMENT call outcome", async ({ page }) => {
-  const { context, userEmail, dogName } = await registerTestUser({ page });
+  const { context, userName, dogName } = await registerTestUser({ page });
   await doLogoutSequence({ context });
   await loginKnownVet({ page });
   const pg1 = new VetSchedulePage(context);
@@ -17,7 +17,7 @@ test("vet can record APPOINTMENT call outcome", async ({ page }) => {
 
   const isMobile = await getIsMobile(context);
   const activityArea = isMobile ? pg1.dogCard(dogName) : pg1.rightSidePane();
-  await expect(activityArea.exactText(userEmail)).toBeVisible();
+  await expect(activityArea.exactText(userName)).toBeVisible();
   await expect(activityArea.scheduleButton()).toBeVisible();
 
   await activityArea.scheduleButton().click();

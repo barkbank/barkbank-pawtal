@@ -11,7 +11,7 @@ import { NA_TEXT } from "@/app/_lib/constants";
 export function BarkUserContactDetails(props: {
   details: null | {
     userName: string;
-    userEmail: string;
+    userEmail?: string;
     userPhoneNumber: string;
     userResidency: UserResidency;
     userCreationTime?: Date;
@@ -33,6 +33,12 @@ export function BarkUserContactDetails(props: {
     );
   }
 
+  type LineItem = {
+    key: string;
+    icon: React.ReactNode;
+    value: React.ReactNode;
+  };
+
   const {
     userName,
     userEmail,
@@ -41,25 +47,22 @@ export function BarkUserContactDetails(props: {
     userCreationTime,
     userLastContactedTime,
   } = details;
-  const userDetails: {
-    key: string;
-    icon: React.ReactNode;
-    value: React.ReactNode;
-  }[] = [
-    {
-      key: "location",
-      icon: (
-        <Image
-          src={IMG_PATH.LOCATION_MARKER}
-          width={24}
-          height={26}
-          alt="location marker icon"
-          className="h-full w-auto"
-        />
-      ),
-      value: capitalize(userResidency),
-    },
-    {
+  const lineItems: LineItem[] = [];
+  lineItems.push({
+    key: "location",
+    icon: (
+      <Image
+        src={IMG_PATH.LOCATION_MARKER}
+        width={24}
+        height={26}
+        alt="location marker icon"
+        className="h-full w-auto"
+      />
+    ),
+    value: capitalize(userResidency),
+  });
+  if (userEmail !== undefined) {
+    lineItems.push({
       key: "email",
       icon: (
         <Image
@@ -71,21 +74,21 @@ export function BarkUserContactDetails(props: {
         />
       ),
       value: userEmail,
-    },
-    {
-      key: "phone",
-      icon: (
-        <Image
-          src={IMG_PATH.PHONE}
-          width={30}
-          height={30}
-          alt="phone icon icon"
-          className="h-full w-auto"
-        />
-      ),
-      value: userPhoneNumber,
-    },
-  ];
+    });
+  }
+  lineItems.push({
+    key: "phone",
+    icon: (
+      <Image
+        src={IMG_PATH.PHONE}
+        width={30}
+        height={30}
+        alt="phone icon icon"
+        className="h-full w-auto"
+      />
+    ),
+    value: userPhoneNumber,
+  });
 
   const userCreationTimeText =
     userCreationTime === undefined
@@ -117,7 +120,7 @@ export function BarkUserContactDetails(props: {
         </p>
       </div>
       <div className="flex flex-col gap-3">
-        {userDetails.map((detail) => {
+        {lineItems.map((detail) => {
           const { key, icon, value } = detail;
           return (
             <div key={key} className="flex items-center gap-2">

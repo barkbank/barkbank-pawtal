@@ -1,6 +1,9 @@
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { VetActor } from "../vet-actor";
-import { OwnerContactDetails } from "../vet-models";
+import {
+  OwnerContactDetails,
+  OwnerContactDetailsSchema,
+} from "@/lib/bark/models/owner-contact-details";
 import { dbQuery } from "@/lib/data/db-utils";
 import { CODE } from "@/lib/utilities/bark-code";
 
@@ -31,7 +34,7 @@ export async function getOwnerContactDetails(
     return Err(CODE.ERROR_NOT_PREFERRED_VET);
   }
   const res = await toOwnerContactDetails(ctx, row);
-  return Ok(res);
+  return Ok(OwnerContactDetailsSchema.parse(res));
 }
 
 type Context = {
@@ -90,12 +93,11 @@ async function toOwnerContactDetails(
   const { actor, dogId } = ctx;
   const { userMapper } = actor.getParams();
   const { isPreferredVet, userEncryptedPii, ...otherFields } = row;
-  const { userName, userEmail, userPhoneNumber } =
+  const { userName, userPhoneNumber } =
     await userMapper.mapUserEncryptedPiiToUserPii({ userEncryptedPii });
   return {
     dogId,
     userName,
-    userEmail,
     userPhoneNumber,
     ...otherFields,
   };
