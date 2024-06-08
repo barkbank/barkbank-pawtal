@@ -19,19 +19,15 @@ export function ReportList(props: { reports: BarkReport[] }) {
     setQuery("");
   };
 
-  function getReportTokens(report: BarkReport): string[] {
+  function getReportStrings(report: BarkReport): string[] {
     const { dogName, dogBreed, ownerName } = report;
     return [dogName, dogBreed, ownerName];
-    const nameTokens = dogName.split(" ");
-    const breedTokens = dogBreed.split(" ");
-    const ownerTokens = ownerName.split(" ");
-    return nameTokens.concat(breedTokens).concat(ownerTokens);
   }
 
   const matchingReports = getMatchingItems({
     query,
     items: reports,
-    getStrings: getReportTokens,
+    getStrings: getReportStrings,
   });
 
   return (
