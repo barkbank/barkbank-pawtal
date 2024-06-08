@@ -7,9 +7,8 @@ describe("getMatchingItems", () => {
   };
 
   function getSomeTokens(something: SomeType): string[] {
-    const nameTokens = something.name.split(" ");
-    const powerTokens = something.power.split(" ");
-    return nameTokens.concat(powerTokens);
+    const { name, power } = something;
+    return [name, power];
   }
 
   const ALICIA = {
@@ -32,7 +31,7 @@ describe("getMatchingItems", () => {
   function search(query: string): SomeType[] {
     return getMatchingItems({
       items: GIVEN_PERSONS,
-      getTokens: getSomeTokens,
+      getStrings: getSomeTokens,
       query,
     });
   }

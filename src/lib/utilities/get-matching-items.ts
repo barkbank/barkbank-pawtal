@@ -1,13 +1,13 @@
 export function getMatchingItems<T>(args: {
   query: string;
   items: T[];
-  getTokens: (item: T) => string[];
+  getStrings: (item: T) => string[];
 }): T[] {
-  const { query, items, getTokens } = args;
+  const { query, items, getStrings } = args;
   const queryTokens = query.split(" ").map((x) => x.toLowerCase());
   const matchingItems = [];
   for (const item of items) {
-    const itemTokens = getTokens(item).map((x) => x.toLocaleLowerCase());
+    const itemTokens = getStrings(item).map((x) => x.toLocaleLowerCase());
     if (allNeedlesMatchOneToken(queryTokens, itemTokens)) {
       matchingItems.push(item);
     }

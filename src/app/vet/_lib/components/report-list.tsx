@@ -21,6 +21,7 @@ export function ReportList(props: { reports: BarkReport[] }) {
 
   function getReportTokens(report: BarkReport): string[] {
     const { dogName, dogBreed, ownerName } = report;
+    return [dogName, dogBreed, ownerName];
     const nameTokens = dogName.split(" ");
     const breedTokens = dogBreed.split(" ");
     const ownerTokens = ownerName.split(" ");
@@ -30,7 +31,7 @@ export function ReportList(props: { reports: BarkReport[] }) {
   const matchingReports = getMatchingItems({
     query,
     items: reports,
-    getTokens: getReportTokens,
+    getStrings: getReportTokens,
   });
 
   return (
