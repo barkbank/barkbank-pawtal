@@ -7,28 +7,20 @@ import {
 } from "@/components/bark/bark-status";
 import { Badge } from "@/components/ui/badge";
 import { BarkReport } from "@/lib/bark/models/bark-report";
-import { DOG_GENDER, SpecifiedDogGender } from "@/lib/bark/models/dog-gender";
 import {
   POS_NEG_NIL,
   PosNegNil,
   REPORTED_INELIGIBILITY,
   ReportedIneligibility,
 } from "@/lib/data/db-enums";
-import { IMG_PATH } from "@/lib/image-path";
 import { RoutePath } from "@/lib/route-path";
-import {
-  SGT_UI_DATE_TIME,
-  SINGAPORE_TIME_ZONE,
-  formatDateTime,
-} from "@/lib/utilities/bark-time";
+import { SGT_UI_DATE_TIME, formatDateTime } from "@/lib/utilities/bark-time";
 import clsx from "clsx";
 import { capitalize } from "lodash";
 import { Droplets, Worm } from "lucide-react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { sprintf } from "sprintf-js";
 import { DogAvatar } from "./dog-avatar";
-import { BarkDogAvatar } from "@/components/bark/bark-dog-avatar";
 
 export function ReportCard(props: { report: BarkReport }) {
   const router = useRouter();

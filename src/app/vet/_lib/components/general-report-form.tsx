@@ -251,7 +251,7 @@ export function GeneralReportForm(props: {
       <BarkFormError form={form} />
       <div className="mt-6 flex w-full flex-col gap-3 md:flex-row">
         <BarkButton className="w-full md:w-40" variant="brand" type="submit">
-          {purpose === "SUBMIT" ? "Submit Report" : "Edit Report"}
+          {purpose === "SUBMIT" ? "Submit Report" : "Save Changes"}
         </BarkButton>
         <BarkButton
           className="w-full md:w-40"
