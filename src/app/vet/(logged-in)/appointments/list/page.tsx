@@ -1,3 +1,4 @@
+import { DogAvatar } from "@/app/vet/_lib/components/dog-avatar";
 import { BarkButton } from "@/components/bark/bark-button";
 import { BarkH1 } from "@/components/bark/bark-typography";
 import { Separator } from "@/components/ui/separator";
@@ -24,7 +25,10 @@ const AppointmentCard = (props: { appointment: BarkAppointment }) => {
     props.appointment;
   return (
     <div className="x-card flex flex-col gap-2">
-      <div className="x-card-title">{dogName}</div>
+      <div className="flex flex-row gap-3">
+        <DogAvatar dogGender={dogGender} />
+        <div className="x-card-title">{dogName}</div>
+      </div>
       <Separator />
       <div className="flex flex-col">
         <Item label="Breed" value={dogBreed} />
