@@ -43,7 +43,7 @@ export function ReportCard(props: { report: BarkReport }) {
   } = report;
   const avatar = getAvatar(dogGender);
   const gotoViewReport = () => {
-    router.push(RoutePath.VET_REPORTS_EDIT(reportId));
+    router.push(RoutePath.VET_REPORTS_VIEW(reportId));
   };
   return (
     <div
