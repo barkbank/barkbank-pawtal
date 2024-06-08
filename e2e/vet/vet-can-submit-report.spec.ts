@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { initPomContext } from "../_lib/init/init-pom-context";
 import { doCreateAppointment } from "../_lib/sequences/do-create-appointment";
 import { VetAppointmentsListPage } from "../_lib/pom/pages/vet-appointments-list-page";
-import { VetSubmitReportPage } from "../_lib/pom/pages/vet-submit-report-page";
+import { VetAppointmentSubmitReportPage } from "../_lib/pom/pages/vet-appointment-submit-report-page";
 import { NavComponent } from "../_lib/pom/layout/nav-component";
 import { VetReportListPage } from "../_lib/pom/pages/vet-report-list-page";
 
@@ -14,7 +14,7 @@ test("vet can submit report", async ({ page }) => {
   await pg1.checkUrl();
   await pg1.appointmentCard({ dogName }).submitReportButton().click();
 
-  const pg2 = new VetSubmitReportPage(context);
+  const pg2 = new VetAppointmentSubmitReportPage(context);
   await pg2.checkUrl();
   await pg2.visitTimeField().fill("6 May 2024, 13:30");
   await pg2.dogWeightField().fill("27.89");
