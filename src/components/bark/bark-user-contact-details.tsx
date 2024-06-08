@@ -6,6 +6,7 @@ import { BarkH4 } from "./bark-typography";
 import { SINGAPORE_TIME_ZONE, formatDateTime } from "@/lib/utilities/bark-time";
 import { formatDistanceStrict } from "date-fns";
 import { Skeleton } from "../ui/skeleton";
+import { NA_TEXT } from "@/app/_lib/constants";
 
 export function BarkUserContactDetails(props: {
   details: null | {
@@ -112,7 +113,7 @@ export function BarkUserContactDetails(props: {
         )}
         <p className="text-xs italic text-grey-60">
           Last contacted:{" "}
-          {latestCallText !== undefined ? latestCallText : "N/A"}
+          {latestCallText !== undefined ? latestCallText : NA_TEXT}
         </p>
       </div>
       <div className="flex flex-col gap-3">
