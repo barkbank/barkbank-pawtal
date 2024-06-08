@@ -7,6 +7,7 @@ import clsx from "clsx";
 import { capitalize } from "lodash";
 import { SchedulerOutcome } from "@/app/vet/_lib/models/scheduler-outcome";
 import { DeclinedBadge, ScheduledBadge } from "./scheduler-badges";
+import { DogAvatar } from "./dog-avatar";
 
 export function DogCard(props: {
   dog: AvailableDog;
@@ -16,7 +17,7 @@ export function DogCard(props: {
   children?: React.ReactNode;
 }) {
   const { dog, onSelect, selectedDogId, outcome, children } = props;
-  const { dogName, dogId } = dog;
+  const { dogName, dogGender, dogId } = dog;
   // TODO: when the latest call-outcome related to the dog is DECLINED, the dog card should indicate how long ago that was.
   return (
     <div
@@ -30,7 +31,10 @@ export function DogCard(props: {
 
       {/* Name */}
       <div className="flex flex-row justify-between">
-        <div className="x-card-title">{dogName}</div>
+        <div className="flex flex-row gap-3">
+          <DogAvatar dogGender={dogGender} />
+          <div className="x-card-title">{dogName}</div>
+        </div>
         {outcome === CALL_OUTCOME.APPOINTMENT && <ScheduledBadge />}
         {outcome === CALL_OUTCOME.DECLINED && <DeclinedBadge />}
       </div>

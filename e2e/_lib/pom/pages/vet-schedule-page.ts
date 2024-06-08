@@ -52,6 +52,7 @@ export class VetSchedulePageDogCard extends PomComponent {
     return this.page()
       .getByText(this.dogName, { exact: true })
       .locator("..")
+      .locator("..")
       .locator("..");
   }
 
@@ -59,12 +60,14 @@ export class VetSchedulePageDogCard extends PomComponent {
     return this.page()
       .getByText(this.dogName, { exact: true })
       .locator("..")
+      .locator("..")
       .locator(".vet-appointment-scheduler-scheduled-badge");
   }
 
   declinedBadge(): Locator {
     return this.page()
       .getByText(this.dogName, { exact: true })
+      .locator("..")
       .locator("..")
       .locator(".vet-appointment-scheduler-declined-badge");
   }

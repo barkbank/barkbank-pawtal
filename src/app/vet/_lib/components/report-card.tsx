@@ -27,6 +27,8 @@ import { Droplets, Worm } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { sprintf } from "sprintf-js";
+import { DogAvatar } from "./dog-avatar";
+import { BarkDogAvatar } from "@/components/bark/bark-dog-avatar";
 
 export function ReportCard(props: { report: BarkReport }) {
   const router = useRouter();
@@ -45,7 +47,6 @@ export function ReportCard(props: { report: BarkReport }) {
     dogWeightKg,
     ineligibilityStatus,
   } = report;
-  const avatar = getAvatar(dogGender);
   const gotoViewReport = () => {
     router.push(RoutePath.VET_REPORTS_VIEW(reportId));
   };
@@ -55,7 +56,7 @@ export function ReportCard(props: { report: BarkReport }) {
       onClick={gotoViewReport}
     >
       <div className="flex w-full flex-row items-center justify-between gap-3">
-        {avatar}
+        <DogAvatar dogGender={dogGender} />
         <h2 className="x-card-title flex-1">{dogName}</h2>
         {getDonated(dogDidDonateBlood)}
       </div>
@@ -81,28 +82,6 @@ export function ReportCard(props: { report: BarkReport }) {
     </div>
   );
 }
-
-const getAvatar = (dogGender: SpecifiedDogGender) => {
-  const size = 24;
-  if (dogGender === DOG_GENDER.MALE) {
-    return (
-      <Image
-        src={IMG_PATH.BROWN_DOG_AVATAR}
-        width={size}
-        height={size}
-        alt="Generic male dog avatar"
-      />
-    );
-  }
-  return (
-    <Image
-      src={IMG_PATH.BORDER_COLLIE_DOG_AVATAR}
-      width={size}
-      height={size}
-      alt="Generic female dog avatar"
-    />
-  );
-};
 
 const getHeartworm = (dogHeartworm: PosNegNil) => {
   if (dogHeartworm === POS_NEG_NIL.POSITIVE) {
