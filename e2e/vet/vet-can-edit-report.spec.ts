@@ -23,7 +23,7 @@ test("vet can edit report", async ({ page }) => {
   ).toBeVisible();
 
   // Edit to DEA1.1 Negative
-  await changeBloodTypeToNegative(context, {dogName});
+  await changeBloodTypeToNegative(context, { dogName });
 
   // Should now be DEA1.1 Negative
   await pgList.checkUrl();
@@ -67,7 +67,10 @@ async function givenSubmittedReport(context: PomContext): Promise<{
   return { dogName };
 }
 
-async function changeBloodTypeToNegative(context: PomContext, args: {dogName: string}) {
+async function changeBloodTypeToNegative(
+  context: PomContext,
+  args: { dogName: string },
+) {
   const { dogName } = args;
 
   const pgList = new VetReportListPage(context);
@@ -75,7 +78,7 @@ async function changeBloodTypeToNegative(context: PomContext, args: {dogName: st
   const pgEdit = new VetEditReportPage(context);
 
   await pgList.checkUrl();
-  await pgList.reportCard({dogName}).locator().click();
+  await pgList.reportCard({ dogName }).locator().click();
   await pgView.checkUrl();
   await pgView.editButton().click();
   await pgEdit.checkUrl();

@@ -8,10 +8,10 @@ export class VetReportViewPage extends PomDynamicPage {
   }
 
   backButton(): Locator {
-    return this.page().getByRole("link", {name: "Back", exact: true});
+    return this.page().getByRole("link", { name: "Back", exact: true });
   }
 
   editButton(): Locator {
-    return this.page().getByRole("link", {name: "Edit", exact: true});
+    return this.page().getByRole("link", { name: "Edit", exact: true });
   }
 }
