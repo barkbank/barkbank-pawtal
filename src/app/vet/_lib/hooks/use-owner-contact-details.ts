@@ -1,7 +1,7 @@
 import { RoutePath } from "@/lib/route-path";
 import { CODE } from "@/lib/utilities/bark-code";
 import { Err, Ok, Result } from "@/lib/utilities/result";
-import { OwnerContactDetails } from "@/lib/vet/vet-models";
+import { OwnerContactDetails } from "@/lib/bark/models/owner-contact-details";
 import useSWR from "swr";
 
 type DataType = Result<

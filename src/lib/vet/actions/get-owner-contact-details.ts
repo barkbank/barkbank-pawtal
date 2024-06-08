@@ -1,6 +1,6 @@
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { VetActor } from "../vet-actor";
-import { OwnerContactDetails } from "../vet-models";
+import { OwnerContactDetails } from "@/lib/bark/models/owner-contact-details";
 import { dbQuery } from "@/lib/data/db-utils";
 import { CODE } from "@/lib/utilities/bark-code";
 

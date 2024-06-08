@@ -12,7 +12,7 @@ import {
   dbDeleteDogVetPreference,
   dbInsertDogVetPreference,
 } from "@/lib/data/db-dogs";
-import { OwnerContactDetails } from "@/lib/vet/vet-models";
+import { OwnerContactDetails } from "@/lib/bark/models/owner-contact-details";
 import { getOwnerContactDetails } from "@/lib/vet/actions/get-owner-contact-details";
 import { CALL_OUTCOME } from "@/lib/data/db-enums";
 import { CODE } from "@/lib/utilities/bark-code";
