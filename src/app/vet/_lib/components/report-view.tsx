@@ -28,6 +28,8 @@ export function ReportView(props: { report: BarkReport }) {
     ineligibilityStatus,
     ineligibilityReason,
     ineligibilityExpiryTime,
+    reportCreationTime,
+    reportModificationTime,
   } = report;
 
   type Field = {
@@ -111,6 +113,14 @@ export function ReportView(props: { report: BarkReport }) {
         if (ineligibilityExpiryTime === null) return "Unspecified";
         return formatDateTime(ineligibilityExpiryTime, SGT_UI_DATE);
       })(),
+    },
+    {
+      label: "Report Creation Time",
+      value: formatDateTime(reportCreationTime, SGT_UI_DATE_TIME),
+    },
+    {
+      label: "Report Modification Time",
+      value: formatDateTime(reportModificationTime, SGT_UI_DATE_TIME),
     },
   ];
 
