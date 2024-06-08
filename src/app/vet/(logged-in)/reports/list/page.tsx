@@ -1,4 +1,5 @@
 import { ReportCard } from "@/app/vet/_lib/components/report-card";
+import { ReportList } from "@/app/vet/_lib/components/report-list";
 import { BarkError } from "@/components/bark/bark-error";
 import APP from "@/lib/app";
 import { getAuthenticatedVetActor } from "@/lib/auth";
@@ -18,13 +19,5 @@ export default async function Page() {
     return <BarkError className="m-3">Failed to fetch reports.</BarkError>;
   }
   const { reports } = result;
-  return (
-    <div className="m-3">
-      <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
-        {reports.map((report) => (
-          <ReportCard key={report.reportId} report={report} />
-        ))}
-      </div>
-    </div>
-  );
+  return <ReportList reports={reports} />
 }
