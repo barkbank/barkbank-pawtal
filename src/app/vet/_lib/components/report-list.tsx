@@ -2,10 +2,9 @@
 
 import { BarkReport } from "@/lib/bark/models/bark-report";
 import { ReportCard } from "./report-card";
-import { Input } from "@/components/ui/input";
-import { X } from "lucide-react";
 import { ChangeEvent, useState } from "react";
 import { getMatchingItems } from "@/lib/utilities/get-matching-items";
+import { SearchInput } from "./search-input";
 
 export function ReportList(props: { reports: BarkReport[] }) {
   const { reports } = props;
@@ -33,20 +32,14 @@ export function ReportList(props: { reports: BarkReport[] }) {
     items: reports,
     getTokens: getReportTokens,
   });
-  console.log({ query, matchingReports });
 
   return (
     <div className="m-3 flex flex-col gap-3">
-      <div className="flex flex-row items-center gap-3">
-        <Input
-          type="text"
-          placeholder="Search..."
-          className="text-base"
-          value={query}
-          onChange={handleSearchInputChange}
-        />
-        <X className="cursor-pointer" onClick={handleSearchReset} />
-      </div>
+      <SearchInput
+        query={query}
+        handleSearchInputChange={handleSearchInputChange}
+        handleSearchReset={handleSearchReset}
+      />
       <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
         {matchingReports.map((report) => (
           <ReportCard key={report.reportId} report={report} />
