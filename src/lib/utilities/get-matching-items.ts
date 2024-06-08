@@ -7,29 +7,29 @@ export function getMatchingItems<T>(args: {
   const queryTokens = query.split(" ").map((x) => x.toLowerCase());
   const matchingItems = [];
   for (const item of items) {
-    const itemTokens = getStrings(item).map((x) => x.toLocaleLowerCase());
-    if (allNeedlesMatchOneToken(queryTokens, itemTokens)) {
+    const itemStrings = getStrings(item).map((x) => x.toLocaleLowerCase());
+    if (allNeedlesMatchAtLeastOneString(queryTokens, itemStrings)) {
       matchingItems.push(item);
     }
   }
   return matchingItems;
 }
 
-function allNeedlesMatchOneToken(
+function allNeedlesMatchAtLeastOneString(
   needles: string[],
   haystack: string[],
 ): boolean {
   for (const needle of needles) {
-    if (!matchesOneToken(needle, haystack)) {
+    if (!matchesAtLeastOneString(needle, haystack)) {
       return false;
     }
   }
   return true;
 }
 
-function matchesOneToken(needle: string, haystack: string[]): boolean {
-  for (const tok of haystack) {
-    if (tok.includes(needle)) {
+function matchesAtLeastOneString(needle: string, haystack: string[]): boolean {
+  for (const stringValue of haystack) {
+    if (stringValue.includes(needle)) {
       return true;
     }
   }

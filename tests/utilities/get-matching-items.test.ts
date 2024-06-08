@@ -6,7 +6,7 @@ describe("getMatchingItems", () => {
     power: string;
   };
 
-  function getSomeTokens(something: SomeType): string[] {
+  function getSomeStrings(something: SomeType): string[] {
     const { name, power } = something;
     return [name, power];
   }
@@ -31,7 +31,7 @@ describe("getMatchingItems", () => {
   function search(query: string): SomeType[] {
     return getMatchingItems({
       items: GIVEN_PERSONS,
-      getStrings: getSomeTokens,
+      getStrings: getSomeStrings,
       query,
     });
   }
