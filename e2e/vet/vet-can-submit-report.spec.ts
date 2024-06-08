@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { initPomContext } from "../_lib/init/init-pom-context";
 import { doCreateAppointment } from "../_lib/sequences/do-create-appointment";
-import { VetAppointmentsListPage } from "../_lib/pom/pages/vet-appointments-list-page";
+import { VetAppointmentListPage } from "../_lib/pom/pages/vet-appointment-list-page";
 import { VetAppointmentSubmitReportPage } from "../_lib/pom/pages/vet-appointment-submit-report-page";
 import { NavComponent } from "../_lib/pom/layout/nav-component";
 import { VetReportListPage } from "../_lib/pom/pages/vet-report-list-page";
@@ -10,7 +10,7 @@ test("vet can submit report", async ({ page }) => {
   const context = await initPomContext({ page });
   const { dogName } = await doCreateAppointment(context);
 
-  const pg1 = new VetAppointmentsListPage(context);
+  const pg1 = new VetAppointmentListPage(context);
   await pg1.checkUrl();
   await pg1.appointmentCard({ dogName }).submitReportButton().click();
 
@@ -26,7 +26,7 @@ test("vet can submit report", async ({ page }) => {
   await pg2.dogEligibility_ELIGIBLE().click();
   await pg2.submitButton().click();
 
-  const pg3 = new VetAppointmentsListPage(context);
+  const pg3 = new VetAppointmentListPage(context);
   await pg3.checkUrl();
   await expect(pg3.appointmentCard({ dogName }).locator()).not.toBeVisible();
 

@@ -4,20 +4,20 @@ import { PomComponent } from "../core/pom-component";
 import { PomContext } from "../core/pom-object";
 import { Locator } from "@playwright/test";
 
-export class VetAppointmentsListPage extends PomPage {
+export class VetAppointmentListPage extends PomPage {
   url(): string {
     return this.website().urlOf(RoutePath.VET_APPOINTMENTS_LIST);
   }
 
   appointmentCard(args: { dogName: string }) {
     const { dogName } = args;
-    return new VetAppointmentsListPageAppointmentCard(this.context(), {
+    return new VetAppointmentListCard(this.context(), {
       dogName,
     });
   }
 }
 
-export class VetAppointmentsListPageAppointmentCard extends PomComponent {
+export class VetAppointmentListCard extends PomComponent {
   constructor(
     context: PomContext,
     private args: { dogName: string },

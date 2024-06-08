@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { initPomContext } from "../_lib/init/init-pom-context";
 import { doCreateAppointment } from "../_lib/sequences/do-create-appointment";
-import { VetAppointmentsListPage } from "../_lib/pom/pages/vet-appointments-list-page";
+import { VetAppointmentListPage } from "../_lib/pom/pages/vet-appointment-list-page";
 import { VetAppointmentSubmitReportPage } from "../_lib/pom/pages/vet-appointment-submit-report-page";
 import { NavComponent } from "../_lib/pom/layout/nav-component";
 import { VetReportListPage } from "../_lib/pom/pages/vet-report-list-page";
@@ -38,7 +38,7 @@ async function givenSubmittedReport(context: PomContext): Promise<{
 }> {
   const { dogName } = await doCreateAppointment(context);
 
-  const pgList = new VetAppointmentsListPage(context);
+  const pgList = new VetAppointmentListPage(context);
   const pgSubmit = new VetAppointmentSubmitReportPage(context);
   const sideBarOrDock = new NavComponent(context);
   const pgReportList = new VetReportListPage(context);
