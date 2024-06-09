@@ -230,8 +230,9 @@ export function BarkFormRadioGroup(props: {
   options: BarkFormOption[];
   description?: string;
   layout?: "button" | "radio";
+  disabled?: boolean;
 }) {
-  const { layout, form, name, label, options, description } = props;
+  const { layout, form, name, label, options, description, disabled } = props;
   return (
     <FormField
       control={form.control}
@@ -265,6 +266,7 @@ export function BarkFormRadioGroup(props: {
                 onValueChange={field.onChange}
                 defaultValue={field.value}
                 className="flex flex-col"
+                disabled={disabled}
               >
                 {options.map((option) => (
                   <FormItem

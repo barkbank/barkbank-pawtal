@@ -32,7 +32,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Result } from "@/lib/utilities/result";
 import {
-  SGT_ISO8601,
   SGT_UI_DATE,
   SGT_UI_DATE_TIME,
   formatDateTime,
@@ -105,6 +104,7 @@ const DEFAULT_REPORT_FORM_DATA = {
   visitTime: "",
   dogWeightKg: "",
   ineligibilityReason: "",
+  ineligibilityStatus: REPORTED_INELIGIBILITY.NIL,
   ineligibilityExpiryTime: "",
 };
 
@@ -122,6 +122,13 @@ export function GeneralReportForm(props: {
         ? DEFAULT_REPORT_FORM_DATA
         : toReportFormData(reportData),
   });
+  // WIP: validate reported ineligibility across form fields.
+
+  const currentValues = form.watch();
+  const hasReason = currentValues.ineligibilityReason !== "";
+  const isTemporary =
+    currentValues.ineligibilityStatus ===
+    REPORTED_INELIGIBILITY.TEMPORARILY_INELIGIBLE;
 
   const onSubmit = async (values: ReportFormData) => {
     const reportData = toBarkReportData(values);
@@ -222,32 +229,31 @@ export function GeneralReportForm(props: {
         name="ineligibilityReason"
         label="Please indicate if there are reasons why this dog might be ineligible for blood donation"
       />
-      <BarkFormRadioGroup
-        form={form}
-        name="ineligibilityStatus"
-        label="Please indicate if dog is eligible for blood donation"
-        // placeholder="Select eligibility"
-        options={[
-          {
-            value: REPORTED_INELIGIBILITY.NIL,
-            label: `Eligible`,
-          },
-          {
-            value: REPORTED_INELIGIBILITY.TEMPORARILY_INELIGIBLE,
-            label: `Temporarily Ineligible`,
-          },
-          {
-            value: REPORTED_INELIGIBILITY.PERMANENTLY_INELIGIBLE,
-            label: `Permanently Ineligible`,
-          },
-        ]}
-      />
-      <BarkFormInput
-        form={form}
-        name="ineligibilityExpiryTime"
-        label="Please indicate a date after which dog might be eligible again"
-        type="text"
-      />
+      {hasReason && (
+        <BarkFormRadioGroup
+          form={form}
+          name="ineligibilityStatus"
+          label="Is this reason for ineligibility temporary or permanent?"
+          options={[
+            {
+              value: REPORTED_INELIGIBILITY.TEMPORARILY_INELIGIBLE,
+              label: `Temporarily Ineligible`,
+            },
+            {
+              value: REPORTED_INELIGIBILITY.PERMANENTLY_INELIGIBLE,
+              label: `Permanently Ineligible`,
+            },
+          ]}
+        />
+      )}
+      {hasReason && isTemporary && (
+        <BarkFormInput
+          form={form}
+          name="ineligibilityExpiryTime"
+          label="For temporary ineligibility, please indicate a date after which dog might be eligible again"
+          type="text"
+        />
+      )}
       <BarkFormError form={form} />
       <div className="mt-6 flex w-full flex-col gap-3 md:flex-row">
         <BarkButton className="w-full md:w-40" variant="brand" type="submit">
