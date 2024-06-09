@@ -59,6 +59,7 @@ export const DateField = {
   },
 };
 
+// TODO: Change the other fields to classes like this one.
 export class DateOrDurationField {
   constructor(private args: { optional: boolean; timeZone: string }) {}
   schema() {
