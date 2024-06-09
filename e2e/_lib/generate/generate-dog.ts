@@ -8,11 +8,13 @@ import { sprintf } from "sprintf-js";
 export function generateDog(options?: { dogGender?: "MALE" | "FEMALE" }): {
   dogName: string;
   dogBreed: string;
+  dogGender: "MALE" | "FEMALE";
   dogBirthday: string;
   dogWeightKg: string;
   ageYears: number;
 } {
-  const dogGender = options?.dogGender ?? "MALE";
+  const dogGender =
+    options?.dogGender ?? pickOne<"MALE" | "FEMALE">(["FEMALE", "MALE"]);
   const nameList = dogGender === "MALE" ? MALE_DOG_NAMES : FEMALE_DOG_NAMES;
   const guid = generateRandomGUID(4);
   const dogName = `${pickOne(nameList)} E2E${guid}`;
@@ -21,7 +23,14 @@ export function generateDog(options?: { dogGender?: "MALE" | "FEMALE" }): {
   const ageYears = pickOne([3, 4, 5, 6]);
   const dogBirthday = getTestBirthday(ageYears);
   const dogWeightKg = sprintf("%.1f", 20 + Math.random() * 20);
-  const result = { dogName, dogBreed, dogBirthday, dogWeightKg, ageYears };
+  const result = {
+    dogName,
+    dogBreed,
+    dogGender,
+    dogBirthday,
+    dogWeightKg,
+    ageYears,
+  };
   console.log("Generated Dog", result);
   return result;
 }

@@ -1,5 +1,4 @@
 import { Page } from "@playwright/test";
-import { getTestBirthday } from "../e2e-test-utils";
 import { initPomContext } from "./init-pom-context";
 import { UserMyPetsPage } from "../pom/pages/user-my-pets-page";
 import { PomContext } from "../pom/core/pom-object";
@@ -7,7 +6,6 @@ import { UserRegistrationPage } from "../pom/pages/user-registration-page";
 import { generateDog } from "../generate/generate-dog";
 import { generateUser } from "../generate/generate-user";
 import { pickOne } from "../generate/gen-utils";
-import { DogGender, SpecifiedDogGender } from "@/lib/bark/models/dog-gender";
 
 export async function registerTestUser(args: {
   page: Page;
@@ -27,7 +25,7 @@ export async function registerTestUser(args: {
 
   const dogGender = isIncomplete
     ? "FEMALE"
-    : pickOne<SpecifiedDogGender>(["FEMALE", "MALE"]);
+    : pickOne<"MALE" | "FEMALE">(["FEMALE", "MALE"]);
   const { dogName, dogBreed, dogBirthday, dogWeightKg } = generateDog({
     dogGender,
   });
@@ -52,7 +50,11 @@ export async function registerTestUser(args: {
     await pg.dogEverReceivedTransfusion_UNKNOWN().click();
     await pg.dogEverPregnant_UNKNOWN().click();
   } else {
-    await pg.dogGender_MALE().click();
+    if (dogGender === "MALE") {
+      await pg.dogGender_MALE().click();
+    } else {
+      await pg.dogGender_FEMALE().click();
+    }
     await pg.dogBloodType_UNKNOWN().click();
     await pg.dogEverReceivedTransfusion_NO().click();
     await pg.dogEverPregnant_NO().click();
