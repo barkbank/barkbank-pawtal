@@ -9,7 +9,7 @@ import {
 } from "@/lib/utilities/bark-time";
 
 test("user can view dog", async ({ page }) => {
-  const { context, dogName, dogBreed, dogWeightKg, dogBirthday } =
+  const { context, dogName, dogBreed, dogWeightKg, dogBirthday, dogGender, ageYears } =
     await registerTestUser({ page });
 
   const pg1 = new UserMyPetsPage(context);
@@ -26,13 +26,18 @@ test("user can view dog", async ({ page }) => {
   ).toContainText(dogName);
   await expect(pg2.dogBreedItem()).toContainText(dogBreed);
   await expect(pg2.dogWeightItem()).toContainText(dogWeightKg);
-  await expect(pg2.dogGenderItem()).toContainText("Male");
+  if (dogGender === "MALE") {
+    await expect(pg2.dogGenderItem()).toContainText("Male");
+    await expect(pg2.dogEverPregnantItem()).toContainText("N.A.");
+  } else {
+    await expect(pg2.dogGenderItem()).toContainText("Female");
+    await expect(pg2.dogEverPregnantItem()).toContainText("No, never pregnant");
+  }
   await expect(pg2.dogBirthdayItem()).toContainText(
     formatDogBirthday(dogBirthday),
   );
-  await expect(pg2.dogAgeItem()).toContainText("5 years 0 months");
+  await expect(pg2.dogAgeItem()).toContainText(`${ageYears} years 0 months`);
   await expect(pg2.dogBloodTypeItem()).toContainText("Unknown");
-  await expect(pg2.dogEverPregnantItem()).toContainText("N.A.");
   await expect(pg2.dogEverReceivedTransfusionItem()).toContainText(
     "No, never received blood transfusion",
   );

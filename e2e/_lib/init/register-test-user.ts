@@ -17,7 +17,9 @@ export async function registerTestUser(args: {
   userPhoneNumber: string;
   dogName: string;
   dogBreed: string;
+  dogGender: "MALE" | "FEMALE";
   dogBirthday: string;
+  ageYears: number;
   dogWeightKg: string;
   userMyPetsPage: UserMyPetsPage;
 }> {
@@ -26,7 +28,7 @@ export async function registerTestUser(args: {
   const dogGender = isIncomplete
     ? "FEMALE"
     : pickOne<"MALE" | "FEMALE">(["FEMALE", "MALE"]);
-  const { dogName, dogBreed, dogBirthday, dogWeightKg } = generateDog({
+  const { dogName, dogBreed, dogBirthday, dogWeightKg, ageYears } = generateDog({
     dogGender,
   });
   const { userName, userEmail, userPhoneNumber } = generateUser();
@@ -86,7 +88,9 @@ export async function registerTestUser(args: {
     userPhoneNumber,
     dogName,
     dogBreed,
+    dogGender,
     dogBirthday,
+    ageYears,
     dogWeightKg,
     userMyPetsPage,
   };

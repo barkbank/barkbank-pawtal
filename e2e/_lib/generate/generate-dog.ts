@@ -17,7 +17,7 @@ export function generateDog(options?: { dogGender?: "MALE" | "FEMALE" }): {
     options?.dogGender ?? pickOne<"MALE" | "FEMALE">(["FEMALE", "MALE"]);
   const nameList = dogGender === "MALE" ? MALE_DOG_NAMES : FEMALE_DOG_NAMES;
   const guid = generateRandomGUID(4);
-  const dogName = `${pickOne(nameList)} E2E${guid}`;
+  const dogName = `${pickOne(nameList)} (${guid})`;
   const dogBreeds = dogBreedsJson.dog_breeds.map((entry) => entry.dog_breed);
   const dogBreed = pickOne(dogBreeds);
   const ageYears = pickOne([3, 4, 5, 6]);
