@@ -38,7 +38,7 @@ export function ReportView(props: { report: BarkReport }) {
   };
 
   const fields: Field[] = [
-    { label: "Visit Time", value: formatDateTime(visitTime, SGT_UI_DATE_TIME) },
+    { label: "Visit Date", value: formatDateTime(visitTime, SGT_UI_DATE) },
     { label: "Owner Name", value: ownerName },
     { label: "Dog Name", value: dogName },
     { label: "Dog Gender", value: capitalize(dogGender) },

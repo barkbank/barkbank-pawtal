@@ -2,8 +2,8 @@ import { PomDynamicPage } from "../core/pom-dynamic-page";
 import { Locator } from "@playwright/test";
 
 export abstract class VetGeneralReportForm extends PomDynamicPage {
-  visitTimeField(): Locator {
-    return this.page().getByLabel("Visit Time");
+  visitDateField(): Locator {
+    return this.page().getByLabel("Visit Date");
   }
 
   dogWeightField(): Locator {
@@ -56,8 +56,8 @@ export abstract class VetGeneralReportForm extends PomDynamicPage {
     return this.page().getByLabel("No", { exact: true });
   }
 
-  dogEligibility_ELIGIBLE(): Locator {
-    return this.page().getByLabel("Eligible", { exact: true });
+  ineligibilityReasonTextArea(): Locator {
+    return this.page().getByLabel("Please indicate if there are reasons");
   }
 
   dogEligibility_TEMPORARILY_INELIGIBLE(): Locator {
@@ -68,11 +68,9 @@ export abstract class VetGeneralReportForm extends PomDynamicPage {
     return this.page().getByLabel("Permanantly Ineligible", { exact: true });
   }
 
-  ineligibilityReasonTextArea(): Locator {
-    return this.page().getByLabel("Please indicate a reason (if");
-  }
-
   ineligibilityExpiryDateField(): Locator {
-    return this.page().getByLabel("Please indicate a date after");
+    return this.page().getByLabel(
+      "For temporary ineligibility, please indicate",
+    );
   }
 }

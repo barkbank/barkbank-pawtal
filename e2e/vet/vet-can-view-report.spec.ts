@@ -24,15 +24,15 @@ test("vet can view report", async ({ page }) => {
     .submitReportButton()
     .click();
   await pgSubmit.checkUrl();
-  await pgSubmit.visitTimeField().fill("13 Jan 2021, 15:55");
+  await pgSubmit.visitDateField().fill("13 Jan 2021");
   await pgSubmit.dogWeightField().fill("42.5");
   await pgSubmit.dogBcsSelector().click();
   await pgSubmit.dogBcsOption5().click();
   await pgSubmit.dogHeartwormOption_POSITIVE().click();
   await pgSubmit.dogDea1Point1_POSITIVE().click();
   await pgSubmit.dogDidDonateBlood_NO().click();
-  await pgSubmit.dogEligibility_TEMPORARILY_INELIGIBLE().click();
   await pgSubmit.ineligibilityReasonTextArea().fill("The dog is too fat.");
+  await pgSubmit.dogEligibility_TEMPORARILY_INELIGIBLE().click();
   await pgSubmit.ineligibilityExpiryDateField().fill("1 Feb 2022");
   await pgSubmit.submitButton().click();
   await pgAppointmentList.checkUrl();
@@ -47,7 +47,7 @@ test("vet can view report", async ({ page }) => {
   // Check values
   await pgView.checkUrl();
   await expect(
-    pgView.field("Visit Time").getByText("13 Jan 2021 3:55PM", { exact: true }),
+    pgView.field("Visit Date").getByText("13 Jan 2021", { exact: true }),
   ).toBeVisible();
   await expect(
     pgView.field("Ineligible Until").getByText("1 Feb 2022", { exact: true }),

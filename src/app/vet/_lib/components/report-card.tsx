@@ -14,7 +14,7 @@ import {
   ReportedIneligibility,
 } from "@/lib/data/db-enums";
 import { RoutePath } from "@/lib/route-path";
-import { SGT_UI_DATE_TIME, formatDateTime } from "@/lib/utilities/bark-time";
+import { SGT_UI_DATE, formatDateTime } from "@/lib/utilities/bark-time";
 import clsx from "clsx";
 import { capitalize } from "lodash";
 import { Droplets, Worm } from "lucide-react";
@@ -53,7 +53,7 @@ export function ReportCard(props: { report: BarkReport }) {
         {getDonated(dogDidDonateBlood)}
       </div>
       {getReportedIneligibility(ineligibilityStatus)}
-      <p>Visit Time: {formatDateTime(visitTime, SGT_UI_DATE_TIME)}</p>
+      <p>Visited on {formatDateTime(visitTime, SGT_UI_DATE)}</p>
       <p className="flex-1">
         <span className="font-semibold text-slate-700">{dogName}</span> is a{" "}
         <span className="font-semibold text-slate-500">
