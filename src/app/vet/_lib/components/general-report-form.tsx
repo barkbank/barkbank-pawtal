@@ -3,7 +3,6 @@
 import {
   BodyConditioningScoreField,
   DateField,
-  DateTimeField,
   DogWeightKgField,
 } from "@/app/_lib/field-schemas";
 import { BarkButton } from "@/components/bark/bark-button";
@@ -33,8 +32,9 @@ import { z } from "zod";
 import { Result } from "@/lib/utilities/result";
 import {
   SGT_UI_DATE,
-  SGT_UI_DATE_TIME,
+  SINGAPORE_TIME_ZONE,
   formatDateTime,
+  parseCommonDate,
 } from "@/lib/utilities/bark-time";
 import { Separator } from "@/components/ui/separator";
 
@@ -50,8 +50,6 @@ const ReportFormDataSchema = z.object({
   dogDidDonateBlood: z.enum([YES_NO_UNKNOWN.YES, YES_NO_UNKNOWN.NO]),
 });
 
-// WIP: visit date cannot be in the future
-// WIP: expiry date must be after visit date.
 // Refine schema to do cross-field validations
 const schemaWithRefinements = ReportFormDataSchema.refine(
   (data) => {
@@ -65,25 +63,84 @@ const schemaWithRefinements = ReportFormDataSchema.refine(
     message: "Please specify if ineligibility is temporary or permanent",
     path: ["ineligibilityStatus"],
   },
-).refine(
-  (data) => {
-    const {
-      ineligibilityReason,
-      ineligibilityStatus,
-      ineligibilityExpiryTime,
-    } = data;
-    const triggered =
-      ineligibilityReason !== "" &&
-      ineligibilityStatus === REPORTED_INELIGIBILITY.TEMPORARILY_INELIGIBLE &&
-      ineligibilityExpiryTime === "";
-    return !triggered;
-  },
-  {
-    message:
-      "Please specify a duration or date for the temporary ineligibility",
-    path: ["ineligibilityExpiryTime"],
-  },
-);
+)
+  .refine(
+    (data) => {
+      const {
+        ineligibilityReason,
+        ineligibilityStatus,
+        ineligibilityExpiryTime,
+      } = data;
+      const triggered =
+        ineligibilityReason !== "" &&
+        ineligibilityStatus === REPORTED_INELIGIBILITY.TEMPORARILY_INELIGIBLE &&
+        ineligibilityExpiryTime === "";
+      return !triggered;
+    },
+    {
+      message:
+        "Please specify a duration or date for the temporary ineligibility",
+      path: ["ineligibilityExpiryTime"],
+    },
+  )
+  .refine(
+    (data) => {
+      const { visitTime } = data;
+      const triggered = (() => {
+        try {
+          const tsVisit = parseCommonDate(
+            visitTime,
+            SINGAPORE_TIME_ZONE,
+          ).getTime();
+          const tsNow = Date.now();
+          return tsNow < tsVisit;
+        } catch {
+          // Formatting erros do not trigger this rule.
+          return false;
+        }
+      })();
+      return !triggered;
+    },
+    {
+      message: "Visit date cannot be in the future",
+      path: ["visitTime"],
+    },
+  )
+  .refine(
+    (data) => {
+      const {
+        visitTime,
+        ineligibilityReason,
+        ineligibilityStatus,
+        ineligibilityExpiryTime,
+      } = data;
+      const triggered = (() => {
+        if (ineligibilityReason === "") {
+          return false;
+        }
+        if (
+          ineligibilityStatus !== REPORTED_INELIGIBILITY.TEMPORARILY_INELIGIBLE
+        ) {
+          return false;
+        }
+        try {
+          const tsExpire = parseCommonDate(
+            ineligibilityExpiryTime,
+            SINGAPORE_TIME_ZONE,
+          );
+          const tsVisit = parseCommonDate(visitTime, SINGAPORE_TIME_ZONE);
+          return tsExpire <= tsVisit;
+        } catch {
+          return false;
+        }
+      })();
+      return !triggered;
+    },
+    {
+      message: "Expiry date should be after the visit date",
+      path: ["ineligibilityExpiryTime"],
+    },
+  );
 
 type ReportFormData = z.infer<typeof ReportFormDataSchema>;
 
