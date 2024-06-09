@@ -10,6 +10,11 @@ import { CallCard } from "./call-card";
 import { CALL_OUTCOME } from "@/lib/data/db-enums";
 import { SearchInput } from "./search-input";
 import { getMatchingItems } from "@/lib/utilities/get-matching-items";
+import {
+  SORT_OPTION,
+  SortOption,
+  SortOptionSelector,
+} from "./sort-option-selector";
 
 export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
   const [schedulerState, setSchedulerState] = useState<SchedulerState>({
@@ -21,6 +26,11 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
   const { dogs, selectedDogId, outcomes } = schedulerState;
 
   const [query, setQuery] = useState<string>("");
+  const [sortBy, setSortBy] = useState<SortOption>(SORT_OPTION.NIL);
+
+  const onSortValueChange = (value: SortOption) => {
+    setSortBy(value);
+  };
 
   const handleSearchInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
@@ -34,12 +44,6 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
     const { dogName, dogBreed } = dog;
     return [dogName, dogBreed];
   }
-
-  const matchingDogs = getMatchingItems({
-    query,
-    items: dogs,
-    getStrings,
-  });
 
   function toggleDogSelection(dogId: string) {
     const toggledSelectedDogId = selectedDogId === dogId ? null : dogId;
@@ -58,6 +62,53 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
     state.outcomes[dogId] = callOutcome;
     setSchedulerState(state);
   }
+
+  // Apply search filter and sort option
+  const dogsToDisplay = (() => {
+    console.log({ query, sortBy });
+    const result = getMatchingItems({
+      query,
+      items: dogs,
+      getStrings,
+    });
+    if (sortBy === SORT_OPTION.AGE_OLDEST_FIRST) {
+      result.sort((a, b) => {
+        const x = a.dogBirthday.getTime();
+        const y = b.dogBirthday.getTime();
+        if (x < y) return -1;
+        if (x > y) return +1;
+        return 0;
+      });
+    }
+    if (sortBy === SORT_OPTION.AGE_YOUNGEST_FIRST) {
+      result.sort((a, b) => {
+        const x = a.dogBirthday.getTime();
+        const y = b.dogBirthday.getTime();
+        if (x > y) return -1;
+        if (x < y) return +1;
+        return 0;
+      });
+    }
+    if (sortBy === SORT_OPTION.WEIGHT_HEAVIEST_FIRST) {
+      result.sort((a, b) => {
+        const x = a.dogWeightKg ?? 0;
+        const y = b.dogWeightKg ?? 0;
+        if (x > y) return -1;
+        if (x < y) return +1;
+        return 0;
+      });
+    }
+    if (sortBy === SORT_OPTION.WEIGHT_LIGHTEST_FIRST) {
+      result.sort((a, b) => {
+        const x = a.dogWeightKg ?? 0;
+        const y = b.dogWeightKg ?? 0;
+        if (x < y) return -1;
+        if (x > y) return +1;
+        return 0;
+      });
+    }
+    return result;
+  })();
 
   const selectedDogCallCard =
     selectedDogId === null ? undefined : (
@@ -81,7 +132,7 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
 
   const dogCardList = (
     <div className="flex flex-col gap-3">
-      {matchingDogs.map((dog) => (
+      {dogsToDisplay.map((dog) => (
         <DogCard
           dog={dog}
           key={dog.dogId}
@@ -109,7 +160,11 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
         handleSearchInputChange={handleSearchInputChange}
         handleSearchReset={handleSearchReset}
       />
-
+      <div className="flex flex-row gap-3">
+        <div className="w-[370px]">
+          <SortOptionSelector onValueChange={onSortValueChange} />
+        </div>
+      </div>
       <div className="flex flex-col gap-3 md:flex-row">
         {/* List of dog cards */}
         <ScrollArea
