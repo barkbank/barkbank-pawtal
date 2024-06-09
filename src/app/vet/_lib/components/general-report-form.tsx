@@ -3,6 +3,7 @@
 import {
   BodyConditioningScoreField,
   DateField,
+  DateOrDurationField,
   DogWeightKgField,
 } from "@/app/_lib/field-schemas";
 import { BarkButton } from "@/components/bark/bark-button";
@@ -38,6 +39,11 @@ import {
 } from "@/lib/utilities/bark-time";
 import { Separator } from "@/components/ui/separator";
 
+const expiryTimeField = new DateOrDurationField({
+  optional: true,
+  timeZone: SINGAPORE_TIME_ZONE,
+});
+
 const ReportFormDataSchema = z.object({
   visitTime: DateField.getSchema(),
   dogWeightKg: DogWeightKgField.Schema,
@@ -46,7 +52,7 @@ const ReportFormDataSchema = z.object({
   dogDea1Point1: PosNegNilSchema,
   ineligibilityReason: z.string().min(0),
   ineligibilityStatus: ReportedIneligibilitySchema,
-  ineligibilityExpiryTime: DateField.getSchema({ optional: true }),
+  ineligibilityExpiryTime: expiryTimeField.schema(),
   dogDidDonateBlood: z.enum([YES_NO_UNKNOWN.YES, YES_NO_UNKNOWN.NO]),
 });
 
@@ -124,11 +130,11 @@ const schemaWithRefinements = ReportFormDataSchema.refine(
           return false;
         }
         try {
-          const tsExpire = parseCommonDate(
-            ineligibilityExpiryTime,
-            SINGAPORE_TIME_ZONE,
-          );
           const tsVisit = parseCommonDate(visitTime, SINGAPORE_TIME_ZONE);
+          const tsExpire = expiryTimeField.resolveDate({
+            reference: tsVisit,
+            value: ineligibilityExpiryTime,
+          });
           return tsExpire <= tsVisit;
         } catch {
           return false;
@@ -155,8 +161,9 @@ function toBarkReportData(formData: ReportFormData): BarkReportData {
     ineligibilityExpiryTime,
     ...otherFields
   } = formData;
+  const resolvedVisitTime = DateField.parse(visitTime);
   const values: BarkReportData = {
-    visitTime: DateField.parse(visitTime),
+    visitTime: resolvedVisitTime,
     dogWeightKg: DogWeightKgField.parse(dogWeightKg)!,
     dogBodyConditioningScore: BodyConditioningScoreField.parse(
       dogBodyConditioningScore,
@@ -178,7 +185,10 @@ function toBarkReportData(formData: ReportFormData): BarkReportData {
       ) {
         return null;
       }
-      return DateField.parse(ineligibilityExpiryTime);
+      return expiryTimeField.resolveDate({
+        reference: resolvedVisitTime,
+        value: ineligibilityExpiryTime,
+      });
     })(),
     ...otherFields,
   };
@@ -200,10 +210,12 @@ function toReportFormData(reportData: BarkReportData): ReportFormData {
     dogWeightKg: `${dogWeightKg}`,
     dogBodyConditioningScore: `${dogBodyConditioningScore}`,
     dogDidDonateBlood: dogDidDonateBlood ? "YES" : "NO",
-    ineligibilityExpiryTime:
-      ineligibilityExpiryTime === null
-        ? ""
-        : formatDateTime(ineligibilityExpiryTime, SGT_UI_DATE),
+    ineligibilityExpiryTime: (() => {
+      if (ineligibilityExpiryTime === null) {
+        return "";
+      }
+      return formatDateTime(ineligibilityExpiryTime, SGT_UI_DATE);
+    })(),
     ...otherFields,
   };
   return ReportFormDataSchema.parse(formData);
@@ -384,7 +396,7 @@ export function GeneralReportForm(props: {
               name="ineligibilityExpiryTime"
               label="For temporary ineligibility, please indicate a date after which dog might be eligible again"
               type="text"
-              description="Please provide a date, e.g. 16 Apr 2021"
+              description="Please provide a date (e.g. 16 Apr 2021) or duration (e.g. 4 weeks)"
             />
           )}
         </div>

@@ -9,6 +9,7 @@ import {
   SGT_UI_DATE_TIME,
   formatDateTime,
 } from "@/lib/utilities/bark-time";
+import { formatDistanceStrict } from "date-fns";
 import { capitalize, toString } from "lodash";
 
 export function ReportView(props: { report: BarkReport }) {
@@ -111,7 +112,15 @@ export function ReportView(props: { report: BarkReport }) {
           return NA_TEXT;
         }
         if (ineligibilityExpiryTime === null) return "Unspecified";
-        return formatDateTime(ineligibilityExpiryTime, SGT_UI_DATE);
+        const dateText = formatDateTime(ineligibilityExpiryTime, SGT_UI_DATE);
+        const durationText = formatDistanceStrict(
+          ineligibilityExpiryTime,
+          visitTime,
+          {
+            addSuffix: false,
+          },
+        );
+        return `${dateText} (${durationText} after the visit date)`;
       })(),
     },
     {

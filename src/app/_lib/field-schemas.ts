@@ -9,6 +9,9 @@ import {
   isValidWeightKg,
   parseWeightKg,
 } from "../../lib/utilities/bark-utils";
+import { parseCommonDuration } from "@/lib/utilities/parse-common-duration";
+import { Duration } from "date-fns";
+import { addDuration } from "@/lib/utilities/add-duration";
 
 export const DateTimeField = {
   Schema: z.string().refine(
@@ -55,6 +58,54 @@ export const DateField = {
     return parseCommonDate(value, SINGAPORE_TIME_ZONE);
   },
 };
+
+// TODO: Change the other fields to classes like this one.
+export class DateOrDurationField {
+  constructor(private args: { optional: boolean; timeZone: string }) {}
+  schema() {
+    return z.string().refine(
+      (value) => {
+        if (value.trim() === "") {
+          return this.args.optional;
+        }
+        return this.isDate(value) || this.isDuration(value);
+      },
+      {
+        message:
+          "Neither a date (e.g. 16 Apr 2021) or a duration (e.g. 30 days)",
+      },
+    );
+  }
+  isDate(value: string): boolean {
+    try {
+      this.parseDate(value);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+  isDuration(value: string): boolean {
+    try {
+      this.parseDuration(value);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+  parseDate(value: string): Date {
+    return parseCommonDate(value, this.args.timeZone);
+  }
+  parseDuration(value: string): Duration {
+    return parseCommonDuration(value);
+  }
+  resolveDate(args: { reference: Date; value: string }): Date {
+    const { reference, value } = args;
+    if (this.isDate(value)) {
+      return this.parseDate(value);
+    }
+    return addDuration(reference, this.parseDuration(value));
+  }
+}
 
 export const DogWeightKgField = {
   Schema: z.string().refine(
