@@ -3,26 +3,20 @@ import { initPomContext } from "./init-pom-context";
 import { UserMyPetsPage } from "../pom/pages/user-my-pets-page";
 import { PomContext } from "../pom/core/pom-object";
 import { UserRegistrationPage } from "../pom/pages/user-registration-page";
-import { generateDog } from "../generate/generate-dog";
-import { generateUser } from "../generate/generate-user";
+import { GenerateDogType, generateDog } from "../generate/generate-dog";
+import { GenerateUserType, generateUser } from "../generate/generate-user";
 import { pickOne } from "../generate/gen-utils";
+
+export type RegisterTestUserType = {
+  context: PomContext;
+  userMyPetsPage: UserMyPetsPage;
+} & GenerateUserType &
+  GenerateDogType;
 
 export async function registerTestUser(args: {
   page: Page;
   isIncomplete?: boolean;
-}): Promise<{
-  context: PomContext;
-  userName: string;
-  userEmail: string;
-  userPhoneNumber: string;
-  dogName: string;
-  dogBreed: string;
-  dogGender: "MALE" | "FEMALE";
-  dogBirthday: string;
-  ageYears: number;
-  dogWeightKg: string;
-  userMyPetsPage: UserMyPetsPage;
-}> {
+}): Promise<RegisterTestUserType> {
   const { page, isIncomplete } = args;
 
   const dogGender = isIncomplete
@@ -83,18 +77,20 @@ export async function registerTestUser(args: {
   const userMyPetsPage = new UserMyPetsPage(context);
   await userMyPetsPage.checkUrl();
 
-  const result = {
+  const result: RegisterTestUserType = {
     context,
+    userMyPetsPage,
+
     userName,
     userEmail,
     userPhoneNumber,
+
     dogName,
     dogBreed,
     dogGender,
     dogBirthday,
-    ageYears,
     dogWeightKg,
-    userMyPetsPage,
+    ageYears,
   };
   // console.log(result);
   return result;
