@@ -207,10 +207,12 @@ function toReportFormData(reportData: BarkReportData): ReportFormData {
     dogWeightKg: `${dogWeightKg}`,
     dogBodyConditioningScore: `${dogBodyConditioningScore}`,
     dogDidDonateBlood: dogDidDonateBlood ? "YES" : "NO",
-    ineligibilityExpiryTime:
-      ineligibilityExpiryTime === null
-        ? ""
-        : formatDateTime(ineligibilityExpiryTime, SGT_UI_DATE),
+    ineligibilityExpiryTime: (() => {
+      if (ineligibilityExpiryTime === null) {
+        return "";
+      }
+      return formatDateTime(ineligibilityExpiryTime, SGT_UI_DATE);
+    })(),
     ...otherFields,
   };
   return ReportFormDataSchema.parse(formData);
@@ -391,7 +393,7 @@ export function GeneralReportForm(props: {
               name="ineligibilityExpiryTime"
               label="For temporary ineligibility, please indicate a date after which dog might be eligible again"
               type="text"
-              description="Please provide a date, e.g. 16 Apr 2021"
+              description="Please provide a date (e.g. 16 Apr 2021) or duration (e.g. 4 weeks)"
             />
           )}
         </div>
