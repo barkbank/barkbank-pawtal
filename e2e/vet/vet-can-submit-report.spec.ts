@@ -16,8 +16,8 @@ test("vet can submit report", async ({ page }) => {
 
   const pg2 = new VetAppointmentSubmitReportPage(context);
   await pg2.checkUrl();
-  await pg2.visitTimeField().fill("6 May 2024, 13:30");
-  await pg2.dogWeightField().fill("27.89");
+  await pg2.visitDateField().fill("11 May 2024");
+  await pg2.dogWeightField().fill("28.61");
   await pg2.dogBcsSelector().click();
   await pg2.dogBcsOption8().click();
   await pg2.dogHeartwormOption_NEGATIVE().click();

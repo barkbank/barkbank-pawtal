@@ -47,7 +47,7 @@ async function givenSubmittedReport(context: PomContext): Promise<{
   await pgList.appointmentCard({ dogName }).submitReportButton().click();
 
   await pgSubmit.checkUrl();
-  await pgSubmit.visitTimeField().fill("6 May 2024, 13:30");
+  await pgSubmit.visitDateField().fill("6 May 2024");
   await pgSubmit.dogWeightField().fill("27.89");
   await pgSubmit.dogBcsSelector().click();
   await pgSubmit.dogBcsOption8().click();

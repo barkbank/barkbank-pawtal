@@ -24,7 +24,7 @@ test("vet can view report", async ({ page }) => {
     .submitReportButton()
     .click();
   await pgSubmit.checkUrl();
-  await pgSubmit.visitTimeField().fill("13 Jan 2021, 15:55");
+  await pgSubmit.visitDateField().fill("13 Jan 2021");
   await pgSubmit.dogWeightField().fill("42.5");
   await pgSubmit.dogBcsSelector().click();
   await pgSubmit.dogBcsOption5().click();

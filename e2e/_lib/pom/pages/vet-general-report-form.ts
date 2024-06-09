@@ -2,8 +2,8 @@ import { PomDynamicPage } from "../core/pom-dynamic-page";
 import { Locator } from "@playwright/test";
 
 export abstract class VetGeneralReportForm extends PomDynamicPage {
-  visitTimeField(): Locator {
-    return this.page().getByLabel("Visit Time");
+  visitDateField(): Locator {
+    return this.page().getByLabel("Visit Date");
   }
 
   dogWeightField(): Locator {
