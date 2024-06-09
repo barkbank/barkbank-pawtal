@@ -139,7 +139,7 @@ function toReportFormData(reportData: BarkReportData): ReportFormData {
     ...otherFields
   } = reportData;
   const formData: ReportFormData = {
-    visitTime: formatDateTime(visitTime, SGT_UI_DATE_TIME),
+    visitTime: formatDateTime(visitTime, SGT_UI_DATE),
     dogWeightKg: `${dogWeightKg}`,
     dogBodyConditioningScore: `${dogBodyConditioningScore}`,
     dogDidDonateBlood: dogDidDonateBlood ? "YES" : "NO",
