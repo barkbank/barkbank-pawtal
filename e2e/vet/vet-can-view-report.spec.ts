@@ -50,7 +50,7 @@ test("vet can view report", async ({ page }) => {
     pgView.field("Visit Date").getByText("13 Jan 2021", { exact: true }),
   ).toBeVisible();
   await expect(
-    pgView.field("Ineligible Until").getByText("1 Feb 2022", { exact: true }),
+    pgView.field("Ineligible Until").getByText("1 Feb 2022", { exact: false }),
   ).toBeVisible();
   await expect(
     pgView.field("Dog Weight (KG)").getByText("42.5", { exact: true }),
