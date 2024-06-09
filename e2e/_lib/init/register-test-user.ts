@@ -6,6 +6,8 @@ import { PomContext } from "../pom/core/pom-object";
 import { UserRegistrationPage } from "../pom/pages/user-registration-page";
 import { generateDog } from "../generate/generate-dog";
 import { generateUser } from "../generate/generate-user";
+import { pickOne } from "../generate/gen-utils";
+import { DogGender, SpecifiedDogGender } from "@/lib/bark/models/dog-gender";
 
 export async function registerTestUser(args: {
   page: Page;
@@ -23,12 +25,13 @@ export async function registerTestUser(args: {
 }> {
   const { page, isIncomplete } = args;
 
-  const dogGender = isIncomplete ? "FEMALE" : "MALE";
-  const { dogName, dogBreed } = generateDog({ dogGender });
+  const dogGender = isIncomplete
+    ? "FEMALE"
+    : pickOne<SpecifiedDogGender>(["FEMALE", "MALE"]);
+  const { dogName, dogBreed, dogBirthday, dogWeightKg } = generateDog({
+    dogGender,
+  });
   const { userName, userEmail, userPhoneNumber } = generateUser();
-
-  const dogBirthday = getTestBirthday(5);
-  const dogWeightKg = "31.4";
 
   const context = await initPomContext({ page });
 
