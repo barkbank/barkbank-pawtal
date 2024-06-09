@@ -60,6 +60,10 @@ export abstract class VetGeneralReportForm extends PomDynamicPage {
     return this.page().getByLabel("Eligible", { exact: true });
   }
 
+  ineligibilityReasonTextArea(): Locator {
+    return this.page().getByLabel("Please indicate if there are reasons");
+  }
+
   dogEligibility_TEMPORARILY_INELIGIBLE(): Locator {
     return this.page().getByLabel("Temporarily Ineligible", { exact: true });
   }
@@ -68,11 +72,9 @@ export abstract class VetGeneralReportForm extends PomDynamicPage {
     return this.page().getByLabel("Permanantly Ineligible", { exact: true });
   }
 
-  ineligibilityReasonTextArea(): Locator {
-    return this.page().getByLabel("Please indicate if there are reasons");
-  }
-
   ineligibilityExpiryDateField(): Locator {
-    return this.page().getByLabel("Please indicate a date after");
+    return this.page().getByLabel(
+      "For temporary ineligibility, please indicate",
+    );
   }
 }

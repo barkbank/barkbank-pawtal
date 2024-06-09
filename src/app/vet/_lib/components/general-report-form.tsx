@@ -140,6 +140,7 @@ export function GeneralReportForm(props: {
 
   const onCancel = handleCancel;
 
+  // WIP: Split form into sections: (a) Visit Outcomes; (b) Observations; and (c) Reported Ineligibility
   return (
     <BarkForm form={form} onSubmit={onSubmit}>
       <BarkFormInput
