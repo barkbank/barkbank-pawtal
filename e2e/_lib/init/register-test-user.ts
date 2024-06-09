@@ -28,9 +28,11 @@ export async function registerTestUser(args: {
   const dogGender = isIncomplete
     ? "FEMALE"
     : pickOne<"MALE" | "FEMALE">(["FEMALE", "MALE"]);
-  const { dogName, dogBreed, dogBirthday, dogWeightKg, ageYears } = generateDog({
-    dogGender,
-  });
+  const { dogName, dogBreed, dogBirthday, dogWeightKg, ageYears } = generateDog(
+    {
+      dogGender,
+    },
+  );
   const { userName, userEmail, userPhoneNumber } = generateUser();
 
   const context = await initPomContext({ page });

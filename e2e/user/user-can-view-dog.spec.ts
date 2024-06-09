@@ -9,8 +9,15 @@ import {
 } from "@/lib/utilities/bark-time";
 
 test("user can view dog", async ({ page }) => {
-  const { context, dogName, dogBreed, dogWeightKg, dogBirthday, dogGender, ageYears } =
-    await registerTestUser({ page });
+  const {
+    context,
+    dogName,
+    dogBreed,
+    dogWeightKg,
+    dogBirthday,
+    dogGender,
+    ageYears,
+  } = await registerTestUser({ page });
 
   const pg1 = new UserMyPetsPage(context);
   await pg1.checkUrl();
