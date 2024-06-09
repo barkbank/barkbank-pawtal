@@ -10,6 +10,9 @@ import { CallCard } from "./call-card";
 import { CALL_OUTCOME } from "@/lib/data/db-enums";
 import { SearchInput } from "./search-input";
 import { getMatchingItems } from "@/lib/utilities/get-matching-items";
+import { Select } from "@/components/ui/select";
+import { SortOptions } from "./sort-options";
+import { FilterOptions } from "./filter-options";
 
 export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
   const [schedulerState, setSchedulerState] = useState<SchedulerState>({
@@ -109,7 +112,11 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
         handleSearchInputChange={handleSearchInputChange}
         handleSearchReset={handleSearchReset}
       />
-
+      <div className="flex flex-row gap-3">
+        <div className="w-[370px]">
+          <SortOptions />
+        </div>
+      </div>
       <div className="flex flex-col gap-3 md:flex-row">
         {/* List of dog cards */}
         <ScrollArea
