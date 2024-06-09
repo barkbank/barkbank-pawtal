@@ -43,11 +43,44 @@ const ReportFormDataSchema = z.object({
   dogBodyConditioningScore: BodyConditioningScoreField.Schema,
   dogHeartworm: PosNegNilSchema,
   dogDea1Point1: PosNegNilSchema,
-  ineligibilityStatus: ReportedIneligibilitySchema,
   ineligibilityReason: z.string().min(0),
+  ineligibilityStatus: ReportedIneligibilitySchema,
   ineligibilityExpiryTime: DateField.getSchema({ optional: true }),
   dogDidDonateBlood: z.enum([YES_NO_UNKNOWN.YES, YES_NO_UNKNOWN.NO]),
 });
+
+// Refine schema to do cross-field validations
+const schemaWithRefinements = ReportFormDataSchema.refine(
+  (data) => {
+    const { ineligibilityReason, ineligibilityStatus } = data;
+    const triggered =
+      ineligibilityReason !== "" &&
+      ineligibilityStatus === REPORTED_INELIGIBILITY.NIL;
+    return !triggered;
+  },
+  {
+    message: "Please specify if ineligibility is temporary or permanent",
+    path: ["ineligibilityStatus"],
+  },
+).refine(
+  (data) => {
+    const {
+      ineligibilityReason,
+      ineligibilityStatus,
+      ineligibilityExpiryTime,
+    } = data;
+    const triggered =
+      ineligibilityReason !== "" &&
+      ineligibilityStatus === REPORTED_INELIGIBILITY.TEMPORARILY_INELIGIBLE &&
+      ineligibilityExpiryTime === "";
+    return !triggered;
+  },
+  {
+    message:
+      "Please specify a duration or date for the temporary ineligibility",
+    path: ["ineligibilityExpiryTime"],
+  },
+);
 
 type ReportFormData = z.infer<typeof ReportFormDataSchema>;
 
@@ -57,20 +90,36 @@ function toBarkReportData(formData: ReportFormData): BarkReportData {
     dogWeightKg,
     dogBodyConditioningScore,
     dogDidDonateBlood,
+    ineligibilityReason,
+    ineligibilityStatus,
     ineligibilityExpiryTime,
     ...otherFields
   } = formData;
-  const values = {
+  const values: BarkReportData = {
     visitTime: DateTimeField.parse(visitTime),
     dogWeightKg: DogWeightKgField.parse(dogWeightKg)!,
     dogBodyConditioningScore: BodyConditioningScoreField.parse(
       dogBodyConditioningScore,
     ),
     dogDidDonateBlood: dogDidDonateBlood === "YES",
-    ineligibilityExpiryTime:
-      ineligibilityExpiryTime === ""
-        ? null
-        : DateField.parse(ineligibilityExpiryTime),
+    ineligibilityReason,
+    ineligibilityStatus: (() => {
+      if (ineligibilityReason === "") {
+        return REPORTED_INELIGIBILITY.NIL;
+      }
+      return ineligibilityStatus;
+    })(),
+    ineligibilityExpiryTime: (() => {
+      if (ineligibilityReason === "") {
+        return null;
+      }
+      if (
+        ineligibilityStatus !== REPORTED_INELIGIBILITY.TEMPORARILY_INELIGIBLE
+      ) {
+        return null;
+      }
+      return DateField.parse(ineligibilityExpiryTime);
+    })(),
     ...otherFields,
   };
   console.log({ values });
@@ -115,14 +164,14 @@ export function GeneralReportForm(props: {
   reportData?: BarkReportData;
 }) {
   const { purpose, handleSubmit, handleCancel, reportData } = props;
+
   const form = useForm<ReportFormData>({
-    resolver: zodResolver(ReportFormDataSchema),
+    resolver: zodResolver(schemaWithRefinements),
     defaultValues:
       reportData === undefined
         ? DEFAULT_REPORT_FORM_DATA
         : toReportFormData(reportData),
   });
-  // WIP: validate reported ineligibility across form fields.
 
   const currentValues = form.watch();
   const hasReason = currentValues.ineligibilityReason !== "";
