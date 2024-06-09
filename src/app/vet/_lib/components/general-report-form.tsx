@@ -36,6 +36,7 @@ import {
   SGT_UI_DATE_TIME,
   formatDateTime,
 } from "@/lib/utilities/bark-time";
+import { Separator } from "@/components/ui/separator";
 
 const ReportFormDataSchema = z.object({
   visitTime: DateTimeField.Schema,
@@ -189,133 +190,157 @@ export function GeneralReportForm(props: {
 
   const onCancel = handleCancel;
 
-  // WIP: Split form into sections: (a) Visit Outcomes; (b) Observations; and (c) Reported Ineligibility
   return (
     <BarkForm form={form} onSubmit={onSubmit}>
-      <BarkFormInput
-        form={form}
-        name="visitTime"
-        label="Visit Time"
-        type="text"
-        description="Please provide the visit time, e.g. 16 Apr 2021 4:30pm"
-      />
-      <BarkFormInput
-        form={form}
-        name="dogWeightKg"
-        label="Dog's Weight (KG)"
-        type="text"
-      />
-      <BarkFormSelect
-        form={form}
-        name="dogBodyConditioningScore"
-        label="Dog's Body Conditioning Score (BCS)"
-        placeholder="Select BCS"
-        options={BodyConditioningScoreField.values.map((value: number) => {
-          const option: BarkFormOption = {
-            value: `${value}`,
-            label: `${value}`,
-          };
-          return option;
-        })}
-        description="Body conditioning score is a value between 1 and 9"
-      />
-      <BarkFormRadioGroup
-        form={form}
-        name="dogHeartworm"
-        label="Heartworm Test Result"
-        options={[
-          {
-            value: POS_NEG_NIL.POSITIVE,
-            label: "Tested positive for heartworm",
-          },
-          {
-            value: POS_NEG_NIL.NEGATIVE,
-            label: "Tested negative for heartworm",
-          },
-          {
-            value: POS_NEG_NIL.NIL,
-            label: "Did not test",
-          },
-        ]}
-        description="Please indicate the result of heartworm test, if any"
-      />
-      <BarkFormRadioGroup
-        form={form}
-        name="dogDea1Point1"
-        label="Blood Test Result"
-        options={[
-          {
-            value: POS_NEG_NIL.POSITIVE,
-            label: "DEA 1.1 Positive",
-          },
-          {
-            value: POS_NEG_NIL.NEGATIVE,
-            label: "DEA 1.1 Negative",
-          },
-          {
-            value: POS_NEG_NIL.NIL,
-            label: "Did not test",
-          },
-        ]}
-        description="Please indicate the result of blood test, if any"
-      />
-      <BarkFormRadioGroup
-        form={form}
-        name="dogDidDonateBlood"
-        label="Please indicate if dog donated blood"
-        options={[
-          {
-            value: YES_NO_UNKNOWN.YES,
-            label: `Yes`,
-          },
-          {
-            value: YES_NO_UNKNOWN.NO,
-            label: `No`,
-          },
-        ]}
-      />
-      <BarkFormTextArea
-        form={form}
-        name="ineligibilityReason"
-        label="Please indicate if there are reasons why this dog might be ineligible for blood donation"
-      />
-      {hasReason && (
-        <BarkFormRadioGroup
-          form={form}
-          name="ineligibilityStatus"
-          label="Is this reason for ineligibility temporary or permanent?"
-          options={[
-            {
-              value: REPORTED_INELIGIBILITY.TEMPORARILY_INELIGIBLE,
-              label: `Temporarily Ineligible`,
-            },
-            {
-              value: REPORTED_INELIGIBILITY.PERMANENTLY_INELIGIBLE,
-              label: `Permanently Ineligible`,
-            },
-          ]}
-        />
-      )}
-      {hasReason && isTemporary && (
-        <BarkFormInput
-          form={form}
-          name="ineligibilityExpiryTime"
-          label="For temporary ineligibility, please indicate a date after which dog might be eligible again"
-          type="text"
-        />
-      )}
-      <BarkFormError form={form} />
-      <div className="mt-6 flex w-full flex-col gap-3 md:flex-row">
-        <BarkButton className="w-full md:w-40" variant="brand" type="submit">
-          {purpose === "SUBMIT" ? "Submit Report" : "Save Changes"}
-        </BarkButton>
-        <BarkButton
-          className="w-full md:w-40"
-          variant="brandInverse"
-          onClick={onCancel}
-        >
-          Cancel
-        </BarkButton>
+      <div className="flex flex-col gap-3">
+        <div className="x-card x-card-bg prose">
+          <h2 className="x-card-title">Visit & Outcomes</h2>
+          <p>
+            This section is about capturing details of the visit and the
+            outcomes.
+          </p>
+          <Separator />
+          <BarkFormInput
+            form={form}
+            name="visitTime"
+            label="Visit Time"
+            type="text"
+            description="Please provide the visit time, e.g. 16 Apr 2021 4:30pm"
+          />
+          <BarkFormRadioGroup
+            form={form}
+            name="dogDidDonateBlood"
+            label="Please indicate if dog donated blood"
+            options={[
+              {
+                value: YES_NO_UNKNOWN.YES,
+                label: `Yes`,
+              },
+              {
+                value: YES_NO_UNKNOWN.NO,
+                label: `No`,
+              },
+            ]}
+          />
+        </div>
+        <div className="x-card x-card-bg prose">
+          <h2 className="x-card-title">Observations</h2>
+          <p>
+            This section captures medical observations made during the visit.
+          </p>
+          <Separator />
+          <BarkFormInput
+            form={form}
+            name="dogWeightKg"
+            label="Dog's Weight (KG)"
+            type="text"
+          />
+          <BarkFormSelect
+            form={form}
+            name="dogBodyConditioningScore"
+            label="Dog's Body Conditioning Score (BCS)"
+            placeholder="Select BCS"
+            options={BodyConditioningScoreField.values.map((value: number) => {
+              const option: BarkFormOption = {
+                value: `${value}`,
+                label: `${value}`,
+              };
+              return option;
+            })}
+            description="Body conditioning score is a value between 1 and 9"
+          />
+          <BarkFormRadioGroup
+            form={form}
+            name="dogHeartworm"
+            label="Heartworm Test Result"
+            options={[
+              {
+                value: POS_NEG_NIL.POSITIVE,
+                label: "Tested positive for heartworm",
+              },
+              {
+                value: POS_NEG_NIL.NEGATIVE,
+                label: "Tested negative for heartworm",
+              },
+              {
+                value: POS_NEG_NIL.NIL,
+                label: "Did not test",
+              },
+            ]}
+            description="Please indicate the result of heartworm test, if any"
+          />
+          <BarkFormRadioGroup
+            form={form}
+            name="dogDea1Point1"
+            label="Blood Test Result"
+            options={[
+              {
+                value: POS_NEG_NIL.POSITIVE,
+                label: "DEA 1.1 Positive",
+              },
+              {
+                value: POS_NEG_NIL.NEGATIVE,
+                label: "DEA 1.1 Negative",
+              },
+              {
+                value: POS_NEG_NIL.NIL,
+                label: "Did not test",
+              },
+            ]}
+            description="Please indicate the result of blood test, if any"
+          />
+        </div>
+        <div className="x-card x-card-bg prose">
+          <h2 className="x-card-title">Ineligibility</h2>
+          <p>
+            This section captures reasons for why the dog might be ineligible
+            for blood donation.
+          </p>
+          <Separator />
+          <BarkFormTextArea
+            form={form}
+            name="ineligibilityReason"
+            label="Please indicate if there are reasons why this dog might be ineligible for blood donation. (Leave blank if there are none.)"
+          />
+          {hasReason && (
+            <BarkFormRadioGroup
+              form={form}
+              name="ineligibilityStatus"
+              label="Is this reason for ineligibility temporary or permanent?"
+              options={[
+                {
+                  value: REPORTED_INELIGIBILITY.TEMPORARILY_INELIGIBLE,
+                  label: `Temporarily Ineligible`,
+                },
+                {
+                  value: REPORTED_INELIGIBILITY.PERMANENTLY_INELIGIBLE,
+                  label: `Permanently Ineligible`,
+                },
+              ]}
+            />
+          )}
+          {hasReason && isTemporary && (
+            <BarkFormInput
+              form={form}
+              name="ineligibilityExpiryTime"
+              label="For temporary ineligibility, please indicate a date after which dog might be eligible again"
+              type="text"
+            />
+          )}
+        </div>
+        <BarkFormError form={form} />
+        <div className="mt-6 flex w-full flex-col gap-3 md:flex-row">
+          <BarkButton className="w-full md:w-40" variant="brand" type="submit">
+            {purpose === "SUBMIT" ? "Submit Report" : "Save Changes"}
+          </BarkButton>
+          <BarkButton
+            className="w-full md:w-40"
+            variant="brandInverse"
+            onClick={onCancel}
+          >
+            Cancel
+          </BarkButton>
+        </div>
       </div>
     </BarkForm>
   );
