@@ -56,10 +56,6 @@ export abstract class VetGeneralReportForm extends PomDynamicPage {
     return this.page().getByLabel("No", { exact: true });
   }
 
-  dogEligibility_ELIGIBLE(): Locator {
-    return this.page().getByLabel("Eligible", { exact: true });
-  }
-
   ineligibilityReasonTextArea(): Locator {
     return this.page().getByLabel("Please indicate if there are reasons");
   }

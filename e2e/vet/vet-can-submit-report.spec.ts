@@ -23,7 +23,6 @@ test("vet can submit report", async ({ page }) => {
   await pg2.dogHeartwormOption_NEGATIVE().click();
   await pg2.dogDea1Point1_POSITIVE().click();
   await pg2.dogDidDonateBlood_YES().click();
-  await pg2.dogEligibility_ELIGIBLE().click();
   await pg2.submitButton().click();
 
   const pg3 = new VetAppointmentListPage(context);

@@ -31,8 +31,8 @@ test("vet can view report", async ({ page }) => {
   await pgSubmit.dogHeartwormOption_POSITIVE().click();
   await pgSubmit.dogDea1Point1_POSITIVE().click();
   await pgSubmit.dogDidDonateBlood_NO().click();
-  await pgSubmit.dogEligibility_TEMPORARILY_INELIGIBLE().click();
   await pgSubmit.ineligibilityReasonTextArea().fill("The dog is too fat.");
+  await pgSubmit.dogEligibility_TEMPORARILY_INELIGIBLE().click();
   await pgSubmit.ineligibilityExpiryDateField().fill("1 Feb 2022");
   await pgSubmit.submitButton().click();
   await pgAppointmentList.checkUrl();

@@ -54,7 +54,6 @@ async function givenSubmittedReport(context: PomContext): Promise<{
   await pgSubmit.dogHeartwormOption_NEGATIVE().click();
   await pgSubmit.dogDea1Point1_POSITIVE().click();
   await pgSubmit.dogDidDonateBlood_YES().click();
-  await pgSubmit.dogEligibility_ELIGIBLE().click();
   await pgSubmit.submitButton().click();
 
   await pgList.checkUrl();
