@@ -39,7 +39,10 @@ import {
 } from "@/lib/utilities/bark-time";
 import { Separator } from "@/components/ui/separator";
 
-const expiryTimeField = new DateOrDurationField({ optional: true });
+const expiryTimeField = new DateOrDurationField({
+  optional: true,
+  timeZone: SINGAPORE_TIME_ZONE,
+});
 
 const ReportFormDataSchema = z.object({
   visitTime: DateField.getSchema(),
@@ -128,10 +131,10 @@ const schemaWithRefinements = ReportFormDataSchema.refine(
         }
         try {
           const tsVisit = parseCommonDate(visitTime, SINGAPORE_TIME_ZONE);
-          const tsExpire = expiryTimeField.resolveDate(
-            tsVisit,
-            ineligibilityExpiryTime,
-          );
+          const tsExpire = expiryTimeField.resolveDate({
+            reference: tsVisit,
+            value: ineligibilityExpiryTime,
+          });
           return tsExpire <= tsVisit;
         } catch {
           return false;
@@ -182,10 +185,10 @@ function toBarkReportData(formData: ReportFormData): BarkReportData {
       ) {
         return null;
       }
-      return expiryTimeField.resolveDate(
-        resolvedVisitTime,
-        ineligibilityExpiryTime,
-      );
+      return expiryTimeField.resolveDate({
+        reference: resolvedVisitTime,
+        value: ineligibilityExpiryTime,
+      });
     })(),
     ...otherFields,
   };

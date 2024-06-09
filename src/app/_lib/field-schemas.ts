@@ -60,7 +60,7 @@ export const DateField = {
 };
 
 export class DateOrDurationField {
-  constructor(private args: { optional: boolean }) {}
+  constructor(private args: { optional: boolean; timeZone: string }) {}
   schema() {
     return z.string().refine(
       (value) => {
@@ -92,12 +92,13 @@ export class DateOrDurationField {
     }
   }
   parseDate(value: string): Date {
-    return parseCommonDate(value, SINGAPORE_TIME_ZONE);
+    return parseCommonDate(value, this.args.timeZone);
   }
   parseDuration(value: string): Duration {
     return parseCommonDuration(value);
   }
-  resolveDate(reference: Date, value: string): Date {
+  resolveDate(args: { reference: Date; value: string }): Date {
+    const { reference, value } = args;
     if (this.isDate(value)) {
       return this.parseDate(value);
     }
