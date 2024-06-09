@@ -39,7 +39,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 
 const ReportFormDataSchema = z.object({
-  visitTime: DateTimeField.Schema,
+  visitTime: DateField.getSchema(),
   dogWeightKg: DogWeightKgField.Schema,
   dogBodyConditioningScore: BodyConditioningScoreField.Schema,
   dogHeartworm: PosNegNilSchema,
@@ -50,6 +50,8 @@ const ReportFormDataSchema = z.object({
   dogDidDonateBlood: z.enum([YES_NO_UNKNOWN.YES, YES_NO_UNKNOWN.NO]),
 });
 
+// WIP: visit date cannot be in the future
+// WIP: expiry date must be after visit date.
 // Refine schema to do cross-field validations
 const schemaWithRefinements = ReportFormDataSchema.refine(
   (data) => {
@@ -97,7 +99,7 @@ function toBarkReportData(formData: ReportFormData): BarkReportData {
     ...otherFields
   } = formData;
   const values: BarkReportData = {
-    visitTime: DateTimeField.parse(visitTime),
+    visitTime: DateField.parse(visitTime),
     dogWeightKg: DogWeightKgField.parse(dogWeightKg)!,
     dogBodyConditioningScore: BodyConditioningScoreField.parse(
       dogBodyConditioningScore,
@@ -203,9 +205,9 @@ export function GeneralReportForm(props: {
           <BarkFormInput
             form={form}
             name="visitTime"
-            label="Visit Time"
+            label="Visit Date"
             type="text"
-            description="Please provide the visit time, e.g. 16 Apr 2021 4:30pm"
+            description="Please provide the visit date, e.g. 16 Apr 2021"
           />
           <BarkFormRadioGroup
             form={form}
@@ -325,6 +327,7 @@ export function GeneralReportForm(props: {
               name="ineligibilityExpiryTime"
               label="For temporary ineligibility, please indicate a date after which dog might be eligible again"
               type="text"
+              description="Please provide a date, e.g. 16 Apr 2021"
             />
           )}
         </div>
