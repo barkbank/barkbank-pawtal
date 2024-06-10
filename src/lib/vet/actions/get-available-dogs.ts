@@ -4,6 +4,8 @@ import { AvailableDog } from "../vet-models";
 import { YesNoUnknown } from "@/lib/data/db-enums";
 import { DogGender } from "@/lib/bark/models/dog-gender";
 
+// WIP: Delete getAvailableDogs when migrated to call tasks.
+
 /**
  * Get dogs that are available for scheduling.
  *

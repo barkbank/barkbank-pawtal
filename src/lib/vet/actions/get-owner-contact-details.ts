@@ -7,6 +7,8 @@ import {
 import { dbQuery } from "@/lib/data/db-utils";
 import { CODE } from "@/lib/utilities/bark-code";
 
+// TODO: Is this still needed after we have migrated to call-tasks? (Bec. call tasks include contact details)
+
 /**
  * Get contact details of a dog's owner.
  *

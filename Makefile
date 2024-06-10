@@ -90,12 +90,22 @@ reset-local-database:
 # branch.
 .PHONY: wip
 wip:
-	grep -n --color=always -R WIP src tests db e2e
+	@echo Remaining wip tasks
+	@echo
+	@grep -n --color=always -R 'WIP[:]' src tests db e2e
+	@echo
+	@echo Number of tasks remaining
+	@grep -n --color=always -R 'WIP[:]' src tests db e2e | wc -l
 
 # Lists TODO notes.
 .PHONY: todo
 todo:
-	grep -n --color=always -R TODO src tests db e2e
+	@echo Remaining todo tasks
+	@echo
+	@grep -n --color=always -R 'TODO[:]' src tests db e2e
+	@echo
+	@echo Number of tasks remaining
+	@grep -n --color=always -R 'TODO[:]' src tests db e2e | wc -l
 
 # Diff local schema and barkbank-schemas
 .PHONY: schema-diff

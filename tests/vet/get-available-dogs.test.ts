@@ -23,6 +23,7 @@ import {
 import { AvailableDog } from "@/lib/vet/vet-models";
 import { dbQuery } from "@/lib/data/db-utils";
 
+// WIP: Delete tests for getAvailableDogs when migrated to call tasks
 describe("getAvailableDogs", () => {
   it("should return available dog", async () => {
     await withDb(async (dbPool) => {
