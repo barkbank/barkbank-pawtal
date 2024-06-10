@@ -12,7 +12,7 @@ import {
   DOG_GENDER,
   DogGender,
   DogGenderSchema,
-} from "@/lib/bark/models/dog-gender";
+} from "@/lib/bark/enums/dog-gender";
 import { dbQuery } from "@/lib/data/db-utils";
 import { BarkContext } from "@/lib/bark/bark-context";
 import { opRecordAppointmentCallOutcome } from "@/lib/bark/operations/op-record-appointment-call-outcome";

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { SpecifiedDogGenderSchema } from "./dog-gender";
+import { SpecifiedDogGenderSchema } from "../enums/dog-gender";
 
 export const CallTaskSchema = z.object({
   dogId: z.string(),

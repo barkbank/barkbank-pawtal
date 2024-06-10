@@ -9,7 +9,7 @@ import {
 import { Pool } from "pg";
 import { PARTICIPATION_STATUS } from "@/lib/data/db-enums";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
-import { DOG_GENDER } from "@/lib/bark/models/dog-gender";
+import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
 import {
   DEFAULT_DATE_TIME_FORMAT,
   SINGAPORE_TIME_ZONE,

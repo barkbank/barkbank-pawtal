@@ -1,5 +1,5 @@
 import { YesNoUnknown } from "../bark/enums/yes-no-unknown";
-import { DogGender } from "../bark/models/dog-gender";
+import { DogGender } from "../bark/enums/dog-gender";
 
 // WIP: Define CallTask and EncryptedCallTask in lib/bark/models based fields in AvailableDog and OwnerContactDetails.
 // CallTask ::= {dog: DogFields, owner: OwnerContactDetails}

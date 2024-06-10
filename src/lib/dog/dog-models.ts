@@ -6,7 +6,7 @@ import {
   ServiceStatus,
 } from "../data/db-enums";
 import { YesNoUnknown } from "../bark/enums/yes-no-unknown";
-import { DogGender } from "../bark/models/dog-gender";
+import { DogGender } from "../bark/enums/dog-gender";
 
 /**
  * The different statuses of a dog.

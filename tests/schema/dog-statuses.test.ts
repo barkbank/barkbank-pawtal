@@ -11,7 +11,7 @@ import { dbQuery } from "@/lib/data/db-utils";
 import { DbReportSpec, DogSpec, UserSpec } from "@/lib/data/db-models";
 import { PARTICIPATION_STATUS } from "@/lib/data/db-enums";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
-import { DOG_GENDER } from "@/lib/bark/models/dog-gender";
+import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
 import { USER_RESIDENCY } from "@/lib/data/db-enums";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import {

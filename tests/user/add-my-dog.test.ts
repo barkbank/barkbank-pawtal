@@ -9,7 +9,7 @@ import {
 import { UTC_DATE_OPTION, parseDateTime } from "@/lib/utilities/bark-time";
 import { DOG_ANTIGEN_PRESENCE } from "@/lib/data/db-enums";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
-import { DOG_GENDER } from "@/lib/bark/models/dog-gender";
+import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
 import { addMyDog } from "@/lib/user/actions/add-my-dog";
 
 describe("addMyDog", () => {

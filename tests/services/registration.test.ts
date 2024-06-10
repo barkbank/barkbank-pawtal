@@ -5,7 +5,7 @@ import { RegistrationServiceConfig } from "@/lib/services/registration";
 import { RegistrationService } from "@/lib/services/registration";
 import { DOG_ANTIGEN_PRESENCE } from "@/lib/data/db-enums";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
-import { DOG_GENDER } from "@/lib/bark/models/dog-gender";
+import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
 import { USER_RESIDENCY } from "@/lib/data/db-enums";
 import { guaranteed } from "@/lib/utilities/bark-utils";
 import { BARK_UTC } from "@/lib/utilities/bark-time";

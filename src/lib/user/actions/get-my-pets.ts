@@ -8,7 +8,7 @@ import {
   ProfileStatus,
   ServiceStatus,
 } from "@/lib/data/db-enums";
-import { DogGender } from "@/lib/bark/models/dog-gender";
+import { DogGender } from "@/lib/bark/enums/dog-gender";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { CODE } from "@/lib/utilities/bark-code";
 import { DogStatuses } from "@/lib/dog/dog-models";

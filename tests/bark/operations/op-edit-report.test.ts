@@ -8,7 +8,7 @@ import { opRecordAppointmentCallOutcome } from "@/lib/bark/operations/op-record-
 import { opSubmitReport } from "@/lib/bark/operations/op-submit-report";
 import { opFetchReport } from "@/lib/bark/operations/op-fetch-report";
 import { opEditReport } from "@/lib/bark/operations/op-edit-report";
-import { SpecifiedDogGenderSchema } from "@/lib/bark/models/dog-gender";
+import { SpecifiedDogGenderSchema } from "@/lib/bark/enums/dog-gender";
 
 describe("opEditReport", () => {
   it("should return ERROR_NOT_ALLOWED if attempting to edit another vet's report", async () => {
