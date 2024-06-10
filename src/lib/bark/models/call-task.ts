@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { SpecifiedDogGenderSchema } from "../enums/dog-gender";
+import { YesNoSchema } from "../enums/yes-no";
 
 export const CallTaskSchema = z.object({
   dogId: z.string(),
@@ -7,19 +8,10 @@ export const CallTaskSchema = z.object({
   dogBreed: z.string(),
   dogBirthday: z.date(),
   dogGender: SpecifiedDogGenderSchema,
-  dogWeightKg: z.number().optional(),
-  // WIP: dogEverReceivedTransfusion
-  // WIP: dogEverPregnant
-  // WIP: ownerName
+  dogWeightKg: z.number().nullable(),
+  dogEverReceivedTransfusion: YesNoSchema,
+  dogEverPregnant: YesNoSchema,
+  ownerName: z.string(),
 });
 
-// export type xAvailableDog = {
-//   dogId: string;
-//   dogName: string;
-//   dogBreed: string;
-//   dogBirthday: Date;
-//   dogGender: DogGender;
-//   dogWeightKg: number | null;
-//   dogEverReceivedTransfusion: YesNoUnknown;
-//   dogEverPregnant: YesNoUnknown;
-// };
+export type CallTask = z.infer<typeof CallTaskSchema>
