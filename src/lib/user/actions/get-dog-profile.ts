@@ -3,7 +3,7 @@ import { UserActor } from "../user-actor";
 import { DogProfile } from "@/lib/dog/dog-models";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { DogAntigenPresence } from "@/lib/data/db-enums";
-import { YesNoUnknown } from "@/lib/bark/enums/yes-no";
+import { YesNoUnknown } from "@/lib/bark/enums/yes-no-unknown";
 import { DogGender } from "@/lib/bark/models/dog-gender";
 import { CODE } from "@/lib/utilities/bark-code";
 

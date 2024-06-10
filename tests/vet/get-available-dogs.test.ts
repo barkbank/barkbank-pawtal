@@ -19,7 +19,7 @@ import {
   PARTICIPATION_STATUS,
   USER_RESIDENCY,
 } from "@/lib/data/db-enums";
-import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no";
+import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { AvailableDog } from "@/lib/vet/vet-models";
 import { dbQuery } from "@/lib/data/db-utils";
 

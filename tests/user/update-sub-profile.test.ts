@@ -1,7 +1,7 @@
 import { SubProfile } from "@/lib/dog/dog-models";
 import { withDb } from "../_db_helpers";
 import { CALL_OUTCOME } from "@/lib/data/db-enums";
-import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no";
+import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import {
   fetchDogInfo,
   getUserActor,

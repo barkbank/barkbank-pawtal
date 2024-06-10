@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/table";
 import clsx from "clsx";
 import { BARK_UTC } from "@/lib/utilities/bark-time";
-import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no";
+import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { DOG_GENDER } from "@/lib/bark/models/dog-gender";
 import { IncompleteProfile } from "@/lib/admin/admin-models";
 

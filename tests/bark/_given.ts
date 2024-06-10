@@ -1,14 +1,13 @@
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import {
   getDogMapper,
-  getUserSpec,
   insertDog,
   insertUser,
   insertVet,
   userPii,
 } from "../_fixtures";
 import { BarkTestContext } from "./_context";
-import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no";
+import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import {
   DOG_GENDER,
   DogGender,
@@ -19,10 +18,7 @@ import { BarkContext } from "@/lib/bark/bark-context";
 import { opRecordAppointmentCallOutcome } from "@/lib/bark/operations/op-record-appointment-call-outcome";
 import { opSubmitReport } from "@/lib/bark/operations/op-submit-report";
 import { mockReportData } from "./_mocks";
-import {
-  BarkReportData,
-  BarkReportDataSchema,
-} from "@/lib/bark/models/bark-report-data";
+import { BarkReportDataSchema } from "@/lib/bark/models/bark-report-data";
 import { z } from "zod";
 import { toUserPii } from "@/lib/bark/mappers/to-user-pii";
 

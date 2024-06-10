@@ -8,7 +8,7 @@ import {
   PROFILE_STATUS,
   SERVICE_STATUS,
 } from "@/lib/data/db-enums";
-import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no";
+import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { DOG_GENDER } from "@/lib/bark/models/dog-gender";
 import { dateAgo } from "../_time_helpers";
 

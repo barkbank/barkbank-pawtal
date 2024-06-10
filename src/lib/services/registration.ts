@@ -10,7 +10,7 @@ import {
   DogSpec,
 } from "@/lib/data/db-models";
 import { DogAntigenPresence } from "../data/db-enums";
-import { YesNoUnknown } from "../bark/enums/yes-no";
+import { YesNoUnknown } from "../bark/enums/yes-no-unknown";
 import { DogGender } from "../bark/models/dog-gender";
 import { UserResidency } from "../data/db-enums";
 import { dbSelectUserIdByHashedEmail, dbInsertUser } from "@/lib/data/db-users";

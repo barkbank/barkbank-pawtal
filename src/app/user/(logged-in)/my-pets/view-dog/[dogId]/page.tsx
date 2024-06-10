@@ -3,7 +3,7 @@ import { BarkDogAvatar } from "@/components/bark/bark-dog-avatar";
 import { BarkStatusBlock } from "@/components/bark/bark-status-block";
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { DOG_ANTIGEN_PRESENCE, DogAntigenPresence } from "@/lib/data/db-enums";
-import { YES_NO_UNKNOWN, YesNoUnknown } from "@/lib/bark/enums/yes-no";
+import { YES_NO_UNKNOWN, YesNoUnknown } from "@/lib/bark/enums/yes-no-unknown";
 import { DOG_GENDER, DogGender } from "@/lib/bark/models/dog-gender";
 import {
   DogAppointment,

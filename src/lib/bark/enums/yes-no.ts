@@ -1,12 +1,10 @@
-import { ObjectValues } from "@/lib/utilities/object-values";
 import { z } from "zod";
 
-export const YES_NO_UNKNOWN = {
+export const YES_NO = {
   YES: "YES",
   NO: "NO",
-  UNKNOWN: "UNKNOWN",
 } as const;
 
-export const YesNoUnknownSchema = z.nativeEnum(YES_NO_UNKNOWN);
+export const YesNoSchema = z.nativeEnum(YES_NO);
 
-export type YesNoUnknown = z.infer<typeof YesNoUnknownSchema>;
+export type YesNo = z.infer<typeof YesNoSchema>;
