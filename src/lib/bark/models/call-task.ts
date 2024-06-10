@@ -14,4 +14,4 @@ export const CallTaskSchema = z.object({
   ownerName: z.string(),
 });
 
-export type CallTask = z.infer<typeof CallTaskSchema>
+export type CallTask = z.infer<typeof CallTaskSchema>;
