@@ -1,4 +1,4 @@
-import { DOG_GENDER, DogGender } from "@/lib/bark/models/dog-gender";
+import { DOG_GENDER, DogGender } from "@/lib/bark/enums/dog-gender";
 import { IMG_PATH } from "@/lib/image-path";
 import Image from "next/image";
 

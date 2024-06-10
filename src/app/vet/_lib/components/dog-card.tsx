@@ -1,6 +1,6 @@
 import { Separator } from "@/components/ui/separator";
 import { CALL_OUTCOME } from "@/lib/data/db-enums";
-import { DOG_GENDER } from "@/lib/bark/models/dog-gender";
+import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
 import { getFormattedAge } from "@/lib/utilities/bark-age";
 import { AvailableDog } from "@/lib/vet/vet-models";
 import clsx from "clsx";

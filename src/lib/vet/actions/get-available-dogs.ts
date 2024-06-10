@@ -2,7 +2,7 @@ import { dbQuery } from "@/lib/data/db-utils";
 import { VetActor } from "../vet-actor";
 import { AvailableDog } from "../vet-models";
 import { YesNoUnknown } from "@/lib/bark/enums/yes-no-unknown";
-import { DogGender } from "@/lib/bark/models/dog-gender";
+import { DogGender } from "@/lib/bark/enums/dog-gender";
 
 // WIP: Delete getAvailableDogs when migrated to call tasks.
 
