@@ -44,7 +44,9 @@ test-ui-headed: playwright-browsers
 # Run playwright interactively
 .PHONY: run-playwright
 run-playwright: playwright-browsers
-	npx playwright test --ui --project "Mobile Chrome" --project "chromium"
+#	npx playwright test --ui --project "Mobile Chrome" --project "chromium"
+	npx playwright test --ui --project "Mobile Chrome" --project "chromium" --workers 1
+#	npx playwright test --ui --project "chromium" --workers 1
 
 # Installs playwright browsers
 .PHONY: playwright-browsers
