@@ -8,7 +8,7 @@ import {
   userPii,
 } from "../_fixtures";
 import { BarkTestContext } from "./_context";
-import { YES_NO_UNKNOWN } from "@/lib/data/db-enums";
+import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no";
 import {
   DOG_GENDER,
   DogGender,

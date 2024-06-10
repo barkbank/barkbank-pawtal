@@ -10,7 +10,8 @@ import {
   BarkFormRadioGroup,
 } from "@/components/bark/bark-form";
 import { isValidWeightKg } from "@/lib/utilities/bark-utils";
-import { DOG_ANTIGEN_PRESENCE, YES_NO_UNKNOWN } from "@/lib/data/db-enums";
+import { DOG_ANTIGEN_PRESENCE } from "@/lib/data/db-enums";
+import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no";
 import { DOG_GENDER } from "@/lib/bark/models/dog-gender";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";

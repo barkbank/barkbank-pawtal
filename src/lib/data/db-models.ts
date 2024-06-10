@@ -14,7 +14,8 @@
 // - Some: This sould be a full record with PII.
 //
 
-import { DogAntigenPresence, YesNoUnknown } from "./db-enums";
+import { DogAntigenPresence } from "./db-enums";
+import { YesNoUnknown } from "../bark/enums/yes-no";
 import { DogGender } from "../bark/models/dog-gender";
 import { UserResidency } from "./db-enums";
 import { CallOutcome, PosNegNil, ReportedIneligibility } from "./db-enums";

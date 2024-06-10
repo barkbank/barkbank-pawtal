@@ -11,11 +11,8 @@ import {
 } from "../_fixtures";
 import { DogProfile } from "@/lib/dog/dog-models";
 import { UTC_DATE_OPTION, parseDateTime } from "@/lib/utilities/bark-time";
-import {
-  CALL_OUTCOME,
-  DOG_ANTIGEN_PRESENCE,
-  YES_NO_UNKNOWN,
-} from "@/lib/data/db-enums";
+import { CALL_OUTCOME, DOG_ANTIGEN_PRESENCE } from "@/lib/data/db-enums";
+import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no";
 import { DOG_GENDER } from "@/lib/bark/models/dog-gender";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 

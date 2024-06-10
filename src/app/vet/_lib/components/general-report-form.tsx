@@ -25,8 +25,8 @@ import {
   PosNegNilSchema,
   REPORTED_INELIGIBILITY,
   ReportedIneligibilitySchema,
-  YES_NO_UNKNOWN,
 } from "@/lib/data/db-enums";
+import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";

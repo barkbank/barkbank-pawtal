@@ -18,8 +18,8 @@ import {
   CALL_OUTCOME,
   PARTICIPATION_STATUS,
   USER_RESIDENCY,
-  YES_NO_UNKNOWN,
 } from "@/lib/data/db-enums";
+import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no";
 import { AvailableDog } from "@/lib/vet/vet-models";
 import { dbQuery } from "@/lib/data/db-utils";
 

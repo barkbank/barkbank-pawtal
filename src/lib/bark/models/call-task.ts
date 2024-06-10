@@ -11,8 +11,7 @@ export const CallTaskSchema = z.object({
   // WIP: dogEverReceivedTransfusion
   // WIP: dogEverPregnant
   // WIP: ownerName
-})
-
+});
 
 // export type xAvailableDog = {
 //   dogId: string;

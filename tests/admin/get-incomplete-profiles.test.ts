@@ -9,7 +9,8 @@ import {
 } from "../_fixtures";
 import { getIncompleteProfiles } from "@/lib/admin/actions/get-incomplete-profiles";
 import { Pool } from "pg";
-import { PARTICIPATION_STATUS, YES_NO_UNKNOWN } from "@/lib/data/db-enums";
+import { PARTICIPATION_STATUS } from "@/lib/data/db-enums";
+import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no";
 import { DOG_GENDER } from "@/lib/bark/models/dog-gender";
 import {
   DEFAULT_DATE_TIME_FORMAT,
