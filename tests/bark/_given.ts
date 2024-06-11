@@ -18,9 +18,13 @@ import { BarkContext } from "@/lib/bark/bark-context";
 import { opRecordAppointmentCallOutcome } from "@/lib/bark/operations/op-record-appointment-call-outcome";
 import { opSubmitReport } from "@/lib/bark/operations/op-submit-report";
 import { mockReportData } from "./_mocks";
-import { BarkReportDataSchema } from "@/lib/bark/models/bark-report-data";
+import {
+  BarkReportData,
+  BarkReportDataSchema,
+} from "@/lib/bark/models/bark-report-data";
 import { z } from "zod";
 import { toUserPii } from "@/lib/bark/mappers/to-user-pii";
+import { DogSpec } from "@/lib/data/db-models";
 
 const GivenUserSchema = z.object({
   userId: z.string(),
@@ -76,7 +80,12 @@ type GivenDogType = z.infer<typeof GivenDogSchema>;
 
 export async function givenDog(
   context: BarkTestContext,
-  options?: { dogIdx?: number; userId?: string; preferredVetId?: string },
+  options?: {
+    dogIdx?: number;
+    userId?: string;
+    preferredVetId?: string;
+    dogOverrides?: Partial<DogSpec>;
+  },
 ): Promise<GivenDogType> {
   const { dbPool } = context;
   const args = options ?? {};
@@ -99,6 +108,8 @@ export async function givenDog(
   const { dogId } = await insertDog(idx, ownerUserId, dbPool, {
     dogGender: DOG_GENDER.MALE,
     dogEverPregnant: YES_NO_UNKNOWN.NO,
+    dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
+    ...options?.dogOverrides,
   });
   if (preferredVetId !== undefined) {
     await dbInsertDogVetPreference(dbPool, dogId, preferredVetId);
@@ -180,10 +191,17 @@ type GivenReportType = z.infer<typeof GivenReportSchema>;
 
 export async function givenReport(
   context: BarkContext,
-  options?: { idx?: number; existingVetId?: string },
+  options?: {
+    idx?: number;
+    existingVetId?: string;
+    reportOverrides?: Partial<BarkReportData>;
+  },
 ): Promise<GivenReportType> {
   const res1 = await givenAppointment(context, options);
-  const reportData = mockReportData();
+  const reportData = {
+    ...mockReportData(),
+    ...options?.reportOverrides,
+  };
   const res2 = await opSubmitReport(context, {
     appointmentId: res1.appointmentId,
     actorVetId: res1.vetId,
