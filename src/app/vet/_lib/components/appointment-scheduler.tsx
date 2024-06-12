@@ -41,8 +41,8 @@ export function AppointmentScheduler(props: { dogs: CallTask[] }) {
   };
 
   function getStrings(dog: CallTask): string[] {
-    const { dogName, dogBreed } = dog;
-    return [dogName, dogBreed];
+    const { dogName, dogBreed, ownerName } = dog;
+    return [dogName, dogBreed, ownerName];
   }
 
   function toggleDogSelection(dogId: string) {
@@ -65,7 +65,7 @@ export function AppointmentScheduler(props: { dogs: CallTask[] }) {
 
   // Apply search filter and sort option
   const dogsToDisplay = (() => {
-    console.log({ query, sortBy });
+    // console.log({ query, sortBy });
     const result = getMatchingItems({
       query,
       items: dogs,

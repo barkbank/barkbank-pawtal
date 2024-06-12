@@ -53,6 +53,7 @@ export function DogCard(props: {
         />
         <Item label="Gender" value={getGender(dog)} />
         <Item label="Was ever pregnant" value={getEverPregnant(dog)} />
+        <Item label="Owner" value={dog.ownerName} />
       </div>
 
       {children}
