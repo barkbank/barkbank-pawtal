@@ -1,6 +1,5 @@
 "use client";
 
-import { AvailableDog } from "@/lib/vet/vet-models";
 import { DogCard } from "./dog-card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { SchedulerState } from "../models/scheduler-state";
@@ -15,8 +14,9 @@ import {
   SortOption,
   SortOptionSelector,
 } from "./sort-option-selector";
+import { CallTask } from "@/lib/bark/models/call-task";
 
-export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
+export function AppointmentScheduler(props: { dogs: CallTask[] }) {
   const [schedulerState, setSchedulerState] = useState<SchedulerState>({
     dogs: props.dogs,
     selectedDogId: null,
@@ -40,7 +40,7 @@ export function AppointmentScheduler(props: { dogs: AvailableDog[] }) {
     setQuery("");
   };
 
-  function getStrings(dog: AvailableDog): string[] {
+  function getStrings(dog: CallTask): string[] {
     const { dogName, dogBreed } = dog;
     return [dogName, dogBreed];
   }
