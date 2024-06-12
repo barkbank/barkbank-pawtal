@@ -17,7 +17,7 @@ export async function opFetchCallTasksByVetId(
       toCallTask(context, task),
     );
     const callTasks = await Promise.all(futureTasks);
-    return Ok({ callTasks });  
+    return Ok({ callTasks });
   } catch (err) {
     console.error(err);
     return Err(CODE.FAILED);

@@ -1,6 +1,21 @@
+import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
+import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { BarkReportData } from "@/lib/bark/models/bark-report-data";
 import { POS_NEG_NIL, REPORTED_INELIGIBILITY } from "@/lib/data/db-enums";
+import { DogSpec } from "@/lib/data/db-models";
 import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
+import { weeksAgo } from "../_time_helpers";
+
+export function mockEligibleDogOverrides(): Partial<DogSpec> {
+  return {
+    dogBreed: "Great Elidog",
+    dogBirthday: weeksAgo(3 * 52), // about 3 years old
+    dogGender: DOG_GENDER.FEMALE,
+    dogWeightKg: 25,
+    dogEverPregnant: YES_NO_UNKNOWN.NO,
+    dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
+  };
+}
 
 export function mockReportData(): BarkReportData {
   return {

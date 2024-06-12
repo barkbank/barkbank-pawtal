@@ -1,23 +1,19 @@
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import {
-  getDogMapper,
   insertDog,
   insertUser,
   insertVet,
-  userPii,
+  userPii
 } from "../_fixtures";
-import { BarkTestContext } from "./_context";
-import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import {
-  DOG_GENDER,
   DogGender,
-  DogGenderSchema,
+  DogGenderSchema
 } from "@/lib/bark/enums/dog-gender";
 import { dbQuery } from "@/lib/data/db-utils";
 import { BarkContext } from "@/lib/bark/bark-context";
 import { opRecordAppointmentCallOutcome } from "@/lib/bark/operations/op-record-appointment-call-outcome";
 import { opSubmitReport } from "@/lib/bark/operations/op-submit-report";
-import { mockReportData } from "./_mocks";
+import { mockEligibleDogOverrides, mockReportData } from "./_mocks";
 import {
   BarkReportData,
   BarkReportDataSchema,
@@ -25,6 +21,7 @@ import {
 import { z } from "zod";
 import { toUserPii } from "@/lib/bark/mappers/to-user-pii";
 import { DogSpec } from "@/lib/data/db-models";
+import { toDogName } from "@/lib/bark/mappers/to-dog-name";
 
 const GivenUserSchema = z.object({
   userId: z.string(),
@@ -36,7 +33,7 @@ const GivenUserSchema = z.object({
 type GivenUserType = z.infer<typeof GivenUserSchema>;
 
 export async function givenUser(
-  context: BarkTestContext,
+  context: BarkContext,
   options?: { userIdx?: number },
 ): Promise<GivenUserType> {
   const { dbPool } = context;
@@ -49,7 +46,7 @@ export async function givenUser(
 }
 
 async function existingUser(
-  context: BarkTestContext,
+  context: BarkContext,
   userId: string,
 ): Promise<GivenUserType> {
   const { dbPool } = context;
@@ -79,17 +76,19 @@ const GivenDogSchema = z.object({
 type GivenDogType = z.infer<typeof GivenDogSchema>;
 
 export async function givenDog(
-  context: BarkTestContext,
+  context: BarkContext,
   options?: {
     dogIdx?: number;
     userId?: string;
     preferredVetId?: string;
     dogOverrides?: Partial<DogSpec>;
+    dogProfileModificationTime?: Date;
   },
 ): Promise<GivenDogType> {
   const { dbPool } = context;
   const args = options ?? {};
-  const { dogIdx, preferredVetId } = args;
+  const { dogIdx, preferredVetId, dogOverrides, dogProfileModificationTime } =
+    args;
   const idx = dogIdx ?? 1;
   const { ownerUserId, ownerName } = await (async () => {
     if (args.userId !== undefined) {
@@ -105,12 +104,19 @@ export async function givenDog(
       ownerName: res.userName,
     };
   })();
+  const baseDogOverrides = mockEligibleDogOverrides();
   const { dogId } = await insertDog(idx, ownerUserId, dbPool, {
-    dogGender: DOG_GENDER.MALE,
-    dogEverPregnant: YES_NO_UNKNOWN.NO,
-    dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
-    ...options?.dogOverrides,
+    ...baseDogOverrides,
+    ...dogOverrides,
   });
+  if (dogProfileModificationTime !== undefined) {
+    const _sql = `
+    UPDATE dogs
+    SET profile_modification_time = $2
+    WHERE dog_id = $1
+    `;
+    await dbQuery(dbPool, _sql, [dogId, dogProfileModificationTime]);
+  }
   if (preferredVetId !== undefined) {
     await dbInsertDogVetPreference(dbPool, dogId, preferredVetId);
   }
@@ -129,9 +135,7 @@ export async function givenDog(
       dogGender: DogGender;
     }>(dbPool, dogSql, [dogId])
   ).rows[0];
-  const { dogName } = await getDogMapper().mapDogSecureOiiToDogOii({
-    dogEncryptedOii,
-  });
+  const dogName = await toDogName(context, dogEncryptedOii);
   return { dogId, dogName, dogBreed, dogGender, ownerUserId, ownerName };
 }
 
@@ -142,7 +146,7 @@ const GivenVetSchema = z.object({
 type GivenVetType = z.infer<typeof GivenVetSchema>;
 
 export async function givenVet(
-  context: BarkTestContext,
+  context: BarkContext,
   options?: { vetIdx?: number },
 ): Promise<GivenVetType> {
   const { dbPool } = context;
@@ -162,14 +166,20 @@ type GivenAppointmentType = z.infer<typeof GivenAppointmentSchema>;
 
 export async function givenAppointment(
   context: BarkContext,
-  options?: { idx?: number; existingVetId?: string },
+  options?: {
+    idx?: number;
+    existingVetId?: string;
+    dogOverrides?: Partial<DogSpec>;
+    dogProfileModificationTime?: Date;
+  },
 ): Promise<GivenAppointmentType> {
-  const { idx, existingVetId } = options ?? {};
+  const { idx, existingVetId, ...otherOptions } = options ?? {};
   const vetId =
     existingVetId ?? (await givenVet(context, { vetIdx: idx })).vetId;
   const theDog = await givenDog(context, {
     dogIdx: idx,
     preferredVetId: vetId,
+    ...otherOptions,
   });
   const a1 = await opRecordAppointmentCallOutcome(context, {
     dogId: theDog.dogId,
@@ -194,13 +204,16 @@ export async function givenReport(
   options?: {
     idx?: number;
     existingVetId?: string;
+    dogOverrides?: Partial<DogSpec>;
+    dogProfileModificationTime?: Date;
     reportOverrides?: Partial<BarkReportData>;
   },
 ): Promise<GivenReportType> {
-  const res1 = await givenAppointment(context, options);
+  const { reportOverrides, ...otherOptions } = options ?? {};
+  const res1 = await givenAppointment(context, otherOptions);
   const reportData = {
     ...mockReportData(),
-    ...options?.reportOverrides,
+    ...reportOverrides,
   };
   const res2 = await opSubmitReport(context, {
     appointmentId: res1.appointmentId,

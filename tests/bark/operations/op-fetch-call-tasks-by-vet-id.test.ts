@@ -1,6 +1,7 @@
 import { opFetchCallTasksByVetId } from "@/lib/bark/operations/op-fetch-call-tasks-by-vet-id";
 import { withBarkContext } from "../_context";
 import { givenDog, givenReport, givenVet } from "../_given";
+import { weeksAgo } from "../../_time_helpers";
 
 describe("opFetchCallTasksByVetId", () => {
   it("should return empty list when vet has no applicable call tasks", async () => {
@@ -51,16 +52,34 @@ describe("opFetchCallTasksByVetId", () => {
   });
   it("should use latest values in call task", async () => {
     await withBarkContext(async ({ context }) => {
-      const { dogId, vetId } = await givenReport(context, {
+      const { vetId } = await givenReport(context, {
         idx: 1,
-        reportOverrides: { dogDidDonateBlood: false, dogWeightKg: 99999 },
+
+        // GIVEN a dog profile modified by the user 10 weeks ago that indicates
+        // weight to be 30 KG;
+        dogProfileModificationTime: weeksAgo(10),
+        dogOverrides: {
+          dogWeightKg: 30,
+        },
+
+        // AND a report 1 week ago that says the weight is 28 KG; AND there was
+        // no blood donation (so still eligible)
+        reportOverrides: {
+          visitTime: weeksAgo(1),
+          dogDidDonateBlood: false,
+          dogWeightKg: 28,
+        },
       });
+
+      // WHEN call tasks are fetched...
       const { result, error } = await opFetchCallTasksByVetId(context, {
         vetId,
       });
+
+      // THEN...
       expect(error).toBeUndefined();
       const { callTasks } = result!;
-      expect(callTasks[0].dogWeightKg).toEqual(99999);
+      expect(callTasks[0].dogWeightKg).toEqual(28);
     });
   });
   it("should exclude dog profile that is incomplete", async () => {
