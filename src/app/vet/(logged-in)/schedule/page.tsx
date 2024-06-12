@@ -13,11 +13,11 @@ export default async function Page() {
   }
   const vetId = actor.getVetId();
   const context = await APP.getBarkContext();
-  const {result, error} = await opFetchCallTasksByVetId(context, {vetId});
+  const { result, error } = await opFetchCallTasksByVetId(context, { vetId });
   if (error !== undefined) {
     return <BarkError className="m-3">Failed to fetch call tasks.</BarkError>;
   }
-  const {callTasks} = result;
+  const { callTasks } = result;
   return (
     <div>
       <AppointmentScheduler dogs={callTasks} />

@@ -9,13 +9,17 @@ import { NavComponent } from "../_lib/pom/layout/nav-component";
 import { VetAppointmentSubmitReportPage } from "../_lib/pom/pages/vet-appointment-submit-report-page";
 import { getIsMobile } from "../_lib/e2e-test-utils";
 import { toString } from "lodash";
+import { ApiClient } from "../_lib/pom/api/api-client";
+import { SGT_UI_DATE, formatDateTime } from "@/lib/utilities/bark-time";
 
-test("call task uses latest values", async ({ page }) => {
+test("call task uses latest values", async ({ page, request }) => {
   const { context, dogName, dogWeightKg, userName } = await registerTestUser({
     page,
   });
   await doLogoutSequence({ context });
   await loginKnownVet({ page });
+
+  const api = new ApiClient(context, request);
 
   const pgSchedule = new VetSchedulePage(context);
   const pgAppointments = new VetAppointmentListPage(context);
@@ -40,7 +44,22 @@ test("call task uses latest values", async ({ page }) => {
     .click();
   await pgSubmit.checkUrl();
 
-  await pgSubmit.visitDateField().fill("21 Apr 2024");
+  // For this test to work, the profile modification time needs to be before the
+  // visit date. However, since profile modification time is set by
+  // CURRENT_TIMESTAMP above, and the maximum visitDate is today's date due to
+  // form validation, in the following we push back all profile modification
+  // times within the last day to two days ago.
+  {
+    const _sql = `
+    UPDATE dogs
+    SET profile_modification_time = (CURRENT_TIMESTAMP - INTERVAL '2 days')
+    WHERE profile_modification_time > (CURRENT_TIMESTAMP - INTERVAL '1 day')
+    `;
+    await api.sql(_sql, []);
+  }
+  const visitDate = formatDateTime(new Date(), SGT_UI_DATE);
+
+  await pgSubmit.visitDateField().fill(visitDate);
   await pgSubmit.dogDidDonateBlood_NO().click();
   await pgSubmit.dogBcsSelector().click();
   await pgSubmit.dogBcsOption5().click();

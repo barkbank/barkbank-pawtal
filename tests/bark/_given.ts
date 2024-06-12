@@ -1,14 +1,6 @@
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
-import {
-  insertDog,
-  insertUser,
-  insertVet,
-  userPii
-} from "../_fixtures";
-import {
-  DogGender,
-  DogGenderSchema
-} from "@/lib/bark/enums/dog-gender";
+import { insertDog, insertUser, insertVet, userPii } from "../_fixtures";
+import { DogGender, DogGenderSchema } from "@/lib/bark/enums/dog-gender";
 import { dbQuery } from "@/lib/data/db-utils";
 import { BarkContext } from "@/lib/bark/bark-context";
 import { opRecordAppointmentCallOutcome } from "@/lib/bark/operations/op-record-appointment-call-outcome";
