@@ -5,7 +5,7 @@ import { getMyPets } from "@/lib/user/actions/get-my-pets";
 import { MyDog } from "@/lib/user/user-models";
 import { IMG_PATH } from "@/lib/image-path";
 import { PROFILE_STATUS } from "@/lib/data/db-enums";
-import { DOG_GENDER } from "@/lib/bark/models/dog-gender";
+import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
 import { getHighlightedStatus } from "@/lib/dog/get-highlighted-status";
 import { BarkButton } from "@/components/bark/bark-button";
 import { BarkStatusBlock } from "@/components/bark/bark-status-block";

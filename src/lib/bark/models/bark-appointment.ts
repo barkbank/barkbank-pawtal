@@ -1,5 +1,5 @@
 import { BarkAppointmentMetadataSchema } from "./bark-appointment-metadata";
-import { SpecifiedDogGenderSchema } from "./dog-gender";
+import { SpecifiedDogGenderSchema } from "../enums/dog-gender";
 import { z } from "zod";
 
 export const BarkAppointmentSchema = BarkAppointmentMetadataSchema.extend({

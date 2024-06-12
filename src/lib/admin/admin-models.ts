@@ -1,5 +1,5 @@
-import { YesNoUnknown } from "../data/db-enums";
-import { DogGender } from "../bark/models/dog-gender";
+import { YesNoUnknown } from "../bark/enums/yes-no-unknown";
+import { DogGender } from "../bark/enums/dog-gender";
 
 export type IncompleteProfile = {
   userId: string;

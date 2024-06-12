@@ -44,7 +44,9 @@ test-ui-headed: playwright-browsers
 # Run playwright interactively
 .PHONY: run-playwright
 run-playwright: playwright-browsers
-	npx playwright test --ui --project "Mobile Chrome" --project "chromium"
+#	npx playwright test --ui --project "Mobile Chrome" --project "chromium"
+	npx playwright test --ui --project "Mobile Chrome" --project "chromium" --workers 1
+#	npx playwright test --ui --project "chromium" --workers 1
 
 # Installs playwright browsers
 .PHONY: playwright-browsers
@@ -90,12 +92,22 @@ reset-local-database:
 # branch.
 .PHONY: wip
 wip:
-	grep -n --color=always -R WIP src tests db e2e
+	@echo Remaining wip tasks
+	@echo
+	@grep -n --color=always -R 'WIP[:]' src tests db e2e
+	@echo
+	@echo Number of tasks remaining
+	@grep -n --color=always -R 'WIP[:]' src tests db e2e | wc -l
 
 # Lists TODO notes.
 .PHONY: todo
 todo:
-	grep -n --color=always -R TODO src tests db e2e
+	@echo Remaining todo tasks
+	@echo
+	@grep -n --color=always -R 'TODO[:]' src tests db e2e
+	@echo
+	@echo Number of tasks remaining
+	@grep -n --color=always -R 'TODO[:]' src tests db e2e | wc -l
 
 # Diff local schema and barkbank-schemas
 .PHONY: schema-diff

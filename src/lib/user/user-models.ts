@@ -5,7 +5,7 @@ import {
   ServiceStatus,
   UserResidency,
 } from "../data/db-enums";
-import { DogGender } from "../bark/models/dog-gender";
+import { DogGender } from "../bark/enums/dog-gender";
 import { DogAppointment } from "../dog/dog-models";
 import { DogStatuses } from "../dog/dog-models";
 

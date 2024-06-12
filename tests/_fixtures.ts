@@ -20,13 +20,9 @@ import {
   DbCallSpec,
   DbCallGen,
 } from "@/lib/data/db-models";
-import {
-  DOG_ANTIGEN_PRESENCE,
-  DogAntigenPresence,
-  YES_NO_UNKNOWN,
-  YesNoUnknown,
-} from "@/lib/data/db-enums";
-import { DOG_GENDER, DogGender } from "@/lib/bark/models/dog-gender";
+import { DOG_ANTIGEN_PRESENCE, DogAntigenPresence } from "@/lib/data/db-enums";
+import { YES_NO_UNKNOWN, YesNoUnknown } from "@/lib/bark/enums/yes-no-unknown";
+import { DOG_GENDER, DogGender } from "@/lib/bark/enums/dog-gender";
 import { USER_RESIDENCY } from "@/lib/data/db-enums";
 import { dbInsertAdmin, dbSelectAdmin } from "@/lib/data/db-admins";
 import { Pool } from "pg";

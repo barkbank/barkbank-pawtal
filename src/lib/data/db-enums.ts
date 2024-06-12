@@ -86,14 +86,6 @@ export const USER_RESIDENCY = {
 
 export type UserResidency = ObjectValues<typeof USER_RESIDENCY>;
 
-export const YES_NO_UNKNOWN = {
-  YES: "YES",
-  NO: "NO",
-  UNKNOWN: "UNKNOWN",
-} as const;
-
-export type YesNoUnknown = ObjectValues<typeof YES_NO_UNKNOWN>;
-
 export const DOG_ANTIGEN_PRESENCE = {
   POSITIVE: "POSITIVE",
   NEGATIVE: "NEGATIVE",

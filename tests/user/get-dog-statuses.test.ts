@@ -7,9 +7,9 @@ import {
   PARTICIPATION_STATUS,
   PROFILE_STATUS,
   SERVICE_STATUS,
-  YES_NO_UNKNOWN,
 } from "@/lib/data/db-enums";
-import { DOG_GENDER } from "@/lib/bark/models/dog-gender";
+import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
+import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
 import { dateAgo } from "../_time_helpers";
 
 describe("getDogStatuses", () => {

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { SpecifiedDogGenderSchema } from "./dog-gender";
+import { SpecifiedDogGenderSchema } from "../enums/dog-gender";
 
 // TODO: Add preferredVetName - Useful when presented to Users.
 

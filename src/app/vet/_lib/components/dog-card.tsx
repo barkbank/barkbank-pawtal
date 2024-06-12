@@ -1,17 +1,17 @@
 import { Separator } from "@/components/ui/separator";
 import { CALL_OUTCOME } from "@/lib/data/db-enums";
-import { DOG_GENDER } from "@/lib/bark/models/dog-gender";
+import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
 import { getFormattedAge } from "@/lib/utilities/bark-age";
-import { AvailableDog } from "@/lib/vet/vet-models";
 import clsx from "clsx";
 import { capitalize } from "lodash";
 import { SchedulerOutcome } from "@/app/vet/_lib/models/scheduler-outcome";
 import { DeclinedBadge, ScheduledBadge } from "./scheduler-badges";
 import { DogAvatar } from "./dog-avatar";
 import { NA_TEXT } from "@/app/_lib/constants";
+import { CallTask } from "@/lib/bark/models/call-task";
 
 export function DogCard(props: {
-  dog: AvailableDog;
+  dog: CallTask;
   onSelect: () => void;
   selectedDogId: string | null;
   outcome: SchedulerOutcome | undefined;
@@ -53,6 +53,7 @@ export function DogCard(props: {
         />
         <Item label="Gender" value={getGender(dog)} />
         <Item label="Was ever pregnant" value={getEverPregnant(dog)} />
+        <Item label="Owner" value={dog.ownerName} />
       </div>
 
       {children}
@@ -69,11 +70,11 @@ function Item(props: { label: string; value: string }) {
   );
 }
 
-function getBreed(dog: AvailableDog): string {
+function getBreed(dog: CallTask): string {
   return dog.dogBreed;
 }
 
-function getWeight(dog: AvailableDog): string {
+function getWeight(dog: CallTask): string {
   const { dogWeightKg } = dog;
   if (dogWeightKg === null) {
     return "Unknown";
@@ -81,22 +82,22 @@ function getWeight(dog: AvailableDog): string {
   return `${dogWeightKg} KG`;
 }
 
-function getAge(dog: AvailableDog): string {
+function getAge(dog: CallTask): string {
   const { dogBirthday } = dog;
   return getFormattedAge(dogBirthday, new Date());
 }
 
-function getBloodTransfusionHistory(dog: AvailableDog): string {
+function getBloodTransfusionHistory(dog: CallTask): string {
   const { dogEverReceivedTransfusion } = dog;
   return capitalize(dogEverReceivedTransfusion);
 }
 
-function getGender(dog: AvailableDog): string {
+function getGender(dog: CallTask): string {
   const { dogGender } = dog;
   return capitalize(dogGender);
 }
 
-function getEverPregnant(dog: AvailableDog): string {
+function getEverPregnant(dog: CallTask): string {
   const { dogEverPregnant, dogGender } = dog;
   if (dogGender === DOG_GENDER.MALE) {
     return NA_TEXT;
