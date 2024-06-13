@@ -30,7 +30,7 @@ import {
   UserActorFactory,
   UserActorFactoryConfig,
 } from "./user/user-actor-factory";
-import { APP_ENV } from "./app-env";
+import { APP_ENV, AppEnv, AppEnvSchema } from "./app-env";
 import { isValidEmail } from "./utilities/bark-utils";
 import { UserMapper } from "./data/user-mapper";
 import { AdminMapper } from "./data/admin-mapper";
@@ -73,11 +73,11 @@ export class AppFactory {
     this.envs = envs;
   }
 
-  private envOptionalString(key: APP_ENV): string | undefined {
-    return this.envs[key];
+  private envOptionalString(key: AppEnv): string | undefined {
+    return this.envs[AppEnvSchema.parse(key)];
   }
 
-  private envString(key: APP_ENV): string {
+  private envString(key: AppEnv): string {
     const value = this.envOptionalString(key);
     if (value === undefined) {
       throw Error(`${key} is not specified`);
@@ -85,7 +85,7 @@ export class AppFactory {
     return value;
   }
 
-  private envInteger(key: APP_ENV): number {
+  private envInteger(key: AppEnv): number {
     return parseInt(this.envString(key));
   }
 
