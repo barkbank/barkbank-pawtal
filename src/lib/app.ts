@@ -30,7 +30,7 @@ import {
   UserActorFactory,
   UserActorFactoryConfig,
 } from "./user/user-actor-factory";
-import { AppEnv } from "./app-env";
+import { APP_ENV } from "./app-env";
 import { isValidEmail } from "./utilities/bark-utils";
 import { UserMapper } from "./data/user-mapper";
 import { AdminMapper } from "./data/admin-mapper";
@@ -73,11 +73,11 @@ export class AppFactory {
     this.envs = envs;
   }
 
-  private envOptionalString(key: AppEnv): string | undefined {
+  private envOptionalString(key: APP_ENV): string | undefined {
     return this.envs[key];
   }
 
-  private envString(key: AppEnv): string {
+  private envString(key: APP_ENV): string {
     const value = this.envOptionalString(key);
     if (value === undefined) {
       throw Error(`${key} is not specified`);
@@ -85,12 +85,12 @@ export class AppFactory {
     return value;
   }
 
-  private envInteger(key: AppEnv): number {
+  private envInteger(key: APP_ENV): number {
     return parseInt(this.envString(key));
   }
 
   public getNodeEnv(): "development" | "production" | "test" {
-    const val = this.envOptionalString(AppEnv.NODE_ENV);
+    const val = this.envOptionalString(APP_ENV.NODE_ENV);
     if (val === "production" || val === "test") {
       return val;
     }
@@ -100,17 +100,17 @@ export class AppFactory {
   public getEmailService(): Promise<EmailService> {
     if (this.promisedEmailService === null) {
       this.promisedEmailService = new Promise<EmailService>((resolve) => {
-        if (this.envString(AppEnv.BARKBANK_SMTP_HOST) === "") {
+        if (this.envString(APP_ENV.BARKBANK_SMTP_HOST) === "") {
           resolve(new PassthroughEmailService());
           console.log("Created PassthroughEmailService as EmailService");
           return;
         }
 
         const config: SmtpConfig = {
-          smtpHost: this.envString(AppEnv.BARKBANK_SMTP_HOST),
-          smtpPort: this.envInteger(AppEnv.BARKBANK_SMTP_PORT),
-          smtpUser: this.envString(AppEnv.BARKBANK_SMTP_USER),
-          smtpPassword: this.envString(AppEnv.BARKBANK_SMTP_PASSWORD),
+          smtpHost: this.envString(APP_ENV.BARKBANK_SMTP_HOST),
+          smtpPort: this.envInteger(APP_ENV.BARKBANK_SMTP_PORT),
+          smtpUser: this.envString(APP_ENV.BARKBANK_SMTP_USER),
+          smtpPassword: this.envString(APP_ENV.BARKBANK_SMTP_PASSWORD),
         };
         resolve(new NodemailerEmailService(config));
         console.log("Created NodemailerEmailService as EmailService");
@@ -132,12 +132,12 @@ export class AppFactory {
         this.promisedOtpService = new Promise<OtpService>((resolve) => {
           const config: OtpConfig = {
             otpLength: 6,
-            otpPeriodMillis: this.envInteger(AppEnv.BARKBANK_OTP_PERIOD_MILLIS),
+            otpPeriodMillis: this.envInteger(APP_ENV.BARKBANK_OTP_PERIOD_MILLIS),
             otpRecentPeriods: this.envInteger(
-              AppEnv.BARKBANK_OTP_NUM_RECENT_PERIODS,
+              APP_ENV.BARKBANK_OTP_NUM_RECENT_PERIODS,
             ),
             otpHashService: new SecretHashService(
-              this.envString(AppEnv.BARKBANK_OTP_SECRET),
+              this.envString(APP_ENV.BARKBANK_OTP_SECRET),
             ),
           };
           const service = new OtpServiceImpl(config);
@@ -151,8 +151,8 @@ export class AppFactory {
 
   public getSenderForOtpEmail(): Promise<EmailContact> {
     return Promise.resolve({
-      email: this.envString(AppEnv.BARKBANK_OTP_SENDER_EMAIL),
-      name: this.envOptionalString(AppEnv.BARKBANK_OTP_SENDER_NAME),
+      email: this.envString(APP_ENV.BARKBANK_OTP_SENDER_EMAIL),
+      name: this.envOptionalString(APP_ENV.BARKBANK_OTP_SENDER_NAME),
     });
   }
 
@@ -195,7 +195,7 @@ export class AppFactory {
   public getEmailHashService(): Promise<HashService> {
     if (this.promisedPiiHashService === null) {
       this.promisedPiiHashService = Promise.resolve(
-        new SecretHashService(this.envString(AppEnv.BARKBANK_PII_SECRET)),
+        new SecretHashService(this.envString(APP_ENV.BARKBANK_PII_SECRET)),
       );
       console.log("Created EmailHashService");
     }
@@ -205,7 +205,7 @@ export class AppFactory {
   private getPiiEncryptionService(): Promise<EncryptionService> {
     if (this.promisedPiiEncryptionService === null) {
       this.promisedPiiEncryptionService = Promise.resolve(
-        new SecretEncryptionService(this.envString(AppEnv.BARKBANK_PII_SECRET)),
+        new SecretEncryptionService(this.envString(APP_ENV.BARKBANK_PII_SECRET)),
       );
       console.log("Created EncryptionService for PII");
     }
@@ -215,7 +215,7 @@ export class AppFactory {
   private getOiiEncryptionService(): Promise<EncryptionService> {
     if (this.promisedOiiEncryptionService === null) {
       this.promisedOiiEncryptionService = Promise.resolve(
-        new SecretEncryptionService(this.envString(AppEnv.BARKBANK_OII_SECRET)),
+        new SecretEncryptionService(this.envString(APP_ENV.BARKBANK_OII_SECRET)),
       );
       console.log("Created EncryptionService for OII");
     }
@@ -226,7 +226,7 @@ export class AppFactory {
     if (this.promisedTextEncryptionService === null) {
       this.promisedTextEncryptionService = Promise.resolve(
         new SecretEncryptionService(
-          this.envString(AppEnv.BARKBANK_TEXT_SECRET),
+          this.envString(APP_ENV.BARKBANK_TEXT_SECRET),
         ),
       );
       console.log("Created EncryptionService for text");
@@ -246,11 +246,11 @@ export class AppFactory {
     if (this.promisedDbPool === null) {
       this.promisedDbPool = Promise.resolve(
         new pg.Pool({
-          host: this.envString(AppEnv.BARKBANK_DB_HOST),
-          port: this.envInteger(AppEnv.BARKBANK_DB_PORT),
-          user: this.envString(AppEnv.BARKBANK_DB_USER),
-          password: this.envString(AppEnv.BARKBANK_DB_PASSWORD),
-          database: this.envString(AppEnv.BARKBANK_DB_NAME),
+          host: this.envString(APP_ENV.BARKBANK_DB_HOST),
+          port: this.envInteger(APP_ENV.BARKBANK_DB_PORT),
+          user: this.envString(APP_ENV.BARKBANK_DB_USER),
+          password: this.envString(APP_ENV.BARKBANK_DB_PASSWORD),
+          database: this.envString(APP_ENV.BARKBANK_DB_NAME),
         }),
       );
       console.log("Created database connection pool");
@@ -269,7 +269,7 @@ export class AppFactory {
             this.getDogMapper(),
             this.getUserMapper(),
           ]);
-        const rootAdminEmail = this.envString(AppEnv.BARKBANK_ROOT_ADMIN_EMAIL);
+        const rootAdminEmail = this.envString(APP_ENV.BARKBANK_ROOT_ADMIN_EMAIL);
         if (!isValidEmail(rootAdminEmail)) {
           throw new Error("BARKBANK_ROOT_ADMIN_EMAIL is not a valid email");
         }

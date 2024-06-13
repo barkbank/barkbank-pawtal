@@ -1,7 +1,7 @@
 /**
  * An enumeration of all environment variables used by Pawtal.
  */
-export enum AppEnv {
+export enum APP_ENV {
   NODE_ENV = "NODE_ENV",
 
   BARKBANK_DB_HOST = "BARKBANK_DB_HOST",
