@@ -52,7 +52,6 @@ export function ReportCard(props: { report: BarkReport }) {
         <h2 className="x-card-title flex-1">{dogName}</h2>
         {getDonated(dogDidDonateBlood)}
       </div>
-      {getReportedIneligibility(ineligibilityStatus)}
       <p>Visited on {formatDateTime(visitTime, SGT_UI_DATE)}</p>
       <p className="flex-1">
         <span className="font-semibold text-slate-700">{dogName}</span> is a{" "}
@@ -66,10 +65,11 @@ export function ReportCard(props: { report: BarkReport }) {
         belonging to{" "}
         <span className="font-semibold text-slate-700">{ownerName}</span>.
       </p>
-      <div className="flex h-[24px] flex-row gap-3">
+      <div className="flex flex-wrap gap-3">
         {getHeartworm(dogHeartworm)}
         {getBCS(dogBodyConditioningScore)}
         {getBloodType(dogDea1Point1)}
+        {getReportedIneligibility(ineligibilityStatus)}
       </div>
     </div>
   );
@@ -141,10 +141,9 @@ const getReportedIneligibility = (
   reportedIneligibility: ReportedIneligibility,
 ) => {
   if (reportedIneligibility === REPORTED_INELIGIBILITY.TEMPORARILY_INELIGIBLE) {
-    return <BarkStatusTemporarilyIneligible />;
+    return <Badge className="bg-amber-600">Temporarily Ineligible</Badge>;
   }
   if (reportedIneligibility === REPORTED_INELIGIBILITY.PERMANENTLY_INELIGIBLE) {
-    return <BarkStatusIneligible />;
+    return <Badge className="bg-red-600">Permanently Ineligible</Badge>;
   }
-  return <BarkStatusEligible />;
 };
