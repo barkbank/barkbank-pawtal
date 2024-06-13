@@ -132,7 +132,9 @@ export class AppFactory {
         this.promisedOtpService = new Promise<OtpService>((resolve) => {
           const config: OtpConfig = {
             otpLength: 6,
-            otpPeriodMillis: this.envInteger(APP_ENV.BARKBANK_OTP_PERIOD_MILLIS),
+            otpPeriodMillis: this.envInteger(
+              APP_ENV.BARKBANK_OTP_PERIOD_MILLIS,
+            ),
             otpRecentPeriods: this.envInteger(
               APP_ENV.BARKBANK_OTP_NUM_RECENT_PERIODS,
             ),
@@ -205,7 +207,9 @@ export class AppFactory {
   private getPiiEncryptionService(): Promise<EncryptionService> {
     if (this.promisedPiiEncryptionService === null) {
       this.promisedPiiEncryptionService = Promise.resolve(
-        new SecretEncryptionService(this.envString(APP_ENV.BARKBANK_PII_SECRET)),
+        new SecretEncryptionService(
+          this.envString(APP_ENV.BARKBANK_PII_SECRET),
+        ),
       );
       console.log("Created EncryptionService for PII");
     }
@@ -215,7 +219,9 @@ export class AppFactory {
   private getOiiEncryptionService(): Promise<EncryptionService> {
     if (this.promisedOiiEncryptionService === null) {
       this.promisedOiiEncryptionService = Promise.resolve(
-        new SecretEncryptionService(this.envString(APP_ENV.BARKBANK_OII_SECRET)),
+        new SecretEncryptionService(
+          this.envString(APP_ENV.BARKBANK_OII_SECRET),
+        ),
       );
       console.log("Created EncryptionService for OII");
     }
@@ -269,7 +275,9 @@ export class AppFactory {
             this.getDogMapper(),
             this.getUserMapper(),
           ]);
-        const rootAdminEmail = this.envString(APP_ENV.BARKBANK_ROOT_ADMIN_EMAIL);
+        const rootAdminEmail = this.envString(
+          APP_ENV.BARKBANK_ROOT_ADMIN_EMAIL,
+        );
         if (!isValidEmail(rootAdminEmail)) {
           throw new Error("BARKBANK_ROOT_ADMIN_EMAIL is not a valid email");
         }
