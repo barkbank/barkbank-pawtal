@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 import { APP_ENV } from "./lib/app-env";
+import { NODE_ENV } from "./lib/node-envs";
 
 function responseWithStatus(status: number) {
   return NextResponse.json({ _error: { status } }, { status });
@@ -20,7 +21,7 @@ export async function authDangerous(
   request: NextRequest,
   envs: NodeJS.Dict<string>,
 ): Promise<Response | null> {
-  if (envs[APP_ENV.NODE_ENV] !== "development") {
+  if (envs[APP_ENV.NODE_ENV] !== NODE_ENV.DEVELOPMENT) {
     return _404_NOT_FOUND;
   }
   const cred = envs[APP_ENV.DANGEROUS_CREDENTIALS];

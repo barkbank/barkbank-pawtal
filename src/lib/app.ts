@@ -44,6 +44,7 @@ import {
 } from "./services/email-otp-service";
 import { VetActorConfig } from "./vet/vet-actor";
 import { BarkContext } from "./bark/bark-context";
+import { NODE_ENV, NodeEnv } from "./node-envs";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -89,12 +90,12 @@ export class AppFactory {
     return parseInt(this.envString(key));
   }
 
-  public getNodeEnv(): "development" | "production" | "test" {
+  public getNodeEnv(): NodeEnv {
     const val = this.envOptionalString(APP_ENV.NODE_ENV);
-    if (val === "production" || val === "test") {
+    if (val === NODE_ENV.PRODUCTION || val === NODE_ENV.TEST) {
       return val;
     }
-    return "development";
+    return NODE_ENV.DEVELOPMENT;
   }
 
   public getEmailService(): Promise<EmailService> {
@@ -122,7 +123,7 @@ export class AppFactory {
 
   public getOtpService(): Promise<OtpService> {
     if (this.promisedOtpService === null) {
-      if (this.getNodeEnv() === "development") {
+      if (this.getNodeEnv() === NODE_ENV.DEVELOPMENT) {
         this.promisedOtpService = new Promise<OtpService>((resolve) => {
           const service = new DevelopmentOtpService();
           console.log("Created DevelopmentOtpService as OtpService");
@@ -250,6 +251,7 @@ export class AppFactory {
 
   public getDbPool(): Promise<pg.Pool> {
     if (this.promisedDbPool === null) {
+      const ssl = this.getNodeEnv() !== NODE_ENV.DEVELOPMENT ? true : undefined;
       this.promisedDbPool = Promise.resolve(
         new pg.Pool({
           host: this.envString(APP_ENV.BARKBANK_DB_HOST),
@@ -257,6 +259,7 @@ export class AppFactory {
           user: this.envString(APP_ENV.BARKBANK_DB_USER),
           password: this.envString(APP_ENV.BARKBANK_DB_PASSWORD),
           database: this.envString(APP_ENV.BARKBANK_DB_NAME),
+          ssl,
         }),
       );
       console.log("Created database connection pool");
