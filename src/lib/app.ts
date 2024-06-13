@@ -251,6 +251,7 @@ export class AppFactory {
 
   public getDbPool(): Promise<pg.Pool> {
     if (this.promisedDbPool === null) {
+      const ssl = this.getNodeEnv() !== NODE_ENV.DEVELOPMENT ? true : undefined;
       this.promisedDbPool = Promise.resolve(
         new pg.Pool({
           host: this.envString(APP_ENV.BARKBANK_DB_HOST),
@@ -258,6 +259,7 @@ export class AppFactory {
           user: this.envString(APP_ENV.BARKBANK_DB_USER),
           password: this.envString(APP_ENV.BARKBANK_DB_PASSWORD),
           database: this.envString(APP_ENV.BARKBANK_DB_NAME),
+          ssl,
         }),
       );
       console.log("Created database connection pool");
