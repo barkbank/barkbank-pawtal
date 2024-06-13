@@ -44,6 +44,7 @@ import {
 } from "./services/email-otp-service";
 import { VetActorConfig } from "./vet/vet-actor";
 import { BarkContext } from "./bark/bark-context";
+import { NODE_ENV, NodeEnv } from "./node-envs";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -89,12 +90,12 @@ export class AppFactory {
     return parseInt(this.envString(key));
   }
 
-  public getNodeEnv(): "development" | "production" | "test" {
+  public getNodeEnv(): NodeEnv {
     const val = this.envOptionalString(APP_ENV.NODE_ENV);
-    if (val === "production" || val === "test") {
+    if (val === NODE_ENV.PRODUCTION || val === NODE_ENV.TEST) {
       return val;
     }
-    return "development";
+    return NODE_ENV.DEVELOPMENT;
   }
 
   public getEmailService(): Promise<EmailService> {
@@ -122,7 +123,7 @@ export class AppFactory {
 
   public getOtpService(): Promise<OtpService> {
     if (this.promisedOtpService === null) {
-      if (this.getNodeEnv() === "development") {
+      if (this.getNodeEnv() === NODE_ENV.DEVELOPMENT) {
         this.promisedOtpService = new Promise<OtpService>((resolve) => {
           const service = new DevelopmentOtpService();
           console.log("Created DevelopmentOtpService as OtpService");

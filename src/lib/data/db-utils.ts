@@ -3,6 +3,7 @@ import { SlowQueryService } from "./db-slow-query";
 import { Err, Ok, Result } from "../utilities/result";
 import { CODE } from "../utilities/bark-code";
 import { asyncSleep } from "../utilities/async-sleep";
+import { NODE_ENV } from "../node-envs";
 
 export type DbContext = Pool | PoolClient;
 
@@ -55,7 +56,7 @@ export async function dbQuery<T extends QueryResultRow = any>(
   sql: string,
   params: any[],
 ): Promise<QueryResult<T>> {
-  if (process.env.NODE_ENV === "development") {
+  if (process.env.NODE_ENV === NODE_ENV.DEVELOPMENT) {
     return timedDbQuery<T>(ctx, sql, params);
   }
   try {
