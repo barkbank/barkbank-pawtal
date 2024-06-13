@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
-import { AppEnv } from "./lib/app-env";
+import { APP_ENV } from "./lib/app-env";
 
 function responseWithStatus(status: number) {
   return NextResponse.json({ _error: { status } }, { status });
@@ -20,10 +20,10 @@ export async function authDangerous(
   request: NextRequest,
   envs: NodeJS.Dict<string>,
 ): Promise<Response | null> {
-  if (envs[AppEnv.NODE_ENV] !== "development") {
+  if (envs[APP_ENV.NODE_ENV] !== "development") {
     return _404_NOT_FOUND;
   }
-  const cred = envs[AppEnv.DANGEROUS_CREDENTIALS];
+  const cred = envs[APP_ENV.DANGEROUS_CREDENTIALS];
   if (!cred) {
     return _401_UNAUTHORIZED;
   }
@@ -32,7 +32,7 @@ export async function authDangerous(
   if (authVal !== `Basic ${base64Cred}`) {
     return _401_UNAUTHORIZED;
   }
-  const isEnabled = envs[AppEnv.DANGEROUS_ENABLED];
+  const isEnabled = envs[APP_ENV.DANGEROUS_ENABLED];
   if (!isEnabled || isEnabled !== "true") {
     return _403_FORBIDDEN;
   }
