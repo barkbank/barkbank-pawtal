@@ -254,14 +254,18 @@ export class AppFactory {
     if (this.promisedDbPool === null) {
       this.promisedDbPool = new Promise(async (resolve) => {
         const ssl = (() => {
-          const fileName = this.envOptionalString(APP_ENV.BARKBANK_DB_CA_CERT_FILE);
+          const fileName = this.envOptionalString(
+            APP_ENV.BARKBANK_DB_CA_CERT_FILE,
+          );
           if (fileName === undefined) {
             return undefined;
           }
           // See this reference for how to specify a self-signed CA cert when
           // connecting to the database.
           // https://node-postgres.com/features/ssl#self-signed-cert
-          const ca = fs.readFileSync(`src/resources/certs/${fileName}`).toString()
+          const ca = fs
+            .readFileSync(`src/resources/certs/${fileName}`)
+            .toString();
           console.log({ ca });
           return { rejectUnauthorized: false, ca };
         })();
