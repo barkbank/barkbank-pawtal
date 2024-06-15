@@ -50,6 +50,10 @@ export default function AccountEditForm({
     const request: MyAccountDetailsUpdate = values;
 
     const response = await postMyAccountDetails(request);
+    if (response === CODE.ERROR_NOT_LOGGED_IN) {
+      router.push(RoutePath.USER_LOGIN_PAGE);
+      return;
+    }
     if (response === CODE.OK) {
       router.push(RoutePath.USER_MY_ACCOUNT_PAGE);
       return;
