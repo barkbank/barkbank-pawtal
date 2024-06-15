@@ -2,7 +2,6 @@
 
 import {
   BodyConditioningScoreField,
-  DateField,
 } from "@/app/_lib/field-schemas";
 import { DateOrDurationField } from "@/app/_lib/field-schemas/date-or-duration-field";
 import { BarkButton } from "@/components/bark/bark-button";
@@ -38,6 +37,7 @@ import {
 } from "@/lib/utilities/bark-time";
 import { Separator } from "@/components/ui/separator";
 import { RequiredDogWeightKgField } from "@/app/_lib/field-schemas/required-dog-weight-kg-field";
+import { RequiredDateField } from "@/app/_lib/field-schemas/required-date-field";
 
 const expiryTimeField = new DateOrDurationField({
   optional: true,
@@ -45,7 +45,7 @@ const expiryTimeField = new DateOrDurationField({
 });
 
 const ReportFormDataSchema = z.object({
-  visitTime: DateField.getSchema(),
+  visitTime: RequiredDateField.new().schema(),
   dogWeightKg: RequiredDogWeightKgField.new().schema(),
   dogBodyConditioningScore: BodyConditioningScoreField.Schema,
   dogHeartworm: PosNegNilSchema,
@@ -161,7 +161,7 @@ function toBarkReportData(formData: ReportFormData): BarkReportData {
     ineligibilityExpiryTime,
     ...otherFields
   } = formData;
-  const resolvedVisitTime = DateField.parse(visitTime);
+  const resolvedVisitTime = RequiredDateField.new().parse(visitTime);
   const values: BarkReportData = {
     visitTime: resolvedVisitTime,
     dogWeightKg: RequiredDogWeightKgField.new().parse(dogWeightKg),
