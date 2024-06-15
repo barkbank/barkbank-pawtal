@@ -1,3 +1,4 @@
+import { isEmpty } from "lodash";
 import { z } from "zod";
 
 export function guaranteed<T>(arg: T | undefined | null): T {
@@ -8,6 +9,10 @@ export function guaranteed<T>(arg: T | undefined | null): T {
     throw Error("arg is null");
   }
   return arg;
+}
+
+export function isBlank(value: string): boolean {
+  return isEmpty(value.trim());
 }
 
 export function isIntegerString(value: string): boolean {

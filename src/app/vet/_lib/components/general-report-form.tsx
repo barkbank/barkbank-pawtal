@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  BodyConditioningScoreField,
-  DateField,
-  DateOrDurationField,
-  DogWeightKgField,
-} from "@/app/_lib/field-schemas";
+import { DateOrDurationField } from "@/app/_lib/field-schemas/date-or-duration-field";
 import { BarkButton } from "@/components/bark/bark-button";
 import {
   BarkForm,
@@ -38,6 +33,9 @@ import {
   parseCommonDate,
 } from "@/lib/utilities/bark-time";
 import { Separator } from "@/components/ui/separator";
+import { RequiredDogWeightKgField } from "@/app/_lib/field-schemas/required-dog-weight-kg-field";
+import { RequiredDateField } from "@/app/_lib/field-schemas/required-date-field";
+import { BodyConditioningScoreField } from "@/app/_lib/field-schemas/body-conditioning-score-field";
 
 const expiryTimeField = new DateOrDurationField({
   optional: true,
@@ -45,9 +43,9 @@ const expiryTimeField = new DateOrDurationField({
 });
 
 const ReportFormDataSchema = z.object({
-  visitTime: DateField.getSchema(),
-  dogWeightKg: DogWeightKgField.Schema,
-  dogBodyConditioningScore: BodyConditioningScoreField.Schema,
+  visitTime: RequiredDateField.new().schema(),
+  dogWeightKg: RequiredDogWeightKgField.new().schema(),
+  dogBodyConditioningScore: BodyConditioningScoreField.new().schema(),
   dogHeartworm: PosNegNilSchema,
   dogDea1Point1: PosNegNilSchema,
   ineligibilityReason: z.string().min(0),
@@ -161,11 +159,11 @@ function toBarkReportData(formData: ReportFormData): BarkReportData {
     ineligibilityExpiryTime,
     ...otherFields
   } = formData;
-  const resolvedVisitTime = DateField.parse(visitTime);
+  const resolvedVisitTime = RequiredDateField.new().parse(visitTime);
   const values: BarkReportData = {
     visitTime: resolvedVisitTime,
-    dogWeightKg: DogWeightKgField.parse(dogWeightKg)!,
-    dogBodyConditioningScore: BodyConditioningScoreField.parse(
+    dogWeightKg: RequiredDogWeightKgField.new().parse(dogWeightKg),
+    dogBodyConditioningScore: BodyConditioningScoreField.new().parse(
       dogBodyConditioningScore,
     ),
     dogDidDonateBlood: dogDidDonateBlood === "YES",
@@ -311,7 +309,7 @@ export function GeneralReportForm(props: {
             name="dogBodyConditioningScore"
             label="Dog's Body Conditioning Score (BCS)"
             placeholder="Select BCS"
-            options={BodyConditioningScoreField.values.map((value: number) => {
+            options={[1, 2, 3, 4, 5, 6, 7, 8, 9].map((value: number) => {
               const option: BarkFormOption = {
                 value: `${value}`,
                 label: `${value}`,
