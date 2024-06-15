@@ -15,6 +15,10 @@ import {
   SortOptionSelector,
 } from "./sort-option-selector";
 import { CallTask } from "@/lib/bark/models/call-task";
+import {
+  compare,
+  compareNullableWithNullFirst,
+} from "@/lib/utilities/comparators";
 
 export function AppointmentScheduler(props: { dogs: CallTask[] }) {
   const [schedulerState, setSchedulerState] = useState<SchedulerState>({
@@ -26,7 +30,9 @@ export function AppointmentScheduler(props: { dogs: CallTask[] }) {
   const { dogs, selectedDogId, outcomes } = schedulerState;
 
   const [query, setQuery] = useState<string>("");
-  const [sortBy, setSortBy] = useState<SortOption>(SORT_OPTION.NIL);
+  const [sortBy, setSortBy] = useState<SortOption>(
+    SORT_OPTION.DOG_OLDEST_CALL_FIRST,
+  );
 
   const onSortValueChange = (value: SortOption) => {
     setSortBy(value);
@@ -73,38 +79,54 @@ export function AppointmentScheduler(props: { dogs: CallTask[] }) {
     });
     if (sortBy === SORT_OPTION.AGE_OLDEST_FIRST) {
       result.sort((a, b) => {
-        const x = a.dogBirthday.getTime();
-        const y = b.dogBirthday.getTime();
-        if (x < y) return -1;
-        if (x > y) return +1;
-        return 0;
+        return compare(a.dogBirthday, b.dogBirthday);
       });
     }
     if (sortBy === SORT_OPTION.AGE_YOUNGEST_FIRST) {
       result.sort((a, b) => {
-        const x = a.dogBirthday.getTime();
-        const y = b.dogBirthday.getTime();
-        if (x > y) return -1;
-        if (x < y) return +1;
-        return 0;
+        return compare(b.dogBirthday, a.dogBirthday);
       });
     }
     if (sortBy === SORT_OPTION.WEIGHT_HEAVIEST_FIRST) {
       result.sort((a, b) => {
-        const x = a.dogWeightKg ?? 0;
-        const y = b.dogWeightKg ?? 0;
-        if (x > y) return -1;
-        if (x < y) return +1;
-        return 0;
+        return compare(b.dogWeightKg ?? 0, a.dogWeightKg ?? 0);
       });
     }
     if (sortBy === SORT_OPTION.WEIGHT_LIGHTEST_FIRST) {
       result.sort((a, b) => {
-        const x = a.dogWeightKg ?? 0;
-        const y = b.dogWeightKg ?? 0;
-        if (x < y) return -1;
-        if (x > y) return +1;
-        return 0;
+        return compare(a.dogWeightKg ?? 0, b.dogWeightKg ?? 0);
+      });
+    }
+    if (sortBy === SORT_OPTION.OWNER_OLDEST_CALL_FIRST) {
+      result.sort((a, b) => {
+        return compareNullableWithNullFirst(
+          a.ownerLastContactedTime,
+          b.ownerLastContactedTime,
+        );
+      });
+    }
+    if (sortBy === SORT_OPTION.OWNER_RECENT_CALL_FIRST) {
+      result.sort((a, b) => {
+        return compareNullableWithNullFirst(
+          b.ownerLastContactedTime,
+          a.ownerLastContactedTime,
+        );
+      });
+    }
+    if (sortBy === SORT_OPTION.DOG_OLDEST_CALL_FIRST) {
+      result.sort((a, b) => {
+        return compareNullableWithNullFirst(
+          a.dogLastContactedTime,
+          b.dogLastContactedTime,
+        );
+      });
+    }
+    if (sortBy === SORT_OPTION.DOG_RECENT_CALL_FIRST) {
+      result.sort((a, b) => {
+        return compareNullableWithNullFirst(
+          b.dogLastContactedTime,
+          a.dogLastContactedTime,
+        );
       });
     }
     return result;
@@ -148,11 +170,6 @@ export function AppointmentScheduler(props: { dogs: CallTask[] }) {
     </div>
   );
 
-  // TODO: If an appointment invitation was declined within the last 7 days, the related outcomes[dogId] should be set to DECLINED.
-  // TODO: Should have option to sort dog cards by - Lightest First; Heaviest First; Oldest First; Youngest First; Most recently created;
-  // TODO: Should have option to exclude dogs contacted in the - Last 7 days; Last 30 days; Last 90 days
-  // TODO: Should have option to exclude owners contacted in the - Last 7 days; Last 30 days; Last 90 days
-
   return (
     <div className="m-3 flex flex-col gap-3">
       <SearchInput
@@ -162,7 +179,10 @@ export function AppointmentScheduler(props: { dogs: CallTask[] }) {
       />
       <div className="flex flex-row gap-3">
         <div className="w-[370px]">
-          <SortOptionSelector onValueChange={onSortValueChange} />
+          <SortOptionSelector
+            value={sortBy}
+            onValueChange={onSortValueChange}
+          />
         </div>
       </div>
       <div className="flex flex-col gap-3 md:flex-row">

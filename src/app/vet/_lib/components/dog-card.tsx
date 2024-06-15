@@ -5,10 +5,16 @@ import { getFormattedAge } from "@/lib/utilities/bark-age";
 import clsx from "clsx";
 import { capitalize } from "lodash";
 import { SchedulerOutcome } from "@/app/vet/_lib/models/scheduler-outcome";
-import { DeclinedBadge, ScheduledBadge } from "./scheduler-badges";
+import {
+  DeclinedBadge,
+  RecentlyContactedBadge,
+  ScheduledBadge,
+} from "./scheduler-badges";
 import { DogAvatar } from "./dog-avatar";
 import { NA_TEXT } from "@/app/_lib/constants";
 import { CallTask } from "@/lib/bark/models/call-task";
+import { formatDistance } from "date-fns";
+import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
 
 export function DogCard(props: {
   dog: CallTask;
@@ -18,8 +24,12 @@ export function DogCard(props: {
   children?: React.ReactNode;
 }) {
   const { dog, onSelect, selectedDogId, outcome, children } = props;
-  const { dogName, dogGender, dogId } = dog;
-  // TODO: when the latest call-outcome related to the dog is DECLINED, the dog card should indicate how long ago that was.
+  const { dogName, dogGender, dogId, dogLastContactedTime } = dog;
+  const { isScheduled, isDeclined, recentTime } = resolveBadge(
+    dogLastContactedTime,
+    outcome,
+  );
+
   return (
     <div
       className={clsx("x-card m-1", {
@@ -31,29 +41,40 @@ export function DogCard(props: {
       {/* A small m-1 above is needed because the ScrollArea crops the content a little. */}
 
       {/* Name */}
-      <div className="flex flex-row justify-between">
+      <div className="flex flex-row flex-wrap justify-between">
         <div className="flex flex-row gap-3">
           <DogAvatar dogGender={dogGender} />
           <div className="x-card-title">{dogName}</div>
         </div>
-        {outcome === CALL_OUTCOME.APPOINTMENT && <ScheduledBadge />}
-        {outcome === CALL_OUTCOME.DECLINED && <DeclinedBadge />}
+        {isScheduled && <ScheduledBadge />}
+        {isDeclined && <DeclinedBadge />}
+        {recentTime !== null && (
+          <RecentlyContactedBadge recentTime={recentTime} />
+        )}
       </div>
 
       <Separator className="my-1" />
 
       {/* Details */}
-      <div className="grid grid-cols-1 xl:grid-cols-2">
+      <div className="flex flex-col">
         <Item label="Breed" value={getBreed(dog)} />
         <Item label="Weight" value={getWeight(dog)} />
         <Item label="Age" value={getAge(dog)} />
+        <Item label="Gender" value={getGender(dog)} />
         <Item
           label="Has ever received blood"
           value={getBloodTransfusionHistory(dog)}
         />
-        <Item label="Gender" value={getGender(dog)} />
         <Item label="Was ever pregnant" value={getEverPregnant(dog)} />
         <Item label="Owner" value={dog.ownerName} />
+        <Item
+          label="Owner last contacted"
+          value={getLastContacted(dog.ownerLastContactedTime)}
+        />
+        <Item
+          label="Dog last contacted"
+          value={getLastContacted(dog.dogLastContactedTime)}
+        />
       </div>
 
       {children}
@@ -68,6 +89,28 @@ function Item(props: { label: string; value: string }) {
       {label}: <span className="font-semibold">{value}</span>
     </div>
   );
+}
+
+function resolveBadge(
+  contactDate: Date | null,
+  outcome: SchedulerOutcome | undefined,
+): {
+  isScheduled: boolean;
+  isDeclined: boolean;
+  recentTime: Date | null;
+} {
+  const isScheduled = outcome === CALL_OUTCOME.APPOINTMENT;
+  const isDeclined = !isScheduled && outcome === CALL_OUTCOME.DECLINED;
+  const recentTime = (() => {
+    if (isScheduled) return null;
+    if (isDeclined) return null;
+    if (contactDate === null) return null;
+    const delta = Date.now() - contactDate.getTime();
+    const threshold = MILLIS_PER_WEEK;
+    if (delta > threshold) return null;
+    return contactDate;
+  })();
+  return { isScheduled, isDeclined, recentTime };
 }
 
 function getBreed(dog: CallTask): string {
@@ -103,4 +146,14 @@ function getEverPregnant(dog: CallTask): string {
     return NA_TEXT;
   }
   return capitalize(dogEverPregnant);
+}
+
+function getLastContacted(time: Date | null): string {
+  if (time === null) {
+    return NA_TEXT;
+  }
+  return formatDistance(time, new Date(), {
+    includeSeconds: false,
+    addSuffix: true,
+  });
 }
