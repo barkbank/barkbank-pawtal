@@ -3,7 +3,6 @@
 import {
   BodyConditioningScoreField,
   DateField,
-  DogWeightKgField,
 } from "@/app/_lib/field-schemas";
 import { DateOrDurationField } from "@/app/_lib/field-schemas/date-or-duration-field";
 import { BarkButton } from "@/components/bark/bark-button";
@@ -38,6 +37,7 @@ import {
   parseCommonDate,
 } from "@/lib/utilities/bark-time";
 import { Separator } from "@/components/ui/separator";
+import { RequiredDogWeightKgField } from "@/app/_lib/field-schemas/required-dog-weight-kg-field";
 
 const expiryTimeField = new DateOrDurationField({
   optional: true,
@@ -46,7 +46,7 @@ const expiryTimeField = new DateOrDurationField({
 
 const ReportFormDataSchema = z.object({
   visitTime: DateField.getSchema(),
-  dogWeightKg: DogWeightKgField.Schema,
+  dogWeightKg: RequiredDogWeightKgField.new().schema(),
   dogBodyConditioningScore: BodyConditioningScoreField.Schema,
   dogHeartworm: PosNegNilSchema,
   dogDea1Point1: PosNegNilSchema,
@@ -164,7 +164,7 @@ function toBarkReportData(formData: ReportFormData): BarkReportData {
   const resolvedVisitTime = DateField.parse(visitTime);
   const values: BarkReportData = {
     visitTime: resolvedVisitTime,
-    dogWeightKg: DogWeightKgField.parse(dogWeightKg)!,
+    dogWeightKg: RequiredDogWeightKgField.new().parse(dogWeightKg),
     dogBodyConditioningScore: BodyConditioningScoreField.parse(
       dogBodyConditioningScore,
     ),

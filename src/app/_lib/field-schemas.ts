@@ -56,23 +56,6 @@ export const DateField = {
   },
 };
 
-export const DogWeightKgField = {
-  Schema: z.string().refine(
-    (value: string) => {
-      if (!value || value.trim() === "") {
-        return false;
-      }
-      return isValidWeightKg(value);
-    },
-    {
-      message: "Weight should be a positive number",
-    },
-  ),
-  parse: (value: string) => {
-    return parseWeightKg(value)!;
-  },
-};
-
 export const BodyConditioningScoreField = {
   Schema: z.string().refine(
     (value: string) => {
