@@ -56,6 +56,7 @@ export default function EditDogProfileForm(props: {
       description: `Profile for ${dogName} has been saved.`,
       variant: "brandSuccess",
     });
+    // TODO: do not use router.back(). It may go to the wrong place. Think of another solution.
     router.back();
     return Ok(true);
   }
