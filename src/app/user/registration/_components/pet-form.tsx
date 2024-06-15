@@ -141,7 +141,7 @@ export default function PetForm(props: {
         <BarkFormInput
           form={form}
           label="What's your dog's weight? (KG)"
-          description="Provide whole number weight or leave blank if unknown"
+          description="Provide weight or leave blank if unknown"
           name="dogWeightKg"
           type="text"
         />
