@@ -2,6 +2,8 @@ import { opFetchCallTasksByVetId } from "@/lib/bark/operations/op-fetch-call-tas
 import { withBarkContext } from "../_context";
 import { givenDog, givenReport, givenVet } from "../_given";
 import { weeksAgo } from "../../_time_helpers";
+import { insertCall } from "../../_fixtures";
+import { CALL_OUTCOME } from "@/lib/data/db-enums";
 
 describe("opFetchCallTasksByVetId", () => {
   it("should return empty list when vet has no applicable call tasks", async () => {
@@ -97,23 +99,89 @@ describe("opFetchCallTasksByVetId", () => {
       expect(result).toEqual({ callTasks: [] });
     });
   });
-  it("WIP: both last contacted times should be null when vet has never contacted the owner", async () => {
-    await withBarkContext(async ({context}) => {
+  it("should return null last contacted times when vet has never contacted the owner", async () => {
+    await withBarkContext(async ({ context }) => {
       // Given vets v1 and v2
+      const v1 = await givenVet(context, { vetIdx: 1 });
+      const v2 = await givenVet(context, { vetIdx: 2 });
+
       // And dog d1 with preferred vet v1
+      const d1 = await givenDog(context, {
+        dogIdx: 1,
+        preferredVetId: v1.vetId,
+      });
+
       // And a previous call from v2 to d1's owner
+      const c1 = await insertCall(
+        context.dbPool,
+        d1.dogId,
+        v2.vetId,
+        CALL_OUTCOME.DECLINED,
+      );
+
       // When call task is fetched
-      // Then the last contacted times should both be null
-    })
-  })
-  it("WIP: dog last contacted time is about the dog, and owner last contacted time is about the owner", async () => {
-    await withBarkContext(async ({context}) => {
+      const { result, error } = await opFetchCallTasksByVetId(context, {
+        vetId: v1.vetId,
+      });
+
+      // Then...
+      expect(error).toBeUndefined();
+
+      // The last contacted times should both be null
+      expect(result?.callTasks[0].dogLastContactedTime).toBeNull();
+      expect(result?.callTasks[0].ownerLastContactedTime).toBeNull();
+    });
+  });
+  it("should use last contact times from the POV of the actor vet", async () => {
+    await withBarkContext(async ({ context }) => {
       // Given vet v1
+      const v1 = await givenVet(context, { vetIdx: 1 });
+
       // And dogs d1 and d2 that both prefer vet v1
+      const d1 = await givenDog(context, {
+        dogIdx: 1,
+        preferredVetId: v1.vetId,
+      });
+      const d2 = await givenDog(context, {
+        dogIdx: 2,
+        preferredVetId: v1.vetId,
+      });
+
       // And v1 has contacted the owner about dog d1
+      const c1 = await insertCall(
+        context.dbPool,
+        d1.dogId,
+        v1.vetId,
+        CALL_OUTCOME.DECLINED,
+      );
+
+      // And there is a later call from vet v2
+      const v2 = await givenVet(context, { vetIdx: 2 });
+      const c2 = await insertCall(
+        context.dbPool,
+        d1.dogId,
+        v2.vetId,
+        CALL_OUTCOME.DECLINED,
+      );
+
       // When call tasks are fetched
-      // Then the last contacted time for the owner should be the same as that for dog d1 and nonnull
-      // And the last contacted time for d2 should be null
-    })
-  })
+      const { result, error } = await opFetchCallTasksByVetId(context, {
+        vetId: v1.vetId,
+      });
+
+      // Then...
+      expect(error).toBeUndefined();
+      const t1 = result!.callTasks.filter(
+        (task) => task.dogName === d1.dogName,
+      )[0];
+      const t2 = result!.callTasks.filter(
+        (task) => task.dogName === d2.dogName,
+      )[0];
+
+      expect(t1.ownerLastContactedTime).toEqual(c1.callCreationTime);
+      expect(t1.dogLastContactedTime).toEqual(c1.callCreationTime);
+      expect(t2.ownerLastContactedTime).toEqual(c1.callCreationTime);
+      expect(t2.dogLastContactedTime).toBeNull();
+    });
+  });
 });
