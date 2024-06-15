@@ -11,7 +11,7 @@ export class RequiredDogWeightKgField extends AbstractStringParserField<number> 
   }
 
   getMessage(): string {
-    return "Weight should be a positive number"
+    return "Weight should be a positive number";
   }
 
   parse(value: string): number {

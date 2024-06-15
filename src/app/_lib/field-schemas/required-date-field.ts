@@ -9,8 +9,8 @@ export class RequiredDateField extends AbstractStringParserField<Date> {
     return new RequiredDateField({ timeZone: SINGAPORE_TIME_ZONE });
   }
 
-  constructor(private args: {timeZone: string}) {
-    super()
+  constructor(private args: { timeZone: string }) {
+    super();
   }
 
   isOptional(): boolean {

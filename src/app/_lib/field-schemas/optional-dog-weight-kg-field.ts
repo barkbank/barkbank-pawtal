@@ -11,7 +11,7 @@ export class OptionalDogWeightKgField extends AbstractStringParserField<
     return true;
   }
   getMessage(): string {
-    return "Weight should be a positive number or empty"
+    return "Weight should be a positive number or empty";
   }
   parse(value: string): number | null {
     if (isBlank(value)) {

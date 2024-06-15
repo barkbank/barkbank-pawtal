@@ -1,8 +1,5 @@
 "use client";
 
-import {
-  BodyConditioningScoreField,
-} from "@/app/_lib/field-schemas";
 import { DateOrDurationField } from "@/app/_lib/field-schemas/date-or-duration-field";
 import { BarkButton } from "@/components/bark/bark-button";
 import {
@@ -38,6 +35,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { RequiredDogWeightKgField } from "@/app/_lib/field-schemas/required-dog-weight-kg-field";
 import { RequiredDateField } from "@/app/_lib/field-schemas/required-date-field";
+import { BodyConditioningScoreField } from "@/app/_lib/field-schemas/body-conditioning-score-field";
 
 const expiryTimeField = new DateOrDurationField({
   optional: true,
@@ -47,7 +45,7 @@ const expiryTimeField = new DateOrDurationField({
 const ReportFormDataSchema = z.object({
   visitTime: RequiredDateField.new().schema(),
   dogWeightKg: RequiredDogWeightKgField.new().schema(),
-  dogBodyConditioningScore: BodyConditioningScoreField.Schema,
+  dogBodyConditioningScore: BodyConditioningScoreField.new().schema(),
   dogHeartworm: PosNegNilSchema,
   dogDea1Point1: PosNegNilSchema,
   ineligibilityReason: z.string().min(0),
@@ -165,7 +163,7 @@ function toBarkReportData(formData: ReportFormData): BarkReportData {
   const values: BarkReportData = {
     visitTime: resolvedVisitTime,
     dogWeightKg: RequiredDogWeightKgField.new().parse(dogWeightKg),
-    dogBodyConditioningScore: BodyConditioningScoreField.parse(
+    dogBodyConditioningScore: BodyConditioningScoreField.new().parse(
       dogBodyConditioningScore,
     ),
     dogDidDonateBlood: dogDidDonateBlood === "YES",
@@ -311,7 +309,7 @@ export function GeneralReportForm(props: {
             name="dogBodyConditioningScore"
             label="Dog's Body Conditioning Score (BCS)"
             placeholder="Select BCS"
-            options={BodyConditioningScoreField.values.map((value: number) => {
+            options={[1, 2, 3, 4, 5, 6, 7, 8, 9].map((value: number) => {
               const option: BarkFormOption = {
                 value: `${value}`,
                 label: `${value}`,

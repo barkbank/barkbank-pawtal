@@ -20,7 +20,7 @@ export abstract class AbstractStringParserField<T> {
         }
       },
       {
-        message: this.getMessage()
+        message: this.getMessage(),
       },
     );
   }
