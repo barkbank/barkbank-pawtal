@@ -13,10 +13,10 @@ export const APP_ENV = {
   BARKBANK_DB_PASSWORD: "BARKBANK_DB_PASSWORD",
 
   /**
-   * CA Certificate for self-signed certificates.
+   * File name for self-signed CA certificate.
    * https://node-postgres.com/features/ssl#self-signed-cert
    */
-  BARKBANK_DB_SELF_SIGNED_CA_CERT: "BARKBANK_DB_SELF_SIGNED_CA_CERT",
+  BARKBANK_DB_CA_CERT_FILE: "BARKBANK_DB_CA_CERT_FILE",
 
   BARKBANK_OTP_NUM_RECENT_PERIODS: "BARKBANK_OTP_NUM_RECENT_PERIODS",
   BARKBANK_OTP_PERIOD_MILLIS: "BARKBANK_OTP_PERIOD_MILLIS",

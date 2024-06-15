@@ -1,3 +1,4 @@
+import fs from "fs";
 import {
   AdminActorFactory,
   AdminActorFactoryConfig,
@@ -253,20 +254,16 @@ export class AppFactory {
     if (this.promisedDbPool === null) {
       this.promisedDbPool = new Promise(async (resolve) => {
         const ssl = (() => {
-          const selfSignedCaCert = this.envOptionalString(
-            APP_ENV.BARKBANK_DB_SELF_SIGNED_CA_CERT,
-          );
-          console.log({ selfSignedCaCert });
-          if (selfSignedCaCert === undefined) {
+          const fileName = this.envOptionalString(APP_ENV.BARKBANK_DB_CA_CERT_FILE);
+          if (fileName === undefined) {
             return undefined;
           }
           // See this reference for how to specify a self-signed CA cert when
           // connecting to the database.
           // https://node-postgres.com/features/ssl#self-signed-cert
-          return {
-            rejectUnauthorized: false,
-            ca: selfSignedCaCert,
-          };
+          const ca = fs.readFileSync(`src/resources/certs/${fileName}`).toString()
+          console.log({ ca });
+          return { rejectUnauthorized: false, ca };
         })();
         const dbPool = new pg.Pool({
           host: this.envString(APP_ENV.BARKBANK_DB_HOST),
