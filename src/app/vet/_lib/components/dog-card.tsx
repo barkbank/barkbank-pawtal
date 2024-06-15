@@ -110,7 +110,7 @@ function resolveBadge(
     if (delta > threshold) return null;
     return contactDate;
   })();
-  return {isScheduled, isDeclined, recentTime}
+  return { isScheduled, isDeclined, recentTime };
 }
 
 function getBreed(dog: CallTask): string {
