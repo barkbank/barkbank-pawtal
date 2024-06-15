@@ -6,7 +6,6 @@ import { z } from "zod";
  * fails if the parser throws an exception.
  */
 export abstract class AbstractStringParserField<T> {
-  constructor(private abstractArgs: { message: string; optional?: boolean }) {}
   schema() {
     return z.string().refine(
       (value: string) => {
@@ -21,14 +20,12 @@ export abstract class AbstractStringParserField<T> {
         }
       },
       {
-        message: this.abstractArgs.message,
+        message: this.getMessage()
       },
     );
   }
 
+  abstract isOptional(): boolean;
+  abstract getMessage(): string;
   abstract parse(value: string): T;
-
-  private isOptional(): boolean {
-    return this.abstractArgs.optional ?? false;
-  }
 }
