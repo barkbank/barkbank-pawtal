@@ -1,6 +1,10 @@
 import { isBlank } from "@/lib/utilities/bark-utils";
 import { z } from "zod";
 
+/**
+ * An abstract field that parses string values into a generic type T. Validation
+ * fails if the parser throws an exception.
+ */
 export abstract class AbstractStringParserField<T> {
   constructor(private abstractArgs: { message: string; optional?: boolean }) {}
   schema() {
