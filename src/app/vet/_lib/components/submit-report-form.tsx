@@ -8,12 +8,14 @@ import { capitalize } from "lodash";
 import { postBarkReportData } from "../actions/post-bark-report-data";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { GeneralReportForm } from "./general-report-form";
+import { useToast } from "@/components/ui/use-toast";
 
 export function SubmitReportForm(props: { appointment: BarkAppointment }) {
   const { appointment } = props;
   const { appointmentId, dogName, dogBreed, dogGender, ownerName } =
     appointment;
   const router = useRouter();
+  const { toast } = useToast();
 
   async function handleSubmit(
     reportData: BarkReportData,
@@ -25,6 +27,11 @@ export function SubmitReportForm(props: { appointment: BarkAppointment }) {
     if (error !== undefined) {
       return Err(error);
     }
+    toast({
+      title: "Submitted!",
+      description: `Report for ${dogName} has been submitted.`,
+      variant: "brandSuccess",
+    });
     router.push(RoutePath.VET_APPOINTMENTS_LIST);
     return Ok(true);
   }

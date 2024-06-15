@@ -9,11 +9,13 @@ import { GeneralReportForm } from "./general-report-form";
 import { BarkReport } from "@/lib/bark/models/bark-report";
 import { postUpdatedReport } from "../actions/post-updated-report";
 import { CODE } from "@/lib/utilities/bark-code";
+import { useToast } from "@/components/ui/use-toast";
 
 export function EditReportForm(props: { report: BarkReport }) {
   const { report } = props;
   const { reportId, dogName, dogBreed, dogGender, ownerName } = report;
   const router = useRouter();
+  const { toast } = useToast();
 
   async function handleSubmit(
     reportData: BarkReportData,
@@ -25,6 +27,11 @@ export function EditReportForm(props: { report: BarkReport }) {
     if (res !== CODE.OK) {
       return Err(res);
     }
+    toast({
+      title: "Saved!",
+      description: `Changes to report for ${dogName} have been saved.`,
+      variant: "brandSuccess",
+    });
     router.push(RoutePath.VET_REPORTS_VIEW(reportId));
     return Ok(true);
   }
