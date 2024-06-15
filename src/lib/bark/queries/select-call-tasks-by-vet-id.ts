@@ -28,6 +28,16 @@ export async function selectCallTasksByVetId(
     FROM dog_vet_preferences
     WHERE vet_id = $1
   ),
+  mVetCalls as (
+    SELECT
+      tCall.call_creation_time,
+      tCall.vet_id,
+      tCall.dog_id,
+      tDog.user_id
+    FROM calls as tCall
+    LEFT JOIN dogs as tDog on tCall.dog_id = tDog.dog_id
+    WHERE vet_id = $1
+  ),
   mDogsEligible as (
     SELECT dog_id
     FROM dog_statuses
@@ -42,30 +52,26 @@ export async function selectCallTasksByVetId(
     WHERE call_outcome = 'APPOINTMENT'
     -- with any vet
   ),
+  mShortlistedDogs as (
+    SELECT
+      tVetDog.dog_id
+    FROM mVetDogs as tVetDog
+    WHERE tVetDog.dog_id IN (SELECT dog_id FROM mDogsEligible)
+    AND tVetDog.dog_id NOT IN (SELECT dog_id FROM mDogsWithAppointments)
+  ),
   mDogLastContactedTimes as (
     SELECT
       dog_id,
       MAX(call_creation_time) as dog_last_contacted_time
-    FROM calls
-    WHERE vet_id = $1
+    FROM mVetCalls
     GROUP BY dog_id
   ),
   mOwnerLastContactedTimes as (
     SELECT
-      tUser.user_id,
-      MAX(tCall.call_creation_time) as owner_last_contacted_time
-    FROM calls as tCall
-    LEFT JOIN dogs as tDog on tCall.dog_id = tDog.dog_id
-    LEFT JOIN users as tUser on tDog.user_id = tUser.user_id
-    WHERE tCall.vet_id = $1
-    GROUP BY tUser.user_id
-  ),
-  mShortlistedDogs as (
-    SELECT
-      dog_id
-    FROM mVetDogs
-    WHERE dog_id IN (SELECT dog_id FROM mDogsEligible)
-    AND dog_id NOT IN (SELECT dog_id FROM mDogsWithAppointments)
+      user_id,
+      MAX(call_creation_time) as owner_last_contacted_time
+    FROM mVetCalls
+    GROUP BY user_id
   ),
   mResults as (
     SELECT
