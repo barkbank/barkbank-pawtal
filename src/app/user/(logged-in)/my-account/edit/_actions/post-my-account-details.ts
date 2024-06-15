@@ -1,19 +1,19 @@
 "use server";
 
 import { getAuthenticatedUserActor } from "@/lib/auth";
-import { RoutePath } from "@/lib/route-path";
 import { updateMyAccountDetails } from "@/lib/user/actions/update-my-account-details";
 import { MyAccountDetailsUpdate } from "@/lib/user/user-models";
 import { CODE } from "@/lib/utilities/bark-code";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 export async function postMyAccountDetails(
   request: MyAccountDetailsUpdate,
-): Promise<typeof CODE.OK | typeof CODE.FAILED> {
+): Promise<
+  typeof CODE.OK | typeof CODE.ERROR_NOT_LOGGED_IN | typeof CODE.FAILED
+> {
   const actor = await getAuthenticatedUserActor();
   if (actor === null) {
-    redirect(RoutePath.USER_LOGIN_PAGE);
+    return CODE.ERROR_NOT_LOGGED_IN;
   }
 
   const response = await updateMyAccountDetails(actor, request);
