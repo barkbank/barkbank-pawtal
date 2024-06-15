@@ -29,7 +29,7 @@ export function DogCard(props: {
     dogLastContactedTime,
     outcome,
   );
-  // TODO: when the latest call-outcome related to the dog is DECLINED, the dog card should indicate how long ago that was.
+
   return (
     <div
       className={clsx("x-card m-1", {
