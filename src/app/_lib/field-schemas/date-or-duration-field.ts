@@ -1,5 +1,6 @@
 import { addDuration } from "@/lib/utilities/add-duration";
 import { parseCommonDate } from "@/lib/utilities/bark-time";
+import { isBlank } from "@/lib/utilities/bark-utils";
 import { parseCommonDuration } from "@/lib/utilities/parse-common-duration";
 import { z } from "zod";
 
@@ -8,7 +9,7 @@ export class DateOrDurationField {
   schema() {
     return z.string().refine(
       (value) => {
-        if (value.trim() === "") {
+        if (isBlank(value)) {
           return this.args.optional;
         }
         return this.isDate(value) || this.isDuration(value);

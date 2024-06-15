@@ -1,26 +1,17 @@
-import {
-  isBlank,
-  isValidWeightKg,
-  parseWeightKg,
-} from "@/lib/utilities/bark-utils";
-import { z } from "zod";
+import { isBlank, parseWeightKg } from "@/lib/utilities/bark-utils";
+import { AbstractStringParserField } from "./abstract-string-parser-field";
 
-export class OptionalDogWeightKgField {
+export class OptionalDogWeightKgField extends AbstractStringParserField<
+  number | null
+> {
   static new() {
     return new OptionalDogWeightKgField();
   }
-  schema() {
-    return z.string().refine(
-      (value: string) => {
-        if (isBlank(value)) {
-          return true;
-        }
-        return isValidWeightKg(value);
-      },
-      {
-        message: "Weight should be a positive number",
-      },
-    );
+  constructor() {
+    super({
+      message: "Weight should be a positive number or empty",
+      optional: true,
+    });
   }
 
   parse(value: string): number | null {
