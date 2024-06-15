@@ -9,7 +9,7 @@ import { DeclinedBadge, ScheduledBadge } from "./scheduler-badges";
 import { DogAvatar } from "./dog-avatar";
 import { NA_TEXT } from "@/app/_lib/constants";
 import { CallTask } from "@/lib/bark/models/call-task";
-import { formatDistanceStrict } from "date-fns";
+import { formatDistance } from "date-fns";
 
 export function DogCard(props: {
   dog: CallTask;
@@ -118,7 +118,8 @@ function getLastContacted(time: Date | null): string {
   if (time === null) {
     return NA_TEXT;
   }
-  return formatDistanceStrict(time, new Date(), {
+  return formatDistance(time, new Date(), {
+    includeSeconds: false,
     addSuffix: true,
   });
 }
