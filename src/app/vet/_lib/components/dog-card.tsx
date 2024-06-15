@@ -5,7 +5,11 @@ import { getFormattedAge } from "@/lib/utilities/bark-age";
 import clsx from "clsx";
 import { capitalize } from "lodash";
 import { SchedulerOutcome } from "@/app/vet/_lib/models/scheduler-outcome";
-import { DeclinedBadge, ScheduledBadge } from "./scheduler-badges";
+import {
+  DeclinedBadge,
+  RecentlyContactedBadge,
+  ScheduledBadge,
+} from "./scheduler-badges";
 import { DogAvatar } from "./dog-avatar";
 import { NA_TEXT } from "@/app/_lib/constants";
 import { CallTask } from "@/lib/bark/models/call-task";
@@ -21,7 +25,10 @@ export function DogCard(props: {
 }) {
   const { dog, onSelect, selectedDogId, outcome, children } = props;
   const { dogName, dogGender, dogId, dogLastContactedTime } = dog;
-  const { isScheduled, isDeclined } = resolveBadge(dog, outcome);
+  const { isScheduled, isDeclined, recentTime } = resolveBadge(
+    dogLastContactedTime,
+    outcome,
+  );
   // TODO: when the latest call-outcome related to the dog is DECLINED, the dog card should indicate how long ago that was.
   return (
     <div
@@ -40,8 +47,9 @@ export function DogCard(props: {
           <div className="x-card-title">{dogName}</div>
         </div>
         {isScheduled && <ScheduledBadge />}
-        {isDeclined && (
-          <DeclinedBadge dogLastContactedTime={dogLastContactedTime} />
+        {isDeclined && <DeclinedBadge />}
+        {recentTime !== null && (
+          <RecentlyContactedBadge recentTime={recentTime} />
         )}
       </div>
 
@@ -84,36 +92,47 @@ function Item(props: { label: string; value: string }) {
 }
 
 function resolveBadge(
-  dog: CallTask,
+  contactDate: Date | null,
   outcome: SchedulerOutcome | undefined,
 ): {
   isScheduled: boolean;
   isDeclined: boolean;
+  recentTime: Date | null;
 } {
   if (outcome === CALL_OUTCOME.APPOINTMENT) {
     return {
       isScheduled: true,
       isDeclined: false,
+      recentTime: null,
     };
   }
   if (outcome === CALL_OUTCOME.DECLINED) {
     return {
       isScheduled: false,
       isDeclined: true,
+      recentTime: null,
     };
   }
-  const contactDate = dog.dogLastContactedTime;
   if (contactDate === null) {
     return {
       isScheduled: false,
       isDeclined: false,
+      recentTime: null,
     };
   }
   const delta = Date.now() - contactDate.getTime();
   const threshold = MILLIS_PER_WEEK;
+  if (delta > threshold) {
+    return {
+      isScheduled: false,
+      isDeclined: false,
+      recentTime: null,
+    };
+  }
   return {
     isScheduled: false,
-    isDeclined: delta < threshold,
+    isDeclined: false,
+    recentTime: contactDate,
   };
 }
 

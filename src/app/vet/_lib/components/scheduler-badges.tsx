@@ -9,23 +9,27 @@ export function ScheduledBadge() {
   );
 }
 
-export function DeclinedBadge(props: { dogLastContactedTime?: Date | null }) {
-  const { dogLastContactedTime } = props;
-  const whenTime = dogLastContactedTime ?? null;
-  const whenText =
-    whenTime === null
-      ? null
-      : formatDistance(whenTime, new Date(), {
-          includeSeconds: false,
-          addSuffix: true,
-        });
-
+export function DeclinedBadge() {
   return (
     <Badge
       className="vet-appointment-scheduler-declined-badge"
       variant="secondary"
     >
-      Declined {whenText}
+      Declined
+    </Badge>
+  );
+}
+
+export function RecentlyContactedBadge(props: { recentTime: Date }) {
+  const { recentTime } = props;
+  const whenText = formatDistance(recentTime, new Date(), {
+    includeSeconds: false,
+    addSuffix: true,
+  });
+
+  return (
+    <Badge className="vet-appointment-scheduler-declined-badge bg-amber-600">
+      Recently contacted {whenText}
     </Badge>
   );
 }
