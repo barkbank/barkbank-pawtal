@@ -9,6 +9,7 @@ import { DeclinedBadge, ScheduledBadge } from "./scheduler-badges";
 import { DogAvatar } from "./dog-avatar";
 import { NA_TEXT } from "@/app/_lib/constants";
 import { CallTask } from "@/lib/bark/models/call-task";
+import { formatDistanceStrict } from "date-fns";
 
 export function DogCard(props: {
   dog: CallTask;
@@ -43,17 +44,25 @@ export function DogCard(props: {
       <Separator className="my-1" />
 
       {/* Details */}
-      <div className="grid grid-cols-1 xl:grid-cols-2">
+      <div className="flex flex-col">
         <Item label="Breed" value={getBreed(dog)} />
         <Item label="Weight" value={getWeight(dog)} />
         <Item label="Age" value={getAge(dog)} />
+        <Item label="Gender" value={getGender(dog)} />
         <Item
           label="Has ever received blood"
           value={getBloodTransfusionHistory(dog)}
         />
-        <Item label="Gender" value={getGender(dog)} />
         <Item label="Was ever pregnant" value={getEverPregnant(dog)} />
         <Item label="Owner" value={dog.ownerName} />
+        <Item
+          label="Owner last contacted"
+          value={getLastContacted(dog.ownerLastContactedTime)}
+        />
+        <Item
+          label="Dog last contacted"
+          value={getLastContacted(dog.dogLastContactedTime)}
+        />
       </div>
 
       {children}
@@ -103,4 +112,13 @@ function getEverPregnant(dog: CallTask): string {
     return NA_TEXT;
   }
   return capitalize(dogEverPregnant);
+}
+
+function getLastContacted(time: Date | null): string {
+  if (time === null) {
+    return NA_TEXT;
+  }
+  return formatDistanceStrict(time, new Date(), {
+    addSuffix: true,
+  });
 }
