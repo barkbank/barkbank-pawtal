@@ -12,6 +12,8 @@ export const CallTaskSchema = z.object({
   dogEverReceivedTransfusion: YesNoSchema,
   dogEverPregnant: YesNoSchema,
   ownerName: z.string(),
+  dogLastContactedTime: z.date(),
+  ownerLastContactedTime: z.date(),
 });
 
 export type CallTask = z.infer<typeof CallTaskSchema>;
