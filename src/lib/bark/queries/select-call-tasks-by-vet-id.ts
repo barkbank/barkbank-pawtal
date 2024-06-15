@@ -40,6 +40,32 @@ export async function selectCallTasksByVetId(
     SELECT dog_id
     FROM calls
     WHERE call_outcome = 'APPOINTMENT'
+    -- with any vet
+  ),
+  mDogLastContactedTimes as (
+    SELECT
+      dog_id,
+      MAX(call_creation_time) as dog_last_contacted_time
+    FROM calls
+    WHERE vet_id = $1
+    GROUP BY dog_id
+  ),
+  mOwnerLastContactedTimes as (
+    SELECT
+      tUser.user_id,
+      MAX(tCall.call_creation_time) as owner_last_contacted_time
+    FROM calls as tCall
+    LEFT JOIN dogs as tDog on tCall.dog_id = tDog.dog_id
+    LEFT JOIN users as tUser on tDog.user_id = tUser.user_id
+    WHERE tCall.vet_id = $1
+    GROUP BY tUser.user_id
+  ),
+  mShortlistedDogs as (
+    SELECT
+      dog_id
+    FROM mVetDogs
+    WHERE dog_id IN (SELECT dog_id FROM mDogsEligible)
+    AND dog_id NOT IN (SELECT dog_id FROM mDogsWithAppointments)
   ),
   mResults as (
     SELECT
@@ -51,13 +77,15 @@ export async function selectCallTasksByVetId(
       tDog.dog_ever_received_transfusion,
       tDog.dog_ever_pregnant,
       tLatest.latest_dog_weight_kg,
-      tUser.user_encrypted_pii
-    FROM dogs as tDog
+      tUser.user_encrypted_pii,
+      tDogLct.dog_last_contacted_time,
+      tOwnerLct.owner_last_contacted_time
+    FROM mShortlistedDogs as tShortlisted
+    LEFT JOIN dogs as tDog on tShortlisted.dog_id = tDog.dog_id
     LEFT JOIN latest_values as tLatest on tDog.dog_id = tLatest.dog_id
     LEFT JOIN users as tUser on tDog.user_id = tUser.user_id
-    WHERE tDog.dog_id IN (SELECT dog_id FROM mVetDogs)
-    AND tDog.dog_id IN (SELECT dog_id FROM mDogsEligible)
-    AND tDog.dog_id NOT IN (SELECT dog_id FROM mDogsWithAppointments)
+    LEFT JOIN mDogLastContactedTimes as tDogLct on tShortlisted.dog_id = tDogLct.dog_id
+    LEFT JOIN mOwnerLastContactedTimes as tOwnerLct on tDog.user_id = tOwnerLct.user_id
   )
 
   SELECT
@@ -68,6 +96,8 @@ export async function selectCallTasksByVetId(
     latest_dog_weight_kg as "dogWeightKg",
     dog_ever_received_transfusion as "dogEverReceivedTransfusion",
     dog_ever_pregnant as "dogEverPregnant",
+    dog_last_contacted_time as "dogLastContactedTime",
+    owner_last_contacted_time as "ownerLastContactedTime",
     dog_encrypted_oii as "dogEncryptedOii",
     user_encrypted_pii as "userEncryptedPii"
   FROM mResults
