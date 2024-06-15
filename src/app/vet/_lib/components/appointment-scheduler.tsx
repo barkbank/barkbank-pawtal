@@ -170,11 +170,6 @@ export function AppointmentScheduler(props: { dogs: CallTask[] }) {
     </div>
   );
 
-  // TODO: If an appointment invitation was declined within the last 7 days, the related outcomes[dogId] should be set to DECLINED.
-  // DONE: Should have option to sort dog cards by - Lightest First; Heaviest First; Oldest First; Youngest First; Most recently created;
-  // TODO: Should have option to exclude dogs contacted in the - Last 7 days; Last 30 days; Last 90 days
-  // TODO: Should have option to exclude owners contacted in the - Last 7 days; Last 30 days; Last 90 days
-
   return (
     <div className="m-3 flex flex-col gap-3">
       <SearchInput
