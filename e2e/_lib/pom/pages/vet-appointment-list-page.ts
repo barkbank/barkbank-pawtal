@@ -26,7 +26,10 @@ export class VetAppointmentListCard extends PomComponent {
   }
 
   locator(): Locator {
-    return this.page().getByText(this.args.dogName).locator("..").locator("..");
+    return this.page()
+      .getByText(this.args.dogName, { exact: true })
+      .locator("..")
+      .locator("..");
   }
 
   submitReportButton(): Locator {
