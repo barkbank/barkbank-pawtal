@@ -27,6 +27,10 @@ test:
 	bash scripts/test_no_wip_tasks_remaining.sh
 	npm run lint
 
+.PHONY: lint
+lint:
+	npm run lint
+
 # Run playwright tests. show-report will run automatically if a test
 # fails. If you want to use more workers, specify pw_workers like this
 # "make pw_workers=4 test-ui".
