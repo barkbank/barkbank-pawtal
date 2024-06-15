@@ -124,7 +124,9 @@ export default function BarkLoginForm(props: {
         </BarkFormButton>
         {recipientEmail !== "" && (
           <BarkFormParagraph>
-            An OTP has been sent to {recipientEmail}
+            An OTP has been sent to {recipientEmail}. Please check your junk
+            mail folder and ensure that &lsquo;Bark Bank&rsquo; is added to your
+            list of approved senders.
           </BarkFormParagraph>
         )}
         {emailOtpError !== "" && (
