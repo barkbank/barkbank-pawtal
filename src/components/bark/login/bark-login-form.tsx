@@ -5,11 +5,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   BarkForm,
-  BarkFormButton,
   BarkFormError,
   BarkFormInput,
   BarkFormParagraph,
-  BarkFormSubmitButton,
 } from "@/components/bark/bark-form";
 import { useState } from "react";
 import { SignInResponse, signIn } from "next-auth/react";
@@ -18,6 +16,7 @@ import { postOtpRequest } from "@/lib/server-actions/post-otp-request";
 import { AccountType } from "@/lib/auth-models";
 import { FormMessage } from "@/components/ui/form";
 import { CODE } from "@/lib/utilities/bark-code";
+import { BarkButton } from "../bark-button";
 
 const FORM_SCHEMA = z.object({
   email: z.string().email(),
@@ -119,9 +118,13 @@ export default function BarkLoginForm(props: {
           description={emailDescription}
         />
         {/* TODO - We need a CAPTCHA to prevent abuse of Send me an OTP */}
-        <BarkFormButton className="w-full md:w-48" onClick={onRequestOtp}>
+        <BarkButton
+          variant="brandInverse"
+          className="mt-3 w-full md:w-48"
+          onClick={onRequestOtp}
+        >
           Send me an OTP
-        </BarkFormButton>
+        </BarkButton>
         {recipientEmail !== "" && (
           <BarkFormParagraph>
             An OTP has been sent to {recipientEmail}
@@ -133,9 +136,13 @@ export default function BarkLoginForm(props: {
           </FormMessage>
         )}
         <BarkFormInput form={form} name="otp" label="Enter OTP" />
-        <BarkFormSubmitButton className="w-full md:w-48">
+        <BarkButton
+          variant="brand"
+          type="submit"
+          className="mt-3 w-full md:w-48"
+        >
           Login
-        </BarkFormSubmitButton>
+        </BarkButton>
         <BarkFormError form={form} />
         {shouldShowLoginFailed && (
           <FormMessage className="mt-6 text-red-500">Login Failed</FormMessage>
