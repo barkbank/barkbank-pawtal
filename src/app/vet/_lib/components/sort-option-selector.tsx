@@ -24,16 +24,25 @@ export const SORT_OPTION = {
 export type SortOption = ObjectValues<typeof SORT_OPTION>;
 
 export function SortOptionSelector(props: {
+  value: SortOption;
   onValueChange: (value: SortOption) => void;
 }) {
-  const { onValueChange } = props;
+  const { value, onValueChange } = props;
   return (
-    <Select onValueChange={onValueChange}>
+    <Select onValueChange={onValueChange} value={value}>
       <SelectTrigger>
         <SelectValue placeholder="Sort By" />
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
+          <SelectLabel>Dog Last Contacted</SelectLabel>
+          <SelectItem value={SORT_OPTION.DOG_OLDEST_CALL_FIRST}>
+            Dog Never/Oldest Call First
+          </SelectItem>
+          <SelectItem value={SORT_OPTION.DOG_RECENT_CALL_FIRST}>
+            Dog Recent Call First
+          </SelectItem>
+
           <SelectLabel>Age</SelectLabel>
           <SelectItem value={SORT_OPTION.AGE_YOUNGEST_FIRST}>
             Youngest First
@@ -41,6 +50,7 @@ export function SortOptionSelector(props: {
           <SelectItem value={SORT_OPTION.AGE_OLDEST_FIRST}>
             Oldest First
           </SelectItem>
+
           <SelectLabel>Weight</SelectLabel>
           <SelectItem value={SORT_OPTION.WEIGHT_HEAVIEST_FIRST}>
             Heaviest First
@@ -48,20 +58,15 @@ export function SortOptionSelector(props: {
           <SelectItem value={SORT_OPTION.WEIGHT_LIGHTEST_FIRST}>
             Lightest First
           </SelectItem>
+
           <SelectLabel>Owner Last Contacted</SelectLabel>
           <SelectItem value={SORT_OPTION.OWNER_OLDEST_CALL_FIRST}>
-            Never Called or Oldest Call First
+            Owner Never/Oldest Call First
           </SelectItem>
           <SelectItem value={SORT_OPTION.OWNER_RECENT_CALL_FIRST}>
-            Recent Call First
+            Owner Recent Call First
           </SelectItem>
-          <SelectLabel>Dog Last Contacted</SelectLabel>
-          <SelectItem value={SORT_OPTION.DOG_OLDEST_CALL_FIRST}>
-            Never Called or Oldest Call First
-          </SelectItem>
-          <SelectItem value={SORT_OPTION.DOG_RECENT_CALL_FIRST}>
-            Recent Call First
-          </SelectItem>
+
         </SelectGroup>
       </SelectContent>
     </Select>

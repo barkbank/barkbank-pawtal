@@ -30,7 +30,7 @@ export function AppointmentScheduler(props: { dogs: CallTask[] }) {
   const { dogs, selectedDogId, outcomes } = schedulerState;
 
   const [query, setQuery] = useState<string>("");
-  const [sortBy, setSortBy] = useState<SortOption>(SORT_OPTION.NIL);
+  const [sortBy, setSortBy] = useState<SortOption>(SORT_OPTION.DOG_OLDEST_CALL_FIRST);
 
   const onSortValueChange = (value: SortOption) => {
     setSortBy(value);
@@ -182,7 +182,7 @@ export function AppointmentScheduler(props: { dogs: CallTask[] }) {
       />
       <div className="flex flex-row gap-3">
         <div className="w-[370px]">
-          <SortOptionSelector onValueChange={onSortValueChange} />
+          <SortOptionSelector value={sortBy} onValueChange={onSortValueChange} />
         </div>
       </div>
       <div className="flex flex-col gap-3 md:flex-row">
