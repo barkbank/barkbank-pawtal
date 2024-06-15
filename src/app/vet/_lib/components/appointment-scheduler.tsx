@@ -15,6 +15,10 @@ import {
   SortOptionSelector,
 } from "./sort-option-selector";
 import { CallTask } from "@/lib/bark/models/call-task";
+import {
+  compare,
+  compareNullableWithNullFirst,
+} from "@/lib/utilities/comparators";
 
 export function AppointmentScheduler(props: { dogs: CallTask[] }) {
   const [schedulerState, setSchedulerState] = useState<SchedulerState>({
@@ -73,38 +77,54 @@ export function AppointmentScheduler(props: { dogs: CallTask[] }) {
     });
     if (sortBy === SORT_OPTION.AGE_OLDEST_FIRST) {
       result.sort((a, b) => {
-        const x = a.dogBirthday.getTime();
-        const y = b.dogBirthday.getTime();
-        if (x < y) return -1;
-        if (x > y) return +1;
-        return 0;
+        return compare(a.dogBirthday, b.dogBirthday);
       });
     }
     if (sortBy === SORT_OPTION.AGE_YOUNGEST_FIRST) {
       result.sort((a, b) => {
-        const x = a.dogBirthday.getTime();
-        const y = b.dogBirthday.getTime();
-        if (x > y) return -1;
-        if (x < y) return +1;
-        return 0;
+        return compare(b.dogBirthday, a.dogBirthday);
       });
     }
     if (sortBy === SORT_OPTION.WEIGHT_HEAVIEST_FIRST) {
       result.sort((a, b) => {
-        const x = a.dogWeightKg ?? 0;
-        const y = b.dogWeightKg ?? 0;
-        if (x > y) return -1;
-        if (x < y) return +1;
-        return 0;
+        return compare(b.dogWeightKg ?? 0, a.dogWeightKg ?? 0);
       });
     }
     if (sortBy === SORT_OPTION.WEIGHT_LIGHTEST_FIRST) {
       result.sort((a, b) => {
-        const x = a.dogWeightKg ?? 0;
-        const y = b.dogWeightKg ?? 0;
-        if (x < y) return -1;
-        if (x > y) return +1;
-        return 0;
+        return compare(a.dogWeightKg ?? 0, b.dogWeightKg ?? 0);
+      });
+    }
+    if (sortBy === SORT_OPTION.OWNER_OLDEST_CALL_FIRST) {
+      result.sort((a, b) => {
+        return compareNullableWithNullFirst(
+          a.ownerLastContactedTime,
+          b.ownerLastContactedTime,
+        );
+      });
+    }
+    if (sortBy === SORT_OPTION.OWNER_RECENT_CALL_FIRST) {
+      result.sort((a, b) => {
+        return compareNullableWithNullFirst(
+          b.ownerLastContactedTime,
+          a.ownerLastContactedTime,
+        );
+      });
+    }
+    if (sortBy === SORT_OPTION.DOG_OLDEST_CALL_FIRST) {
+      result.sort((a, b) => {
+        return compareNullableWithNullFirst(
+          a.dogLastContactedTime,
+          b.dogLastContactedTime,
+        );
+      });
+    }
+    if (sortBy === SORT_OPTION.DOG_RECENT_CALL_FIRST) {
+      result.sort((a, b) => {
+        return compareNullableWithNullFirst(
+          b.dogLastContactedTime,
+          a.dogLastContactedTime,
+        );
       });
     }
     return result;
