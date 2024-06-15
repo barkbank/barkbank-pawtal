@@ -41,7 +41,7 @@ export function DogCard(props: {
       {/* A small m-1 above is needed because the ScrollArea crops the content a little. */}
 
       {/* Name */}
-      <div className="flex flex-row justify-between">
+      <div className="flex flex-row flex-wrap justify-between">
         <div className="flex flex-row gap-3">
           <DogAvatar dogGender={dogGender} />
           <div className="x-card-title">{dogName}</div>
@@ -99,41 +99,18 @@ function resolveBadge(
   isDeclined: boolean;
   recentTime: Date | null;
 } {
-  if (outcome === CALL_OUTCOME.APPOINTMENT) {
-    return {
-      isScheduled: true,
-      isDeclined: false,
-      recentTime: null,
-    };
-  }
-  if (outcome === CALL_OUTCOME.DECLINED) {
-    return {
-      isScheduled: false,
-      isDeclined: true,
-      recentTime: null,
-    };
-  }
-  if (contactDate === null) {
-    return {
-      isScheduled: false,
-      isDeclined: false,
-      recentTime: null,
-    };
-  }
-  const delta = Date.now() - contactDate.getTime();
-  const threshold = MILLIS_PER_WEEK;
-  if (delta > threshold) {
-    return {
-      isScheduled: false,
-      isDeclined: false,
-      recentTime: null,
-    };
-  }
-  return {
-    isScheduled: false,
-    isDeclined: false,
-    recentTime: contactDate,
-  };
+  const isScheduled = outcome === CALL_OUTCOME.APPOINTMENT;
+  const isDeclined = !isScheduled && outcome === CALL_OUTCOME.DECLINED;
+  const recentTime = (() => {
+    if (isScheduled) return null;
+    if (isDeclined) return null;
+    if (contactDate === null) return null;
+    const delta = Date.now() - contactDate.getTime();
+    const threshold = MILLIS_PER_WEEK;
+    if (delta > threshold) return null;
+    return contactDate;
+  })();
+  return {isScheduled, isDeclined, recentTime}
 }
 
 function getBreed(dog: CallTask): string {
