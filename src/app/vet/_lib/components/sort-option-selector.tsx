@@ -66,7 +66,6 @@ export function SortOptionSelector(props: {
           <SelectItem value={SORT_OPTION.OWNER_RECENT_CALL_FIRST}>
             Owner Recent Call First
           </SelectItem>
-
         </SelectGroup>
       </SelectContent>
     </Select>

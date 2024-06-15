@@ -30,7 +30,9 @@ export function AppointmentScheduler(props: { dogs: CallTask[] }) {
   const { dogs, selectedDogId, outcomes } = schedulerState;
 
   const [query, setQuery] = useState<string>("");
-  const [sortBy, setSortBy] = useState<SortOption>(SORT_OPTION.DOG_OLDEST_CALL_FIRST);
+  const [sortBy, setSortBy] = useState<SortOption>(
+    SORT_OPTION.DOG_OLDEST_CALL_FIRST,
+  );
 
   const onSortValueChange = (value: SortOption) => {
     setSortBy(value);
@@ -169,7 +171,7 @@ export function AppointmentScheduler(props: { dogs: CallTask[] }) {
   );
 
   // TODO: If an appointment invitation was declined within the last 7 days, the related outcomes[dogId] should be set to DECLINED.
-  // TODO: Should have option to sort dog cards by - Lightest First; Heaviest First; Oldest First; Youngest First; Most recently created;
+  // DONE: Should have option to sort dog cards by - Lightest First; Heaviest First; Oldest First; Youngest First; Most recently created;
   // TODO: Should have option to exclude dogs contacted in the - Last 7 days; Last 30 days; Last 90 days
   // TODO: Should have option to exclude owners contacted in the - Last 7 days; Last 30 days; Last 90 days
 
@@ -182,7 +184,10 @@ export function AppointmentScheduler(props: { dogs: CallTask[] }) {
       />
       <div className="flex flex-row gap-3">
         <div className="w-[370px]">
-          <SortOptionSelector value={sortBy} onValueChange={onSortValueChange} />
+          <SortOptionSelector
+            value={sortBy}
+            onValueChange={onSortValueChange}
+          />
         </div>
       </div>
       <div className="flex flex-col gap-3 md:flex-row">

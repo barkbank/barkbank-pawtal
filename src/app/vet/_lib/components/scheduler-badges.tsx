@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge";
+import { formatDistance } from "date-fns";
 
 export function ScheduledBadge() {
   return (
@@ -8,13 +9,23 @@ export function ScheduledBadge() {
   );
 }
 
-export function DeclinedBadge() {
+export function DeclinedBadge(props: { dogLastContactedTime?: Date | null }) {
+  const { dogLastContactedTime } = props;
+  const whenTime = dogLastContactedTime ?? null;
+  const whenText =
+    whenTime === null
+      ? null
+      : formatDistance(whenTime, new Date(), {
+          includeSeconds: false,
+          addSuffix: true,
+        });
+
   return (
     <Badge
       className="vet-appointment-scheduler-declined-badge"
       variant="secondary"
     >
-      Declined
+      Declined {whenText}
     </Badge>
   );
 }

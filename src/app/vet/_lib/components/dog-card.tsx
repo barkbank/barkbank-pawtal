@@ -10,6 +10,7 @@ import { DogAvatar } from "./dog-avatar";
 import { NA_TEXT } from "@/app/_lib/constants";
 import { CallTask } from "@/lib/bark/models/call-task";
 import { formatDistance } from "date-fns";
+import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
 
 export function DogCard(props: {
   dog: CallTask;
@@ -19,7 +20,8 @@ export function DogCard(props: {
   children?: React.ReactNode;
 }) {
   const { dog, onSelect, selectedDogId, outcome, children } = props;
-  const { dogName, dogGender, dogId } = dog;
+  const { dogName, dogGender, dogId, dogLastContactedTime } = dog;
+  const { isScheduled, isDeclined } = resolveBadge(dog, outcome);
   // TODO: when the latest call-outcome related to the dog is DECLINED, the dog card should indicate how long ago that was.
   return (
     <div
@@ -37,8 +39,10 @@ export function DogCard(props: {
           <DogAvatar dogGender={dogGender} />
           <div className="x-card-title">{dogName}</div>
         </div>
-        {outcome === CALL_OUTCOME.APPOINTMENT && <ScheduledBadge />}
-        {outcome === CALL_OUTCOME.DECLINED && <DeclinedBadge />}
+        {isScheduled && <ScheduledBadge />}
+        {isDeclined && (
+          <DeclinedBadge dogLastContactedTime={dogLastContactedTime} />
+        )}
       </div>
 
       <Separator className="my-1" />
@@ -77,6 +81,40 @@ function Item(props: { label: string; value: string }) {
       {label}: <span className="font-semibold">{value}</span>
     </div>
   );
+}
+
+function resolveBadge(
+  dog: CallTask,
+  outcome: SchedulerOutcome | undefined,
+): {
+  isScheduled: boolean;
+  isDeclined: boolean;
+} {
+  if (outcome === CALL_OUTCOME.APPOINTMENT) {
+    return {
+      isScheduled: true,
+      isDeclined: false,
+    };
+  }
+  if (outcome === CALL_OUTCOME.DECLINED) {
+    return {
+      isScheduled: false,
+      isDeclined: true,
+    };
+  }
+  const contactDate = dog.dogLastContactedTime;
+  if (contactDate === null) {
+    return {
+      isScheduled: false,
+      isDeclined: false,
+    };
+  }
+  const delta = Date.now() - contactDate.getTime();
+  const threshold = MILLIS_PER_WEEK;
+  return {
+    isScheduled: false,
+    isDeclined: delta < threshold,
+  };
 }
 
 function getBreed(dog: CallTask): string {
