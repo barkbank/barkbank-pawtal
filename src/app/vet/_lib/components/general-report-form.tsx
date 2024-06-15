@@ -3,9 +3,9 @@
 import {
   BodyConditioningScoreField,
   DateField,
-  DateOrDurationField,
   DogWeightKgField,
 } from "@/app/_lib/field-schemas";
+import { DateOrDurationField } from "@/app/_lib/field-schemas/date-or-duration-field";
 import { BarkButton } from "@/components/bark/bark-button";
 import {
   BarkForm,
