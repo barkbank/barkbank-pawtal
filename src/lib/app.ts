@@ -260,6 +260,9 @@ export class AppFactory {
           if (selfSignedCaCert === undefined) {
             return undefined;
           }
+          // See this reference for how to specify a self-signed CA cert when
+          // connecting to the database.
+          // https://node-postgres.com/features/ssl#self-signed-cert
           return {
             rejectUnauthorized: false,
             ca: selfSignedCaCert,
