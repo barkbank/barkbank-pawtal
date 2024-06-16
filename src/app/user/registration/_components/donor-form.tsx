@@ -20,7 +20,10 @@ import { DogAntigenPresence } from "@/lib/data/db-enums";
 import { YesNoUnknown } from "@/lib/bark/enums/yes-no-unknown";
 import { DogGender } from "@/lib/bark/enums/dog-gender";
 import { UserResidency } from "@/lib/data/db-enums";
-import { BARK_UTC } from "@/lib/utilities/bark-time";
+import {
+  SINGAPORE_TIME_ZONE,
+  parseCommonDate,
+} from "@/lib/utilities/bark-time";
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { IMG_PATH } from "@/lib/image-path";
@@ -95,7 +98,7 @@ export default function DonorForm(props: {
       dogName: vals.dogName,
       dogBreed: vals.dogBreed,
       // WIP: Change this parsing.
-      dogBirthday: BARK_UTC.parseDate(vals.dogBirthday),
+      dogBirthday: parseCommonDate(vals.dogBirthday, SINGAPORE_TIME_ZONE),
       dogGender: vals.dogGender as DogGender,
       dogWeightKg: vals.dogWeightKg === "" ? null : Number(vals.dogWeightKg),
       dogDea1Point1: vals.dogDea1Point1 as DogAntigenPresence,

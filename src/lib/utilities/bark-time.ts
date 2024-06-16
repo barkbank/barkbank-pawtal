@@ -156,19 +156,3 @@ export function parseCommonDate(dateString: string, timeZone: string): Date {
   }
   throw new Error(`No common format for date value: ${dateString}`);
 }
-
-// WIP: Remove BARK_UTC
-/**
- * @deprecated
- */
-export const BARK_UTC = {
-  getDate: (year: number, month: number, day: number) => {
-    return new Date(Date.UTC(year, month - 1, day));
-  },
-  parseDate: (yyyy_mm_dd: string) => {
-    return new Date(`${yyyy_mm_dd}T00:00:00Z`);
-  },
-  formatDate: (utcDate: Date) => {
-    return utcDate.toISOString().split("T")[0];
-  },
-};
