@@ -20,9 +20,10 @@ import { BarkH1 } from "@/components/bark/bark-typography";
 import { Result } from "@/lib/utilities/result";
 import { DogProfile } from "@/lib/dog/dog-models";
 import {
-  UTC_DATE_OPTION,
+  SGT_UI_DATE,
+  SINGAPORE_TIME_ZONE,
   formatDateTime,
-  parseDateTime,
+  parseCommonDate,
 } from "@/lib/utilities/bark-time";
 
 const FORM_SCHEMA = z.object({
@@ -64,7 +65,7 @@ const EMPTY_VALUES: Partial<DogFormData> = {
 function toDogFormData(dogProfile: DogProfile): DogFormData {
   const { dogBirthday, dogWeightKg, ...otherFields } = dogProfile;
   // WIP: Add format() to RequiredDateField
-  const dogBirthdayString = formatDateTime(dogBirthday, UTC_DATE_OPTION);
+  const dogBirthdayString = formatDateTime(dogBirthday, SGT_UI_DATE);
   const dogWeightKgString = dogWeightKg !== null ? dogWeightKg.toString() : "";
   const dogFormData: DogFormData = {
     dogBirthday: dogBirthdayString,
@@ -81,7 +82,7 @@ function toDogProfile(dogFormData: DogFormData): DogProfile {
     ...otherFields
   } = dogFormData;
   // WIP Use RequiredDateField to parse dogBirthday
-  const dogBirthday = parseDateTime(dogBirthdayString, UTC_DATE_OPTION);
+  const dogBirthday = parseCommonDate(dogBirthdayString, SINGAPORE_TIME_ZONE);
   const dogWeightKg = parseFloat(dogWeightKgString);
   const dogProfile: DogProfile = {
     dogBirthday,
