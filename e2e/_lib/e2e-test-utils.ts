@@ -1,12 +1,7 @@
 import { sprintf } from "sprintf-js";
 import { PomContext } from "./pom/core/pom-object";
 import { HeaderComponent } from "./pom/layout/header-component";
-import {
-  SGT_UI_DATE,
-  SINGAPORE_TIME_ZONE,
-  formatDateTime,
-  parseCommonDate,
-} from "@/lib/utilities/bark-time";
+import { RequiredDateField } from "@/app/_lib/field-schemas/required-date-field";
 
 export function getTestBirthday(ageYears: number): string {
   const ts = new Date();
@@ -14,8 +9,9 @@ export function getTestBirthday(ageYears: number): string {
   const m = ts.getUTCMonth() + 1;
   const d = ts.getUTCDate();
   const ymd = sprintf("%04d-%02d-%02d", y, m, d);
-  const birthdayDate = parseCommonDate(ymd, SINGAPORE_TIME_ZONE);
-  const birthdayString = formatDateTime(birthdayDate, SGT_UI_DATE);
+  const field = RequiredDateField.new();
+  const birthdayDate = field.parse(ymd);
+  const birthdayString = field.format(birthdayDate);
   return birthdayString;
 }
 
