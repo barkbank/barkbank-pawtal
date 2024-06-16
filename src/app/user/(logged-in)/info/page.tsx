@@ -62,19 +62,16 @@ const registrationSteps = [
 
 const faqs = [
   {
-    question: 'What does it mean if my dog is labeled as "Permanently Ineligible" for blood donation?',
-    answer:
-      "Your dog is considered permanently ineligible if they have ever been pregnant, received a blood transfusion, are over 8 years old, or have a medical report indicating permanent ineligibility.",
+    question: `What does it mean if my dog is labeled as "Permanently Ineligible" for blood donation?`,
+    answer: `Your dog is considered permanently ineligible if they have ever been pregnant, received a blood transfusion, are over 8 years old, or have a medical report indicating permanent ineligibility.`,
   },
   {
-    question: "How often can my dog donate blood?",
-    answer:
-      "Dogs can donate blood every 3 months. However, the frequency of donation is subject to the discretion of the attending veterinarian.",
+    question: `What does "Unknown" eligibility status signify?`,
+    answer: `The "Unknown" status means that it is not confirmed whether your dog is permanently ineligible due to unknown pregnancy or blood transfusion history, or unspecified breed and weight.`,
   },
   {
-    question: "How often can my dog donate blood?",
-    answer:
-      "Dogs can donate blood every 3 months. However, the frequency of donation is subject to the discretion of the attending veterinarian.",
+    question: `Under what conditions is my dog "Temporarily Ineligible" for donating blood?`,
+    answer: `Your dog is temporarily ineligible if they are underweight (less than 20 KG), underage (less than 1 year), recently donated blood (within the last 3 months), recently vaccinated (within the last 2 weeks), recently tested positive for heartworm (within the last 6 months), or have been deemed temporarily ineligible by a vet.`,
   },
   {
     question: "How often can my dog donate blood?",
