@@ -185,6 +185,28 @@ const faqs = [
     ),
   },
   {
+    question: `What happens if I need to reschedule or cancel my vet appointment?`,
+    answer: (
+      <p>
+        Please contact the vet directly to reschedule or cancel your
+        appointment. They will be able to assist you with finding a new time
+        that works for both you and the veterinary office.
+      </p>
+    ),
+  },
+  {
+    question: `The Question`,
+    answer: <p>The Answer</p>,
+  },
+  {
+    question: `The Question`,
+    answer: <p>The Answer</p>,
+  },
+  {
+    question: `The Question`,
+    answer: <p>The Answer</p>,
+  },
+  {
     question: `The Question`,
     answer: <p>The Answer</p>,
   },
