@@ -67,6 +67,7 @@ export default function EditDogProfileForm(props: {
 
   const prefillData = toDogFormData(existingDogProfile);
 
+  // WIP: This will break when we update GeneralDogForm
   return (
     <GeneralDogForm
       formTitle="Edit Dog"
@@ -78,7 +79,8 @@ export default function EditDogProfileForm(props: {
   );
 }
 
-// WIP: Move toDogFormData and toDogProfile into GeneralDogForm so the IO for GeneralDogForm is in terms of DogProfile.
+// WIP: Copy toDogFormData and toDogProfile into GeneralDogForm so the IO for GeneralDogForm is in terms of DogProfile.
+// WIP: Delete this when no longer needed.
 function toDogFormData(dogProfile: DogProfile): DogFormData {
   const { dogBirthday, dogWeightKg, ...otherFields } = dogProfile;
   const dogBirthdayString = formatDateTime(dogBirthday, UTC_DATE_OPTION);
@@ -91,6 +93,7 @@ function toDogFormData(dogProfile: DogProfile): DogFormData {
   return dogFormData;
 }
 
+// WIP: Delete this when no longer needed.
 function toDogProfile(dogFormData: DogFormData): DogProfile {
   const {
     dogBirthday: dogBirthdayString,
