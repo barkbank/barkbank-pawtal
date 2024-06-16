@@ -1,6 +1,6 @@
 import { getVetFormOptions } from "@/app/_lib/get-vet-form-options";
 import APP from "@/lib/app";
-import AddDogForm from "./_components/add-dog-form";
+import AddDogForm from "../_lib/components/add-dog-form";
 
 export default async function Page() {
   const vetOptions = await APP.getDbPool().then(getVetFormOptions);
