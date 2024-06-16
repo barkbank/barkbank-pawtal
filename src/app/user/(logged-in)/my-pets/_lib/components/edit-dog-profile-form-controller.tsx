@@ -47,13 +47,12 @@ export default function EditDogProfileFormController(props: {
       description: `Profile for ${dogName} has been saved.`,
       variant: "brandSuccess",
     });
-    // TODO: do not use router.back(). It may go to the wrong place. Think of another solution.
-    router.back();
+    router.push(RoutePath.USER_VIEW_DOG(dogId));
     return Ok(true);
   }
 
   async function handleCancel() {
-    router.back();
+    router.push(RoutePath.USER_VIEW_DOG(dogId));
   }
 
   return (
