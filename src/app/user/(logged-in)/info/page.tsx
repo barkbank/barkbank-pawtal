@@ -324,7 +324,7 @@ export default async function Page() {
           ))}
         </article>
       </section>
-      <section className="mx-[60px] my-[80px] flex max-w-7xl flex-col items-center gap-[50px] ">
+      <section className="mx-[60px] my-[80px] flex max-w-7xl flex-col items-center gap-[50px]">
         <div className="mb-[21px] text-center sm:col-span-2 md:col-span-3 lg:mt-[40px]">
           <BarkH2>Frequently Asked Questions</BarkH2>
         </div>
@@ -335,13 +335,12 @@ export default async function Page() {
               orientation="vertical"
               type="single"
               collapsible
-              className="p-[25px] sm:max-w-[333px]"
             >
               <AccordionItem className="border-none" value={`item-${idx}`}>
                 <AccordionTrigger>
-                  <div className="flex flex-col gap-y-1 text-start">
-                    <p className="font-bold">{question}</p>
-                  </div>
+                  <p className="w-full text-left text-base font-semibold">
+                    {question}
+                  </p>
                 </AccordionTrigger>
                 <AccordionContent className="prose">{answer}</AccordionContent>
               </AccordionItem>
