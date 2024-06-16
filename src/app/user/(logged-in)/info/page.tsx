@@ -246,20 +246,14 @@ const faqs = [
     ),
   },
   {
-    question: `The Question`,
-    answer: <p>The Answer</p>,
-  },
-  {
-    question: `The Question`,
-    answer: <p>The Answer</p>,
-  },
-  {
-    question: `The Question`,
-    answer: <p>The Answer</p>,
-  },
-  {
-    question: `The Question`,
-    answer: <p>The Answer</p>,
+    question: `How can I request for my data?`,
+    answer: (
+      <p>
+        To request all the information collected about you and understand how it
+        has been used, please write to <ContactEmail />. We will provide you
+        with the necessary details and assist with any further queries.
+      </p>
+    ),
   },
 ];
 
