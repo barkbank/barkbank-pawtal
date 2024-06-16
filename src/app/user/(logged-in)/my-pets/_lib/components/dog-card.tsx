@@ -52,13 +52,13 @@ export function DogCard(props: {
   const { dog } = props;
   const { dogId, dogName, dogStatuses, dogAppointments } = dog;
   const router = useRouter();
-  const onClick = () => {
+  const gotoViewDog = () => {
     router.push(RoutePath.USER_VIEW_DOG(dogId));
   };
   return (
     <>
       <div
-        onClick={onClick}
+        onClick={gotoViewDog}
         className="mt-3 flex flex-col place-items-center gap-3 rounded-md px-3 py-3 shadow-sm shadow-slate-400 first:mt-0 md:flex-row"
       >
         {/* Avatar */}
