@@ -63,45 +63,91 @@ const registrationSteps = [
 const faqs = [
   {
     question: `What does it mean if my dog is labeled as "Permanently Ineligible" for blood donation?`,
-    answer: `Your dog is considered permanently ineligible if they have ever been pregnant, received a blood transfusion, are over 8 years old, or have a medical report indicating permanent ineligibility.`,
+    answer: (
+      <p>
+        Your dog is considered permanently ineligible if they have ever been
+        pregnant, received a blood transfusion, are over 8 years old, or have a
+        medical report indicating permanent ineligibility.
+      </p>
+    ),
   },
   {
     question: `What does "Unknown" eligibility status signify?`,
-    answer: `The "Unknown" status means that it is not confirmed whether your dog is permanently ineligible due to unknown pregnancy or blood transfusion history, or unspecified breed and weight.`,
+    answer: (
+      <p>
+        The "Unknown" status means that it is not confirmed whether your dog is
+        permanently ineligible due to unknown pregnancy or blood transfusion
+        history, or unspecified breed and weight.
+      </p>
+    ),
   },
   {
     question: `Under what conditions is my dog "Temporarily Ineligible" for donating blood?`,
-    answer: `Your dog is temporarily ineligible if they are underweight (less than 20 KG), underage (less than 1 year), recently donated blood (within the last 3 months), recently vaccinated (within the last 2 weeks), recently tested positive for heartworm (within the last 6 months), or have been deemed temporarily ineligible by a vet.`,
+    answer: (
+      <p>
+        Your dog is temporarily ineligible if they are underweight (less than 20
+        KG), underage (less than 1 year), recently donated blood (within the
+        last 3 months), recently vaccinated (within the last 2 weeks), recently
+        tested positive for heartworm (within the last 6 months), or have been
+        deemed temporarily ineligible by a vet.
+      </p>
+    ),
   },
   {
-    question: "How often can my dog donate blood?",
-    answer:
-      "Dogs can donate blood every 3 months. However, the frequency of donation is subject to the discretion of the attending veterinarian.",
+    question: `How is a dog determined to be "Eligible" for blood donation?`,
+    answer: (
+      <>
+        <p>
+          A dog is eligible when they meet all the criteria for blood donation,
+          have completed all required medical information and currently in
+          active participation. Criteria for canine blood donation:
+        </p>
+        <p>
+          <b>Weight</b>: Dogs should weigh at least 25kg but not be overweight.
+        </p>
+        <p>
+          <b>Age</b>: Dogs between 1 to 8 years old are generally eligible.
+        </p>
+        <p>
+          <b>Temperament</b>: Donor dogs should have a good and calm temperament
+          to minimise stress during the process.
+        </p>
+        <p>
+          <b>Health</b>: They should be healthy with no underlying health
+          conditions.
+        </p>
+        <p>
+          <b>Blood Type</b>: Dogs must have DEA 1.1 or 1.2 negative blood type.
+        </p>
+        <p>
+          <b>Vaccinations</b>: Donor dogs should be up to date on vaccinations.
+        </p>
+        <p>
+          <b>Parasite Prevention</b>: They should be on regular parasite
+          prevention medication for heart worm, tick, and flea control.
+        </p>
+        <p>
+          <b>Blood Transfusion</b>: Dogs that have received a blood transfusion
+          are not eligible to donate.
+        </p>
+        <p>
+          <b>Donation Frequency</b>: A healthy dog can donate blood every 3
+          months, which equals up to 4 times a year.
+        </p>
+        <p>
+          <b>Gender</b>: Male dogs or nulliparous (never pregnant) female dogs
+          are typically accepted.
+        </p>
+        <p>
+          <b>Medications</b>: Donor dogs should not be on any medications that
+          could pose a problem for the recipient.
+        </p>
+      </>
+    ),
   },
   {
-    question: "How often can my dog donate blood?",
-    answer:
-      "Dogs can donate blood every 3 months. However, the frequency of donation is subject to the discretion of the attending veterinarian.",
-  },
-  {
-    question: "How often can my dog donate blood?",
-    answer:
-      "Dogs can donate blood every 3 months. However, the frequency of donation is subject to the discretion of the attending veterinarian.",
-  },
-  {
-    question: "How often can my dog donate blood?",
-    answer:
-      "Dogs can donate blood every 3 months. However, the frequency of donation is subject to the discretion of the attending veterinarian.",
-  },
-  {
-    question: "How often can my dog donate blood?",
-    answer:
-      "Dogs can donate blood every 3 months. However, the frequency of donation is subject to the discretion of the attending veterinarian.",
-  },
-  {
-    question: "How often can my dog donate blood?",
-    answer:
-      "Dogs can donate blood every 3 months. However, the frequency of donation is subject to the discretion of the attending veterinarian.",
+    question: `TODO_QUESTION`,
+    answer: <p>TODO_ANSWER</p>,
   },
 ];
 
@@ -176,26 +222,22 @@ export default async function Page() {
         <div className="mb-[21px] text-center sm:col-span-2 md:col-span-3 lg:mt-[40px]">
           <BarkH2>Frequently Asked Questions</BarkH2>
         </div>
-        <div className="grid grid-cols-1 gap-[30px] sm:grid-cols-2 md:grid-cols-3">
-          {faqs.map(({ question, answer }) => (
+        <div className="grid grid-cols-1 gap-[30px] sm:grid-cols-2 xl:grid-cols-3">
+          {faqs.map(({ question, answer }, idx) => (
             <Accordion
-              key={question}
+              key={idx}
               orientation="vertical"
               type="single"
               collapsible
               className="p-[25px] sm:max-w-[333px]"
             >
-              <AccordionItem
-                className="border-none"
-                key={question}
-                value={answer}
-              >
+              <AccordionItem className="border-none" value={`item-${idx}`}>
                 <AccordionTrigger>
                   <div className="flex flex-col gap-y-1 text-start">
                     <p className="font-bold">{question}</p>
                   </div>
                 </AccordionTrigger>
-                <AccordionContent>{answer}</AccordionContent>
+                <AccordionContent className="prose">{answer}</AccordionContent>
               </AccordionItem>
             </Accordion>
           ))}
