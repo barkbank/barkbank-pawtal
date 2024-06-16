@@ -25,23 +25,12 @@ import {
   formatDateTime,
   parseCommonDate,
 } from "@/lib/utilities/bark-time";
+import { RequiredDateField } from "@/app/_lib/field-schemas/required-date-field";
 
 const FORM_SCHEMA = z.object({
   dogName: z.string().min(1, { message: "Name cannot be empty" }),
   dogBreed: z.string(),
-  // WIP: Change to RequiredDateField
-  dogBirthday: z
-    .string()
-    .min(1, { message: "Please fill in a birthday" })
-    .refine(
-      (value) => {
-        const regex = /^\d{4}-\d{2}-\d{2}$/;
-        return regex.test(value) && !isNaN(Date.parse(value));
-      },
-      {
-        message: "Birthday must be a valid date in the format YYYY-MM-DD",
-      },
-    ),
+  dogBirthday: RequiredDateField.new().schema(),
   dogGender: z.nativeEnum(DOG_GENDER),
   dogWeightKg: z.string().refine(isValidWeightKg, {
     message: "Weight should be a positive number or left blank",
@@ -64,8 +53,7 @@ const EMPTY_VALUES: Partial<DogFormData> = {
 
 function toDogFormData(dogProfile: DogProfile): DogFormData {
   const { dogBirthday, dogWeightKg, ...otherFields } = dogProfile;
-  // WIP: Add format() to RequiredDateField
-  const dogBirthdayString = formatDateTime(dogBirthday, SGT_UI_DATE);
+  const dogBirthdayString = RequiredDateField.new().format(dogBirthday);
   const dogWeightKgString = dogWeightKg !== null ? dogWeightKg.toString() : "";
   const dogFormData: DogFormData = {
     dogBirthday: dogBirthdayString,
@@ -81,8 +69,7 @@ function toDogProfile(dogFormData: DogFormData): DogProfile {
     dogWeightKg: dogWeightKgString,
     ...otherFields
   } = dogFormData;
-  // WIP Use RequiredDateField to parse dogBirthday
-  const dogBirthday = parseCommonDate(dogBirthdayString, SINGAPORE_TIME_ZONE);
+  const dogBirthday = RequiredDateField.new().parse(dogBirthdayString);
   const dogWeightKg = parseFloat(dogWeightKgString);
   const dogProfile: DogProfile = {
     dogBirthday,

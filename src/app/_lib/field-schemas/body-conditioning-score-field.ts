@@ -18,4 +18,7 @@ export class BodyConditioningScoreField extends AbstractStringParserField<number
     }
     return intValue;
   }
+  format(value: number): string {
+    return value.toString();
+  }
 }

@@ -17,4 +17,8 @@ export class RequiredDogWeightKgField extends AbstractStringParserField<number> 
   parse(value: string): number {
     return parseWeightKg(value)!;
   }
+
+  format(value: number): string {
+    return value.toString();
+  }
 }

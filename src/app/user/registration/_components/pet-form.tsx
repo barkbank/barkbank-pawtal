@@ -198,7 +198,6 @@ export default function PetForm(props: {
         )}
 
         <div className="mt-3 flex gap-3">
-          {/* WIP: Replace this with BarkButton */}
           <BarkButton
             variant="brandInverse"
             onClick={onPrevClick}
@@ -207,7 +206,6 @@ export default function PetForm(props: {
             {prevLabel}
           </BarkButton>
 
-          {/* WIP: Replace this with BarkButton */}
           <BarkButton variant="brand" type="submit" className="w-full">
             {nextLabel}
           </BarkButton>

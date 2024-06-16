@@ -36,13 +36,16 @@ export const SGT_ISO8601: DateTimeOptions = {
   timeZone: SINGAPORE_TIME_ZONE,
 } as const;
 
+export const UI_DATE_TIME_FORMAT = "d MMM yyyy h:mma";
+export const UI_DATE_FORMAT = "d MMM yyyy";
+
 export const SGT_UI_DATE_TIME: DateTimeOptions = {
-  format: "d MMM yyyy h:mma",
+  format: UI_DATE_TIME_FORMAT,
   timeZone: SINGAPORE_TIME_ZONE,
 } as const;
 
 export const SGT_UI_DATE: DateTimeOptions = {
-  format: "d MMM yyyy",
+  format: UI_DATE_FORMAT,
   timeZone: SINGAPORE_TIME_ZONE,
 } as const;
 
