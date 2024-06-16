@@ -3,7 +3,6 @@
 import {
   BarkForm,
   BarkFormButton,
-  BarkFormDateInput,
   BarkFormHeader,
   BarkFormInput,
   BarkFormOption,
@@ -112,6 +111,7 @@ export default function PetForm(props: {
           type="text"
         />
 
+        {/* WIP: Coordinate this description with that in general dog form */}
         <BarkFormInput
           form={form}
           label="When is it's birthday?"

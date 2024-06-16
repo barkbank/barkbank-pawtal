@@ -23,6 +23,7 @@ import { Result } from "@/lib/utilities/result";
 const FORM_SCHEMA = z.object({
   dogName: z.string().min(1, { message: "Name cannot be empty" }),
   dogBreed: z.string(),
+  // WIP: Change to RequiredDateField
   dogBirthday: z
     .string()
     .min(1, { message: "Please fill in a birthday" })
@@ -97,6 +98,8 @@ export function GeneralDogForm(props: {
 
         <BarkFormInput form={form} label="Breed" name="dogBreed" type="text" />
 
+        {/* WIP: Change to normal input */}
+        {/* WIP: Coordinate this description with that in pet form */}
         <BarkFormDateInput
           form={form}
           label="Birthday"

@@ -94,6 +94,7 @@ export default function DonorForm(props: {
       userResidency: vals.userResidency as UserResidency,
       dogName: vals.dogName,
       dogBreed: vals.dogBreed,
+      // WIP: Change this parsing.
       dogBirthday: BARK_UTC.parseDate(vals.dogBirthday),
       dogGender: vals.dogGender as DogGender,
       dogWeightKg: vals.dogWeightKg === "" ? null : Number(vals.dogWeightKg),
