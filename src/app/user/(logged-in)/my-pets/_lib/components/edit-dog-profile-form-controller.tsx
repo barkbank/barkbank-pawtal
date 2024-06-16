@@ -2,62 +2,67 @@
 
 import { BarkFormOption } from "@/components/bark/bark-form";
 import { DogProfile } from "@/lib/dog/dog-models";
-import { postDogProfile } from "../../_lib/actions/post-dog-profile";
 import { useRouter } from "next/navigation";
 import { RoutePath } from "@/lib/route-path";
 import { Err, Ok, Result } from "@/lib/utilities/result";
+import { postDogProfileUpdate } from "../actions/post-dog-profile-update";
 import { CODE } from "@/lib/utilities/bark-code";
-import { GeneralDogForm } from "../../_lib/components/general-dog-form";
+import { GeneralDogForm } from "./general-dog-form";
 import { useToast } from "@/components/ui/use-toast";
 import { MINIMUM_TOAST_MILLIS } from "@/app/_lib/toast-delay";
 import { asyncSleep } from "@/lib/utilities/async-sleep";
 
-export default function AddDogForm(props: { vetOptions: BarkFormOption[] }) {
+export default function EditDogProfileFormController(props: {
+  vetOptions: BarkFormOption[];
+  dogId: string;
+  existingDogProfile: DogProfile;
+}) {
   const router = useRouter();
   const { toast } = useToast();
-  const { vetOptions } = props;
+  const { vetOptions, dogId, existingDogProfile } = props;
 
   async function handleValues(
     dogProfile: DogProfile,
   ): Promise<Result<true, string>> {
     const { dogName } = dogProfile;
+
     toast({
-      title: "Adding...",
-      description: `Profile for ${dogName} is being added.`,
+      title: "Saving...",
+      description: `Profile for ${dogName} is being saved.`,
       variant: "brandInfo",
     });
-
-    const [{ error }, _] = await Promise.all([
-      postDogProfile(dogProfile),
+    const [res, _] = await Promise.all([
+      postDogProfileUpdate({ dogId, dogProfile }),
       asyncSleep(MINIMUM_TOAST_MILLIS),
     ]);
-
-    if (error === CODE.ERROR_NOT_LOGGED_IN) {
+    if (res === CODE.ERROR_NOT_LOGGED_IN) {
       router.push(RoutePath.USER_LOGIN_PAGE);
-      return Err(error);
+      return Err(res);
     }
-    if (error !== undefined) {
-      return Err(error);
+    if (res !== CODE.OK) {
+      return Err(res);
     }
     toast({
-      title: "Added!",
-      description: `Profile for ${dogName} has been added.`,
+      title: "Saved!",
+      description: `Profile for ${dogName} has been saved.`,
       variant: "brandSuccess",
     });
-    router.push(RoutePath.USER_MY_PETS);
+    // TODO: do not use router.back(). It may go to the wrong place. Think of another solution.
+    router.back();
     return Ok(true);
   }
 
   async function handleCancel() {
-    router.push(RoutePath.USER_MY_PETS);
+    router.back();
   }
 
   return (
     <GeneralDogForm
-      formTitle="Add Dog"
+      formTitle="Edit Dog"
       vetOptions={vetOptions}
       handleSubmit={handleValues}
       handleCancel={handleCancel}
+      prefillData={existingDogProfile}
     />
   );
 }

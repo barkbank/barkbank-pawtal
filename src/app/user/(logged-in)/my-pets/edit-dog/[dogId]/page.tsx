@@ -4,7 +4,7 @@ import { getVetFormOptions } from "@/app/_lib/get-vet-form-options";
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { getDogProfile } from "@/lib/user/actions/get-dog-profile";
-import EditDogProfileForm from "../../_lib/components/edit-dog-profile-form";
+import EditDogProfileFormController from "../../_lib/components/edit-dog-profile-form-controller";
 
 export default async function Page(props: { params: { dogId: string } }) {
   const {
@@ -34,7 +34,7 @@ export default async function Page(props: { params: { dogId: string } }) {
 
   return (
     <div className="m-3">
-      <EditDogProfileForm
+      <EditDogProfileFormController
         vetOptions={vetOptions}
         dogId={dogId}
         existingDogProfile={existingDogProfile}
