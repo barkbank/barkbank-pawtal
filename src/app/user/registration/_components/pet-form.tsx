@@ -18,23 +18,12 @@ import { Breed } from "@/lib/services/breed";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { RequiredDateField } from "@/app/_lib/field-schemas/required-date-field";
 
 const FORM_SCHEMA = z.object({
   dogName: z.string().min(1, { message: "Name cannot be empty" }),
   dogBreed: z.string(),
-  // WIP: dogBirthday field here.
-  dogBirthday: z
-    .string()
-    .min(1, { message: "Please fill in a birthday" })
-    .refine(
-      (value) => {
-        const regex = /^\d{4}-\d{2}-\d{2}$/;
-        return regex.test(value) && !isNaN(Date.parse(value));
-      },
-      {
-        message: "Birthday must be a valid date in the format YYYY-MM-DD",
-      },
-    ),
+  dogBirthday: RequiredDateField.new().schema(),
   dogGender: z.string().min(1, { message: "Please select an option" }),
   dogWeightKg: z.string().refine(isValidWeightKg, {
     message: "Weight should be a positive number or left blank",
@@ -123,10 +112,11 @@ export default function PetForm(props: {
           type="text"
         />
 
-        <BarkFormDateInput
+        <BarkFormInput
           form={form}
-          label="When is it's birthday? (YYYY-MM-DD)"
+          label="When is it's birthday?"
           name="dogBirthday"
+          description="Please provide a date (e.g. 18 Aug 2018)"
         />
 
         <BarkFormRadioGroup
