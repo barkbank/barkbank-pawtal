@@ -8,7 +8,10 @@ import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
 import { USER_RESIDENCY } from "@/lib/data/db-enums";
 import { guaranteed } from "@/lib/utilities/bark-utils";
-import { BARK_UTC } from "@/lib/utilities/bark-time";
+import {
+  SINGAPORE_TIME_ZONE,
+  parseCommonDate,
+} from "@/lib/utilities/bark-time";
 import {
   getDogMapper,
   getEmailHashService,
@@ -201,7 +204,7 @@ function getRegistrationRequest(
     userResidency: USER_RESIDENCY.SINGAPORE,
     dogName: "Tarik",
     dogBreed: "Teh",
-    dogBirthday: BARK_UTC.getDate(2019, 7, 4),
+    dogBirthday: parseCommonDate("4 Jul 2019", SINGAPORE_TIME_ZONE),
     dogGender: DOG_GENDER.MALE,
     dogWeightKg: 23,
     dogDea1Point1: DOG_ANTIGEN_PRESENCE.NEGATIVE,

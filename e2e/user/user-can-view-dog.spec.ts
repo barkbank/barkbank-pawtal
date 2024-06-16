@@ -2,11 +2,7 @@ import { test, expect } from "@playwright/test";
 import { registerTestUser } from "../_lib/init/register-test-user";
 import { UserMyPetsPage } from "../_lib/pom/pages/user-my-pets-page";
 import { UserViewDogPage } from "../_lib/pom/pages/user-view-dog-page";
-import {
-  UTC_DATE_OPTION,
-  formatDateTime,
-  parseDateTime,
-} from "@/lib/utilities/bark-time";
+import { RequiredDateField } from "@/app/_lib/field-schemas/required-date-field";
 
 test("user can view dog", async ({ page }) => {
   const {
@@ -52,7 +48,8 @@ test("user can view dog", async ({ page }) => {
 });
 
 function formatDogBirthday(dogBirthday: string): string {
-  const birthdayDate = parseDateTime(dogBirthday, UTC_DATE_OPTION);
-  const birthdayString = formatDateTime(birthdayDate, UTC_DATE_OPTION);
+  const field = RequiredDateField.new();
+  const birthdayDate = field.parse(dogBirthday);
+  const birthdayString = field.format(birthdayDate);
   return birthdayString;
 }

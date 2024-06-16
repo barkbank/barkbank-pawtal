@@ -19,4 +19,10 @@ export class OptionalDogWeightKgField extends AbstractStringParserField<
     }
     return parseWeightKg(value)!;
   }
+  format(value: number | null): string {
+    if (value === null) {
+      return "";
+    }
+    return value.toString();
+  }
 }

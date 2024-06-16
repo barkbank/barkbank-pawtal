@@ -11,7 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import clsx from "clsx";
-import { BARK_UTC } from "@/lib/utilities/bark-time";
+import { SGT_UI_DATE, formatDateTime } from "@/lib/utilities/bark-time";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
 import { IncompleteProfile } from "@/lib/admin/admin-models";
@@ -60,7 +60,7 @@ ${jsonEncoded}
         })}
       >
         {profile.dogBirthday.getTime() > 0
-          ? BARK_UTC.formatDate(profile.dogBirthday)
+          ? formatDateTime(profile.dogBirthday, SGT_UI_DATE)
           : ""}
       </TableCell>
       <TableCell

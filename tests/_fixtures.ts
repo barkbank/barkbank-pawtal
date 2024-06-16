@@ -48,7 +48,10 @@ import { AdminMapper } from "@/lib/data/admin-mapper";
 import { VetMapper } from "@/lib/data/vet-mapper";
 import { DogMapper } from "@/lib/data/dog-mapper";
 import { UserMapper } from "@/lib/data/user-mapper";
-import { BARK_UTC } from "@/lib/utilities/bark-time";
+import {
+  SINGAPORE_TIME_ZONE,
+  parseCommonDate,
+} from "@/lib/utilities/bark-time";
 import { DbContext, dbQuery } from "@/lib/data/db-utils";
 import { dbInsertDog } from "@/lib/data/db-dogs";
 import { OtpService } from "@/lib/services/otp";
@@ -74,6 +77,7 @@ import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
 import { DogProfile } from "@/lib/dog/dog-models";
 import { SubProfile } from "@/lib/dog/dog-models";
 import { getDogProfile } from "@/lib/user/actions/get-dog-profile";
+import { sprintf } from "sprintf-js";
 
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
@@ -364,7 +368,8 @@ function getDogBirthday(idx: number): Date {
   const y = 2022 - (idx % 5);
   const m = 1 + (idx % 11);
   const d = 1 + (idx % 23);
-  return BARK_UTC.getDate(y, m, d);
+  const ymd = sprintf("%04d-%02d-%02d", y, m, d);
+  return parseCommonDate(ymd, SINGAPORE_TIME_ZONE);
 }
 
 export function getEligibleDogSpecOverrides(): Partial<DogSpec> {

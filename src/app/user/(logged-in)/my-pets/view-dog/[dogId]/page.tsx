@@ -20,7 +20,7 @@ import { getDogStatuses } from "@/lib/user/actions/get-dog-statuses";
 import { UserActor } from "@/lib/user/user-actor";
 import { getAgeMonths } from "@/lib/utilities/bark-age";
 import { CODE } from "@/lib/utilities/bark-code";
-import { UTC_DATE_OPTION, formatDateTime } from "@/lib/utilities/bark-time";
+import { SGT_UI_DATE, formatDateTime } from "@/lib/utilities/bark-time";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import Image from "next/image";
 import { redirect } from "next/navigation";
@@ -157,7 +157,7 @@ function formatTransfusionHistory(
 }
 
 function formatBirthday(dogBirthday: Date): string {
-  return formatDateTime(dogBirthday, UTC_DATE_OPTION);
+  return formatDateTime(dogBirthday, SGT_UI_DATE);
 }
 
 function formatPreferredVet(dogPreferredVet: DogPreferredVet | null): string {

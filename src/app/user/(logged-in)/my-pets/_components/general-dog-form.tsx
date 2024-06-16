@@ -2,7 +2,6 @@
 
 import {
   BarkForm,
-  BarkFormDateInput,
   BarkFormError,
   BarkFormInput,
   BarkFormOption,
@@ -19,22 +18,13 @@ import { z } from "zod";
 import { BarkButton } from "@/components/bark/bark-button";
 import { BarkH1 } from "@/components/bark/bark-typography";
 import { Result } from "@/lib/utilities/result";
+import { DogProfile } from "@/lib/dog/dog-models";
+import { RequiredDateField } from "@/app/_lib/field-schemas/required-date-field";
 
 const FORM_SCHEMA = z.object({
   dogName: z.string().min(1, { message: "Name cannot be empty" }),
   dogBreed: z.string(),
-  dogBirthday: z
-    .string()
-    .min(1, { message: "Please fill in a birthday" })
-    .refine(
-      (value) => {
-        const regex = /^\d{4}-\d{2}-\d{2}$/;
-        return regex.test(value) && !isNaN(Date.parse(value));
-      },
-      {
-        message: "Birthday must be a valid date in the format YYYY-MM-DD",
-      },
-    ),
+  dogBirthday: RequiredDateField.new().schema(),
   dogGender: z.nativeEnum(DOG_GENDER),
   dogWeightKg: z.string().refine(isValidWeightKg, {
     message: "Weight should be a positive number or left blank",
@@ -45,7 +35,7 @@ const FORM_SCHEMA = z.object({
   dogPreferredVetId: z.string(),
 });
 
-export type DogFormData = z.infer<typeof FORM_SCHEMA>;
+type DogFormData = z.infer<typeof FORM_SCHEMA>;
 
 const EMPTY_VALUES: Partial<DogFormData> = {
   dogName: "",
@@ -55,15 +45,46 @@ const EMPTY_VALUES: Partial<DogFormData> = {
   dogPreferredVetId: "",
 };
 
+function toDogFormData(dogProfile: DogProfile): DogFormData {
+  const { dogBirthday, dogWeightKg, ...otherFields } = dogProfile;
+  const dogBirthdayString = RequiredDateField.new().format(dogBirthday);
+  const dogWeightKgString = dogWeightKg !== null ? dogWeightKg.toString() : "";
+  const dogFormData: DogFormData = {
+    dogBirthday: dogBirthdayString,
+    dogWeightKg: dogWeightKgString,
+    ...otherFields,
+  };
+  return dogFormData;
+}
+
+function toDogProfile(dogFormData: DogFormData): DogProfile {
+  const {
+    dogBirthday: dogBirthdayString,
+    dogWeightKg: dogWeightKgString,
+    ...otherFields
+  } = dogFormData;
+  const dogBirthday = RequiredDateField.new().parse(dogBirthdayString);
+  const dogWeightKg = parseFloat(dogWeightKgString);
+  const dogProfile: DogProfile = {
+    dogBirthday,
+    dogWeightKg,
+    ...otherFields,
+  };
+  return dogProfile;
+}
+
 export function GeneralDogForm(props: {
   formTitle: string;
   vetOptions: BarkFormOption[];
-  prefillData?: DogFormData;
-  handleSubmit: (values: DogFormData) => Promise<Result<true, string>>;
+  prefillData?: DogProfile;
+  handleSubmit: (dogProfile: DogProfile) => Promise<Result<true, string>>;
   handleCancel: () => Promise<void>;
 }) {
   const { formTitle, vetOptions, prefillData, handleSubmit, handleCancel } =
     props;
+  const prefillFormValues = prefillData
+    ? toDogFormData(prefillData)
+    : undefined;
   const form = useForm<DogFormData>({
     resolver: zodResolver(
       FORM_SCHEMA.extend({
@@ -74,11 +95,12 @@ export function GeneralDogForm(props: {
             : z.string().min(1, { message: "Please select an option" }),
       }),
     ),
-    defaultValues: { ...EMPTY_VALUES, ...prefillData },
+    defaultValues: { ...EMPTY_VALUES, ...prefillFormValues },
   });
 
   async function onSubmit(values: DogFormData) {
-    const { error } = await handleSubmit(values);
+    const dogProfile = toDogProfile(values);
+    const { error } = await handleSubmit(dogProfile);
     if (error !== undefined) {
       // TODO: The GeneralDogForm needs to specify the specifc types of errors
       // because it is responsible for how the errors need to be displayed.
@@ -97,11 +119,11 @@ export function GeneralDogForm(props: {
 
         <BarkFormInput form={form} label="Breed" name="dogBreed" type="text" />
 
-        <BarkFormDateInput
+        <BarkFormInput
           form={form}
           label="Birthday"
           name="dogBirthday"
-          description="Use YYYY-MM-DD format. Approximations are okay."
+          description="Please provide a date (e.g. 18 Aug 2018). It is okay to provide an approximate date."
         />
 
         <BarkFormRadioGroup

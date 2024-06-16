@@ -5,8 +5,11 @@ import { removeConsecutiveSpaces } from "./bark-strings";
 export const UTC = "UTC";
 export const SINGAPORE_TIME_ZONE = "Asia/Singapore";
 export const NEW_YORK_TIME_ZONE = "America/New_York";
-export const DEFAULT_DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm";
+
+export const YYYY_MM_DD_HH_MM_FORMAT = "yyyy-MM-dd HH:mm";
 export const ISO8601_FORMAT = "yyyy-MM-dd'T'HH:mm:ssXXX";
+export const UI_DATE_TIME_FORMAT = "d MMM yyyy h:mma";
+export const UI_DATE_FORMAT = "d MMM yyyy";
 
 export type DateTimeOptions = {
   /**
@@ -16,33 +19,13 @@ export type DateTimeOptions = {
   timeZone: string;
 };
 
-const DEFAULT_DATE_TIME_OPTIONS: DateTimeOptions = {
-  format: DEFAULT_DATE_TIME_FORMAT,
-  timeZone: UTC,
-} as const;
-
-export const UTC_DATE_OPTION: DateTimeOptions = {
-  format: "yyyy-MM-dd",
-  timeZone: UTC,
-} as const;
-
-export const UTC_ISO8601: DateTimeOptions = {
-  format: "yyyy-MM-dd'T'HH:mm:ssXXX",
-  timeZone: UTC,
-} as const;
-
-export const SGT_ISO8601: DateTimeOptions = {
-  format: "yyyy-MM-dd'T'HH:mm:ssXXX",
-  timeZone: SINGAPORE_TIME_ZONE,
-} as const;
-
 export const SGT_UI_DATE_TIME: DateTimeOptions = {
-  format: "d MMM yyyy h:mma",
+  format: UI_DATE_TIME_FORMAT,
   timeZone: SINGAPORE_TIME_ZONE,
 } as const;
 
 export const SGT_UI_DATE: DateTimeOptions = {
-  format: "d MMM yyyy",
+  format: UI_DATE_FORMAT,
   timeZone: SINGAPORE_TIME_ZONE,
 } as const;
 
@@ -52,31 +35,29 @@ export const SGT_UI_DATE: DateTimeOptions = {
  *
  * @param dateTimeString Date time string to parse
  * @param options Options for parsing the string.
- * @returns UCT Date
+ * @returns Date
  */
 export function parseDateTime(
   dateTimeString: string,
-  options?: DateTimeOptions,
+  options: DateTimeOptions,
 ): Date {
-  const opts = { ...DEFAULT_DATE_TIME_OPTIONS, ...options };
   const refDate = new Date();
-  const zonedTime = utcToZonedTime(refDate, opts.timeZone);
-  const parsedTime = parse(dateTimeString, opts.format, zonedTime);
+  const zonedTime = utcToZonedTime(refDate, options.timeZone);
+  const parsedTime = parse(dateTimeString, options.format, zonedTime);
   if (!isValid(parsedTime)) {
     throw new Error(`Invalid date time input: ${dateTimeString}`);
   }
-  const utcTime = zonedTimeToUtc(parsedTime, opts.timeZone);
+  const utcTime = zonedTimeToUtc(parsedTime, options.timeZone);
   return utcTime;
 }
 
 export function formatDateTime(
   utcTime: Date,
-  options?: DateTimeOptions,
+  options: DateTimeOptions,
 ): string {
-  const opts = { ...DEFAULT_DATE_TIME_OPTIONS, ...options };
-  const zonedTime = utcToZonedTime(utcTime, opts.timeZone);
-  const dateTimeString = format(zonedTime, opts.format, {
-    timeZone: opts.timeZone,
+  const zonedTime = utcToZonedTime(utcTime, options.timeZone);
+  const dateTimeString = format(zonedTime, options.format, {
+    timeZone: options.timeZone,
   });
   return dateTimeString;
 }
@@ -156,18 +137,3 @@ export function parseCommonDate(dateString: string, timeZone: string): Date {
   }
   throw new Error(`No common format for date value: ${dateString}`);
 }
-
-/**
- * @deprecated
- */
-export const BARK_UTC = {
-  getDate: (year: number, month: number, day: number) => {
-    return new Date(Date.UTC(year, month - 1, day));
-  },
-  parseDate: (yyyy_mm_dd: string) => {
-    return new Date(`${yyyy_mm_dd}T00:00:00Z`);
-  },
-  formatDate: (utcDate: Date) => {
-    return utcDate.toISOString().split("T")[0];
-  },
-};

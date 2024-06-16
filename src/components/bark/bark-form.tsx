@@ -13,16 +13,7 @@ import { Checkbox } from "../ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { CalendarIcon } from "lucide-react";
-import { Calendar } from "@/components/ui/calendar";
-import { cn } from "@/lib/utils";
 import React from "react";
-import { BARK_UTC } from "@/lib/utilities/bark-time";
 import {
   Select,
   SelectContent,
@@ -106,73 +97,6 @@ export function BarkFormInput(props: {
             </div>
             {children}
           </div>
-          {description && <FormDescription>{description}</FormDescription>}
-          <FormMessage />
-        </FormItem>
-      )}
-    />
-  );
-}
-
-// TODO: Deprecate this. Use BarkFormInput and define a DateField in field-schemas.
-// Field value should be a YYYY-MM-DD string.
-export function BarkFormDateInput(props: {
-  form: UseFormReturn<any>;
-  name: string;
-  label: string;
-  placeholder?: string;
-  description?: string;
-}) {
-  const { form, name, label, placeholder, description } = props;
-
-  return (
-    <FormField
-      control={form.control}
-      name={name}
-      render={({ field }) => (
-        <FormItem className="mt-6 flex flex-col">
-          <FormLabel>{label}</FormLabel>
-          <FormControl>
-            <Popover>
-              <div className="relative">
-                <Input
-                  className="text-base"
-                  placeholder={placeholder}
-                  type="text"
-                  {...field}
-                />
-                <PopoverTrigger asChild>
-                  <Button
-                    variant={"outline"}
-                    className={cn(
-                      "absolute right-0 top-[50%] translate-y-[-50%] rounded-l-none font-normal",
-                      !field.value && "text-muted-foreground",
-                    )}
-                  >
-                    <CalendarIcon className="h-4 w-4" />
-                  </Button>
-                </PopoverTrigger>
-              </div>
-              <PopoverContent className="w-auto p-0">
-                <Calendar
-                  mode="single"
-                  selected={BARK_UTC.parseDate(field.value)}
-                  onSelect={(v) => {
-                    if (v === undefined) {
-                      field.onChange("");
-                    } else {
-                      const y = v.getFullYear();
-                      const m = v.getMonth() + 1;
-                      const d = v.getDate();
-                      const utcDate = BARK_UTC.getDate(y, m, d);
-                      field.onChange(BARK_UTC.formatDate(utcDate));
-                    }
-                  }}
-                  initialFocus={true}
-                />
-              </PopoverContent>
-            </Popover>
-          </FormControl>
           {description && <FormDescription>{description}</FormDescription>}
           <FormMessage />
         </FormItem>
@@ -385,48 +309,6 @@ export function BarkFormTextArea(props: {
         </FormItem>
       )}
     />
-  );
-}
-
-export function BarkFormButton(props: {
-  children: React.ReactNode;
-  className?: string;
-  onClick: () => Promise<void>;
-}) {
-  const { children, onClick, className } = props;
-  return (
-    <Button
-      type="button"
-      className={cn("mt-6", className)}
-      onClick={onClick}
-      variant="brandInverse"
-    >
-      {children}
-    </Button>
-  );
-}
-
-// TODO: Remove this deprecated function
-/**
- * @deprecated Use BarkButton type="submit" instead. BarkFormSubmitButton has a
- * mt-6 that makes it difficult to arrange when it is grouped with other buttons
- * (e.g. Cancel).
- */
-export function BarkFormSubmitButton(props: {
-  className?: string;
-  children: React.ReactNode;
-  disabled?: boolean;
-}) {
-  const { disabled, children, className } = props;
-  return (
-    <Button
-      type="submit"
-      variant="brand"
-      className={cn("mt-6", className)}
-      disabled={disabled ?? false}
-    >
-      {children}
-    </Button>
   );
 }
 

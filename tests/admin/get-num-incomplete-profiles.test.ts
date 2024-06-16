@@ -11,9 +11,9 @@ import { PARTICIPATION_STATUS } from "@/lib/data/db-enums";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
 import {
-  DEFAULT_DATE_TIME_FORMAT,
+  YYYY_MM_DD_HH_MM_FORMAT,
   SINGAPORE_TIME_ZONE,
-  UTC_DATE_OPTION,
+  parseCommonDate,
   parseDateTime,
 } from "@/lib/utilities/bark-time";
 import { MILLIS_PER_DAY, MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
@@ -66,7 +66,7 @@ async function insertIncompleteProfile(
   const { userId } = await insertUser(idx, dbPool);
   const { dogId } = await insertDog(idx, userId, dbPool, {
     dogGender: DOG_GENDER.MALE,
-    dogBirthday: parseDateTime("2020-03-03", UTC_DATE_OPTION),
+    dogBirthday: parseCommonDate("2020-03-03", SINGAPORE_TIME_ZONE),
     dogWeightKg: null,
     dogBreed: "",
     dogEverPregnant: YES_NO_UNKNOWN.NO,
@@ -83,7 +83,7 @@ async function insertCompleteProfile(
   const { userId } = await insertUser(idx, dbPool);
   const { dogId } = await insertDog(idx, userId, dbPool, {
     dogGender: DOG_GENDER.MALE,
-    dogBirthday: parseDateTime("2020-03-03", UTC_DATE_OPTION),
+    dogBirthday: parseCommonDate("2020-03-03", SINGAPORE_TIME_ZONE),
     dogWeightKg: 28,
     dogBreed: "Lion Dog",
     dogEverPregnant: YES_NO_UNKNOWN.NO,
@@ -115,7 +115,7 @@ async function insertPausedProfile(
 
 async function setDogCreationTime(idx: number, dogId: string, dbPool: Pool) {
   const baseTs = parseDateTime("2023-01-01 08:00", {
-    format: DEFAULT_DATE_TIME_FORMAT,
+    format: YYYY_MM_DD_HH_MM_FORMAT,
     timeZone: SINGAPORE_TIME_ZONE,
   }).getTime();
   const dogCreationTime = new Date(baseTs + idx * MILLIS_PER_DAY);

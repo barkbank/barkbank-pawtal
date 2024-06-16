@@ -20,12 +20,12 @@ import { DogAntigenPresence } from "@/lib/data/db-enums";
 import { YesNoUnknown } from "@/lib/bark/enums/yes-no-unknown";
 import { DogGender } from "@/lib/bark/enums/dog-gender";
 import { UserResidency } from "@/lib/data/db-enums";
-import { BARK_UTC } from "@/lib/utilities/bark-time";
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { IMG_PATH } from "@/lib/image-path";
 import { AccountType } from "@/lib/auth-models";
 import { CODE } from "@/lib/utilities/bark-code";
+import { RequiredDateField } from "@/app/_lib/field-schemas/required-date-field";
 
 const FORM_SCHEMA = z.object({
   dogName: z.string(),
@@ -93,7 +93,7 @@ export default function DonorForm(props: {
       userResidency: vals.userResidency as UserResidency,
       dogName: vals.dogName,
       dogBreed: vals.dogBreed,
-      dogBirthday: BARK_UTC.parseDate(vals.dogBirthday),
+      dogBirthday: RequiredDateField.new().parse(vals.dogBirthday),
       dogGender: vals.dogGender as DogGender,
       dogWeightKg: vals.dogWeightKg === "" ? null : Number(vals.dogWeightKg),
       dogDea1Point1: vals.dogDea1Point1 as DogAntigenPresence,

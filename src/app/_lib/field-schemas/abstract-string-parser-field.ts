@@ -28,4 +28,5 @@ export abstract class AbstractStringParserField<T> {
   abstract isOptional(): boolean;
   abstract getMessage(): string;
   abstract parse(value: string): T;
+  abstract format(value: T): string;
 }

@@ -2,15 +2,12 @@
 
 import {
   BarkForm,
-  BarkFormButton,
-  BarkFormError,
   BarkFormErrorParagraph,
   BarkFormHeader,
   BarkFormInput,
   BarkFormParagraph,
   BarkFormRadioGroup,
   BarkFormSingleCheckbox,
-  BarkFormSubmitButton,
 } from "@/components/bark/bark-form";
 import { postOtpRequest } from "@/lib/server-actions/post-otp-request";
 import { isValidEmail } from "@/lib/utilities/bark-utils";
@@ -20,6 +17,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { CODE } from "@/lib/utilities/bark-code";
+import { BarkButton } from "@/components/bark/bark-button";
 
 const FORM_SCHEMA = z.object({
   userName: z.string().min(1, { message: "Name cannot be empty" }),
@@ -124,10 +122,18 @@ export default function OwnerForm(props: {
           name="userEmail"
           type="email"
         />
-        <BarkFormButton onClick={onRequestOtp}>Send me an OTP</BarkFormButton>
+        <BarkButton
+          variant="brandInverse"
+          className="mt-3"
+          onClick={onRequestOtp}
+        >
+          Send me an OTP
+        </BarkButton>
         {otpState.status === "SEND_SUCCESS" && (
           <BarkFormParagraph>
-            An OTP has been sent to {otpState.email}
+            An OTP has been sent to {otpState.email}. Please check your junk
+            mail folder and ensure that &lsquo;Bark Bank&rsquo; is added to your
+            list of approved senders.
           </BarkFormParagraph>
         )}
         {otpState.status === "SEND_FAILED" && (
@@ -156,14 +162,18 @@ export default function OwnerForm(props: {
           </div>
         )}
 
-        <div className="flex gap-2">
-          <BarkFormButton onClick={onPrevClick} className="w-full">
+        <div className="mt-3 flex gap-3">
+          <BarkButton
+            variant="brandInverse"
+            onClick={onPrevClick}
+            className="w-full"
+          >
             {prevLabel}
-          </BarkFormButton>
+          </BarkButton>
 
-          <BarkFormSubmitButton className="w-full">
+          <BarkButton variant="brand" type="submit" className="w-full">
             {nextLabel}
-          </BarkFormSubmitButton>
+          </BarkButton>
         </div>
       </BarkForm>
     </>

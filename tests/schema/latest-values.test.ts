@@ -13,7 +13,7 @@ import { DOG_ANTIGEN_PRESENCE } from "@/lib/data/db-enums";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import { CALL_OUTCOME, POS_NEG_NIL } from "@/lib/data/db-enums";
 import {
-  DEFAULT_DATE_TIME_FORMAT,
+  YYYY_MM_DD_HH_MM_FORMAT,
   SINGAPORE_TIME_ZONE,
   parseDateTime,
 } from "@/lib/utilities/bark-time";
@@ -170,7 +170,7 @@ describe("latest_values", () => {
         await addReport(dbPool, dogId, vetId, {
           reportSpec: {
             visitTime: parseDateTime("2023-10-15 15:30", {
-              format: DEFAULT_DATE_TIME_FORMAT,
+              format: YYYY_MM_DD_HH_MM_FORMAT,
               timeZone: SINGAPORE_TIME_ZONE,
             }),
             dogHeartworm: POS_NEG_NIL.NEGATIVE,
@@ -180,7 +180,7 @@ describe("latest_values", () => {
         await addReport(dbPool, dogId, vetId, {
           reportSpec: {
             visitTime: parseDateTime("2024-02-02 09:35", {
-              format: DEFAULT_DATE_TIME_FORMAT,
+              format: YYYY_MM_DD_HH_MM_FORMAT,
               timeZone: SINGAPORE_TIME_ZONE,
             }),
             dogHeartworm: POS_NEG_NIL.NIL, // Did not test
@@ -237,7 +237,7 @@ describe("latest_values", () => {
         await addReport(dbPool, dogId, vetId, {
           reportSpec: {
             visitTime: parseDateTime("2023-10-15 15:30", {
-              format: DEFAULT_DATE_TIME_FORMAT,
+              format: YYYY_MM_DD_HH_MM_FORMAT,
               timeZone: SINGAPORE_TIME_ZONE,
             }),
             dogDea1Point1: POS_NEG_NIL.NEGATIVE,
@@ -247,7 +247,7 @@ describe("latest_values", () => {
         await addReport(dbPool, dogId, vetId, {
           reportSpec: {
             visitTime: parseDateTime("2024-02-02 09:35", {
-              format: DEFAULT_DATE_TIME_FORMAT,
+              format: YYYY_MM_DD_HH_MM_FORMAT,
               timeZone: SINGAPORE_TIME_ZONE,
             }),
             dogDea1Point1: POS_NEG_NIL.NIL, // Did not test

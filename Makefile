@@ -98,7 +98,7 @@ reset-local-database:
 wip:
 	@echo Remaining wip tasks
 	@echo
-	@grep -n --color=always -R 'WIP[:]' src tests db e2e
+	@grep -n --color=always -R 'WIP[:]' src tests db e2e || true
 	@echo
 	@echo Number of tasks remaining
 	@grep -n --color=always -R 'WIP[:]' src tests db e2e | wc -l
@@ -108,7 +108,7 @@ wip:
 todo:
 	@echo Remaining todo tasks
 	@echo
-	@grep -n --color=always -R 'TODO[:]' src tests db e2e
+	@grep -n --color=always -R 'TODO[:]' src tests db e2e || true
 	@echo
 	@echo Number of tasks remaining
 	@grep -n --color=always -R 'TODO[:]' src tests db e2e | wc -l
