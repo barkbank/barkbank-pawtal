@@ -21,7 +21,7 @@ export function DogCard(props: {
     <>
       <div
         onClick={gotoViewDog}
-        className="flex flex-col place-items-center gap-3 rounded-md px-3 py-3 shadow-sm shadow-slate-400 first:mt-0 md:flex-row"
+        className="x-card flex flex-col place-items-center gap-3 md:flex-row"
       >
         {/* Avatar */}
         <BarkDogAvatar gender={dog.dogGender} />
