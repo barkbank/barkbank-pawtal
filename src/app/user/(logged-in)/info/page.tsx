@@ -173,8 +173,20 @@ const faqs = [
     ),
   },
   {
-    question: `TODO_QUESTION`,
-    answer: <p>TODO_ANSWER</p>,
+    question: `Can I contact the vet directly?`,
+    answer: (
+      <p>
+        Yes, you may arrange an appointment with the vet directly. However, it
+        is encouraged to register with Bark Bank so that dogs in need have a
+        centralised system with updated donor dog details. This helps ensure
+        that all necessary information is available and organised, facilitating
+        better coordination and care.
+      </p>
+    ),
+  },
+  {
+    question: `The Question`,
+    answer: <p>The Answer</p>,
   },
 ];
 
