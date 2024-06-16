@@ -5,14 +5,14 @@ import { DogProfile } from "@/lib/dog/dog-models";
 import { useRouter } from "next/navigation";
 import { RoutePath } from "@/lib/route-path";
 import { Err, Ok, Result } from "@/lib/utilities/result";
-import { postDogProfileUpdate } from "../_actions/post-dog-profile-update";
+import { postDogProfileUpdate } from "../actions/post-dog-profile-update";
 import { CODE } from "@/lib/utilities/bark-code";
-import { GeneralDogForm } from "../../../_components/general-dog-form";
+import { GeneralDogForm } from "./general-dog-form";
 import { useToast } from "@/components/ui/use-toast";
 import { MINIMUM_TOAST_MILLIS } from "@/app/_lib/toast-delay";
 import { asyncSleep } from "@/lib/utilities/async-sleep";
 
-export default function EditDogProfileForm(props: {
+export default function EditDogProfileFormController(props: {
   vetOptions: BarkFormOption[];
   dogId: string;
   existingDogProfile: DogProfile;
@@ -47,13 +47,12 @@ export default function EditDogProfileForm(props: {
       description: `Profile for ${dogName} has been saved.`,
       variant: "brandSuccess",
     });
-    // TODO: do not use router.back(). It may go to the wrong place. Think of another solution.
-    router.back();
+    router.push(RoutePath.USER_VIEW_DOG(dogId));
     return Ok(true);
   }
 
   async function handleCancel() {
-    router.back();
+    router.push(RoutePath.USER_VIEW_DOG(dogId));
   }
 
   return (

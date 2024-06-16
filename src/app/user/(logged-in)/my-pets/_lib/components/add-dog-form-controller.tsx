@@ -2,17 +2,19 @@
 
 import { BarkFormOption } from "@/components/bark/bark-form";
 import { DogProfile } from "@/lib/dog/dog-models";
-import { postDogProfile } from "../_actions/post-dog-profile";
+import { postDogProfile } from "../actions/post-dog-profile";
 import { useRouter } from "next/navigation";
 import { RoutePath } from "@/lib/route-path";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { CODE } from "@/lib/utilities/bark-code";
-import { GeneralDogForm } from "../../_components/general-dog-form";
+import { GeneralDogForm } from "./general-dog-form";
 import { useToast } from "@/components/ui/use-toast";
 import { MINIMUM_TOAST_MILLIS } from "@/app/_lib/toast-delay";
 import { asyncSleep } from "@/lib/utilities/async-sleep";
 
-export default function AddDogForm(props: { vetOptions: BarkFormOption[] }) {
+export default function AddDogFormController(props: {
+  vetOptions: BarkFormOption[];
+}) {
   const router = useRouter();
   const { toast } = useToast();
   const { vetOptions } = props;
