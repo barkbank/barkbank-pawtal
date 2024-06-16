@@ -4,6 +4,7 @@
  * because the dog will turn 2 only on 8 Oct 2022.
  */
 export function getAgeYears(fromTime: Date, toTime: Date): number {
+  // TODO: getAgeYears should have a timezone paramter
   const ageYears = toTime.getUTCFullYear() - fromTime.getUTCFullYear();
   if (toTime.getUTCMonth() < fromTime.getUTCMonth()) {
     return ageYears - 1;
@@ -18,6 +19,7 @@ export function getAgeYears(fromTime: Date, toTime: Date): number {
 }
 
 export function getAgeMonths(fromTime: Date, toTime: Date): number {
+  // TODO: getAgeMonths should have a timezone paramter
   const dy = toTime.getUTCFullYear() - fromTime.getUTCFullYear();
   const dm = toTime.getUTCMonth() - fromTime.getUTCMonth();
   const ageMonths = dy * 12 + dm;

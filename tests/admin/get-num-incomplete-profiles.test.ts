@@ -11,7 +11,7 @@ import { PARTICIPATION_STATUS } from "@/lib/data/db-enums";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
 import {
-  DEFAULT_DATE_TIME_FORMAT,
+  YYYY_MM_DD_HH_MM_FORMAT,
   SINGAPORE_TIME_ZONE,
   parseCommonDate,
   parseDateTime,
@@ -115,7 +115,7 @@ async function insertPausedProfile(
 
 async function setDogCreationTime(idx: number, dogId: string, dbPool: Pool) {
   const baseTs = parseDateTime("2023-01-01 08:00", {
-    format: DEFAULT_DATE_TIME_FORMAT,
+    format: YYYY_MM_DD_HH_MM_FORMAT,
     timeZone: SINGAPORE_TIME_ZONE,
   }).getTime();
   const dogCreationTime = new Date(baseTs + idx * MILLIS_PER_DAY);

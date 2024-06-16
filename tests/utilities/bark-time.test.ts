@@ -1,20 +1,24 @@
 import {
   NEW_YORK_TIME_ZONE,
   SINGAPORE_TIME_ZONE,
+  UTC,
+  YYYY_MM_DD_HH_MM_FORMAT,
   formatDateTime,
   parseCommonDateTime,
   parseDateTime,
 } from "@/lib/utilities/bark-time";
-import { parse, parseISO } from "date-fns";
-import { Signpost } from "lucide-react";
+import { parseISO } from "date-fns";
 
 describe("bark-time parseDateTime", () => {
-  it("should parse yyyy-MM-dd HH:mm strings into UTC Dates", () => {
-    const d1 = parseDateTime("2019-09-27 06:00");
+  it("can parse yyyy-MM-dd HH:mm strings into UTC Dates", () => {
+    const d1 = parseDateTime("2019-09-27 06:00", {
+      format: "yyyy-MM-dd HH:mm",
+      timeZone: UTC,
+    });
     const d2 = parseISO("2019-09-27T06:00:00Z");
     expect(d1).toEqual(d2);
   });
-  it("should parse yyyy-MM-dd HH:mm strings at time zone into UTC Dates", () => {
+  it("can parse d MMM y, HH:mm strings at time zone into UTC Dates", () => {
     const d1 = parseDateTime("27 Sep 2019, 06:00", {
       format: "d MMM y, HH:mm",
       timeZone: SINGAPORE_TIME_ZONE,
@@ -27,7 +31,10 @@ describe("bark-time parseDateTime", () => {
 describe("bark-time formatDateTime", () => {
   it("should format UTC Dates into yyyy-MM-dd HH:mm strings", () => {
     const utcDate = parseISO("2017-11-06T21:33:21Z");
-    const dateTimeString = formatDateTime(utcDate);
+    const dateTimeString = formatDateTime(utcDate, {
+      format: YYYY_MM_DD_HH_MM_FORMAT,
+      timeZone: UTC,
+    });
     expect(dateTimeString).toEqual("2017-11-06 21:33");
   });
   it("should format UTC Dates for the specified time zone and format (Singapore)", () => {
