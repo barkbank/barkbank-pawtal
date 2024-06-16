@@ -12,7 +12,9 @@ import { useToast } from "@/components/ui/use-toast";
 import { MINIMUM_TOAST_MILLIS } from "@/app/_lib/toast-delay";
 import { asyncSleep } from "@/lib/utilities/async-sleep";
 
-export default function AddDogFormController(props: { vetOptions: BarkFormOption[] }) {
+export default function AddDogFormController(props: {
+  vetOptions: BarkFormOption[];
+}) {
   const router = useRouter();
   const { toast } = useToast();
   const { vetOptions } = props;
