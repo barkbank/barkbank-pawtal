@@ -1,12 +1,13 @@
+"use client";
+
 import { BarkButton } from "@/components/bark/bark-button";
 import { BarkDogAvatar } from "@/components/bark/bark-dog-avatar";
 import { BarkStatusBlock } from "@/components/bark/bark-status-block";
-import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
 import { PROFILE_STATUS } from "@/lib/data/db-enums";
 import { getHighlightedStatus } from "@/lib/dog/get-highlighted-status";
-import { IMG_PATH } from "@/lib/image-path";
 import { RoutePath } from "@/lib/route-path";
 import { MyDog } from "@/lib/user/user-models";
+import { useRouter } from "next/navigation";
 
 function ActionBlock(props: { dog: MyDog }) {
   const { dog } = props;
@@ -48,15 +49,18 @@ export function DogCard(props: {
   cardIdx: number;
   isLastCard: boolean;
 }) {
-  const { dog, cardIdx, isLastCard } = props;
-  const { dogName, dogStatuses, dogAppointments } = dog;
-  const imgSrc =
-    dog.dogGender === DOG_GENDER.MALE
-      ? IMG_PATH.BROWN_DOG_AVATAR
-      : IMG_PATH.BORDER_COLLIE_DOG_AVATAR;
+  const { dog } = props;
+  const { dogId, dogName, dogStatuses, dogAppointments } = dog;
+  const router = useRouter();
+  const onClick = () => {
+    router.push(RoutePath.USER_VIEW_DOG(dogId));
+  };
   return (
     <>
-      <div className="mt-3 flex flex-col place-items-center gap-3 rounded-md px-3 py-3 shadow-sm shadow-slate-400 first:mt-0 md:flex-row">
+      <div
+        onClick={onClick}
+        className="mt-3 flex flex-col place-items-center gap-3 rounded-md px-3 py-3 shadow-sm shadow-slate-400 first:mt-0 md:flex-row"
+      >
         {/* Avatar */}
         <BarkDogAvatar gender={dog.dogGender} />
 
