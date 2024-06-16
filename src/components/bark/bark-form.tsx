@@ -13,7 +13,6 @@ import { Checkbox } from "../ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
-import { cn } from "@/lib/utils";
 import React from "react";
 import {
   Select,
@@ -310,28 +309,6 @@ export function BarkFormTextArea(props: {
         </FormItem>
       )}
     />
-  );
-}
-
-// WIP: Remove BarkFormButton
-/**
- * @deprecated Use BarkButton
- */
-export function BarkFormButton(props: {
-  children: React.ReactNode;
-  className?: string;
-  onClick: () => Promise<void>;
-}) {
-  const { children, onClick, className } = props;
-  return (
-    <Button
-      type="button"
-      className={cn("mt-6", className)}
-      onClick={onClick}
-      variant="brandInverse"
-    >
-      {children}
-    </Button>
   );
 }
 
