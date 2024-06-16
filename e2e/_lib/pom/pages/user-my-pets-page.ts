@@ -33,19 +33,19 @@ export class DogCardItem extends PomComponent {
       .locator("..");
   }
 
+  profileEligibleStatusText(): Locator {
+    return this.locator().getByText("Eligible", { exact: true });
+  }
+
+  profileIncompleteStatusText(): Locator {
+    return this.locator().getByText("Profile Incomplete", { exact: true });
+  }
+
   exactText(text: string): Locator {
     return this.locator().getByText(text, { exact: true });
   }
 
-  editButton(): Locator {
-    return this.locator().getByRole("link", { name: "Edit" });
-  }
-
   completeProfileButton(): Locator {
     return this.locator().getByRole("link", { name: "Complete Profile" });
-  }
-
-  viewButton(): Locator {
-    return this.locator().getByRole("link", { name: "View" });
   }
 }

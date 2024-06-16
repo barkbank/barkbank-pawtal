@@ -15,36 +15,39 @@ test("user can view dog", async ({ page }) => {
     ageYears,
   } = await registerTestUser({ page });
 
-  const pg1 = new UserMyPetsPage(context);
-  await pg1.checkUrl();
-  await pg1.dogCardItem(dogName).viewButton().click();
+  const pgList = new UserMyPetsPage(context);
+  const pgView = new UserViewDogPage(context);
 
-  const pg2 = new UserViewDogPage(context);
-  await pg2.checkUrl();
+  await pgList.checkUrl();
+  await pgList.dogCardItem(dogName).locator().click();
+
+  await pgView.checkUrl();
   await expect(
-    pg2.page().getByRole("heading", { name: dogName }),
+    pgView.page().getByRole("heading", { name: dogName }),
   ).toBeVisible();
   await expect(
-    pg2.page().getByText(`is eligible for blood donation`),
+    pgView.page().getByText(`is eligible for blood donation`),
   ).toContainText(dogName);
-  await expect(pg2.dogBreedItem()).toContainText(dogBreed);
-  await expect(pg2.dogWeightItem()).toContainText(dogWeightKg);
+  await expect(pgView.dogBreedItem()).toContainText(dogBreed);
+  await expect(pgView.dogWeightItem()).toContainText(dogWeightKg);
   if (dogGender === "MALE") {
-    await expect(pg2.dogGenderItem()).toContainText("Male");
-    await expect(pg2.dogEverPregnantItem()).toContainText("N.A.");
+    await expect(pgView.dogGenderItem()).toContainText("Male");
+    await expect(pgView.dogEverPregnantItem()).toContainText("N.A.");
   } else {
-    await expect(pg2.dogGenderItem()).toContainText("Female");
-    await expect(pg2.dogEverPregnantItem()).toContainText("No, never pregnant");
+    await expect(pgView.dogGenderItem()).toContainText("Female");
+    await expect(pgView.dogEverPregnantItem()).toContainText(
+      "No, never pregnant",
+    );
   }
-  await expect(pg2.dogBirthdayItem()).toContainText(
+  await expect(pgView.dogBirthdayItem()).toContainText(
     formatDogBirthday(dogBirthday),
   );
-  await expect(pg2.dogAgeItem()).toContainText(`${ageYears} years 0 months`);
-  await expect(pg2.dogBloodTypeItem()).toContainText("Unknown");
-  await expect(pg2.dogEverReceivedTransfusionItem()).toContainText(
+  await expect(pgView.dogAgeItem()).toContainText(`${ageYears} years 0 months`);
+  await expect(pgView.dogBloodTypeItem()).toContainText("Unknown");
+  await expect(pgView.dogEverReceivedTransfusionItem()).toContainText(
     "No, never received blood transfusion",
   );
-  await expect(pg2.dogPreferredVetItem()).toContainText("Vet Clinic 1");
+  await expect(pgView.dogPreferredVetItem()).toContainText("Vet Clinic 1");
 });
 
 function formatDogBirthday(dogBirthday: string): string {

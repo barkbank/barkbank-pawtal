@@ -2,44 +2,40 @@ import { test, expect } from "@playwright/test";
 import { registerTestUser } from "../_lib/init/register-test-user";
 import { UserMyPetsPage } from "../_lib/pom/pages/user-my-pets-page";
 import { UserEditDogPage } from "../_lib/pom/pages/user-edit-dog-page";
+import { UserViewDogPage } from "../_lib/pom/pages/user-view-dog-page";
 
 test("user can cancel edit dog profile", async ({ page }) => {
   const { context, dogName, dogBreed, dogBirthday, dogWeightKg } =
     await registerTestUser({ page });
 
-  const pg1 = new UserMyPetsPage(context);
-  await pg1.checkUrl();
-  const pg1card = pg1.dogCardItem(dogName);
-  await expect(pg1card.locator()).toBeVisible();
-  await expect(pg1card.editButton()).toBeVisible();
-  await pg1card.editButton().click();
+  const pgList = new UserMyPetsPage(context);
+  const pgView = new UserViewDogPage(context);
+  const pgEdit = new UserEditDogPage(context);
 
-  const pg2 = new UserEditDogPage(context);
-  await pg2.checkUrl();
-  await expect(pg2.dogNameField()).toHaveValue(dogName);
-  await expect(pg2.dogBreedField()).toHaveValue(dogBreed);
-  await expect(pg2.dogBirthdayField()).toHaveValue(dogBirthday);
-  await expect(pg2.dogWeightField()).toHaveValue(dogWeightKg);
-  await expect(pg2.saveButton()).toBeVisible();
-  await pg2.dogNameField().fill("Thomas Green");
-  await pg2.dogBreedField().fill("Royal Canine");
-  await pg2.dogBirthdayField().fill("1968-08-28");
-  await pg2.dogWeightField().fill("16.827");
+  // Navigate to edit dog page
+  await pgList.checkUrl();
+  await pgList.dogCardItem(dogName).locator().click();
+  await pgView.editButton().click();
+  await pgEdit.checkUrl();
 
-  // BUT cancelled
-  await pg2.cancelButton().click();
+  // Fill in form
+  await expect(pgEdit.dogNameField()).toHaveValue(dogName);
+  await expect(pgEdit.dogBreedField()).toHaveValue(dogBreed);
+  await expect(pgEdit.dogBirthdayField()).toHaveValue(dogBirthday);
+  await expect(pgEdit.dogWeightField()).toHaveValue(dogWeightKg);
+  await pgEdit.dogNameField().fill("Thomas Green");
+  await pgEdit.dogBreedField().fill("Royal Canine");
+  await pgEdit.dogBirthdayField().fill("1968-08-28");
+  await pgEdit.dogWeightField().fill("16.827");
 
-  const pg3 = new UserMyPetsPage(context);
-  await pg3.checkUrl();
-  const pg3card = pg3.dogCardItem(dogName);
-  await expect(pg3card.locator()).toBeVisible();
-  await expect(pg3card.editButton()).toBeVisible();
-  await pg3card.editButton().click();
+  // Cancel
+  await pgEdit.cancelButton().click();
+  await pgView.checkUrl();
 
-  const pg4 = new UserEditDogPage(context);
-  await pg4.checkUrl();
-  await expect(pg4.dogNameField()).toHaveValue(dogName);
-  await expect(pg4.dogBreedField()).toHaveValue(dogBreed);
-  await expect(pg4.dogBirthdayField()).toHaveValue(dogBirthday);
-  await expect(pg4.dogWeightField()).toHaveValue(dogWeightKg);
+  // Navigate back to edit dog to verify no changes
+  await pgView.editButton().click();
+  await expect(pgEdit.dogNameField()).toHaveValue(dogName);
+  await expect(pgEdit.dogBreedField()).toHaveValue(dogBreed);
+  await expect(pgEdit.dogBirthdayField()).toHaveValue(dogBirthday);
+  await expect(pgEdit.dogWeightField()).toHaveValue(dogWeightKg);
 });

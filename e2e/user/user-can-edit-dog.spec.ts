@@ -3,33 +3,39 @@ import { registerTestUser } from "../_lib/init/register-test-user";
 import { UserMyPetsPage } from "../_lib/pom/pages/user-my-pets-page";
 import { UserEditDogPage } from "../_lib/pom/pages/user-edit-dog-page";
 import { ToastComponent } from "../_lib/pom/layout/toast-component";
+import { UserViewDogPage } from "../_lib/pom/pages/user-view-dog-page";
 
 test("user can edit dog profile", async ({ page }) => {
   const { context, dogName, dogBreed, dogBirthday, dogWeightKg } =
     await registerTestUser({ page });
 
-  const pg1 = new UserMyPetsPage(context);
-  await pg1.checkUrl();
-  const pg1card = pg1.dogCardItem(dogName);
-  await expect(pg1card.locator()).toBeVisible();
-  await expect(pg1card.editButton()).toBeVisible();
-  await pg1card.editButton().click();
+  const pgList = new UserMyPetsPage(context);
+  const pgView = new UserViewDogPage(context);
+  const pgEdit = new UserEditDogPage(context);
 
-  const pg2 = new UserEditDogPage(context);
-  await pg2.checkUrl();
-  await expect(pg2.dogNameField()).toHaveValue(dogName);
-  await expect(pg2.dogBreedField()).toHaveValue(dogBreed);
-  await expect(pg2.dogBirthdayField()).toHaveValue(dogBirthday);
-  await expect(pg2.dogWeightField()).toHaveValue(
+  // Navigate to Edit Page
+  await pgList.checkUrl();
+  await pgList.dogCardItem(dogName).locator().click();
+  await pgView.checkUrl();
+  await pgView.editButton().click();
+  await pgEdit.checkUrl();
+
+  // Fill in the Edit Dog form
+  await pgEdit.checkUrl();
+  await expect(pgEdit.dogNameField()).toHaveValue(dogName);
+  await expect(pgEdit.dogBreedField()).toHaveValue(dogBreed);
+  await expect(pgEdit.dogBirthdayField()).toHaveValue(dogBirthday);
+  await expect(pgEdit.dogWeightField()).toHaveValue(
     parseFloat(dogWeightKg).toString(),
   );
-  await expect(pg2.saveButton()).toBeVisible();
-  await pg2.dogNameField().fill("Thomas Green");
-  await pg2.dogBreedField().fill("Royal Canine");
-  await pg2.dogBirthdayField().fill("1968-08-28");
-  await pg2.dogWeightField().fill("16.827");
-  await pg2.saveButton().click();
+  await expect(pgEdit.saveButton()).toBeVisible();
+  await pgEdit.dogNameField().fill("Thomas Green");
+  await pgEdit.dogBreedField().fill("Royal Canine");
+  await pgEdit.dogBirthdayField().fill("1968-08-28");
+  await pgEdit.dogWeightField().fill("16.827");
+  await pgEdit.saveButton().click();
 
+  // There should be a toast
   const toast = new ToastComponent(context);
   await expect(toast.locator()).toBeVisible();
   await expect(
@@ -43,19 +49,14 @@ test("user can edit dog profile", async ({ page }) => {
     toast.locator().getByText("Saved!", { exact: true }),
   ).not.toBeVisible();
 
-  const pg3 = new UserMyPetsPage(context);
-  await pg3.checkUrl();
-  const pg3card = pg3.dogCardItem("Thomas Green");
-  await expect(pg3card.locator()).toBeVisible();
-  await expect(pg3card.editButton()).toBeVisible();
-  await pg3card.editButton().click();
+  // Should be back at the view dog page.
+  await pgView.checkUrl();
 
-  const pg4 = new UserEditDogPage(context);
-  await pg4.checkUrl();
-  await expect(pg4.dogNameField()).toHaveValue("Thomas Green");
-  await expect(pg4.dogBreedField()).toHaveValue("Royal Canine");
-  await expect(pg4.dogBirthdayField()).toHaveValue("28 Aug 1968");
-  await expect(pg4.dogWeightField()).toHaveValue("16.827");
-
-  // TODO: In future, also check the UserViewDogPage.
+  // Go back to edit page to verify changes.
+  await pgView.editButton().click();
+  await pgEdit.checkUrl();
+  await expect(pgEdit.dogNameField()).toHaveValue("Thomas Green");
+  await expect(pgEdit.dogBreedField()).toHaveValue("Royal Canine");
+  await expect(pgEdit.dogBirthdayField()).toHaveValue("28 Aug 1968");
+  await expect(pgEdit.dogWeightField()).toHaveValue("16.827");
 });

@@ -21,17 +21,19 @@ export default async function Page() {
     );
   }
   return (
-    <div className="m-3">
-      {dogs.map((dog, idx, ary) => (
-        <DogCard
-          key={dog.dogId}
-          dog={dog}
-          cardIdx={idx}
-          isLastCard={idx === ary.length - 1}
-        />
-      ))}
+    <div className="m-3 flex flex-col gap-3">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+        {dogs.map((dog, idx, ary) => (
+          <DogCard
+            key={dog.dogId}
+            dog={dog}
+            cardIdx={idx}
+            isLastCard={idx === ary.length - 1}
+          />
+        ))}
+      </div>
       <BarkButton
-        className="mt-3 w-full"
+        className="w-full md:w-48"
         variant="brandInverse"
         href={RoutePath.USER_ADD_DOG}
       >
