@@ -18,6 +18,12 @@ import { z } from "zod";
 import { BarkButton } from "@/components/bark/bark-button";
 import { BarkH1 } from "@/components/bark/bark-typography";
 import { Result } from "@/lib/utilities/result";
+import { DogProfile } from "@/lib/dog/dog-models";
+import {
+  UTC_DATE_OPTION,
+  formatDateTime,
+  parseDateTime,
+} from "@/lib/utilities/bark-time";
 
 const FORM_SCHEMA = z.object({
   dogName: z.string().min(1, { message: "Name cannot be empty" }),
@@ -45,7 +51,7 @@ const FORM_SCHEMA = z.object({
   dogPreferredVetId: z.string(),
 });
 
-export type DogFormData = z.infer<typeof FORM_SCHEMA>;
+type DogFormData = z.infer<typeof FORM_SCHEMA>;
 
 const EMPTY_VALUES: Partial<DogFormData> = {
   dogName: "",
@@ -55,15 +61,48 @@ const EMPTY_VALUES: Partial<DogFormData> = {
   dogPreferredVetId: "",
 };
 
+function toDogFormData(dogProfile: DogProfile): DogFormData {
+  const { dogBirthday, dogWeightKg, ...otherFields } = dogProfile;
+  // WIP: Add format() to RequiredDateField
+  const dogBirthdayString = formatDateTime(dogBirthday, UTC_DATE_OPTION);
+  const dogWeightKgString = dogWeightKg !== null ? dogWeightKg.toString() : "";
+  const dogFormData: DogFormData = {
+    dogBirthday: dogBirthdayString,
+    dogWeightKg: dogWeightKgString,
+    ...otherFields,
+  };
+  return dogFormData;
+}
+
+function toDogProfile(dogFormData: DogFormData): DogProfile {
+  const {
+    dogBirthday: dogBirthdayString,
+    dogWeightKg: dogWeightKgString,
+    ...otherFields
+  } = dogFormData;
+  // WIP Use RequiredDateField to parse dogBirthday
+  const dogBirthday = parseDateTime(dogBirthdayString, UTC_DATE_OPTION);
+  const dogWeightKg = parseFloat(dogWeightKgString);
+  const dogProfile: DogProfile = {
+    dogBirthday,
+    dogWeightKg,
+    ...otherFields,
+  };
+  return dogProfile;
+}
+
 export function GeneralDogForm(props: {
   formTitle: string;
   vetOptions: BarkFormOption[];
-  prefillData?: DogFormData;
-  handleSubmit: (values: DogFormData) => Promise<Result<true, string>>;
+  prefillData?: DogProfile;
+  handleSubmit: (dogProfile: DogProfile) => Promise<Result<true, string>>;
   handleCancel: () => Promise<void>;
 }) {
   const { formTitle, vetOptions, prefillData, handleSubmit, handleCancel } =
     props;
+  const prefillFormValues = prefillData
+    ? toDogFormData(prefillData)
+    : undefined;
   const form = useForm<DogFormData>({
     resolver: zodResolver(
       FORM_SCHEMA.extend({
@@ -74,11 +113,12 @@ export function GeneralDogForm(props: {
             : z.string().min(1, { message: "Please select an option" }),
       }),
     ),
-    defaultValues: { ...EMPTY_VALUES, ...prefillData },
+    defaultValues: { ...EMPTY_VALUES, ...prefillFormValues },
   });
 
   async function onSubmit(values: DogFormData) {
-    const { error } = await handleSubmit(values);
+    const dogProfile = toDogProfile(values);
+    const { error } = await handleSubmit(dogProfile);
     if (error !== undefined) {
       // TODO: The GeneralDogForm needs to specify the specifc types of errors
       // because it is responsible for how the errors need to be displayed.

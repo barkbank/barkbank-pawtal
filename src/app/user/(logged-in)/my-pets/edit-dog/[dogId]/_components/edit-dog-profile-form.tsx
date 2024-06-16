@@ -2,20 +2,12 @@
 
 import { BarkFormOption } from "@/components/bark/bark-form";
 import { DogProfile } from "@/lib/dog/dog-models";
-import {
-  UTC_DATE_OPTION,
-  formatDateTime,
-  parseDateTime,
-} from "@/lib/utilities/bark-time";
 import { useRouter } from "next/navigation";
 import { RoutePath } from "@/lib/route-path";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { postDogProfileUpdate } from "../_actions/post-dog-profile-update";
 import { CODE } from "@/lib/utilities/bark-code";
-import {
-  DogFormData,
-  GeneralDogForm,
-} from "../../../_components/general-dog-form";
+import { GeneralDogForm } from "../../../_components/general-dog-form";
 import { useToast } from "@/components/ui/use-toast";
 import { MINIMUM_TOAST_MILLIS } from "@/app/_lib/toast-delay";
 import { asyncSleep } from "@/lib/utilities/async-sleep";
@@ -30,9 +22,8 @@ export default function EditDogProfileForm(props: {
   const { vetOptions, dogId, existingDogProfile } = props;
 
   async function handleValues(
-    values: DogFormData,
+    dogProfile: DogProfile,
   ): Promise<Result<true, string>> {
-    const dogProfile = toDogProfile(values);
     const { dogName } = dogProfile;
 
     toast({
@@ -65,47 +56,13 @@ export default function EditDogProfileForm(props: {
     router.back();
   }
 
-  const prefillData = toDogFormData(existingDogProfile);
-
-  // WIP: This will break when we update GeneralDogForm
   return (
     <GeneralDogForm
       formTitle="Edit Dog"
       vetOptions={vetOptions}
       handleSubmit={handleValues}
       handleCancel={handleCancel}
-      prefillData={prefillData}
+      prefillData={existingDogProfile}
     />
   );
-}
-
-// WIP: Copy toDogFormData and toDogProfile into GeneralDogForm so the IO for GeneralDogForm is in terms of DogProfile.
-// WIP: Delete this when no longer needed.
-function toDogFormData(dogProfile: DogProfile): DogFormData {
-  const { dogBirthday, dogWeightKg, ...otherFields } = dogProfile;
-  const dogBirthdayString = formatDateTime(dogBirthday, UTC_DATE_OPTION);
-  const dogWeightKgString = dogWeightKg !== null ? dogWeightKg.toString() : "";
-  const dogFormData: DogFormData = {
-    dogBirthday: dogBirthdayString,
-    dogWeightKg: dogWeightKgString,
-    ...otherFields,
-  };
-  return dogFormData;
-}
-
-// WIP: Delete this when no longer needed.
-function toDogProfile(dogFormData: DogFormData): DogProfile {
-  const {
-    dogBirthday: dogBirthdayString,
-    dogWeightKg: dogWeightKgString,
-    ...otherFields
-  } = dogFormData;
-  const dogBirthday = parseDateTime(dogBirthdayString, UTC_DATE_OPTION);
-  const dogWeightKg = parseFloat(dogWeightKgString);
-  const dogProfile: DogProfile = {
-    dogBirthday,
-    dogWeightKg,
-    ...otherFields,
-  };
-  return dogProfile;
 }
