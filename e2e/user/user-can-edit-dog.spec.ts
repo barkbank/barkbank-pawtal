@@ -20,7 +20,9 @@ test("user can edit dog profile", async ({ page }) => {
   await expect(pg2.dogNameField()).toHaveValue(dogName);
   await expect(pg2.dogBreedField()).toHaveValue(dogBreed);
   await expect(pg2.dogBirthdayField()).toHaveValue(dogBirthday);
-  await expect(pg2.dogWeightField()).toHaveValue(dogWeightKg);
+  await expect(pg2.dogWeightField()).toHaveValue(
+    parseFloat(dogWeightKg).toString(),
+  );
   await expect(pg2.saveButton()).toBeVisible();
   await pg2.dogNameField().fill("Thomas Green");
   await pg2.dogBreedField().fill("Royal Canine");
