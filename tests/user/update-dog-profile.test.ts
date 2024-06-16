@@ -10,7 +10,10 @@ import {
   insertVet,
 } from "../_fixtures";
 import { DogProfile } from "@/lib/dog/dog-models";
-import { UTC_DATE_OPTION, parseDateTime } from "@/lib/utilities/bark-time";
+import {
+  SINGAPORE_TIME_ZONE,
+  parseCommonDate,
+} from "@/lib/utilities/bark-time";
 import { CALL_OUTCOME, DOG_ANTIGEN_PRESENCE } from "@/lib/data/db-enums";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
@@ -111,7 +114,7 @@ function _getDogProfile(overrides?: Partial<DogProfile>): DogProfile {
   const base: DogProfile = {
     dogName: "updated name",
     dogBreed: "updated breed",
-    dogBirthday: parseDateTime("1970-01-01", UTC_DATE_OPTION),
+    dogBirthday: parseCommonDate("1970-01-01", SINGAPORE_TIME_ZONE),
     dogGender: DOG_GENDER.MALE,
     dogWeightKg: 50,
     dogDea1Point1: DOG_ANTIGEN_PRESENCE.UNKNOWN,

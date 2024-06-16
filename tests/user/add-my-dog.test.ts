@@ -6,7 +6,10 @@ import {
   insertUser,
   insertVet,
 } from "../_fixtures";
-import { UTC_DATE_OPTION, parseDateTime } from "@/lib/utilities/bark-time";
+import {
+  SINGAPORE_TIME_ZONE,
+  parseCommonDate,
+} from "@/lib/utilities/bark-time";
 import { DOG_ANTIGEN_PRESENCE } from "@/lib/data/db-enums";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
@@ -71,7 +74,7 @@ describe("addMyDog", () => {
 const DOG_PROFILE_WITHOUT_VET: DogProfile = {
   dogName: "Hippo",
   dogBreed: "Greyhound",
-  dogBirthday: parseDateTime("2023-01-01", UTC_DATE_OPTION),
+  dogBirthday: parseCommonDate("2023-01-01", SINGAPORE_TIME_ZONE),
   dogGender: DOG_GENDER.MALE,
   dogWeightKg: 68,
   dogEverPregnant: YES_NO_UNKNOWN.NO,
