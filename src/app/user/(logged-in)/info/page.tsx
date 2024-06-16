@@ -195,8 +195,17 @@ const faqs = [
     ),
   },
   {
-    question: `The Question`,
-    answer: <p>The Answer</p>,
+    question: `What if my dog is unwell after an appointment has been scheduled?`,
+    answer: (
+      <p>
+        If your dog is unwell after scheduling an appointment, it is important
+        to either reschedule the appointment with the vet or change the
+        participation status if the dog will be unavailable for more than 2
+        weeks. This ensures that your dog receives the necessary care and rest,
+        and the donation schedule is updated accordingly to reflect their
+        current health status.
+      </p>
+    ),
   },
   {
     question: `The Question`,
