@@ -98,9 +98,8 @@ export function GeneralDogForm(props: {
 
         <BarkFormInput form={form} label="Breed" name="dogBreed" type="text" />
 
-        {/* WIP: Change to normal input */}
         {/* WIP: Coordinate this description with that in pet form */}
-        <BarkFormDateInput
+        <BarkFormInput
           form={form}
           label="Birthday"
           name="dogBirthday"
