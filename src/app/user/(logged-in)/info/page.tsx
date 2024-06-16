@@ -217,6 +217,28 @@ const faqs = [
     ),
   },
   {
+    question: `How can I delete my account?`,
+    answer: (
+      <p>
+        You can write in to hello@barkbank.co to request for your account to be
+        deleted. We will guide you through the process and address any concerns
+        you may have.
+      </p>
+    ),
+  },
+  {
+    question: `The Question`,
+    answer: <p>The Answer</p>,
+  },
+  {
+    question: `The Question`,
+    answer: <p>The Answer</p>,
+  },
+  {
+    question: `The Question`,
+    answer: <p>The Answer</p>,
+  },
+  {
     question: `The Question`,
     answer: <p>The Answer</p>,
   },
