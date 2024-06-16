@@ -92,17 +92,6 @@ export default function PetForm(props: {
           name="dogName"
         />
 
-        {/* WIP: Delete this commented out block */}
-        {/* <BarkFormSelect
-          form={form}
-          label="What's your dog's breed?"
-          name="dogBreed"
-          options={breeds.map((breed) => ({
-            label: breed.dog_breed,
-            value: breed.dog_breed,
-          }))}
-        /> */}
-
         {/* TODO: Support auto-complete */}
         <BarkFormInput
           form={form}
