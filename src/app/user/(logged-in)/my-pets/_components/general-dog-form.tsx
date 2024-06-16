@@ -2,7 +2,6 @@
 
 import {
   BarkForm,
-  BarkFormDateInput,
   BarkFormError,
   BarkFormInput,
   BarkFormOption,
