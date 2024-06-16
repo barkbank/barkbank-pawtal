@@ -313,6 +313,10 @@ export function BarkFormTextArea(props: {
   );
 }
 
+// WIP: Remove BarkFormButton
+/**
+ * @deprecated Use BarkButton
+ */
 export function BarkFormButton(props: {
   children: React.ReactNode;
   className?: string;

@@ -2,12 +2,10 @@
 
 import {
   BarkForm,
-  BarkFormButton,
   BarkFormHeader,
   BarkFormInput,
   BarkFormOption,
   BarkFormRadioGroup,
-  BarkFormSubmitButton,
 } from "@/components/bark/bark-form";
 import { isValidWeightKg } from "@/lib/utilities/bark-utils";
 import { DOG_ANTIGEN_PRESENCE } from "@/lib/data/db-enums";
@@ -18,6 +16,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { RequiredDateField } from "@/app/_lib/field-schemas/required-date-field";
+import { BarkButton } from "@/components/bark/bark-button";
 
 const FORM_SCHEMA = z.object({
   dogName: z.string().min(1, { message: "Name cannot be empty" }),
@@ -198,16 +197,20 @@ export default function PetForm(props: {
           />
         )}
 
-        <div className="flex gap-2">
+        <div className="mt-3 flex gap-3">
           {/* WIP: Replace this with BarkButton */}
-          <BarkFormButton onClick={onPrevClick} className="w-full">
+          <BarkButton
+            variant="brandInverse"
+            onClick={onPrevClick}
+            className="w-full"
+          >
             {prevLabel}
-          </BarkFormButton>
+          </BarkButton>
 
           {/* WIP: Replace this with BarkButton */}
-          <BarkFormSubmitButton className="w-full">
+          <BarkButton variant="brand" type="submit" className="w-full">
             {nextLabel}
-          </BarkFormSubmitButton>
+          </BarkButton>
         </div>
       </BarkForm>
     </>
