@@ -3,6 +3,7 @@ import { PomContext } from "./pom/core/pom-object";
 import { HeaderComponent } from "./pom/layout/header-component";
 
 export function getTestBirthday(ageYears: number): string {
+  // WIP: Change this to return 18 Aug 2022 style dates. So we know where all the validation needs to update.
   const ts = new Date();
   const y = ts.getUTCFullYear() - ageYears;
   const m = ts.getUTCMonth() + 1;
