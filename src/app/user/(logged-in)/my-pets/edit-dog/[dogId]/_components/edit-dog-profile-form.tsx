@@ -78,6 +78,7 @@ export default function EditDogProfileForm(props: {
   );
 }
 
+// WIP: Move toDogFormData and toDogProfile into GeneralDogForm so the IO for GeneralDogForm is in terms of DogProfile.
 function toDogFormData(dogProfile: DogProfile): DogFormData {
   const { dogBirthday, dogWeightKg, ...otherFields } = dogProfile;
   const dogBirthdayString = formatDateTime(dogBirthday, UTC_DATE_OPTION);
