@@ -1,10 +1,10 @@
 import { RoutePath } from "@/lib/route-path";
-import EditDogProfileForm from "./_components/edit-dog-profile-form";
 import APP from "@/lib/app";
 import { getVetFormOptions } from "@/app/_lib/get-vet-form-options";
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { getDogProfile } from "@/lib/user/actions/get-dog-profile";
+import EditDogProfileForm from "../../_lib/components/edit-dog-profile-form";
 
 export default async function Page(props: { params: { dogId: string } }) {
   const {
