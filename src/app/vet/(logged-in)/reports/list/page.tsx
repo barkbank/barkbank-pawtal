@@ -1,4 +1,3 @@
-import { ReportCard } from "@/app/vet/_lib/components/report-card";
 import { ReportList } from "@/app/vet/_lib/components/report-list";
 import { BarkError } from "@/components/bark/bark-error";
 import APP from "@/lib/app";
