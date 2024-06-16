@@ -335,30 +335,6 @@ export function BarkFormButton(props: {
   );
 }
 
-// WIP: Remove this deprecated function
-/**
- * @deprecated Use BarkButton type="submit" instead. BarkFormSubmitButton has a
- * mt-6 that makes it difficult to arrange when it is grouped with other buttons
- * (e.g. Cancel).
- */
-export function BarkFormSubmitButton(props: {
-  className?: string;
-  children: React.ReactNode;
-  disabled?: boolean;
-}) {
-  const { disabled, children, className } = props;
-  return (
-    <Button
-      type="submit"
-      variant="brand"
-      className={cn("mt-6", className)}
-      disabled={disabled ?? false}
-    >
-      {children}
-    </Button>
-  );
-}
-
 export function BarkFormSelect(props: {
   form: UseFormReturn<any>;
   options: BarkFormOption[];
