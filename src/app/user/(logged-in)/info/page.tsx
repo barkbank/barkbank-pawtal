@@ -208,8 +208,13 @@ const faqs = [
     ),
   },
   {
-    question: `The Question`,
-    answer: <p>The Answer</p>,
+    question: `Who should I reach out to for additional questions?`,
+    answer: (
+      <p>
+        Please email hello@barkbank.co if you have more questions. We are here
+        to assist you with any inquiries you may have.
+      </p>
+    ),
   },
   {
     question: `The Question`,
