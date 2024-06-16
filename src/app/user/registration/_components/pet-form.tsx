@@ -99,12 +99,11 @@ export default function PetForm(props: {
           type="text"
         />
 
-        {/* WIP: Coordinate this description with that in general dog form */}
         <BarkFormInput
           form={form}
           label="When is it's birthday?"
           name="dogBirthday"
-          description="Please provide a date (e.g. 18 Aug 2018)"
+          description="Please provide a date (e.g. 18 Aug 2018). It is okay to provide an approximate date."
         />
 
         <BarkFormRadioGroup
