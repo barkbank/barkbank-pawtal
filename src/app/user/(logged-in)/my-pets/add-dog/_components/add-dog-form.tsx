@@ -2,7 +2,7 @@
 
 import { BarkFormOption } from "@/components/bark/bark-form";
 import { DogProfile } from "@/lib/dog/dog-models";
-import { postDogProfile } from "../_actions/post-dog-profile";
+import { postDogProfile } from "../../_lib/actions/post-dog-profile";
 import { useRouter } from "next/navigation";
 import { RoutePath } from "@/lib/route-path";
 import { Err, Ok, Result } from "@/lib/utilities/result";
