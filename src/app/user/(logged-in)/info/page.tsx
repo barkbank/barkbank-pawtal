@@ -75,9 +75,9 @@ const faqs = [
     question: `What does "Unknown" eligibility status signify?`,
     answer: (
       <p>
-        The "Unknown" status means that it is not confirmed whether your dog is
-        permanently ineligible due to unknown pregnancy or blood transfusion
-        history, or unspecified breed and weight.
+        The &ldquo;Unknown&rdquo; status means that it is not confirmed whether
+        your dog is permanently ineligible due to unknown pregnancy or blood
+        transfusion history, or unspecified breed and weight.
       </p>
     ),
   },
@@ -103,44 +103,71 @@ const faqs = [
           active participation. Criteria for canine blood donation:
         </p>
         <p>
-          <b>Weight</b>: Dogs should weigh at least 25kg but not be overweight.
+          <b>Weight:</b> Dogs should weigh at least 25kg but not be overweight.
         </p>
         <p>
-          <b>Age</b>: Dogs between 1 to 8 years old are generally eligible.
+          <b>Age:</b> Dogs between 1 to 8 years old are generally eligible.
         </p>
         <p>
-          <b>Temperament</b>: Donor dogs should have a good and calm temperament
+          <b>Temperament:</b> Donor dogs should have a good and calm temperament
           to minimise stress during the process.
         </p>
         <p>
-          <b>Health</b>: They should be healthy with no underlying health
+          <b>Health:</b> They should be healthy with no underlying health
           conditions.
         </p>
         <p>
-          <b>Blood Type</b>: Dogs must have DEA 1.1 or 1.2 negative blood type.
+          <b>Blood Type:</b> Dogs must have DEA 1.1 or 1.2 negative blood type.
         </p>
         <p>
-          <b>Vaccinations</b>: Donor dogs should be up to date on vaccinations.
+          <b>Vaccinations:</b> Donor dogs should be up to date on vaccinations.
         </p>
         <p>
-          <b>Parasite Prevention</b>: They should be on regular parasite
+          <b>Parasite Prevention:</b> They should be on regular parasite
           prevention medication for heart worm, tick, and flea control.
         </p>
         <p>
-          <b>Blood Transfusion</b>: Dogs that have received a blood transfusion
+          <b>Blood Transfusion:</b> Dogs that have received a blood transfusion
           are not eligible to donate.
         </p>
         <p>
-          <b>Donation Frequency</b>: A healthy dog can donate blood every 3
+          <b>Donation Frequency:</b> A healthy dog can donate blood every 3
           months, which equals up to 4 times a year.
         </p>
         <p>
-          <b>Gender</b>: Male dogs or nulliparous (never pregnant) female dogs
+          <b>Gender:</b> Male dogs or nulliparous (never pregnant) female dogs
           are typically accepted.
         </p>
         <p>
-          <b>Medications</b>: Donor dogs should not be on any medications that
+          <b>Medications:</b> Donor dogs should not be on any medications that
           could pose a problem for the recipient.
+        </p>
+      </>
+    ),
+  },
+  {
+    question: `What is the Bark Bank blood donation process?`,
+    answer: (
+      <>
+        <p>
+          <b>Step 1 — Registration:</b> Begin by registering your dog on Bark
+          Bank&apos;s Canine Blood Registry Pawtal, completing your contact
+          information, providing basic medical details about your dog, and
+          selecting your preferred vet donation point.
+        </p>
+        <p>
+          <b>Step 2 — Appointment scheduling:</b> Once registered, your vet will
+          schedule an appointment for health screening, blood profiling test,
+          and blood donation.
+        </p>
+        <p>
+          <b>Step 3 — Vet appointment:</b> Head to your scheduled vet
+          appointment with your dog at the designated time for a health check
+          and blood donation
+        </p>
+        <p>
+          <b>Step 4 — Medical Report:</b> Your vet will update your dog&apos;s
+          medical details directly on the Pawtal after the appointment.
         </p>
       </>
     ),
