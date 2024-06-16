@@ -10,6 +10,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import Link from "next/link";
 
 const criterias = [
   { text: ">20KG in weight", imgUrl: IMG_PATH.WEIGHING_MACHINE },
@@ -59,6 +60,15 @@ const registrationSteps = [
     text: "Your vet will update your dog’s medical details directly on the Pawtal after the appointment.",
   },
 ];
+
+const ContactEmail = () => (
+  <Link href="mailto:hello@barkbank.co">hello@barkbank.co</Link>
+);
+const PrivacyPolicy = () => (
+  <Link href="https://www.barkbank.co/privacy-policy">
+    https://www.barkbank.co/privacy-policy
+  </Link>
+);
 
 const faqs = [
   {
@@ -211,8 +221,8 @@ const faqs = [
     question: `Who should I reach out to for additional questions?`,
     answer: (
       <p>
-        Please email hello@barkbank.co if you have more questions. We are here
-        to assist you with any inquiries you may have.
+        Please email <ContactEmail /> if you have more questions. We are here to
+        assist you with any inquiries you may have.
       </p>
     ),
   },
@@ -220,15 +230,20 @@ const faqs = [
     question: `How can I delete my account?`,
     answer: (
       <p>
-        You can write in to hello@barkbank.co to request for your account to be
+        You can write in to <ContactEmail /> to request for your account to be
         deleted. We will guide you through the process and address any concerns
         you may have.
       </p>
     ),
   },
   {
-    question: `The Question`,
-    answer: <p>The Answer</p>,
+    question: `What is the Bark Bank privacy policy?`,
+    answer: (
+      <p>
+        The Bark Bank privacy policy details how we handle your data and protect
+        your privacy. You can review our policy at <PrivacyPolicy />.
+      </p>
+    ),
   },
   {
     question: `The Question`,
