@@ -7,7 +7,7 @@ import { RoutePath } from "@/lib/route-path";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { postDogProfileUpdate } from "../_actions/post-dog-profile-update";
 import { CODE } from "@/lib/utilities/bark-code";
-import { GeneralDogForm } from "../../../_components/general-dog-form";
+import { GeneralDogForm } from "../../../_lib/components/general-dog-form";
 import { useToast } from "@/components/ui/use-toast";
 import { MINIMUM_TOAST_MILLIS } from "@/app/_lib/toast-delay";
 import { asyncSleep } from "@/lib/utilities/async-sleep";
