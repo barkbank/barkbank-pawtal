@@ -114,7 +114,7 @@ export function BarkFormInput(props: {
   );
 }
 
-// TODO: Deprecate this. Use BarkFormInput and define a DateField in field-schemas.
+// WIP: Deprecate this. Use BarkFormInput and define a DateField in field-schemas.
 // Field value should be a YYYY-MM-DD string.
 export function BarkFormDateInput(props: {
   form: UseFormReturn<any>;
@@ -406,7 +406,7 @@ export function BarkFormButton(props: {
   );
 }
 
-// TODO: Remove this deprecated function
+// WIP: Remove this deprecated function
 /**
  * @deprecated Use BarkButton type="submit" instead. BarkFormSubmitButton has a
  * mt-6 that makes it difficult to arrange when it is grouped with other buttons

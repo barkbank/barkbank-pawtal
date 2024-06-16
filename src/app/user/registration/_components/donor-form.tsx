@@ -30,6 +30,7 @@ import { CODE } from "@/lib/utilities/bark-code";
 const FORM_SCHEMA = z.object({
   dogName: z.string(),
   dogBreed: z.string(),
+  // WIP: dogBirthday field here.
   dogBirthday: z.string(),
   dogGender: z.string(),
   dogWeightKg: z.string(),

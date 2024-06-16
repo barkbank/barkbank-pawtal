@@ -22,6 +22,7 @@ import { z } from "zod";
 const FORM_SCHEMA = z.object({
   dogName: z.string().min(1, { message: "Name cannot be empty" }),
   dogBreed: z.string(),
+  // WIP: dogBirthday field here.
   dogBirthday: z
     .string()
     .min(1, { message: "Please fill in a birthday" })
@@ -103,7 +104,7 @@ export default function PetForm(props: {
           name="dogName"
         />
 
-        {/* TODO: Make better autocomplete before using. */}
+        {/* WIP: Delete this commented out block */}
         {/* <BarkFormSelect
           form={form}
           label="What's your dog's breed?"
@@ -114,6 +115,7 @@ export default function PetForm(props: {
           }))}
         /> */}
 
+        {/* TODO: Support auto-complete */}
         <BarkFormInput
           form={form}
           label="What's your dog's breed?"
@@ -218,10 +220,12 @@ export default function PetForm(props: {
         )}
 
         <div className="flex gap-2">
+          {/* WIP: Replace this with BarkButton */}
           <BarkFormButton onClick={onPrevClick} className="w-full">
             {prevLabel}
           </BarkFormButton>
 
+          {/* WIP: Replace this with BarkButton */}
           <BarkFormSubmitButton className="w-full">
             {nextLabel}
           </BarkFormSubmitButton>
