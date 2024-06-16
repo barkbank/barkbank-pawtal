@@ -22,7 +22,10 @@ const criterias = [
     text: "Healthy with no underlying health conditions",
     imgUrl: IMG_PATH.HEALTH_CARE,
   },
-  { text: "DEA 1.1 or 1.2 negative blood type", imgUrl: IMG_PATH.BLOOD_TEST },
+  {
+    text: "Have not donated blood in the last 3 months",
+    imgUrl: IMG_PATH.BLOOD_TEST,
+  },
   {
     text: "Up to date on vaccinations & parasite prevention",
     imgUrl: IMG_PATH.VACCINE,
@@ -33,7 +36,7 @@ const criterias = [
     imgUrl: IMG_PATH.DRUGS,
   },
   {
-    text: "Never received a blood transfusion, donated blood >3 months ago",
+    text: "Never received a blood transfusion",
     imgUrl: IMG_PATH.BLOOD_TRANSFUSION,
   },
 ];
