@@ -3,7 +3,7 @@ import {
   EncryptedBarkReport,
   EncryptedBarkReportSchema,
 } from "../models/encrypted-bark-report";
-import { CTE_ENCRYPTED_BARK_REPORT } from "./cte-encrypted-bark-report";
+import { SQL_ENCRYPTED_BARK_REPORT } from "./sql-encrypted-bark-report";
 
 export async function selectReportsByVetId(
   dbContext: DbContext,
@@ -12,7 +12,7 @@ export async function selectReportsByVetId(
   const { vetId } = args;
   const sql = `
   SELECT *
-  FROM (${CTE_ENCRYPTED_BARK_REPORT}) as tReport
+  FROM (${SQL_ENCRYPTED_BARK_REPORT}) as tReport
   WHERE tReport."vetId" = $1
   ORDER BY tReport."visitTime" DESC
   `;

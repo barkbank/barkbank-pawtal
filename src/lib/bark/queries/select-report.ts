@@ -3,7 +3,7 @@ import {
   EncryptedBarkReport,
   EncryptedBarkReportSchema,
 } from "../models/encrypted-bark-report";
-import { CTE_ENCRYPTED_BARK_REPORT } from "./cte-encrypted-bark-report";
+import { SQL_ENCRYPTED_BARK_REPORT } from "./sql-encrypted-bark-report";
 
 export async function selectReport(
   dbContext: DbContext,
@@ -12,7 +12,7 @@ export async function selectReport(
   const { reportId } = args;
   const sql = `
   SELECT *
-  FROM (${CTE_ENCRYPTED_BARK_REPORT}) as tReport
+  FROM (${SQL_ENCRYPTED_BARK_REPORT}) as tReport
   WHERE tReport."reportId" = $1
   `;
   const res = await dbQuery<EncryptedBarkReport>(dbContext, sql, [reportId]);
