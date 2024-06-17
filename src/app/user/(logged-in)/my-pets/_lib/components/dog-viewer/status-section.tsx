@@ -2,7 +2,7 @@ import { BarkDogAvatar } from "@/components/bark/bark-dog-avatar";
 import { BarkStatusBlock } from "@/components/bark/bark-status-block";
 import { DogViewerData } from "./dog-viewer-data";
 
-export function StatusCard(props: { data: DogViewerData }) {
+export function StatusSection(props: { data: DogViewerData }) {
   const { dogName, dogGender } = props.data.dogProfile;
   const { dogStatuses, dogAppointments } = props.data;
   return (
