@@ -1,8 +1,4 @@
 import { getAuthenticatedUserActor } from "@/lib/auth";
-import { DogPreferredVet } from "@/lib/bark/models/dog-preferred-vet";
-import { DogAppointment } from "@/lib/bark/models/dog-appointment";
-import { DogProfile } from "@/lib/bark/models/dog-profile";
-import { DogStatuses } from "@/lib/bark/models/dog-statuses";
 import { RoutePath } from "@/lib/route-path";
 import { getDogPreferredVet } from "@/lib/user/actions/get-dog-preferred-vet";
 import { getDogProfile } from "@/lib/user/actions/get-dog-profile";
@@ -14,18 +10,37 @@ import { redirect } from "next/navigation";
 import { DogViewer } from "../../_lib/components/dog-viewer/dog-viewer";
 import APP from "@/lib/app";
 import { opFetchDogAppointmentsByDogId } from "@/lib/bark/operations/op-fetch-dog-appointments-by-dog-id";
+import { DogViewerData } from "../../_lib/components/dog-viewer/dog-viewer-data";
 
-async function getPageData(
+export default async function Page(props: { params: { dogId: string } }) {
+  const { dogId } = props.params;
+  const actor = await getAuthenticatedUserActor();
+  if (actor === null) {
+    redirect(RoutePath.USER_LOGIN_PAGE);
+  }
+  const { result, error } = await getDogViewerData(actor, dogId);
+  if (error !== undefined) {
+    redirect(RoutePath.USER_MY_PETS);
+  }
+  const { dogProfile, dogStatuses, dogAppointments, dogPreferredVet } = result;
+
+  return (
+    <DogViewer
+      dogId={dogId}
+      dogProfile={dogProfile}
+      dogStatuses={dogStatuses}
+      dogAppointments={dogAppointments}
+      dogPreferredVet={dogPreferredVet}
+    />
+  );
+}
+
+async function getDogViewerData(
   actor: UserActor,
   dogId: string,
 ): Promise<
   Result<
-    {
-      dogProfile: DogProfile;
-      dogStatuses: DogStatuses;
-      dogAppointments: DogAppointment[];
-      dogPreferredVet: DogPreferredVet | null;
-    },
+    DogViewerData,
     | typeof CODE.ERROR_DOG_NOT_FOUND
     | typeof CODE.ERROR_WRONG_OWNER
     | typeof CODE.DB_QUERY_FAILURE
@@ -33,6 +48,7 @@ async function getPageData(
     | typeof CODE.FAILED
   >
 > {
+  const actorUserId = actor.getUserId();
   const context = await APP.getBarkContext();
   const [
     resDogProfile,
@@ -44,7 +60,7 @@ async function getPageData(
     getDogStatuses(actor, dogId),
     opFetchDogAppointmentsByDogId(context, {
       dogId,
-      actorUserId: actor.getUserId(),
+      actorUserId,
     }),
     getDogPreferredVet(actor, dogId),
   ]);
@@ -62,32 +78,10 @@ async function getPageData(
     return Err(resDogPreferredVet.error);
   }
   return Ok({
+    dogId,
     dogProfile: resDogProfile.result,
     dogStatuses: resDogStatuses.result,
     dogAppointments: resDogAppointments.result.appointments,
     dogPreferredVet: resDogPreferredVet.result,
   });
-}
-
-export default async function Page(props: { params: { dogId: string } }) {
-  const { dogId } = props.params;
-  const actor = await getAuthenticatedUserActor();
-  if (actor === null) {
-    redirect(RoutePath.USER_LOGIN_PAGE);
-  }
-  const { result, error } = await getPageData(actor, dogId);
-  if (error !== undefined) {
-    redirect(RoutePath.USER_MY_PETS);
-  }
-  const { dogProfile, dogStatuses, dogAppointments, dogPreferredVet } = result;
-
-  return (
-    <DogViewer
-      dogId={dogId}
-      dogProfile={dogProfile}
-      dogStatuses={dogStatuses}
-      dogAppointments={dogAppointments}
-      dogPreferredVet={dogPreferredVet}
-    />
-  );
 }
