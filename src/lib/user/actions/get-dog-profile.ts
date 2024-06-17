@@ -1,11 +1,10 @@
 import { dbResultQuery } from "@/lib/data/db-utils";
 import { UserActor } from "../user-actor";
-import { DogProfile } from "@/lib/bark/models/dog-profile";
+import { DogProfile, DogProfileSchema } from "@/lib/bark/models/dog-profile";
 import { Err, Ok, Result } from "@/lib/utilities/result";
-import { DogAntigenPresence } from "@/lib/bark/enums/dog-antigen-presence";
-import { YesNoUnknown } from "@/lib/bark/enums/yes-no-unknown";
-import { DogGender } from "@/lib/bark/enums/dog-gender";
 import { CODE } from "@/lib/utilities/bark-code";
+import { EncryptedDogProfileSchema } from "@/lib/bark/models/encrypted-dog-profile";
+import { z } from "zod";
 
 export async function getDogProfile(
   actor: UserActor,
@@ -44,18 +43,10 @@ export async function getDogProfile(
   ) as tPref on tDog.dog_id = tPref.dog_id
   WHERE tDog.dog_id = $1
   `;
-  type Row = {
-    dogOwnerId: string;
-    dogEncryptedOii: string;
-    dogBreed: string;
-    dogBirthday: Date;
-    dogGender: DogGender;
-    dogWeightKg: number | null;
-    dogDea1Point1: DogAntigenPresence;
-    dogEverPregnant: YesNoUnknown;
-    dogEverReceivedTransfusion: YesNoUnknown;
-    dogPreferredVetId: string;
-  };
+  const RowSchema = EncryptedDogProfileSchema.extend({
+    dogOwnerId: z.string(),
+  });
+  type Row = z.infer<typeof RowSchema>;
   const { result: res, error } = await dbResultQuery<Row>(dbPool, sql, [dogId]);
   if (error !== undefined) {
     return Err(error);
@@ -71,5 +62,5 @@ export async function getDogProfile(
     dogEncryptedOii,
   });
   const profile: DogProfile = { dogName, ...otherFields };
-  return Ok(profile);
+  return Ok(DogProfileSchema.parse(profile));
 }
