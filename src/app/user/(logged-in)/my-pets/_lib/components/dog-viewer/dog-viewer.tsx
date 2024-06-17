@@ -45,8 +45,9 @@ function Warning(props: { children: React.ReactNode; icon: string }) {
 }
 
 export function DogViewer(props: { data: DogViewerData }) {
+  const { data } = props;
   const { dogId, dogProfile, dogStatuses, dogAppointments, dogPreferredVet } =
-    props.data;
+    data;
   const {
     dogName,
     dogGender,
