@@ -14,7 +14,7 @@ import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
 import { USER_RESIDENCY } from "@/lib/data/db-enums";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
-import { MEDICAL_STATUS } from "@/lib/data/db-enums";
+import { MEDICAL_STATUS } from "@/lib/bark/enums/medical-status";
 import { PROFILE_STATUS } from "@/lib/bark/enums/profile-status";
 import { SERVICE_STATUS } from "@/lib/bark/enums/service-status";
 import { REPORTED_INELIGIBILITY } from "@/lib/bark/enums/reported-ineligibility";

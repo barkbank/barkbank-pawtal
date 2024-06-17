@@ -1,8 +1,5 @@
-import {
-  SCHEDULING_STATUS,
-  PARTICIPATION_STATUS,
-  MEDICAL_STATUS,
-} from "@/lib/data/db-enums";
+import { SCHEDULING_STATUS, PARTICIPATION_STATUS } from "@/lib/data/db-enums";
+import { MEDICAL_STATUS } from "@/lib/bark/enums/medical-status";
 import { PROFILE_STATUS } from "@/lib/bark/enums/profile-status";
 import { SERVICE_STATUS } from "@/lib/bark/enums/service-status";
 import { getHighlightedStatus } from "@/lib/dog/get-highlighted-status";

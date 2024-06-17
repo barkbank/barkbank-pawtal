@@ -1,14 +1,5 @@
 import { ObjectValues } from "../utilities/object-values";
 
-export const MEDICAL_STATUS = {
-  UNKNOWN: "UNKNOWN",
-  PERMANENTLY_INELIGIBLE: "PERMANENTLY_INELIGIBLE",
-  TEMPORARILY_INELIGIBLE: "TEMPORARILY_INELIGIBLE",
-  ELIGIBLE: "ELIGIBLE",
-} as const;
-
-export type MedicalStatus = ObjectValues<typeof MEDICAL_STATUS>;
-
 export const PARTICIPATION_STATUS = {
   OPTED_OUT: "OPTED_OUT",
   PAUSED: "PAUSED",

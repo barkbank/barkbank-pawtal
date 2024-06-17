@@ -1,8 +1,5 @@
-import {
-  MedicalStatus,
-  ParticipationStatus,
-  UserResidency,
-} from "../data/db-enums";
+import { ParticipationStatus, UserResidency } from "../data/db-enums";
+import { MedicalStatus } from "../bark/enums/medical-status";
 import { ProfileStatus } from "../bark/enums/profile-status";
 import { ServiceStatus } from "../bark/enums/service-status";
 import { DogGender } from "../bark/enums/dog-gender";
