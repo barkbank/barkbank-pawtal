@@ -4,7 +4,6 @@ import { DogAppointment } from "@/lib/bark/models/dog-appointment";
 import { DogProfile } from "@/lib/bark/models/dog-profile";
 import { DogStatuses } from "@/lib/bark/models/dog-statuses";
 import { RoutePath } from "@/lib/route-path";
-import { getDogAppointments } from "@/lib/user/actions/get-dog-appointments";
 import { getDogPreferredVet } from "@/lib/user/actions/get-dog-preferred-vet";
 import { getDogProfile } from "@/lib/user/actions/get-dog-profile";
 import { getDogStatuses } from "@/lib/user/actions/get-dog-statuses";
@@ -13,6 +12,8 @@ import { CODE } from "@/lib/utilities/bark-code";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { redirect } from "next/navigation";
 import { DogViewer } from "../../_lib/components/dog-viewer";
+import APP from "@/lib/app";
+import { opFetchDogAppointmentsByDogId } from "@/lib/bark/operations/op-fetch-dog-appointments-by-dog-id";
 
 async function getPageData(
   actor: UserActor,
@@ -29,8 +30,10 @@ async function getPageData(
     | typeof CODE.ERROR_WRONG_OWNER
     | typeof CODE.DB_QUERY_FAILURE
     | typeof CODE.ERROR_MORE_THAN_ONE_PREFERRED_VET
+    | typeof CODE.FAILED
   >
 > {
+  const context = await APP.getBarkContext();
   const [
     resDogProfile,
     resDogStatuses,
@@ -39,7 +42,10 @@ async function getPageData(
   ] = await Promise.all([
     getDogProfile(actor, dogId),
     getDogStatuses(actor, dogId),
-    getDogAppointments(actor, dogId),
+    opFetchDogAppointmentsByDogId(context, {
+      dogId,
+      actorUserId: actor.getUserId(),
+    }),
     getDogPreferredVet(actor, dogId),
   ]);
 
@@ -58,7 +64,7 @@ async function getPageData(
   return Ok({
     dogProfile: resDogProfile.result,
     dogStatuses: resDogStatuses.result,
-    dogAppointments: resDogAppointments.result,
+    dogAppointments: resDogAppointments.result.appointments,
     dogPreferredVet: resDogPreferredVet.result,
   });
 }
