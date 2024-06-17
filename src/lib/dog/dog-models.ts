@@ -1,4 +1,4 @@
-import { DogAntigenPresence } from "../data/db-enums";
+import { DogAntigenPresence } from "../bark/enums/dog-antigen-presence";
 import { ParticipationStatus } from "../bark/enums/participation-status";
 import { MedicalStatus } from "../bark/enums/medical-status";
 import { ProfileStatus } from "../bark/enums/profile-status";

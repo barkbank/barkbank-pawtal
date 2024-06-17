@@ -9,7 +9,7 @@ import {
   DogSecureOii,
   DogSpec,
 } from "@/lib/data/db-models";
-import { DogAntigenPresence } from "../data/db-enums";
+import { DogAntigenPresence } from "../bark/enums/dog-antigen-presence";
 import { YesNoUnknown } from "../bark/enums/yes-no-unknown";
 import { DogGender } from "../bark/enums/dog-gender";
 import { UserResidency } from "../bark/enums/user-residency";
