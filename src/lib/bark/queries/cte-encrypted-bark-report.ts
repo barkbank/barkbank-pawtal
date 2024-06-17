@@ -1,3 +1,6 @@
+/**
+ * This projects DB tables into the fields for EncryptedBarkReport.
+ */
 export const CTE_ENCRYPTED_BARK_REPORT = `
   SELECT
     tReport.report_id as "reportId",
