@@ -54,7 +54,9 @@ export async function getDogProfile(
   if (res.rows.length === 0) {
     return Err(CODE.ERROR_DOG_NOT_FOUND);
   }
-  const { dogOwnerId, dogEncryptedOii, ...otherFields } = RowSchema.parse(res.rows[0]);
+  const { dogOwnerId, dogEncryptedOii, ...otherFields } = RowSchema.parse(
+    res.rows[0],
+  );
   if (dogOwnerId !== userId) {
     return Err(CODE.ERROR_WRONG_OWNER);
   }

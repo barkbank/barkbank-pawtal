@@ -221,6 +221,7 @@ async function insertPausedProfile(
   const { dogId } = await insertDog(idx, userId, dbPool, {
     dogWeightKg: null,
     dogBreed: "",
+    dogGender: DOG_GENDER.FEMALE,
     dogEverPregnant: YES_NO_UNKNOWN.UNKNOWN,
     dogEverReceivedTransfusion: YES_NO_UNKNOWN.UNKNOWN,
   });
