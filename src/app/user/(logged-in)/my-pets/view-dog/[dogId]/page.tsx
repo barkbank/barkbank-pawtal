@@ -8,7 +8,7 @@ import {
 } from "@/lib/bark/enums/dog-antigen-presence";
 import { YES_NO_UNKNOWN, YesNoUnknown } from "@/lib/bark/enums/yes-no-unknown";
 import { DOG_GENDER, DogGender } from "@/lib/bark/enums/dog-gender";
-import { DogPreferredVet } from "@/lib/dog/dog-models";
+import { DogPreferredVet } from "@/lib/bark/models/dog-preferred-vet";
 import { DogAppointment } from "@/lib/bark/models/dog-appointment";
 import { DogProfile } from "@/lib/bark/models/dog-profile";
 import { DogStatuses } from "@/lib/bark/models/dog-statuses";

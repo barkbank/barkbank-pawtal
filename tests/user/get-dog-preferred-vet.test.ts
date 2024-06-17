@@ -3,7 +3,7 @@ import { withDb } from "../_db_helpers";
 import { getUserActor, insertDog, insertUser, insertVet } from "../_fixtures";
 import { CODE } from "@/lib/utilities/bark-code";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
-import { DogPreferredVet } from "@/lib/dog/dog-models";
+import { DogPreferredVet } from "@/lib/bark/models/dog-preferred-vet";
 
 describe("getDogPreferredVet", () => {
   it("should return ERROR_DOG_NOT_FOUND when dog cannot be found", async () => {
