@@ -9,7 +9,7 @@ import { ServiceStatus } from "@/lib/bark/enums/service-status";
 import { DogGender } from "@/lib/bark/enums/dog-gender";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { CODE } from "@/lib/utilities/bark-code";
-import { DogStatuses } from "@/lib/dog/dog-models";
+import { DogStatuses } from "@/lib/bark/models/dog-statuses";
 
 export async function getMyPets(
   actor: UserActor,

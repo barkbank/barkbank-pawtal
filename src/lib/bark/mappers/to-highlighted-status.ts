@@ -1,4 +1,4 @@
-import { DogStatuses } from "@/lib/dog/dog-models";
+import { DogStatuses } from "../models/dog-statuses";
 import { HighlightedStatus } from "../enums/highlighted-status";
 import { MEDICAL_STATUS } from "../enums/medical-status";
 import { PARTICIPATION_STATUS } from "../enums/participation-status";

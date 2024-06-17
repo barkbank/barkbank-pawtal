@@ -1,7 +1,7 @@
 import { getDogStatuses } from "@/lib/user/actions/get-dog-statuses";
 import { withDb } from "../_db_helpers";
 import { getUserActor, insertDog, insertUser } from "../_fixtures";
-import { DogStatuses } from "@/lib/dog/dog-models";
+import { DogStatuses } from "@/lib/bark/models/dog-statuses";
 import { PARTICIPATION_STATUS } from "@/lib/bark/enums/participation-status";
 import { MEDICAL_STATUS } from "@/lib/bark/enums/medical-status";
 import { PROFILE_STATUS } from "@/lib/bark/enums/profile-status";

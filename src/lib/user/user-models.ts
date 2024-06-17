@@ -5,7 +5,7 @@ import { ProfileStatus } from "../bark/enums/profile-status";
 import { ServiceStatus } from "../bark/enums/service-status";
 import { DogGender } from "../bark/enums/dog-gender";
 import { DogAppointment } from "../dog/dog-models";
-import { DogStatuses } from "../dog/dog-models";
+import { DogStatuses } from "../bark/models/dog-statuses";
 
 export type MyAccount = {
   userCreationTime: Date;

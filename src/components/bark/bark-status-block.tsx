@@ -15,7 +15,8 @@ import {
   BarkStatusTemporarilyIneligible,
   BarkStatusEligible,
 } from "./bark-status";
-import { DogAppointment, DogStatuses } from "@/lib/dog/dog-models";
+import { DogAppointment } from "@/lib/dog/dog-models";
+import { DogStatuses } from "@/lib/bark/models/dog-statuses";
 
 function StatusMessage(props: {
   children: React.ReactNode;

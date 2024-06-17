@@ -12,8 +12,8 @@ import {
   DogAppointment,
   DogPreferredVet,
   DogProfile,
-  DogStatuses,
 } from "@/lib/dog/dog-models";
+import { DogStatuses } from "@/lib/bark/models/dog-statuses";
 import { IMG_PATH } from "@/lib/image-path";
 import { RoutePath } from "@/lib/route-path";
 import { getDogAppointments } from "@/lib/user/actions/get-dog-appointments";
