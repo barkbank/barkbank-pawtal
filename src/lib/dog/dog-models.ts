@@ -1,17 +1,3 @@
-import { YesNoUnknown } from "../bark/enums/yes-no-unknown";
-
-/**
- * The subset of MyDogProfile that can be modified after the first medical
- * report.
- */
-export type SubProfile = {
-  dogName: string;
-  dogWeightKg: number | null;
-  dogEverPregnant: YesNoUnknown;
-  dogEverReceivedTransfusion: YesNoUnknown;
-  dogPreferredVetId: string;
-};
-
 /**
  * An appointment
  */

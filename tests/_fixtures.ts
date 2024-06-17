@@ -76,7 +76,7 @@ import {
 import { VetActor, VetActorConfig } from "@/lib/vet/vet-actor";
 import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
 import { DogProfile } from "@/lib/bark/models/dog-profile";
-import { SubProfile } from "@/lib/dog/dog-models";
+import { SubProfile } from "@/lib/bark/models/sub-profile";
 import { getDogProfile } from "@/lib/user/actions/get-dog-profile";
 import { sprintf } from "sprintf-js";
 
