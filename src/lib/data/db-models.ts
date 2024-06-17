@@ -18,7 +18,8 @@ import { DogAntigenPresence } from "./db-enums";
 import { YesNoUnknown } from "../bark/enums/yes-no-unknown";
 import { DogGender } from "../bark/enums/dog-gender";
 import { UserResidency } from "./db-enums";
-import { CallOutcome, PosNegNil, ReportedIneligibility } from "./db-enums";
+import { PosNegNil, ReportedIneligibility } from "./db-enums";
+import { CallOutcome } from "../bark/enums/call-outcome";
 
 export type UserPii = {
   userName: string;

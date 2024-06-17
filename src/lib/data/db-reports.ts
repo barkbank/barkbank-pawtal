@@ -1,4 +1,4 @@
-import { CallOutcome } from "./db-enums";
+import { CallOutcome } from "../bark/enums/call-outcome";
 import { DbReportGen, DbReportSpec } from "./db-models";
 import { DbContext, dbQuery } from "./db-utils";
 

@@ -1,16 +1,6 @@
 import { z } from "zod";
 import { ObjectValues } from "../utilities/object-values";
 
-export const CALL_OUTCOME = {
-  APPOINTMENT: "APPOINTMENT",
-  DECLINED: "DECLINED",
-  OPT_OUT: "OPT_OUT",
-  REPORTED: "REPORTED",
-  CANCELLED: "CANCELLED",
-} as const;
-
-export type CallOutcome = ObjectValues<typeof CALL_OUTCOME>;
-
 export const POS_NEG_NIL = {
   POSITIVE: "POSITIVE",
   NEGATIVE: "NEGATIVE",

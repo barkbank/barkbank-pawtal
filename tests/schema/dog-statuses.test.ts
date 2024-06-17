@@ -15,13 +15,13 @@ import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
 import { USER_RESIDENCY } from "@/lib/data/db-enums";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import {
-  CALL_OUTCOME,
   MEDICAL_STATUS,
   POS_NEG_NIL,
   PROFILE_STATUS,
   REPORTED_INELIGIBILITY,
   SERVICE_STATUS,
 } from "@/lib/data/db-enums";
+import { CALL_OUTCOME } from "@/lib/bark/enums/call-outcome";
 import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
 
 describe("dog_statuses view", () => {

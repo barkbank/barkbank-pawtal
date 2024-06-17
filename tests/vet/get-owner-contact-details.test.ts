@@ -17,7 +17,7 @@ import {
   OwnerContactDetailsSchema,
 } from "@/lib/bark/models/owner-contact-details";
 import { getOwnerContactDetails } from "@/lib/vet/actions/get-owner-contact-details";
-import { CALL_OUTCOME } from "@/lib/data/db-enums";
+import { CALL_OUTCOME } from "@/lib/bark/enums/call-outcome";
 import { CODE } from "@/lib/utilities/bark-code";
 
 describe("getOwnerContactDetails", () => {

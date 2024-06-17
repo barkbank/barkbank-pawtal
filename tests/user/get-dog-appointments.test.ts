@@ -8,7 +8,7 @@ import {
   insertVet,
 } from "../_fixtures";
 import { CODE } from "@/lib/utilities/bark-code";
-import { CALL_OUTCOME } from "@/lib/data/db-enums";
+import { CALL_OUTCOME } from "@/lib/bark/enums/call-outcome";
 import { DogAppointment } from "@/lib/dog/dog-models";
 
 describe("getDogAppointments", () => {

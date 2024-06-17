@@ -3,7 +3,7 @@ import { withBarkContext } from "../_context";
 import { givenDog, givenReport, givenUser, givenVet } from "../_given";
 import { weeksAgo } from "../../_time_helpers";
 import { insertCall } from "../../_fixtures";
-import { CALL_OUTCOME } from "@/lib/data/db-enums";
+import { CALL_OUTCOME } from "@/lib/bark/enums/call-outcome";
 
 describe("opFetchCallTasksByVetId", () => {
   it("should return empty list when vet has no applicable call tasks", async () => {

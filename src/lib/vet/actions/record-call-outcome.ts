@@ -1,6 +1,6 @@
 import { CODE } from "@/lib/utilities/bark-code";
 import { VetActor } from "../vet-actor";
-import { CALL_OUTCOME } from "@/lib/data/db-enums";
+import { CALL_OUTCOME } from "@/lib/bark/enums/call-outcome";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import {
   dbBegin,

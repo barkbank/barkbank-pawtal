@@ -14,7 +14,8 @@ import {
   SINGAPORE_TIME_ZONE,
   parseCommonDate,
 } from "@/lib/utilities/bark-time";
-import { CALL_OUTCOME, DOG_ANTIGEN_PRESENCE } from "@/lib/data/db-enums";
+import { DOG_ANTIGEN_PRESENCE } from "@/lib/data/db-enums";
+import { CALL_OUTCOME } from "@/lib/bark/enums/call-outcome";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
