@@ -8,11 +8,8 @@ import {
 } from "@/lib/bark/enums/dog-antigen-presence";
 import { YES_NO_UNKNOWN, YesNoUnknown } from "@/lib/bark/enums/yes-no-unknown";
 import { DOG_GENDER, DogGender } from "@/lib/bark/enums/dog-gender";
-import {
-  DogAppointment,
-  DogPreferredVet,
-  DogProfile,
-} from "@/lib/dog/dog-models";
+import { DogAppointment, DogPreferredVet } from "@/lib/dog/dog-models";
+import { DogProfile } from "@/lib/bark/models/dog-profile";
 import { DogStatuses } from "@/lib/bark/models/dog-statuses";
 import { IMG_PATH } from "@/lib/image-path";
 import { RoutePath } from "@/lib/route-path";
