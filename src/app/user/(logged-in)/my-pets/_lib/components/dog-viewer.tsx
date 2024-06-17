@@ -37,7 +37,7 @@ function Warning(props: { children: React.ReactNode; icon: string }) {
   // Note: -mt-3 because warnings are outside the profile item. It should match
   // the gap of the flex-col
   return (
-    <div className="-mt-3 flex flex-row items-center justify-center gap-3">
+    <div className="-mt-3 flex flex-row gap-3">
       <Image src={icon} width={16} height={16} alt="Warning Icon" />
       <p className="text-sm italic">{children}</p>
     </div>
@@ -83,6 +83,9 @@ export function DogViewer(props: {
         </div>
       </div>
       <div className="x-card flex w-full flex-col gap-3">
+        <div className="x-card-top-section x-card-title bg-brand-brown">
+          Profile
+        </div>
         <ProfileItem label="Breed" value={dogBreed} />
         <ProfileItem label="Weight" value={formatWeight(dogWeightKg)} />
         {dogBreed === "" && dogWeightKg === null && (
