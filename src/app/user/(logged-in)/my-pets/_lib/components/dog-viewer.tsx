@@ -135,8 +135,11 @@ export function DogViewer(props: {
 
   return (
     <div className="m-3 flex flex-col md:items-start">
-      <div className="flex flex-row items-start justify-center gap-3">
-        <BarkDogAvatar gender={dogGender} className="align" />
+      <div className="x-card flex flex-row items-start justify-center gap-3">
+        <BarkDogAvatar
+          gender={dogGender}
+          className="h-16 w-16 md:h-24 md:w-24"
+        />
         <div className="flex flex-col items-start justify-center gap-3">
           <h1 className="text-3xl">{dogName}</h1>
           <BarkStatusBlock
@@ -146,7 +149,7 @@ export function DogViewer(props: {
           />
         </div>
       </div>
-      <div className="mt-3 flex w-full flex-col items-start justify-start gap-3 rounded-md p-3 shadow-md shadow-slate-400">
+      <div className="x-card mt-3 flex w-full flex-col items-start justify-start gap-3">
         <ProfileItem label="Breed" value={dogBreed} />
         <ProfileItem label="Weight" value={formatWeight(dogWeightKg)} />
         {dogBreed === "" && dogWeightKg === null && (
