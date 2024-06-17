@@ -1,9 +1,9 @@
 import {
   MEDICAL_STATUS,
   PARTICIPATION_STATUS,
-  PROFILE_STATUS,
   SCHEDULING_STATUS,
 } from "../data/db-enums";
+import { PROFILE_STATUS } from "../bark/enums/profile-status";
 import { SERVICE_STATUS } from "../bark/enums/service-status";
 import { DogStatuses } from "./dog-models";
 

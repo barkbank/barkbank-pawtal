@@ -1,12 +1,5 @@
 import { ObjectValues } from "../utilities/object-values";
 
-export const PROFILE_STATUS = {
-  COMPLETE: "COMPLETE",
-  INCOMPLETE: "INCOMPLETE",
-} as const;
-
-export type ProfileStatus = ObjectValues<typeof PROFILE_STATUS>;
-
 export const MEDICAL_STATUS = {
   UNKNOWN: "UNKNOWN",
   PERMANENTLY_INELIGIBLE: "PERMANENTLY_INELIGIBLE",
