@@ -1,6 +1,6 @@
 import { opFetchReportsByDogId } from "@/lib/bark/operations/op-fetch-reports-by-dog-id";
 import { withBarkContext } from "../_context";
-import { givenDog, givenVet } from "../_given";
+import { givenDog, givenUser, givenVet } from "../_given";
 import { BarkContext } from "@/lib/bark/bark-context";
 import { opRecordAppointmentCallOutcome } from "@/lib/bark/operations/op-record-appointment-call-outcome";
 import { opSubmitReport } from "@/lib/bark/operations/op-submit-report";
@@ -9,6 +9,7 @@ import {
   SINGAPORE_TIME_ZONE,
   parseCommonDate,
 } from "@/lib/utilities/bark-time";
+import { CODE } from "@/lib/utilities/bark-code";
 
 describe("opFetchReportsByDogId", () => {
   it("returns empty list when dog has no reports", async () => {
@@ -21,6 +22,7 @@ describe("opFetchReportsByDogId", () => {
       expect(result).toEqual({ reports: [] });
     });
   });
+
   it("returns reports, newest to oldest", async () => {
     await withBarkContext(async ({ context }) => {
       // Given vet v1
@@ -58,6 +60,27 @@ describe("opFetchReportsByDogId", () => {
       expect(reports[0].reportId).toEqual(r3.reportId);
       expect(reports[1].reportId).toEqual(r1.reportId);
       expect(reports[2].reportId).toEqual(r2.reportId);
+    });
+  });
+
+  it("returns ERROR_WRONG_OWNER when actorUserId is not the dog owner", async () => {
+    await withBarkContext(async ({ context }) => {
+      // Given two users u1 and u2
+      const u1 = await givenUser(context, { userIdx: 1 });
+      const u2 = await givenUser(context, { userIdx: 2 });
+
+      // And a dog d1 belonging to u1
+      const d1 = await givenDog(context, { dogIdx: 1, userId: u1.userId });
+
+      // When reports are fetched by actor u2
+      const { result, error } = await opFetchReportsByDogId(context, {
+        dogId: d1.dogId,
+        actorUserId: u2.userId,
+      });
+
+      // Then
+      expect(error).toEqual(CODE.ERROR_WRONG_OWNER);
+      expect(result).toBeUndefined();
     });
   });
 });
