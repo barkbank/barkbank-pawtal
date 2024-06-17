@@ -67,8 +67,8 @@ export function DogViewer(props: {
   const dogAgeMonths = getAgeMonths(dogBirthday, new Date());
 
   return (
-    <div className="m-3 flex flex-col md:items-start">
-      <div className="x-card flex flex-row items-start justify-center gap-3">
+    <div className="m-3 flex flex-col gap-3">
+      <div className="x-card flex flex-row gap-3">
         <BarkDogAvatar
           gender={dogGender}
           className="h-16 w-16 md:h-24 md:w-24"
@@ -82,7 +82,7 @@ export function DogViewer(props: {
           />
         </div>
       </div>
-      <div className="x-card mt-3 flex w-full flex-col items-start justify-start gap-3">
+      <div className="x-card flex w-full flex-col gap-3">
         <ProfileItem label="Breed" value={dogBreed} />
         <ProfileItem label="Weight" value={formatWeight(dogWeightKg)} />
         {dogBreed === "" && dogWeightKg === null && (
