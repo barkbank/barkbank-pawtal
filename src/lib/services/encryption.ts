@@ -191,10 +191,12 @@ export class SecretEncryptionService extends ConvenientEncryptionService {
     return { isValid };
   }
 
+  // TODO: Timing measurements below are about 20-100ms. Consider HKDF
   private async getEncryptionKey(
     params: Pbkdf2Params,
     salt: Buffer,
   ): Promise<Buffer> {
+    // const t0 = Date.now();
     return new Promise<Buffer>((resolve, reject) => {
       crypto.pbkdf2(
         this.secret,
@@ -206,6 +208,9 @@ export class SecretEncryptionService extends ConvenientEncryptionService {
           if (err) {
             throw err;
           }
+          // const t1 = Date.now()
+          // const deriveMillis = t1 - t0;
+          // console.log({deriveMillis});
           resolve(derivedKey);
         },
       );

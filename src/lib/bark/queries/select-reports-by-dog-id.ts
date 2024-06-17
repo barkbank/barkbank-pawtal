@@ -5,17 +5,17 @@ import {
 } from "../models/encrypted-bark-report";
 import { CTE_ENCRYPTED_BARK_REPORT } from "./cte-encrypted-bark-report";
 
-export async function selectReportsByVetId(
+export async function selectReportsByDogId(
   dbContext: DbContext,
-  args: { vetId: string },
+  args: { dogId: string },
 ): Promise<EncryptedBarkReport[]> {
-  const { vetId } = args;
+  const { dogId } = args;
   const sql = `
   SELECT *
   FROM (${CTE_ENCRYPTED_BARK_REPORT}) as tReport
-  WHERE tReport."vetId" = $1
+  WHERE tReport."dogId" = $1
   ORDER BY tReport."visitTime" DESC
   `;
-  const res = await dbQuery<EncryptedBarkReport>(dbContext, sql, [vetId]);
+  const res = await dbQuery<EncryptedBarkReport>(dbContext, sql, [dogId]);
   return res.rows.map((row) => EncryptedBarkReportSchema.parse(row));
 }
