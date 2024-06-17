@@ -194,7 +194,7 @@ export default async function Page(props: { params: { dogId: string } }) {
   const dogAgeMonths = getAgeMonths(dogBirthday, new Date());
 
   // WIP: === REFACTORING STEPS ===
-  // WIP: Create pull request to continually test the UI as we refactor.
+  // *WIP: Move dog-models into bark/models with Zod schemas.
   // WIP: Extract the following into a DogViewer component inside page.tsx first.
   // WIP: Then move DogViewer into _lib/components/dog-viewer.tsx with all the view components and functions.
   // WIP: Extract from DogViewer components DogStatus and DogProfile
