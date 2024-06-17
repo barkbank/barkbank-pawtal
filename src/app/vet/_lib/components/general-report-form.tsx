@@ -18,7 +18,7 @@ import {
 import {
   REPORTED_INELIGIBILITY,
   ReportedIneligibilitySchema,
-} from "@/lib/data/db-enums";
+} from "@/lib/bark/enums/reported-ineligibility";
 import { POS_NEG_NIL, PosNegNilSchema } from "@/lib/bark/enums/pos-neg-nil";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { zodResolver } from "@hookform/resolvers/zod";

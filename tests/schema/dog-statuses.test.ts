@@ -17,9 +17,9 @@ import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import {
   MEDICAL_STATUS,
   PROFILE_STATUS,
-  REPORTED_INELIGIBILITY,
   SERVICE_STATUS,
 } from "@/lib/data/db-enums";
+import { REPORTED_INELIGIBILITY } from "@/lib/bark/enums/reported-ineligibility";
 import { POS_NEG_NIL } from "@/lib/bark/enums/pos-neg-nil";
 import { CALL_OUTCOME } from "@/lib/bark/enums/call-outcome";
 import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";

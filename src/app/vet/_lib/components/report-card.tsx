@@ -10,7 +10,7 @@ import { BarkReport } from "@/lib/bark/models/bark-report";
 import {
   REPORTED_INELIGIBILITY,
   ReportedIneligibility,
-} from "@/lib/data/db-enums";
+} from "@/lib/bark/enums/reported-ineligibility";
 import { POS_NEG_NIL, PosNegNil } from "@/lib/bark/enums/pos-neg-nil";
 import { RoutePath } from "@/lib/route-path";
 import { SGT_UI_DATE, formatDateTime } from "@/lib/utilities/bark-time";

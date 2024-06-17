@@ -60,7 +60,7 @@ import {
   UserActorFactory,
   UserActorFactoryConfig,
 } from "@/lib/user/user-actor-factory";
-import { REPORTED_INELIGIBILITY } from "@/lib/data/db-enums";
+import { REPORTED_INELIGIBILITY } from "@/lib/bark/enums/reported-ineligibility";
 import { POS_NEG_NIL } from "@/lib/bark/enums/pos-neg-nil";
 import { CallOutcome } from "@/lib/bark/enums/call-outcome";
 import { dbInsertReportAndUpdateCall } from "@/lib/data/db-reports";

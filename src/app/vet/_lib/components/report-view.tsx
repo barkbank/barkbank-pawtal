@@ -2,7 +2,7 @@ import { NA_TEXT } from "@/app/_lib/constants";
 import { BarkButton } from "@/components/bark/bark-button";
 import { Textarea } from "@/components/ui/textarea";
 import { BarkReport } from "@/lib/bark/models/bark-report";
-import { REPORTED_INELIGIBILITY } from "@/lib/data/db-enums";
+import { REPORTED_INELIGIBILITY } from "@/lib/bark/enums/reported-ineligibility";
 import { POS_NEG_NIL } from "@/lib/bark/enums/pos-neg-nil";
 import { RoutePath } from "@/lib/route-path";
 import {

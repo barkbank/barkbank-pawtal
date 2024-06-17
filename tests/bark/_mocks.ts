@@ -1,7 +1,7 @@
 import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { BarkReportData } from "@/lib/bark/models/bark-report-data";
-import { REPORTED_INELIGIBILITY } from "@/lib/data/db-enums";
+import { REPORTED_INELIGIBILITY } from "@/lib/bark/enums/reported-ineligibility";
 import { POS_NEG_NIL } from "@/lib/bark/enums/pos-neg-nil";
 import { DogSpec } from "@/lib/data/db-models";
 import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";

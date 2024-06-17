@@ -1,4 +1,4 @@
-import { ReportedIneligibilitySchema } from "@/lib/data/db-enums";
+import { ReportedIneligibilitySchema } from "../enums/reported-ineligibility";
 import { PosNegNilSchema } from "../enums/pos-neg-nil";
 import { z } from "zod";
 

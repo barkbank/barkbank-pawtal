@@ -1,15 +1,4 @@
-import { z } from "zod";
 import { ObjectValues } from "../utilities/object-values";
-
-export const REPORTED_INELIGIBILITY = {
-  NIL: "NIL",
-  TEMPORARILY_INELIGIBLE: "TEMPORARILY_INELIGIBLE",
-  PERMANENTLY_INELIGIBLE: "PERMANENTLY_INELIGIBLE",
-} as const;
-
-export type ReportedIneligibility = ObjectValues<typeof REPORTED_INELIGIBILITY>;
-
-export const ReportedIneligibilitySchema = z.nativeEnum(REPORTED_INELIGIBILITY);
 
 export const SERVICE_STATUS = {
   AVAILABLE: "AVAILABLE",
