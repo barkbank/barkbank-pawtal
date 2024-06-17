@@ -1,5 +1,5 @@
 import { UserPii } from "@/lib/data/db-models";
-import { UserResidency } from "@/lib/data/db-enums";
+import { UserResidency } from "@/lib/bark/enums/user-residency";
 import APP from "@/lib/app";
 import { dbInsertUser } from "@/lib/data/db-users";
 import { NextRequest, NextResponse } from "next/server";

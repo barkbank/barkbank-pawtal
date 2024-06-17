@@ -19,7 +19,7 @@ import { RegistrationRequest } from "@/lib/services/registration";
 import { DogAntigenPresence } from "@/lib/data/db-enums";
 import { YesNoUnknown } from "@/lib/bark/enums/yes-no-unknown";
 import { DogGender } from "@/lib/bark/enums/dog-gender";
-import { UserResidency } from "@/lib/data/db-enums";
+import { UserResidency } from "@/lib/bark/enums/user-residency";
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { IMG_PATH } from "@/lib/image-path";

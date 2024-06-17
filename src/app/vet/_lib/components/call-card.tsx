@@ -3,7 +3,7 @@ import { useOwnerContactDetails } from "../hooks/use-owner-contact-details";
 import { BarkUserContactDetails } from "@/components/bark/bark-user-contact-details";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-import { USER_RESIDENCY } from "@/lib/data/db-enums";
+import { USER_RESIDENCY } from "@/lib/bark/enums/user-residency";
 import { CALL_OUTCOME } from "@/lib/bark/enums/call-outcome";
 import { SchedulerOutcome } from "@/app/vet/_lib/models/scheduler-outcome";
 import { postSchedulerOutcome } from "../actions/post-scheduler-outcome";

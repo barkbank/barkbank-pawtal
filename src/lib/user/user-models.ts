@@ -1,4 +1,4 @@
-import { UserResidency } from "../data/db-enums";
+import { UserResidency } from "../bark/enums/user-residency";
 import { ParticipationStatus } from "../bark/enums/participation-status";
 import { MedicalStatus } from "../bark/enums/medical-status";
 import { ProfileStatus } from "../bark/enums/profile-status";

@@ -1,4 +1,4 @@
-import { UserResidency } from "@/lib/data/db-enums";
+import { UserResidency } from "@/lib/bark/enums/user-residency";
 import { IMG_PATH } from "@/lib/image-path";
 import { capitalize } from "lodash";
 import Image from "next/image";

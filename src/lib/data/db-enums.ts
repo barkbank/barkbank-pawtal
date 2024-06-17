@@ -1,12 +1,5 @@
 import { ObjectValues } from "../utilities/object-values";
 
-export const USER_RESIDENCY = {
-  OTHER: "OTHER",
-  SINGAPORE: "SINGAPORE",
-} as const;
-
-export type UserResidency = ObjectValues<typeof USER_RESIDENCY>;
-
 export const DOG_ANTIGEN_PRESENCE = {
   POSITIVE: "POSITIVE",
   NEGATIVE: "NEGATIVE",

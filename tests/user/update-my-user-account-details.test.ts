@@ -2,7 +2,7 @@ import { MyAccountDetailsUpdate } from "@/lib/user/user-models";
 import { withDb } from "../_db_helpers";
 import { getUserActor, insertUser } from "../_fixtures";
 import { updateMyAccountDetails } from "@/lib/user/actions/update-my-account-details";
-import { USER_RESIDENCY } from "@/lib/data/db-enums";
+import { USER_RESIDENCY } from "@/lib/bark/enums/user-residency";
 import { getMyAccount } from "@/lib/user/actions/get-my-account";
 
 describe("updateMyAccountDetails", () => {

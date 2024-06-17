@@ -23,7 +23,7 @@ import {
 import { DOG_ANTIGEN_PRESENCE, DogAntigenPresence } from "@/lib/data/db-enums";
 import { YES_NO_UNKNOWN, YesNoUnknown } from "@/lib/bark/enums/yes-no-unknown";
 import { DOG_GENDER, DogGender } from "@/lib/bark/enums/dog-gender";
-import { USER_RESIDENCY } from "@/lib/data/db-enums";
+import { USER_RESIDENCY } from "@/lib/bark/enums/user-residency";
 import { dbInsertAdmin, dbSelectAdmin } from "@/lib/data/db-admins";
 import { Pool } from "pg";
 import {

@@ -12,7 +12,7 @@ import {
 import { DogAntigenPresence } from "../data/db-enums";
 import { YesNoUnknown } from "../bark/enums/yes-no-unknown";
 import { DogGender } from "../bark/enums/dog-gender";
-import { UserResidency } from "../data/db-enums";
+import { UserResidency } from "../bark/enums/user-residency";
 import { dbSelectUserIdByHashedEmail, dbInsertUser } from "@/lib/data/db-users";
 import { dbBegin, dbRollback, dbCommit, dbRelease } from "@/lib/data/db-utils";
 import { DogMapper } from "@/lib/data/dog-mapper";
