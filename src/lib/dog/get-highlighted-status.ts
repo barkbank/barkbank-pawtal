@@ -3,8 +3,8 @@ import {
   PARTICIPATION_STATUS,
   PROFILE_STATUS,
   SCHEDULING_STATUS,
-  SERVICE_STATUS,
 } from "../data/db-enums";
+import { SERVICE_STATUS } from "../bark/enums/service-status";
 import { DogStatuses } from "./dog-models";
 
 export type HighlightedStatus =

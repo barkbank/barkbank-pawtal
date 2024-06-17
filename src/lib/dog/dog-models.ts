@@ -3,8 +3,8 @@ import {
   MedicalStatus,
   ParticipationStatus,
   ProfileStatus,
-  ServiceStatus,
 } from "../data/db-enums";
+import { ServiceStatus } from "../bark/enums/service-status";
 import { YesNoUnknown } from "../bark/enums/yes-no-unknown";
 import { DogGender } from "../bark/enums/dog-gender";
 

@@ -1,12 +1,5 @@
 import { ObjectValues } from "../utilities/object-values";
 
-export const SERVICE_STATUS = {
-  AVAILABLE: "AVAILABLE",
-  UNAVAILABLE: "UNAVAILABLE",
-} as const;
-
-export type ServiceStatus = ObjectValues<typeof SERVICE_STATUS>;
-
 export const PROFILE_STATUS = {
   COMPLETE: "COMPLETE",
   INCOMPLETE: "INCOMPLETE",

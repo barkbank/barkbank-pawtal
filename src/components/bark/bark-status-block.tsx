@@ -1,10 +1,10 @@
 import {
-  SERVICE_STATUS,
   SCHEDULING_STATUS,
   PARTICIPATION_STATUS,
   MEDICAL_STATUS,
   PROFILE_STATUS,
 } from "@/lib/data/db-enums";
+import { SERVICE_STATUS } from "@/lib/bark/enums/service-status";
 import { getHighlightedStatus } from "@/lib/dog/get-highlighted-status";
 import clsx from "clsx";
 import {

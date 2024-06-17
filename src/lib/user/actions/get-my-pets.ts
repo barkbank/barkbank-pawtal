@@ -6,8 +6,8 @@ import {
   MedicalStatus,
   ParticipationStatus,
   ProfileStatus,
-  ServiceStatus,
 } from "@/lib/data/db-enums";
+import { ServiceStatus } from "@/lib/bark/enums/service-status";
 import { DogGender } from "@/lib/bark/enums/dog-gender";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { CODE } from "@/lib/utilities/bark-code";

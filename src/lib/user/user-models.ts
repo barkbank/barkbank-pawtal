@@ -2,9 +2,9 @@ import {
   MedicalStatus,
   ParticipationStatus,
   ProfileStatus,
-  ServiceStatus,
   UserResidency,
 } from "../data/db-enums";
+import { ServiceStatus } from "../bark/enums/service-status";
 import { DogGender } from "../bark/enums/dog-gender";
 import { DogAppointment } from "../dog/dog-models";
 import { DogStatuses } from "../dog/dog-models";

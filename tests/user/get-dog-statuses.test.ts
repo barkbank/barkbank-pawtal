@@ -6,8 +6,8 @@ import {
   MEDICAL_STATUS,
   PARTICIPATION_STATUS,
   PROFILE_STATUS,
-  SERVICE_STATUS,
 } from "@/lib/data/db-enums";
+import { SERVICE_STATUS } from "@/lib/bark/enums/service-status";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
 import { dateAgo } from "../_time_helpers";
