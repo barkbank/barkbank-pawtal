@@ -3,7 +3,7 @@ import { PARTICIPATION_STATUS } from "@/lib/bark/enums/participation-status";
 import { MEDICAL_STATUS } from "@/lib/bark/enums/medical-status";
 import { PROFILE_STATUS } from "@/lib/bark/enums/profile-status";
 import { SERVICE_STATUS } from "@/lib/bark/enums/service-status";
-import { getHighlightedStatus } from "@/lib/dog/get-highlighted-status";
+import { getHighlightedStatus } from "@/lib/bark/mappers/to-highlighted-status";
 import clsx from "clsx";
 import {
   BarkStatusServiceUnavailable,
