@@ -11,6 +11,7 @@ import { formatPreferredVet } from "@/app/_lib/formatters";
 import { BarkButton } from "@/components/bark/bark-button";
 import { BarkDogAvatar } from "@/components/bark/bark-dog-avatar";
 import { BarkStatusBlock } from "@/components/bark/bark-status-block";
+import { Separator } from "@/components/ui/separator";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { DogAppointment } from "@/lib/bark/models/dog-appointment";
 import { DogPreferredVet } from "@/lib/bark/models/dog-preferred-vet";
@@ -85,12 +86,13 @@ export function DogViewer(props: {
         </div>
       </div>
       <div className="x-card flex w-full flex-col gap-3">
-        <div className="x-card-top-section flex flex-row justify-between bg-brand-brown">
+        <div className="flex flex-row justify-between">
           <p className="x-card-title">Profile</p>
           <Link href={RoutePath.USER_EDIT_DOG(dogId)}>
             <Edit color="#555" />
           </Link>
         </div>
+        <Separator />
         <ProfileItem label="Breed" value={dogBreed} />
         <ProfileItem label="Weight" value={formatWeight(dogWeightKg)} />
         {dogBreed === "" && dogWeightKg === null && (
