@@ -1,7 +1,5 @@
-import {
-  PosNegNilSchema,
-  ReportedIneligibilitySchema,
-} from "@/lib/data/db-enums";
+import { ReportedIneligibilitySchema } from "@/lib/data/db-enums";
+import { PosNegNilSchema } from "../enums/pos-neg-nil";
 import { z } from "zod";
 
 /**

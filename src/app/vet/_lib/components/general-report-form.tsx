@@ -16,11 +16,10 @@ import {
   BarkReportDataSchema,
 } from "@/lib/bark/models/bark-report-data";
 import {
-  POS_NEG_NIL,
-  PosNegNilSchema,
   REPORTED_INELIGIBILITY,
   ReportedIneligibilitySchema,
 } from "@/lib/data/db-enums";
+import { POS_NEG_NIL, PosNegNilSchema } from "@/lib/bark/enums/pos-neg-nil";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";

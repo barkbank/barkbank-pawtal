@@ -1,16 +1,6 @@
 import { z } from "zod";
 import { ObjectValues } from "../utilities/object-values";
 
-export const POS_NEG_NIL = {
-  POSITIVE: "POSITIVE",
-  NEGATIVE: "NEGATIVE",
-  NIL: "NIL",
-} as const;
-
-export type PosNegNil = ObjectValues<typeof POS_NEG_NIL>;
-
-export const PosNegNilSchema = z.nativeEnum(POS_NEG_NIL);
-
 export const REPORTED_INELIGIBILITY = {
   NIL: "NIL",
   TEMPORARILY_INELIGIBLE: "TEMPORARILY_INELIGIBLE",

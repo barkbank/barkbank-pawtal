@@ -11,7 +11,8 @@ import {
   insertVet,
 } from "../_fixtures";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
-import { DOG_ANTIGEN_PRESENCE, POS_NEG_NIL } from "@/lib/data/db-enums";
+import { DOG_ANTIGEN_PRESENCE } from "@/lib/data/db-enums";
+import { POS_NEG_NIL } from "@/lib/bark/enums/pos-neg-nil";
 import { CALL_OUTCOME } from "@/lib/bark/enums/call-outcome";
 import { MILLIS_PER_DAY } from "@/lib/utilities/bark-millis";
 

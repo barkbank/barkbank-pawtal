@@ -11,7 +11,7 @@ import { dbQuery } from "@/lib/data/db-utils";
 import { DbReportSpec, DogSpec, UserSpec } from "@/lib/data/db-models";
 import { DOG_ANTIGEN_PRESENCE } from "@/lib/data/db-enums";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
-import { POS_NEG_NIL } from "@/lib/data/db-enums";
+import { POS_NEG_NIL } from "@/lib/bark/enums/pos-neg-nil";
 import { CALL_OUTCOME } from "@/lib/bark/enums/call-outcome";
 import {
   YYYY_MM_DD_HH_MM_FORMAT,
