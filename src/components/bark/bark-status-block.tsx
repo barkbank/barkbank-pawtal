@@ -1,4 +1,4 @@
-import { SCHEDULING_STATUS } from "@/lib/data/db-enums";
+import { SCHEDULING_STATUS } from "@/lib/bark/enums/scheduling-status";
 import { PARTICIPATION_STATUS } from "@/lib/bark/enums/participation-status";
 import { MEDICAL_STATUS } from "@/lib/bark/enums/medical-status";
 import { PROFILE_STATUS } from "@/lib/bark/enums/profile-status";

@@ -1,13 +1,5 @@
 import { ObjectValues } from "../utilities/object-values";
 
-export const SCHEDULING_STATUS = {
-  PENDING_APPOINTMENT: "PENDING_APPOINTMENT",
-  PENDING_REPORT: "PENDING_REPORT",
-  UNAVAILABLE: "UNAVAILABLE",
-} as const;
-
-export type SchedulingStatus = ObjectValues<typeof SCHEDULING_STATUS>;
-
 export const USER_RESIDENCY = {
   OTHER: "OTHER",
   SINGAPORE: "SINGAPORE",
