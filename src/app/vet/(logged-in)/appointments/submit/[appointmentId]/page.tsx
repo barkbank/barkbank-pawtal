@@ -4,7 +4,7 @@ import { getAuthenticatedVetActor } from "@/lib/auth";
 import { opFetchAppointment } from "@/lib/bark/operations/op-fetch-appointment";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
-import { APPOINTMENT_STATUS } from "@/lib/bark/models/appointment-status";
+import { APPOINTMENT_STATUS } from "@/lib/bark/enums/appointment-status";
 import { SubmitReportForm } from "@/app/vet/_lib/components/submit-report-form";
 
 export default async function Page(props: {
