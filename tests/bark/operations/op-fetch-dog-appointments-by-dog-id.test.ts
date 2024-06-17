@@ -7,8 +7,8 @@ import {
   SINGAPORE_TIME_ZONE,
   parseCommonDate,
 } from "@/lib/utilities/bark-time";
-import { opRecordAppointmentCallOutcome } from "@/lib/bark/operations/op-record-appointment-call-outcome";
 import { dbQuery } from "@/lib/data/db-utils";
+import { insertAppointment } from "@/lib/bark/queries/insert-appointment";
 
 describe("opFetchDogAppointmentsByDogId", () => {
   it("returns empty list when there are no appointments", async () => {
@@ -30,7 +30,11 @@ describe("opFetchDogAppointmentsByDogId", () => {
         preferredVetId: v1.vetId,
       });
 
-      // And appointments a1, a2, a3, in that order
+      // And two more vets
+      const v2 = await givenVet(context, { vetIdx: 2 });
+      const v3 = await givenVet(context, { vetIdx: 3 });
+
+      // And appointments a1, a2, a3, in that order, vets v1, v2, and v3.
       const a1 = await addAppointment(context, {
         dogId: d1.dogId,
         vetId: v1.vetId,
@@ -38,12 +42,12 @@ describe("opFetchDogAppointmentsByDogId", () => {
       });
       const a2 = await addAppointment(context, {
         dogId: d1.dogId,
-        vetId: v1.vetId,
+        vetId: v2.vetId,
         creationTime: parseCommonDate("10 May 2021", SINGAPORE_TIME_ZONE),
       });
       const a3 = await addAppointment(context, {
         dogId: d1.dogId,
-        vetId: v1.vetId,
+        vetId: v2.vetId,
         creationTime: parseCommonDate("10 May 2022", SINGAPORE_TIME_ZONE),
       });
 
@@ -102,8 +106,7 @@ async function addAppointment(
 ): Promise<{ appointmentId: string }> {
   const { dbPool } = context;
   const { vetId, dogId, creationTime } = args;
-  const res1 = await opRecordAppointmentCallOutcome(context, { dogId, vetId });
-  const appointmentId = res1.result!.appointmentId;
+  const { appointmentId } = await insertAppointment(dbPool, { dogId, vetId });
   const sql = `
   UPDATE calls
   SET call_creation_time = $2
