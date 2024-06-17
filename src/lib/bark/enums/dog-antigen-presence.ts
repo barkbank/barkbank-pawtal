@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-
 export const DOG_ANTIGEN_PRESENCE = {
   POSITIVE: "POSITIVE",
   NEGATIVE: "NEGATIVE",
