@@ -20,6 +20,7 @@ import { Edit } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { DogViewerData } from "./dog-viewer-data";
+import { StatusSection } from "./status-section";
 
 function ProfileItem(props: { label: string; value: string | number | null }) {
   const { label, value } = props;
@@ -63,20 +64,7 @@ export function DogViewer(props: { data: DogViewerData }) {
 
   return (
     <div className="m-3 flex flex-col gap-3">
-      <div className="x-card flex flex-row gap-3">
-        <BarkDogAvatar
-          gender={dogGender}
-          className="h-16 w-16 md:h-24 md:w-24"
-        />
-        <div className="flex flex-col items-start justify-center gap-3">
-          <h1 className="text-3xl">{dogName}</h1>
-          <BarkStatusBlock
-            dogName={dogName}
-            dogStatuses={dogStatuses}
-            dogAppointments={dogAppointments}
-          />
-        </div>
-      </div>
+      <StatusSection data={data} />
       <div className="x-card flex w-full flex-col gap-3">
         <div className="flex flex-row justify-between">
           <p className="x-card-title">Profile</p>
