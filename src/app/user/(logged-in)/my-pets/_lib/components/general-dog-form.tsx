@@ -11,7 +11,7 @@ import {
 import { isValidWeightKg } from "@/lib/utilities/bark-utils";
 import { DOG_ANTIGEN_PRESENCE } from "@/lib/bark/enums/dog-antigen-presence";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
-import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
+import { DOG_GENDER, SPECIFIED_DOG_GENDER } from "@/lib/bark/enums/dog-gender";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -20,15 +20,14 @@ import { BarkH1 } from "@/components/bark/bark-typography";
 import { Result } from "@/lib/utilities/result";
 import { DogProfile } from "@/lib/bark/models/dog-profile";
 import { RequiredDateField } from "@/app/_lib/field-schemas/required-date-field";
+import { OptionalDogWeightKgField } from "@/app/_lib/field-schemas/optional-dog-weight-kg-field";
 
 const FORM_SCHEMA = z.object({
   dogName: z.string().min(1, { message: "Name cannot be empty" }),
   dogBreed: z.string(),
   dogBirthday: RequiredDateField.new().schema(),
-  dogGender: z.nativeEnum(DOG_GENDER),
-  dogWeightKg: z.string().refine(isValidWeightKg, {
-    message: "Weight should be a positive number or left blank",
-  }),
+  dogGender: z.nativeEnum(SPECIFIED_DOG_GENDER),
+  dogWeightKg: OptionalDogWeightKgField.new().schema(),
   dogDea1Point1: z.nativeEnum(DOG_ANTIGEN_PRESENCE),
   dogEverReceivedTransfusion: z.nativeEnum(YES_NO_UNKNOWN),
   dogEverPregnant: z.nativeEnum(YES_NO_UNKNOWN),
@@ -48,7 +47,7 @@ const EMPTY_VALUES: Partial<DogFormData> = {
 function toDogFormData(dogProfile: DogProfile): DogFormData {
   const { dogBirthday, dogWeightKg, ...otherFields } = dogProfile;
   const dogBirthdayString = RequiredDateField.new().format(dogBirthday);
-  const dogWeightKgString = dogWeightKg !== null ? dogWeightKg.toString() : "";
+  const dogWeightKgString = OptionalDogWeightKgField.new().format(dogWeightKg);
   const dogFormData: DogFormData = {
     dogBirthday: dogBirthdayString,
     dogWeightKg: dogWeightKgString,
@@ -64,7 +63,7 @@ function toDogProfile(dogFormData: DogFormData): DogProfile {
     ...otherFields
   } = dogFormData;
   const dogBirthday = RequiredDateField.new().parse(dogBirthdayString);
-  const dogWeightKg = parseFloat(dogWeightKgString);
+  const dogWeightKg = OptionalDogWeightKgField.new().parse(dogWeightKgString);
   const dogProfile: DogProfile = {
     dogBirthday,
     dogWeightKg,
