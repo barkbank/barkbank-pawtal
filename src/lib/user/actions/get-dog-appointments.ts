@@ -1,6 +1,6 @@
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { UserActor } from "../user-actor";
-import { DogAppointment } from "@/lib/dog/dog-models";
+import { DogAppointment } from "@/lib/bark/models/dog-appointment";
 import { CODE } from "@/lib/utilities/bark-code";
 import {
   dbBegin,

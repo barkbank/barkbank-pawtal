@@ -15,7 +15,7 @@ import {
   BarkStatusTemporarilyIneligible,
   BarkStatusEligible,
 } from "./bark-status";
-import { DogAppointment } from "@/lib/dog/dog-models";
+import { DogAppointment } from "@/lib/bark/models/dog-appointment";
 import { DogStatuses } from "@/lib/bark/models/dog-statuses";
 
 function StatusMessage(props: {

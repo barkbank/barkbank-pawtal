@@ -9,7 +9,7 @@ import {
 } from "../_fixtures";
 import { CODE } from "@/lib/utilities/bark-code";
 import { CALL_OUTCOME } from "@/lib/bark/enums/call-outcome";
-import { DogAppointment } from "@/lib/dog/dog-models";
+import { DogAppointment } from "@/lib/bark/models/dog-appointment";
 
 describe("getDogAppointments", () => {
   it("should return ERROR_DOG_NOT_FOUND when dog cannot be found", async () => {

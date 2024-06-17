@@ -1,6 +1,6 @@
 import { dbResultQuery } from "../../data/db-utils";
 import { MyDog } from "../user-models";
-import { DogAppointment } from "@/lib/dog/dog-models";
+import { DogAppointment } from "@/lib/bark/models/dog-appointment";
 import { UserActor } from "../user-actor";
 import { ParticipationStatus } from "@/lib/bark/enums/participation-status";
 import { MedicalStatus } from "@/lib/bark/enums/medical-status";
