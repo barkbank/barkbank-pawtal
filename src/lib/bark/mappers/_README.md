@@ -16,3 +16,17 @@ This reads better where the functions are used because, at where the functions a
 
     const encryptedReport = await selectReport(...);
     const report = await toReport(context, encryptedReport);
+
+## Convention for disambiguating multiple possible source types
+
+Where there are multiple source types, add a `fromSourceType` suffix.
+
+    async function toDestinationTypeFromSourceType1(
+        context: BarkContext,
+        source: SourceType1
+    ): Promise<DestinationType>
+
+    async function toDestinationTypeFromSourceType2(
+        context: BarkContext,
+        source: SourceType2
+    ): Promise<DestinationType>
