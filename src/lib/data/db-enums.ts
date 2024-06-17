@@ -1,15 +1,6 @@
 import { z } from "zod";
 import { ObjectValues } from "../utilities/object-values";
 
-export const DOG_STATUS = {
-  INCOMPLETE: "INCOMPLETE",
-  ELIGIBLE: "ELIGIBLE",
-  INELIGIBLE: "INELIGIBLE",
-  PERMANENTLY_INELIGIBLE: "PERMANENTLY_INELIGIBLE",
-} as const;
-
-export type DogStatus = ObjectValues<typeof DOG_STATUS>;
-
 export const CALL_OUTCOME = {
   APPOINTMENT: "APPOINTMENT",
   DECLINED: "DECLINED",
