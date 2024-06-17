@@ -9,7 +9,7 @@ import { SERVICE_STATUS } from "../enums/service-status";
 /**
  * https://www.notion.so/Status-Definitions-1863858b32eb4016b73d1ddc6c16d26f?pvs=4#e0ef6804a6704fa19d7966ba2b830a17
  */
-export function getHighlightedStatus(
+export function toHighlightedStatus(
   dogStatuses: DogStatuses,
 ): HighlightedStatus {
   const {

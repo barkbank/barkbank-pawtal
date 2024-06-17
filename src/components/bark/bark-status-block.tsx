@@ -3,7 +3,7 @@ import { PARTICIPATION_STATUS } from "@/lib/bark/enums/participation-status";
 import { MEDICAL_STATUS } from "@/lib/bark/enums/medical-status";
 import { PROFILE_STATUS } from "@/lib/bark/enums/profile-status";
 import { SERVICE_STATUS } from "@/lib/bark/enums/service-status";
-import { getHighlightedStatus } from "@/lib/bark/mappers/to-highlighted-status";
+import { toHighlightedStatus } from "@/lib/bark/mappers/to-highlighted-status";
 import clsx from "clsx";
 import {
   BarkStatusServiceUnavailable,
@@ -39,7 +39,7 @@ export function BarkStatusBlock(props: {
   dogAppointments: DogAppointment[];
 }) {
   const { dogName, dogAppointments, dogStatuses } = props;
-  const highlightedStatus = getHighlightedStatus(dogStatuses);
+  const highlightedStatus = toHighlightedStatus(dogStatuses);
 
   if (highlightedStatus === SERVICE_STATUS.UNAVAILABLE) {
     return (
