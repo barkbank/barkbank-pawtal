@@ -1,5 +1,5 @@
 import { DbContext, dbQuery } from "@/lib/data/db-utils";
-import { APPOINTMENT_STATUS } from "../models/appointment-status";
+import { APPOINTMENT_STATUS } from "../enums/appointment-status";
 
 /**
  * Updates an appointment status to REPORTED or CANCELLED.

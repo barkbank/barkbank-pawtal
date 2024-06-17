@@ -7,7 +7,7 @@ import { insertReport } from "../queries/insert-report";
 import { updateAppointment } from "../queries/update-appointment";
 import { BarkContext } from "@/lib/bark/bark-context";
 import { toEncryptedBarkReportData } from "../mappers/to-encrypted-bark-report-data";
-import { APPOINTMENT_STATUS } from "../models/appointment-status";
+import { APPOINTMENT_STATUS } from "../enums/appointment-status";
 
 /**
  * Submits a medical report for a specified appointment and progresses that
