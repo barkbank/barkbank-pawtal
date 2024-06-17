@@ -80,6 +80,7 @@ export default async function Page(props: { params: { dogId: string } }) {
   // DONE: Move dog-models into bark/models with Zod schemas.
   // DONE: Extract the following into a DogViewer component inside page.tsx first.
   // DONE: Then move DogViewer into _lib/components/dog-viewer.tsx with all the view components and functions.
+  // *WIP: Move formatX functions into app/_lib/formatters/format-x.ts files.
   // WIP: Extract from DogViewer components DogStatus and DogProfile
   // WIP: Create a _lib/components/dog-viewer directory.
   // WIP: Move DogStatus into .../dog-viewer/dog-status.tsx
