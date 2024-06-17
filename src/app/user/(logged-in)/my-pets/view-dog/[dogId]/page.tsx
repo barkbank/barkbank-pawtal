@@ -11,7 +11,7 @@ import { UserActor } from "@/lib/user/user-actor";
 import { CODE } from "@/lib/utilities/bark-code";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { redirect } from "next/navigation";
-import { DogViewer } from "../../_lib/components/dog-viewer";
+import { DogViewer } from "../../_lib/components/dog-viewer/dog-viewer";
 import APP from "@/lib/app";
 import { opFetchDogAppointmentsByDogId } from "@/lib/bark/operations/op-fetch-dog-appointments-by-dog-id";
 
