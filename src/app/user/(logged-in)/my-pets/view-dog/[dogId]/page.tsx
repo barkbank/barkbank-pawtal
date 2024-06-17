@@ -194,6 +194,7 @@ export default async function Page(props: { params: { dogId: string } }) {
   const dogAgeMonths = getAgeMonths(dogBirthday, new Date());
 
   // WIP: === REFACTORING STEPS ===
+  // *WIP: Move db-enums into bark/enums with Zod schemas.
   // *WIP: Move dog-models into bark/models with Zod schemas.
   // WIP: Extract the following into a DogViewer component inside page.tsx first.
   // WIP: Then move DogViewer into _lib/components/dog-viewer.tsx with all the view components and functions.
