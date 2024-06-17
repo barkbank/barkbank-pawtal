@@ -93,6 +93,10 @@
   @apply rounded-md p-3 shadow-sm shadow-slate-400;
 }
 
+.x-card-top-section {
+  @apply -mx-3 -mt-3 rounded-t-md p-3;
+}
+
 /* Standard card background */
 .x-card-bg {
   @apply bg-white md:hover:bg-slate-100;

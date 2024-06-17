@@ -1,27 +1,15 @@
-import {
-  MEDICAL_STATUS,
-  PARTICIPATION_STATUS,
-  PROFILE_STATUS,
-  SCHEDULING_STATUS,
-  SERVICE_STATUS,
-} from "../data/db-enums";
-import { DogStatuses } from "./dog-models";
-
-export type HighlightedStatus =
-  | typeof SERVICE_STATUS.UNAVAILABLE
-  | typeof SCHEDULING_STATUS.PENDING_REPORT
-  | typeof PARTICIPATION_STATUS.OPTED_OUT
-  | typeof PARTICIPATION_STATUS.PAUSED
-  | typeof MEDICAL_STATUS.PERMANENTLY_INELIGIBLE
-  | typeof PROFILE_STATUS.INCOMPLETE
-  | typeof MEDICAL_STATUS.TEMPORARILY_INELIGIBLE
-  | typeof MEDICAL_STATUS.ELIGIBLE
-  | typeof MEDICAL_STATUS.UNKNOWN;
+import { DogStatuses } from "../models/dog-statuses";
+import { HighlightedStatus } from "../enums/highlighted-status";
+import { MEDICAL_STATUS } from "../enums/medical-status";
+import { PARTICIPATION_STATUS } from "../enums/participation-status";
+import { PROFILE_STATUS } from "../enums/profile-status";
+import { SCHEDULING_STATUS } from "../enums/scheduling-status";
+import { SERVICE_STATUS } from "../enums/service-status";
 
 /**
  * https://www.notion.so/Status-Definitions-1863858b32eb4016b73d1ddc6c16d26f?pvs=4#e0ef6804a6704fa19d7966ba2b830a17
  */
-export function getHighlightedStatus(
+export function toHighlightedStatus(
   dogStatuses: DogStatuses,
 ): HighlightedStatus {
   const {

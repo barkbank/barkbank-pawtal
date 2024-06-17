@@ -1,11 +1,9 @@
-import {
-  SERVICE_STATUS,
-  SCHEDULING_STATUS,
-  PARTICIPATION_STATUS,
-  MEDICAL_STATUS,
-  PROFILE_STATUS,
-} from "@/lib/data/db-enums";
-import { getHighlightedStatus } from "@/lib/dog/get-highlighted-status";
+import { SCHEDULING_STATUS } from "@/lib/bark/enums/scheduling-status";
+import { PARTICIPATION_STATUS } from "@/lib/bark/enums/participation-status";
+import { MEDICAL_STATUS } from "@/lib/bark/enums/medical-status";
+import { PROFILE_STATUS } from "@/lib/bark/enums/profile-status";
+import { SERVICE_STATUS } from "@/lib/bark/enums/service-status";
+import { toHighlightedStatus } from "@/lib/bark/mappers/to-highlighted-status";
 import clsx from "clsx";
 import {
   BarkStatusServiceUnavailable,
@@ -17,7 +15,8 @@ import {
   BarkStatusTemporarilyIneligible,
   BarkStatusEligible,
 } from "./bark-status";
-import { DogAppointment, DogStatuses } from "@/lib/dog/dog-models";
+import { DogAppointment } from "@/lib/bark/models/dog-appointment";
+import { DogStatuses } from "@/lib/bark/models/dog-statuses";
 
 function StatusMessage(props: {
   children: React.ReactNode;
@@ -41,7 +40,7 @@ export function BarkStatusBlock(props: {
   dogAppointments: DogAppointment[];
 }) {
   const { dogName, dogAppointments, dogStatuses } = props;
-  const highlightedStatus = getHighlightedStatus(dogStatuses);
+  const highlightedStatus = toHighlightedStatus(dogStatuses);
 
   if (highlightedStatus === SERVICE_STATUS.UNAVAILABLE) {
     return (

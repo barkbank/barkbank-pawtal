@@ -8,7 +8,7 @@ import {
   BarkFormRadioGroup,
 } from "@/components/bark/bark-form";
 import { isValidWeightKg } from "@/lib/utilities/bark-utils";
-import { DOG_ANTIGEN_PRESENCE } from "@/lib/data/db-enums";
+import { DOG_ANTIGEN_PRESENCE } from "@/lib/bark/enums/dog-antigen-presence";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
 import { Breed } from "@/lib/services/breed";

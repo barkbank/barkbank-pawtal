@@ -2,7 +2,7 @@ import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import { withDb } from "../_db_helpers";
 import { getVetActor, insertDog, insertUser, insertVet } from "../_fixtures";
 import { recordCallOutcome } from "@/lib/vet/actions/record-call-outcome";
-import { CALL_OUTCOME, CallOutcome } from "@/lib/data/db-enums";
+import { CALL_OUTCOME, CallOutcome } from "@/lib/bark/enums/call-outcome";
 import { CODE } from "@/lib/utilities/bark-code";
 import { dbResultQuery } from "@/lib/data/db-utils";
 import { Pool } from "pg";

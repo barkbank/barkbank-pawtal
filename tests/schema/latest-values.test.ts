@@ -9,9 +9,10 @@ import {
 } from "../_fixtures";
 import { dbQuery } from "@/lib/data/db-utils";
 import { DbReportSpec, DogSpec, UserSpec } from "@/lib/data/db-models";
-import { DOG_ANTIGEN_PRESENCE } from "@/lib/data/db-enums";
+import { DOG_ANTIGEN_PRESENCE } from "@/lib/bark/enums/dog-antigen-presence";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
-import { CALL_OUTCOME, POS_NEG_NIL } from "@/lib/data/db-enums";
+import { POS_NEG_NIL } from "@/lib/bark/enums/pos-neg-nil";
+import { CALL_OUTCOME } from "@/lib/bark/enums/call-outcome";
 import {
   YYYY_MM_DD_HH_MM_FORMAT,
   SINGAPORE_TIME_ZONE,

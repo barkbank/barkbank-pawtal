@@ -14,11 +14,13 @@
 // - Some: This sould be a full record with PII.
 //
 
-import { DogAntigenPresence } from "./db-enums";
+import { DogAntigenPresence } from "../bark/enums/dog-antigen-presence";
 import { YesNoUnknown } from "../bark/enums/yes-no-unknown";
 import { DogGender } from "../bark/enums/dog-gender";
-import { UserResidency } from "./db-enums";
-import { CallOutcome, PosNegNil, ReportedIneligibility } from "./db-enums";
+import { UserResidency } from "../bark/enums/user-residency";
+import { ReportedIneligibility } from "../bark/enums/reported-ineligibility";
+import { PosNegNil } from "../bark/enums/pos-neg-nil";
+import { CallOutcome } from "../bark/enums/call-outcome";
 
 export type UserPii = {
   userName: string;

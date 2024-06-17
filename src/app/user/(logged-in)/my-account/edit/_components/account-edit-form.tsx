@@ -5,7 +5,7 @@ import {
   BarkFormInput,
   BarkFormRadioGroup,
 } from "@/components/bark/bark-form";
-import { USER_RESIDENCY, UserResidency } from "@/lib/data/db-enums";
+import { USER_RESIDENCY, UserResidency } from "@/lib/bark/enums/user-residency";
 import { RoutePath } from "@/lib/route-path";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";

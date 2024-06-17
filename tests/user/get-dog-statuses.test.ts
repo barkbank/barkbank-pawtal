@@ -1,13 +1,11 @@
 import { getDogStatuses } from "@/lib/user/actions/get-dog-statuses";
 import { withDb } from "../_db_helpers";
 import { getUserActor, insertDog, insertUser } from "../_fixtures";
-import { DogStatuses } from "@/lib/dog/dog-models";
-import {
-  MEDICAL_STATUS,
-  PARTICIPATION_STATUS,
-  PROFILE_STATUS,
-  SERVICE_STATUS,
-} from "@/lib/data/db-enums";
+import { DogStatuses } from "@/lib/bark/models/dog-statuses";
+import { PARTICIPATION_STATUS } from "@/lib/bark/enums/participation-status";
+import { MEDICAL_STATUS } from "@/lib/bark/enums/medical-status";
+import { PROFILE_STATUS } from "@/lib/bark/enums/profile-status";
+import { SERVICE_STATUS } from "@/lib/bark/enums/service-status";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
 import { dateAgo } from "../_time_helpers";

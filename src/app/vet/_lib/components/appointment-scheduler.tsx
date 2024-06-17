@@ -6,7 +6,7 @@ import { SchedulerState } from "../models/scheduler-state";
 import { SchedulerOutcome } from "@/app/vet/_lib/models/scheduler-outcome";
 import { ChangeEvent, useState } from "react";
 import { CallCard } from "./call-card";
-import { CALL_OUTCOME } from "@/lib/data/db-enums";
+import { CALL_OUTCOME } from "@/lib/bark/enums/call-outcome";
 import { SearchInput } from "./search-input";
 import { getMatchingItems } from "@/lib/utilities/get-matching-items";
 import {

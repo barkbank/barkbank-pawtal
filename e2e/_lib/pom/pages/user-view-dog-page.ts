@@ -44,11 +44,14 @@ export class UserViewDogPage extends PomDynamicPage {
   }
 
   editButton(): Locator {
-    return this.page().getByRole("link", { name: "Edit" });
+    return this.page()
+      .locator("div")
+      .filter({ hasText: /^Profile$/ })
+      .getByRole("link");
   }
 
   backButton(): Locator {
-    return this.page().getByRole("link", { name: "Back" });
+    return this.page().getByRole("link", { name: "Back to Pets" });
   }
 
   private profileItem(label: string): Locator {

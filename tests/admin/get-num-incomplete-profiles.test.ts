@@ -7,7 +7,7 @@ import {
   insertUser,
 } from "../_fixtures";
 import { Pool } from "pg";
-import { PARTICIPATION_STATUS } from "@/lib/data/db-enums";
+import { PARTICIPATION_STATUS } from "@/lib/bark/enums/participation-status";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
 import {
@@ -101,6 +101,7 @@ async function insertPausedProfile(
   const { dogId } = await insertDog(idx, userId, dbPool, {
     dogWeightKg: null,
     dogBreed: "",
+    dogGender: DOG_GENDER.FEMALE,
     dogEverPregnant: YES_NO_UNKNOWN.UNKNOWN,
     dogEverReceivedTransfusion: YES_NO_UNKNOWN.UNKNOWN,
   });

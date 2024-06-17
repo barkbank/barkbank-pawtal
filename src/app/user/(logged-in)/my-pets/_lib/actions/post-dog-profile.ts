@@ -3,7 +3,7 @@
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { addMyDog } from "@/lib/user/actions/add-my-dog";
-import { DogProfile } from "@/lib/dog/dog-models";
+import { DogProfile } from "@/lib/bark/models/dog-profile";
 import { CODE } from "@/lib/utilities/bark-code";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { revalidatePath } from "next/cache";

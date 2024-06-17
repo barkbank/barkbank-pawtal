@@ -1,14 +1,9 @@
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { UserActor } from "../user-actor";
-import { DogStatuses } from "@/lib/dog/dog-models";
-import {
-  MedicalStatus,
-  ParticipationStatus,
-  ProfileStatus,
-  ServiceStatus,
-} from "@/lib/data/db-enums";
+import { DogStatuses, DogStatusesSchema } from "@/lib/bark/models/dog-statuses";
 import { dbResultQuery } from "@/lib/data/db-utils";
 import { CODE } from "@/lib/utilities/bark-code";
+import { z } from "zod";
 
 export async function getDogStatuses(
   actor: UserActor,
@@ -31,7 +26,7 @@ export async function getDogStatuses(
   if (ownerUserId !== userId) {
     return Err(CODE.ERROR_WRONG_OWNER);
   }
-  return Ok(otherFields);
+  return Ok(DogStatusesSchema.parse(otherFields));
 }
 
 type Context = {
@@ -39,14 +34,11 @@ type Context = {
   dogId: string;
 };
 
-type Row = {
-  ownerUserId: string;
-  dogServiceStatus: ServiceStatus;
-  dogProfileStatus: ProfileStatus;
-  dogMedicalStatus: MedicalStatus;
-  dogParticipationStatus: ParticipationStatus;
-  numPendingReports: number;
-};
+const RowSchema = DogStatusesSchema.extend({
+  ownerUserId: z.string(),
+});
+
+type Row = z.infer<typeof RowSchema>;
 
 async function fetchRow(
   ctx: Context,
@@ -84,5 +76,5 @@ async function fetchRow(
   if (res.rows.length == 0) {
     return Err(CODE.ERROR_DOG_NOT_FOUND);
   }
-  return Ok(res.rows[0]);
+  return Ok(RowSchema.parse(res.rows[0]));
 }

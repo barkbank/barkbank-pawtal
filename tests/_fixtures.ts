@@ -20,10 +20,17 @@ import {
   DbCallSpec,
   DbCallGen,
 } from "@/lib/data/db-models";
-import { DOG_ANTIGEN_PRESENCE, DogAntigenPresence } from "@/lib/data/db-enums";
+import {
+  DOG_ANTIGEN_PRESENCE,
+  DogAntigenPresence,
+} from "@/lib/bark/enums/dog-antigen-presence";
 import { YES_NO_UNKNOWN, YesNoUnknown } from "@/lib/bark/enums/yes-no-unknown";
-import { DOG_GENDER, DogGender } from "@/lib/bark/enums/dog-gender";
-import { USER_RESIDENCY } from "@/lib/data/db-enums";
+import {
+  DOG_GENDER,
+  DogGender,
+  SPECIFIED_DOG_GENDER,
+} from "@/lib/bark/enums/dog-gender";
+import { USER_RESIDENCY } from "@/lib/bark/enums/user-residency";
 import { dbInsertAdmin, dbSelectAdmin } from "@/lib/data/db-admins";
 import { Pool } from "pg";
 import {
@@ -60,11 +67,9 @@ import {
   UserActorFactory,
   UserActorFactoryConfig,
 } from "@/lib/user/user-actor-factory";
-import {
-  CallOutcome,
-  POS_NEG_NIL,
-  REPORTED_INELIGIBILITY,
-} from "@/lib/data/db-enums";
+import { REPORTED_INELIGIBILITY } from "@/lib/bark/enums/reported-ineligibility";
+import { POS_NEG_NIL } from "@/lib/bark/enums/pos-neg-nil";
+import { CallOutcome } from "@/lib/bark/enums/call-outcome";
 import { dbInsertReportAndUpdateCall } from "@/lib/data/db-reports";
 import { dbInsertCall } from "@/lib/data/db-calls";
 import { EmailService } from "@/lib/services/email";
@@ -74,8 +79,8 @@ import {
 } from "@/lib/services/email-otp-service";
 import { VetActor, VetActorConfig } from "@/lib/vet/vet-actor";
 import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
-import { DogProfile } from "@/lib/dog/dog-models";
-import { SubProfile } from "@/lib/dog/dog-models";
+import { DogProfile } from "@/lib/bark/models/dog-profile";
+import { SubProfile } from "@/lib/bark/models/sub-profile";
 import { getDogProfile } from "@/lib/user/actions/get-dog-profile";
 import { sprintf } from "sprintf-js";
 
@@ -376,7 +381,7 @@ export function getEligibleDogSpecOverrides(): Partial<DogSpec> {
   return {
     dogBreed: "Great Elidog",
     dogBirthday: new Date(Date.now() - 3 * 52 * MILLIS_PER_WEEK), // ~3 yrs old
-    dogGender: DOG_GENDER.FEMALE,
+    dogGender: SPECIFIED_DOG_GENDER.FEMALE,
     dogWeightKg: 25,
     dogEverPregnant: YES_NO_UNKNOWN.NO,
     dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
@@ -440,7 +445,7 @@ function getDogAntigenPresence(idx: number): DogAntigenPresence {
 }
 
 function getDogGender(idx: number): DogGender {
-  const genderList: DogGender[] = Object.values(DOG_GENDER);
+  const genderList: DogGender[] = Object.values(SPECIFIED_DOG_GENDER);
   return genderList[idx % genderList.length];
 }
 

@@ -9,19 +9,17 @@ import {
 } from "../_fixtures";
 import { dbQuery } from "@/lib/data/db-utils";
 import { DbReportSpec, DogSpec, UserSpec } from "@/lib/data/db-models";
-import { PARTICIPATION_STATUS } from "@/lib/data/db-enums";
+import { PARTICIPATION_STATUS } from "@/lib/bark/enums/participation-status";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
-import { USER_RESIDENCY } from "@/lib/data/db-enums";
+import { USER_RESIDENCY } from "@/lib/bark/enums/user-residency";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
-import {
-  CALL_OUTCOME,
-  MEDICAL_STATUS,
-  POS_NEG_NIL,
-  PROFILE_STATUS,
-  REPORTED_INELIGIBILITY,
-  SERVICE_STATUS,
-} from "@/lib/data/db-enums";
+import { MEDICAL_STATUS } from "@/lib/bark/enums/medical-status";
+import { PROFILE_STATUS } from "@/lib/bark/enums/profile-status";
+import { SERVICE_STATUS } from "@/lib/bark/enums/service-status";
+import { REPORTED_INELIGIBILITY } from "@/lib/bark/enums/reported-ineligibility";
+import { POS_NEG_NIL } from "@/lib/bark/enums/pos-neg-nil";
+import { CALL_OUTCOME } from "@/lib/bark/enums/call-outcome";
 import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
 
 describe("dog_statuses view", () => {

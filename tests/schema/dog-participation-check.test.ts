@@ -1,7 +1,7 @@
 import { dbUpdateDogParticipation } from "@/lib/data/db-dogs";
 import { withDb } from "../_db_helpers";
 import { getTextEncryptionService, insertDog, insertUser } from "../_fixtures";
-import { PARTICIPATION_STATUS } from "@/lib/data/db-enums";
+import { PARTICIPATION_STATUS } from "@/lib/bark/enums/participation-status";
 import { expectError, expectSuccess } from "../_helpers";
 import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
 

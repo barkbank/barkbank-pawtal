@@ -1,4 +1,4 @@
-import { CALL_OUTCOME } from "@/lib/data/db-enums";
+import { CALL_OUTCOME } from "@/lib/bark/enums/call-outcome";
 
 export type SchedulerOutcome =
   | typeof CALL_OUTCOME.APPOINTMENT

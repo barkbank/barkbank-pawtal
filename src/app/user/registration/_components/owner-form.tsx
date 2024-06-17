@@ -11,7 +11,7 @@ import {
 } from "@/components/bark/bark-form";
 import { postOtpRequest } from "@/lib/server-actions/post-otp-request";
 import { isValidEmail } from "@/lib/utilities/bark-utils";
-import { USER_RESIDENCY } from "@/lib/data/db-enums";
+import { USER_RESIDENCY } from "@/lib/bark/enums/user-residency";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";

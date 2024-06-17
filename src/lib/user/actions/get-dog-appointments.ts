@@ -1,6 +1,9 @@
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { UserActor } from "../user-actor";
-import { DogAppointment } from "@/lib/dog/dog-models";
+import {
+  DogAppointment,
+  DogAppointmentSchema,
+} from "@/lib/bark/models/dog-appointment";
 import { CODE } from "@/lib/utilities/bark-code";
 import {
   dbBegin,
@@ -102,5 +105,5 @@ async function fetchAppointments(
   if (error !== undefined) {
     return Err(error);
   }
-  return Ok(result.rows);
+  return Ok(result.rows.map((row) => DogAppointmentSchema.parse(row)));
 }

@@ -9,12 +9,13 @@ import {
   insertUser,
   insertVet,
 } from "../_fixtures";
-import { DogProfile } from "@/lib/dog/dog-models";
+import { DogProfile } from "@/lib/bark/models/dog-profile";
 import {
   SINGAPORE_TIME_ZONE,
   parseCommonDate,
 } from "@/lib/utilities/bark-time";
-import { CALL_OUTCOME, DOG_ANTIGEN_PRESENCE } from "@/lib/data/db-enums";
+import { DOG_ANTIGEN_PRESENCE } from "@/lib/bark/enums/dog-antigen-presence";
+import { CALL_OUTCOME } from "@/lib/bark/enums/call-outcome";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";

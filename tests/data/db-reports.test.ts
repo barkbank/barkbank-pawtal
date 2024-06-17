@@ -7,7 +7,7 @@ import {
   insertUser,
   insertVet,
 } from "../_fixtures";
-import { CALL_OUTCOME, CallOutcome } from "@/lib/data/db-enums";
+import { CALL_OUTCOME, CallOutcome } from "@/lib/bark/enums/call-outcome";
 import { dbInsertReportAndUpdateCall } from "@/lib/data/db-reports";
 import { dbQuery } from "@/lib/data/db-utils";
 import { expectError } from "../_helpers";

@@ -3,10 +3,10 @@ import { withDb } from "../_db_helpers";
 import { RegistrationRequest } from "@/lib/services/registration";
 import { RegistrationServiceConfig } from "@/lib/services/registration";
 import { RegistrationService } from "@/lib/services/registration";
-import { DOG_ANTIGEN_PRESENCE } from "@/lib/data/db-enums";
+import { DOG_ANTIGEN_PRESENCE } from "@/lib/bark/enums/dog-antigen-presence";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
-import { USER_RESIDENCY } from "@/lib/data/db-enums";
+import { USER_RESIDENCY } from "@/lib/bark/enums/user-residency";
 import { guaranteed } from "@/lib/utilities/bark-utils";
 import {
   SINGAPORE_TIME_ZONE,
