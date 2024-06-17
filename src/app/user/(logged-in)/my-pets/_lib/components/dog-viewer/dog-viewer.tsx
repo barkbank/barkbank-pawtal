@@ -13,16 +13,13 @@ import { BarkDogAvatar } from "@/components/bark/bark-dog-avatar";
 import { BarkStatusBlock } from "@/components/bark/bark-status-block";
 import { Separator } from "@/components/ui/separator";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
-import { DogAppointment } from "@/lib/bark/models/dog-appointment";
-import { DogPreferredVet } from "@/lib/bark/models/dog-preferred-vet";
-import { DogProfile } from "@/lib/bark/models/dog-profile";
-import { DogStatuses } from "@/lib/bark/models/dog-statuses";
 import { IMG_PATH } from "@/lib/image-path";
 import { RoutePath } from "@/lib/route-path";
 import { getAgeMonths } from "@/lib/utilities/bark-age";
 import { Edit } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { DogViewerData } from "./dog-viewer-data";
 
 function ProfileItem(props: { label: string; value: string | number | null }) {
   const { label, value } = props;
@@ -47,15 +44,9 @@ function Warning(props: { children: React.ReactNode; icon: string }) {
   );
 }
 
-export function DogViewer(props: {
-  dogId: string;
-  dogProfile: DogProfile;
-  dogStatuses: DogStatuses;
-  dogAppointments: DogAppointment[];
-  dogPreferredVet: DogPreferredVet | null;
-}) {
+export function DogViewer(props: { data: DogViewerData }) {
   const { dogId, dogProfile, dogStatuses, dogAppointments, dogPreferredVet } =
-    props;
+    props.data;
   const {
     dogName,
     dogGender,

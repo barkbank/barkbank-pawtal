@@ -22,17 +22,8 @@ export default async function Page(props: { params: { dogId: string } }) {
   if (error !== undefined) {
     redirect(RoutePath.USER_MY_PETS);
   }
-  const { dogProfile, dogStatuses, dogAppointments, dogPreferredVet } = result;
 
-  return (
-    <DogViewer
-      dogId={dogId}
-      dogProfile={dogProfile}
-      dogStatuses={dogStatuses}
-      dogAppointments={dogAppointments}
-      dogPreferredVet={dogPreferredVet}
-    />
-  );
+  return <DogViewer data={result} />;
 }
 
 async function getDogViewerData(
