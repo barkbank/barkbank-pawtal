@@ -169,18 +169,15 @@ function formatPreferredVet(dogPreferredVet: DogPreferredVet | null): string {
   return `${vetName} (${vetAddress})`;
 }
 
-export default async function Page(props: { params: { dogId: string } }) {
-  const { dogId } = props.params;
-  const actor = await getAuthenticatedUserActor();
-  if (actor === null) {
-    redirect(RoutePath.USER_LOGIN_PAGE);
-  }
-  const { result, error } = await getPageData(actor, dogId);
-  if (error !== undefined) {
-    redirect(RoutePath.USER_MY_PETS);
-  }
-  const { dogProfile, dogStatuses, dogAppointments, dogPreferredVet } = result;
-
+function DogViewer(props: {
+  dogId: string;
+  dogProfile: DogProfile;
+  dogStatuses: DogStatuses;
+  dogAppointments: DogAppointment[];
+  dogPreferredVet: DogPreferredVet | null;
+}) {
+  const { dogId, dogProfile, dogStatuses, dogAppointments, dogPreferredVet } =
+    props;
   const {
     dogName,
     dogGender,
@@ -193,17 +190,6 @@ export default async function Page(props: { params: { dogId: string } }) {
   } = dogProfile;
 
   const dogAgeMonths = getAgeMonths(dogBirthday, new Date());
-
-  // WIP: === REFACTORING STEPS ===
-  // DONE: Move db-enums into bark/enums with Zod schemas.
-  // DONE: Move dog-models into bark/models with Zod schemas.
-  // WIP: Extract the following into a DogViewer component inside page.tsx first.
-  // WIP: Then move DogViewer into _lib/components/dog-viewer.tsx with all the view components and functions.
-  // WIP: Extract from DogViewer components DogStatus and DogProfile
-  // WIP: Create a _lib/components/dog-viewer directory.
-  // WIP: Move DogStatus into .../dog-viewer/dog-status.tsx
-  // WIP: Move DogProfile, ProfileItem, and Warning into .../dog-viewer/dog-profile.tsx
-  // WIP: === Regroup, think of next steps ===
 
   return (
     <div className="m-3 flex flex-col md:items-start">
@@ -293,5 +279,39 @@ export default async function Page(props: { params: { dogId: string } }) {
         </div>
       </div>
     </div>
+  );
+}
+
+export default async function Page(props: { params: { dogId: string } }) {
+  const { dogId } = props.params;
+  const actor = await getAuthenticatedUserActor();
+  if (actor === null) {
+    redirect(RoutePath.USER_LOGIN_PAGE);
+  }
+  const { result, error } = await getPageData(actor, dogId);
+  if (error !== undefined) {
+    redirect(RoutePath.USER_MY_PETS);
+  }
+  const { dogProfile, dogStatuses, dogAppointments, dogPreferredVet } = result;
+
+  // WIP: === REFACTORING STEPS ===
+  // DONE: Move db-enums into bark/enums with Zod schemas.
+  // DONE: Move dog-models into bark/models with Zod schemas.
+  // DONE: Extract the following into a DogViewer component inside page.tsx first.
+  // WIP: Then move DogViewer into _lib/components/dog-viewer.tsx with all the view components and functions.
+  // WIP: Extract from DogViewer components DogStatus and DogProfile
+  // WIP: Create a _lib/components/dog-viewer directory.
+  // WIP: Move DogStatus into .../dog-viewer/dog-status.tsx
+  // WIP: Move DogProfile, ProfileItem, and Warning into .../dog-viewer/dog-profile.tsx
+  // WIP: === Regroup, think of next steps ===
+
+  return (
+    <DogViewer
+      dogId={dogId}
+      dogProfile={dogProfile}
+      dogStatuses={dogStatuses}
+      dogAppointments={dogAppointments}
+      dogPreferredVet={dogPreferredVet}
+    />
   );
 }
