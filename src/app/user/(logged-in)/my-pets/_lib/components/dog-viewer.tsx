@@ -1,12 +1,17 @@
+import {
+  formatWeight,
+  formatGender,
+  formatBirthday,
+  formatAge,
+  formatBloodType,
+  formatPregnancyHistory,
+  formatTransfusionHistory,
+} from "@/app/_lib/formatters";
+import { formatPreferredVet } from "@/app/_lib/formatters";
 import { BarkButton } from "@/components/bark/bark-button";
 import { BarkDogAvatar } from "@/components/bark/bark-dog-avatar";
 import { BarkStatusBlock } from "@/components/bark/bark-status-block";
-import {
-  DogAntigenPresence,
-  DOG_ANTIGEN_PRESENCE,
-} from "@/lib/bark/enums/dog-antigen-presence";
-import { DogGender, DOG_GENDER } from "@/lib/bark/enums/dog-gender";
-import { YesNoUnknown, YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
+import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { DogAppointment } from "@/lib/bark/models/dog-appointment";
 import { DogPreferredVet } from "@/lib/bark/models/dog-preferred-vet";
 import { DogProfile } from "@/lib/bark/models/dog-profile";
@@ -14,7 +19,6 @@ import { DogStatuses } from "@/lib/bark/models/dog-statuses";
 import { IMG_PATH } from "@/lib/image-path";
 import { RoutePath } from "@/lib/route-path";
 import { getAgeMonths } from "@/lib/utilities/bark-age";
-import { formatDateTime, SGT_UI_DATE } from "@/lib/utilities/bark-time";
 import Image from "next/image";
 
 function ProfileItem(props: { label: string; value: string | number | null }) {
@@ -38,77 +42,6 @@ function Warning(props: { children: React.ReactNode; icon: string }) {
       <p className="text-sm italic">{children}</p>
     </div>
   );
-}
-
-function formatWeight(dogWeightKg: number | null): string {
-  if (dogWeightKg === null) {
-    return "Unknown";
-  }
-  return `${dogWeightKg} KG`;
-}
-
-function formatAge(dogAgeMonths: number): string {
-  const yearValue = Math.floor(dogAgeMonths / 12);
-  const monthValue = dogAgeMonths % 12;
-  const yearUnit = yearValue === 1 ? "year" : "years";
-  const monthUnit = monthValue === 1 ? "month" : "months";
-  return `${yearValue} ${yearUnit} ${monthValue} ${monthUnit}`;
-}
-
-function formatGender(dogGender: DogGender): string {
-  if (dogGender === DOG_GENDER.MALE) return "Male";
-  if (dogGender === DOG_GENDER.FEMALE) return "Female";
-  return "Unknown";
-}
-
-function formatPregnancyHistory(
-  dogGender: DogGender,
-  dogEverPregnant: YesNoUnknown,
-): string {
-  if (dogGender === DOG_GENDER.MALE) {
-    return "N.A.";
-  }
-  if (dogEverPregnant === YES_NO_UNKNOWN.YES) {
-    return "Yes, ever pregnant";
-  }
-  if (dogEverPregnant === YES_NO_UNKNOWN.NO) {
-    return "No, never pregnant";
-  }
-  return "Unknown";
-}
-
-function formatBloodType(dogDea1Point1: DogAntigenPresence): string {
-  if (dogDea1Point1 === DOG_ANTIGEN_PRESENCE.POSITIVE) {
-    return "DEA 1.1 Positive";
-  }
-  if (dogDea1Point1 === DOG_ANTIGEN_PRESENCE.NEGATIVE) {
-    return "DEA 1.1 Negative";
-  }
-  return "Unknown";
-}
-
-function formatTransfusionHistory(
-  dogEverReceivedTransfusion: YesNoUnknown,
-): string {
-  if (dogEverReceivedTransfusion === YES_NO_UNKNOWN.YES) {
-    return "Yes, ever received blood transfusion";
-  }
-  if (dogEverReceivedTransfusion === YES_NO_UNKNOWN.NO) {
-    return "No, never received blood transfusion";
-  }
-  return "Unknown";
-}
-
-function formatBirthday(dogBirthday: Date): string {
-  return formatDateTime(dogBirthday, SGT_UI_DATE);
-}
-
-function formatPreferredVet(dogPreferredVet: DogPreferredVet | null): string {
-  if (dogPreferredVet === null) {
-    return "No preferred vet";
-  }
-  const { vetName, vetAddress } = dogPreferredVet;
-  return `${vetName} (${vetAddress})`;
 }
 
 export function DogViewer(props: {
