@@ -13,11 +13,12 @@ import { opFetchDogAppointmentsByDogId } from "@/lib/bark/operations/op-fetch-do
 import { DogViewerData } from "../../_lib/components/dog-viewer/dog-viewer-data";
 
 export default async function Page(props: { params: { dogId: string } }) {
-  const { dogId } = props.params;
   const actor = await getAuthenticatedUserActor();
   if (actor === null) {
     redirect(RoutePath.USER_LOGIN_PAGE);
   }
+
+  const { dogId } = props.params;
   const { result, error } = await getDogViewerData(actor, dogId);
   if (error !== undefined) {
     redirect(RoutePath.USER_MY_PETS);
