@@ -58,7 +58,7 @@ describe("getDogAppointments", () => {
       const { result, error } = await getDogAppointments(actor, d1.dogId);
       expect(error).toBeUndefined();
       const expected: DogAppointment = {
-        callId: c1.callId,
+        appointmentId: c1.callId,
         dogId: d1.dogId,
         vetId: v1.vetId,
         vetName: v1.vetName,

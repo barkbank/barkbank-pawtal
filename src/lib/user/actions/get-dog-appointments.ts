@@ -91,7 +91,7 @@ async function fetchAppointments(
   const sql = `
   SELECT
     tCall.dog_id as "dogId",
-    tCall.call_id as "callId",
+    tCall.call_id as "appointmentId",
     tCall.vet_id as "vetId",
     tVet.vet_name as "vetName"
   FROM calls as tCall
