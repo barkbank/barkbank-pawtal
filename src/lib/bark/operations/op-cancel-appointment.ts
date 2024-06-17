@@ -2,7 +2,7 @@ import { CODE } from "@/lib/utilities/bark-code";
 import { BarkContext } from "../bark-context";
 import { dbBegin, dbCommit, dbRelease, dbRollback } from "@/lib/data/db-utils";
 import { updateAppointment } from "../queries/update-appointment";
-import { APPOINTMENT_STATUS } from "../models/appointment-status";
+import { APPOINTMENT_STATUS } from "../enums/appointment-status";
 import { selectAppointmentMetadata } from "../queries/select-appointment-metadata";
 
 export async function opCancelAppointment(

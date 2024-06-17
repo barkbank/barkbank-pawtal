@@ -40,6 +40,6 @@ export async function opFetchReportsByDogId(
     console.log(err);
     return Err(CODE.FAILED);
   } finally {
-    dbRelease(conn);
+    await dbRelease(conn);
   }
 }

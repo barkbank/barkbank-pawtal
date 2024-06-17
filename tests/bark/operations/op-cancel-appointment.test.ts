@@ -3,8 +3,8 @@ import { withBarkContext } from "../_context";
 import { givenAppointment, givenVet } from "../_given";
 import { CODE } from "@/lib/utilities/bark-code";
 import { opFetchAppointment } from "@/lib/bark/operations/op-fetch-appointment";
-import { APPOINTMENT_STATUS } from "@/lib/bark/models/appointment-status";
 import { opSubmitReport } from "@/lib/bark/operations/op-submit-report";
+import { APPOINTMENT_STATUS } from "@/lib/bark/enums/appointment-status";
 import { mockReportData } from "../_mocks";
 
 describe("opCancelAppointment", () => {

@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { AppointmentStatusSchema } from "./appointment-status";
+import { AppointmentStatusSchema } from "../enums/appointment-status";
 
 export const BarkAppointmentMetadataSchema = z.object({
   appointmentId: z.string(),
