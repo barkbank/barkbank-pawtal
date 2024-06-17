@@ -19,7 +19,9 @@ import { DogStatuses } from "@/lib/bark/models/dog-statuses";
 import { IMG_PATH } from "@/lib/image-path";
 import { RoutePath } from "@/lib/route-path";
 import { getAgeMonths } from "@/lib/utilities/bark-age";
+import { Edit } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 function ProfileItem(props: { label: string; value: string | number | null }) {
   const { label, value } = props;
@@ -83,8 +85,11 @@ export function DogViewer(props: {
         </div>
       </div>
       <div className="x-card flex w-full flex-col gap-3">
-        <div className="x-card-top-section x-card-title bg-brand-brown">
-          Profile
+        <div className="x-card-top-section flex flex-row justify-between bg-brand-brown">
+          <p className="x-card-title">Profile</p>
+          <Link href={RoutePath.USER_EDIT_DOG(dogId)}>
+            <Edit color="#555" />
+          </Link>
         </div>
         <ProfileItem label="Breed" value={dogBreed} />
         <ProfileItem label="Weight" value={formatWeight(dogWeightKg)} />
@@ -141,24 +146,15 @@ export function DogViewer(props: {
           label="Preferred Vet"
           value={formatPreferredVet(dogPreferredVet)}
         />
-
-        <div className="flex w-full flex-col gap-3 md:flex-row">
-          <BarkButton
-            className="w-full md:w-40"
-            variant="brandInverse"
-            href={RoutePath.USER_MY_PETS}
-          >
-            Back
-          </BarkButton>
-          <BarkButton
-            className="w-full md:w-40"
-            variant="brandInverse"
-            href={RoutePath.USER_EDIT_DOG(dogId)}
-          >
-            Edit
-          </BarkButton>
-        </div>
       </div>
+
+      <BarkButton
+        className="w-full md:w-40"
+        variant="brandInverse"
+        href={RoutePath.USER_MY_PETS}
+      >
+        Back to Pets
+      </BarkButton>
     </div>
   );
 }
