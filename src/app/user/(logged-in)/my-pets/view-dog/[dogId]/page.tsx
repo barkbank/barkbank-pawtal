@@ -75,18 +75,6 @@ export default async function Page(props: { params: { dogId: string } }) {
   }
   const { dogProfile, dogStatuses, dogAppointments, dogPreferredVet } = result;
 
-  // WIP: === REFACTORING STEPS ===
-  // DONE: Move db-enums into bark/enums with Zod schemas.
-  // DONE: Move dog-models into bark/models with Zod schemas.
-  // DONE: Extract the following into a DogViewer component inside page.tsx first.
-  // DONE: Then move DogViewer into _lib/components/dog-viewer.tsx with all the view components and functions.
-  // DONE: Move formatX functions into app/_lib/formatters.ts files.
-  // WIP: Extract from DogViewer components DogStatus and DogProfile
-  // WIP: Create a _lib/components/dog-viewer directory.
-  // WIP: Move DogStatus into .../dog-viewer/dog-status.tsx
-  // WIP: Move DogProfile, ProfileItem, and Warning into .../dog-viewer/dog-profile.tsx
-  // WIP: === Regroup, think of next steps ===
-
   return (
     <DogViewer
       dogId={dogId}
