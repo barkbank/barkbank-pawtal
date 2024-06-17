@@ -193,6 +193,16 @@ export default async function Page(props: { params: { dogId: string } }) {
 
   const dogAgeMonths = getAgeMonths(dogBirthday, new Date());
 
+  // WIP: === REFACTORING STEPS ===
+  // WIP: Create pull request to continually test the UI as we refactor.
+  // WIP: Extract the following into a DogViewer component inside page.tsx first.
+  // WIP: Then move DogViewer into _lib/components/dog-viewer.tsx with all the view components and functions.
+  // WIP: Extract from DogViewer components DogStatus and DogProfile
+  // WIP: Create a _lib/components/dog-viewer directory.
+  // WIP: Move DogStatus into .../dog-viewer/dog-status.tsx
+  // WIP: Move DogProfile, ProfileItem, and Warning into .../dog-viewer/dog-profile.tsx
+  // WIP: === Regroup, think of next steps ===
+
   return (
     <div className="m-3 flex flex-col md:items-start">
       <div className="flex flex-row items-start justify-center gap-3">
