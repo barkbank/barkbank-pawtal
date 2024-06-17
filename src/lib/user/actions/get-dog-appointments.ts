@@ -93,7 +93,9 @@ async function fetchAppointments(
     tCall.dog_id as "dogId",
     tCall.call_id as "appointmentId",
     tCall.vet_id as "vetId",
-    tVet.vet_name as "vetName"
+    tVet.vet_name as "vetName",
+    tVet.vet_phone_number as "vetPhoneNumber",
+    tVet.vet_address as "vetAddress"
   FROM calls as tCall
   LEFT JOIN vets as tVet on tCall.vet_id = tVet.vet_id
   WHERE tCall.dog_id = $1

@@ -5,6 +5,8 @@ export const DogAppointmentSchema = z.object({
   dogId: z.string(),
   vetId: z.string(),
   vetName: z.string(),
+  vetPhoneNumber: z.string(),
+  vetAddress: z.string(),
 });
 
 export type DogAppointment = z.infer<typeof DogAppointmentSchema>;

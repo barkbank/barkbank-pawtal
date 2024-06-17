@@ -62,6 +62,8 @@ describe("getDogAppointments", () => {
         dogId: d1.dogId,
         vetId: v1.vetId,
         vetName: v1.vetName,
+        vetPhoneNumber: v1.vetPhoneNumber,
+        vetAddress: v1.vetAddress,
       };
       expect(result).toEqual([expected]);
     });
