@@ -2,7 +2,7 @@ import { dbResultQuery } from "../../data/db-utils";
 import { MyDog } from "../user-models";
 import { DogAppointment } from "@/lib/dog/dog-models";
 import { UserActor } from "../user-actor";
-import { ParticipationStatus } from "@/lib/data/db-enums";
+import { ParticipationStatus } from "@/lib/bark/enums/participation-status";
 import { MedicalStatus } from "@/lib/bark/enums/medical-status";
 import { ProfileStatus } from "@/lib/bark/enums/profile-status";
 import { ServiceStatus } from "@/lib/bark/enums/service-status";

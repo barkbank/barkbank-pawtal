@@ -1,6 +1,6 @@
 import { DbContext, dbQuery, toCamelCaseRow } from "./db-utils";
 import { DogRecord, DogGen, DogSpec } from "./db-models";
-import { ParticipationStatus } from "./db-enums";
+import { ParticipationStatus } from "../bark/enums/participation-status";
 
 const DOG_COLUMNS = [
   "dog_id",

@@ -9,7 +9,7 @@ import {
   insertVet,
 } from "../_fixtures";
 import { getMyPets } from "@/lib/user/actions/get-my-pets";
-import { PARTICIPATION_STATUS } from "@/lib/data/db-enums";
+import { PARTICIPATION_STATUS } from "@/lib/bark/enums/participation-status";
 import { CALL_OUTCOME } from "@/lib/bark/enums/call-outcome";
 import { guaranteed } from "@/lib/utilities/bark-utils";
 import { dbQuery } from "@/lib/data/db-utils";

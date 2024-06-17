@@ -1,7 +1,7 @@
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { UserActor } from "../user-actor";
 import { DogStatuses } from "@/lib/dog/dog-models";
-import { ParticipationStatus } from "@/lib/data/db-enums";
+import { ParticipationStatus } from "@/lib/bark/enums/participation-status";
 import { MedicalStatus } from "@/lib/bark/enums/medical-status";
 import { ProfileStatus } from "@/lib/bark/enums/profile-status";
 import { ServiceStatus } from "@/lib/bark/enums/service-status";
