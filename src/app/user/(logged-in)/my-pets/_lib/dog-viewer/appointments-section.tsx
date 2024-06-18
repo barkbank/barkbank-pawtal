@@ -2,8 +2,7 @@ import { Separator } from "@/components/ui/separator";
 import { DogViewerData } from "./dog-viewer-data";
 
 export function AppointmentsSection(props: { data: DogViewerData }) {
-  const { data } = props;
-  const { dogAppointments } = data;
+  const { dogAppointments } = props.data;
 
   return (
     <div className="x-card flex flex-col gap-3">
