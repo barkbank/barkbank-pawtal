@@ -10,7 +10,11 @@ import { redirect } from "next/navigation";
 import { DogViewer } from "../../_lib/dog-viewer/dog-viewer";
 import APP from "@/lib/app";
 import { opFetchDogAppointmentsByDogId } from "@/lib/bark/operations/op-fetch-dog-appointments-by-dog-id";
-import { DogViewerData } from "../../_lib/dog-viewer/dog-viewer-data";
+import {
+  DogViewerData,
+  DogViewerDataSchema,
+} from "../../_lib/dog-viewer/dog-viewer-data";
+import { opFetchReportsByDogId } from "@/lib/bark/operations/op-fetch-reports-by-dog-id";
 
 export default async function Page(props: { params: { dogId: string } }) {
   const actor = await getAuthenticatedUserActor();
@@ -47,6 +51,7 @@ async function getDogViewerData(
     resDogStatuses,
     resDogAppointments,
     resDogPreferredVet,
+    resDogReports,
   ] = await Promise.all([
     getDogProfile(actor, dogId),
     getDogStatuses(actor, dogId),
@@ -55,6 +60,7 @@ async function getDogViewerData(
       actorUserId,
     }),
     getDogPreferredVet(actor, dogId),
+    opFetchReportsByDogId(context, { dogId, actorUserId }),
   ]);
 
   if (resDogProfile.error !== undefined) {
@@ -69,11 +75,16 @@ async function getDogViewerData(
   if (resDogPreferredVet.error !== undefined) {
     return Err(resDogPreferredVet.error);
   }
-  return Ok({
+  if (resDogReports.error !== undefined) {
+    return Err(resDogReports.error);
+  }
+  const data: DogViewerData = {
     dogId,
     dogProfile: resDogProfile.result,
     dogStatuses: resDogStatuses.result,
     dogAppointments: resDogAppointments.result.appointments,
     dogPreferredVet: resDogPreferredVet.result,
-  });
+    dogReports: resDogReports.result.reports,
+  };
+  return Ok(DogViewerDataSchema.parse(data));
 }
