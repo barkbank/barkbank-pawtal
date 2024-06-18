@@ -7,10 +7,10 @@ import { UserActor } from "@/lib/user/user-actor";
 import { CODE } from "@/lib/utilities/bark-code";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { redirect } from "next/navigation";
-import { DogViewer } from "../../_lib/components/dog-viewer/dog-viewer";
+import { DogViewer } from "../../_lib/dog-viewer/dog-viewer";
 import APP from "@/lib/app";
 import { opFetchDogAppointmentsByDogId } from "@/lib/bark/operations/op-fetch-dog-appointments-by-dog-id";
-import { DogViewerData } from "../../_lib/components/dog-viewer/dog-viewer-data";
+import { DogViewerData } from "../../_lib/dog-viewer/dog-viewer-data";
 
 export default async function Page(props: { params: { dogId: string } }) {
   const actor = await getAuthenticatedUserActor();
