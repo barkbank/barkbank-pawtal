@@ -52,7 +52,7 @@ export function _Report(props: { report: BarkReport }) {
           <p>{dogName} tested negative for heartworms.</p>
         )}
       </div>
-      {/* <pre>{JSON.stringify(report, null, 2)}</pre> */}
+      {/* WIP: <pre>{JSON.stringify(report, null, 2)}</pre> */}
     </div>
   );
 }
