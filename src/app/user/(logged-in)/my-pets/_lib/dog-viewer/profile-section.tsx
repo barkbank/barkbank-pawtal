@@ -17,6 +17,7 @@ import { DogViewerData } from "./dog-viewer-data";
 import Link from "next/link";
 import Image from "next/image";
 import { getAgeMonths } from "@/lib/utilities/bark-age";
+import { DataItem } from "./data-item";
 
 export function ProfileSection(props: { data: DogViewerData }) {
   const { data } = props;
@@ -40,8 +41,8 @@ export function ProfileSection(props: { data: DogViewerData }) {
         </Link>
       </div>
       <Separator />
-      <_Item label="Breed" value={dogBreed} />
-      <_Item label="Weight" value={formatWeight(dogWeightKg)} />
+      <DataItem label="Breed" value={dogBreed} />
+      <DataItem label="Weight" value={formatWeight(dogWeightKg)} />
       {dogBreed === "" && dogWeightKg === null && (
         <_Warn icon={IMG_PATH.CIRCLE_RED_EXCLAMATION}>
           Either dog breed or weight must be specified to complete the profile.
@@ -53,9 +54,9 @@ export function ProfileSection(props: { data: DogViewerData }) {
         </_Warn>
       )}
 
-      <_Item label="Sex" value={formatGender(dogGender)} />
-      <_Item label="Birthday" value={formatBirthday(dogBirthday)} />
-      <_Item label="Age" value={formatAge(dogAgeMonths)} />
+      <DataItem label="Sex" value={formatGender(dogGender)} />
+      <DataItem label="Birthday" value={formatBirthday(dogBirthday)} />
+      <DataItem label="Age" value={formatAge(dogAgeMonths)} />
       {dogAgeMonths < 12 && (
         <_Warn icon={IMG_PATH.CIRCLE_BLUE_PAUSE}>
           Dogs younger than 1 year of age are not eligible.
@@ -66,8 +67,8 @@ export function ProfileSection(props: { data: DogViewerData }) {
           Dogs aged 8 years or older are ineligible.
         </_Warn>
       )}
-      <_Item label="Blood Type" value={formatBloodType(dogDea1Point1)} />
-      <_Item
+      <DataItem label="Blood Type" value={formatBloodType(dogDea1Point1)} />
+      <DataItem
         label="Ever Pregnant"
         value={formatPregnancyHistory(dogGender, dogEverPregnant)}
       />
@@ -76,7 +77,7 @@ export function ProfileSection(props: { data: DogViewerData }) {
           Dogs that have a history of pregnancy are not eligible.
         </_Warn>
       )}
-      <_Item
+      <DataItem
         label="Ever Received Blood"
         value={formatTransfusionHistory(dogEverReceivedTransfusion)}
       />
@@ -87,20 +88,10 @@ export function ProfileSection(props: { data: DogViewerData }) {
         </_Warn>
       )}
 
-      <_Item
+      <DataItem
         label="Preferred Vet"
         value={formatPreferredVet(dogPreferredVet)}
       />
-    </div>
-  );
-}
-
-function _Item(props: { label: string; value: string | number | null }) {
-  const { label, value } = props;
-  return (
-    <div className="w-full">
-      <h2 className="text-base">{label}:</h2>
-      <p className="flex-1 text-base font-bold">{value}</p>
     </div>
   );
 }
