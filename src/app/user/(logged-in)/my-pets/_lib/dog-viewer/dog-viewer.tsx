@@ -3,7 +3,6 @@ import { RoutePath } from "@/lib/route-path";
 import { DogViewerData } from "./dog-viewer-data";
 import { StatusSection } from "./status-section";
 import { ProfileSection } from "./profile-section";
-import { AppointmentsSection } from "./appointments-section";
 import { ReportsSection } from "./reports-section";
 
 export function DogViewer(props: { data: DogViewerData }) {
@@ -13,7 +12,6 @@ export function DogViewer(props: { data: DogViewerData }) {
     <div className="m-3 flex flex-col gap-3">
       <StatusSection data={data} />
       <ProfileSection data={data} />
-      <AppointmentsSection data={data} />
       <ReportsSection data={data} />
       <BarkButton
         className="w-full md:w-40"
