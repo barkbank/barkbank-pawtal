@@ -10,7 +10,25 @@ export function ReportsSection(props: { data: DogViewerData }) {
     <div className="x-card flex flex-col gap-3">
       <p className="x-card-title">Reports</p>
       <Separator />
-      {dogReports.map((report) => {
+      {dogReports.length === 0 && <_NoReports />}
+      {dogReports.length > 0 && <_ReportList reports={dogReports} />}
+    </div>
+  );
+}
+
+export function _NoReports() {
+  return (
+    <div className="prose">
+      <p>There are no reports currently.</p>
+    </div>
+  );
+}
+
+export function _ReportList(props: { reports: BarkReport[] }) {
+  const { reports } = props;
+  return (
+    <div className="flex flex-col gap-3">
+      {reports.map((report) => {
         const { reportId } = report;
         return <_Report key={reportId} report={report} />;
       })}
@@ -18,7 +36,6 @@ export function ReportsSection(props: { data: DogViewerData }) {
   );
 }
 
-// WIP: Need to add vet details to the report. (Remember, reports can come from past preferred vets which may be different from the current.)
 export function _Report(props: { report: BarkReport }) {
   const { report } = props;
   const {
@@ -29,30 +46,15 @@ export function _Report(props: { report: BarkReport }) {
     dogHeartworm,
     dogBodyConditioningScore,
   } = report;
+  const vetName = "Happy Vet"; // WIP: add vetName to report
   const dateText = formatDateTime(visitTime, SGT_UI_DATE);
 
   return (
-    <div>
-      <div className="prose">
-        <h4>
-          {dateText} report from vet {vetId}.
-        </h4>
-        <p>
-          {dogName} was presented on {dateText}, weighing in at {dogWeightKg}{" "}
-          kilograms. Overall, its body conditioning score (BCS) was{" "}
-          {dogBodyConditioningScore}.
-        </p>
-        {dogHeartworm === POS_NEG_NIL.POSITIVE && (
-          <p>
-            {dogName} tested positive for heartworms and is therefore ineligible
-            for blood donation.
-          </p>
-        )}
-        {dogHeartworm === POS_NEG_NIL.NEGATIVE && (
-          <p>{dogName} tested negative for heartworms.</p>
-        )}
+    <div className="x-card bg-gray-100">
+      <div className="">
+        <p>Date: {dateText}</p>
+        <p>Clinic: {vetName}</p>
       </div>
-      {/* WIP: <pre>{JSON.stringify(report, null, 2)}</pre> */}
     </div>
   );
 }

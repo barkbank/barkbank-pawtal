@@ -69,7 +69,7 @@ export function BarkStatusBlock(props: {
             {headLine}
             {dogAppointments.map(
               ({ vetName, vetPhoneNumber, vetAddress }, idx) => (
-                <div key={idx} className="x-card bg-brand-brown">
+                <div key={idx} className="x-card bg-gray-100">
                   <p>Clinic: {vetName}</p>
                   <p>Phone: {vetPhoneNumber}</p>
                   <p>Address: {vetAddress}</p>
