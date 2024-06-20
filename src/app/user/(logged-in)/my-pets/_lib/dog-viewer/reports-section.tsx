@@ -38,23 +38,15 @@ export function _ReportList(props: { reports: BarkReport[] }) {
 
 export function _Report(props: { report: BarkReport }) {
   const { report } = props;
-  const {
-    visitTime,
-    vetId,
-    dogName,
-    dogWeightKg,
-    dogHeartworm,
-    dogBodyConditioningScore,
-  } = report;
+  const { visitTime } = report;
   const vetName = "Happy Vet"; // WIP: add vetName to report
   const dateText = formatDateTime(visitTime, SGT_UI_DATE);
 
+  // WIP: Clicking on the card should send users to report page.
   return (
     <div className="x-card bg-gray-100">
-      <div className="">
-        <p>Date: {dateText}</p>
-        <p>Clinic: {vetName}</p>
-      </div>
+      <p>Date: {dateText}</p>
+      <p>Clinic: {vetName}</p>
     </div>
   );
 }
