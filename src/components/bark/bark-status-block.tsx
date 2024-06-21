@@ -17,7 +17,6 @@ import {
 } from "./bark-status";
 import { DogAppointment } from "@/lib/bark/models/dog-appointment";
 import { DogStatuses } from "@/lib/bark/models/dog-statuses";
-import { LocateIcon, MapPin, Phone, Pin } from "lucide-react";
 
 function StatusMessage(props: {
   children: React.ReactNode;
