@@ -2,7 +2,6 @@ import { Separator } from "@/components/ui/separator";
 import { DogViewerData } from "./dog-viewer-data";
 import { BarkReport } from "@/lib/bark/models/bark-report";
 import { SGT_UI_DATE, formatDateTime } from "@/lib/utilities/bark-time";
-import { POS_NEG_NIL } from "@/lib/bark/enums/pos-neg-nil";
 
 export function ReportsSection(props: { data: DogViewerData }) {
   const { dogReports } = props.data;
@@ -38,8 +37,7 @@ export function _ReportList(props: { reports: BarkReport[] }) {
 
 export function _Report(props: { report: BarkReport }) {
   const { report } = props;
-  const { visitTime } = report;
-  const vetName = "Happy Vet"; // WIP: add vetName to report
+  const { visitTime, vetName } = report;
   const dateText = formatDateTime(visitTime, SGT_UI_DATE);
 
   // WIP: Clicking on the card should send users to report page.

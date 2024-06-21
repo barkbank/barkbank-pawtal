@@ -1,5 +1,8 @@
 import { BarkContext } from "../bark-context";
-import { EncryptedBarkReportData } from "../models/encrypted-bark-report-data";
+import {
+  EncryptedBarkReportData,
+  EncryptedBarkReportDataSchema,
+} from "../models/encrypted-bark-report-data";
 import { BarkReportData } from "../models/bark-report-data";
 import { toEncryptedText } from "./to-encrypted-text";
 
@@ -16,5 +19,5 @@ export async function toEncryptedBarkReportData(
     ...otherFields,
     encryptedIneligibilityReason,
   };
-  return encryptedReportData;
+  return EncryptedBarkReportDataSchema.parse(encryptedReportData);
 }
