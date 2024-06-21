@@ -2,6 +2,8 @@ import { Separator } from "@/components/ui/separator";
 import { DogViewerData } from "./dog-viewer-data";
 import { BarkReport } from "@/lib/bark/models/bark-report";
 import { SGT_UI_DATE, formatDateTime } from "@/lib/utilities/bark-time";
+import Link from "next/link";
+import { RoutePath } from "@/lib/route-path";
 
 export function ReportsSection(props: { data: DogViewerData }) {
   const { dogReports } = props.data;
@@ -37,14 +39,16 @@ export function _ReportList(props: { reports: BarkReport[] }) {
 
 export function _Report(props: { report: BarkReport }) {
   const { report } = props;
-  const { visitTime, vetName } = report;
+  const { reportId, visitTime, vetName } = report;
   const dateText = formatDateTime(visitTime, SGT_UI_DATE);
 
-  // WIP: Clicking on the card should send users to report page.
   return (
-    <div className="x-card bg-gray-100">
+    <Link
+      className="x-card bg-gray-100"
+      href={RoutePath.USER_VIEW_REPORT(reportId)}
+    >
       <p>Date: {dateText}</p>
       <p>Clinic: {vetName}</p>
-    </div>
+    </Link>
   );
 }
