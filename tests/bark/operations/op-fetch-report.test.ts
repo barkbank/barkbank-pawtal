@@ -1,4 +1,4 @@
-import { BarkReport } from "@/lib/bark/models/bark-report";
+import { BarkReport, BarkReportSchema } from "@/lib/bark/models/bark-report";
 import { BarkReportData } from "@/lib/bark/models/bark-report-data";
 import { givenDog, givenVet } from "../_given";
 import { mockReportData } from "../_mocks";
@@ -10,7 +10,8 @@ import { opFetchReport } from "@/lib/bark/operations/op-fetch-report";
 describe("opFetchReport", () => {
   it("should return the report", async () => {
     await withBarkContext(async ({ context, testContext }) => {
-      const { vetId } = await givenVet(testContext);
+      const { vetId, vetName, vetAddress, vetPhoneNumber } =
+        await givenVet(testContext);
       const { dogId, dogName, dogBreed, dogGender, ownerName } = await givenDog(
         testContext,
         { preferredVetId: vetId },
@@ -47,9 +48,12 @@ describe("opFetchReport", () => {
         dogBreed,
         dogGender,
         ownerName,
+        vetName,
+        vetAddress,
+        vetPhoneNumber,
         ...reportData,
       };
-      expect(report).toEqual(expectedReport);
+      expect(report).toEqual(BarkReportSchema.parse(expectedReport));
     });
   });
 });

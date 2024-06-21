@@ -93,9 +93,9 @@
   @apply rounded-md p-3 shadow-sm shadow-slate-400;
 }
 
-.x-card-top-section {
-  @apply -mx-3 -mt-3 rounded-t-md p-3;
-}
+/* .x-card-top-section {
+  @apply -mx-3 -mt-3 rounded-t-md p-3 bg-slate-200;
+} */
 
 /* Standard card background */
 .x-card-bg {
@@ -109,5 +109,5 @@
 
 /* Card title text */
 .x-card-title {
-  @apply text-xl font-normal;
+  @apply text-xl font-bold;
 }

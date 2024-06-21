@@ -4,6 +4,7 @@ import { BarkAppointment } from "../models/bark-appointment";
 import { toDogOii } from "./to-dog-oii";
 import { toUserPii } from "./to-user-pii";
 
+// TODO: Use schemas to parse inputs and outputs, this and the other mapper functions
 export async function toBarkAppointment(
   context: BarkContext,
   encrypted: EncryptedBarkAppointment,

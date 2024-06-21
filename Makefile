@@ -1,7 +1,7 @@
 # Default command. It installs npm packages, if any, runs the code
 # formatter, runs the unit tests, and does a schema diff.
 .PHONY: default
-default: npm-install fmt test schema-diff
+default: npm-install fmt lint test schema-diff
 
 # Does everything default does AND THEN also run frontend tests—which
 # takes awhile to complete. If you just want to run the frontend
@@ -25,7 +25,6 @@ test:
 	bash scripts/testdb.sh testDbDown
 	bash scripts/test_minimal_process_env_usage.sh
 	bash scripts/test_no_wip_tasks_remaining.sh
-	npm run lint
 
 .PHONY: lint
 lint:

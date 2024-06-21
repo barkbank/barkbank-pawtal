@@ -54,33 +54,31 @@ export function BarkStatusBlock(props: {
     );
   }
   if (highlightedStatus === SCHEDULING_STATUS.PENDING_REPORT) {
-    if (dogAppointments.length === 1) {
-      const { vetName } = dogAppointments[0];
-      return (
-        <div>
-          <BarkStatusAwaitingReport />
-          <StatusMessage>
-            A veterinary appointment for {dogName} with {vetName} is on record.
-          </StatusMessage>
-        </div>
+    const headLine =
+      dogAppointments.length === 1 ? (
+        <p>A veterinary appointment for {dogName} is on record.</p>
+      ) : (
+        <p>{dogName} has appointments with the following vets:</p>
       );
-    } else {
-      return (
-        <div>
-          <BarkStatusAwaitingReport />
-          <StatusMessage>
-            <p>{dogName} has appointments with the following vets:</p>
-            <ul>
-              {dogAppointments.map((appointment) => (
-                <li key={appointment.vetId} className="list-inside list-disc">
-                  {appointment.vetName}
-                </li>
-              ))}
-            </ul>
-          </StatusMessage>
-        </div>
-      );
-    }
+    return (
+      <div>
+        <BarkStatusAwaitingReport />
+        <StatusMessage>
+          <div className="flex flex-col gap-1">
+            {headLine}
+            {dogAppointments.map(
+              ({ vetName, vetPhoneNumber, vetAddress }, idx) => (
+                <div key={idx} className="x-card bg-gray-100">
+                  <p>Clinic: {vetName}</p>
+                  <p>Phone: {vetPhoneNumber}</p>
+                  <p>Address: {vetAddress}</p>
+                </div>
+              ),
+            )}
+          </div>
+        </StatusMessage>
+      </div>
+    );
   }
   if (highlightedStatus === PARTICIPATION_STATUS.OPTED_OUT) {
     return (

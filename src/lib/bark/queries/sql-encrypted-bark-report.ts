@@ -28,9 +28,14 @@ export const SQL_ENCRYPTED_BARK_REPORT = `
     tDog.dog_gender as "dogGender",
     tDog.dog_breed as "dogBreed",
 
+    tVet.vet_name as "vetName",
+    tVet.vet_phone_number as "vetPhoneNumber",
+    tVet.vet_address as "vetAddress",
+
     tUser.user_encrypted_pii as "userEncryptedPii"
 
   FROM reports as tReport
   LEFT JOIN dogs as tDog on tReport.dog_id = tDog.dog_id
   LEFT JOIN users as tUser on tDog.user_id = tUser.user_id
+  LEFT JOIN vets as tVet on tReport.vet_id = tVet.vet_id
 `;

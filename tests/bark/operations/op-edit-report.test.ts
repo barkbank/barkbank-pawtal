@@ -1,4 +1,4 @@
-import { BarkReport } from "@/lib/bark/models/bark-report";
+import { BarkReport, BarkReportSchema } from "@/lib/bark/models/bark-report";
 import { BarkReportData } from "@/lib/bark/models/bark-report-data";
 import { givenDog, givenReport, givenVet } from "../_given";
 import { withBarkContext } from "../_context";
@@ -8,7 +8,6 @@ import { opRecordAppointmentCallOutcome } from "@/lib/bark/operations/op-record-
 import { opSubmitReport } from "@/lib/bark/operations/op-submit-report";
 import { opFetchReport } from "@/lib/bark/operations/op-fetch-report";
 import { opEditReport } from "@/lib/bark/operations/op-edit-report";
-import { SpecifiedDogGenderSchema } from "@/lib/bark/enums/dog-gender";
 
 describe("opEditReport", () => {
   it("should return ERROR_NOT_ALLOWED if attempting to edit another vet's report", async () => {
@@ -27,7 +26,8 @@ describe("opEditReport", () => {
   it("should update report data to the new values", async () => {
     await withBarkContext(async ({ context, testContext }) => {
       // GIVEN an existing report
-      const { vetId } = await givenVet(testContext);
+      const { vetId, vetName, vetAddress, vetPhoneNumber } =
+        await givenVet(testContext);
       const { dogId, dogName, dogBreed, dogGender, ownerName } = await givenDog(
         testContext,
         { preferredVetId: vetId },
@@ -78,11 +78,14 @@ describe("opEditReport", () => {
         reportModificationTime: report.reportModificationTime,
         dogName,
         dogBreed,
-        dogGender: SpecifiedDogGenderSchema.parse(dogGender),
+        dogGender,
         ownerName,
+        vetName,
+        vetAddress,
+        vetPhoneNumber,
         ...modifiedReportData,
       };
-      expect(report).toEqual(expectedReport);
+      expect(report).toEqual(BarkReportSchema.parse(expectedReport));
     });
   });
 });

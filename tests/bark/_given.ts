@@ -1,6 +1,15 @@
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
-import { insertDog, insertUser, insertVet, userPii } from "../_fixtures";
-import { DogGender, DogGenderSchema } from "@/lib/bark/enums/dog-gender";
+import {
+  getVetSpec,
+  insertDog,
+  insertUser,
+  insertVet,
+  userPii,
+} from "../_fixtures";
+import {
+  SpecifiedDogGender,
+  SpecifiedDogGenderSchema,
+} from "@/lib/bark/enums/dog-gender";
 import { dbQuery } from "@/lib/data/db-utils";
 import { BarkContext } from "@/lib/bark/bark-context";
 import { opRecordAppointmentCallOutcome } from "@/lib/bark/operations/op-record-appointment-call-outcome";
@@ -37,6 +46,7 @@ export async function givenUser(
   return { userId, userName, userEmail, userPhoneNumber };
 }
 
+// TODO: Each givenFoo should accept existingFooId and resolve that.
 async function existingUser(
   context: BarkContext,
   userId: string,
@@ -60,7 +70,7 @@ const GivenDogSchema = z.object({
   dogId: z.string(),
   dogName: z.string(),
   dogBreed: z.string(),
-  dogGender: DogGenderSchema,
+  dogGender: SpecifiedDogGenderSchema,
   ownerUserId: z.string(),
   ownerName: z.string(),
 });
@@ -124,7 +134,7 @@ export async function givenDog(
     await dbQuery<{
       dogEncryptedOii: string;
       dogBreed: string;
-      dogGender: DogGender;
+      dogGender: SpecifiedDogGender;
     }>(dbPool, dogSql, [dogId])
   ).rows[0];
   const dogName = await toDogName(context, dogEncryptedOii);
@@ -133,18 +143,37 @@ export async function givenDog(
 
 const GivenVetSchema = z.object({
   vetId: z.string(),
+  vetName: z.string(),
+  vetPhoneNumber: z.string(),
+  vetAddress: z.string(),
 });
 
 type GivenVetType = z.infer<typeof GivenVetSchema>;
 
 export async function givenVet(
   context: BarkContext,
-  options?: { vetIdx?: number },
+  options?: { vetIdx?: number; existingVetId?: string },
 ): Promise<GivenVetType> {
   const { dbPool } = context;
-  const { vetIdx } = options ?? {};
-  const { vetId } = await insertVet(vetIdx ?? 1, dbPool);
-  return { vetId };
+  const { vetIdx, existingVetId } = options ?? {};
+  if (existingVetId !== undefined) {
+    const sql = `
+    SELECT
+      vet_id as "vetId",
+      vet_name as "vetName",
+      vet_phone_number as "vetPhoneNumber",
+      vet_address as "vetAddress"
+    FROM vets
+    WHERE vet_id = $1
+    `;
+    const res = await dbQuery(dbPool, sql, [existingVetId]);
+    return GivenVetSchema.parse(res.rows[0]);
+  } else {
+    const idx = vetIdx ?? 1;
+    const { vetId } = await insertVet(idx, dbPool);
+    const { vetName, vetPhoneNumber, vetAddress } = getVetSpec(idx);
+    return { vetId, vetName, vetPhoneNumber, vetAddress };
+  }
 }
 
 const GivenAppointmentSchema = z
@@ -166,19 +195,18 @@ export async function givenAppointment(
   },
 ): Promise<GivenAppointmentType> {
   const { idx, existingVetId, ...otherOptions } = options ?? {};
-  const vetId =
-    existingVetId ?? (await givenVet(context, { vetIdx: idx })).vetId;
+  const theVet = await givenVet(context, { vetIdx: idx, existingVetId });
   const theDog = await givenDog(context, {
     dogIdx: idx,
-    preferredVetId: vetId,
+    preferredVetId: theVet.vetId,
     ...otherOptions,
   });
   const a1 = await opRecordAppointmentCallOutcome(context, {
     dogId: theDog.dogId,
-    vetId,
+    vetId: theVet.vetId,
   });
   const appointmentId = a1.result!.appointmentId;
-  const result: GivenAppointmentType = { appointmentId, vetId, ...theDog };
+  const result: GivenAppointmentType = { appointmentId, ...theVet, ...theDog };
   return GivenAppointmentSchema.parse(result);
 }
 

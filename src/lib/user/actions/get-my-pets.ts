@@ -1,6 +1,9 @@
 import { dbResultQuery } from "../../data/db-utils";
 import { MyDog } from "../user-models";
-import { DogAppointment } from "@/lib/bark/models/dog-appointment";
+import {
+  DogAppointment,
+  DogAppointmentSchema,
+} from "@/lib/bark/models/dog-appointment";
 import { UserActor } from "../user-actor";
 import { ParticipationStatus } from "@/lib/bark/enums/participation-status";
 import { MedicalStatus } from "@/lib/bark/enums/medical-status";
@@ -29,10 +32,12 @@ export async function getMyPets(
     SELECT
       tDog.dog_id,
       json_agg(json_build_object(
-        'dogId', tCall.dog_id,
-        'callId', tCall.call_id,
-        'vetId', tVet.vet_id,
-        'vetName', tVet.vet_name
+        'dogId', tCall.dog_id::text,
+        'appointmentId', tCall.call_id::text,
+        'vetId', tVet.vet_id::text,
+        'vetName', tVet.vet_name,
+        'vetPhoneNumber', tVet.vet_phone_number,
+        'vetAddress', tVet.vet_address
       )) as appointments
     FROM mUserDogs as tDog
     LEFT JOIN calls as tCall on tDog.dog_id = tCall.dog_id
@@ -89,7 +94,9 @@ export async function getMyPets(
     };
     const myDog: MyDog = {
       dogName,
-      dogAppointments,
+      dogAppointments: dogAppointments.map((item) =>
+        DogAppointmentSchema.parse(item),
+      ),
       dogStatuses,
       ...otherFields,
     };

@@ -1,6 +1,6 @@
 import { BarkContext } from "../bark-context";
 import { EncryptedBarkReport } from "../models/encrypted-bark-report";
-import { BarkReport } from "../models/bark-report";
+import { BarkReport, BarkReportSchema } from "../models/bark-report";
 import { toDecryptedText } from "./to-decrypted-text";
 import { toOwnerName } from "./to-owner-name";
 import { toDogName } from "./to-dog-name";
@@ -20,11 +20,11 @@ export async function toBarkReport(
     toDogName(context, dogEncryptedOii),
     toOwnerName(context, userEncryptedPii),
   ]);
-  const report = {
+  const report: BarkReport = {
     ...otherFields,
     ineligibilityReason,
     dogName,
     ownerName,
   };
-  return report;
+  return BarkReportSchema.parse(report);
 }
