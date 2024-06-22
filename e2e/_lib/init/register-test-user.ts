@@ -15,6 +15,9 @@ export type RegisterTestUserType = {
 } & GeneratedUser &
   GeneratedDog;
 
+/**
+ * @deprecated TODO: Use doRegister
+ */
 export async function registerTestUser(args: {
   page: Page;
   isIncomplete?: boolean;
