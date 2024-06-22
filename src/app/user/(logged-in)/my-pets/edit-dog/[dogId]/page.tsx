@@ -4,40 +4,49 @@ import { getVetFormOptions } from "@/app/_lib/get-vet-form-options";
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { getDogProfile } from "@/lib/user/actions/get-dog-profile";
-import EditDogProfileFormController from "../../_lib/components/edit-dog-profile-form-controller";
+import { EditDogProfileFormController } from "../../_lib/components/edit-dog-profile-form-controller";
+import { SimpleErrorPage } from "@/app/_components/simple-error-page";
+import { SubProfileFormController } from "../../_lib/components/sub-profile-form-controller";
+import { opFetchDogReportCount } from "@/lib/bark/operations/op-fetch-dog-report-count";
 
 export default async function Page(props: { params: { dogId: string } }) {
-  const {
-    params: { dogId },
-  } = props;
-
   const actor = await getAuthenticatedUserActor();
   if (actor === null) {
     redirect(RoutePath.USER_LOGIN_PAGE);
   }
-  const { result: existingDogProfile, error } = await getDogProfile(
+
+  const { dogId } = props.params;
+  const context = await APP.getBarkContext();
+  const { result: reportCount, error: errCount } = await opFetchDogReportCount(
+    context,
+    { dogId },
+  );
+  if (errCount !== undefined) {
+    return <SimpleErrorPage error={errCount} />;
+  }
+  const { result: dogProfile, error: errFetch } = await getDogProfile(
     actor,
     dogId,
   );
-  if (error !== undefined) {
+  if (errFetch !== undefined) {
+    return <SimpleErrorPage error={errFetch} />;
+  }
+  const vetOptions = await APP.getDbPool().then(getVetFormOptions);
+
+  if (reportCount.numReports > 0) {
     return (
       <div className="m-3">
-        <p>
-          Failed to load your dog&apos;s profile. Please refresh the page to try
-          again.
-        </p>
+        <SubProfileFormController />
       </div>
     );
   }
-
-  const vetOptions = await APP.getDbPool().then(getVetFormOptions);
 
   return (
     <div className="m-3">
       <EditDogProfileFormController
         vetOptions={vetOptions}
         dogId={dogId}
-        existingDogProfile={existingDogProfile}
+        existingDogProfile={dogProfile}
       />
     </div>
   );

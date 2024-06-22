@@ -12,7 +12,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { MINIMUM_TOAST_MILLIS } from "@/app/_lib/toast-delay";
 import { asyncSleep } from "@/lib/utilities/async-sleep";
 
-export default function EditDogProfileFormController(props: {
+export function EditDogProfileFormController(props: {
   vetOptions: BarkFormOption[];
   dogId: string;
   existingDogProfile: DogProfile;

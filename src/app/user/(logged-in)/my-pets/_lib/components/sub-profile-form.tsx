@@ -1,5 +1,3 @@
 export function SubProfileForm() {
-  return (
-    <div>SubProfileForm</div>
-  );
+  return <div>SubProfileForm</div>;
 }
