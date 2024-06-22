@@ -18,6 +18,7 @@ test("user can view report", async ({ page }) => {
   const reportedDogWeightKg = "111";
   const updatedDogWeightKg = "222";
 
+  // WIP: Implement the following ops
   await doScheduleAppointment(context, {dogName});
   await doSubmitReport(context, {dogName, overrides: {dogWeightKg: reportedDogWeightKg}});
   await doLogoutSequence(context);
