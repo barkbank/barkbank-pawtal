@@ -4,7 +4,7 @@ import { PomAdmin } from "../pom/entities";
 import { initPomContext } from "./init-pom-context";
 import { FooterComponent } from "../pom/layout/footer-component";
 import { RoutePath } from "@/lib/route-path";
-import { getKnownAdmin } from "../known-entities/known-admin";
+import { getKnownAdmin } from "../utils/get-known-admin";
 import { AdminLoginPage } from "../pom/pages/admin-login-page";
 
 export async function loginKnownAdmin(args: { page: Page }): Promise<{
