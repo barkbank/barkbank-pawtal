@@ -3,7 +3,7 @@ import { registerTestUser } from "../_lib/init/register-test-user";
 import { doLogoutSequence } from "../_lib/ops/logout-sequence";
 import { loginKnownVet } from "../_lib/init/login-known-vet";
 import { VetSchedulePage } from "../_lib/pom/pages/vet-schedule-page";
-import { getIsMobile } from "../_lib/e2e-test-utils";
+import { doGetIsMobile } from "../_lib/ops/do-get-is-mobile";
 
 test("vet can record APPOINTMENT call outcome", async ({ page }) => {
   const { context, userName, dogName } = await registerTestUser({ page });
@@ -15,7 +15,7 @@ test("vet can record APPOINTMENT call outcome", async ({ page }) => {
 
   await pg1.dogCard(dogName).locator().click();
 
-  const isMobile = await getIsMobile(context);
+  const isMobile = await doGetIsMobile(context);
   const activityArea = isMobile ? pg1.dogCard(dogName) : pg1.rightSidePane();
   await expect(activityArea.exactText(userName)).toBeVisible();
   await expect(activityArea.scheduleButton()).toBeVisible();

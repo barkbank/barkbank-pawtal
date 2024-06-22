@@ -7,7 +7,7 @@ import { VetAppointmentListPage } from "../_lib/pom/pages/vet-appointment-list-p
 import { VetReportListPage } from "../_lib/pom/pages/vet-report-list-page";
 import { NavComponent } from "../_lib/pom/layout/nav-component";
 import { VetAppointmentSubmitReportPage } from "../_lib/pom/pages/vet-appointment-submit-report-page";
-import { getIsMobile } from "../_lib/e2e-test-utils";
+import { doGetIsMobile } from "../_lib/ops/do-get-is-mobile";
 import { toString } from "lodash";
 import { ApiClient } from "../_lib/pom/api/api-client";
 import { SGT_UI_DATE, formatDateTime } from "@/lib/utilities/bark-time";
@@ -29,7 +29,7 @@ test("call task uses latest values", async ({ page, request }) => {
 
   await pgSchedule.checkUrl();
   await pgSchedule.dogCard(dogName).locator().click();
-  const isMobile = await getIsMobile(context);
+  const isMobile = await doGetIsMobile(context);
   const activityArea = isMobile
     ? pgSchedule.dogCard(dogName)
     : pgSchedule.rightSidePane();
