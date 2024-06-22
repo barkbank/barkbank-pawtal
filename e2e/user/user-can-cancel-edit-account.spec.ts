@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { gotoUserMyAccountPage } from "../_lib/sequences/nav-gotos";
+import { gotoUserMyAccountPage } from "../_lib/ops/nav-gotos";
 import { UserMyAccountEditPage } from "../_lib/pom/pages/user-my-account-edit-page";
 import { registerTestUser } from "../_lib/init/register-test-user";
 

@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { loginKnownUser } from "../_lib/init/login-known-user";
-import { gotoUserMyAccountPage } from "../_lib/sequences/nav-gotos";
+import { gotoUserMyAccountPage } from "../_lib/ops/nav-gotos";
 
 test("user can view their account", async ({ page }) => {
   const { context, knownUser } = await loginKnownUser({ page });

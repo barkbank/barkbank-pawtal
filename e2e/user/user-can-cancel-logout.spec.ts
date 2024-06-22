@@ -3,7 +3,7 @@ import { loginKnownUser } from "../_lib/init/login-known-user";
 import { HeaderComponent } from "../_lib/pom/layout/header-component";
 import { LogoutPage } from "../_lib/pom/pages/logout-page";
 import { UserMyAccountPage } from "../_lib/pom/pages/user-my-account-page";
-import { gotoUserMyAccountPage } from "../_lib/sequences/nav-gotos";
+import { gotoUserMyAccountPage } from "../_lib/ops/nav-gotos";
 
 test("user can cancel logout", async ({ page }) => {
   const { context } = await loginKnownUser({ page });

@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { registerTestUser } from "../_lib/init/register-test-user";
-import { doLogoutSequence } from "../_lib/sequences/logout-sequence";
+import { doLogoutSequence } from "../_lib/ops/logout-sequence";
 import { loginKnownVet } from "../_lib/init/login-known-vet";
 import { VetSchedulePage } from "../_lib/pom/pages/vet-schedule-page";
 import { VetAppointmentListPage } from "../_lib/pom/pages/vet-appointment-list-page";
