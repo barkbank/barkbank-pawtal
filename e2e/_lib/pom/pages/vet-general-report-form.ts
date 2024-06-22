@@ -1,5 +1,7 @@
+import { POS_NEG_NIL, PosNegNil } from "@/lib/bark/enums/pos-neg-nil";
 import { PomDynamicPage } from "../core/pom-dynamic-page";
 import { Locator } from "@playwright/test";
+import { isThisSecond } from "date-fns";
 
 export abstract class VetGeneralReportForm extends PomDynamicPage {
   visitDateField(): Locator {
@@ -15,11 +17,25 @@ export abstract class VetGeneralReportForm extends PomDynamicPage {
   }
 
   dogBcsOption5(): Locator {
-    return this.page().getByLabel("5", { exact: true });
+    return this.dogBcsOption(5);
   }
 
   dogBcsOption8(): Locator {
-    return this.page().getByLabel("8", { exact: true });
+    return this.dogBcsOption(8);
+  }
+
+  dogBcsOption(val: number): Locator {
+    return this.page().getByLabel(val.toString(), { exact: true });
+  }
+
+  dogHeartwormOption(val: PosNegNil): Locator {
+    if (val === POS_NEG_NIL.POSITIVE) {
+      return this.dogHeartwormOption_POSITIVE();
+    } else if (val === POS_NEG_NIL.NEGATIVE) {
+      return this.dogHeartwormOption_NEGATIVE();
+    } else {
+      return this.dogHeartwormOption_NIL();
+    }
   }
 
   dogHeartwormOption_POSITIVE(): Locator {
@@ -32,12 +48,19 @@ export abstract class VetGeneralReportForm extends PomDynamicPage {
 
   dogHeartwormOption_NIL(): Locator {
     return this.page()
-      .locator("div")
-      .filter({
-        hasText:
-          /^Tested positive for heartwormTested negative for heartwormDid not test$/,
-      })
+      .getByText("Heartworm Test Result")
+      .locator("..")
       .getByLabel("Did not test");
+  }
+
+  dogDea1Point1(val: PosNegNil): Locator {
+    if (val === POS_NEG_NIL.POSITIVE) {
+      return this.dogDea1Point1_POSITIVE();
+    } else if (val === POS_NEG_NIL.NEGATIVE) {
+      return this.dogDea1Point1_NEGATIVE();
+    } else {
+      return this.dogDea1Point1_NIL();
+    }
   }
 
   dogDea1Point1_POSITIVE(): Locator {
@@ -48,12 +71,27 @@ export abstract class VetGeneralReportForm extends PomDynamicPage {
     return this.page().getByLabel("DEA 1.1 Negative");
   }
 
+  dogDea1Point1_NIL(): Locator {
+    return this.page()
+      .getByText("Blood Test Result")
+      .locator("..")
+      .getByLabel("Did not test");
+  }
+
   dogDidDonateBlood_YES(): Locator {
     return this.page().getByLabel("Yes", { exact: true });
   }
 
   dogDidDonateBlood_NO(): Locator {
     return this.page().getByLabel("No", { exact: true });
+  }
+
+  dogDidDonateBlood(val: boolean): Locator {
+    if (val === true) {
+      return this.dogDidDonateBlood_YES();
+    } else {
+      return this.dogDidDonateBlood_NO();
+    }
   }
 
   ineligibilityReasonTextArea(): Locator {

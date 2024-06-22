@@ -8,6 +8,7 @@ import { UserViewDogPage } from "../_lib/pom/pages/user-view-dog-page";
 import { UserEditDogPage } from "../_lib/pom/pages/user-edit-dog-page";
 import { UserViewReportPage } from "../_lib/pom/pages/user-view-report-page";
 import { doScheduleAppointment } from "../_lib/ops/do-schedule-appointment";
+import { doSubmitReport } from "../_lib/ops/do-submit-report";
 
 test("user can view report", async ({ page }) => {
   const reportedDogWeightKg = "111";
@@ -26,7 +27,7 @@ test("user can view report", async ({ page }) => {
   await doScheduleAppointment(context, { dogName });
   await doSubmitReport(context, {
     dogName,
-    overrides: { dogWeightKg: reportedDogWeightKg },
+    overrides: { dogWeightKg: parseFloat(reportedDogWeightKg) },
   });
   await doLogoutSequence(context);
 
