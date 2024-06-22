@@ -1,6 +1,7 @@
 import { RoutePath } from "@/lib/route-path";
 import { PomDynamicPage } from "../core/pom-dynamic-page";
 import { Locator } from "@playwright/test";
+import { SGT_UI_DATE, formatDateTime } from "@/lib/utilities/bark-time";
 
 export class UserViewDogPage extends PomDynamicPage {
   urlRegex(): RegExp {
@@ -41,6 +42,14 @@ export class UserViewDogPage extends PomDynamicPage {
 
   dogPreferredVetItem(): Locator {
     return this.profileItem("Preferred Vet");
+  }
+
+  getReportItem(args: { visitTime: Date; vetName: string }): Locator {
+    const { visitTime, vetName } = args;
+    const visitTimeText = formatDateTime(visitTime, SGT_UI_DATE);
+    return this.page().getByRole("link", {
+      name: `Date: ${visitTimeText} Clinic: ${vetName}`,
+    });
   }
 
   editButton(): Locator {

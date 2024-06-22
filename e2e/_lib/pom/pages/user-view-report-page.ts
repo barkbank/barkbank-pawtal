@@ -12,42 +12,19 @@ export class UserViewReportPage extends PomDynamicPage {
   }
 
   dogWeightItem(): Locator {
-    return this.reportItem("Weight");
+    return this.reportItem("Dog Weight (KG)");
   }
 
   dogGenderItem(): Locator {
-    return this.reportItem("Sex");
+    return this.reportItem("Dog Gender");
   }
 
-  dogAgeItem(): Locator {
-    return this.reportItem("Age");
+  dogHeartwormTestResultItem(): Locator {
+    return this.reportItem("Heartworm Test Result");
   }
 
-  dogBirthdayItem(): Locator {
-    return this.reportItem("Birthday");
-  }
-
-  dogBloodTypeItem(): Locator {
-    return this.reportItem("Blood Type");
-  }
-
-  dogEverPregnantItem(): Locator {
-    return this.reportItem("Ever Pregnant");
-  }
-
-  dogEverReceivedTransfusionItem(): Locator {
-    return this.reportItem("Ever Received Blood");
-  }
-
-  dogPreferredVetItem(): Locator {
-    return this.reportItem("Preferred Vet");
-  }
-
-  editButton(): Locator {
-    return this.page()
-      .locator("div")
-      .filter({ hasText: /^Profile$/ })
-      .getByRole("link");
+  dogBloodTestResultItem(): Locator {
+    return this.reportItem("Blood Test Result");
   }
 
   backButton(): Locator {
@@ -57,6 +34,7 @@ export class UserViewReportPage extends PomDynamicPage {
   private reportItem(label: string): Locator {
     return this.page()
       .getByRole("heading", { name: `${label}:` })
-      .locator("..");
+      .locator("..")
+      .locator("p");
   }
 }
