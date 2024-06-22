@@ -1,7 +1,6 @@
 import { RequiredDateField } from "@/app/_lib/field-schemas/required-date-field";
 import { sprintf } from "sprintf-js";
 
-
 export function getTestBirthday(ageYears: number): string {
   const ts = new Date();
   const y = ts.getUTCFullYear() - ageYears;
