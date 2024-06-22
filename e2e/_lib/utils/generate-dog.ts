@@ -1,5 +1,5 @@
 import dogBreedsJson from "@/resources/dog_breeds.json";
-import { pickOne } from "./gen-utils";
+import { pickOne } from "./pick-one";
 import { FEMALE_DOG_NAMES, MALE_DOG_NAMES } from "../data/name-lists";
 import { generateRandomGUID } from "@/lib/utilities/bark-guid";
 import { getTestBirthday } from "./get-test-birthday";

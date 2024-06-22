@@ -5,7 +5,7 @@ import {
 import { PomContext } from "../pom/core/pom-object";
 import { UserMyPetsPage } from "../pom/pages/user-my-pets-page";
 import { UserRegistrationPage } from "../pom/pages/user-registration-page";
-import { pickOne } from "../utils/gen-utils";
+import { pickOne } from "../utils/pick-one";
 import { generateDog } from "../utils/generate-dog";
 import { generateUser } from "../utils/generate-user";
 

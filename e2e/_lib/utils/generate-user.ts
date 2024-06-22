@@ -1,5 +1,5 @@
 import { generateRandomGUID } from "@/lib/utilities/bark-guid";
-import { pickOne } from "./gen-utils";
+import { pickOne } from "./pick-one";
 import { FIRST_NAMES, LAST_NAMES } from "../data/name-lists";
 import { GeneratedUser, GeneratedUserSchema } from "../models/generated-user";
 
