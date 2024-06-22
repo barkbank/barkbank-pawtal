@@ -3,11 +3,11 @@ import { initPomContext } from "./init-pom-context";
 import { UserMyPetsPage } from "../pom/pages/user-my-pets-page";
 import { PomContext } from "../pom/core/pom-object";
 import { UserRegistrationPage } from "../pom/pages/user-registration-page";
-import { generateDog } from "../generate/generate-dog";
+import { generateDog } from "../utils/generate-dog";
 import { GeneratedDog } from "../models/generated-dog";
-import { generateUser } from "../generate/generate-user";
+import { generateUser } from "../utils/generate-user";
 import { GeneratedUser } from "../models/generated-user";
-import { pickOne } from "../generate/gen-utils";
+import { pickOne } from "../utils/gen-utils";
 
 export type RegisterTestUserType = {
   context: PomContext;

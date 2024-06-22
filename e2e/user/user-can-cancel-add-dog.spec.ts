@@ -3,7 +3,7 @@ import { registerTestUser } from "../_lib/init/register-test-user";
 import { getTestBirthday } from "../_lib/e2e-test-utils";
 import { UserMyPetsPage } from "../_lib/pom/pages/user-my-pets-page";
 import { UserAddDogPage } from "../_lib/pom/pages/user-add-dog-page";
-import { generateDog } from "../_lib/generate/generate-dog";
+import { generateDog } from "../_lib/utils/generate-dog";
 
 test("user can register, login, add dog but cancel, and not should not see new dog in my-pets", async ({
   page,

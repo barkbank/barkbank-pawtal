@@ -4,7 +4,7 @@ import { getTestBirthday } from "../_lib/e2e-test-utils";
 import { UserAddDogPage } from "../_lib/pom/pages/user-add-dog-page";
 import { UserMyPetsPage } from "../_lib/pom/pages/user-my-pets-page";
 import { ToastComponent } from "../_lib/pom/layout/toast-component";
-import { generateDog } from "../_lib/generate/generate-dog";
+import { generateDog } from "../_lib/utils/generate-dog";
 
 test("user can register, login, add dog, and see it in my-pets", async ({
   page,
