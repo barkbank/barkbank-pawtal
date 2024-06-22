@@ -1,14 +1,16 @@
 import { test, expect } from "@playwright/test";
-import { registerTestUser } from "../_lib/init/register-test-user";
 import { UserMyPetsPage } from "../_lib/pom/pages/user-my-pets-page";
 import { UserEditDogPage } from "../_lib/pom/pages/user-edit-dog-page";
 import { ToastComponent } from "../_lib/pom/layout/toast-component";
 import { UserViewDogPage } from "../_lib/pom/pages/user-view-dog-page";
-import { toUiWeightKg } from "../_lib/utils/to-ui-weight-kg";
+import { initPomContext } from "../_lib/init/init-pom-context";
+import { doRegister } from "../_lib/ops/do-register";
 
 test("user can edit dog profile", async ({ page }) => {
-  const { context, dogName, dogBreed, dogBirthday, dogWeightKg } =
-    await registerTestUser({ page });
+  const context = await initPomContext({ page });
+  const {
+    dog: { dogName, dogBreed, dogBirthday, dogWeightKg },
+  } = await doRegister(context);
 
   const pgList = new UserMyPetsPage(context);
   const pgView = new UserViewDogPage(context);

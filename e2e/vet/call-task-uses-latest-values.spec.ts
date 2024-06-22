@@ -1,21 +1,23 @@
 import { test, expect } from "@playwright/test";
-import { registerTestUser } from "../_lib/init/register-test-user";
 import { doLogoutSequence } from "../_lib/ops/do-logout-sequence";
 import { loginKnownVet } from "../_lib/init/login-known-vet";
 import { VetSchedulePage } from "../_lib/pom/pages/vet-schedule-page";
 import { VetAppointmentListPage } from "../_lib/pom/pages/vet-appointment-list-page";
-import { VetReportListPage } from "../_lib/pom/pages/vet-report-list-page";
 import { NavComponent } from "../_lib/pom/layout/nav-component";
 import { VetAppointmentSubmitReportPage } from "../_lib/pom/pages/vet-appointment-submit-report-page";
 import { doGetIsMobile } from "../_lib/ops/do-get-is-mobile";
 import { toString } from "lodash";
 import { ApiClient } from "../_lib/pom/api/api-client";
 import { SGT_UI_DATE, formatDateTime } from "@/lib/utilities/bark-time";
+import { initPomContext } from "../_lib/init/init-pom-context";
+import { doRegister } from "../_lib/ops/do-register";
 
 test("call task uses latest values", async ({ page, request }) => {
-  const { context, dogName, dogWeightKg, userName } = await registerTestUser({
-    page,
-  });
+  const context = await initPomContext({ page });
+  const {
+    dog: { dogName, dogWeightKg },
+  } = await doRegister(context);
+
   await doLogoutSequence(context);
   await loginKnownVet({ page });
 
@@ -24,7 +26,6 @@ test("call task uses latest values", async ({ page, request }) => {
   const pgSchedule = new VetSchedulePage(context);
   const pgAppointments = new VetAppointmentListPage(context);
   const pgSubmit = new VetAppointmentSubmitReportPage(context);
-  const pgReports = new VetReportListPage(context);
   const sidebar = new NavComponent(context);
 
   await pgSchedule.checkUrl();

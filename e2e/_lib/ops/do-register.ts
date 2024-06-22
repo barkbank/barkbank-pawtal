@@ -11,13 +11,14 @@ import { generateUser } from "../utils/generate-user";
 
 export async function doRegister(
   context: PomContext,
-  args: { isIncomplete?: boolean },
+  args?: { isIncomplete?: boolean },
 ): Promise<GeneratedRegistration> {
-  const { isIncomplete } = args;
+  const { isIncomplete } = args ?? {};
 
-  const dogGender = isIncomplete
-    ? "FEMALE"
-    : pickOne<"MALE" | "FEMALE">(["FEMALE", "MALE"]);
+  const dogGender =
+    isIncomplete === true
+      ? "FEMALE"
+      : pickOne<"MALE" | "FEMALE">(["FEMALE", "MALE"]);
   const dog = generateDog({ dogGender });
   const user = generateUser();
 

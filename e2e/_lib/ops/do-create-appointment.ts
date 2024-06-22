@@ -1,18 +1,21 @@
 import { expect } from "@playwright/test";
 import { loginKnownVet } from "../init/login-known-vet";
-import { registerTestUser } from "../init/register-test-user";
 import { PomContext } from "../pom/core/pom-object";
 import { VetSchedulePage } from "../pom/pages/vet-schedule-page";
 import { doLogoutSequence } from "./do-logout-sequence";
 import { doGetIsMobile } from "./do-get-is-mobile";
 import { NavComponent } from "../pom/layout/nav-component";
 import { VetAppointmentListPage } from "../pom/pages/vet-appointment-list-page";
+import { doRegister } from "./do-register";
 
 export async function doCreateAppointment(
   context: PomContext,
 ): Promise<{ dogName: string }> {
   const page = context.page;
-  const { dogName, userName } = await registerTestUser({ page });
+  const {
+    dog: { dogName },
+    user: { userName },
+  } = await doRegister(context);
   await doLogoutSequence(context);
   await loginKnownVet({ page });
   const pg1 = new VetSchedulePage(context);

@@ -1,14 +1,15 @@
 import { test, expect } from "@playwright/test";
-import { registerTestUser } from "../_lib/init/register-test-user";
 import { UserMyPetsPage } from "../_lib/pom/pages/user-my-pets-page";
 import { UserEditDogPage } from "../_lib/pom/pages/user-edit-dog-page";
 import { UserViewDogPage } from "../_lib/pom/pages/user-view-dog-page";
+import { initPomContext } from "../_lib/init/init-pom-context";
+import { doRegister } from "../_lib/ops/do-register";
 
 test("user can edit incomplete dog profile", async ({ page }) => {
-  const { context, dogName } = await registerTestUser({
-    page,
-    isIncomplete: true,
-  });
+  const context = await initPomContext({ page });
+  const {
+    dog: { dogName },
+  } = await doRegister(context, { isIncomplete: true });
 
   const pgList = new UserMyPetsPage(context);
   const pgView = new UserViewDogPage(context);
