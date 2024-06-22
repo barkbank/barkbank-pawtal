@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { loginKnownVet } from "../_lib/init/login-known-vet";
+import { doLoginKnownVet } from "../_lib/ops/do-login-known-vet";
 import { initPomContext } from "../_lib/init/init-pom-context";
 import { RoutePath } from "@/lib/route-path";
 import { ApiClient } from "../_lib/pom/api/api-client";
@@ -24,7 +24,8 @@ test.describe("/api/vet/dog-owners/[dogId]", () => {
     page,
     request,
   }) => {
-    const { context } = await loginKnownVet({ page });
+    const context = await initPomContext({ page });
+    await doLoginKnownVet(context);
     const api = new ApiClient(context, request);
     const res = await api.get(RoutePath.API_VET_DOG_OWNER_DETAILS("9999999"));
     const data = await res.json();
@@ -36,10 +37,10 @@ test.describe("/api/vet/dog-owners/[dogId]", () => {
     request,
   }) => {
     // Login the known vet.
+    const context = await initPomContext({ page });
     const {
-      context,
       knownVet: { vetEmail },
-    } = await loginKnownVet({ page });
+    } = await doLoginKnownVet(context);
     const api = new ApiClient(context, request);
 
     // Find a dog that does not prefer the known vet.

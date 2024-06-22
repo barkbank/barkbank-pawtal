@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { initPomContext } from "../_lib/init/init-pom-context";
 import { UserLoginPage } from "../_lib/pom/pages/user-login-page";
-import { getKnownUser } from "../_lib/known-entities/known-user";
+import { getKnownUser } from "../_lib/utils/get-known-user";
 import { UserMyPetsPage } from "../_lib/pom/pages/user-my-pets-page";
 
 test("email cannot be empty when requesting an otp", async ({ page }) => {

@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { initPomContext } from "../_lib/init/init-pom-context";
-import { doCreateAppointment } from "../_lib/sequences/do-create-appointment";
+import { doCreateAppointment } from "../_lib/ops/do-create-appointment";
 import { VetAppointmentListPage } from "../_lib/pom/pages/vet-appointment-list-page";
 import { VetAppointmentCancelPage } from "../_lib/pom/pages/vet-appointment-cancel-page";
 

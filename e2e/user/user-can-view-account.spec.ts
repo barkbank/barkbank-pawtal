@@ -1,13 +1,25 @@
 import { test, expect } from "@playwright/test";
-import { loginKnownUser } from "../_lib/init/login-known-user";
-import { gotoUserMyAccountPage } from "../_lib/sequences/nav-gotos";
+import { initPomContext } from "../_lib/init/init-pom-context";
+import { doLoginKnownUser } from "../_lib/ops/do-login-known-user";
+import { NavComponent } from "../_lib/pom/layout/nav-component";
+import { UserMyAccountPage } from "../_lib/pom/pages/user-my-account-page";
+import { UserMyPetsPage } from "../_lib/pom/pages/user-my-pets-page";
 
 test("user can view their account", async ({ page }) => {
-  const { context, knownUser } = await loginKnownUser({ page });
-  const accountPage = await gotoUserMyAccountPage({ context });
+  const context = await initPomContext({ page });
+  const knownUser = await doLoginKnownUser(context);
+
+  const nav = new NavComponent(context);
+  const pgMyPets = new UserMyPetsPage(context);
+  const pgAccount = new UserMyAccountPage(context);
+
+  await pgMyPets.checkUrl();
+  await nav.myAcountOption().click();
+  await pgAccount.checkUrl();
+
   const { userName, userEmail, userPhoneNumber, userResidency } = knownUser;
-  await expect(accountPage.exactText(userName)).toBeVisible();
-  await expect(accountPage.exactText(userEmail)).toBeVisible();
-  await expect(accountPage.exactText(userPhoneNumber)).toBeVisible();
-  await expect(accountPage.exactText(userResidency)).toBeVisible();
+  await expect(pgAccount.exactText(userName)).toBeVisible();
+  await expect(pgAccount.exactText(userEmail)).toBeVisible();
+  await expect(pgAccount.exactText(userPhoneNumber)).toBeVisible();
+  await expect(pgAccount.exactText(userResidency)).toBeVisible();
 });

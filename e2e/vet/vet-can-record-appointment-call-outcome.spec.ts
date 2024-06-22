@@ -1,21 +1,27 @@
 import { test, expect } from "@playwright/test";
-import { registerTestUser } from "../_lib/init/register-test-user";
-import { doLogoutSequence } from "../_lib/sequences/logout-sequence";
-import { loginKnownVet } from "../_lib/init/login-known-vet";
+import { doLogoutSequence } from "../_lib/ops/do-logout-sequence";
+import { doLoginKnownVet } from "../_lib/ops/do-login-known-vet";
 import { VetSchedulePage } from "../_lib/pom/pages/vet-schedule-page";
-import { getIsMobile } from "../_lib/e2e-test-utils";
+import { doGetIsMobile } from "../_lib/ops/do-get-is-mobile";
+import { initPomContext } from "../_lib/init/init-pom-context";
+import { doRegister } from "../_lib/ops/do-register";
 
 test("vet can record APPOINTMENT call outcome", async ({ page }) => {
-  const { context, userName, dogName } = await registerTestUser({ page });
-  await doLogoutSequence({ context });
-  await loginKnownVet({ page });
+  const context = await initPomContext({ page });
+  const {
+    user: { userName },
+    dog: { dogName },
+  } = await doRegister(context);
+
+  await doLogoutSequence(context);
+  await doLoginKnownVet(context);
   const pg1 = new VetSchedulePage(context);
   await pg1.checkUrl();
   await expect(pg1.dogCard(dogName).locator()).toBeVisible();
 
   await pg1.dogCard(dogName).locator().click();
 
-  const isMobile = await getIsMobile(context);
+  const isMobile = await doGetIsMobile(context);
   const activityArea = isMobile ? pg1.dogCard(dogName) : pg1.rightSidePane();
   await expect(activityArea.exactText(userName)).toBeVisible();
   await expect(activityArea.scheduleButton()).toBeVisible();

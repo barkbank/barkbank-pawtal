@@ -1,16 +1,19 @@
 import { test, expect } from "@playwright/test";
-import { registerTestUser } from "../_lib/init/register-test-user";
-import { getTestBirthday } from "../_lib/e2e-test-utils";
+import { getTestBirthday } from "../_lib/utils/get-test-birthday";
 import { UserAddDogPage } from "../_lib/pom/pages/user-add-dog-page";
 import { UserMyPetsPage } from "../_lib/pom/pages/user-my-pets-page";
 import { ToastComponent } from "../_lib/pom/layout/toast-component";
-import { generateDog } from "../_lib/generate/generate-dog";
+import { generateDog } from "../_lib/utils/generate-dog";
+import { initPomContext } from "../_lib/init/init-pom-context";
+import { doRegister } from "../_lib/ops/do-register";
 
 test("user can register, login, add dog, and see it in my-pets", async ({
   page,
 }) => {
   // GIVEN
-  const { context } = await registerTestUser({ page });
+  const context = await initPomContext({ page });
+  await doRegister(context);
+
   const pg1 = new UserMyPetsPage(context);
   await pg1.checkUrl();
   await pg1.addPetButton().click();

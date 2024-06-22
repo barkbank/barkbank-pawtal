@@ -1,30 +1,35 @@
 import { test, expect } from "@playwright/test";
-import { loginKnownUser } from "../_lib/init/login-known-user";
 import { HeaderComponent } from "../_lib/pom/layout/header-component";
 import { LogoutPage } from "../_lib/pom/pages/logout-page";
 import { UserMyAccountPage } from "../_lib/pom/pages/user-my-account-page";
-import { gotoUserMyAccountPage } from "../_lib/sequences/nav-gotos";
+import { initPomContext } from "../_lib/init/init-pom-context";
+import { doLoginKnownUser } from "../_lib/ops/do-login-known-user";
+import { NavComponent } from "../_lib/pom/layout/nav-component";
 
 test("user can cancel logout", async ({ page }) => {
-  const { context } = await loginKnownUser({ page });
+  const context = await initPomContext({ page });
+  await doLoginKnownUser(context);
+
+  const header = new HeaderComponent(context);
+  const nav = new NavComponent(context);
+  const pgLogout = new LogoutPage(context);
+  const pgMyAcc = new UserMyAccountPage(context);
 
   // Navigate to My Account page first. We expect to return here if we cancel
   // the logout.
-  await gotoUserMyAccountPage({ context });
+  await nav.myAcountOption().click();
+  await pgMyAcc.checkUrl();
 
-  const header = new HeaderComponent(context);
   if (await header.hamburgerButton().isVisible()) {
     await header.hamburgerButton().click();
   }
   await expect(header.logoutLink()).toBeVisible();
   await header.logoutLink().click();
 
-  const logoutPage = new LogoutPage(context);
-  await logoutPage.checkUrl();
-  await expect(logoutPage.cancelButton()).toBeVisible();
-  await logoutPage.cancelButton().click();
+  await pgLogout.checkUrl();
+  await expect(pgLogout.cancelButton()).toBeVisible();
+  await pgLogout.cancelButton().click();
 
   // Should be back at my account page.
-  const myAccountPage = new UserMyAccountPage(context);
-  await myAccountPage.checkUrl();
+  await pgMyAcc.checkUrl();
 });

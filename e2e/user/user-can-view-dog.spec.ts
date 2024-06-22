@@ -1,19 +1,15 @@
 import { test, expect } from "@playwright/test";
-import { registerTestUser } from "../_lib/init/register-test-user";
 import { UserMyPetsPage } from "../_lib/pom/pages/user-my-pets-page";
 import { UserViewDogPage } from "../_lib/pom/pages/user-view-dog-page";
 import { RequiredDateField } from "@/app/_lib/field-schemas/required-date-field";
+import { initPomContext } from "../_lib/init/init-pom-context";
+import { doRegister } from "../_lib/ops/do-register";
 
 test("user can view dog", async ({ page }) => {
+  const context = await initPomContext({ page });
   const {
-    context,
-    dogName,
-    dogBreed,
-    dogWeightKg,
-    dogBirthday,
-    dogGender,
-    ageYears,
-  } = await registerTestUser({ page });
+    dog: { dogName, dogBreed, dogWeightKg, dogBirthday, dogGender, ageYears },
+  } = await doRegister(context);
 
   const pgList = new UserMyPetsPage(context);
   const pgView = new UserViewDogPage(context);

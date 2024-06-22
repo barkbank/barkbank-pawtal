@@ -1,10 +1,11 @@
 import dogBreedsJson from "@/resources/dog_breeds.json";
-import { pickOne } from "./gen-utils";
-import { FEMALE_DOG_NAMES, MALE_DOG_NAMES } from "./name-lists";
+import { pickOne } from "./pick-one";
+import { FEMALE_DOG_NAMES, MALE_DOG_NAMES } from "../data/name-lists";
 import { generateRandomGUID } from "@/lib/utilities/bark-guid";
-import { getTestBirthday } from "../e2e-test-utils";
+import { getTestBirthday } from "./get-test-birthday";
 import { sprintf } from "sprintf-js";
 import { GeneratedDog, GeneratedDogSchema } from "../models/generated-dog";
+import { toUiWeightKg } from "./to-ui-weight-kg";
 
 export function generateDog(options?: {
   dogGender?: "MALE" | "FEMALE";
@@ -18,7 +19,7 @@ export function generateDog(options?: {
   const dogBreed = pickOne(dogBreeds);
   const ageYears = pickOne([3, 4, 5, 6]);
   const dogBirthday = getTestBirthday(ageYears);
-  const dogWeightKg = sprintf("%.1f", 20 + Math.random() * 20);
+  const dogWeightKg = toUiWeightKg(sprintf("%.1f", 20 + Math.random() * 20));
   const result: GeneratedDog = {
     dogName,
     dogBreed,

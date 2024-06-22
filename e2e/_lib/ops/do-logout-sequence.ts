@@ -8,11 +8,9 @@ import { PomContext } from "../pom/core/pom-object";
  * @param args.context Should have a Logout option in the Navbar
  * @returns UserLoginPage
  */
-export async function doLogoutSequence(args: {
-  context: PomContext;
-}): Promise<UserLoginPage> {
-  const { context } = args;
-
+export async function doLogoutSequence(
+  context: PomContext,
+): Promise<UserLoginPage> {
   const navbar = new HeaderComponent(context);
   await expect(navbar.locator()).toBeVisible();
   if (await navbar.hamburgerButton().isVisible()) {

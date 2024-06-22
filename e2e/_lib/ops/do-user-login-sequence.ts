@@ -8,11 +8,11 @@ import { UserMyPetsPage } from "../pom/pages/user-my-pets-page";
  * @param args.userEmail User email.
  * @returns
  */
-export async function doUserLoginSequence(args: {
-  context: PomContext;
-  userEmail: string;
-}): Promise<UserMyPetsPage> {
-  const { context, userEmail } = args;
+export async function doUserLoginSequence(
+  context: PomContext,
+  args: { userEmail: string },
+): Promise<UserMyPetsPage> {
+  const { userEmail } = args;
 
   const pg1 = new UserLoginPage(context);
   await pg1.checkUrl();
