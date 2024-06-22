@@ -3,7 +3,7 @@ import { loginKnownVet } from "../init/login-known-vet";
 import { registerTestUser } from "../init/register-test-user";
 import { PomContext } from "../pom/core/pom-object";
 import { VetSchedulePage } from "../pom/pages/vet-schedule-page";
-import { doLogoutSequence } from "./logout-sequence";
+import { doLogoutSequence } from "./do-logout-sequence";
 import { doGetIsMobile } from "./do-get-is-mobile";
 import { NavComponent } from "../pom/layout/nav-component";
 import { VetAppointmentListPage } from "../pom/pages/vet-appointment-list-page";
@@ -13,7 +13,7 @@ export async function doCreateAppointment(
 ): Promise<{ dogName: string }> {
   const page = context.page;
   const { dogName, userName } = await registerTestUser({ page });
-  await doLogoutSequence({ context });
+  await doLogoutSequence(context);
   await loginKnownVet({ page });
   const pg1 = new VetSchedulePage(context);
   await pg1.goto();

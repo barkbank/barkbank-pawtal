@@ -1,13 +1,13 @@
 import { test, expect } from "@playwright/test";
 import { registerTestUser } from "../_lib/init/register-test-user";
-import { doLogoutSequence } from "../_lib/ops/logout-sequence";
+import { doLogoutSequence } from "../_lib/ops/do-logout-sequence";
 import { loginKnownVet } from "../_lib/init/login-known-vet";
 import { VetSchedulePage } from "../_lib/pom/pages/vet-schedule-page";
 import { doGetIsMobile } from "../_lib/ops/do-get-is-mobile";
 
 test("vet can record DECLINED call outcome", async ({ page }) => {
   const { context, userName, dogName } = await registerTestUser({ page });
-  await doLogoutSequence({ context });
+  await doLogoutSequence(context);
   await loginKnownVet({ page });
   const pg1 = new VetSchedulePage(context);
   await pg1.checkUrl();
