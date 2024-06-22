@@ -1,8 +1,9 @@
 import { test, expect } from "@playwright/test";
-import { gotoUserMyAccountPage } from "../_lib/ops/nav-gotos";
 import { UserMyAccountEditPage } from "../_lib/pom/pages/user-my-account-edit-page";
 import { initPomContext } from "../_lib/init/init-pom-context";
 import { doRegister } from "../_lib/ops/do-register";
+import { NavComponent } from "../_lib/pom/layout/nav-component";
+import { UserMyAccountPage } from "../_lib/pom/pages/user-my-account-page";
 
 test("user can register, edit account details, but click cancel, and should see their details unchanged", async ({
   page,
@@ -13,27 +14,32 @@ test("user can register, edit account details, but click cancel, and should see 
     user: { userName, userEmail, userPhoneNumber },
   } = await doRegister(context);
 
-  const accountPage = await gotoUserMyAccountPage({ context });
-  await expect(accountPage.exactText(userName)).toBeVisible();
-  await expect(accountPage.exactText("Singapore")).toBeVisible();
-  await expect(accountPage.exactText(userEmail)).toBeVisible();
-  await expect(accountPage.exactText(userPhoneNumber)).toBeVisible();
+  const nav = new NavComponent(context);
+  const pgAcc = new UserMyAccountPage(context);
+  const pgEdit = new UserMyAccountEditPage(context);
+
+  await nav.myAcountOption().click();
+  await pgAcc.checkUrl();
+
+  await expect(pgAcc.exactText(userName)).toBeVisible();
+  await expect(pgAcc.exactText("Singapore")).toBeVisible();
+  await expect(pgAcc.exactText(userEmail)).toBeVisible();
+  await expect(pgAcc.exactText(userPhoneNumber)).toBeVisible();
 
   // WHEN user clicks on edit button, navigate to edit page
-  await accountPage.editButton().click();
-  const editAccountPage = new UserMyAccountEditPage(context);
-  await editAccountPage.checkUrl();
+  await pgAcc.editButton().click();
+  await pgEdit.checkUrl();
 
   // BUT cancelled, navigate back to account page
-  await editAccountPage.userNameField().fill("New Name");
-  await editAccountPage.userPhoneNumberField().fill("+65 12345678");
-  await editAccountPage.userResidencyOption_OTHERS().click();
-  await editAccountPage.cancelButton().click();
+  await pgEdit.userNameField().fill("New Name");
+  await pgEdit.userPhoneNumberField().fill("+65 12345678");
+  await pgEdit.userResidencyOption_OTHERS().click();
+  await pgEdit.cancelButton().click();
 
   // THEN
-  await accountPage.checkUrl();
-  await expect(accountPage.exactText(userName)).toBeVisible();
-  await expect(accountPage.exactText("Singapore")).toBeVisible();
-  await expect(accountPage.exactText(userEmail)).toBeVisible();
-  await expect(accountPage.exactText(userPhoneNumber)).toBeVisible();
+  await pgAcc.checkUrl();
+  await expect(pgAcc.exactText(userName)).toBeVisible();
+  await expect(pgAcc.exactText("Singapore")).toBeVisible();
+  await expect(pgAcc.exactText(userEmail)).toBeVisible();
+  await expect(pgAcc.exactText(userPhoneNumber)).toBeVisible();
 });
