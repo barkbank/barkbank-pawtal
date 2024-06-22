@@ -52,7 +52,7 @@ function _Controls(props: { report: BarkReport }) {
   return (
     <div>
       <BarkButton
-        className="w-full md:w-48"
+        className="w-full md:w-40"
         variant="brandInverse"
         href={RoutePath.USER_VIEW_DOG(dogId)}
       >
