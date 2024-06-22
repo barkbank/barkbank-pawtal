@@ -7,24 +7,30 @@ import { UserMyPetsPage } from "../_lib/pom/pages/user-my-pets-page";
 import { UserViewDogPage } from "../_lib/pom/pages/user-view-dog-page";
 import { UserEditDogPage } from "../_lib/pom/pages/user-edit-dog-page";
 import { UserViewReportPage } from "../_lib/pom/pages/user-view-report-page";
+import { doScheduleAppointment } from "../_lib/ops/do-schedule-appointment";
 
 test("user can view report", async ({ page }) => {
-  const context = await initPomContext({ page });
-  const { user, dog } = await doRegister(context);
-  await doLoginKnownVet(context);
-
-  const { userEmail } = user;
-  const { dogName, dogBreed } = dog;
   const reportedDogWeightKg = "111";
   const updatedDogWeightKg = "222";
 
-  // WIP: Implement the following ops
+  const context = await initPomContext({ page });
+
+  // User registers and logs out.
+  const { user, dog } = await doRegister(context);
+  const { userEmail } = user;
+  const { dogName, dogBreed } = dog;
+  await doLogoutSequence(context);
+
+  // Vet schedules appointment and submits report. Then logs out.
+  await doLoginKnownVet(context);
   await doScheduleAppointment(context, { dogName });
   await doSubmitReport(context, {
     dogName,
     overrides: { dogWeightKg: reportedDogWeightKg },
   });
   await doLogoutSequence(context);
+
+  // User logs in again.
   await doUserLoginSequence(context, { userEmail });
 
   const pgPets = new UserMyPetsPage(context);
