@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { initPomContext } from "../_lib/init/init-pom-context";
 import { UserLoginPage } from "../_lib/pom/pages/user-login-page";
 import { UserRegistrationPage } from "../_lib/pom/pages/user-registration-page";
-import { getTestBirthday } from "../_lib/e2e-test-utils";
+import { getTestBirthday } from "../_lib/utils/get-test-birthday";
 import { generateRandomGUID } from "@/lib/utilities/bark-guid";
 import { NavComponent } from "../_lib/pom/layout/nav-component";
 import { UserMyAccountPage } from "../_lib/pom/pages/user-my-account-page";

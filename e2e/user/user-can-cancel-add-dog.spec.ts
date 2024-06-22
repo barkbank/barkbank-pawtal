@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { registerTestUser } from "../_lib/init/register-test-user";
-import { getTestBirthday } from "../_lib/e2e-test-utils";
+import { getTestBirthday } from "../_lib/utils/get-test-birthday";
 import { UserMyPetsPage } from "../_lib/pom/pages/user-my-pets-page";
 import { UserAddDogPage } from "../_lib/pom/pages/user-add-dog-page";
 import { generateDog } from "../_lib/utils/generate-dog";
