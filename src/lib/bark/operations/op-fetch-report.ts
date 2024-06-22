@@ -10,7 +10,7 @@ import { toBarkReport } from "../mappers/to-bark-report";
  */
 export async function opFetchReport(
   context: BarkContext,
-  args: { reportId: string; actorVetId?: string },
+  args: { reportId: string; actorVetId?: string; actorUserId?: string },
 ): Promise<
   Result<
     { report: BarkReport },
@@ -20,7 +20,7 @@ export async function opFetchReport(
   >
 > {
   const { dbPool } = context;
-  const { reportId, actorVetId } = args;
+  const { reportId, actorVetId, actorUserId } = args;
   try {
     const encryptedReport = await selectReport(dbPool, {
       reportId,
@@ -32,6 +32,7 @@ export async function opFetchReport(
     if (actorVetId !== undefined && actorVetId !== report.vetId) {
       return Err(CODE.ERROR_NOT_ALLOWED);
     }
+    // TODO: check that actorUserId is the ownerUserId if it is defined.
     return Ok({ report });
   } catch (err) {
     console.error(err);
