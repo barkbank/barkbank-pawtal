@@ -3,7 +3,7 @@ import { initPomContext } from "../_lib/init/init-pom-context";
 import { RoutePath } from "@/lib/route-path";
 import { loginKnownUser } from "../_lib/init/login-known-user";
 import { loginKnownVet } from "../_lib/init/login-known-vet";
-import { loginKnownAdmin } from "../_lib/init/login-known-admin";
+import { doLoginKnownAdmin } from "../_lib/ops/do-login-known-admin";
 
 test("should redirect visitor to user login page", async ({ page }) => {
   const context = await initPomContext({ page });
@@ -32,7 +32,8 @@ test("should redirect logged-in vet to vet dashboard", async ({ page }) => {
 });
 
 test("should redirect logged-in admin to admin dashboard", async ({ page }) => {
-  const { context } = await loginKnownAdmin({ page });
+  const context = await initPomContext({ page });
+  await doLoginKnownAdmin(context);
   const rootUrl = context.website.urlOf("/");
   const expectedUrl = context.website.urlOf(RoutePath.ADMIN_DASHBOARD_PAGE);
   await page.goto(rootUrl);
