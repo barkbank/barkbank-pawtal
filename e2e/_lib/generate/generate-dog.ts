@@ -1,6 +1,6 @@
 import dogBreedsJson from "@/resources/dog_breeds.json";
 import { pickOne } from "./gen-utils";
-import { FEMALE_DOG_NAMES, MALE_DOG_NAMES } from "./name-lists";
+import { FEMALE_DOG_NAMES, MALE_DOG_NAMES } from "../data/name-lists";
 import { generateRandomGUID } from "@/lib/utilities/bark-guid";
 import { getTestBirthday } from "../e2e-test-utils";
 import { sprintf } from "sprintf-js";
