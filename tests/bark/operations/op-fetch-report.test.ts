@@ -1,11 +1,12 @@
 import { BarkReport, BarkReportSchema } from "@/lib/bark/models/bark-report";
 import { BarkReportData } from "@/lib/bark/models/bark-report-data";
-import { givenDog, givenVet } from "../_given";
+import { givenDog, givenReport, givenUser, givenVet } from "../_given";
 import { mockReportData } from "../_mocks";
 import { withBarkContext } from "../_context";
 import { opRecordAppointmentCallOutcome } from "@/lib/bark/operations/op-record-appointment-call-outcome";
 import { opSubmitReport } from "@/lib/bark/operations/op-submit-report";
 import { opFetchReport } from "@/lib/bark/operations/op-fetch-report";
+import { CODE } from "@/lib/utilities/bark-code";
 
 describe("opFetchReport", () => {
   it("should return the report", async () => {
@@ -54,6 +55,32 @@ describe("opFetchReport", () => {
         ...reportData,
       };
       expect(report).toEqual(BarkReportSchema.parse(expectedReport));
+    });
+  });
+  it("returns ERROR_NOT_ALLOWED if the actorVetId is not the report author", async () => {
+    await withBarkContext(async ({ context }) => {
+      const r1 = await givenReport(context, { idx: 1337 });
+      const v1 = await givenVet(context, { vetIdx: 1 });
+      expect(r1.vetId).not.toEqual(v1.vetId);
+      const { result, error } = await opFetchReport(context, {
+        reportId: r1.reportId,
+        actorVetId: v1.vetId,
+      });
+      expect(result).toBeUndefined();
+      expect(error).toEqual(CODE.ERROR_NOT_ALLOWED);
+    });
+  });
+  it("returns ERROR_WRONG_OWNER if the actorUserId is not the owner of the dog", async () => {
+    await withBarkContext(async ({ context }) => {
+      const r1 = await givenReport(context, { idx: 1337 });
+      const u1 = await givenUser(context, { userIdx: 1 });
+      expect(r1.ownerUserId).not.toEqual(u1.userId);
+      const { result, error } = await opFetchReport(context, {
+        reportId: r1.reportId,
+        actorUserId: u1.userId,
+      });
+      expect(result).toBeUndefined();
+      expect(error).toEqual(CODE.ERROR_WRONG_OWNER);
     });
   });
 });
