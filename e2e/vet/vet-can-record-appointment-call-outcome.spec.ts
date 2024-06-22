@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { doLogoutSequence } from "../_lib/ops/do-logout-sequence";
-import { loginKnownVet } from "../_lib/init/login-known-vet";
+import { doLoginKnownVet } from "../_lib/ops/do-login-known-vet";
 import { VetSchedulePage } from "../_lib/pom/pages/vet-schedule-page";
 import { doGetIsMobile } from "../_lib/ops/do-get-is-mobile";
 import { initPomContext } from "../_lib/init/init-pom-context";
@@ -14,7 +14,7 @@ test("vet can record APPOINTMENT call outcome", async ({ page }) => {
   } = await doRegister(context);
 
   await doLogoutSequence(context);
-  await loginKnownVet({ page });
+  await doLoginKnownVet(context);
   const pg1 = new VetSchedulePage(context);
   await pg1.checkUrl();
   await expect(pg1.dogCard(dogName).locator()).toBeVisible();

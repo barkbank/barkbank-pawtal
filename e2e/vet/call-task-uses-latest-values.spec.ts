@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { doLogoutSequence } from "../_lib/ops/do-logout-sequence";
-import { loginKnownVet } from "../_lib/init/login-known-vet";
+import { doLoginKnownVet } from "../_lib/ops/do-login-known-vet";
 import { VetSchedulePage } from "../_lib/pom/pages/vet-schedule-page";
 import { VetAppointmentListPage } from "../_lib/pom/pages/vet-appointment-list-page";
 import { NavComponent } from "../_lib/pom/layout/nav-component";
@@ -19,7 +19,7 @@ test("call task uses latest values", async ({ page, request }) => {
   } = await doRegister(context);
 
   await doLogoutSequence(context);
-  await loginKnownVet({ page });
+  await doLoginKnownVet(context);
 
   const api = new ApiClient(context, request);
 

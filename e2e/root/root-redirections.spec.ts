@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { initPomContext } from "../_lib/init/init-pom-context";
 import { RoutePath } from "@/lib/route-path";
 import { loginKnownUser } from "../_lib/init/login-known-user";
-import { loginKnownVet } from "../_lib/init/login-known-vet";
+import { doLoginKnownVet } from "../_lib/ops/do-login-known-vet";
 import { doLoginKnownAdmin } from "../_lib/ops/do-login-known-admin";
 
 test("should redirect visitor to user login page", async ({ page }) => {
@@ -22,7 +22,8 @@ test("should redirect logged-in user to my pets page", async ({ page }) => {
 });
 
 test("should redirect logged-in vet to vet dashboard", async ({ page }) => {
-  const { context } = await loginKnownVet({ page });
+  const context = await initPomContext({ page });
+  await doLoginKnownVet(context);
   const rootUrl = context.website.urlOf("/");
   const expectedUrl = context.website.urlOf(
     RoutePath.VET_SCHEDULE_APPOINTMENTS,

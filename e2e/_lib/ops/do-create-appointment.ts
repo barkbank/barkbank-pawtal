@@ -1,5 +1,5 @@
 import { expect } from "@playwright/test";
-import { loginKnownVet } from "../init/login-known-vet";
+import { doLoginKnownVet } from "./do-login-known-vet";
 import { PomContext } from "../pom/core/pom-object";
 import { VetSchedulePage } from "../pom/pages/vet-schedule-page";
 import { doLogoutSequence } from "./do-logout-sequence";
@@ -17,7 +17,7 @@ export async function doCreateAppointment(
     user: { userName },
   } = await doRegister(context);
   await doLogoutSequence(context);
-  await loginKnownVet({ page });
+  await doLoginKnownVet(context);
   const pg1 = new VetSchedulePage(context);
   await pg1.goto();
 
