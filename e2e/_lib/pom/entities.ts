@@ -4,6 +4,7 @@ export type PomDog = {
   vetName?: string;
 };
 
+// TODO: Is this still used?
 export type PomUser = {
   userName: string;
   userEmail: string;
