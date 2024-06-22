@@ -1,4 +1,4 @@
-import { ReportView } from "@/app/vet/_lib/components/report-view";
+import { ReportView } from "@/app/_components/report-view";
 import { BarkButton } from "@/components/bark/bark-button";
 import { BarkError } from "@/components/bark/bark-error";
 import APP from "@/lib/app";
