@@ -20,6 +20,6 @@ export async function loginKnownUser(args: { page: Page }): Promise<{
   const context = await initPomContext({ page });
   const knownUser = getKnownUser();
   const { userEmail } = knownUser;
-  const pomPage = await doUserLoginSequence({ context, userEmail });
+  const pomPage = await doUserLoginSequence(context, { userEmail });
   return { context, knownUser, pomPage };
 }
