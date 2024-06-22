@@ -1,9 +1,9 @@
 import { test, expect } from "@playwright/test";
 import { initPomContext } from "../_lib/init/init-pom-context";
 import { RoutePath } from "@/lib/route-path";
-import { loginKnownUser } from "../_lib/init/login-known-user";
 import { doLoginKnownVet } from "../_lib/ops/do-login-known-vet";
 import { doLoginKnownAdmin } from "../_lib/ops/do-login-known-admin";
+import { doLoginKnownUser } from "../_lib/ops/do-login-known-user";
 
 test("should redirect visitor to user login page", async ({ page }) => {
   const context = await initPomContext({ page });
@@ -14,7 +14,8 @@ test("should redirect visitor to user login page", async ({ page }) => {
 });
 
 test("should redirect logged-in user to my pets page", async ({ page }) => {
-  const { context } = await loginKnownUser({ page });
+  const context = await initPomContext({ page });
+  await doLoginKnownUser(context);
   const rootUrl = context.website.urlOf("/");
   const expectedUrl = context.website.urlOf(RoutePath.USER_MY_PETS);
   await page.goto(rootUrl);

@@ -1,12 +1,14 @@
 import { test, expect } from "@playwright/test";
-import { loginKnownUser } from "../_lib/init/login-known-user";
 import { HeaderComponent } from "../_lib/pom/layout/header-component";
 import { LogoutPage } from "../_lib/pom/pages/logout-page";
 import { UserMyAccountPage } from "../_lib/pom/pages/user-my-account-page";
 import { gotoUserMyAccountPage } from "../_lib/ops/nav-gotos";
+import { initPomContext } from "../_lib/init/init-pom-context";
+import { doLoginKnownUser } from "../_lib/ops/do-login-known-user";
 
 test("user can cancel logout", async ({ page }) => {
-  const { context } = await loginKnownUser({ page });
+  const context = await initPomContext({ page });
+  await doLoginKnownUser(context);
 
   // Navigate to My Account page first. We expect to return here if we cancel
   // the logout.

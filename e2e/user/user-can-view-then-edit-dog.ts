@@ -1,13 +1,15 @@
 import { test } from "@playwright/test";
-import { loginKnownUser } from "../_lib/init/login-known-user";
 import { UserMyPetsPage } from "../_lib/pom/pages/user-my-pets-page";
 import { UserEditDogPage } from "../_lib/pom/pages/user-edit-dog-page";
 import { UserViewDogPage } from "../_lib/pom/pages/user-view-dog-page";
+import { initPomContext } from "../_lib/init/init-pom-context";
+import { doLoginKnownUser } from "../_lib/ops/do-login-known-user";
 
 test("user can list, view, edit, cancel, edit, submit, back, list", async ({
   page,
 }) => {
-  const { context, knownUser } = await loginKnownUser({ page });
+  const context = await initPomContext({ page });
+  const knownUser = await doLoginKnownUser(context);
   const { dogName } = knownUser.userDogs[0];
 
   const myPetsPage = new UserMyPetsPage(context);

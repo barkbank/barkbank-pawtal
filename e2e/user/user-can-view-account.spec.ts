@@ -1,9 +1,11 @@
 import { test, expect } from "@playwright/test";
-import { loginKnownUser } from "../_lib/init/login-known-user";
 import { gotoUserMyAccountPage } from "../_lib/ops/nav-gotos";
+import { initPomContext } from "../_lib/init/init-pom-context";
+import { doLoginKnownUser } from "../_lib/ops/do-login-known-user";
 
 test("user can view their account", async ({ page }) => {
-  const { context, knownUser } = await loginKnownUser({ page });
+  const context = await initPomContext({ page });
+  const knownUser = await doLoginKnownUser(context);
   const accountPage = await gotoUserMyAccountPage({ context });
   const { userName, userEmail, userPhoneNumber, userResidency } = knownUser;
   await expect(accountPage.exactText(userName)).toBeVisible();
