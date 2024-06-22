@@ -8,7 +8,6 @@ import {
   BarkFormParagraph,
   BarkFormRadioGroup,
 } from "@/components/bark/bark-form";
-import { isValidWeightKg } from "@/lib/utilities/bark-utils";
 import { DOG_ANTIGEN_PRESENCE } from "@/lib/bark/enums/dog-antigen-presence";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { DOG_GENDER, SPECIFIED_DOG_GENDER } from "@/lib/bark/enums/dog-gender";
