@@ -1,10 +1,5 @@
 "use client";
 
-import {
-  BarkStatusEligible,
-  BarkStatusIneligible,
-  BarkStatusTemporarilyIneligible,
-} from "@/components/bark/bark-status";
 import { Badge } from "@/components/ui/badge";
 import { BarkReport } from "@/lib/bark/models/bark-report";
 import {

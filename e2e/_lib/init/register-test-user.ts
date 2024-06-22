@@ -3,15 +3,17 @@ import { initPomContext } from "./init-pom-context";
 import { UserMyPetsPage } from "../pom/pages/user-my-pets-page";
 import { PomContext } from "../pom/core/pom-object";
 import { UserRegistrationPage } from "../pom/pages/user-registration-page";
-import { GenerateDogType, generateDog } from "../generate/generate-dog";
-import { GenerateUserType, generateUser } from "../generate/generate-user";
+import { generateDog } from "../generate/generate-dog";
+import { GeneratedDog } from "../models/generated-dog";
+import { generateUser } from "../generate/generate-user";
+import { GeneratedUser } from "../models/generated-user";
 import { pickOne } from "../generate/gen-utils";
 
 export type RegisterTestUserType = {
   context: PomContext;
   userMyPetsPage: UserMyPetsPage;
-} & GenerateUserType &
-  GenerateDogType;
+} & GeneratedUser &
+  GeneratedDog;
 
 export async function registerTestUser(args: {
   page: Page;

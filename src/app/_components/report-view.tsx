@@ -1,10 +1,8 @@
 import { NA_TEXT } from "@/app/_lib/constants";
-import { BarkButton } from "@/components/bark/bark-button";
 import { Textarea } from "@/components/ui/textarea";
 import { BarkReport } from "@/lib/bark/models/bark-report";
 import { REPORTED_INELIGIBILITY } from "@/lib/bark/enums/reported-ineligibility";
 import { POS_NEG_NIL } from "@/lib/bark/enums/pos-neg-nil";
-import { RoutePath } from "@/lib/route-path";
 import {
   SGT_UI_DATE,
   SGT_UI_DATE_TIME,
@@ -16,7 +14,6 @@ import { capitalize, toString } from "lodash";
 export function ReportView(props: { report: BarkReport }) {
   const { report } = props;
   const {
-    reportId,
     dogName,
     dogGender,
     dogBreed,
@@ -152,36 +149,10 @@ export function ReportView(props: { report: BarkReport }) {
   };
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="prose">
-        <h1>Report</h1>
-        <p>
-          Below is the medical report for <b>{dogName}</b>, a{" "}
-          <b>{capitalize(dogGender)}</b> <b>{dogBreed}</b> belonging to{" "}
-          <b>{ownerName}</b>. (Report ID: {reportId})
-        </p>
-      </div>
-      <div className="x-card flex flex-col gap-3">
-        {fields.map((field) => (
-          <FieldItem key={field.label} field={field} />
-        ))}
-      </div>
-      <div className="flex w-full flex-col gap-3 md:flex-row">
-        <BarkButton
-          className="w-full md:w-40"
-          variant="brandInverse"
-          href={RoutePath.VET_REPORTS_LIST}
-        >
-          Back
-        </BarkButton>
-        <BarkButton
-          className="w-full md:w-40"
-          variant="brandInverse"
-          href={RoutePath.VET_REPORTS_EDIT(reportId)}
-        >
-          Edit
-        </BarkButton>
-      </div>
+    <div className="x-card flex flex-col gap-3">
+      {fields.map((field) => (
+        <FieldItem key={field.label} field={field} />
+      ))}
     </div>
   );
 }
