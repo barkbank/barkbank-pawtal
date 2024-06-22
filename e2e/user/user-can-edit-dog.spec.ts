@@ -4,6 +4,7 @@ import { UserMyPetsPage } from "../_lib/pom/pages/user-my-pets-page";
 import { UserEditDogPage } from "../_lib/pom/pages/user-edit-dog-page";
 import { ToastComponent } from "../_lib/pom/layout/toast-component";
 import { UserViewDogPage } from "../_lib/pom/pages/user-view-dog-page";
+import { toUiWeightKg } from "../_lib/utils/to-ui-weight-kg";
 
 test("user can edit dog profile", async ({ page }) => {
   const { context, dogName, dogBreed, dogBirthday, dogWeightKg } =
@@ -25,9 +26,7 @@ test("user can edit dog profile", async ({ page }) => {
   await expect(pgEdit.dogNameField()).toHaveValue(dogName);
   await expect(pgEdit.dogBreedField()).toHaveValue(dogBreed);
   await expect(pgEdit.dogBirthdayField()).toHaveValue(dogBirthday);
-  await expect(pgEdit.dogWeightField()).toHaveValue(
-    parseFloat(dogWeightKg).toString(),
-  );
+  await expect(pgEdit.dogWeightField()).toHaveValue(dogWeightKg);
   await expect(pgEdit.saveButton()).toBeVisible();
   await pgEdit.dogNameField().fill("Thomas Green");
   await pgEdit.dogBreedField().fill("Royal Canine");
