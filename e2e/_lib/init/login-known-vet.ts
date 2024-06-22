@@ -2,7 +2,7 @@ import { Page, expect } from "@playwright/test";
 import { PomContext } from "../pom/core/pom-object";
 import { PomVet } from "../pom/entities";
 import { initPomContext } from "./init-pom-context";
-import { getKnownVet } from "../known-entities/known-vet";
+import { getKnownVet } from "../utils/get-known-vet";
 import { VetLoginPage } from "../pom/pages/vet-login-page";
 import { FooterComponent } from "../pom/layout/footer-component";
 import { RoutePath } from "@/lib/route-path";
