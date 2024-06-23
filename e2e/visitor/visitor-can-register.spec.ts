@@ -72,6 +72,7 @@ test("visitor can register a new user account", async ({ page }) => {
   const pg4 = new UserMyAccountPage(context);
   await pg4.checkUrl();
   await expect(pg4.exactText("Ian Little")).toBeVisible();
-  await expect(pg4.exactText("87654321")).toBeVisible();
-  await expect(pg4.exactText(userEmail)).toBeVisible();
+  await expect(pg4.residencyItem()).toHaveValue("Singapore");
+  await expect(pg4.phoneNumberItem()).toHaveValue("87654321");
+  await expect(pg4.emailItem()).toHaveValue(userEmail);
 });
