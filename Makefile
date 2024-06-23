@@ -9,15 +9,31 @@ default: npm-install fmt lint test schema-diff
 .PHONY: all
 all: default test-ui
 
-# Vars
+######################################################################
+# Definitions
+
 BARKBANK_SCHEMA_DIR=../barkbank-schema
 
-# Runs the code formatter
+# Number of playwright workers
+PW_WORKERS=1
+
+
+######################################################################
+# Development
+
+.PHONY: run
+run:
+	npm run dev
+
+# This can be used to check for type mismatches.
+.PHONY: build
+build:
+	npm run build
+
 .PHONY: fmt
 fmt:
 	npm run fmt
 
-# Runs unit tests
 .PHONY: test
 test:
 	bash scripts/testdb.sh testDbUp
@@ -31,18 +47,17 @@ lint:
 	npm run lint
 
 # Run playwright tests. show-report will run automatically if a test
-# fails. If you want to use more workers, specify pw_workers like this
-# "make pw_workers=4 test-ui".
-pw_workers=1
+# fails. If you want to use more workers, specify PW_WORKERS like this
+# "make PW_WORKERS=4 test-ui".
 .PHONY: test-ui
 test-ui: playwright-browsers
-	npx playwright test --workers $(pw_workers) --project "Mobile Chrome" --project "chromium"
+	npx playwright test --workers $(PW_WORKERS) --project "Mobile Chrome" --project "chromium"
 
 # Like test-ui, but also adds --headed to run the tests in headed
 # mode, you will see flashes of browser screens.
 .PHONY: test-ui-headed
 test-ui-headed: playwright-browsers
-	npx playwright test --workers $(pw_workers) --project "Mobile Chrome" --project "chromium" --headed
+	npx playwright test --workers $(PW_WORKERS) --project "Mobile Chrome" --project "chromium" --headed
 
 # Run playwright interactively
 .PHONY: run-playwright
@@ -62,15 +77,20 @@ playwright-browsers:
 playwright-report:
 	npx playwright show-report
 
-# Runs the local development server.
-.PHONY: run
-run:
-	npm run dev
+######################################################################
+# NPM
 
-# Does npm install
 .PHONY: npm-install
 npm-install:
 	npm install
+
+.PHONY: npm-check-updates
+npm-check-updates:
+	npx npm-check-updates
+
+
+######################################################################
+# Local database
 
 # Creates test user, vet, and admin accounts in the local dev
 # database.
@@ -89,6 +109,10 @@ reset: reset-local-database local-accounts
 .PHONY: reset-local-database
 reset-local-database:
 	bash scripts/reset-local-database.sh
+
+
+######################################################################
+# Task management
 
 # Lists work-in-progress notes. These shouldn't be merged into
 # main. Use TODO if they should be worked on in another feature
@@ -111,6 +135,10 @@ todo:
 	@echo
 	@echo Number of tasks remaining
 	@grep -n --color=always -R 'TODO[:]' src tests db e2e | wc -l
+
+
+######################################################################
+# Schema management
 
 # Diff local schema and barkbank-schemas
 .PHONY: schema-diff
