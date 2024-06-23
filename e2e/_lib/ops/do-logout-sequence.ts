@@ -3,27 +3,25 @@ import { HeaderComponent } from "../pom/layout/header-component";
 import { UserLoginPage } from "../pom/pages/user-login-page";
 import { LogoutPage } from "../pom/pages/logout-page";
 import { PomContext } from "../pom/core/pom-object";
+import { doGetIsMobile } from "./do-get-is-mobile";
 
 /**
  * @param args.context Should have a Logout option in the Navbar
  * @returns UserLoginPage
  */
-export async function doLogoutSequence(
-  context: PomContext,
-): Promise<UserLoginPage> {
-  const navbar = new HeaderComponent(context);
-  await expect(navbar.locator()).toBeVisible();
-  if (await navbar.hamburgerButton().isVisible()) {
-    await navbar.hamburgerButton().click();
+export async function doLogoutSequence(context: PomContext) {
+  const isMobile = await doGetIsMobile(context);
+
+  const header = new HeaderComponent(context);
+  const pgLogout = new LogoutPage(context);
+  const pgUserLogin = new UserLoginPage(context);
+
+  if (isMobile) {
+    await header.hamburgerButton().click();
   }
-  await expect(navbar.logoutLink()).toBeVisible();
-  await navbar.logoutLink().click();
-
-  const logoutPage = new LogoutPage(context);
-  await logoutPage.checkUrl();
-  await logoutPage.logoutButton().click();
-
-  const userLoginPage = new UserLoginPage(context);
-  await userLoginPage.checkUrl();
-  return userLoginPage;
+  await expect(header.logoutLink()).toBeVisible();
+  await header.logoutLink().click();
+  await pgLogout.checkUrl();
+  await pgLogout.logoutButton().click();
+  await pgUserLogin.checkUrl();
 }

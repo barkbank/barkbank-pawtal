@@ -5,7 +5,6 @@ import { doLoginKnownVet } from "../_lib/ops/do-login-known-vet";
 import { doLogoutSequence } from "../_lib/ops/do-logout-sequence";
 import { UserMyPetsPage } from "../_lib/pom/pages/user-my-pets-page";
 import { UserViewDogPage } from "../_lib/pom/pages/user-view-dog-page";
-import { UserEditDogPage } from "../_lib/pom/pages/user-edit-dog-page";
 import { UserViewReportPage } from "../_lib/pom/pages/user-view-report-page";
 import { doScheduleAppointment } from "../_lib/ops/do-schedule-appointment";
 import { doSubmitReport } from "../_lib/ops/do-submit-report";

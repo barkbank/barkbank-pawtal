@@ -24,4 +24,5 @@ export async function doScheduleAppointment(
     await pgScheduler.rightSidePane().scheduleButton().click();
     await expect(pgScheduler.rightSidePane().scheduledBadge()).toBeVisible();
   }
+  await pgScheduler.checkUrl();
 }
