@@ -74,11 +74,11 @@ export function BarkUserContactDetails(props: {
       </div>
       <div className="flex flex-col gap-3">
         <_ContactItem
-          icon={_locationIcon()}
+          icon={_residencyIcon()}
           value={capitalize(userResidency)}
         />
         {userEmail && <_ContactItem icon={_emailIcon()} value={userEmail} />}
-        <_ContactItem icon={_phoneIcon()} value={userPhoneNumber} />
+        <_ContactItem icon={_phoneNumberIcon()} value={userPhoneNumber} />
       </div>
     </div>
   );
@@ -96,13 +96,13 @@ function _ContactItem(props: { icon: React.ReactNode; value: string }) {
   );
 }
 
-function _phoneIcon() {
+function _phoneNumberIcon() {
   return (
     <Image
       src={IMG_PATH.PHONE}
       width={30}
       height={30}
-      alt="phone icon"
+      alt="icon for phone number"
       className="h-full w-auto"
     />
   );
@@ -114,19 +114,19 @@ function _emailIcon() {
       src={IMG_PATH.LETTER}
       width={26}
       height={20}
-      alt="letter icon"
+      alt="icon for email"
       className="h-auto w-full"
     />
   );
 }
 
-function _locationIcon() {
+function _residencyIcon() {
   return (
     <Image
       src={IMG_PATH.LOCATION_MARKER}
       width={24}
       height={26}
-      alt="location marker icon"
+      alt="icon for residency"
       className="h-full w-auto"
     />
   );
