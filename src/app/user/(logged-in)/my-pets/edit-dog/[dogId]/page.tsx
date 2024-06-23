@@ -8,6 +8,11 @@ import { EditDogProfileFormController } from "../../_lib/components/edit-dog-pro
 import { SimpleErrorPage } from "@/app/_components/simple-error-page";
 import { SubProfileFormController } from "../../_lib/components/sub-profile-form-controller";
 import { opFetchDogReportCount } from "@/lib/bark/operations/op-fetch-dog-report-count";
+import { SubProfile, SubProfileSchema } from "@/lib/bark/models/sub-profile";
+import { Err, Ok, Result } from "@/lib/utilities/result";
+import { DogProfile } from "@/lib/bark/models/dog-profile";
+import { CODE } from "@/lib/utilities/bark-code";
+import { toSubProfile } from "@/lib/bark/mappers/to-sub-profile";
 
 export default async function Page(props: { params: { dogId: string } }) {
   const actor = await getAuthenticatedUserActor();
@@ -32,14 +37,18 @@ export default async function Page(props: { params: { dogId: string } }) {
     return <SimpleErrorPage error={errFetch} />;
   }
   const vetOptions = await APP.getDbPool().then(getVetFormOptions);
-
   if (reportCount.numReports > 0) {
+    const { result: subProfile, error: errMap } = _toSubProfile(dogProfile);
+    if (errMap !== undefined) {
+      return <SimpleErrorPage error={errMap} />;
+    }
     return (
       <div className="m-3">
         <SubProfileFormController
           vetOptions={vetOptions}
           dogId={dogId}
-          existingDogProfile={dogProfile}
+          dogProfile={dogProfile}
+          subProfile={subProfile}
         />
       </div>
     );
@@ -54,4 +63,15 @@ export default async function Page(props: { params: { dogId: string } }) {
       />
     </div>
   );
+}
+
+function _toSubProfile(
+  dogProfile: DogProfile,
+): Result<SubProfile, typeof CODE.FAILED> {
+  try {
+    return Ok(toSubProfile(dogProfile));
+  } catch (err) {
+    console.debug(err);
+    return Err(CODE.FAILED);
+  }
 }

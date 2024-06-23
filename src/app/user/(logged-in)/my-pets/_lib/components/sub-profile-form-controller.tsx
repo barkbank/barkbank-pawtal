@@ -7,9 +7,10 @@ import { Ok, Result } from "@/lib/utilities/result";
 export function SubProfileFormController(props: {
   vetOptions: BarkFormOption[];
   dogId: string;
-  existingDogProfile: DogProfile;
+  dogProfile: DogProfile;
+  subProfile: SubProfile;
 }) {
-  const { vetOptions, dogId, existingDogProfile } = props;
+  const { vetOptions, dogId, dogProfile, subProfile } = props;
 
   const onCancel = async () => {
     console.debug({ _msg: "onCancel was triggered" });
@@ -28,7 +29,8 @@ export function SubProfileFormController(props: {
   return (
     <SubProfileForm
       vetOptions={vetOptions}
-      dogProfile={existingDogProfile}
+      dogProfile={dogProfile}
+      subProfile={subProfile}
       handleCancel={onCancel}
       handleSubmit={onSubmit}
     />

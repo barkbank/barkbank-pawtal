@@ -21,26 +21,38 @@ type FormData = z.infer<typeof FormDataSchema>;
 export function SubProfileForm(props: {
   vetOptions: BarkFormOption[];
   dogProfile: DogProfile;
+  subProfile: SubProfile;
   handleSubmit: (subProfile: SubProfile) => Promise<Result<true, string>>;
   handleCancel: () => Promise<void>;
 }) {
-  return <div>SubProfileForm</div>;
+  const { vetOptions, dogProfile, subProfile, handleSubmit, handleCancel } =
+    props;
+  const formData = _toFormData(subProfile);
+  const outData = _toSubProfile(formData);
+  return (
+    <div>
+      <h1>Sub Profile Form</h1>
+      <pre>
+        {JSON.stringify(
+          {
+            dogProfile,
+            subProfile,
+            formData,
+            outData,
+          },
+          null,
+          2,
+        )}
+      </pre>
+    </div>
+  );
 }
 
-function _toFormData(dogProfile: DogProfile): FormData {
+function _toFormData(subProfile: SubProfile): FormData {
+  const { dogWeightKg, ...fields } = subProfile;
   const out: FormData = {
-    dogName: dogProfile.dogName,
-    dogWeightKg:
-      dogProfile.dogWeightKg === null ? "" : dogProfile.dogWeightKg.toString(),
-    dogEverPregnant:
-      dogProfile.dogEverPregnant === YES_NO_UNKNOWN.UNKNOWN
-        ? YES_NO_UNKNOWN.NO
-        : dogProfile.dogEverPregnant,
-    dogEverReceivedTransfusion:
-      dogProfile.dogEverReceivedTransfusion === YES_NO_UNKNOWN.UNKNOWN
-        ? YES_NO_UNKNOWN.NO
-        : dogProfile.dogEverReceivedTransfusion,
-    dogPreferredVetId: dogProfile.dogPreferredVetId,
+    dogWeightKg: RequiredDogWeightKgField.new().format(dogWeightKg),
+    ...fields,
   };
   return FormDataSchema.parse(out);
 }
