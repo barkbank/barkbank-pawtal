@@ -90,7 +90,7 @@ test("user can view report and edit sub-profile", async ({
 
   // Verify the edits, we should be in the view dog page again.
   await pgViewDog.checkUrl();
-  // await expect(pgViewDog.dogName()).toContainText(newName);
+  await expect(pgViewDog.dogNameHeader(newName)).toBeVisible();
   await expect(pgViewDog.dogWeightItem()).toContainText(newWeight);
   await expect(pgViewDog.dogEverReceivedTransfusionItem()).toContainText("Yes");
 });
