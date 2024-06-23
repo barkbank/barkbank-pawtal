@@ -44,7 +44,7 @@ export function _Report(props: { report: BarkReport }) {
 
   return (
     <Link
-      className="x-card bg-gray-100"
+      className="x-card cursor-pointer bg-gray-100 md:hover:bg-gray-200"
       href={RoutePath.USER_VIEW_REPORT(reportId)}
     >
       <p>Date: {dateText}</p>
