@@ -137,10 +137,7 @@ export function BarkStatusBlock(props: {
     return (
       <div>
         <BarkStatusEligible />
-        <StatusMessage>
-          {dogName} is eligible for blood donation. Your preferred vet will
-          reachout to make an appointment.
-        </StatusMessage>
+        <StatusMessage>{dogName} is eligible for blood donation.</StatusMessage>
       </div>
     );
   }
