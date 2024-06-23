@@ -36,7 +36,11 @@ export default async function Page(props: { params: { dogId: string } }) {
   if (reportCount.numReports > 0) {
     return (
       <div className="m-3">
-        <SubProfileFormController />
+        <SubProfileFormController
+          vetOptions={vetOptions}
+          dogId={dogId}
+          existingDogProfile={dogProfile}
+        />
       </div>
     );
   }
