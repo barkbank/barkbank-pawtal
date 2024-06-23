@@ -1,11 +1,13 @@
-import { OptionalDogWeightKgField } from "@/app/_lib/field-schemas/optional-dog-weight-kg-field";
+"use client";
+
 import { RequiredDogWeightKgField } from "@/app/_lib/field-schemas/required-dog-weight-kg-field";
 import { BarkFormOption } from "@/components/bark/bark-form";
 import { YesNoSchema } from "@/lib/bark/enums/yes-no";
-import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { DogProfile } from "@/lib/bark/models/dog-profile";
 import { SubProfile, SubProfileSchema } from "@/lib/bark/models/sub-profile";
 import { Result } from "@/lib/utilities/result";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const FormDataSchema = z.object({
@@ -27,8 +29,13 @@ export function SubProfileForm(props: {
 }) {
   const { vetOptions, dogProfile, subProfile, handleSubmit, handleCancel } =
     props;
-  const formData = _toFormData(subProfile);
-  const outData = _toSubProfile(formData);
+  const form = useForm<FormData>({
+    resolver: zodResolver(FormDataSchema),
+    defaultValues: _toFormData(subProfile),
+  });
+
+  const debugFormDefaultValues = _toFormData(subProfile);
+  const debugOutputSubProfile = _toSubProfile(debugFormDefaultValues);
   return (
     <div>
       <h1>Sub Profile Form</h1>
@@ -37,8 +44,8 @@ export function SubProfileForm(props: {
           {
             dogProfile,
             subProfile,
-            formData,
-            outData,
+            debugFormDefaultValues,
+            debugOutputSubProfile,
           },
           null,
           2,
