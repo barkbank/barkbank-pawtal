@@ -27,9 +27,9 @@ test("user can register, edit account details, save, and should see their detail
 
   // Check existing details
   await expect(pgMyAccount.exactText(userName)).toBeVisible();
-  await expect(pgMyAccount.exactText("Singapore")).toBeVisible();
-  await expect(pgMyAccount.exactText(userEmail)).toBeVisible();
-  await expect(pgMyAccount.exactText(userPhoneNumber)).toBeVisible();
+  await expect(pgMyAccount.residencyItem()).toHaveValue("Singapore");
+  await expect(pgMyAccount.emailItem()).toHaveValue(userEmail);
+  await expect(pgMyAccount.phoneNumberItem()).toHaveValue(userPhoneNumber);
 
   // WHEN user navigates to edit page, and saves
   await pgMyAccount.editButton().click();
@@ -42,7 +42,7 @@ test("user can register, edit account details, save, and should see their detail
   // THEN
   await pgMyAccount.checkUrl();
   await expect(pgMyAccount.exactText("New Name")).toBeVisible();
-  await expect(pgMyAccount.exactText("Other")).toBeVisible();
-  await expect(pgMyAccount.exactText(userEmail)).toBeVisible();
-  await expect(pgMyAccount.exactText("+65 12345678")).toBeVisible();
+  await expect(pgMyAccount.residencyItem()).toHaveValue("Other");
+  await expect(pgMyAccount.emailItem()).toHaveValue(userEmail);
+  await expect(pgMyAccount.phoneNumberItem()).toHaveValue("+65 12345678");
 });

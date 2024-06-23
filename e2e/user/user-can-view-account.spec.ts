@@ -19,7 +19,7 @@ test("user can view their account", async ({ page }) => {
 
   const { userName, userEmail, userPhoneNumber, userResidency } = knownUser;
   await expect(pgAccount.exactText(userName)).toBeVisible();
-  await expect(pgAccount.exactText(userEmail)).toBeVisible();
-  await expect(pgAccount.exactText(userPhoneNumber)).toBeVisible();
-  await expect(pgAccount.exactText(userResidency)).toBeVisible();
+  await expect(pgAccount.residencyItem()).toHaveValue(userResidency);
+  await expect(pgAccount.emailItem()).toHaveValue(userEmail);
+  await expect(pgAccount.phoneNumberItem()).toHaveValue(userPhoneNumber);
 });

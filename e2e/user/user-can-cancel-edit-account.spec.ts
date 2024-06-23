@@ -22,9 +22,9 @@ test("user can register, edit account details, but click cancel, and should see 
   await pgAcc.checkUrl();
 
   await expect(pgAcc.exactText(userName)).toBeVisible();
-  await expect(pgAcc.exactText("Singapore")).toBeVisible();
-  await expect(pgAcc.exactText(userEmail)).toBeVisible();
-  await expect(pgAcc.exactText(userPhoneNumber)).toBeVisible();
+  await expect(pgAcc.residencyItem()).toHaveValue("Singapore");
+  await expect(pgAcc.emailItem()).toHaveValue(userEmail);
+  await expect(pgAcc.phoneNumberItem()).toHaveValue(userPhoneNumber);
 
   // WHEN user clicks on edit button, navigate to edit page
   await pgAcc.editButton().click();
@@ -39,7 +39,7 @@ test("user can register, edit account details, but click cancel, and should see 
   // THEN
   await pgAcc.checkUrl();
   await expect(pgAcc.exactText(userName)).toBeVisible();
-  await expect(pgAcc.exactText("Singapore")).toBeVisible();
-  await expect(pgAcc.exactText(userEmail)).toBeVisible();
-  await expect(pgAcc.exactText(userPhoneNumber)).toBeVisible();
+  await expect(pgAcc.residencyItem()).toHaveValue("Singapore");
+  await expect(pgAcc.emailItem()).toHaveValue(userEmail);
+  await expect(pgAcc.phoneNumberItem()).toHaveValue(userPhoneNumber);
 });

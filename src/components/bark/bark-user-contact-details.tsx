@@ -7,6 +7,7 @@ import { SINGAPORE_TIME_ZONE, formatDateTime } from "@/lib/utilities/bark-time";
 import { formatDistanceStrict } from "date-fns";
 import { Skeleton } from "../ui/skeleton";
 import { NA_TEXT } from "@/app/_lib/constants";
+import { Input } from "../ui/input";
 
 export function BarkUserContactDetails(props: {
   details: null | {
@@ -33,12 +34,6 @@ export function BarkUserContactDetails(props: {
     );
   }
 
-  type LineItem = {
-    key: string;
-    icon: React.ReactNode;
-    value: React.ReactNode;
-  };
-
   const {
     userName,
     userEmail,
@@ -47,48 +42,6 @@ export function BarkUserContactDetails(props: {
     userCreationTime,
     userLastContactedTime,
   } = details;
-  const lineItems: LineItem[] = [];
-  lineItems.push({
-    key: "location",
-    icon: (
-      <Image
-        src={IMG_PATH.LOCATION_MARKER}
-        width={24}
-        height={26}
-        alt="location marker icon"
-        className="h-full w-auto"
-      />
-    ),
-    value: capitalize(userResidency),
-  });
-  if (userEmail !== undefined) {
-    lineItems.push({
-      key: "email",
-      icon: (
-        <Image
-          src={IMG_PATH.LETTER}
-          width={26}
-          height={20}
-          alt="letter icon"
-          className="h-auto w-full"
-        />
-      ),
-      value: userEmail,
-    });
-  }
-  lineItems.push({
-    key: "phone",
-    icon: (
-      <Image
-        src={IMG_PATH.PHONE}
-        width={30}
-        height={30}
-        alt="phone icon icon"
-        className="h-full w-auto"
-      />
-    ),
-    value: userPhoneNumber,
-  });
 
   const userCreationTimeText =
     userCreationTime === undefined
@@ -106,7 +59,7 @@ export function BarkUserContactDetails(props: {
         });
 
   return (
-    <div className="flex max-w-64 flex-col gap-2">
+    <div className="flex w-full flex-col gap-2">
       <div className="mb-[7px] flex flex-col gap-[7px]">
         <BarkH4>{userName}</BarkH4>
         {userCreationTimeText !== undefined && (
@@ -120,18 +73,61 @@ export function BarkUserContactDetails(props: {
         </p>
       </div>
       <div className="flex flex-col gap-3">
-        {lineItems.map((detail) => {
-          const { key, icon, value } = detail;
-          return (
-            <div key={key} className="flex items-center gap-2">
-              <div className="flex h-[25px] w-[25px] place-content-center justify-items-center">
-                {icon}
-              </div>
-              <div>{value}</div>
-            </div>
-          );
-        })}
+        <_ContactItem
+          icon={_residencyIcon()}
+          value={capitalize(userResidency)}
+        />
+        {userEmail && <_ContactItem icon={_emailIcon()} value={userEmail} />}
+        <_ContactItem icon={_phoneNumberIcon()} value={userPhoneNumber} />
       </div>
     </div>
+  );
+}
+
+function _ContactItem(props: { icon: React.ReactNode; value: string }) {
+  const { icon, value } = props;
+  return (
+    <div className="flex flex-row items-center gap-2">
+      <div className="flex h-[25px] w-[25px] flex-row place-content-center justify-items-center">
+        {icon}
+      </div>
+      <Input disabled={true} value={value} className="w-full" />
+    </div>
+  );
+}
+
+function _phoneNumberIcon() {
+  return (
+    <Image
+      src={IMG_PATH.PHONE}
+      width={30}
+      height={30}
+      alt="icon for phone number"
+      className="h-full w-auto"
+    />
+  );
+}
+
+function _emailIcon() {
+  return (
+    <Image
+      src={IMG_PATH.LETTER}
+      width={26}
+      height={20}
+      alt="icon for email"
+      className="h-auto w-full"
+    />
+  );
+}
+
+function _residencyIcon() {
+  return (
+    <Image
+      src={IMG_PATH.LOCATION_MARKER}
+      width={24}
+      height={26}
+      alt="icon for residency"
+      className="h-full w-auto"
+    />
   );
 }
