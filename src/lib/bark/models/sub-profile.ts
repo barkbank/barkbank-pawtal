@@ -8,9 +8,9 @@ import { YesNoSchema } from "../enums/yes-no";
  *
  * -(a) Commented out fields are omitted.
  *
- * -(b) The schema for ever pregnant and ever received transfusion is
- * YesNoSchema, not YesNoUnknown. This is because sub profiles are used only
- * after a dog has a report.
+ * -(b) dogEverPregnant and dogEverReceivedTransfusion are YesNoSchema.
+ *
+ * -(c) dogWeightKg cannot be null.
  */
 export const SubProfileSchema = z.object({
   dogName: z.string(),

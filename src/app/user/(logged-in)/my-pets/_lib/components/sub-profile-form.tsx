@@ -46,5 +46,10 @@ function _toFormData(dogProfile: DogProfile): FormData {
 }
 
 function _toSubProfile(formData: FormData): SubProfile {
-  return SubProfileSchema.parse({});
+  const { dogWeightKg, ...fields } = formData;
+  const out: SubProfile = {
+    dogWeightKg: RequiredDogWeightKgField.new().parse(dogWeightKg),
+    ...fields,
+  };
+  return SubProfileSchema.parse(out);
 }
