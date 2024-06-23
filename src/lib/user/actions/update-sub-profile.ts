@@ -1,6 +1,6 @@
 import { PoolClient } from "pg";
 import { UserActor } from "../user-actor";
-import { SubProfile } from "@/lib/bark/models/sub-profile";
+import { SubProfile, SubProfileSchema } from "@/lib/bark/models/sub-profile";
 import {
   dbBegin,
   dbCommit,
@@ -36,6 +36,7 @@ export async function updateSubProfile(
   const { dbPool } = actor.getParams();
   const conn = await dbPool.connect();
   try {
+    SubProfileSchema.parse(subProfile);
     await dbBegin(conn);
     const resOwnership = await checkOwnership(conn, ctx);
     if (resOwnership !== CODE.OK) {
@@ -55,6 +56,9 @@ export async function updateSubProfile(
     }
     await dbCommit(conn);
     return CODE.OK;
+  } catch (err) {
+    console.error(err);
+    return CODE.FAILED;
   } finally {
     await dbRollback(conn);
     await dbRelease(conn);
@@ -70,7 +74,7 @@ async function checkOwnership(
   | typeof CODE.ERROR_DOG_NOT_FOUND
   | typeof CODE.ERROR_WRONG_OWNER
 > {
-  const { actor, dogId, subProfile } = ctx;
+  const { actor, dogId } = ctx;
   const sql = `SELECT user_id as "ownerUserId" FROM dogs WHERE dog_id = $1`;
   const { result, error } = await dbResultQuery<{ ownerUserId: string }>(
     conn,
@@ -99,7 +103,7 @@ async function checkExistingReport(
   | typeof CODE.DB_QUERY_FAILURE
   | typeof CODE.ERROR_SHOULD_UPDATE_FULL_PROFILE
 > {
-  const { dogId, subProfile } = ctx;
+  const { dogId } = ctx;
   const sql = `
   SELECT COUNT(1)::integer as "numReports"
   FROM reports
