@@ -184,7 +184,15 @@ export default function PetForm(props: {
             form={form}
             label="Select your preferred vet for blood profiling test and blood donation"
             name="dogPreferredVetId"
-            options={vetOptions}
+            options={[
+              {
+                label: "None",
+                value: "",
+                description:
+                  "Select this option to exclude this dog from blood donation activities",
+              },
+              ...vetOptions,
+            ]}
           />
         )}
 

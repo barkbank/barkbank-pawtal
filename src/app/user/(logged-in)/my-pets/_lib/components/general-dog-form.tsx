@@ -202,7 +202,15 @@ export function GeneralDogForm(props: {
             form={form}
             label="Preferred Donation Point"
             name="dogPreferredVetId"
-            options={vetOptions}
+            options={[
+              {
+                label: "None",
+                value: "",
+                description:
+                  "Select this option to exclude this dog from blood donation activities",
+              },
+              ...vetOptions,
+            ]}
           />
         )}
 
