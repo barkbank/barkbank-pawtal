@@ -205,7 +205,7 @@ export function GeneralDogForm(props: {
           ]}
         />
 
-        {vetOptions.length > 1 && (
+        {vetOptions.length > 0 && (
           <BarkFormRadioGroup
             form={form}
             label="Preferred Donation Point"
