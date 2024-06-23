@@ -84,7 +84,7 @@ test("user can view report and edit sub-profile", async ({
   await pgEdit.checkUrl();
   await expect(pgEdit.evidenceThisIsTheSubProfileForm()).toBeVisible();
   await pgEdit.dogNameField().fill(newName);
-  await pgEdit.dogEverReceivedTransfusionOption(YES_NO.YES);
+  await pgEdit.dogEverReceivedTransfusionOption(YES_NO.YES).click();
   await pgEdit.dogWeightField().fill(newWeight);
   await pgEdit.saveButton().click();
 
@@ -92,5 +92,7 @@ test("user can view report and edit sub-profile", async ({
   await pgViewDog.checkUrl();
   await expect(pgViewDog.dogNameHeader(newName)).toBeVisible();
   await expect(pgViewDog.dogWeightItem()).toContainText(newWeight);
-  await expect(pgViewDog.dogEverReceivedTransfusionItem()).toContainText("Yes");
+  await expect(pgViewDog.dogEverReceivedTransfusionItem()).toContainText(
+    "Yes, ever received blood transfusion",
+  );
 });
