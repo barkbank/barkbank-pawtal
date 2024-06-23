@@ -122,6 +122,7 @@ export default function BarkLoginForm(props: {
           variant="brandInverse"
           className="mt-3 w-full md:w-48"
           onClick={onRequestOtp}
+          type="button"
         >
           Send me an OTP
         </BarkButton>

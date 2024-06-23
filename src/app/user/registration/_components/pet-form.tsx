@@ -201,6 +201,7 @@ export default function PetForm(props: {
             variant="brandInverse"
             onClick={onPrevClick}
             className="w-full"
+            type="button"
           >
             {prevLabel}
           </BarkButton>

@@ -80,7 +80,7 @@ export default function AccountEditForm({
           ]}
         />
         <div className="mt-6 flex flex-col gap-2 md:flex-row">
-          <BarkButton variant="brand" className="w-full md:w-40">
+          <BarkButton variant="brand" className="w-full md:w-40" type="submit">
             Save
           </BarkButton>
           <BarkButton
