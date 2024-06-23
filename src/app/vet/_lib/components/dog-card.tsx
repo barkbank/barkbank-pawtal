@@ -32,7 +32,7 @@ export function DogCard(props: {
 
   return (
     <div
-      className={clsx("x-card m-1", {
+      className={clsx("x-card m-1 cursor-pointer", {
         "x-card-bg": dogId !== selectedDogId,
         "x-card-bg-selected": dogId === selectedDogId,
       })}

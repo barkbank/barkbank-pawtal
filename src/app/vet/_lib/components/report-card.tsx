@@ -38,7 +38,7 @@ export function ReportCard(props: { report: BarkReport }) {
   };
   return (
     <div
-      className="x-card x-card-bg flex flex-col items-start justify-between gap-3"
+      className="x-card x-card-bg flex cursor-pointer flex-col items-start justify-between gap-3"
       onClick={gotoViewReport}
     >
       <div className="flex w-full flex-row items-center justify-between gap-3">
