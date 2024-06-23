@@ -8,6 +8,13 @@ export class UserEditSubProfilePage extends PomDynamicPage {
     return RoutePath.USER_EDIT_DOG_REGEX;
   }
 
+  /**
+   * @returns Any locator that indicates the form for sub-profile was loaded.
+   */
+  evidenceThisIsTheSubProfileForm(): Locator {
+    return this.page().getByText("Note that after the first");
+  }
+
   dogNameField(): Locator {
     return this.page().getByLabel("Name");
   }
