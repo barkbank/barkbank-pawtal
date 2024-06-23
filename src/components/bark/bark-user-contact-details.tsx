@@ -7,6 +7,7 @@ import { SINGAPORE_TIME_ZONE, formatDateTime } from "@/lib/utilities/bark-time";
 import { formatDistanceStrict } from "date-fns";
 import { Skeleton } from "../ui/skeleton";
 import { NA_TEXT } from "@/app/_lib/constants";
+import { Input } from "../ui/input";
 
 export function BarkUserContactDetails(props: {
   details: null | {
@@ -90,7 +91,7 @@ function _ContactItem(props: { icon: React.ReactNode; value: string }) {
       <div className="flex h-[25px] w-[25px] flex-row place-content-center justify-items-center">
         {icon}
       </div>
-      <div className="... w-full truncate">{value}</div>
+      <Input disabled={true} value={value} className="w-full" />
     </div>
   );
 }
