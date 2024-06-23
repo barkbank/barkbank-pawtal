@@ -406,6 +406,7 @@ export function GeneralReportForm(props: {
             className="w-full md:w-40"
             variant="brandInverse"
             onClick={onCancel}
+            type="button"
           >
             Cancel
           </BarkButton>

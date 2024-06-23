@@ -50,6 +50,7 @@ export function CancelAppointmentForm(props: { appointment: BarkAppointment }) {
           className="w-full md:w-40"
           variant="brand"
           onClick={onConfirm}
+          type="button"
         >
           Confirm
         </BarkButton>
@@ -57,6 +58,7 @@ export function CancelAppointmentForm(props: { appointment: BarkAppointment }) {
           className="w-full md:w-40"
           variant="brandInverse"
           onClick={onDoNotCancel}
+          type="button"
         >
           Do not cancel
         </BarkButton>

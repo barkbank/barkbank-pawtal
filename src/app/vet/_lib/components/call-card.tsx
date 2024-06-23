@@ -109,6 +109,7 @@ export function CallCard(props: {
           variant="brand"
           onClick={() => submitOutcome(CALL_OUTCOME.APPOINTMENT)}
           className="w-full xl:w-40"
+          type="button"
         >
           Scheduled
         </BarkButton>
@@ -117,6 +118,7 @@ export function CallCard(props: {
           variant="brandInverse"
           onClick={() => submitOutcome(CALL_OUTCOME.DECLINED)}
           className="w-full xl:w-40"
+          type="button"
         >
           Declined
         </BarkButton>

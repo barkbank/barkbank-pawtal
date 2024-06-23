@@ -126,6 +126,7 @@ export default function OwnerForm(props: {
           variant="brandInverse"
           className="mt-3"
           onClick={onRequestOtp}
+          type="button"
         >
           Send me an OTP
         </BarkButton>
@@ -167,6 +168,7 @@ export default function OwnerForm(props: {
             variant="brandInverse"
             onClick={onPrevClick}
             className="w-full"
+            type="button"
           >
             {prevLabel}
           </BarkButton>

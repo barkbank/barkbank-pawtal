@@ -41,6 +41,7 @@ export async function doSubmitReport(
       .fill(values.ineligibilityReason);
   }
   await pgSubmit.submitButton().click();
+  await pgList.checkUrl();
 }
 
 function _getBase(): BarkReportData {
