@@ -1,8 +1,17 @@
 "use client";
 
 import { RequiredDogWeightKgField } from "@/app/_lib/field-schemas/required-dog-weight-kg-field";
-import { BarkFormOption } from "@/components/bark/bark-form";
+import { formatBirthday, formatBloodType } from "@/app/_lib/formatters";
+import { BarkButton } from "@/components/bark/bark-button";
+import {
+  BarkForm,
+  BarkFormError,
+  BarkFormInput,
+  BarkFormOption,
+  BarkFormRadioGroup,
+} from "@/components/bark/bark-form";
 import { YesNoSchema } from "@/lib/bark/enums/yes-no";
+import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { DogProfile } from "@/lib/bark/models/dog-profile";
 import { SubProfile, SubProfileSchema } from "@/lib/bark/models/sub-profile";
 import { Result } from "@/lib/utilities/result";
@@ -34,23 +43,96 @@ export function SubProfileForm(props: {
     defaultValues: _toFormData(subProfile),
   });
 
-  const debugFormDefaultValues = _toFormData(subProfile);
-  const debugOutputSubProfile = _toSubProfile(debugFormDefaultValues);
+  const onSubmit = async (formData: FormData) => {
+    const subProfile = _toSubProfile(formData);
+    const { error } = await handleSubmit(subProfile);
+    if (error !== undefined) {
+      form.setError("root", { message: error });
+    }
+  };
+
   return (
     <div>
-      <h1>Sub Profile Form</h1>
-      <pre>
-        {JSON.stringify(
-          {
-            dogProfile,
-            subProfile,
-            debugFormDefaultValues,
-            debugOutputSubProfile,
-          },
-          null,
-          2,
-        )}
-      </pre>
+      <div className="prose">
+        <h1>Edit Dog</h1>
+        <p>
+          Note that after the first report from a vet has been received, the
+          following cannot be edited:
+        </p>
+        <ul>
+          <li>Breed: {dogProfile.dogBreed}</li>
+          <li>Gender: {dogProfile.dogGender}</li>
+          <li>Birthday: {formatBirthday(dogProfile.dogBirthday)}</li>
+          <li>Blood Type: {formatBloodType(dogProfile.dogDea1Point1)}</li>
+        </ul>
+      </div>
+      <BarkForm form={form} onSubmit={onSubmit}>
+        <BarkFormInput
+          form={form}
+          name="dogName"
+          label="Dog Name"
+          type="text"
+        />
+        <BarkFormInput
+          form={form}
+          name="dogWeightKg"
+          label="Dog Weight (KG)"
+          type="text"
+        />
+        <BarkFormRadioGroup
+          form={form}
+          label="Ever Received Blood Transfusion"
+          name="dogEverReceivedTransfusion"
+          layout="radio"
+          options={[
+            {
+              label: "Yes",
+              value: YES_NO_UNKNOWN.YES,
+            },
+            {
+              label: "No",
+              value: YES_NO_UNKNOWN.NO,
+            },
+          ]}
+        />
+        <BarkFormRadioGroup
+          form={form}
+          label="Ever Pregnant"
+          name="dogEverPregnant"
+          layout="radio"
+          options={[
+            {
+              label: "Yes",
+              value: YES_NO_UNKNOWN.YES,
+            },
+            {
+              label: "No",
+              value: YES_NO_UNKNOWN.NO,
+            },
+          ]}
+        />
+        <BarkFormRadioGroup
+          form={form}
+          label="Preferred Donation Point"
+          name="dogPreferredVetId"
+          options={vetOptions}
+        />
+        <BarkFormError form={form} />
+
+        <div className="mt-6 flex flex-col gap-3 md:flex-row-reverse md:justify-end">
+          <BarkButton
+            className="w-full md:w-40"
+            variant="brandInverse"
+            type="button"
+            onClick={handleCancel}
+          >
+            Cancel
+          </BarkButton>
+          <BarkButton className="w-full md:w-40" variant="brand" type="submit">
+            Save
+          </BarkButton>
+        </div>
+      </BarkForm>
     </div>
   );
 }
