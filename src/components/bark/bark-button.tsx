@@ -11,7 +11,8 @@ export function BarkButton(props: {
   type?: "button" | "submit" | "reset";
   disabled?: boolean;
 }) {
-  const { children, variant, className, type, disabled, href, onClick } = props;
+  const { children, variant, className, disabled, href, onClick } = props;
+  const type = props.type ?? "button";
 
   if (href !== undefined && disabled !== true) {
     return (
