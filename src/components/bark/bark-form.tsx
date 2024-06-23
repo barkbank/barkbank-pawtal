@@ -34,7 +34,7 @@ export function BarkForm(props: {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="mt-3"
+        className="my-3 flex flex-col gap-6"
         autoComplete="off"
       >
         {children}
@@ -44,15 +44,15 @@ export function BarkForm(props: {
 }
 
 export function BarkFormHeader(props: { children: React.ReactNode }) {
-  return <p className="mt-6 text-lg">{props.children}</p>;
+  return <p className="text-lg">{props.children}</p>;
 }
 
 export function BarkFormParagraph(props: { children: React.ReactNode }) {
-  return <p className="mt-3 text-sm text-muted-foreground">{props.children}</p>;
+  return <p className="text-sm text-muted-foreground">{props.children}</p>;
 }
 
 export function BarkFormErrorParagraph(props: { children: React.ReactNode }) {
-  return <p className="mt-3 text-sm text-destructive">{props.children}</p>;
+  return <p className="text-sm text-destructive">{props.children}</p>;
 }
 
 // Use form.setError("root", {message: "..."}) to set the error.
@@ -62,7 +62,7 @@ export function BarkFormError(props: { form: UseFormReturn<any> }) {
     <FormField
       control={form.control}
       name="root"
-      render={({ field }) => <FormMessage className="mt-6" />}
+      render={({ field }) => <FormMessage />}
     />
   );
 }
@@ -82,7 +82,7 @@ export function BarkFormInput(props: {
       control={form.control}
       name={name}
       render={({ field }) => (
-        <FormItem className="mt-6">
+        <FormItem>
           <FormLabel className="text-base">{label}</FormLabel>
           <div className="flex items-end gap-2">
             <div className="flex-grow">
@@ -119,7 +119,7 @@ export function BarkFormSingleCheckbox(props: {
       control={form.control}
       name={name}
       render={({ field }) => (
-        <FormItem className="mt-6">
+        <FormItem>
           <FormLabel className="text-base">{label}</FormLabel>
           <div className="flex flex-row items-start space-x-3 space-y-0">
             <FormControl>
@@ -162,7 +162,7 @@ export function BarkFormRadioGroup(props: {
       control={form.control}
       name={name}
       render={({ field }) => (
-        <FormItem className="mt-6 space-y-3">
+        <FormItem className="space-y-3">
           <FormLabel className="text-base">{label}</FormLabel>
           <FormControl>
             {layout === "button" ? (
@@ -235,7 +235,7 @@ export function BarkFormCheckboxes(props: {
       name={name}
       render={() => (
         <FormItem>
-          <div className="mb-4 mt-6">
+          <div>
             <FormLabel className="text-base">{label}</FormLabel>
             {description && <FormDescription>{description}</FormDescription>}
           </div>
@@ -295,7 +295,7 @@ export function BarkFormTextArea(props: {
       control={form.control}
       name={name}
       render={({ field }) => (
-        <FormItem className="mt-6">
+        <FormItem>
           <FormLabel className="text-base">{label}</FormLabel>
           <FormControl>
             <Textarea
@@ -326,7 +326,7 @@ export function BarkFormSelect(props: {
       control={form.control}
       name={name}
       render={({ field }) => (
-        <FormItem className="mt-6">
+        <FormItem>
           <FormLabel className="text-base">{label}</FormLabel>
           <FormControl>
             <Select onValueChange={field.onChange} defaultValue={field.value}>
