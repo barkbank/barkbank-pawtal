@@ -15,6 +15,5 @@ export async function selectDogReportCount(
   WHERE dog_id = $1
   `;
   const res = await dbQuery<DogReportCount>(dbContext, sql, [dogId]);
-  console.debug(res.rows[0]);
   return DogReportCountSchema.parse(res.rows[0]);
 }
