@@ -57,15 +57,7 @@ export default function PetForm(props: {
     nextLabel,
   } = props;
   const form = useForm<FormDataType>({
-    resolver: zodResolver(
-      FORM_SCHEMA.extend({
-        // Only if there are more than 1 vet options, we require the user to select one. Else vet will be predetermine.
-        dogPreferredVetId:
-          vetOptions.length <= 1
-            ? FORM_SCHEMA.shape.dogPreferredVetId
-            : z.string().min(1, { message: "Please select an option" }),
-      }),
-    ),
+    resolver: zodResolver(FORM_SCHEMA),
     defaultValues,
   });
 
@@ -187,12 +179,20 @@ export default function PetForm(props: {
           ]}
         />
 
-        {vetOptions.length > 1 && (
+        {vetOptions.length > 0 && (
           <BarkFormRadioGroup
             form={form}
             label="Select your preferred vet for blood profiling test and blood donation"
             name="dogPreferredVetId"
-            options={vetOptions}
+            options={[
+              {
+                label: "None",
+                value: "",
+                description:
+                  "Select this option to exclude this dog from blood donation activities",
+              },
+              ...vetOptions,
+            ]}
           />
         )}
 
