@@ -59,7 +59,7 @@ export function BarkUserContactDetails(props: {
         });
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex w-full flex-col gap-2">
       <div className="mb-[7px] flex flex-col gap-[7px]">
         <BarkH4>{userName}</BarkH4>
         {userCreationTimeText !== undefined && (
