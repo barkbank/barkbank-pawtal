@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { RoutePath } from "@/lib/route-path";
 import { CODE } from "@/lib/utilities/bark-code";
 import { postSubProfileUpdate } from "../actions/post-sub-profile-update";
+import { useToast } from "@/components/ui/use-toast";
 
 export function SubProfileFormController(props: {
   vetOptions: BarkFormOption[];
@@ -18,6 +19,7 @@ export function SubProfileFormController(props: {
 }) {
   const { vetOptions, dogId, dogProfile, subProfile } = props;
   const router = useRouter();
+  const { toast } = useToast();
 
   const onCancel = async () => {
     router.push(RoutePath.USER_VIEW_DOG(dogId));
@@ -26,9 +28,11 @@ export function SubProfileFormController(props: {
   const onSubmit = async (
     subProfile: SubProfile,
   ): Promise<Result<true, string>> => {
-    console.log({
-      _msg: "onSubmit was triggered",
-      subProfile,
+    const { dogName } = subProfile;
+    toast({
+      title: "Saving...",
+      description: `Profile for ${dogName} is being saved.`,
+      variant: "brandInfo",
     });
     const err = await postSubProfileUpdate({ dogId, subProfile });
     if (err === CODE.ERROR_NOT_LOGGED_IN) {
@@ -38,6 +42,11 @@ export function SubProfileFormController(props: {
     if (err !== CODE.OK) {
       return Err(err);
     }
+    toast({
+      title: "Saved!",
+      description: `Profile for ${dogName} has been saved.`,
+      variant: "brandSuccess",
+    });
     router.push(RoutePath.USER_VIEW_DOG(dogId));
     return Ok(true);
   };
