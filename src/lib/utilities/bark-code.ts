@@ -13,6 +13,11 @@ export const CODE = {
   FAILED: "FAILED",
 
   /**
+   * When a certain feature is not implemented.
+   */
+  ERROR_NOT_IMPLEMENTED: "ERROR_NOT_IMPLEMENTED",
+
+  /**
    * When an expected account cannot be found. e.g. when sending OTP.
    */
   ERROR_ACCOUNT_NOT_FOUND: "ERROR_ACCOUNT_NOT_FOUND",

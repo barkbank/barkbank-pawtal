@@ -17,8 +17,15 @@ import {
   formatDateTime,
   parseCommonDate,
 } from "@/lib/utilities/bark-time";
+import { UserEditSubProfilePage } from "../_lib/pom/pages/user-edit-sub-profile-page";
+import { YES_NO } from "@/lib/bark/enums/yes-no";
 
-test("user can view report", async ({ page }) => {
+test("user can view report and edit sub-profile", async ({
+  page,
+}, testInfo) => {
+  // This test can take some time...
+  testInfo.setTimeout(60000);
+
   const reportedDogWeightKg = "111";
   const yesterday = new Date(Date.now() - MILLIS_PER_DAY);
   const visitTimeText = formatDateTime(yesterday, SGT_UI_DATE);
@@ -51,7 +58,7 @@ test("user can view report", async ({ page }) => {
 
   const pgPets = new UserMyPetsPage(context);
   const pgViewDog = new UserViewDogPage(context);
-  const pgEditDog = new UserEditDogPage(context);
+  const pgEdit = new UserEditSubProfilePage(context);
   const pgViewReport = new UserViewReportPage(context);
 
   // Verify that dog's weight is the registration dog weight, because
@@ -66,4 +73,26 @@ test("user can view report", async ({ page }) => {
   await pgViewReport.checkUrl();
   await expect(pgViewReport.dogWeightItem()).toContainText(reportedDogWeightKg);
   await expect(pgViewReport.dogBreedItem()).toContainText(dogBreed);
+
+  // Edit sub-profile. When a dog has a report, the View Dog edit button should
+  // take us to the form for editing sub-profile.
+  const newName = "Molly Briggs";
+  const newWeight = "333";
+  await pgViewReport.backButton().click();
+  await pgViewDog.checkUrl();
+  await pgViewDog.editButton().click();
+  await pgEdit.checkUrl();
+  await expect(pgEdit.evidenceThisIsTheSubProfileForm()).toBeVisible();
+  await pgEdit.dogNameField().fill(newName);
+  await pgEdit.dogEverReceivedTransfusionOption(YES_NO.YES).click();
+  await pgEdit.dogWeightField().fill(newWeight);
+  await pgEdit.saveButton().click();
+
+  // Verify the edits, we should be in the view dog page again.
+  await pgViewDog.checkUrl();
+  await expect(pgViewDog.dogNameHeader(newName)).toBeVisible();
+  await expect(pgViewDog.dogWeightItem()).toContainText(newWeight);
+  await expect(pgViewDog.dogEverReceivedTransfusionItem()).toContainText(
+    "Yes, ever received blood transfusion",
+  );
 });

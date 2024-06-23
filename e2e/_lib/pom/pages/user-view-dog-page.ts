@@ -8,6 +8,10 @@ export class UserViewDogPage extends PomDynamicPage {
     return RoutePath.USER_VIEW_DOG_REGEX;
   }
 
+  dogNameHeader(name: string): Locator {
+    return this.page().getByRole("heading", { name, exact: true });
+  }
+
   dogBreedItem(): Locator {
     return this.profileItem("Breed");
   }

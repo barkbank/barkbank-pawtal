@@ -2,7 +2,7 @@ import { BarkFormOption } from "@/components/bark/bark-form";
 import { dbQuery } from "@/lib/data/db-utils";
 import { Pool } from "pg";
 
-// TODO: Move this into lib/bark/operations
+// TODO: Move this into lib/bark/operations as opFetchVetProfiles returning VetProfile[]
 export async function getVetFormOptions(
   dbPool: Pool,
 ): Promise<BarkFormOption[]> {

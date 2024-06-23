@@ -83,6 +83,7 @@ import { DogProfile } from "@/lib/bark/models/dog-profile";
 import { SubProfile } from "@/lib/bark/models/sub-profile";
 import { getDogProfile } from "@/lib/user/actions/get-dog-profile";
 import { sprintf } from "sprintf-js";
+import { toSubProfile } from "@/lib/bark/mappers/to-sub-profile";
 
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
@@ -546,8 +547,7 @@ export async function fetchDogInfo(
   const actor = getUserActor(dbPool, userId);
   const { result } = await getDogProfile(actor, dogId);
   const dogProfile = result!;
-  const { dogBreed, dogBirthday, dogGender, dogDea1Point1, ...subProfile } =
-    dogProfile;
+  const subProfile = toSubProfile(dogProfile);
   const { profileModificationTime } = await _getProfileModificationTime(
     dbPool,
     dogId,
