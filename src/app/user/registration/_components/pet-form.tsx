@@ -93,7 +93,7 @@ export default function PetForm(props: {
 
         <BarkFormInput
           form={form}
-          label="When is it's birthday?"
+          label="When is its birthday?"
           name="dogBirthday"
           description="Please provide a date (e.g. 18 Aug 2018). It is okay to provide an approximate date."
         />
