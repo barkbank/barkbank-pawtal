@@ -20,20 +20,6 @@ export class HarnessEncryptionService implements EncryptionService {
   public constructor(secret: string) {
     this.secret = secret;
   }
-  public async encrypt(
-    data: string,
-  ): Promise<Result<{ encryptedData: string }, string>> {
-    return Ok({
-      encryptedData: await this.getEncryptedData(data),
-    });
-  }
-  public async decrypt(
-    encryptedData: string,
-  ): Promise<Result<{ data: string }, string>> {
-    return Ok({
-      data: await this.getDecryptedData(encryptedData),
-    });
-  }
   public async getEncryptedData(data: string): Promise<string> {
     return JSON.stringify({
       secret: this.secret,

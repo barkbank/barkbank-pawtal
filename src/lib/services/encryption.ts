@@ -1,68 +1,35 @@
-import crypto from "crypto";
-import { Err, Ok, Result } from "../utilities/result";
 import { EncryptionProtocol } from "../encryption/encryption-protocol";
-import { PbkdfEncryptionProtocol } from "../encryption/pbkdf-encryption-protocol";
 
 export interface EncryptionService {
-  encrypt(data: string): Promise<Result<{ encryptedData: string }, string>>;
-  decrypt(encryptedData: string): Promise<Result<{ data: string }, string>>;
-
   getEncryptedData(data: string): Promise<string>;
-  getDecryptedData(encryptedData: string): Promise<string>;
+  getDecryptedData(encrypted: string): Promise<string>;
 }
 
-abstract class ConvenientEncryptionService implements EncryptionService {
-  abstract encrypt(
-    data: string,
-  ): Promise<Result<{ encryptedData: string }, string>>;
-  abstract decrypt(
-    encryptedData: string,
-  ): Promise<Result<{ data: string }, string>>;
+export class MultiProtocolEncryptionService implements EncryptionService {
+  constructor(private protocols: EncryptionProtocol[]) {}
 
-  public async getEncryptedData(data: string): Promise<string> {
-    const { result, error } = await this.encrypt(data);
+  async getEncryptedData(data: string): Promise<string> {
+    if (this.protocols.length === 0) {
+      throw new Error("No protocols defined");
+    }
+    const protocol = this.protocols[0];
+    const { result, error } = await protocol.encrypt(data);
     if (error !== undefined) {
       throw new Error(error);
     }
-    const { encryptedData } = result;
-    return encryptedData;
+    return result.encrypted;
   }
 
-  public async getDecryptedData(encryptedData: string): Promise<string> {
-    const { result, error } = await this.decrypt(encryptedData);
-    if (error !== undefined) {
-      throw new Error(error);
+  async getDecryptedData(encrypted: string): Promise<string> {
+    for (const protocol of this.protocols) {
+      if (protocol.isProtocolFor(encrypted)) {
+        const { result, error } = await protocol.decrypt(encrypted);
+        if (error !== undefined) {
+          throw new Error(error);
+        }
+        return result.data;
+      }
     }
-    const { data } = result;
-    return data;
-  }
-}
-
-export class SecretEncryptionService extends ConvenientEncryptionService {
-  private protocol: EncryptionProtocol;
-
-  public constructor(secret: string) {
-    super();
-    this.protocol = new PbkdfEncryptionProtocol(secret);
-  }
-
-  public async encrypt(
-    data: string,
-  ): Promise<Result<{ encryptedData: string }, string>> {
-    const res = await this.protocol.encrypt(data);
-    if (res.error !== undefined) {
-      return Err(res.error);
-    }
-    return Ok({ encryptedData: res.result.encrypted });
-  }
-
-  public async decrypt(
-    encryptedData: string,
-  ): Promise<Result<{ data: string }, string>> {
-    const res = await this.protocol.decrypt(encryptedData);
-    if (res.error !== undefined) {
-      return Err(res.error);
-    }
-    return Ok({ data: res.result.data });
+    throw new Error("No protocol available for the encrypted data");
   }
 }

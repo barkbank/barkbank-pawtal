@@ -13,7 +13,7 @@ import {
 } from "./services/email";
 import {
   EncryptionService,
-  SecretEncryptionService,
+  MultiProtocolEncryptionService,
 } from "./services/encryption";
 import { HashService, SecretHashService } from "./services/hash";
 import {
@@ -46,6 +46,7 @@ import {
 import { VetActorConfig } from "./vet/vet-actor";
 import { BarkContext } from "./bark/bark-context";
 import { NODE_ENV, NodeEnv } from "./node-envs";
+import { PbkdfEncryptionProtocol } from "./encryption/pbkdf-encryption-protocol";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -209,9 +210,11 @@ export class AppFactory {
   private getPiiEncryptionService(): Promise<EncryptionService> {
     if (this.promisedPiiEncryptionService === null) {
       this.promisedPiiEncryptionService = Promise.resolve(
-        new SecretEncryptionService(
-          this.envString(APP_ENV.BARKBANK_PII_SECRET),
-        ),
+        new MultiProtocolEncryptionService([
+          new PbkdfEncryptionProtocol(
+            this.envString(APP_ENV.BARKBANK_PII_SECRET),
+          ),
+        ]),
       );
       console.log("Created EncryptionService for PII");
     }
@@ -221,9 +224,11 @@ export class AppFactory {
   private getOiiEncryptionService(): Promise<EncryptionService> {
     if (this.promisedOiiEncryptionService === null) {
       this.promisedOiiEncryptionService = Promise.resolve(
-        new SecretEncryptionService(
-          this.envString(APP_ENV.BARKBANK_OII_SECRET),
-        ),
+        new MultiProtocolEncryptionService([
+          new PbkdfEncryptionProtocol(
+            this.envString(APP_ENV.BARKBANK_OII_SECRET),
+          ),
+        ]),
       );
       console.log("Created EncryptionService for OII");
     }
@@ -233,9 +238,11 @@ export class AppFactory {
   private getTextEncryptionService(): Promise<EncryptionService> {
     if (this.promisedTextEncryptionService === null) {
       this.promisedTextEncryptionService = Promise.resolve(
-        new SecretEncryptionService(
-          this.envString(APP_ENV.BARKBANK_TEXT_SECRET),
-        ),
+        new MultiProtocolEncryptionService([
+          new PbkdfEncryptionProtocol(
+            this.envString(APP_ENV.BARKBANK_TEXT_SECRET),
+          ),
+        ]),
       );
       console.log("Created EncryptionService for text");
     }
