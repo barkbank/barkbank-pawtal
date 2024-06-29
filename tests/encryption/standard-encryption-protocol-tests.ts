@@ -4,9 +4,11 @@ import { Err, Ok, Result } from "@/lib/utilities/result";
 /**
  * A standard set of sanity checks for encryption protocols.
  */
-export async function standardEncryptionProtocolTests(
-  protocol: EncryptionProtocol,
-): Promise<Result<true, string>> {
+export async function standardEncryptionProtocolTests(args: {
+  protocol: EncryptionProtocol;
+  differentCredentials: EncryptionProtocol;
+}): Promise<Result<true, string>> {
+  const { protocol, differentCredentials } = args;
   const data = `
   Pale blue horse, wandering on the beach.
   Prancing with the waves, hoofs out of reach.
@@ -30,6 +32,14 @@ export async function standardEncryptionProtocolTests(
     return Err(
       `Protocol's isProtocolFor failed to recognise own encrypted string`,
     );
+  }
+
+  if (!differentCredentials.isProtocolFor(enc.result.encrypted)) {
+    return Err(`Having different credentials should not affect isProtocolFor`);
+  }
+  const dec2 = await differentCredentials.decrypt(enc.result.encrypted);
+  if (dec2.error === undefined) {
+    return Err(`Decryption should fail when credentials are different`);
   }
   return Ok(true);
 }

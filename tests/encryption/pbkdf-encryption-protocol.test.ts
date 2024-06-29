@@ -3,9 +3,12 @@ import { standardEncryptionProtocolTests } from "./standard-encryption-protocol-
 
 describe("PBKDF Encryption Protocol", () => {
   it("passes standard encryption protocol tests", async () => {
-    const secret = "test-password";
-    const protocol = new PbkdfEncryptionProtocol(secret);
-    const { error } = await standardEncryptionProtocolTests(protocol);
+    const protocol = new PbkdfEncryptionProtocol("test-secret");
+    const differentCredentials = new PbkdfEncryptionProtocol("another-secret");
+    const { error } = await standardEncryptionProtocolTests({
+      protocol,
+      differentCredentials,
+    });
     expect(error).toBeUndefined();
   });
 });
