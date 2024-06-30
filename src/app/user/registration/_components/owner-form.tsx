@@ -113,7 +113,7 @@ export default function OwnerForm(props: {
         />
         <BarkFormInput
           form={form}
-          label="What number can we reach you on?"
+          label="What number should vets use to reach out to you?"
           name="userPhoneNumber"
         />
         <BarkFormInput
