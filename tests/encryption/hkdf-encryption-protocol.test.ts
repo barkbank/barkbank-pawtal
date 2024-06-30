@@ -53,6 +53,24 @@ describe("HKDF Encryption Protocol", () => {
     const enc = await p1.encrypt("Secret Message");
     expect(p2.isProtocolFor(enc.result!.encrypted)).toEqual(false);
   });
+  it("can use old key to decrypt", async () => {
+    const config1: HkdfConfig = {
+      ikms: [{ ikmId: "key1", ikmHex: _ikmHex(2021) }],
+      purpose: "test",
+    };
+    const config2: HkdfConfig = {
+      ikms: [
+        { ikmId: "key2", ikmHex: _ikmHex(2022) },
+        { ikmId: "key1", ikmHex: _ikmHex(2021) },
+      ],
+      purpose: "test",
+    };
+    const p1 = new HkdfEncryptionProtocol(config1);
+    const p2 = new HkdfEncryptionProtocol(config2);
+    const enc = await p1.encrypt("Secret Message");
+    const dec = await p2.decrypt(enc.result!.encrypted);
+    expect(dec.result!.data).toEqual("Secret Message");
+  });
 });
 
 function _config(idx: number): HkdfConfig {
