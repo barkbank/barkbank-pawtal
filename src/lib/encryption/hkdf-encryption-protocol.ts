@@ -4,7 +4,14 @@ import { Err, Ok, Result } from "../utilities/result";
 import { EncryptionProtocol } from "./encryption-protocol";
 
 export const HkdfInputKeyMaterialSchema = z.object({
-  ikmId: z.string(),
+  ikmId: z
+    .string()
+    .min(1)
+    .max(6)
+    .refine((val) => {
+      const parts = val.split(".");
+      return parts.length === 1;
+    }),
   ikmHex: z.string(),
 });
 
@@ -41,6 +48,10 @@ export class HkdfEncryptionProtocol implements EncryptionProtocol {
     }
   }
 
+  name(): string {
+    return "HkdfEncryptionProtocol";
+  }
+
   async encrypt(data: string): Promise<Result<{ encrypted: string }, string>> {
     const { ikms, purpose, ikmId } = this;
     const { hkdfArgs } = _generateHkdfArgs({ ikms, ikmId, purpose });
@@ -52,14 +63,14 @@ export class HkdfEncryptionProtocol implements EncryptionProtocol {
     const { cipherParams } = _toCipherParams({ cipherArgs });
     const { payload } = _toPayload({ hkdfParams, cipherParams, ciphertext });
     const { signature } = _sign({ sigKey, payload });
-    const { encrypted } = _pack({ signature, payload });
+    const { encrypted } = _pack({ ikmId, signature, payload });
     return Ok({ encrypted });
   }
 
   async decrypt(encrypted: string): Promise<Result<{ data: string }, string>> {
     const { ikms } = this;
 
-    const { signature, payload } = _unpack({ encrypted });
+    const { ikmId, signature, payload } = _unpack({ encrypted });
     const { hkdfParams, cipherParams, ciphertext } = _fromPayload({ payload });
 
     const resHkdfArgs = _toHkdfArgs({ ikms, hkdfParams });
@@ -87,7 +98,7 @@ export class HkdfEncryptionProtocol implements EncryptionProtocol {
    */
   isProtocolFor(encrypted: string): boolean {
     const parts = encrypted.split(".");
-    return parts.length === 3 && parts[0] === _ENC2_;
+    return parts.length === 4 && parts[0] === _ENC2_;
   }
 }
 
@@ -296,23 +307,25 @@ function _sign(args: { sigKey: Buffer; payload: Buffer }): {
   return { signature };
 }
 
-function _pack(args: { signature: Buffer; payload: Buffer }): {
+function _pack(args: { ikmId: string; signature: Buffer; payload: Buffer }): {
   encrypted: string;
 } {
-  const { signature, payload } = args;
+  const { ikmId, signature, payload } = args;
   const sigB64 = signature.toString("base64");
   const payloadB64 = payload.toString("base64");
-  const encrypted = `${_ENC2_}.${sigB64}.${payloadB64}`;
+  const encrypted = `${_ENC2_}.${ikmId}.${sigB64}.${payloadB64}`;
   return { encrypted };
 }
 
 function _unpack(args: { encrypted: string }): {
+  ikmId: string;
   signature: Buffer;
   payload: Buffer;
 } {
   const { encrypted } = args;
   const parts = encrypted.split(".");
-  const signature = Buffer.from(parts[1], "base64");
-  const payload = Buffer.from(parts[2], "base64");
-  return { signature, payload };
+  const ikmId = parts[1];
+  const signature = Buffer.from(parts[2], "base64");
+  const payload = Buffer.from(parts[3], "base64");
+  return { ikmId, signature, payload };
 }

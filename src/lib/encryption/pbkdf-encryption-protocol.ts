@@ -47,6 +47,10 @@ export class PbkdfEncryptionProtocol implements EncryptionProtocol {
     };
   }
 
+  name(): string {
+    return "PbkdfEncryptionProtocol";
+  }
+
   async encrypt(data: string): Promise<Result<{ encrypted: string }, string>> {
     // Params
     const { pbkdf2Params, cipherParams } = this.params;

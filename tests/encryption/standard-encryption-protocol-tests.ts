@@ -20,6 +20,7 @@ export async function standardEncryptionProtocolTests(args: {
   if (enc.result.encrypted === data) {
     return Err(`Encrypted output should not match original data`);
   }
+  console.log({ encrypted: enc.result.encrypted });
   const dec = await protocol.decrypt(enc.result.encrypted);
   if (dec.error !== undefined) {
     return Err(`Decryption failed: ${dec.error}`);

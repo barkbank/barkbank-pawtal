@@ -23,10 +23,19 @@ export class MultiProtocolEncryptionService implements EncryptionService {
   async getDecryptedData(encrypted: string): Promise<string> {
     for (const protocol of this.protocols) {
       if (protocol.isProtocolFor(encrypted)) {
+        const t0 = Date.now();
         const { result, error } = await protocol.decrypt(encrypted);
         if (error !== undefined) {
           throw new Error(error);
         }
+        const t1 = Date.now();
+        console.log({
+          logName: "ProtocolDecryption",
+          args: {
+            name: protocol.name(),
+            elapsedMillis: t1 - t0,
+          },
+        });
         return result.data;
       }
     }

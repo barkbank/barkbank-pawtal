@@ -19,26 +19,26 @@ describe("HKDF Encryption Protocol", () => {
   });
   it("should get unknown IKM ID when ikms does not contain a mapping", async () => {
     const config1: HkdfConfig = {
-      ikms: [{ ikmId: "ikmid1", ikmHex: _ikmHex(111) }],
+      ikms: [{ ikmId: "IKM1", ikmHex: _ikmHex(111) }],
       purpose: "test",
     };
     const config2: HkdfConfig = {
-      ikms: [{ ikmId: "ikmid2", ikmHex: _ikmHex(111) }],
+      ikms: [{ ikmId: "IKM2", ikmHex: _ikmHex(111) }],
       purpose: "test",
     };
     const p1 = new HkdfEncryptionProtocol(config1);
     const p2 = new HkdfEncryptionProtocol(config2);
     const enc = await p1.encrypt("Secret Message");
     const dec = await p2.decrypt(enc.result!.encrypted);
-    expect(dec.error).toEqual("Unknown IKM ID: ikmid1");
+    expect(dec.error).toEqual("Unknown IKM ID: IKM1");
   });
   it("should get signature verificaiton failure when IKM is different", async () => {
     const config1: HkdfConfig = {
-      ikms: [{ ikmId: "matchingIkmID", ikmHex: _ikmHex(111) }],
+      ikms: [{ ikmId: "IKM3", ikmHex: _ikmHex(111) }],
       purpose: "test",
     };
     const config2: HkdfConfig = {
-      ikms: [{ ikmId: "matchingIkmID", ikmHex: _ikmHex(222) }],
+      ikms: [{ ikmId: "IKM3", ikmHex: _ikmHex(222) }],
       purpose: "test",
     };
     const p1 = new HkdfEncryptionProtocol(config1);
@@ -55,13 +55,13 @@ describe("HKDF Encryption Protocol", () => {
   });
   it("can use old key to decrypt", async () => {
     const config1: HkdfConfig = {
-      ikms: [{ ikmId: "key1", ikmHex: _ikmHex(2021) }],
+      ikms: [{ ikmId: "IKM1", ikmHex: _ikmHex(2021) }],
       purpose: "test",
     };
     const config2: HkdfConfig = {
       ikms: [
-        { ikmId: "key2", ikmHex: _ikmHex(2022) },
-        { ikmId: "key1", ikmHex: _ikmHex(2021) },
+        { ikmId: "IKM2", ikmHex: _ikmHex(2022) },
+        { ikmId: "IKM1", ikmHex: _ikmHex(2021) },
       ],
       purpose: "test",
     };
@@ -81,7 +81,7 @@ function _config(idx: number): HkdfConfig {
 }
 
 function _ikm(idx: number): HkdfInputKeyMaterial {
-  const ikmId = `IKM_${idx}`;
+  const ikmId = `IKM${idx}`;
   const ikmHex = _ikmHex(idx);
   return { ikmId, ikmHex };
 }

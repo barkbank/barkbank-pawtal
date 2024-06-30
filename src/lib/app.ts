@@ -47,6 +47,11 @@ import { VetActorConfig } from "./vet/vet-actor";
 import { BarkContext } from "./bark/bark-context";
 import { NODE_ENV, NodeEnv } from "./node-envs";
 import { PbkdfEncryptionProtocol } from "./encryption/pbkdf-encryption-protocol";
+import {
+  HkdfEncryptionProtocol,
+  HkdfInputKeyMaterial,
+} from "./encryption/hkdf-encryption-protocol";
+import { EncryptionProtocol } from "./encryption/encryption-protocol";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -207,10 +212,32 @@ export class AppFactory {
     return this.promisedPiiHashService;
   }
 
+  private getHkdfInputKeyMaterialList(): HkdfInputKeyMaterial[] {
+    return [
+      {
+        ikmId: "IKM1",
+        ikmHex: this.envString(APP_ENV.BARKBANK_IKM1_HEX),
+      },
+      {
+        ikmId: "IKM2",
+        ikmHex: this.envString(APP_ENV.BARKBANK_IKM2_HEX),
+      },
+    ];
+  }
+
+  private newHkdfEncryptionProtocol(args: {
+    purpose: string;
+  }): EncryptionProtocol {
+    const { purpose } = args;
+    const ikms = this.getHkdfInputKeyMaterialList();
+    return new HkdfEncryptionProtocol({ ikms, purpose });
+  }
+
   private getPiiEncryptionService(): Promise<EncryptionService> {
     if (this.promisedPiiEncryptionService === null) {
       this.promisedPiiEncryptionService = Promise.resolve(
         new MultiProtocolEncryptionService([
+          this.newHkdfEncryptionProtocol({ purpose: "pii" }),
           new PbkdfEncryptionProtocol(
             this.envString(APP_ENV.BARKBANK_PII_SECRET),
           ),
@@ -225,6 +252,7 @@ export class AppFactory {
     if (this.promisedOiiEncryptionService === null) {
       this.promisedOiiEncryptionService = Promise.resolve(
         new MultiProtocolEncryptionService([
+          this.newHkdfEncryptionProtocol({ purpose: "oii" }),
           new PbkdfEncryptionProtocol(
             this.envString(APP_ENV.BARKBANK_OII_SECRET),
           ),
@@ -239,6 +267,7 @@ export class AppFactory {
     if (this.promisedTextEncryptionService === null) {
       this.promisedTextEncryptionService = Promise.resolve(
         new MultiProtocolEncryptionService([
+          this.newHkdfEncryptionProtocol({ purpose: "text" }),
           new PbkdfEncryptionProtocol(
             this.envString(APP_ENV.BARKBANK_TEXT_SECRET),
           ),
