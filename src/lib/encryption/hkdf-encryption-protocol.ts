@@ -73,7 +73,11 @@ export class HkdfEncryptionProtocol implements EncryptionProtocol {
 
   async decrypt(encrypted: string): Promise<Result<{ data: string }, string>> {
     const { ikms } = this;
-    const { signature, payload } = _unpack({ encrypted });
+    const resUnpacked = _unpack({ encrypted });
+    if (resUnpacked.error !== undefined) {
+      return Err(resUnpacked.error);
+    }
+    const { signature, payload } = resUnpacked.result;
     const { hkdfParams, cipherParams, ciphertext } = _fromPayload({ payload });
     const { hkdfArgs } = _toHkdfArgs({ hkdfParams });
     const { ikmId } = hkdfArgs;
@@ -99,8 +103,7 @@ export class HkdfEncryptionProtocol implements EncryptionProtocol {
    * fourth part is a base64 encoded payload.
    */
   isProtocolFor(encrypted: string): boolean {
-    const parts = encrypted.split(".");
-    return parts.length === 4 && parts[0] === _ENC2_;
+    return encrypted.startsWith(_ENC2_ + ".");
   }
 }
 
@@ -317,15 +320,21 @@ function _pack(args: { ikmId: string; signature: Buffer; payload: Buffer }): {
   return { encrypted };
 }
 
-function _unpack(args: { encrypted: string }): {
-  ikmId: string;
-  signature: Buffer;
-  payload: Buffer;
-} {
+function _unpack(args: { encrypted: string }): Result<
+  {
+    ikmId: string;
+    signature: Buffer;
+    payload: Buffer;
+  },
+  string
+> {
   const { encrypted } = args;
   const parts = encrypted.split(".");
+  if (parts.length !== 4) {
+    return Err(`Wrong number of parts: ${parts.length}`);
+  }
   const ikmId = parts[1];
   const signature = Buffer.from(parts[2], "base64");
   const payload = Buffer.from(parts[3], "base64");
-  return { ikmId, signature, payload };
+  return Ok({ ikmId, signature, payload });
 }
