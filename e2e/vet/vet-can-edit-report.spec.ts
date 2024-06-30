@@ -49,6 +49,7 @@ async function givenSubmittedReport(context: PomContext): Promise<{
   await pgList.appointmentCard({ dogName }).submitReportButton().click();
 
   await pgSubmit.checkUrl();
+  await expect(pgSubmit.submitButton()).toBeVisible();
   await pgSubmit.visitDateField().fill("6 May 2024");
   await pgSubmit.dogWeightField().fill("27.89");
   await pgSubmit.dogBcsSelector().click();
@@ -86,6 +87,7 @@ async function changeBloodTypeToNegative(
   await pgView.checkUrl();
   await pgView.editButton().click();
   await pgEdit.checkUrl();
+  await expect(pgEdit.submitButton()).toBeVisible();
 
   await pgEdit.dogDea1Point1_NEGATIVE().click();
   await pgEdit.submitButton().click();
@@ -93,6 +95,7 @@ async function changeBloodTypeToNegative(
   await toast.closeButton().click();
 
   await pgView.checkUrl();
+  await expect(pgView.backButton()).toBeVisible();
   await pgView.backButton().click();
   await pgList.checkUrl();
 }
