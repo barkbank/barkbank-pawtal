@@ -54,14 +54,18 @@ export class HkdfEncryptionProtocol implements EncryptionProtocol {
 
   async encrypt(data: string): Promise<Result<{ encrypted: string }, string>> {
     const { ikms, purpose, ikmId } = this;
-    const { hkdfArgs } = _generateHkdfArgs({ ikms, ikmId, purpose });
-    const { key: encKey } = await _deriveKey({ hkdfArgs, usage: "enc" });
-    const { key: sigKey } = await _deriveKey({ hkdfArgs, usage: "sig" });
-    const { cipherArgs } = _generateCipherArgs({ encKey: encKey });
-    const { ciphertext } = _encrypt({ data, cipherArgs });
+    const ikm = ikms[ikmId];
+    if (ikm === undefined) {
+      return Err(`Unknown IKM ID: ${ikmId}`);
+    }
+    const { hkdfArgs } = _generateHkdfArgs({ ikmId, purpose });
+    const { key: encKey } = await _deriveKey({ ikm, hkdfArgs, usage: "enc" });
+    const { cipherArgs } = _generateCipherArgs();
+    const { ciphertext } = _encrypt({ encKey, data, cipherArgs });
     const { hkdfParams } = _toHkdfParams({ hkdfArgs });
     const { cipherParams } = _toCipherParams({ cipherArgs });
     const { payload } = _toPayload({ hkdfParams, cipherParams, ciphertext });
+    const { key: sigKey } = await _deriveKey({ ikm, hkdfArgs, usage: "sig" });
     const { signature } = _sign({ sigKey, payload });
     const { encrypted } = _pack({ ikmId, signature, payload });
     return Ok({ encrypted });
@@ -69,24 +73,22 @@ export class HkdfEncryptionProtocol implements EncryptionProtocol {
 
   async decrypt(encrypted: string): Promise<Result<{ data: string }, string>> {
     const { ikms } = this;
-
-    const { ikmId, signature, payload } = _unpack({ encrypted });
+    const { signature, payload } = _unpack({ encrypted });
     const { hkdfParams, cipherParams, ciphertext } = _fromPayload({ payload });
-
-    const resHkdfArgs = _toHkdfArgs({ ikms, hkdfParams });
-    if (resHkdfArgs.error !== undefined) {
-      return Err(resHkdfArgs.error);
+    const { hkdfArgs } = _toHkdfArgs({ hkdfParams });
+    const { ikmId } = hkdfArgs;
+    const ikm = ikms[ikmId];
+    if (ikm === undefined) {
+      return Err(`Unknown IKM ID: ${ikmId}`);
     }
-    const { hkdfArgs } = resHkdfArgs.result;
-    const { key: sigKey } = await _deriveKey({ hkdfArgs, usage: "sig" });
+    const { key: sigKey } = await _deriveKey({ ikm, hkdfArgs, usage: "sig" });
     const { signature: verificationSignature } = _sign({ sigKey, payload });
     if (!verificationSignature.equals(signature)) {
       return Err("Signature Verification Failure");
     }
-
-    const { key: encKey } = await _deriveKey({ hkdfArgs, usage: "enc" });
-    const { cipherArgs } = _toCipherArgs({ key: encKey, cipherParams });
-    const { data } = _decrypt({ ciphertext, cipherArgs });
+    const { key: encKey } = await _deriveKey({ ikm, hkdfArgs, usage: "enc" });
+    const { cipherArgs } = _toCipherArgs({ cipherParams });
+    const { data } = _decrypt({ encKey, ciphertext, cipherArgs });
     return Ok({ data });
   }
 
@@ -144,7 +146,6 @@ type _CipherParams = z.infer<typeof _CipherParamsSchema>;
 
 type _HkdfArgs = {
   ikmId: string;
-  ikm: Buffer;
   digest: _HkdfDigest;
   salt: Buffer;
   purpose: string;
@@ -153,37 +154,28 @@ type _HkdfArgs = {
 
 type _CipherArgs = {
   algorithm: _CipherAlgorithm;
-  key: Buffer;
   iv: Buffer;
 };
 
-function _generateHkdfArgs(args: {
-  ikms: Record<string, Buffer>;
-  ikmId: string;
-  purpose: string;
-}): { hkdfArgs: _HkdfArgs } {
-  const { ikms, ikmId, purpose } = args;
-  const ikm = ikms[ikmId];
+function _generateHkdfArgs(args: { ikmId: string; purpose: string }): {
+  hkdfArgs: _HkdfArgs;
+} {
+  const { ikmId, purpose } = args;
   const digest = "sha256";
   const salt = crypto.randomBytes(32); // 256 bits
   const keylen = 32; // For "aes-256-cbc"
-  const hkdfArgs: _HkdfArgs = { ikmId, ikm, digest, salt, purpose, keylen };
+  const hkdfArgs: _HkdfArgs = { ikmId, digest, salt, purpose, keylen };
   return { hkdfArgs };
 }
 
-function _toHkdfArgs(args: {
-  ikms: Record<string, Buffer>;
-  hkdfParams: _HkdfParams;
-}): Result<{ hkdfArgs: _HkdfArgs }, string> {
-  const { ikms, hkdfParams } = args;
+function _toHkdfArgs(args: { hkdfParams: _HkdfParams }): {
+  hkdfArgs: _HkdfArgs;
+} {
+  const { hkdfParams } = args;
   const { ikmId, digest, saltB64, purpose, keylen } = hkdfParams;
-  const ikm = ikms[ikmId];
-  if (ikm === undefined) {
-    return Err(`Unknown IKM ID: ${ikmId}`);
-  }
   const salt = Buffer.from(saltB64, "base64");
-  const hkdfArgs: _HkdfArgs = { ikmId, ikm, digest, salt, purpose, keylen };
-  return Ok({ hkdfArgs });
+  const hkdfArgs: _HkdfArgs = { ikmId, digest, salt, purpose, keylen };
+  return { hkdfArgs };
 }
 
 function _toHkdfParams(args: { hkdfArgs: _HkdfArgs }): {
@@ -198,11 +190,12 @@ function _toHkdfParams(args: { hkdfArgs: _HkdfArgs }): {
 }
 
 function _deriveKey(args: {
+  ikm: Buffer;
   hkdfArgs: _HkdfArgs;
   usage: "enc" | "sig";
 }): Promise<{ key: Buffer }> {
-  const { hkdfArgs, usage } = args;
-  const { ikm, digest, salt, purpose, keylen } = hkdfArgs;
+  const { ikm, hkdfArgs, usage } = args;
+  const { digest, salt, purpose, keylen } = hkdfArgs;
   const info = Buffer.from(`${purpose}.${usage}`, "utf8");
   return new Promise<{ key: Buffer }>((resolve) => {
     crypto.hkdf(digest, ikm, salt, info, keylen, (err, derivedKey) => {
@@ -215,14 +208,13 @@ function _deriveKey(args: {
   });
 }
 
-function _generateCipherArgs(args: { encKey: Buffer }): {
+function _generateCipherArgs(): {
   cipherArgs: _CipherArgs;
 } {
-  const { encKey } = args;
   const algorithm: _CipherAlgorithm = "aes-256-cbc";
   // "aes-256-cbc" needs an IV length of exactly 16 bytes
   const iv: Buffer = crypto.randomBytes(16);
-  const cipherArgs = { algorithm, key: encKey, iv };
+  const cipherArgs = { algorithm, iv };
   return { cipherArgs };
 }
 
@@ -236,33 +228,41 @@ function _toCipherParams(args: { cipherArgs: _CipherArgs }): {
   return { cipherParams };
 }
 
-function _toCipherArgs(args: { key: Buffer; cipherParams: _CipherParams }): {
+function _toCipherArgs(args: { cipherParams: _CipherParams }): {
   cipherArgs: _CipherArgs;
 } {
-  const { key, cipherParams } = args;
+  const { cipherParams } = args;
   const { algorithm, ivB64 } = cipherParams;
   const iv = Buffer.from(ivB64, "base64");
-  const cipherArgs = { algorithm, key, iv };
+  const cipherArgs = { algorithm, iv };
   return { cipherArgs };
 }
 
-function _encrypt(args: { data: string; cipherArgs: _CipherArgs }): {
+function _encrypt(args: {
+  encKey: Buffer;
+  data: string;
+  cipherArgs: _CipherArgs;
+}): {
   ciphertext: string;
 } {
-  const { data, cipherArgs } = args;
-  const { algorithm, key, iv } = cipherArgs;
-  const cipher = crypto.createCipheriv(algorithm, key, iv);
+  const { encKey, data, cipherArgs } = args;
+  const { algorithm, iv } = cipherArgs;
+  const cipher = crypto.createCipheriv(algorithm, encKey, iv);
   const partialCiphertext = cipher.update(data, "utf8", "base64");
   const ciphertext = partialCiphertext + cipher.final("base64");
   return { ciphertext };
 }
 
-function _decrypt(args: { ciphertext: string; cipherArgs: _CipherArgs }): {
+function _decrypt(args: {
+  encKey: Buffer;
+  ciphertext: string;
+  cipherArgs: _CipherArgs;
+}): {
   data: string;
 } {
-  const { ciphertext, cipherArgs } = args;
-  const { algorithm, key, iv } = cipherArgs;
-  const decipher = crypto.createDecipheriv(algorithm, key, iv);
+  const { encKey, ciphertext, cipherArgs } = args;
+  const { algorithm, iv } = cipherArgs;
+  const decipher = crypto.createDecipheriv(algorithm, encKey, iv);
   const partialData = decipher.update(ciphertext, "base64", "utf8");
   const data = partialData + decipher.final("utf8");
   return { data };
