@@ -11,9 +11,9 @@ import { generateUser } from "../utils/generate-user";
 
 export async function doRegister(
   context: PomContext,
-  args?: { isIncomplete?: boolean },
+  args?: { isIncomplete?: boolean; withoutPreferredVet?: boolean },
 ): Promise<GeneratedRegistration> {
-  const { isIncomplete } = args ?? {};
+  const { isIncomplete, withoutPreferredVet } = args ?? {};
 
   const dogGender =
     isIncomplete === true
@@ -54,7 +54,11 @@ export async function doRegister(
     await pgReg.dogEverPregnant_NO().click();
   }
 
-  await pgReg.dogPreferredVet_VetClinic1().click();
+  if (withoutPreferredVet === true) {
+    await pgReg.dogPreferredVet_None().click();
+  } else {
+    await pgReg.dogPreferredVet_VetClinic1().click();
+  }
   await pgReg.nextButton().click();
 
   // Human Form

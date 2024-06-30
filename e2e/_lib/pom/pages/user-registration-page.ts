@@ -113,6 +113,9 @@ export class UserRegistrationPage extends PomPage {
     });
   }
 
+  dogPreferredVet_None(): Locator {
+    return this.page().getByLabel("None");
+  }
   dogPreferredVet_VetClinic1(): Locator {
     return this.page().getByLabel("Vet Clinic 1");
   }
