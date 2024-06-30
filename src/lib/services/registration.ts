@@ -145,10 +145,10 @@ export class RegistrationService {
     request: RegistrationRequest,
     dogId: string,
   ): Promise<boolean> {
-    if (request.dogPreferredVetId === undefined) {
+    const { dogPreferredVetId } = request;
+    if (dogPreferredVetId === undefined || dogPreferredVetId === "") {
       return true;
     }
-
-    return dbInsertDogVetPreference(conn, dogId, request.dogPreferredVetId);
+    return dbInsertDogVetPreference(conn, dogId, dogPreferredVetId);
   }
 }
