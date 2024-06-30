@@ -41,5 +41,6 @@ export async function standardEncryptionProtocolTests(args: {
   if (dec2.error === undefined) {
     return Err(`Decryption should fail when credentials are different`);
   }
+  console.log(dec2.error);
   return Ok(true);
 }
