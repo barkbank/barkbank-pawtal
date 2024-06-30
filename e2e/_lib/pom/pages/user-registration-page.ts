@@ -60,7 +60,9 @@ export class UserRegistrationPage extends PomPage {
   }
 
   private dogEverReceivedTransfusionOptions(): Locator {
-    return this.page().getByText("Has your dog ever received a blood transfusion?").locator("..");
+    return this.page()
+      .getByText("Has your dog ever received a blood transfusion?")
+      .locator("..");
   }
 
   dogEverReceivedTransfusion_UNKNOWN(): Locator {
@@ -85,7 +87,9 @@ export class UserRegistrationPage extends PomPage {
   }
 
   private dogEverPregnantOptions(): Locator {
-    return this.page().getByText("Has your dog ever been pregnant?").locator("..");
+    return this.page()
+      .getByText("Has your dog ever been pregnant?")
+      .locator("..");
   }
 
   dogEverPregnant_UNKNOWN(): Locator {

@@ -77,11 +77,7 @@ export default function PetForm(props: {
       <BarkForm onSubmit={onSubmit} form={form}>
         <BarkFormHeader>Tell us about your pet</BarkFormHeader>
 
-        <BarkFormInput
-          form={form}
-          label="Dog Name"
-          name="dogName"
-        />
+        <BarkFormInput form={form} label="Dog Name" name="dogName" />
 
         {/* TODO: Support auto-complete */}
         <BarkFormInput
@@ -188,8 +184,7 @@ export default function PetForm(props: {
               {
                 label: "None",
                 value: "",
-                description:
-                  "Do not contact me about this dog",
+                description: "Do not contact me about this dog",
               },
               ...vetOptions,
             ]}
