@@ -6,6 +6,7 @@ import { VetAppointmentSubmitReportPage } from "../_lib/pom/pages/vet-appointmen
 import { NavComponent } from "../_lib/pom/layout/nav-component";
 import { VetReportListPage } from "../_lib/pom/pages/vet-report-list-page";
 import { VetReportViewPage } from "../_lib/pom/pages/vet-report-view-page";
+import { ToastComponent } from "../_lib/pom/layout/toast-component";
 
 test("vet can view report", async ({ page }) => {
   const context = await initPomContext({ page });
@@ -16,6 +17,7 @@ test("vet can view report", async ({ page }) => {
   const sideBarOrDock = new NavComponent(context);
   const pgReportList = new VetReportListPage(context);
   const pgView = new VetReportViewPage(context);
+  const toast = new ToastComponent(context);
 
   // Submit a report
   await pgAppointmentList.checkUrl();
@@ -35,6 +37,8 @@ test("vet can view report", async ({ page }) => {
   await pgSubmit.dogEligibility_TEMPORARILY_INELIGIBLE().click();
   await pgSubmit.ineligibilityExpiryDateField().fill("1 Feb 2022");
   await pgSubmit.submitButton().click();
+  await expect(toast.locator()).toContainText("Submitted");
+  await toast.closeButton().click();
   await pgAppointmentList.checkUrl();
 
   // Navigate to view report page
