@@ -25,7 +25,7 @@ export type HkdfInputKeyMaterial = z.infer<typeof HkdfInputKeyMaterialSchema>;
  * "purpose" is incorporated into the "info" during the key derivation step.
  */
 export const HkdfConfigSchema = z.object({
-  ikms: z.array(HkdfInputKeyMaterialSchema),
+  ikms: z.array(HkdfInputKeyMaterialSchema).min(1),
   purpose: z.string(),
 });
 
