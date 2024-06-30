@@ -26,7 +26,7 @@ export class MultiProtocolEncryptionService implements EncryptionService {
         elapsedMillis: t1 - t0,
       },
     });
-return result.encrypted;
+    return result.encrypted;
   }
 
   async getDecryptedData(encrypted: string): Promise<string> {
