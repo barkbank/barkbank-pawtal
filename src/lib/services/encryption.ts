@@ -19,13 +19,13 @@ export class MultiProtocolEncryptionService implements EncryptionService {
       throw new Error(error);
     }
     const t1 = Date.now();
-    console.log({
-      logName: "Encrypt",
-      args: {
-        name: protocol.name(),
+    console.log(
+      JSON.stringify({
+        logName: "Encrypt",
+        protocolName: protocol.name(),
         elapsedMillis: t1 - t0,
-      },
-    });
+      }),
+    );
     return result.encrypted;
   }
 
@@ -38,13 +38,13 @@ export class MultiProtocolEncryptionService implements EncryptionService {
           throw new Error(error);
         }
         const t1 = Date.now();
-        console.log({
-          logName: "Decrypt",
-          args: {
-            name: protocol.name(),
+        console.log(
+          JSON.stringify({
+            logName: "Decrypt",
+            protocolName: protocol.name(),
             elapsedMillis: t1 - t0,
-          },
-        });
+          }),
+        );
         return result.data;
       }
     }
