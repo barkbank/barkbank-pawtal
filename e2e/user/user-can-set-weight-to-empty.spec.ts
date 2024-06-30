@@ -4,6 +4,7 @@ import { UserEditDogPage } from "../_lib/pom/pages/user-edit-dog-page";
 import { UserViewDogPage } from "../_lib/pom/pages/user-view-dog-page";
 import { initPomContext } from "../_lib/init/init-pom-context";
 import { doRegister } from "../_lib/ops/do-register";
+import { ToastComponent } from "../_lib/pom/layout/toast-component";
 
 test("user can set weight to empty", async ({ page }) => {
   const context = await initPomContext({ page });
@@ -14,6 +15,7 @@ test("user can set weight to empty", async ({ page }) => {
   const pgList = new UserMyPetsPage(context);
   const pgView = new UserViewDogPage(context);
   const pgEdit = new UserEditDogPage(context);
+  const toast = new ToastComponent(context);
 
   // Navigate to Edit Page
   await pgList.checkUrl();
@@ -26,6 +28,8 @@ test("user can set weight to empty", async ({ page }) => {
   await pgEdit.checkUrl();
   await pgEdit.dogWeightField().fill("");
   await pgEdit.saveButton().click();
+  await expect(toast.locator()).toContainText("Saved");
+  await toast.closeButton().click();
 
   // Should be back at the view dog page.
   await pgView.checkUrl();

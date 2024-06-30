@@ -8,6 +8,7 @@ import { VetReportListPage } from "../_lib/pom/pages/vet-report-list-page";
 import { PomContext } from "../_lib/pom/core/pom-object";
 import { VetReportEditPage } from "../_lib/pom/pages/vet-report-edit-page";
 import { VetReportViewPage } from "../_lib/pom/pages/vet-report-view-page";
+import { ToastComponent } from "../_lib/pom/layout/toast-component";
 
 test("vet can edit report", async ({ page }) => {
   const context = await initPomContext({ page });
@@ -42,11 +43,13 @@ async function givenSubmittedReport(context: PomContext): Promise<{
   const pgSubmit = new VetAppointmentSubmitReportPage(context);
   const sideBarOrDock = new NavComponent(context);
   const pgReportList = new VetReportListPage(context);
+  const toast = new ToastComponent(context);
 
   await pgList.checkUrl();
   await pgList.appointmentCard({ dogName }).submitReportButton().click();
 
   await pgSubmit.checkUrl();
+  await expect(pgSubmit.submitButton()).toBeVisible();
   await pgSubmit.visitDateField().fill("6 May 2024");
   await pgSubmit.dogWeightField().fill("27.89");
   await pgSubmit.dogBcsSelector().click();
@@ -55,6 +58,8 @@ async function givenSubmittedReport(context: PomContext): Promise<{
   await pgSubmit.dogDea1Point1_POSITIVE().click();
   await pgSubmit.dogDidDonateBlood_YES().click();
   await pgSubmit.submitButton().click();
+  await expect(toast.locator()).toContainText("Submitted");
+  await toast.closeButton().click();
 
   await pgList.checkUrl();
   await expect(pgList.appointmentCard({ dogName }).locator()).not.toBeVisible();
@@ -75,17 +80,22 @@ async function changeBloodTypeToNegative(
   const pgList = new VetReportListPage(context);
   const pgView = new VetReportViewPage(context);
   const pgEdit = new VetReportEditPage(context);
+  const toast = new ToastComponent(context);
 
   await pgList.checkUrl();
   await pgList.reportCard({ dogName }).locator().click();
   await pgView.checkUrl();
   await pgView.editButton().click();
   await pgEdit.checkUrl();
+  await expect(pgEdit.submitButton()).toBeVisible();
 
   await pgEdit.dogDea1Point1_NEGATIVE().click();
   await pgEdit.submitButton().click();
+  await expect(toast.locator()).toContainText("Saved");
+  await toast.closeButton().click();
 
   await pgView.checkUrl();
+  await expect(pgView.backButton()).toBeVisible();
   await pgView.backButton().click();
   await pgList.checkUrl();
 }

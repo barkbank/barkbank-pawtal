@@ -1,3 +1,4 @@
+import { expect } from "@playwright/test";
 import { SGT_UI_DATE, formatDateTime } from "@/lib/utilities/bark-time";
 import { PomContext } from "../pom/core/pom-object";
 import { NavComponent } from "../pom/layout/nav-component";
@@ -9,6 +10,7 @@ import {
 } from "@/lib/bark/models/bark-report-data";
 import { POS_NEG_NIL } from "@/lib/bark/enums/pos-neg-nil";
 import { REPORTED_INELIGIBILITY } from "@/lib/bark/enums/reported-ineligibility";
+import { ToastComponent } from "../pom/layout/toast-component";
 
 export async function doSubmitReport(
   context: PomContext,
@@ -20,6 +22,7 @@ export async function doSubmitReport(
   const nav = new NavComponent(context);
   const pgList = new VetAppointmentListPage(context);
   const pgSubmit = new VetAppointmentSubmitReportPage(context);
+  const toast = new ToastComponent(context);
 
   await nav.vetAppointmentsOption().click();
   await pgList.checkUrl();
@@ -41,6 +44,8 @@ export async function doSubmitReport(
       .fill(values.ineligibilityReason);
   }
   await pgSubmit.submitButton().click();
+  await expect(toast.locator()).toContainText("Submitted");
+  await toast.closeButton().click();
   await pgList.checkUrl();
 }
 

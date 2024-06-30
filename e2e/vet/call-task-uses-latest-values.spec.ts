@@ -11,6 +11,7 @@ import { ApiClient } from "../_lib/pom/api/api-client";
 import { SGT_UI_DATE, formatDateTime } from "@/lib/utilities/bark-time";
 import { initPomContext } from "../_lib/init/init-pom-context";
 import { doRegister } from "../_lib/ops/do-register";
+import { ToastComponent } from "../_lib/pom/layout/toast-component";
 
 test("call task uses latest values", async ({ page, request }) => {
   const context = await initPomContext({ page });
@@ -27,6 +28,7 @@ test("call task uses latest values", async ({ page, request }) => {
   const pgAppointments = new VetAppointmentListPage(context);
   const pgSubmit = new VetAppointmentSubmitReportPage(context);
   const sidebar = new NavComponent(context);
+  const toast = new ToastComponent(context);
 
   await pgSchedule.checkUrl();
   await pgSchedule.dogCard(dogName).locator().click();
@@ -70,6 +72,8 @@ test("call task uses latest values", async ({ page, request }) => {
   await pgSubmit.dogWeightField().fill(newWeight);
   await pgSubmit.dogHeartwormOption_NEGATIVE().click();
   await pgSubmit.submitButton().click();
+  await expect(toast.locator()).toContainText("Submitted");
+  await toast.closeButton().click();
 
   await pgAppointments.checkUrl();
   await sidebar.vetScheduleOption().click();

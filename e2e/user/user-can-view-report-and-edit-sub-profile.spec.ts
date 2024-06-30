@@ -18,6 +18,7 @@ import {
 } from "@/lib/utilities/bark-time";
 import { UserEditSubProfilePage } from "../_lib/pom/pages/user-edit-sub-profile-page";
 import { YES_NO } from "@/lib/bark/enums/yes-no";
+import { ToastComponent } from "../_lib/pom/layout/toast-component";
 
 test("user can view report and edit sub-profile", async ({
   page,
@@ -59,6 +60,7 @@ test("user can view report and edit sub-profile", async ({
   const pgViewDog = new UserViewDogPage(context);
   const pgEdit = new UserEditSubProfilePage(context);
   const pgViewReport = new UserViewReportPage(context);
+  const toast = new ToastComponent(context);
 
   // Verify that dog's weight is the registration dog weight, because
   // registration dog weight is the most recent.
@@ -86,6 +88,8 @@ test("user can view report and edit sub-profile", async ({
   await pgEdit.dogEverReceivedTransfusionOption(YES_NO.YES).click();
   await pgEdit.dogWeightField().fill(newWeight);
   await pgEdit.saveButton().click();
+  await expect(toast.locator()).toContainText("Saved");
+  await toast.closeButton().click();
 
   // Verify the edits, we should be in the view dog page again.
   await pgViewDog.checkUrl();
