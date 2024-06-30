@@ -91,10 +91,10 @@ export class HkdfEncryptionProtocol implements EncryptionProtocol {
   }
 
   /**
-   * @param encrypted A matching encrypted string has three dot delimited parts.
+   * @param encrypted A matching encrypted string has four dot delimited parts.
    * The first part is the literal string "_ENC2_" (for encoding 2). The second
-   * part is a base64 encoded signature. The third part is a base64 encoded
-   * payload.
+   * part is the IKM ID. The third part is a base64 encoded signature. The
+   * fourth part is a base64 encoded payload.
    */
   isProtocolFor(encrypted: string): boolean {
     const parts = encrypted.split(".");
