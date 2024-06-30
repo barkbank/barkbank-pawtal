@@ -28,6 +28,7 @@ export async function doCreateAppointment(
   await expect(activityArea.exactText(userName)).toBeVisible();
   await expect(activityArea.scheduleButton()).toBeVisible();
   await activityArea.scheduleButton().click();
+  await expect(activityArea.scheduledBadge()).toBeVisible();
 
   const nav = new NavComponent(context);
   await nav.vetAppointmentsOption().click();

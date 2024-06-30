@@ -35,6 +35,7 @@ test("call task uses latest values", async ({ page, request }) => {
     ? pgSchedule.dogCard(dogName)
     : pgSchedule.rightSidePane();
   await activityArea.scheduleButton().click();
+  await expect(activityArea.scheduledBadge()).toBeVisible();
 
   await sidebar.vetAppointmentsOption().click();
 
