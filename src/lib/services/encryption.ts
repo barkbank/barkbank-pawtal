@@ -13,11 +13,20 @@ export class MultiProtocolEncryptionService implements EncryptionService {
       throw new Error("No protocols defined");
     }
     const protocol = this.protocols[0];
+    const t0 = Date.now();
     const { result, error } = await protocol.encrypt(data);
     if (error !== undefined) {
       throw new Error(error);
     }
-    return result.encrypted;
+    const t1 = Date.now();
+    console.log({
+      logName: "Encrypt",
+      args: {
+        name: protocol.name(),
+        elapsedMillis: t1 - t0,
+      },
+    });
+return result.encrypted;
   }
 
   async getDecryptedData(encrypted: string): Promise<string> {
@@ -30,7 +39,7 @@ export class MultiProtocolEncryptionService implements EncryptionService {
         }
         const t1 = Date.now();
         console.log({
-          logName: "ProtocolDecryption",
+          logName: "Decrypt",
           args: {
             name: protocol.name(),
             elapsedMillis: t1 - t0,
