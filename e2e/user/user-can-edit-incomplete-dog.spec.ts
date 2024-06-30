@@ -4,6 +4,7 @@ import { UserEditDogPage } from "../_lib/pom/pages/user-edit-dog-page";
 import { UserViewDogPage } from "../_lib/pom/pages/user-view-dog-page";
 import { initPomContext } from "../_lib/init/init-pom-context";
 import { doRegister } from "../_lib/ops/do-register";
+import { ToastComponent } from "../_lib/pom/layout/toast-component";
 
 test("user can edit incomplete dog profile", async ({ page }) => {
   const context = await initPomContext({ page });
@@ -14,6 +15,7 @@ test("user can edit incomplete dog profile", async ({ page }) => {
   const pgList = new UserMyPetsPage(context);
   const pgView = new UserViewDogPage(context);
   const pgEdit = new UserEditDogPage(context);
+  const toast = new ToastComponent(context);
 
   // Starting at the dog list page, user should see that their dog's profile is
   // incomplete.
@@ -32,6 +34,8 @@ test("user can edit incomplete dog profile", async ({ page }) => {
   await pgEdit.dogEverReceivedTransfusionOption_NO().click();
   await pgEdit.dogEverPregnantOption_NO().click();
   await pgEdit.saveButton().click();
+  await expect(toast.locator()).toContainText("Saved");
+  await toast.closeButton().click();
 
   // Navigate back to list
   await pgView.checkUrl();
