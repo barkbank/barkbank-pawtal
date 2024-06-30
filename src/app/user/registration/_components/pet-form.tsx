@@ -77,30 +77,26 @@ export default function PetForm(props: {
       <BarkForm onSubmit={onSubmit} form={form}>
         <BarkFormHeader>Tell us about your pet</BarkFormHeader>
 
-        <BarkFormInput
-          form={form}
-          label="What's your dog's name?"
-          name="dogName"
-        />
+        <BarkFormInput form={form} label="Dog Name" name="dogName" />
 
         {/* TODO: Support auto-complete */}
         <BarkFormInput
           form={form}
-          label="What's your dog's breed?"
+          label="Dog Breed"
           name="dogBreed"
           type="text"
         />
 
         <BarkFormInput
           form={form}
-          label="When is its birthday?"
+          label="Dog Birthday"
           name="dogBirthday"
           description="Please provide a date (e.g. 18 Aug 2018). It is okay to provide an approximate date."
         />
 
         <BarkFormRadioGroup
           form={form}
-          label="What's your dog's sex?"
+          label="Dog Gender"
           name="dogGender"
           layout="button"
           options={[
@@ -111,15 +107,15 @@ export default function PetForm(props: {
 
         <BarkFormInput
           form={form}
-          label="What's your dog's weight? (KG)"
-          description="Provide weight or leave blank if unknown"
+          label="Dog Weight"
+          description="Provide weight in KG (leave blank if unknown)"
           name="dogWeightKg"
           type="text"
         />
 
         <BarkFormRadioGroup
           form={form}
-          label="Do you know it's blood type?"
+          label="Dog Blood Type"
           name="dogDea1Point1"
           options={[
             {
@@ -127,11 +123,11 @@ export default function PetForm(props: {
               value: DOG_ANTIGEN_PRESENCE.UNKNOWN,
             },
             {
-              label: "D.E.A 1.1 positive",
+              label: "D.E.A 1.1 Positive",
               value: DOG_ANTIGEN_PRESENCE.POSITIVE,
             },
             {
-              label: "D.E.A 1.1 negative",
+              label: "D.E.A 1.1 Negative",
               value: DOG_ANTIGEN_PRESENCE.NEGATIVE,
             },
           ]}
@@ -139,7 +135,7 @@ export default function PetForm(props: {
 
         <BarkFormRadioGroup
           form={form}
-          label="Has it received blood transfusion before?"
+          label="Has your dog ever received a blood transfusion?"
           name="dogEverReceivedTransfusion"
           layout="button"
           options={[
@@ -160,7 +156,7 @@ export default function PetForm(props: {
 
         <BarkFormRadioGroup
           form={form}
-          label="Has your dog been pregnant before?"
+          label="Has your dog ever been pregnant?"
           name="dogEverPregnant"
           layout="button"
           options={[
@@ -182,14 +178,13 @@ export default function PetForm(props: {
         {vetOptions.length > 0 && (
           <BarkFormRadioGroup
             form={form}
-            label="Select your preferred vet for blood profiling test and blood donation"
+            label="Select your preferred vet for blood profiling test and donation"
             name="dogPreferredVetId"
             options={[
               {
                 label: "None",
                 value: "",
-                description:
-                  "Select this option to exclude this dog from blood donation activities",
+                description: "Do not contact me about this dog",
               },
               ...vetOptions,
             ]}

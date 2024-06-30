@@ -20,11 +20,11 @@ export class UserRegistrationPage extends PomPage {
   }
 
   dogNameField(): Locator {
-    return this.page().getByLabel("What's your dog's name?");
+    return this.page().getByLabel("Dog Name");
   }
 
   dogBreedField(): Locator {
-    return this.page().getByLabel("What's your dog's breed?");
+    return this.page().getByLabel("Dog Breed");
   }
 
   dogBirthdayField(): Locator {
@@ -40,11 +40,11 @@ export class UserRegistrationPage extends PomPage {
   }
 
   dogWeightField(): Locator {
-    return this.page().getByLabel("What's your dog's weight? (KG)");
+    return this.page().getByLabel("Dog Weight");
   }
 
   private dogBloodTypeOptions(): Locator {
-    return this.page().getByText("Do you know it's blood type?").locator("..");
+    return this.page().getByText("Dog Blood Type").locator("..");
   }
 
   dogBloodType_UNKNOWN(): Locator {
@@ -52,15 +52,17 @@ export class UserRegistrationPage extends PomPage {
   }
 
   dogBloodType_POSITIVE(): Locator {
-    return this.dogBloodTypeOptions().getByLabel("D.E.A 1.1 positive");
+    return this.dogBloodTypeOptions().getByLabel("D.E.A 1.1 Positive");
   }
 
   dogBloodType_NEGATIVE(): Locator {
-    return this.dogBloodTypeOptions().getByLabel("D.E.A 1.1 negative");
+    return this.dogBloodTypeOptions().getByLabel("D.E.A 1.1 Negative");
   }
 
   private dogEverReceivedTransfusionOptions(): Locator {
-    return this.page().getByText("Has it received blood").locator("..");
+    return this.page()
+      .getByText("Has your dog ever received a blood transfusion?")
+      .locator("..");
   }
 
   dogEverReceivedTransfusion_UNKNOWN(): Locator {
@@ -85,7 +87,9 @@ export class UserRegistrationPage extends PomPage {
   }
 
   private dogEverPregnantOptions(): Locator {
-    return this.page().getByText("Has your dog been pregnant").locator("..");
+    return this.page()
+      .getByText("Has your dog ever been pregnant?")
+      .locator("..");
   }
 
   dogEverPregnant_UNKNOWN(): Locator {
@@ -136,11 +140,11 @@ export class UserRegistrationPage extends PomPage {
   }
 
   userNameField(): Locator {
-    return this.page().getByLabel("How would you like to be");
+    return this.page().getByLabel("How would you like to be addressed?");
   }
 
   userPhoneNumberField(): Locator {
-    return this.page().getByLabel("What number can we reach you");
+    return this.page().getByLabel("At which phone number can you be reached?");
   }
 
   userEmailField(): Locator {
