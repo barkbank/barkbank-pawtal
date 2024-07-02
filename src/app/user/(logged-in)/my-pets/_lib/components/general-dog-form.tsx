@@ -4,10 +4,10 @@ import {
   BarkForm,
   BarkFormError,
   BarkFormInput,
-  BarkFormOption,
   BarkFormParagraph,
   BarkFormRadioGroup,
 } from "@/components/bark/bark-form";
+import { BarkFormOption } from "@/components/bark/bark-form-option";
 import { DOG_ANTIGEN_PRESENCE } from "@/lib/bark/enums/dog-antigen-presence";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { DOG_GENDER, SPECIFIED_DOG_GENDER } from "@/lib/bark/enums/dog-gender";
@@ -202,15 +202,7 @@ export function GeneralDogForm(props: {
             form={form}
             label="Preferred Donation Point"
             name="dogPreferredVetId"
-            options={[
-              {
-                label: "None",
-                value: "",
-                description:
-                  "Select this option to exclude this dog from blood donation activities",
-              },
-              ...vetOptions,
-            ]}
+            options={vetOptions}
           />
         )}
 

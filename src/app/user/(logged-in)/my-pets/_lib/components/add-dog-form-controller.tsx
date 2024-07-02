@@ -1,6 +1,6 @@
 "use client";
 
-import { BarkFormOption } from "@/components/bark/bark-form";
+import { BarkFormOption } from "@/components/bark/bark-form-option";
 import { DogProfile } from "@/lib/bark/models/dog-profile";
 import { postDogProfile } from "../actions/post-dog-profile";
 import { useRouter } from "next/navigation";
