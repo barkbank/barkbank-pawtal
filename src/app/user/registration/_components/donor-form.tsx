@@ -13,7 +13,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { RoutePath } from "@/lib/route-path";
 import { useRouter } from "next/navigation";
-import { BarkFormOption } from "@/components/bark/bark-form";
+import { BarkFormOption } from "@/components/bark/bark-form-option";
 import { postRegistrationRequest } from "@/app/user/registration/_actions/post-registration-request";
 import { RegistrationRequest } from "@/lib/services/registration";
 import { DogAntigenPresence } from "@/lib/bark/enums/dog-antigen-presence";

@@ -22,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { BarkFormOption } from "./bark-form-option";
 
 export function BarkForm(props: {
   children: React.ReactNode;
@@ -139,12 +140,6 @@ export function BarkFormSingleCheckbox(props: {
     />
   );
 }
-
-export type BarkFormOption = {
-  value: string;
-  label: string;
-  description?: string;
-};
 
 // TODO: Extract out the button layout into a BarkFormButtonRadioGroup
 export function BarkFormRadioGroup(props: {

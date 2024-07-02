@@ -6,11 +6,11 @@ import {
   BarkForm,
   BarkFormError,
   BarkFormInput,
-  BarkFormOption,
   BarkFormRadioGroup,
   BarkFormSelect,
   BarkFormTextArea,
 } from "@/components/bark/bark-form";
+import { BarkFormOption } from "@/components/bark/bark-form-option";
 import {
   BarkReportData,
   BarkReportDataSchema,

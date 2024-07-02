@@ -2,13 +2,19 @@ import { getVetFormOptions } from "@/app/_lib/get-vet-form-options";
 import { withDb } from "../_db_helpers";
 import { getVetSpec } from "../_fixtures";
 import { dbInsertVet } from "@/lib/data/db-vets";
-import { BarkFormOption } from "@/components/bark/bark-form";
+import { BarkFormOption } from "@/components/bark/bark-form-option";
 
 describe("getVetFormOptions", () => {
-  it("should return an empty list when there are no vets in the database", async () => {
+  it("should return just the None option when there are no vets in the database", async () => {
     await withDb(async (dbPool) => {
       const options: BarkFormOption[] = await getVetFormOptions(dbPool);
-      expect(options).toEqual([]);
+      expect(options).toEqual([
+        {
+          value: "",
+          label: "None",
+          description: "Do not contact me about this dog",
+        },
+      ]);
     });
   });
   it("should return vet options in order of vet name", async () => {
@@ -25,6 +31,11 @@ describe("getVetFormOptions", () => {
       const gen2 = await dbInsertVet(dbPool, spec2);
       const options: BarkFormOption[] = await getVetFormOptions(dbPool);
       const expected: BarkFormOption[] = [
+        {
+          value: "",
+          label: "None",
+          description: "Do not contact me about this dog",
+        },
         {
           value: gen2.vetId,
           label: spec2.vetName,

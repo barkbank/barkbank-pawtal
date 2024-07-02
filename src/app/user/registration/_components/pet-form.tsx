@@ -4,9 +4,9 @@ import {
   BarkForm,
   BarkFormHeader,
   BarkFormInput,
-  BarkFormOption,
   BarkFormRadioGroup,
 } from "@/components/bark/bark-form";
+import { BarkFormOption } from "@/components/bark/bark-form-option";
 import { isValidWeightKg } from "@/lib/utilities/bark-utils";
 import { DOG_ANTIGEN_PRESENCE } from "@/lib/bark/enums/dog-antigen-presence";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
@@ -180,14 +180,7 @@ export default function PetForm(props: {
             form={form}
             label="Select your preferred vet for blood profiling test and donation"
             name="dogPreferredVetId"
-            options={[
-              {
-                label: "None",
-                value: "",
-                description: "Do not contact me about this dog",
-              },
-              ...vetOptions,
-            ]}
+            options={vetOptions}
           />
         )}
 
