@@ -93,7 +93,7 @@ describe("latest_values", () => {
         expect(res.rows[0].latest_dog_weight_kg).toEqual(33.33);
       });
     });
-    it("should use dog-record value when dog-modification-time is more recent than visit-time", async () => {
+    it("should use dog-record value when profile-modification-time is more recent than visit-time", async () => {
       await withDb(async (dbPool) => {
         // GIVEN record
         const { dogId, vetId } = await initDog(dbPool, {
@@ -120,6 +120,35 @@ describe("latest_values", () => {
 
         // THEN expect the weight from the dog record
         expect(res.rows[0].latest_dog_weight_kg).toEqual(11.11);
+      });
+    });
+    it("should use report value profile value is null even when profile-modification-time is more recent than visit-time", async () => {
+      await withDb(async (dbPool) => {
+        // GIVEN record
+        const { dogId, vetId } = await initDog(dbPool, {
+          profileModificationTime: weeksAgo(1), // <-- most recent
+          dogSpec: { dogWeightKg: null }, // <-- but value is null
+        });
+
+        // AND report 1
+        await addReport(dbPool, dogId, vetId, {
+          reportSpec: { dogWeightKg: 22.22, visitTime: weeksAgo(52) },
+        });
+
+        // AND report 2 has the most recent non-null weight
+        await addReport(dbPool, dogId, vetId, {
+          reportSpec: { dogWeightKg: 33.33, visitTime: weeksAgo(26) },
+        });
+
+        // WHEN
+        const res = await dbQuery(
+          dbPool,
+          `select latest_dog_weight_kg from latest_values where dog_id = $1`,
+          [dogId],
+        );
+
+        // THEN expect the weight from the second report
+        expect(res.rows[0].latest_dog_weight_kg).toEqual(33.33);
       });
     });
   });
