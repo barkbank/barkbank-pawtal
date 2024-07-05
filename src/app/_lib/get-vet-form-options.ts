@@ -1,8 +1,11 @@
-import { BarkFormOption } from "@/components/bark/bark-form";
+import {
+  BarkFormOption,
+  BarkFormOptionSchema,
+} from "@/components/bark/bark-form-option";
 import { dbQuery } from "@/lib/data/db-utils";
 import { Pool } from "pg";
+import { z } from "zod";
 
-// TODO: Move this into lib/bark/operations as opFetchVetProfiles returning VetProfile[]
 export async function getVetFormOptions(
   dbPool: Pool,
 ): Promise<BarkFormOption[]> {
@@ -15,5 +18,13 @@ export async function getVetFormOptions(
     ORDER BY vet_name
   `;
   const res = await dbQuery<BarkFormOption>(dbPool, sql, []);
-  return res.rows;
+  const options = [
+    {
+      value: "",
+      label: "None",
+      description: "Do not contact me about this dog",
+    },
+    ...res.rows,
+  ];
+  return z.array(BarkFormOptionSchema).parse(options);
 }
