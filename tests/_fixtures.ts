@@ -465,9 +465,6 @@ function getDogEverPregnant(idx: number): YesNoUnknown {
   if (gender === DOG_GENDER.MALE) {
     return YES_NO_UNKNOWN.NO;
   }
-  if (gender === DOG_GENDER.UNKNOWN) {
-    return YES_NO_UNKNOWN.UNKNOWN;
-  }
   return getYesNoUnknown(idx);
 }
 
