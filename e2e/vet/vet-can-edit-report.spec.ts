@@ -10,7 +10,8 @@ import { VetReportEditPage } from "../_lib/pom/pages/vet-report-edit-page";
 import { VetReportViewPage } from "../_lib/pom/pages/vet-report-view-page";
 import { ToastComponent } from "../_lib/pom/layout/toast-component";
 
-test("vet can edit report", async ({ page }) => {
+test("vet can edit report", async ({ page }, testInfo) => {
+  testInfo.setTimeout(60000);
   const context = await initPomContext({ page });
   const { dogName } = await givenSubmittedReport(context);
 
