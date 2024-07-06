@@ -26,7 +26,9 @@ test("visitor can register a new user account", async ({ page }) => {
   await pg2.dogWeightField().fill("42");
   await pg2.dogGender_MALE().click();
   await pg2.dogBloodType_UNKNOWN().click();
-  await pg2.dogEverPregnant_NO().click();
+  if (await pg2.dogEverPregnant_NO().isEnabled()) {
+    await pg2.dogEverPregnant_NO().click();
+  }
   await pg2.dogEverReceivedTransfusion_NO().click();
   await pg2.dogPreferredVet_VetClinic1().click();
   await pg2.nextButton().click();
