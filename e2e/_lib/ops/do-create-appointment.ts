@@ -11,7 +11,6 @@ import { doRegister } from "./do-register";
 export async function doCreateAppointment(
   context: PomContext,
 ): Promise<{ dogName: string }> {
-  const page = context.page;
   const {
     dog: { dogName },
     user: { userName },
