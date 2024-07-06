@@ -6,7 +6,20 @@ export abstract class PomPage extends PomObject {
   abstract url(): string;
 
   async checkReady() {
+    await this.checkUrl();
+    await this.checkPageLoaded();
+  }
+
+  async checkUrl() {
     await expect(this.page()).toHaveURL(this.url());
+  }
+
+  /**
+   * Override this if there are things to check that demonstrate the page has
+   * loaded successfully.
+   */
+  async checkPageLoaded() {
+    // Do nothing.
   }
 
   async goto() {
