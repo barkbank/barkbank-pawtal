@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { SpecifiedDogGenderSchema } from "../enums/dog-gender";
+import { DogGenderSchema } from "../enums/dog-gender";
 
 // TODO: Add preferredVetName - Useful when presented to Users.
 
@@ -10,7 +10,7 @@ import { SpecifiedDogGenderSchema } from "../enums/dog-gender";
  */
 export const DogIdInfoSchema = z.object({
   dogName: z.string(),
-  dogGender: SpecifiedDogGenderSchema,
+  dogGender: DogGenderSchema,
   dogBreed: z.string(),
   ownerName: z.string(),
 });

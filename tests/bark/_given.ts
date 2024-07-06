@@ -6,10 +6,7 @@ import {
   insertVet,
   userPii,
 } from "../_fixtures";
-import {
-  SpecifiedDogGender,
-  SpecifiedDogGenderSchema,
-} from "@/lib/bark/enums/dog-gender";
+import { DogGender, DogGenderSchema } from "@/lib/bark/enums/dog-gender";
 import { dbQuery } from "@/lib/data/db-utils";
 import { BarkContext } from "@/lib/bark/bark-context";
 import { opRecordAppointmentCallOutcome } from "@/lib/bark/operations/op-record-appointment-call-outcome";
@@ -70,7 +67,7 @@ const GivenDogSchema = z.object({
   dogId: z.string(),
   dogName: z.string(),
   dogBreed: z.string(),
-  dogGender: SpecifiedDogGenderSchema,
+  dogGender: DogGenderSchema,
   ownerUserId: z.string(),
   ownerName: z.string(),
 });
@@ -134,7 +131,7 @@ export async function givenDog(
     await dbQuery<{
       dogEncryptedOii: string;
       dogBreed: string;
-      dogGender: SpecifiedDogGender;
+      dogGender: DogGender;
     }>(dbPool, dogSql, [dogId])
   ).rows[0];
   const dogName = await toDogName(context, dogEncryptedOii);

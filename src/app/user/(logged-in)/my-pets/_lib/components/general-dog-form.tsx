@@ -10,7 +10,7 @@ import {
 import { BarkFormOption } from "@/components/bark/bark-form-option";
 import { DOG_ANTIGEN_PRESENCE } from "@/lib/bark/enums/dog-antigen-presence";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
-import { DOG_GENDER, SPECIFIED_DOG_GENDER } from "@/lib/bark/enums/dog-gender";
+import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -25,7 +25,7 @@ const FORM_SCHEMA = z.object({
   dogName: z.string().min(1, { message: "Name cannot be empty" }),
   dogBreed: z.string(),
   dogBirthday: RequiredDateField.new().schema(),
-  dogGender: z.nativeEnum(SPECIFIED_DOG_GENDER),
+  dogGender: z.nativeEnum(DOG_GENDER),
   dogWeightKg: OptionalDogWeightKgField.new().schema(),
   dogDea1Point1: z.nativeEnum(DOG_ANTIGEN_PRESENCE),
   dogEverReceivedTransfusion: z.nativeEnum(YES_NO_UNKNOWN),
