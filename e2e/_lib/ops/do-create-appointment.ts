@@ -35,6 +35,7 @@ export async function doCreateAppointment(
 
   const pg2 = new VetAppointmentListPage(context);
   await pg2.checkReady();
+  await expect(pg2.appointmentCard({ dogName }).locator()).toBeVisible();
 
   console.log({
     dogName,
