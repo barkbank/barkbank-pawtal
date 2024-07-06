@@ -64,14 +64,14 @@ test("user can view report and edit sub-profile", async ({
 
   // Verify that dog's weight is the registration dog weight, because
   // registration dog weight is the most recent.
-  await pgPets.checkUrl();
+  await pgPets.checkReady();
   await pgPets.dogCardItem(dogName).locator().click();
-  await pgViewDog.checkUrl();
+  await pgViewDog.checkReady();
   await expect(pgViewDog.dogWeightItem()).toContainText(registeredDogWeightKg);
 
   // View the report and verify it has the reported weight, and other fields.
   await pgViewDog.getReportItem({ visitTime, vetName }).click();
-  await pgViewReport.checkUrl();
+  await pgViewReport.checkReady();
   await expect(pgViewReport.dogWeightItem()).toContainText(reportedDogWeightKg);
   await expect(pgViewReport.dogBreedItem()).toContainText(dogBreed);
 
@@ -80,9 +80,9 @@ test("user can view report and edit sub-profile", async ({
   const newName = "Molly Briggs";
   const newWeight = "333";
   await pgViewReport.backButton().click();
-  await pgViewDog.checkUrl();
+  await pgViewDog.checkReady();
   await pgViewDog.editButton().click();
-  await pgEdit.checkUrl();
+  await pgEdit.checkReady();
   await expect(pgEdit.evidenceThisIsTheSubProfileForm()).toBeVisible();
   await pgEdit.dogNameField().fill(newName);
   await pgEdit.dogEverReceivedTransfusionOption(YES_NO.YES).click();
@@ -92,7 +92,7 @@ test("user can view report and edit sub-profile", async ({
   await toast.closeButton().click();
 
   // Verify the edits, we should be in the view dog page again.
-  await pgViewDog.checkUrl();
+  await pgViewDog.checkReady();
   await expect(pgViewDog.dogNameHeader(newName)).toBeVisible();
   await expect(pgViewDog.dogWeightItem()).toContainText(newWeight);
   await expect(pgViewDog.dogEverReceivedTransfusionItem()).toContainText(

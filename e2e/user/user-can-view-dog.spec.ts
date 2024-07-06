@@ -14,10 +14,10 @@ test("user can view dog", async ({ page }) => {
   const pgList = new UserMyPetsPage(context);
   const pgView = new UserViewDogPage(context);
 
-  await pgList.checkUrl();
+  await pgList.checkReady();
   await pgList.dogCardItem(dogName).locator().click();
 
-  await pgView.checkUrl();
+  await pgView.checkReady();
   await expect(
     pgView.page().getByRole("heading", { name: dogName }),
   ).toBeVisible();

@@ -1,10 +1,14 @@
 import { RoutePath } from "@/lib/route-path";
 import { PomDynamicPage } from "../core/pom-dynamic-page";
-import { Locator } from "@playwright/test";
+import { Locator, expect } from "@playwright/test";
 
 export class UserViewReportPage extends PomDynamicPage {
   urlRegex(): RegExp {
     return RoutePath.USER_VIEW_REPORT_REGEX;
+  }
+
+  async checkPageLoaded(): Promise<void> {
+    await expect(this.backButton()).toBeVisible();
   }
 
   dogBreedItem(): Locator {

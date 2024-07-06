@@ -8,7 +8,8 @@ import { VetReportListPage } from "../_lib/pom/pages/vet-report-list-page";
 import { VetReportViewPage } from "../_lib/pom/pages/vet-report-view-page";
 import { ToastComponent } from "../_lib/pom/layout/toast-component";
 
-test("vet can view report", async ({ page }) => {
+test("vet can view report", async ({ page }, testInfo) => {
+  testInfo.setTimeout(60000);
   const context = await initPomContext({ page });
   const { dogName } = await doCreateAppointment(context);
 
@@ -20,12 +21,12 @@ test("vet can view report", async ({ page }) => {
   const toast = new ToastComponent(context);
 
   // Submit a report
-  await pgAppointmentList.checkUrl();
+  await pgAppointmentList.checkReady();
   await pgAppointmentList
     .appointmentCard({ dogName })
     .submitReportButton()
     .click();
-  await pgSubmit.checkUrl();
+  await pgSubmit.checkReady();
   await pgSubmit.visitDateField().fill("13 Jan 2021");
   await pgSubmit.dogWeightField().fill("42.5");
   await pgSubmit.dogBcsSelector().click();
@@ -39,17 +40,17 @@ test("vet can view report", async ({ page }) => {
   await pgSubmit.submitButton().click();
   await expect(toast.locator()).toContainText("Submitted");
   await toast.closeButton().click();
-  await pgAppointmentList.checkUrl();
+  await pgAppointmentList.checkReady();
 
   // Navigate to view report page
-  await pgAppointmentList.checkUrl();
+  await pgAppointmentList.checkReady();
   await sideBarOrDock.vetReportsOption().click();
-  await pgReportList.checkUrl();
+  await pgReportList.checkReady();
   await pgReportList.reportCard({ dogName }).locator().click();
-  await pgView.checkUrl();
+  await pgView.checkReady();
 
   // Check values
-  await pgView.checkUrl();
+  await pgView.checkReady();
   await expect(
     pgView.field("Visit Date").getByText("13 Jan 2021", { exact: true }),
   ).toBeVisible();

@@ -14,7 +14,7 @@ export async function doLoginKnownAdmin(context: PomContext): Promise<{
   await footer.adminLoginLink().click();
 
   const pg = new AdminLoginPage(context);
-  await pg.checkUrl();
+  await pg.checkReady();
   await pg.emailField().fill(knownAdmin.adminEmail);
   await pg.otpField().fill("000000");
   await pg.loginButton().click();

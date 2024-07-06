@@ -1,11 +1,15 @@
 import { RoutePath } from "@/lib/route-path";
 import { PomDynamicPage } from "../core/pom-dynamic-page";
-import { Locator } from "@playwright/test";
+import { Locator, expect } from "@playwright/test";
 import { SGT_UI_DATE, formatDateTime } from "@/lib/utilities/bark-time";
 
 export class UserViewDogPage extends PomDynamicPage {
   urlRegex(): RegExp {
     return RoutePath.USER_VIEW_DOG_REGEX;
+  }
+
+  async checkPageLoaded(): Promise<void> {
+    await expect(this.editButton()).toBeVisible();
   }
 
   dogNameHeader(name: string): Locator {

@@ -29,7 +29,7 @@ export async function doRegister(
   const pgMyPets = new UserMyPetsPage(context);
 
   await context.page.goto(pgReg.url());
-  await pgReg.checkUrl();
+  await pgReg.checkReady();
 
   // Pet Form
   await pgReg.dogNameField().fill(dogName);
@@ -74,7 +74,7 @@ export async function doRegister(
   await pgReg.enterDashboardButton().click();
 
   // Should be at my pets
-  await pgMyPets.checkUrl();
+  await pgMyPets.checkReady();
 
   const reg: GeneratedRegistration = { dog, user };
   console.debug(reg);

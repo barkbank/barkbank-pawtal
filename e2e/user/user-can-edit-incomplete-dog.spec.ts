@@ -19,16 +19,16 @@ test("user can edit incomplete dog profile", async ({ page }) => {
 
   // Starting at the dog list page, user should see that their dog's profile is
   // incomplete.
-  await pgList.checkUrl();
+  await pgList.checkReady();
   await expect(
     pgList.dogCardItem(dogName).profileIncompleteStatusText(),
   ).toBeVisible();
 
   // Navigate to edit dog form
-  await pgList.checkUrl();
+  await pgList.checkReady();
   await pgList.dogCardItem(dogName).locator().click();
   await pgView.editButton().click();
-  await pgEdit.checkUrl();
+  await pgEdit.checkReady();
 
   // Complete the profile
   await pgEdit.dogEverReceivedTransfusionOption_NO().click();
@@ -38,9 +38,9 @@ test("user can edit incomplete dog profile", async ({ page }) => {
   await toast.closeButton().click();
 
   // Navigate back to list
-  await pgView.checkUrl();
+  await pgView.checkReady();
   await pgView.backButton().click();
-  await pgList.checkUrl();
+  await pgList.checkReady();
 
   // Verify status is updated
   await expect(

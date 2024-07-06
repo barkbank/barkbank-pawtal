@@ -15,7 +15,7 @@ export async function doScheduleAppointment(
   const pgScheduler = new VetSchedulePage(context);
 
   await nav.vetScheduleOption().click();
-  await pgScheduler.checkUrl();
+  await pgScheduler.checkReady();
   await pgScheduler.dogCard(dogName).locator().click();
   if (isMobile) {
     await pgScheduler.dogCard(dogName).scheduleButton().click();
@@ -24,5 +24,5 @@ export async function doScheduleAppointment(
     await pgScheduler.rightSidePane().scheduleButton().click();
     await expect(pgScheduler.rightSidePane().scheduledBadge()).toBeVisible();
   }
-  await pgScheduler.checkUrl();
+  await pgScheduler.checkReady();
 }

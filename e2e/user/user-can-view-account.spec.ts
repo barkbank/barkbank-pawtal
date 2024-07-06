@@ -13,9 +13,9 @@ test("user can view their account", async ({ page }) => {
   const pgMyPets = new UserMyPetsPage(context);
   const pgAccount = new UserMyAccountPage(context);
 
-  await pgMyPets.checkUrl();
+  await pgMyPets.checkReady();
   await nav.myAcountOption().click();
-  await pgAccount.checkUrl();
+  await pgAccount.checkReady();
 
   const { userName, userEmail, userPhoneNumber, userResidency } = knownUser;
   await expect(pgAccount.exactText(userName)).toBeVisible();

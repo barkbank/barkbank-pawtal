@@ -16,7 +16,7 @@ test("vet can record DECLINED call outcome", async ({ page }) => {
   await doLogoutSequence(context);
   await doLoginKnownVet(context);
   const pg1 = new VetSchedulePage(context);
-  await pg1.checkUrl();
+  await pg1.checkReady();
   await expect(pg1.dogCard(dogName).locator()).toBeVisible();
 
   await pg1.dogCard(dogName).locator().click();
