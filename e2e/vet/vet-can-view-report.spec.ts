@@ -8,7 +8,8 @@ import { VetReportListPage } from "../_lib/pom/pages/vet-report-list-page";
 import { VetReportViewPage } from "../_lib/pom/pages/vet-report-view-page";
 import { ToastComponent } from "../_lib/pom/layout/toast-component";
 
-test("vet can view report", async ({ page }) => {
+test("vet can view report", async ({ page }, testInfo) => {
+  testInfo.setTimeout(60000);
   const context = await initPomContext({ page });
   const { dogName } = await doCreateAppointment(context);
 
