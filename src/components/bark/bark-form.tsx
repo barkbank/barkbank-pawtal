@@ -175,6 +175,7 @@ export function BarkFormRadioGroup(props: {
                     onClick={async () => {
                       field.onChange(option.value);
                     }}
+                    disabled={disabled}
                   >
                     {option.label}
                   </Button>

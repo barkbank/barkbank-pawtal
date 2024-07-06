@@ -17,6 +17,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { RequiredDateField } from "@/app/_lib/field-schemas/required-date-field";
 import { BarkButton } from "@/components/bark/bark-button";
+import { useEffect } from "react";
 
 const FORM_SCHEMA = z.object({
   dogName: z.string().min(1, { message: "Name cannot be empty" }),
@@ -71,6 +72,14 @@ export default function PetForm(props: {
     onSave(form.getValues());
     onPrev();
   }
+
+  const currentValues = form.watch();
+  const { dogGender } = currentValues;
+  useEffect(() => {
+    if (dogGender === DOG_GENDER.MALE) {
+      form.setValue("dogEverPregnant", YES_NO_UNKNOWN.NO);
+    }
+  }, [dogGender]);
 
   return (
     <>
@@ -159,6 +168,7 @@ export default function PetForm(props: {
           label="Has your dog ever been pregnant?"
           name="dogEverPregnant"
           layout="button"
+          disabled={dogGender === DOG_GENDER.MALE}
           options={[
             {
               label: "I don't know",
