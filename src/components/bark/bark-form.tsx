@@ -194,7 +194,10 @@ export function BarkFormRadioGroup(props: {
                     className="flex items-start space-x-3 space-y-0"
                   >
                     <FormControl>
-                      <RadioGroupItem value={option.value} />
+                      <RadioGroupItem
+                        value={option.value}
+                        checked={option.value === field.value}
+                      />
                     </FormControl>
                     <div>
                       <FormLabel className="font-normal">
