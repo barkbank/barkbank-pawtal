@@ -40,13 +40,7 @@ ${jsonEncoded}
       >
         {profile.dogBreed}
       </TableCell>
-      <TableCell
-        className={clsx("text-center", {
-          "bg-orange-100": profile.dogGender === DOG_GENDER.UNKNOWN,
-        })}
-      >
-        {profile.dogGender}
-      </TableCell>
+      <TableCell className={clsx("text-center")}>{profile.dogGender}</TableCell>
       <TableCell
         className={clsx("text-center", {
           "bg-orange-100": profile.dogWeightKg === null,

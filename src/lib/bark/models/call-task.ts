@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { SpecifiedDogGenderSchema } from "../enums/dog-gender";
+import { DogGenderSchema } from "../enums/dog-gender";
 import { YesNoSchema } from "../enums/yes-no";
 
 export const CallTaskSchema = z.object({
@@ -7,7 +7,7 @@ export const CallTaskSchema = z.object({
   dogName: z.string(),
   dogBreed: z.string(),
   dogBirthday: z.date(),
-  dogGender: SpecifiedDogGenderSchema,
+  dogGender: DogGenderSchema,
   dogWeightKg: z.number().nullable(),
   dogEverReceivedTransfusion: YesNoSchema,
   dogEverPregnant: YesNoSchema,
