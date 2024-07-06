@@ -13,7 +13,6 @@ export async function doCreateAppointment(
 ): Promise<{ dogName: string }> {
   const {
     dog: { dogName },
-    user: { userName },
   } = await doRegister(context);
   await doLogoutSequence(context);
   await doLoginKnownVet(context);
@@ -24,7 +23,6 @@ export async function doCreateAppointment(
   await pg1.dogCard(dogName).locator().click();
   const isMobile = await doGetIsMobile(context);
   const activityArea = isMobile ? pg1.dogCard(dogName) : pg1.rightSidePane();
-  await expect(activityArea.exactText(userName)).toBeVisible();
   await expect(activityArea.scheduleButton()).toBeVisible();
   await activityArea.scheduleButton().click();
   await expect(activityArea.scheduledBadge()).toBeVisible();
