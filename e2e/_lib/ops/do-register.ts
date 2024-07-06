@@ -51,7 +51,9 @@ export async function doRegister(
     }
     await pgReg.dogBloodType_UNKNOWN().click();
     await pgReg.dogEverReceivedTransfusion_NO().click();
-    await pgReg.dogEverPregnant_NO().click();
+    if (await pgReg.dogEverPregnant_NO().isEnabled()) {
+      await pgReg.dogEverPregnant_NO().click();
+    }
   }
 
   if (withoutPreferredVet === true) {
