@@ -79,7 +79,7 @@ export default function PetForm(props: {
     if (dogGender === DOG_GENDER.MALE) {
       form.setValue("dogEverPregnant", YES_NO_UNKNOWN.NO);
     }
-  }, [dogGender]);
+  }, [dogGender, form]);
 
   return (
     <>
