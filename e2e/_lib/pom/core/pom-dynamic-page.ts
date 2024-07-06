@@ -5,7 +5,7 @@ import { Locator, expect } from "@playwright/test";
 export abstract class PomDynamicPage extends PomObject {
   abstract urlRegex(): RegExp;
 
-  async checkUrl() {
+  async checkReady() {
     await expect(this.page()).toHaveURL(this.urlRegex());
   }
 

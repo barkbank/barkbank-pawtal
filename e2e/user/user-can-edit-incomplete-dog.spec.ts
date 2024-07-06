@@ -28,7 +28,7 @@ test("user can edit incomplete dog profile", async ({ page }) => {
   await pgList.checkReady();
   await pgList.dogCardItem(dogName).locator().click();
   await pgView.editButton().click();
-  await pgEdit.checkUrl();
+  await pgEdit.checkReady();
 
   // Complete the profile
   await pgEdit.dogEverReceivedTransfusionOption_NO().click();
@@ -38,7 +38,7 @@ test("user can edit incomplete dog profile", async ({ page }) => {
   await toast.closeButton().click();
 
   // Navigate back to list
-  await pgView.checkUrl();
+  await pgView.checkReady();
   await pgView.backButton().click();
   await pgList.checkReady();
 

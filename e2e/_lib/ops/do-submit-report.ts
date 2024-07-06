@@ -27,7 +27,7 @@ export async function doSubmitReport(
   await nav.vetAppointmentsOption().click();
   await pgList.checkReady();
   await pgList.appointmentCard({ dogName }).submitReportButton().click();
-  await pgSubmit.checkUrl();
+  await pgSubmit.checkReady();
 
   await pgSubmit
     .visitDateField()

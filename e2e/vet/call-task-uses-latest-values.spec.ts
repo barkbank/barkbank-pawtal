@@ -46,7 +46,7 @@ test("call task uses latest values", async ({ page, request }) => {
     .appointmentCard({ dogName })
     .submitReportButton()
     .click();
-  await pgSubmit.checkUrl();
+  await pgSubmit.checkReady();
 
   // For this test to work, the profile modification time needs to be before the
   // visit date. However, since profile modification time is set by

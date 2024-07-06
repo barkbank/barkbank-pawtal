@@ -14,6 +14,6 @@ test("visitor can register without a preferred vet", async ({ page }) => {
   } = await doRegister(context, { withoutPreferredVet: true });
   await pgPets.checkReady();
   await pgPets.dogCardItem(dogName).locator().click();
-  await pgView.checkUrl();
+  await pgView.checkReady();
   await expect(pgView.dogPreferredVetItem()).toContainText("No preferred vet");
 });

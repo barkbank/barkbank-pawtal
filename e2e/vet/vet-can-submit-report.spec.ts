@@ -20,7 +20,7 @@ test("vet can submit report", async ({ page }) => {
   await pgList.checkReady();
   await pgList.appointmentCard({ dogName }).submitReportButton().click();
 
-  await pgSubmit.checkUrl();
+  await pgSubmit.checkReady();
   await expect(pgSubmit.submitButton()).toBeVisible();
   await pgSubmit.visitDateField().fill("11 May 2024");
   await pgSubmit.dogWeightField().fill("28.61");

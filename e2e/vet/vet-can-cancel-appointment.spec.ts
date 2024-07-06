@@ -14,7 +14,7 @@ test("vet can cancel appointment", async ({ page }) => {
   await pg1.appointmentCard({ dogName }).cancelAppointmentButton().click();
 
   const pg2 = new VetAppointmentCancelPage(context);
-  await pg2.checkUrl();
+  await pg2.checkReady();
   await pg2.confirmButton().click();
 
   const pg3 = new VetAppointmentListPage(context);

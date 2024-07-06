@@ -19,7 +19,7 @@ test("user can cancel edit dog profile", async ({ page }) => {
   await pgList.checkReady();
   await pgList.dogCardItem(dogName).locator().click();
   await pgView.editButton().click();
-  await pgEdit.checkUrl();
+  await pgEdit.checkReady();
 
   // Fill in form
   await expect(pgEdit.dogNameField()).toHaveValue(dogName);
@@ -33,7 +33,7 @@ test("user can cancel edit dog profile", async ({ page }) => {
 
   // Cancel
   await pgEdit.cancelButton().click();
-  await pgView.checkUrl();
+  await pgView.checkReady();
 
   // Navigate back to edit dog to verify no changes
   await pgView.editButton().click();

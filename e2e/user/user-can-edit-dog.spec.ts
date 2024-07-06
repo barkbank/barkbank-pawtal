@@ -19,12 +19,12 @@ test("user can edit dog profile", async ({ page }) => {
   // Navigate to Edit Page
   await pgList.checkReady();
   await pgList.dogCardItem(dogName).locator().click();
-  await pgView.checkUrl();
+  await pgView.checkReady();
   await pgView.editButton().click();
-  await pgEdit.checkUrl();
+  await pgEdit.checkReady();
 
   // Fill in the Edit Dog form
-  await pgEdit.checkUrl();
+  await pgEdit.checkReady();
   await expect(pgEdit.dogNameField()).toHaveValue(dogName);
   await expect(pgEdit.dogBreedField()).toHaveValue(dogBreed);
   await expect(pgEdit.dogBirthdayField()).toHaveValue(dogBirthday);
@@ -51,11 +51,11 @@ test("user can edit dog profile", async ({ page }) => {
   ).not.toBeVisible();
 
   // Should be back at the view dog page.
-  await pgView.checkUrl();
+  await pgView.checkReady();
 
   // Go back to edit page to verify changes.
   await pgView.editButton().click();
-  await pgEdit.checkUrl();
+  await pgEdit.checkReady();
   await expect(pgEdit.dogNameField()).toHaveValue("Thomas Green");
   await expect(pgEdit.dogBreedField()).toHaveValue("Royal Canine");
   await expect(pgEdit.dogBirthdayField()).toHaveValue("28 Aug 1968");
