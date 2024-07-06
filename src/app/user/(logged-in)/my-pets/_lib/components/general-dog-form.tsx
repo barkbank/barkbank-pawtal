@@ -20,6 +20,7 @@ import { Result } from "@/lib/utilities/result";
 import { DogProfile } from "@/lib/bark/models/dog-profile";
 import { RequiredDateField } from "@/app/_lib/field-schemas/required-date-field";
 import { OptionalDogWeightKgField } from "@/app/_lib/field-schemas/optional-dog-weight-kg-field";
+import { useEffect } from "react";
 
 const FORM_SCHEMA = z.object({
   dogName: z.string().min(1, { message: "Name cannot be empty" }),
@@ -97,6 +98,14 @@ export function GeneralDogForm(props: {
       form.setError("root", { message: error });
     }
   }
+
+  const currentValues = form.watch();
+  const { dogGender } = currentValues;
+  useEffect(() => {
+    if (dogGender === DOG_GENDER.MALE) {
+      form.setValue("dogEverPregnant", YES_NO_UNKNOWN.NO);
+    }
+  }, [dogGender]);
 
   return (
     <div>
@@ -181,6 +190,7 @@ export function GeneralDogForm(props: {
           label="Ever Pregnant"
           name="dogEverPregnant"
           layout="radio"
+          disabled={dogGender === DOG_GENDER.MALE}
           options={[
             {
               label: "I don't know",
