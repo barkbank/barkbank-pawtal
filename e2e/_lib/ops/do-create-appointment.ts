@@ -11,7 +11,6 @@ import { doRegister } from "./do-register";
 export async function doCreateAppointment(
   context: PomContext,
 ): Promise<{ dogName: string }> {
-  const page = context.page;
   const {
     dog: { dogName },
     user: { userName },
@@ -35,6 +34,7 @@ export async function doCreateAppointment(
 
   const pg2 = new VetAppointmentListPage(context);
   await pg2.checkReady();
+  await expect(pg2.appointmentCard({ dogName }).locator()).toBeVisible();
 
   console.log({
     dogName,
