@@ -34,7 +34,7 @@ export async function doCreateAppointment(
   await nav.vetAppointmentsOption().click();
 
   const pg2 = new VetAppointmentListPage(context);
-  await pg2.checkUrl();
+  await pg2.checkReady();
 
   console.log({
     dogName,

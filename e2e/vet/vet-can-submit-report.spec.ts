@@ -17,10 +17,10 @@ test("vet can submit report", async ({ page }) => {
   const nav = new NavComponent(context);
   const pgReportList = new VetReportListPage(context);
 
-  await pgList.checkUrl();
+  await pgList.checkReady();
   await pgList.appointmentCard({ dogName }).submitReportButton().click();
 
-  await pgSubmit.checkUrl();
+  await pgSubmit.checkReady();
   await expect(pgSubmit.submitButton()).toBeVisible();
   await pgSubmit.visitDateField().fill("11 May 2024");
   await pgSubmit.dogWeightField().fill("28.61");
@@ -33,7 +33,7 @@ test("vet can submit report", async ({ page }) => {
   await expect(toast.locator()).toContainText("Submitted");
   await toast.closeButton().click();
 
-  await pgList.checkUrl();
+  await pgList.checkReady();
   await expect(pgList.appointmentCard({ dogName }).locator()).not.toBeVisible();
 
   await nav.vetReportsOption().click();

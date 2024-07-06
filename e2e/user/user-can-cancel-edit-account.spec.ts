@@ -19,7 +19,7 @@ test("user can register, edit account details, but click cancel, and should see 
   const pgEdit = new UserMyAccountEditPage(context);
 
   await nav.myAcountOption().click();
-  await pgAcc.checkUrl();
+  await pgAcc.checkReady();
 
   await expect(pgAcc.exactText(userName)).toBeVisible();
   await expect(pgAcc.residencyItem()).toHaveValue("Singapore");
@@ -28,7 +28,7 @@ test("user can register, edit account details, but click cancel, and should see 
 
   // WHEN user clicks on edit button, navigate to edit page
   await pgAcc.editButton().click();
-  await pgEdit.checkUrl();
+  await pgEdit.checkReady();
 
   // BUT cancelled, navigate back to account page
   await pgEdit.userNameField().fill("New Name");
@@ -37,7 +37,7 @@ test("user can register, edit account details, but click cancel, and should see 
   await pgEdit.cancelButton().click();
 
   // THEN
-  await pgAcc.checkUrl();
+  await pgAcc.checkReady();
   await expect(pgAcc.exactText(userName)).toBeVisible();
   await expect(pgAcc.residencyItem()).toHaveValue("Singapore");
   await expect(pgAcc.emailItem()).toHaveValue(userEmail);

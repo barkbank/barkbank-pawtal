@@ -15,10 +15,10 @@ test("user can register, login, add dog, and see it in my-pets", async ({
   await doRegister(context);
 
   const pg1 = new UserMyPetsPage(context);
-  await pg1.checkUrl();
+  await pg1.checkReady();
   await pg1.addPetButton().click();
   const pg2 = new UserAddDogPage(context);
-  await pg2.checkUrl();
+  await pg2.checkReady();
 
   // WHEN dog details are filled in and saved
   const dogGender = "FEMALE";
@@ -52,7 +52,7 @@ test("user can register, login, add dog, and see it in my-pets", async ({
 
   // THEN
   const pg3 = new UserMyPetsPage(context);
-  await pg3.checkUrl();
+  await pg3.checkReady();
   const card = pg3.dogCardItem(dogName);
   await expect(card.locator()).toBeVisible();
   await expect(card.exactText("Eligible")).toBeVisible();

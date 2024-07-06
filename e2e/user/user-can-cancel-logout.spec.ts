@@ -18,7 +18,7 @@ test("user can cancel logout", async ({ page }) => {
   // Navigate to My Account page first. We expect to return here if we cancel
   // the logout.
   await nav.myAcountOption().click();
-  await pgMyAcc.checkUrl();
+  await pgMyAcc.checkReady();
 
   if (await header.hamburgerButton().isVisible()) {
     await header.hamburgerButton().click();
@@ -26,10 +26,10 @@ test("user can cancel logout", async ({ page }) => {
   await expect(header.logoutLink()).toBeVisible();
   await header.logoutLink().click();
 
-  await pgLogout.checkUrl();
+  await pgLogout.checkReady();
   await expect(pgLogout.cancelButton()).toBeVisible();
   await pgLogout.cancelButton().click();
 
   // Should be back at my account page.
-  await pgMyAcc.checkUrl();
+  await pgMyAcc.checkReady();
 });

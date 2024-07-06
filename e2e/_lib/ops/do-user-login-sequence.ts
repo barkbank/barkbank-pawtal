@@ -15,7 +15,7 @@ export async function doUserLoginSequence(
   const { userEmail } = args;
 
   const pg1 = new UserLoginPage(context);
-  await pg1.checkUrl();
+  await pg1.checkReady();
   await pg1.emailField().fill(userEmail);
   await pg1.sendMeAnOtpButton().click();
   await expect(pg1.otpSentMessage()).toBeVisible();
@@ -23,6 +23,6 @@ export async function doUserLoginSequence(
   await pg1.loginButton().click();
 
   const pg2 = new UserMyPetsPage(context);
-  await pg2.checkUrl();
+  await pg2.checkReady();
   return pg2;
 }

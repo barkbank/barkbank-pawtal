@@ -14,7 +14,7 @@ export async function doLoginKnownVet(context: PomContext): Promise<{
   await footer.vetLoginLink().click();
 
   const pg = new VetLoginPage(context);
-  await pg.checkUrl();
+  await pg.checkReady();
   await pg.emailField().fill(knownVet.vetEmail);
   await pg.otpField().fill("000000");
   await pg.loginButton().click();

@@ -18,25 +18,25 @@ test("user can list, view, edit, cancel, edit, submit, back, list", async ({
   const viewDogPage = new UserViewDogPage(context);
   const toast = new ToastComponent(context);
 
-  await myPetsPage.checkUrl();
+  await myPetsPage.checkReady();
   await myPetsPage.dogCardItem(dogName).locator().click();
 
-  await viewDogPage.checkUrl();
+  await viewDogPage.checkReady();
   await viewDogPage.editButton().click();
 
-  await editDogPage.checkUrl();
+  await editDogPage.checkReady();
   await editDogPage.cancelButton().click();
 
-  await viewDogPage.checkUrl();
+  await viewDogPage.checkReady();
   await viewDogPage.editButton().click();
 
-  await editDogPage.checkUrl();
+  await editDogPage.checkReady();
   await editDogPage.saveButton().click();
   await expect(toast.locator()).toContainText("Saved");
   await toast.closeButton().click();
 
-  await viewDogPage.checkUrl();
+  await viewDogPage.checkReady();
   await viewDogPage.backButton().click();
 
-  await myPetsPage.checkUrl();
+  await myPetsPage.checkReady();
 });

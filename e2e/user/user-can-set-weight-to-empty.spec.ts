@@ -18,24 +18,24 @@ test("user can set weight to empty", async ({ page }) => {
   const toast = new ToastComponent(context);
 
   // Navigate to Edit Page
-  await pgList.checkUrl();
+  await pgList.checkReady();
   await pgList.dogCardItem(dogName).locator().click();
-  await pgView.checkUrl();
+  await pgView.checkReady();
   await pgView.editButton().click();
-  await pgEdit.checkUrl();
+  await pgEdit.checkReady();
 
   // Fill in the Edit Dog form
-  await pgEdit.checkUrl();
+  await pgEdit.checkReady();
   await pgEdit.dogWeightField().fill("");
   await pgEdit.saveButton().click();
   await expect(toast.locator()).toContainText("Saved");
   await toast.closeButton().click();
 
   // Should be back at the view dog page.
-  await pgView.checkUrl();
+  await pgView.checkReady();
 
   // Go back to edit page to verify changes.
   await pgView.editButton().click();
-  await pgEdit.checkUrl();
+  await pgEdit.checkReady();
   await expect(pgEdit.dogWeightField()).toHaveValue("");
 });

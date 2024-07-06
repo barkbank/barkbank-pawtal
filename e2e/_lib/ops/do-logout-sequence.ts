@@ -21,7 +21,7 @@ export async function doLogoutSequence(context: PomContext) {
   }
   await expect(header.logoutLink()).toBeVisible();
   await header.logoutLink().click();
-  await pgLogout.checkUrl();
+  await pgLogout.checkReady();
   await pgLogout.logoutButton().click();
-  await pgUserLogin.checkUrl();
+  await pgUserLogin.checkReady();
 }

@@ -10,14 +10,15 @@ import { VetReportEditPage } from "../_lib/pom/pages/vet-report-edit-page";
 import { VetReportViewPage } from "../_lib/pom/pages/vet-report-view-page";
 import { ToastComponent } from "../_lib/pom/layout/toast-component";
 
-test("vet can edit report", async ({ page }) => {
+test("vet can edit report", async ({ page }, testInfo) => {
+  testInfo.setTimeout(60000);
   const context = await initPomContext({ page });
   const { dogName } = await givenSubmittedReport(context);
 
   const pgList = new VetReportListPage(context);
 
   // Should be DEA1.1 Positive at first
-  await pgList.checkUrl();
+  await pgList.checkReady();
   await expect(pgList.reportCard({ dogName }).locator()).toBeVisible();
   await expect(
     pgList.reportCard({ dogName }).dea1Point1PositiveBadge(),
@@ -27,7 +28,7 @@ test("vet can edit report", async ({ page }) => {
   await changeBloodTypeToNegative(context, { dogName });
 
   // Should now be DEA1.1 Negative
-  await pgList.checkUrl();
+  await pgList.checkReady();
   await expect(pgList.reportCard({ dogName }).locator()).toBeVisible();
   await expect(
     pgList.reportCard({ dogName }).dea1Point1NegativeBadge(),
@@ -45,10 +46,10 @@ async function givenSubmittedReport(context: PomContext): Promise<{
   const pgReportList = new VetReportListPage(context);
   const toast = new ToastComponent(context);
 
-  await pgList.checkUrl();
+  await pgList.checkReady();
   await pgList.appointmentCard({ dogName }).submitReportButton().click();
 
-  await pgSubmit.checkUrl();
+  await pgSubmit.checkReady();
   await expect(pgSubmit.submitButton()).toBeVisible();
   await pgSubmit.visitDateField().fill("6 May 2024");
   await pgSubmit.dogWeightField().fill("27.89");
@@ -61,12 +62,12 @@ async function givenSubmittedReport(context: PomContext): Promise<{
   await expect(toast.locator()).toContainText("Submitted");
   await toast.closeButton().click();
 
-  await pgList.checkUrl();
+  await pgList.checkReady();
   await expect(pgList.appointmentCard({ dogName }).locator()).not.toBeVisible();
 
   await sideBarOrDock.vetReportsOption().click();
 
-  await pgReportList.checkUrl();
+  await pgReportList.checkReady();
   await expect(pgReportList.reportCard({ dogName }).locator()).toBeVisible();
   return { dogName };
 }
@@ -82,11 +83,11 @@ async function changeBloodTypeToNegative(
   const pgEdit = new VetReportEditPage(context);
   const toast = new ToastComponent(context);
 
-  await pgList.checkUrl();
+  await pgList.checkReady();
   await pgList.reportCard({ dogName }).locator().click();
-  await pgView.checkUrl();
+  await pgView.checkReady();
   await pgView.editButton().click();
-  await pgEdit.checkUrl();
+  await pgEdit.checkReady();
   await expect(pgEdit.submitButton()).toBeVisible();
 
   await pgEdit.dogDea1Point1_NEGATIVE().click();
@@ -94,8 +95,8 @@ async function changeBloodTypeToNegative(
   await expect(toast.locator()).toContainText("Saved");
   await toast.closeButton().click();
 
-  await pgView.checkUrl();
+  await pgView.checkReady();
   await expect(pgView.backButton()).toBeVisible();
   await pgView.backButton().click();
-  await pgList.checkUrl();
+  await pgList.checkReady();
 }

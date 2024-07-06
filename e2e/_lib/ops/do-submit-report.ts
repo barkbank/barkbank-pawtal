@@ -25,9 +25,9 @@ export async function doSubmitReport(
   const toast = new ToastComponent(context);
 
   await nav.vetAppointmentsOption().click();
-  await pgList.checkUrl();
+  await pgList.checkReady();
   await pgList.appointmentCard({ dogName }).submitReportButton().click();
-  await pgSubmit.checkUrl();
+  await pgSubmit.checkReady();
 
   await pgSubmit
     .visitDateField()
@@ -46,7 +46,7 @@ export async function doSubmitReport(
   await pgSubmit.submitButton().click();
   await expect(toast.locator()).toContainText("Submitted");
   await toast.closeButton().click();
-  await pgList.checkUrl();
+  await pgList.checkReady();
 }
 
 function _getBase(): BarkReportData {
