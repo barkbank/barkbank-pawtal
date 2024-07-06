@@ -1,12 +1,20 @@
 import { RoutePath } from "@/lib/route-path";
 import { PomPage } from "../core/pom-page";
-import { Locator } from "@playwright/test";
+import { Locator, expect } from "@playwright/test";
 import { PomComponent } from "../core/pom-component";
 import { PomContext } from "../core/pom-object";
 
 export class VetSchedulePage extends PomPage {
   url(): string {
     return this.website().urlOf(RoutePath.VET_SCHEDULE_APPOINTMENTS);
+  }
+
+  async checkPageLoaded(): Promise<void> {
+    await expect(this.searchInput()).toBeVisible();
+  }
+
+  searchInput(): Locator {
+    return this.page().getByPlaceholder("Search...");
   }
 
   dogCard(dogName: string): VetSchedulePageDogCard {
