@@ -47,7 +47,8 @@ jobs:
       - name: test
         run: |
           cat env.template > .env.local
-          npm run dev &
+          npm run build
+          npm start &
           sleep 5
           npx node scripts/setup-dev-data.js
           npx playwright test --project "${{matrix.project}}"

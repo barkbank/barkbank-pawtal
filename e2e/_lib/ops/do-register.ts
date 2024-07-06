@@ -68,6 +68,7 @@ export async function doRegister(
   await pgReg.userNameField().fill(userName);
   await pgReg.userPhoneNumberField().fill(userPhoneNumber);
   await pgReg.userEmailField().fill(userEmail);
+  await pgReg.sendOtpButton().click();
   await pgReg.otpField().fill("000000");
   await pgReg.disclaimerCheckbox().click();
   await pgReg.submitButton().click();

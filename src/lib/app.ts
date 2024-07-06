@@ -45,13 +45,13 @@ import {
 } from "./services/email-otp-service";
 import { VetActorConfig } from "./vet/vet-actor";
 import { BarkContext } from "./bark/bark-context";
-import { NODE_ENV, NodeEnv } from "./node-envs";
 import { PbkdfEncryptionProtocol } from "./encryption/pbkdf-encryption-protocol";
 import {
   HkdfEncryptionProtocol,
   HkdfInputKeyMaterial,
 } from "./encryption/hkdf-encryption-protocol";
 import { EncryptionProtocol } from "./encryption/encryption-protocol";
+import { BARKBANK_ENV, BarkBankEnv } from "./barkbank-env";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -97,12 +97,12 @@ export class AppFactory {
     return parseInt(this.envString(key));
   }
 
-  public getNodeEnv(): NodeEnv {
-    const val = this.envOptionalString(APP_ENV.NODE_ENV);
-    if (val === NODE_ENV.PRODUCTION || val === NODE_ENV.TEST) {
+  public getBarkBankEnv(): BarkBankEnv {
+    const val = this.envOptionalString(APP_ENV.BARKBANK_ENV);
+    if (val === BARKBANK_ENV.DEV || val === BARKBANK_ENV.TEST) {
       return val;
     }
-    return NODE_ENV.DEVELOPMENT;
+    return BARKBANK_ENV.PRD;
   }
 
   public getEmailService(): Promise<EmailService> {
@@ -130,7 +130,7 @@ export class AppFactory {
 
   public getOtpService(): Promise<OtpService> {
     if (this.promisedOtpService === null) {
-      if (this.getNodeEnv() === NODE_ENV.DEVELOPMENT) {
+      if (this.getBarkBankEnv() === BARKBANK_ENV.TEST) {
         this.promisedOtpService = new Promise<OtpService>((resolve) => {
           const service = new DevelopmentOtpService();
           console.log("Created DevelopmentOtpService as OtpService");

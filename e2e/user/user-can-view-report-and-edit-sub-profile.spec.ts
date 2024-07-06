@@ -27,8 +27,8 @@ test("user can view report and edit sub-profile", async ({
   testInfo.setTimeout(60000);
 
   const reportedDogWeightKg = "111";
-  const yesterday = new Date(Date.now() - MILLIS_PER_DAY);
-  const visitTimeText = formatDateTime(yesterday, SGT_UI_DATE);
+  const twoDaysAgo = new Date(Date.now() - 2 * MILLIS_PER_DAY);
+  const visitTimeText = formatDateTime(twoDaysAgo, SGT_UI_DATE);
   const visitTime = parseCommonDate(visitTimeText, SINGAPORE_TIME_ZONE);
 
   const context = await initPomContext({ page });

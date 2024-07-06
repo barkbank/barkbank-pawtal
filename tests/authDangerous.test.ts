@@ -1,3 +1,4 @@
+import { BARKBANK_ENV } from "@/lib/barkbank-env";
 import { authDangerous } from "@/middleware";
 import { NextRequest } from "next/server";
 
@@ -7,9 +8,9 @@ describe("authDangerous", () => {
     jest.resetModules();
   });
 
-  it("should return 404 if not in development environment", async () => {
+  it("should return 404 if not in TEST environment", async () => {
     const envs: NodeJS.Dict<string> = {
-      NODE_ENV: "production",
+      BARKBANK_ENV: BARKBANK_ENV.PRD,
     };
     const request = {} as NextRequest;
     const response = await authDangerous(request, envs);
@@ -18,7 +19,7 @@ describe("authDangerous", () => {
 
   it("should return 401 if dangerous credentials are not provided", async () => {
     const envs: NodeJS.Dict<string> = {
-      NODE_ENV: "development",
+      BARKBANK_ENV: BARKBANK_ENV.TEST,
     };
     const request = {} as NextRequest;
     const response = await authDangerous(request, envs);
@@ -27,7 +28,7 @@ describe("authDangerous", () => {
 
   it("should return 401 if authorization header is incorrect", async () => {
     const envs: NodeJS.Dict<string> = {
-      NODE_ENV: "development",
+      BARKBANK_ENV: BARKBANK_ENV.TEST,
       DANGEROUS_CREDENTIALS: "user:pass",
     };
     const request: any = {
@@ -41,7 +42,7 @@ describe("authDangerous", () => {
 
   it("should return 403 if dangerous feature is not enabled", async () => {
     const envs: NodeJS.Dict<string> = {
-      NODE_ENV: "development",
+      BARKBANK_ENV: BARKBANK_ENV.TEST,
       DANGEROUS_CREDENTIALS: "user:pass",
       DANGEROUS_ENABLED: "",
     };
@@ -60,7 +61,7 @@ describe("authDangerous", () => {
 
   it("should return next response if all conditions are met", async () => {
     const envs: NodeJS.Dict<string> = {
-      NODE_ENV: "development",
+      BARKBANK_ENV: BARKBANK_ENV.TEST,
       DANGEROUS_CREDENTIALS: "user:pass",
       DANGEROUS_ENABLED: "true",
     };

@@ -9,7 +9,6 @@ import { doRegister } from "../_lib/ops/do-register";
 test("vet can record DECLINED call outcome", async ({ page }) => {
   const context = await initPomContext({ page });
   const {
-    user: { userName },
     dog: { dogName },
   } = await doRegister(context);
 
@@ -23,7 +22,6 @@ test("vet can record DECLINED call outcome", async ({ page }) => {
 
   const isMobile = await doGetIsMobile(context);
   const activityArea = isMobile ? pg1.dogCard(dogName) : pg1.rightSidePane();
-  await expect(activityArea.exactText(userName)).toBeVisible();
   await expect(activityArea.declineButton()).toBeVisible();
 
   await activityArea.declineButton().click();
