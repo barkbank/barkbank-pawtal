@@ -1,9 +1,13 @@
 import { POS_NEG_NIL, PosNegNil } from "@/lib/bark/enums/pos-neg-nil";
 import { PomDynamicPage } from "../core/pom-dynamic-page";
-import { Locator } from "@playwright/test";
-import { isThisSecond } from "date-fns";
+import { Locator, expect } from "@playwright/test";
 
 export abstract class VetGeneralReportForm extends PomDynamicPage {
+  async checkPageLoaded(): Promise<void> {
+    await expect(this.visitDateField()).toBeVisible();
+    await expect(this.ineligibilityReasonTextArea()).toBeVisible();
+  }
+
   visitDateField(): Locator {
     return this.page().getByLabel("Visit Date");
   }
