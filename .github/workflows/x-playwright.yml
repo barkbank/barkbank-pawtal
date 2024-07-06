@@ -44,12 +44,11 @@ jobs:
         id: slugify
         run: echo "project=$(echo ${{matrix.project}} | tr '[:upper:]' '[:lower:]' | tr ' ' '-')" >> $GITHUB_OUTPUT
 
-      # TODO: Change NODE_ENV to BARKBANK_ENV throughout
       - name: test
         run: |
           cat env.template > .env.local
           npm run build
-          NODE_ENV=development npm start &
+          npm start &
           sleep 5
           npx node scripts/setup-dev-data.js
           npx playwright test --project "${{matrix.project}}"

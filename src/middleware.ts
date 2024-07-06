@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 import { APP_ENV } from "./lib/app-env";
-import { NODE_ENV } from "./lib/node-envs";
+import { BARKBANK_ENV } from "./lib/barkbank-env";
 
 function responseWithStatus(status: number) {
   return NextResponse.json({ _error: { status } }, { status });
@@ -21,7 +21,7 @@ export async function authDangerous(
   request: NextRequest,
   envs: NodeJS.Dict<string>,
 ): Promise<Response | null> {
-  if (envs[APP_ENV.NODE_ENV] !== NODE_ENV.DEVELOPMENT) {
+  if (envs[APP_ENV.BARKBANK_ENV] !== BARKBANK_ENV.TEST) {
     return _404_NOT_FOUND;
   }
   const cred = envs[APP_ENV.DANGEROUS_CREDENTIALS];

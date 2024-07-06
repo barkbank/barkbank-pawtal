@@ -4,7 +4,7 @@ import { z } from "zod";
  * An enumeration of all environment variables used by Pawtal.
  */
 export const APP_ENV = {
-  NODE_ENV: "NODE_ENV",
+  BARKBANK_ENV: "BARKBANK_ENV",
 
   BARKBANK_DB_HOST: "BARKBANK_DB_HOST",
   BARKBANK_DB_PORT: "BARKBANK_DB_PORT",
