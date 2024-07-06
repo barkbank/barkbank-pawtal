@@ -18,7 +18,7 @@ test("user can set weight to empty", async ({ page }) => {
   const toast = new ToastComponent(context);
 
   // Navigate to Edit Page
-  await pgList.checkUrl();
+  await pgList.checkReady();
   await pgList.dogCardItem(dogName).locator().click();
   await pgView.checkUrl();
   await pgView.editButton().click();

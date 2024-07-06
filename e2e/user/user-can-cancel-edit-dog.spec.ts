@@ -16,7 +16,7 @@ test("user can cancel edit dog profile", async ({ page }) => {
   const pgEdit = new UserEditDogPage(context);
 
   // Navigate to edit dog page
-  await pgList.checkUrl();
+  await pgList.checkReady();
   await pgList.dogCardItem(dogName).locator().click();
   await pgView.editButton().click();
   await pgEdit.checkUrl();

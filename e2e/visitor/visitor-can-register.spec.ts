@@ -12,12 +12,12 @@ test("visitor can register a new user account", async ({ page }) => {
   // Navigating to the registration form
   const context = await initPomContext({ page });
   const pg1 = new UserLoginPage(context);
-  await pg1.checkUrl();
+  await pg1.checkReady();
   await pg1.registerLink().click();
 
   // Fill in the dog form
   const pg2 = new UserRegistrationPage(context);
-  await pg2.checkUrl();
+  await pg2.checkReady();
   await expect(pg2.dogFormHeader()).toBeVisible();
   await pg2.dogNameField().fill("Casper");
   await pg2.dogBreedField().fill("White Sheet Dog");
@@ -60,7 +60,7 @@ test("visitor can register a new user account", async ({ page }) => {
 
   // Check for expected dog in my pets
   const pg3 = new UserMyPetsPage(context);
-  await pg3.checkUrl();
+  await pg3.checkReady();
   await expect(pg3.dogCardItem("Casper").locator()).toBeVisible();
 
   // Navigate to my account page
@@ -70,7 +70,7 @@ test("visitor can register a new user account", async ({ page }) => {
 
   // Check for account details
   const pg4 = new UserMyAccountPage(context);
-  await pg4.checkUrl();
+  await pg4.checkReady();
   await expect(pg4.exactText("Ian Little")).toBeVisible();
   await expect(pg4.residencyItem()).toHaveValue("Singapore");
   await expect(pg4.phoneNumberItem()).toHaveValue("87654321");

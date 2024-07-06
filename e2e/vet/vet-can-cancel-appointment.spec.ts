@@ -9,7 +9,7 @@ test("vet can cancel appointment", async ({ page }) => {
   const { dogName } = await doCreateAppointment(context);
 
   const pg1 = new VetAppointmentListPage(context);
-  await pg1.checkUrl();
+  await pg1.checkReady();
   await expect(pg1.appointmentCard({ dogName }).locator()).toBeVisible();
   await pg1.appointmentCard({ dogName }).cancelAppointmentButton().click();
 
@@ -18,6 +18,6 @@ test("vet can cancel appointment", async ({ page }) => {
   await pg2.confirmButton().click();
 
   const pg3 = new VetAppointmentListPage(context);
-  await pg3.checkUrl();
+  await pg3.checkReady();
   await expect(pg3.appointmentCard({ dogName }).locator()).not.toBeVisible();
 });

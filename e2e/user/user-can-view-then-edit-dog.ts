@@ -18,7 +18,7 @@ test("user can list, view, edit, cancel, edit, submit, back, list", async ({
   const viewDogPage = new UserViewDogPage(context);
   const toast = new ToastComponent(context);
 
-  await myPetsPage.checkUrl();
+  await myPetsPage.checkReady();
   await myPetsPage.dogCardItem(dogName).locator().click();
 
   await viewDogPage.checkUrl();
@@ -38,5 +38,5 @@ test("user can list, view, edit, cancel, edit, submit, back, list", async ({
   await viewDogPage.checkUrl();
   await viewDogPage.backButton().click();
 
-  await myPetsPage.checkUrl();
+  await myPetsPage.checkReady();
 });

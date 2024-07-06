@@ -17,7 +17,7 @@ test("vet can edit report", async ({ page }) => {
   const pgList = new VetReportListPage(context);
 
   // Should be DEA1.1 Positive at first
-  await pgList.checkUrl();
+  await pgList.checkReady();
   await expect(pgList.reportCard({ dogName }).locator()).toBeVisible();
   await expect(
     pgList.reportCard({ dogName }).dea1Point1PositiveBadge(),
@@ -27,7 +27,7 @@ test("vet can edit report", async ({ page }) => {
   await changeBloodTypeToNegative(context, { dogName });
 
   // Should now be DEA1.1 Negative
-  await pgList.checkUrl();
+  await pgList.checkReady();
   await expect(pgList.reportCard({ dogName }).locator()).toBeVisible();
   await expect(
     pgList.reportCard({ dogName }).dea1Point1NegativeBadge(),
@@ -45,7 +45,7 @@ async function givenSubmittedReport(context: PomContext): Promise<{
   const pgReportList = new VetReportListPage(context);
   const toast = new ToastComponent(context);
 
-  await pgList.checkUrl();
+  await pgList.checkReady();
   await pgList.appointmentCard({ dogName }).submitReportButton().click();
 
   await pgSubmit.checkUrl();
@@ -61,12 +61,12 @@ async function givenSubmittedReport(context: PomContext): Promise<{
   await expect(toast.locator()).toContainText("Submitted");
   await toast.closeButton().click();
 
-  await pgList.checkUrl();
+  await pgList.checkReady();
   await expect(pgList.appointmentCard({ dogName }).locator()).not.toBeVisible();
 
   await sideBarOrDock.vetReportsOption().click();
 
-  await pgReportList.checkUrl();
+  await pgReportList.checkReady();
   await expect(pgReportList.reportCard({ dogName }).locator()).toBeVisible();
   return { dogName };
 }
@@ -82,7 +82,7 @@ async function changeBloodTypeToNegative(
   const pgEdit = new VetReportEditPage(context);
   const toast = new ToastComponent(context);
 
-  await pgList.checkUrl();
+  await pgList.checkReady();
   await pgList.reportCard({ dogName }).locator().click();
   await pgView.checkUrl();
   await pgView.editButton().click();
@@ -97,5 +97,5 @@ async function changeBloodTypeToNegative(
   await pgView.checkUrl();
   await expect(pgView.backButton()).toBeVisible();
   await pgView.backButton().click();
-  await pgList.checkUrl();
+  await pgList.checkReady();
 }

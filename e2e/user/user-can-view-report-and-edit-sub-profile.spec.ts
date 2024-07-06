@@ -64,7 +64,7 @@ test("user can view report and edit sub-profile", async ({
 
   // Verify that dog's weight is the registration dog weight, because
   // registration dog weight is the most recent.
-  await pgPets.checkUrl();
+  await pgPets.checkReady();
   await pgPets.dogCardItem(dogName).locator().click();
   await pgViewDog.checkUrl();
   await expect(pgViewDog.dogWeightItem()).toContainText(registeredDogWeightKg);

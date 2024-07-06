@@ -21,9 +21,9 @@ test("user can register, edit account details, save, and should see their detail
   const pgEditMyAccount = new UserMyAccountEditPage(context);
 
   // Navigate to My Accounts
-  await pgPets.checkUrl();
+  await pgPets.checkReady();
   await nav.myAcountOption().click();
-  await pgMyAccount.checkUrl();
+  await pgMyAccount.checkReady();
 
   // Check existing details
   await expect(pgMyAccount.exactText(userName)).toBeVisible();
@@ -33,14 +33,14 @@ test("user can register, edit account details, save, and should see their detail
 
   // WHEN user navigates to edit page, and saves
   await pgMyAccount.editButton().click();
-  await pgEditMyAccount.checkUrl();
+  await pgEditMyAccount.checkReady();
   await pgEditMyAccount.userNameField().fill("New Name");
   await pgEditMyAccount.userPhoneNumberField().fill("+65 12345678");
   await pgEditMyAccount.userResidencyOption_OTHERS().click();
   await pgEditMyAccount.saveButton().click();
 
   // THEN
-  await pgMyAccount.checkUrl();
+  await pgMyAccount.checkReady();
   await expect(pgMyAccount.exactText("New Name")).toBeVisible();
   await expect(pgMyAccount.residencyItem()).toHaveValue("Other");
   await expect(pgMyAccount.emailItem()).toHaveValue(userEmail);

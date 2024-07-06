@@ -20,7 +20,7 @@ test("vet can view report", async ({ page }) => {
   const toast = new ToastComponent(context);
 
   // Submit a report
-  await pgAppointmentList.checkUrl();
+  await pgAppointmentList.checkReady();
   await pgAppointmentList
     .appointmentCard({ dogName })
     .submitReportButton()
@@ -39,12 +39,12 @@ test("vet can view report", async ({ page }) => {
   await pgSubmit.submitButton().click();
   await expect(toast.locator()).toContainText("Submitted");
   await toast.closeButton().click();
-  await pgAppointmentList.checkUrl();
+  await pgAppointmentList.checkReady();
 
   // Navigate to view report page
-  await pgAppointmentList.checkUrl();
+  await pgAppointmentList.checkReady();
   await sideBarOrDock.vetReportsOption().click();
-  await pgReportList.checkUrl();
+  await pgReportList.checkReady();
   await pgReportList.reportCard({ dogName }).locator().click();
   await pgView.checkUrl();
 

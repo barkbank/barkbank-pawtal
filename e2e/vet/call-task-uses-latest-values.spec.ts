@@ -30,7 +30,7 @@ test("call task uses latest values", async ({ page, request }) => {
   const sidebar = new NavComponent(context);
   const toast = new ToastComponent(context);
 
-  await pgSchedule.checkUrl();
+  await pgSchedule.checkReady();
   await pgSchedule.dogCard(dogName).locator().click();
   const isMobile = await doGetIsMobile(context);
   const activityArea = isMobile
@@ -41,7 +41,7 @@ test("call task uses latest values", async ({ page, request }) => {
 
   await sidebar.vetAppointmentsOption().click();
 
-  await pgAppointments.checkUrl();
+  await pgAppointments.checkReady();
   await pgAppointments
     .appointmentCard({ dogName })
     .submitReportButton()
@@ -75,9 +75,9 @@ test("call task uses latest values", async ({ page, request }) => {
   await expect(toast.locator()).toContainText("Submitted");
   await toast.closeButton().click();
 
-  await pgAppointments.checkUrl();
+  await pgAppointments.checkReady();
   await sidebar.vetScheduleOption().click();
-  await pgSchedule.checkUrl();
+  await pgSchedule.checkReady();
 
   await expect(pgSchedule.dogCard(dogName).locator()).toBeVisible();
   await expect(pgSchedule.dogCard(dogName).locator()).toContainText(newWeight);
