@@ -6,7 +6,7 @@ default: npm-install fmt lint test schema-diff
 # Generate a ticket ID
 .PHONY: ticket
 ticket:
-	@bash scripts/make-ticket.sh
+	@git checkout -b $(shell bash scripts/make-ticket.sh) origin/main
 
 # Does everything default does AND THEN also run frontend tests—which
 # takes awhile to complete. If you just want to run the frontend
