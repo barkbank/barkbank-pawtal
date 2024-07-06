@@ -1,4 +1,4 @@
-import { Locator } from "@playwright/test";
+import { Locator, expect } from "@playwright/test";
 import { RoutePath } from "@/lib/route-path";
 import { PomContext } from "../core/pom-object";
 import { PomComponent } from "../core/pom-component";
@@ -7,6 +7,10 @@ import { PomPage } from "../core/pom-page";
 export class UserMyPetsPage extends PomPage {
   url(): string {
     return this.website().urlOf(RoutePath.USER_MY_PETS);
+  }
+
+  async checkPageLoaded(): Promise<void> {
+    await expect(this.addPetButton()).toBeVisible();
   }
 
   dogCardItem(dogName: string): DogCardItem {
