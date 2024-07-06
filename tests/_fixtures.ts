@@ -25,11 +25,7 @@ import {
   DogAntigenPresence,
 } from "@/lib/bark/enums/dog-antigen-presence";
 import { YES_NO_UNKNOWN, YesNoUnknown } from "@/lib/bark/enums/yes-no-unknown";
-import {
-  DOG_GENDER,
-  DogGender,
-  SPECIFIED_DOG_GENDER,
-} from "@/lib/bark/enums/dog-gender";
+import { DOG_GENDER, DogGender } from "@/lib/bark/enums/dog-gender";
 import { USER_RESIDENCY } from "@/lib/bark/enums/user-residency";
 import { dbInsertAdmin, dbSelectAdmin } from "@/lib/data/db-admins";
 import { Pool } from "pg";
@@ -382,7 +378,7 @@ export function getEligibleDogSpecOverrides(): Partial<DogSpec> {
   return {
     dogBreed: "Great Elidog",
     dogBirthday: new Date(Date.now() - 3 * 52 * MILLIS_PER_WEEK), // ~3 yrs old
-    dogGender: SPECIFIED_DOG_GENDER.FEMALE,
+    dogGender: DOG_GENDER.FEMALE,
     dogWeightKg: 25,
     dogEverPregnant: YES_NO_UNKNOWN.NO,
     dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
@@ -446,7 +442,7 @@ function getDogAntigenPresence(idx: number): DogAntigenPresence {
 }
 
 function getDogGender(idx: number): DogGender {
-  const genderList: DogGender[] = Object.values(SPECIFIED_DOG_GENDER);
+  const genderList: DogGender[] = Object.values(DOG_GENDER);
   return genderList[idx % genderList.length];
 }
 
@@ -464,9 +460,6 @@ function getDogEverPregnant(idx: number): YesNoUnknown {
   const gender = getDogGender(idx);
   if (gender === DOG_GENDER.MALE) {
     return YES_NO_UNKNOWN.NO;
-  }
-  if (gender === DOG_GENDER.UNKNOWN) {
-    return YES_NO_UNKNOWN.UNKNOWN;
   }
   return getYesNoUnknown(idx);
 }
