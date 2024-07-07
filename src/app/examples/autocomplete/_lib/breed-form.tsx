@@ -35,7 +35,12 @@ export function BreedForm(props: { breeds: string[] }) {
         which to select.
       </p>
       <BarkForm form={form} onSubmit={onSubmit}>
-        <BarkFormAutocomplete form={form} name="dogBreed" label="Dog Breed" suggestions={breeds} />
+        <BarkFormAutocomplete
+          form={form}
+          name="dogBreed"
+          label="Dog Breed"
+          suggestions={breeds}
+        />
         <BarkButton type="submit" variant="brand">
           Submit
         </BarkButton>

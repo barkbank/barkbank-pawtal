@@ -19,7 +19,8 @@ export function BarkFormAutocomplete(props: {
   description?: string | React.ReactNode;
   children?: React.ReactNode;
 }) {
-  const { form, name, label, suggestions, placeholder, description, children } = props;
+  const { form, name, label, suggestions, placeholder, description, children } =
+    props;
   return (
     <FormField
       control={form.control}
