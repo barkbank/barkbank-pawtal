@@ -258,6 +258,9 @@ export function GeneralReportForm(props: {
 
   const onCancel = handleCancel;
 
+  // TODO: Remove Separator completely if this works out well.
+  const withSeparator = false;
+
   return (
     <BarkForm form={form} onSubmit={onSubmit}>
       <div className="flex flex-col gap-3">
@@ -267,7 +270,7 @@ export function GeneralReportForm(props: {
             This section is about capturing details of the visit and the
             outcomes.
           </p>
-          <Separator />
+          {withSeparator && <Separator />}
           <div className="flex flex-col gap-6 py-6">
             <BarkFormInput
               form={form}
@@ -298,7 +301,7 @@ export function GeneralReportForm(props: {
           <p>
             This section captures medical observations made during the visit.
           </p>
-          <Separator />
+          {withSeparator && <Separator />}
           <div className="flex flex-col gap-6 py-6">
             <BarkFormInput
               form={form}
@@ -368,7 +371,7 @@ export function GeneralReportForm(props: {
             This section captures reasons for why the dog might be ineligible
             for blood donation.
           </p>
-          <Separator />
+          {withSeparator && <Separator />}
           <div className="flex flex-col gap-6 py-6">
             <BarkFormTextArea
               form={form}
