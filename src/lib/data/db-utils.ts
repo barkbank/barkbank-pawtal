@@ -56,7 +56,7 @@ export async function dbQuery<T extends QueryResultRow = any>(
   sql: string,
   params: any[],
 ): Promise<QueryResult<T>> {
-  if (process.env.BARKBANK_ENV === BARKBANK_ENV.TEST) {
+  if (process.env.BARKBANK_ENV === BARKBANK_ENV.DEVELOPMENT) {
     return timedDbQuery<T>(ctx, sql, params);
   }
   try {
