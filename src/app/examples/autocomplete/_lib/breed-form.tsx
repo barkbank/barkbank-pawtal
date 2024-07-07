@@ -2,6 +2,7 @@
 
 import { BarkButton } from "@/components/bark/bark-button";
 import { BarkForm } from "@/components/bark/bark-form";
+import { BarkFormAutocomplete } from "@/components/bark/bark-form-autocomplete";
 import { BarkFormInput } from "@/components/bark/bark-form-input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -34,7 +35,7 @@ export function BreedForm(props: { breeds: string[] }) {
         which to select.
       </p>
       <BarkForm form={form} onSubmit={onSubmit}>
-        <BarkFormInput form={form} name="dogBreed" label="Dog Breed" />
+        <BarkFormAutocomplete form={form} name="dogBreed" label="Dog Breed" suggestions={breeds} />
         <BarkButton type="submit" variant="brand">
           Submit
         </BarkButton>
