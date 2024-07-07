@@ -275,6 +275,7 @@ export function GeneralReportForm(props: {
               name="visitTime"
               label="Visit Date"
               type="text"
+              placeholder="DD MMM YYYY"
               description="Please provide the visit date, e.g. 16 Apr 2021"
             />
             <BarkFormRadioGroup
