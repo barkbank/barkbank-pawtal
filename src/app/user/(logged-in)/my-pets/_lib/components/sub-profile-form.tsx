@@ -3,12 +3,10 @@
 import { RequiredDogWeightKgField } from "@/app/_lib/field-schemas/required-dog-weight-kg-field";
 import { formatBirthday, formatBloodType } from "@/app/_lib/formatters";
 import { BarkButton } from "@/components/bark/bark-button";
-import {
-  BarkForm,
-  BarkFormError,
-  BarkFormInput,
-  BarkFormRadioGroup,
-} from "@/components/bark/bark-form";
+import { BarkForm } from "@/components/bark/bark-form";
+import { BarkFormError } from "@/components/bark/bark-form-error";
+import { BarkFormInput } from "@/components/bark/bark-form-input";
+import { BarkFormRadioGroup } from "@/components/bark/bark-form-radio-group";
 import { BarkFormOption } from "@/components/bark/bark-form-option";
 import { YesNoSchema } from "@/lib/bark/enums/yes-no";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";

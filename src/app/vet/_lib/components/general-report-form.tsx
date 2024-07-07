@@ -2,14 +2,12 @@
 
 import { DateOrDurationField } from "@/app/_lib/field-schemas/date-or-duration-field";
 import { BarkButton } from "@/components/bark/bark-button";
-import {
-  BarkForm,
-  BarkFormError,
-  BarkFormInput,
-  BarkFormRadioGroup,
-  BarkFormSelect,
-  BarkFormTextArea,
-} from "@/components/bark/bark-form";
+import { BarkForm } from "@/components/bark/bark-form";
+import { BarkFormError } from "@/components/bark/bark-form-error";
+import { BarkFormInput } from "@/components/bark/bark-form-input";
+import { BarkFormRadioGroup } from "@/components/bark/bark-form-radio-group";
+import { BarkFormTextArea } from "@/components/bark/bark-form-text-area";
+import { BarkFormSelect } from "@/components/bark/bark-form-select";
 import { BarkFormOption } from "@/components/bark/bark-form-option";
 import {
   BarkReportData,
