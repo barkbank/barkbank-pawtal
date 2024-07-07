@@ -6,9 +6,9 @@ import {
   BarkFormHeader,
   BarkFormInput,
   BarkFormParagraph,
-  BarkFormRadioGroup,
   BarkFormSingleCheckbox,
 } from "@/components/bark/bark-form";
+import { BarkFormRadioGroup } from "@/components/bark/bark-form-radio-group";
 import { postOtpRequest } from "@/lib/server-actions/post-otp-request";
 import { isValidEmail } from "@/lib/utilities/bark-utils";
 import { USER_RESIDENCY } from "@/lib/bark/enums/user-residency";

@@ -4,8 +4,8 @@ import {
   BarkForm,
   BarkFormHeader,
   BarkFormInput,
-  BarkFormRadioGroup,
 } from "@/components/bark/bark-form";
+import { BarkFormRadioGroup } from "@/components/bark/bark-form-radio-group";
 import { BarkFormOption } from "@/components/bark/bark-form-option";
 import { isValidWeightKg } from "@/lib/utilities/bark-utils";
 import { DOG_ANTIGEN_PRESENCE } from "@/lib/bark/enums/dog-antigen-presence";

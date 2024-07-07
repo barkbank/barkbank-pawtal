@@ -1,10 +1,7 @@
 "use client";
 
-import {
-  BarkForm,
-  BarkFormInput,
-  BarkFormRadioGroup,
-} from "@/components/bark/bark-form";
+import { BarkForm, BarkFormInput } from "@/components/bark/bark-form";
+import { BarkFormRadioGroup } from "@/components/bark/bark-form-radio-group";
 import { USER_RESIDENCY, UserResidency } from "@/lib/bark/enums/user-residency";
 import { RoutePath } from "@/lib/route-path";
 import { zodResolver } from "@hookform/resolvers/zod";

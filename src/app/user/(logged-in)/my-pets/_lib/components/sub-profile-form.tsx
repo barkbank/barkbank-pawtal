@@ -7,8 +7,8 @@ import {
   BarkForm,
   BarkFormError,
   BarkFormInput,
-  BarkFormRadioGroup,
 } from "@/components/bark/bark-form";
+import { BarkFormRadioGroup } from "@/components/bark/bark-form-radio-group";
 import { BarkFormOption } from "@/components/bark/bark-form-option";
 import { YesNoSchema } from "@/lib/bark/enums/yes-no";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
