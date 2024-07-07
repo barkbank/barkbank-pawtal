@@ -1,5 +1,6 @@
 import dog_breeds_json from "@/resources/dog_breeds.json";
 import { z } from "zod";
+import { BreedForm } from "./_lib/breed-form";
 
 const DogBreedJsonSchema = z.object({
   dog_breeds: z.array(
@@ -18,11 +19,8 @@ function getBreeds(): string[] {
 export default async function Page() {
   const breeds = getBreeds();
   return (
-    <div className="x-card">
-      <div className="prose">
-        <h1>Autocomplete Example</h1>
-      </div>
-      <pre>{JSON.stringify(breeds)}</pre>
+    <div className="x-card m-3">
+      <BreedForm breeds={breeds} />
     </div>
   );
 }
