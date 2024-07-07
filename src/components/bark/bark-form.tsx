@@ -11,7 +11,6 @@ import {
 import { Input } from "../ui/input";
 import { Checkbox } from "../ui/checkbox";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
-import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
 import React from "react";
 import { BarkFormOption } from "./bark-form-option";
@@ -266,36 +265,6 @@ export function BarkFormCheckboxes(props: {
               }}
             />
           ))}
-          <FormMessage />
-        </FormItem>
-      )}
-    />
-  );
-}
-
-export function BarkFormTextArea(props: {
-  form: UseFormReturn<any>;
-  name: string;
-  label: string;
-  placeholder?: string;
-  description?: string;
-}) {
-  const { form, name, label, placeholder, description } = props;
-  return (
-    <FormField
-      control={form.control}
-      name={name}
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel className="text-base">{label}</FormLabel>
-          <FormControl>
-            <Textarea
-              placeholder={placeholder}
-              className="resize-none text-base"
-              {...field}
-            />
-          </FormControl>
-          {description && <FormDescription>{description}</FormDescription>}
           <FormMessage />
         </FormItem>
       )}
