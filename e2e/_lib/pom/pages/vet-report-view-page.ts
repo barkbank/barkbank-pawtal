@@ -8,7 +8,7 @@ export class VetReportViewPage extends PomDynamicPage {
   }
 
   async checkPageLoaded(): Promise<void> {
-    await expect(this.editButton()).toBeVisible();
+    await expect(this.editIcon()).toBeVisible();
   }
 
   field(label: string): Locator {
@@ -19,7 +19,10 @@ export class VetReportViewPage extends PomDynamicPage {
     return this.page().getByRole("link", { name: "Back", exact: true });
   }
 
-  editButton(): Locator {
-    return this.page().getByRole("link", { name: "Edit", exact: true });
+  editIcon(): Locator {
+    return this.page()
+      .locator("div")
+      .filter({ hasText: /^Report Details$/ })
+      .getByRole("link");
   }
 }

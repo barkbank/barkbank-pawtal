@@ -12,12 +12,11 @@ import { Separator } from "@/components/ui/separator";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { IMG_PATH } from "@/lib/image-path";
 import { RoutePath } from "@/lib/route-path";
-import { Edit } from "lucide-react";
 import { DogViewerData } from "./dog-viewer-data";
-import Link from "next/link";
 import Image from "next/image";
 import { getAgeMonths } from "@/lib/utilities/bark-age";
 import { DataItem } from "./data-item";
+import { BarkEditLink } from "@/components/bark/bark-edit-link";
 
 export function ProfileSection(props: { data: DogViewerData }) {
   const { data } = props;
@@ -36,9 +35,7 @@ export function ProfileSection(props: { data: DogViewerData }) {
     <div className="x-card flex w-full flex-col gap-3">
       <div className="flex flex-row justify-between">
         <p className="x-card-title">Profile</p>
-        <Link href={RoutePath.USER_EDIT_DOG(dogId)}>
-          <Edit color="#555" />
-        </Link>
+        <BarkEditLink href={RoutePath.USER_EDIT_DOG(dogId)} />
       </div>
       <Separator />
       <DataItem label="Breed" value={dogBreed} />

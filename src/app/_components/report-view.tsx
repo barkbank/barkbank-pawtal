@@ -10,10 +10,13 @@ import {
 } from "@/lib/utilities/bark-time";
 import { formatDistanceStrict } from "date-fns";
 import { capitalize, toString } from "lodash";
+import { BarkEditLink } from "@/components/bark/bark-edit-link";
+import { RoutePath } from "@/lib/route-path";
 
-export function ReportView(props: { report: BarkReport }) {
-  const { report } = props;
+export function ReportView(props: { report: BarkReport; canEdit: boolean }) {
+  const { report, canEdit } = props;
   const {
+    reportId,
     dogName,
     dogGender,
     dogBreed,
@@ -150,6 +153,13 @@ export function ReportView(props: { report: BarkReport }) {
 
   return (
     <div className="x-card flex flex-col gap-3">
+      <div className="flex flex-row justify-between">
+        <p className="x-card-title">Report Details</p>
+        {canEdit && (
+          <BarkEditLink href={RoutePath.VET_REPORTS_EDIT(reportId)} />
+        )}
+      </div>
+
       {fields.map((field) => (
         <FieldItem key={field.label} field={field} />
       ))}

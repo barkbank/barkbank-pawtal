@@ -1,4 +1,5 @@
 import { EditReportForm } from "@/app/vet/_lib/components/edit-report-form";
+import { BarkBackLink } from "@/components/bark/bark-back-link";
 import { BarkError } from "@/components/bark/bark-error";
 import APP from "@/lib/app";
 import { getAuthenticatedVetActor } from "@/lib/auth";
@@ -24,7 +25,8 @@ export default async function Page(props: { params: { reportId: string } }) {
   }
   const { report } = result;
   return (
-    <div className="m-3">
+    <div className="m-3 flex flex-col gap-3">
+      <BarkBackLink href={RoutePath.VET_REPORTS_VIEW(reportId)} />
       <EditReportForm report={report} />
     </div>
   );

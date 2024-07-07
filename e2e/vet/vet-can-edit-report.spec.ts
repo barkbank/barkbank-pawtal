@@ -86,7 +86,7 @@ async function changeBloodTypeToNegative(
   await pgList.checkReady();
   await pgList.reportCard({ dogName }).locator().click();
   await pgView.checkReady();
-  await pgView.editButton().click();
+  await pgView.editIcon().click();
   await pgEdit.checkReady();
   await expect(pgEdit.submitButton()).toBeVisible();
 

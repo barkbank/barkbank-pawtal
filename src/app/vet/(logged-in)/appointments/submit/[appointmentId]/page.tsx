@@ -6,6 +6,7 @@ import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
 import { APPOINTMENT_STATUS } from "@/lib/bark/enums/appointment-status";
 import { SubmitReportForm } from "@/app/vet/_lib/components/submit-report-form";
+import { BarkBackLink } from "@/components/bark/bark-back-link";
 
 export default async function Page(props: {
   params: { appointmentId: string };
@@ -39,7 +40,8 @@ export default async function Page(props: {
   }
 
   return (
-    <div className="m-3">
+    <div className="m-3 flex flex-col gap-3">
+      <BarkBackLink href={RoutePath.VET_APPOINTMENTS_LIST} />
       <SubmitReportForm appointment={appointment} />
     </div>
   );

@@ -27,7 +27,7 @@ export default async function Page(props: { params: { reportId: string } }) {
   return (
     <div className="m-3 flex flex-col gap-3">
       <_Introduction report={report} />
-      <ReportView report={report} />
+      <ReportView report={report} canEdit={false} />
       <_Controls report={report} />
     </div>
   );
