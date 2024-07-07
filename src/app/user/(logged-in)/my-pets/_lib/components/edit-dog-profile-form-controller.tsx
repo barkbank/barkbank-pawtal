@@ -14,12 +14,13 @@ import { asyncSleep } from "@/lib/utilities/async-sleep";
 
 export function EditDogProfileFormController(props: {
   vetOptions: BarkFormOption[];
+  breeds: string[];
   dogId: string;
   existingDogProfile: DogProfile;
 }) {
   const router = useRouter();
   const { toast } = useToast();
-  const { vetOptions, dogId, existingDogProfile } = props;
+  const { vetOptions, breeds, dogId, existingDogProfile } = props;
 
   async function handleValues(
     dogProfile: DogProfile,
@@ -59,6 +60,7 @@ export function EditDogProfileFormController(props: {
     <GeneralDogForm
       formTitle="Edit Dog"
       vetOptions={vetOptions}
+      breeds={breeds}
       handleSubmit={handleValues}
       handleCancel={handleCancel}
       prefillData={existingDogProfile}

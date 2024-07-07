@@ -5,7 +5,7 @@ import { isLoggedIn } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
 import { getVetFormOptions } from "@/app/_lib/get-vet-form-options";
-import breeds_json from "@/resources/data/breeds.json";
+import { getDogBreeds } from "@/app/_lib/get-dog-breeds";
 
 export default async function Page() {
   if (await isLoggedIn(AccountType.USER)) {
@@ -13,7 +13,7 @@ export default async function Page() {
   }
 
   const vetOptions = await APP.getDbPool().then(getVetFormOptions);
-  const breeds = breeds_json.breeds;
+  const breeds = getDogBreeds();
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between">

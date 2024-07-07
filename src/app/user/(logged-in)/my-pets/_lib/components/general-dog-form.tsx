@@ -73,12 +73,19 @@ function toDogProfile(dogFormData: DogFormData): DogProfile {
 export function GeneralDogForm(props: {
   formTitle: string;
   vetOptions: BarkFormOption[];
+  breeds: string[];
   prefillData?: DogProfile;
   handleSubmit: (dogProfile: DogProfile) => Promise<Result<true, string>>;
   handleCancel: () => Promise<void>;
 }) {
-  const { formTitle, vetOptions, prefillData, handleSubmit, handleCancel } =
-    props;
+  const {
+    formTitle,
+    vetOptions,
+    breeds,
+    prefillData,
+    handleSubmit,
+    handleCancel,
+  } = props;
   const prefillFormValues = prefillData
     ? toDogFormData(prefillData)
     : undefined;

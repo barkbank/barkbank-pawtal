@@ -13,6 +13,7 @@ import { Err, Ok, Result } from "@/lib/utilities/result";
 import { DogProfile } from "@/lib/bark/models/dog-profile";
 import { CODE } from "@/lib/utilities/bark-code";
 import { toSubProfile } from "@/lib/bark/mappers/to-sub-profile";
+import { getDogBreeds } from "@/app/_lib/get-dog-breeds";
 
 export default async function Page(props: { params: { dogId: string } }) {
   const actor = await getAuthenticatedUserActor();
@@ -53,11 +54,13 @@ export default async function Page(props: { params: { dogId: string } }) {
       </div>
     );
   }
+  const breeds = getDogBreeds();
 
   return (
     <div className="m-3">
       <EditDogProfileFormController
         vetOptions={vetOptions}
+        breeds={breeds}
         dogId={dogId}
         existingDogProfile={dogProfile}
       />
