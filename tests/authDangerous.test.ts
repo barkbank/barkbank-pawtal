@@ -8,7 +8,7 @@ describe("authDangerous", () => {
     jest.resetModules();
   });
 
-  it("should return 404 if not in TEST environment", async () => {
+  it("should return 404 in production environment", async () => {
     const envs: NodeJS.Dict<string> = {
       BARKBANK_ENV: BARKBANK_ENV.PRODUCTION,
     };
