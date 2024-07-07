@@ -4,6 +4,7 @@ import {
   UTC,
   YYYY_MM_DD_HH_MM_FORMAT,
   formatDateTime,
+  parseCommonDate,
   parseCommonDateTime,
   parseDateTime,
 } from "@/lib/utilities/bark-time";
@@ -64,6 +65,13 @@ describe("bark-time parseCommonDateTime", () => {
   };
   const getActual = (val: string) => {
     return parseCommonDateTime(val, SINGAPORE_TIME_ZONE);
+  };
+  const parsed = (val: string) => {
+    const timeValue = parseCommonDateTime(val, SINGAPORE_TIME_ZONE);
+    return formatDateTime(timeValue, {
+      format: "yyyy-MM-dd'T'HH:mm",
+      timeZone: SINGAPORE_TIME_ZONE,
+    });
   };
   it("should understand 2021-05-03T10:25", () => {
     const expected = getExpected("2021-05-03T10:25");
@@ -129,5 +137,49 @@ describe("bark-time parseCommonDateTime", () => {
     const expected = getExpected("2019-12-06T14:00");
     const actual = getActual("6 December 2019 2pm");
     expect(actual).toEqual(expected);
+  });
+  it("should understand 6-Jul-2024, 11:00", () => {
+    expect(parsed("6-Jul-2024, 11:00")).toEqual("2024-07-06T11:00");
+  });
+  it("should understand 06-Jul-2024, 11:00", () => {
+    expect(parsed("06-Jul-2024, 11:00")).toEqual("2024-07-06T11:00");
+  });
+  it("should understand 6-Jul-2024 11:00", () => {
+    expect(parsed("6-Jul-2024 11:00")).toEqual("2024-07-06T11:00");
+  });
+  it("should understand 06-Jul-2024 11:00", () => {
+    expect(parsed("06-Jul-2024 11:00")).toEqual("2024-07-06T11:00");
+  });
+});
+
+describe("bark-time parseCommonDate", () => {
+  const parsed = (val: string) => {
+    const dateValue = parseCommonDate(val, SINGAPORE_TIME_ZONE);
+    return formatDateTime(dateValue, {
+      format: "yyyy-MM-dd",
+      timeZone: SINGAPORE_TIME_ZONE,
+    });
+  };
+
+  it("should understand 9-Aug-2024", () => {
+    expect(parsed("9-Aug-2024")).toEqual("2024-08-09");
+  });
+  it("should understand 09-Aug-2024", () => {
+    expect(parsed("09-Aug-2024")).toEqual("2024-08-09");
+  });
+  it("should understand 9 August 2024", () => {
+    expect(parsed("9 August 2024")).toEqual("2024-08-09");
+  });
+  it("should understand August 9 2024", () => {
+    expect(parsed("August 9 2024")).toEqual("2024-08-09");
+  });
+  it("should understand August 9th 2024", () => {
+    expect(parsed("August 9th 2024")).toEqual("2024-08-09");
+  });
+  it("should understand August 1st 2024", () => {
+    expect(parsed("August 1st 2024")).toEqual("2024-08-01");
+  });
+  it("should understand August 3rd 2024", () => {
+    expect(parsed("August 3rd 2024")).toEqual("2024-08-03");
   });
 });
