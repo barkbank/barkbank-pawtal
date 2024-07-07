@@ -20,7 +20,7 @@ export class RequiredDateField extends AbstractStringParserField<Date> {
   }
 
   getMessage(): string {
-    return "Please enter a date. E.g. 28 Apr 2022";
+    return "Please enter a date in DD MMM YYYY format. E.g. 28 Apr 2022";
   }
 
   parse(value: string): Date {

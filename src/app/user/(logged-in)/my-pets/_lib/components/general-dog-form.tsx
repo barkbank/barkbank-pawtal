@@ -112,20 +112,26 @@ export function GeneralDogForm(props: {
         Please fill in the required information.
       </BarkFormParagraph>
       <BarkForm onSubmit={onSubmit} form={form}>
-        <BarkFormInput form={form} label="Name" name="dogName" />
-
-        <BarkFormInput form={form} label="Breed" name="dogBreed" type="text" />
+        <BarkFormInput form={form} label="Dog Name" name="dogName" />
 
         <BarkFormInput
           form={form}
-          label="Birthday"
+          label="Dog Breed"
+          name="dogBreed"
+          type="text"
+        />
+
+        <BarkFormInput
+          form={form}
+          label="Dog Birthday"
           name="dogBirthday"
-          description="Please provide a date (e.g. 18 Aug 2018). It is okay to provide an approximate date."
+          placeholder="DD MMM YYYY"
+          description="Please enter a date in DD MMM YYYY format. E.g. 28 Apr 2022. It is okay to provide an approximate date."
         />
 
         <BarkFormRadioGroup
           form={form}
-          label="Sex"
+          label="Dog Gender"
           name="dogGender"
           layout="radio"
           options={[
@@ -136,7 +142,7 @@ export function GeneralDogForm(props: {
 
         <BarkFormInput
           form={form}
-          label="Weight"
+          label="Dog Weight"
           description="Specify weight in kilograms. E.g. 23.4"
           name="dogWeightKg"
           type="text"
@@ -144,7 +150,7 @@ export function GeneralDogForm(props: {
 
         <BarkFormRadioGroup
           form={form}
-          label="Blood Type"
+          label="Dog Blood Type"
           name="dogDea1Point1"
           options={[
             {
@@ -208,7 +214,7 @@ export function GeneralDogForm(props: {
         {vetOptions.length > 0 && (
           <BarkFormRadioGroup
             form={form}
-            label="Preferred Donation Point"
+            label="Preferred Vet"
             name="dogPreferredVetId"
             options={vetOptions}
           />

@@ -98,7 +98,8 @@ export default function PetForm(props: {
           form={form}
           label="Dog Birthday"
           name="dogBirthday"
-          description="Please provide a date (e.g. 18 Aug 2018). It is okay to provide an approximate date."
+          placeholder="DD MMM YYYY"
+          description="Please enter a date in DD MMM YYYY format. E.g. 28 Apr 2022. It is okay to provide an approximate date."
         />
 
         <BarkFormRadioGroup
