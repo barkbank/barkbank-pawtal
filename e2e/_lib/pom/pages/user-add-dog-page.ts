@@ -8,11 +8,11 @@ export class UserAddDogPage extends PomPage {
   }
 
   dogNameField(): Locator {
-    return this.page().getByLabel("Name");
+    return this.page().getByLabel("Dog Name");
   }
 
   dogBreedField(): Locator {
-    return this.page().getByLabel("Breed");
+    return this.page().getByLabel("Dog Breed");
   }
 
   dogBirthdayField(): Locator {
@@ -20,26 +20,26 @@ export class UserAddDogPage extends PomPage {
   }
 
   dogWeightField(): Locator {
-    return this.page().getByLabel("Weight");
+    return this.page().getByLabel("Dog Weight");
   }
 
   dogGenderOption_MALE(): Locator {
     return this.page()
-      .getByText("Sex", { exact: true })
+      .getByText("Dog Gender", { exact: true })
       .locator("..")
       .getByLabel("Male", { exact: true });
   }
 
   dogGenderOption_FEMALE(): Locator {
     return this.page()
-      .getByText("Sex", { exact: true })
+      .getByText("Dog Gender", { exact: true })
       .locator("..")
       .getByLabel("Female", { exact: true });
   }
 
   dogBloodTypeOption_UNKNOWN(): Locator {
     return this.page()
-      .getByText("Blood Type")
+      .getByText("Dog Blood Type")
       .locator("..")
       .getByLabel("I don't know");
   }
@@ -60,7 +60,7 @@ export class UserAddDogPage extends PomPage {
 
   dogPreferredVetOption_1(): Locator {
     return this.page()
-      .getByText("Preferred Donation Point", { exact: true })
+      .getByText("Preferred Vet", { exact: true })
       .locator("..")
       .getByLabel("Vet Clinic 1", { exact: true });
   }
