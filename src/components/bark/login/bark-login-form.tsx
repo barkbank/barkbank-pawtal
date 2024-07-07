@@ -3,7 +3,8 @@
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { BarkForm, BarkFormParagraph } from "@/components/bark/bark-form";
+import { BarkForm } from "@/components/bark/bark-form";
+import { BarkFormParagraph } from "../bark-form-typography";
 import { BarkFormError } from "../bark-form-error";
 import { BarkFormInput } from "../bark-form-input";
 import { useState } from "react";

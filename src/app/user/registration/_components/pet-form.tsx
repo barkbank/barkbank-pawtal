@@ -1,6 +1,7 @@
 "use client";
 
-import { BarkForm, BarkFormHeader } from "@/components/bark/bark-form";
+import { BarkForm } from "@/components/bark/bark-form";
+import { BarkFormHeader } from "@/components/bark/bark-form-typography";
 import { BarkFormInput } from "@/components/bark/bark-form-input";
 import { BarkFormRadioGroup } from "@/components/bark/bark-form-radio-group";
 import { BarkFormOption } from "@/components/bark/bark-form-option";

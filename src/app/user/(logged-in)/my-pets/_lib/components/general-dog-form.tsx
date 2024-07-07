@@ -1,6 +1,7 @@
 "use client";
 
-import { BarkForm, BarkFormParagraph } from "@/components/bark/bark-form";
+import { BarkForm } from "@/components/bark/bark-form";
+import { BarkFormParagraph } from "@/components/bark/bark-form-typography";
 import { BarkFormError } from "@/components/bark/bark-form-error";
 import { BarkFormInput } from "@/components/bark/bark-form-input";
 import { BarkFormRadioGroup } from "@/components/bark/bark-form-radio-group";
