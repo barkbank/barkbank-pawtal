@@ -19,6 +19,7 @@ import { DogProfile } from "@/lib/bark/models/dog-profile";
 import { RequiredDateField } from "@/app/_lib/field-schemas/required-date-field";
 import { OptionalDogWeightKgField } from "@/app/_lib/field-schemas/optional-dog-weight-kg-field";
 import { useEffect } from "react";
+import { BarkFormAutocomplete } from "@/components/bark/bark-form-autocomplete";
 
 const FORM_SCHEMA = z.object({
   dogName: z.string().min(1, { message: "Name cannot be empty" }),
@@ -73,12 +74,19 @@ function toDogProfile(dogFormData: DogFormData): DogProfile {
 export function GeneralDogForm(props: {
   formTitle: string;
   vetOptions: BarkFormOption[];
+  breeds: string[];
   prefillData?: DogProfile;
   handleSubmit: (dogProfile: DogProfile) => Promise<Result<true, string>>;
   handleCancel: () => Promise<void>;
 }) {
-  const { formTitle, vetOptions, prefillData, handleSubmit, handleCancel } =
-    props;
+  const {
+    formTitle,
+    vetOptions,
+    breeds,
+    prefillData,
+    handleSubmit,
+    handleCancel,
+  } = props;
   const prefillFormValues = prefillData
     ? toDogFormData(prefillData)
     : undefined;
@@ -98,7 +106,7 @@ export function GeneralDogForm(props: {
   }
 
   const currentValues = form.watch();
-  const { dogGender } = currentValues;
+  const { dogGender, dogBreed } = currentValues;
   useEffect(() => {
     if (dogGender === DOG_GENDER.MALE) {
       form.setValue("dogEverPregnant", YES_NO_UNKNOWN.NO);
@@ -114,11 +122,12 @@ export function GeneralDogForm(props: {
       <BarkForm onSubmit={onSubmit} form={form}>
         <BarkFormInput form={form} label="Dog Name" name="dogName" />
 
-        <BarkFormInput
+        <BarkFormAutocomplete
           form={form}
           label="Dog Breed"
           name="dogBreed"
-          type="text"
+          suggestions={breeds}
+          value={dogBreed}
         />
 
         <BarkFormInput

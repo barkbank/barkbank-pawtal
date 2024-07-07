@@ -14,10 +14,11 @@ import { asyncSleep } from "@/lib/utilities/async-sleep";
 
 export default function AddDogFormController(props: {
   vetOptions: BarkFormOption[];
+  breeds: string[];
 }) {
   const router = useRouter();
   const { toast } = useToast();
-  const { vetOptions } = props;
+  const { vetOptions, breeds } = props;
 
   async function handleValues(
     dogProfile: DogProfile,
@@ -58,6 +59,7 @@ export default function AddDogFormController(props: {
     <GeneralDogForm
       formTitle="Add Dog"
       vetOptions={vetOptions}
+      breeds={breeds}
       handleSubmit={handleValues}
       handleCancel={handleCancel}
     />

@@ -1,7 +1,6 @@
 "use client";
 
 import { Stepper } from "@/components/ui/stepper";
-import { Breed } from "@/lib/services/breed";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -51,7 +50,7 @@ const steps = ["Tell us about your pet", "Add your details", "Enter Pawtal!"];
 const STEPS = { PET: 0, OWNER: 1, SUCCESS: 2 };
 
 export default function DonorForm(props: {
-  breeds: Breed[];
+  breeds: string[];
   vetOptions: BarkFormOption[];
 }) {
   const { breeds, vetOptions } = props;

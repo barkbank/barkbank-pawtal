@@ -3,7 +3,6 @@ import {
   AdminActorFactory,
   AdminActorFactoryConfig,
 } from "./admin/admin-actor-factory";
-import { BreedService } from "./services/breed";
 import {
   EmailContact,
   EmailService,
@@ -64,7 +63,6 @@ export class AppFactory {
     null;
   private promisedTextEncryptionService: Promise<EncryptionService> | null =
     null;
-  private promisedBreedService: Promise<BreedService> | null = null;
   private promisedDbPool: Promise<pg.Pool> | null = null;
   private promisedAdminActorFactory: Promise<AdminActorFactory> | null = null;
   private promisedAdminMapper: Promise<AdminMapper> | null = null;
@@ -279,14 +277,6 @@ export class AppFactory {
       console.log("Created EncryptionService for text");
     }
     return this.promisedTextEncryptionService;
-  }
-
-  public getBreedService(): Promise<BreedService> {
-    if (this.promisedBreedService === null) {
-      this.promisedBreedService = Promise.resolve(new BreedService());
-      console.log("Created BreedService");
-    }
-    return this.promisedBreedService;
   }
 
   public getDbPool(): Promise<pg.Pool> {

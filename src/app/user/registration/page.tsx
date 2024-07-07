@@ -5,16 +5,15 @@ import { isLoggedIn } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
 import { getVetFormOptions } from "@/app/_lib/get-vet-form-options";
+import { getDogBreeds } from "@/app/_lib/get-dog-breeds";
 
 export default async function Page() {
   if (await isLoggedIn(AccountType.USER)) {
     redirect(RoutePath.USER_DEFAULT_LOGGED_IN_PAGE);
   }
 
-  const [breeds, vetOptions] = await Promise.all([
-    APP.getBreedService().then((service) => service.getAllBreeds()),
-    APP.getDbPool().then(getVetFormOptions),
-  ]);
+  const vetOptions = await APP.getDbPool().then(getVetFormOptions);
+  const breeds = getDogBreeds();
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between">

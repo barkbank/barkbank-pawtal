@@ -9,13 +9,13 @@ import { isValidWeightKg } from "@/lib/utilities/bark-utils";
 import { DOG_ANTIGEN_PRESENCE } from "@/lib/bark/enums/dog-antigen-presence";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
-import { Breed } from "@/lib/services/breed";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { RequiredDateField } from "@/app/_lib/field-schemas/required-date-field";
 import { BarkButton } from "@/components/bark/bark-button";
 import { useEffect } from "react";
+import { BarkFormAutocomplete } from "@/components/bark/bark-form-autocomplete";
 
 const FORM_SCHEMA = z.object({
   dogName: z.string().min(1, { message: "Name cannot be empty" }),
@@ -36,7 +36,7 @@ const FORM_SCHEMA = z.object({
 type FormDataType = z.infer<typeof FORM_SCHEMA>;
 
 export default function PetForm(props: {
-  breeds: Breed[];
+  breeds: string[];
   vetOptions: BarkFormOption[];
   defaultValues: FormDataType;
   onSave: (values: FormDataType) => void;
@@ -72,7 +72,7 @@ export default function PetForm(props: {
   }
 
   const currentValues = form.watch();
-  const { dogGender } = currentValues;
+  const { dogBreed, dogGender } = currentValues;
   useEffect(() => {
     if (dogGender === DOG_GENDER.MALE) {
       form.setValue("dogEverPregnant", YES_NO_UNKNOWN.NO);
@@ -86,12 +86,12 @@ export default function PetForm(props: {
 
         <BarkFormInput form={form} label="Dog Name" name="dogName" />
 
-        {/* TODO: Support auto-complete */}
-        <BarkFormInput
+        <BarkFormAutocomplete
           form={form}
           label="Dog Breed"
           name="dogBreed"
-          type="text"
+          suggestions={breeds}
+          value={dogBreed}
         />
 
         <BarkFormInput
