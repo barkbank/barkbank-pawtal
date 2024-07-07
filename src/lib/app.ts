@@ -99,10 +99,10 @@ export class AppFactory {
 
   public getBarkBankEnv(): BarkBankEnv {
     const val = this.envOptionalString(APP_ENV.BARKBANK_ENV);
-    if (val === BARKBANK_ENV.DEV || val === BARKBANK_ENV.TEST) {
+    if (val === BARKBANK_ENV.DEVELOPMENT || val === BARKBANK_ENV.TEST) {
       return val;
     }
-    return BARKBANK_ENV.PRD;
+    return BARKBANK_ENV.PRODUCTION;
   }
 
   public getEmailService(): Promise<EmailService> {
@@ -130,7 +130,10 @@ export class AppFactory {
 
   public getOtpService(): Promise<OtpService> {
     if (this.promisedOtpService === null) {
-      if (this.getBarkBankEnv() === BARKBANK_ENV.TEST) {
+      if (
+        this.getBarkBankEnv() === BARKBANK_ENV.DEVELOPMENT ||
+        this.getBarkBankEnv() === BARKBANK_ENV.TEST
+      ) {
         this.promisedOtpService = new Promise<OtpService>((resolve) => {
           const service = new DevelopmentOtpService();
           console.log("Created DevelopmentOtpService as OtpService");
@@ -294,6 +297,11 @@ export class AppFactory {
             APP_ENV.BARKBANK_DB_CA_CERT_FILE,
           );
           if (fileName === undefined) {
+            if (this.getBarkBankEnv() === BARKBANK_ENV.PRODUCTION) {
+              throw Error(
+                "BARKBANK_DB_CA_CERT_FILE must be specified in production",
+              );
+            }
             return undefined;
           }
           // See this reference for how to specify a self-signed CA cert when
@@ -524,4 +532,8 @@ export class AppFactory {
 }
 
 const APP: AppFactory = new AppFactory(process.env);
+console.log({
+  BARKBANK_ENV: APP.getBarkBankEnv(),
+  NODE_ENV: process.env.NODE_ENV,
+});
 export default APP;

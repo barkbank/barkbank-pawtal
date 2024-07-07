@@ -21,7 +21,11 @@ export async function authDangerous(
   request: NextRequest,
   envs: NodeJS.Dict<string>,
 ): Promise<Response | null> {
-  if (envs[APP_ENV.BARKBANK_ENV] !== BARKBANK_ENV.TEST) {
+  const barkbankEnv = envs[APP_ENV.BARKBANK_ENV];
+  const isAllowedEnv =
+    barkbankEnv === BARKBANK_ENV.DEVELOPMENT ||
+    barkbankEnv === BARKBANK_ENV.TEST;
+  if (!isAllowedEnv) {
     return _404_NOT_FOUND;
   }
   const cred = envs[APP_ENV.DANGEROUS_CREDENTIALS];
