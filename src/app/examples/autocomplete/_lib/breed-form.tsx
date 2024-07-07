@@ -10,6 +10,7 @@ import { z } from "zod";
 
 const FormDataSchema = z.object({
   dogBreed: z.string(),
+  dogName: z.string(),
 });
 
 type FormData = z.infer<typeof FormDataSchema>;
@@ -18,7 +19,7 @@ export function BreedForm(props: { breeds: string[] }) {
   const { breeds } = props;
   const form = useForm<FormData>({
     resolver: zodResolver(FormDataSchema),
-    defaultValues: { dogBreed: "" },
+    defaultValues: { dogBreed: "", dogName: "" },
   });
 
   const onSubmit = async (values: FormData) => {
@@ -39,8 +40,10 @@ export function BreedForm(props: { breeds: string[] }) {
           form={form}
           name="dogBreed"
           label="Dog Breed"
+          value={currentValues.dogBreed}
           suggestions={breeds}
         />
+        <BarkFormInput form={form} name="dogName" label="Dog Name" />
         <BarkButton type="submit" variant="brand">
           Submit
         </BarkButton>
