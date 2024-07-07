@@ -1,4 +1,5 @@
 import { ReportView } from "@/app/_components/report-view";
+import { BarkBackLink } from "@/components/bark/bark-back-link";
 import { BarkButton } from "@/components/bark/bark-button";
 import { BarkError } from "@/components/bark/bark-error";
 import APP from "@/lib/app";
@@ -28,6 +29,7 @@ export default async function Page(props: { params: { reportId: string } }) {
   const { report } = result;
   return (
     <div className="m-3 flex flex-col gap-3">
+      <BarkBackLink href={RoutePath.VET_REPORTS} />
       <_Introduction report={report} />
       <ReportView report={report} />
       <_Controls report={report} />
