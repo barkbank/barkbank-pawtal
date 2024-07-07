@@ -12,7 +12,10 @@ export class UserAddDogPage extends PomPage {
   }
 
   dogBreedField(): Locator {
-    return this.page().getByLabel("Dog Breed");
+    return this.page()
+      .getByText("Dog Breed")
+      .locator("..")
+      .getByLabel("", { exact: true });
   }
 
   dogBirthdayField(): Locator {
