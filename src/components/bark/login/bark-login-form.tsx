@@ -6,9 +6,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
   BarkForm,
   BarkFormError,
-  BarkFormInput,
   BarkFormParagraph,
 } from "@/components/bark/bark-form";
+import { BarkFormInput } from "../bark-form-input";
 import { useState } from "react";
 import { SignInResponse, signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";

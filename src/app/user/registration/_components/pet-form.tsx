@@ -1,10 +1,7 @@
 "use client";
 
-import {
-  BarkForm,
-  BarkFormHeader,
-  BarkFormInput,
-} from "@/components/bark/bark-form";
+import { BarkForm, BarkFormHeader } from "@/components/bark/bark-form";
+import { BarkFormInput } from "@/components/bark/bark-form-input";
 import { BarkFormRadioGroup } from "@/components/bark/bark-form-radio-group";
 import { BarkFormOption } from "@/components/bark/bark-form-option";
 import { isValidWeightKg } from "@/lib/utilities/bark-utils";

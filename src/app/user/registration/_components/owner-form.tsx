@@ -4,9 +4,9 @@ import {
   BarkForm,
   BarkFormErrorParagraph,
   BarkFormHeader,
-  BarkFormInput,
   BarkFormParagraph,
 } from "@/components/bark/bark-form";
+import { BarkFormInput } from "@/components/bark/bark-form-input";
 import { BarkFormSingleCheckbox } from "@/components/bark/bark-form-single-checkbox";
 import { BarkFormRadioGroup } from "@/components/bark/bark-form-radio-group";
 import { postOtpRequest } from "@/lib/server-actions/post-otp-request";
