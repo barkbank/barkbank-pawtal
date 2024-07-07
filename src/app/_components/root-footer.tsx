@@ -5,19 +5,16 @@ import { RoutePath } from "@/lib/route-path";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { BarkNavRoute } from "@/components/bark/navigation/bark-nav-route";
+import { ExternalLink } from "lucide-react";
 
 const footerRoutes: BarkNavRoute[] = [
   {
-    label: "Contact us",
-    href: RoutePath.CONTACT_US,
+    label: "About Us",
+    href: RoutePath.WEBSITE_ABOUT_US,
   },
   {
     label: "Privacy Policy",
-    href: RoutePath.PRIVACY_POLICY,
-  },
-  {
-    label: "Terms & Conditions",
-    href: RoutePath.TERMS_AND_CONDITIONS,
+    href: RoutePath.WEBSITE_PRIVACY_POLICY,
   },
 ];
 
@@ -48,9 +45,17 @@ const RootFooter = () => {
       className="flex w-full flex-col items-center justify-center bg-grey pb-16 md:flex-row md:pb-0"
     >
       {routes.map((route) => {
+        const isLocalPath = route.href.startsWith("/");
+        const target = isLocalPath ? "_self" : "_blank";
         return (
-          <Link key={route.label} href={route.href} className="m-3 md:w-32">
-            {route.label}
+          <Link
+            className="m-3 flex flex-row gap-1 md:w-48 justify-items-start"
+            key={route.label}
+            href={route.href}
+            target={target}
+          >
+            <span>{route.label}</span>
+            {!isLocalPath && <ExternalLink color="#000" className="w-4"/>}
           </Link>
         );
       })}
