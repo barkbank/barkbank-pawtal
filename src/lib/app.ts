@@ -130,7 +130,10 @@ export class AppFactory {
 
   public getOtpService(): Promise<OtpService> {
     if (this.promisedOtpService === null) {
-      if (this.getBarkBankEnv() === BARKBANK_ENV.TEST) {
+      if (
+        this.getBarkBankEnv() === BARKBANK_ENV.DEVELOPMENT ||
+        this.getBarkBankEnv() === BARKBANK_ENV.TEST
+      ) {
         this.promisedOtpService = new Promise<OtpService>((resolve) => {
           const service = new DevelopmentOtpService();
           console.log("Created DevelopmentOtpService as OtpService");
