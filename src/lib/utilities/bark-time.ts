@@ -70,6 +70,8 @@ const COMMON_DATE_TIME_FORMATS = [
   "dd MMM yyyy HH:mm",
   "d MMM yyyy, HH:mm",
   "d MMM yyyy HH:mm",
+  "d-MMM-yyyy, HH:mm",
+  "d-MMM-yyyy HH:mm",
 
   "dd MMMM yyyy, HH:mm",
   "dd MMMM yyyy HH:mm",
@@ -123,6 +125,7 @@ const COMMON_DATE_FORMATS = [
   "d MMMM yyyy",
   "MMMM do yyyy",
   "MMM do yyyy",
+  "d-MMM-yyyy",
 ];
 
 export function parseCommonDate(dateString: string, timeZone: string): Date {
