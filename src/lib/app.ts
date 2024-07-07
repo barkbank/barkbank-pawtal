@@ -529,5 +529,8 @@ export class AppFactory {
 }
 
 const APP: AppFactory = new AppFactory(process.env);
-console.log({BARKBANK_ENV: APP.getBarkBankEnv(), NODE_ENV: process.env.NODE_ENV});
+console.log({
+  BARKBANK_ENV: APP.getBarkBankEnv(),
+  NODE_ENV: process.env.NODE_ENV,
+});
 export default APP;
