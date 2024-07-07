@@ -1,5 +1,5 @@
 import { UseFormReturn } from "react-hook-form";
-import { Form, FormField, FormMessage } from "../ui/form";
+import { Form } from "../ui/form";
 import React from "react";
 
 export function BarkForm(props: {
@@ -32,16 +32,4 @@ export function BarkFormParagraph(props: { children: React.ReactNode }) {
 
 export function BarkFormErrorParagraph(props: { children: React.ReactNode }) {
   return <p className="text-sm text-destructive">{props.children}</p>;
-}
-
-// Use form.setError("root", {message: "..."}) to set the error.
-export function BarkFormError(props: { form: UseFormReturn<any> }) {
-  const { form } = props;
-  return (
-    <FormField
-      control={form.control}
-      name="root"
-      render={({ field }) => <FormMessage />}
-    />
-  );
 }
