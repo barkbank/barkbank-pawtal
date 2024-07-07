@@ -3,10 +3,10 @@
 .PHONY: default
 default: npm-install fmt lint test schema-diff
 
-# Generate a ticket ID
+# Generate branch name, checkout from main, and push to origin
 .PHONY: ticket
 ticket:
-	@git checkout -b $(shell bash scripts/make-ticket.sh) origin/main
+	@bash scripts/make-ticket.sh
 
 # Does everything default does AND THEN also run frontend tests—which
 # takes awhile to complete. If you just want to run the frontend
