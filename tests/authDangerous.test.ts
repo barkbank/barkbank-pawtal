@@ -10,7 +10,7 @@ describe("authDangerous", () => {
 
   it("should return 404 if not in TEST environment", async () => {
     const envs: NodeJS.Dict<string> = {
-      BARKBANK_ENV: BARKBANK_ENV.PRD,
+      BARKBANK_ENV: BARKBANK_ENV.PRODUCTION,
     };
     const request = {} as NextRequest;
     const response = await authDangerous(request, envs);

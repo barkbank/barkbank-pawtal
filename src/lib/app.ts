@@ -99,10 +99,10 @@ export class AppFactory {
 
   public getBarkBankEnv(): BarkBankEnv {
     const val = this.envOptionalString(APP_ENV.BARKBANK_ENV);
-    if (val === BARKBANK_ENV.DEV || val === BARKBANK_ENV.TEST) {
+    if (val === BARKBANK_ENV.DEVELOPMENT || val === BARKBANK_ENV.TEST) {
       return val;
     }
-    return BARKBANK_ENV.PRD;
+    return BARKBANK_ENV.PRODUCTION;
   }
 
   public getEmailService(): Promise<EmailService> {
