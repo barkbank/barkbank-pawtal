@@ -1,6 +1,5 @@
 import { ReportView } from "@/app/_components/report-view";
 import { BarkBackLink } from "@/components/bark/bark-back-link";
-import { BarkButton } from "@/components/bark/bark-button";
 import { BarkError } from "@/components/bark/bark-error";
 import APP from "@/lib/app";
 import { getAuthenticatedVetActor } from "@/lib/auth";
@@ -31,8 +30,7 @@ export default async function Page(props: { params: { reportId: string } }) {
     <div className="m-3 flex flex-col gap-3">
       <BarkBackLink href={RoutePath.VET_REPORTS} />
       <_Introduction report={report} />
-      <ReportView report={report} />
-      <_Controls report={report} />
+      <ReportView report={report} canEdit={true} />
     </div>
   );
 }
@@ -48,29 +46,6 @@ function _Introduction(props: { report: BarkReport }) {
         <b>{capitalize(dogGender)}</b> <b>{dogBreed}</b> belonging to{" "}
         <b>{ownerName}</b>. (Report ID: {reportId})
       </p>
-    </div>
-  );
-}
-
-function _Controls(props: { report: BarkReport }) {
-  const { report } = props;
-  const { reportId } = report;
-  return (
-    <div className="flex w-full flex-col gap-3 md:flex-row">
-      <BarkButton
-        className="w-full md:w-40"
-        variant="brandInverse"
-        href={RoutePath.VET_REPORTS_LIST}
-      >
-        Back
-      </BarkButton>
-      <BarkButton
-        className="w-full md:w-40"
-        variant="brandInverse"
-        href={RoutePath.VET_REPORTS_EDIT(reportId)}
-      >
-        Edit
-      </BarkButton>
     </div>
   );
 }
