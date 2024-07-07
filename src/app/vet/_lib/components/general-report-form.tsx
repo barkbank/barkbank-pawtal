@@ -7,9 +7,9 @@ import {
   BarkFormError,
   BarkFormInput,
   BarkFormRadioGroup,
-  BarkFormSelect,
   BarkFormTextArea,
 } from "@/components/bark/bark-form";
+import { BarkFormSelect } from "@/components/bark/bark-form-select";
 import { BarkFormOption } from "@/components/bark/bark-form-option";
 import {
   BarkReportData,
