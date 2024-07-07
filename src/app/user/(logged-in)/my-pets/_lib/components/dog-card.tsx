@@ -27,7 +27,7 @@ export function DogCard(props: {
         <BarkDogAvatar gender={dog.dogGender} />
 
         {/* Details */}
-        <div className="flex-1">
+        <div className="w-full flex-1">
           <div className="text-grey-100 text-lg font-semibold leading-9">
             {dog.dogName}
           </div>
