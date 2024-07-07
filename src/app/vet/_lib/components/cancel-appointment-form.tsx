@@ -29,6 +29,11 @@ export function CancelAppointmentForm(props: { appointment: BarkAppointment }) {
       });
     }
     if (res === CODE.OK) {
+      toast({
+        title: "Appointment Cancelled",
+        description: `Appointment with ${dogName} has been cancelled.`,
+        variant: "brandSuccess",
+      });
       router.push(RoutePath.VET_APPOINTMENTS_LIST);
     }
   };

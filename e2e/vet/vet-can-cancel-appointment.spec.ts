@@ -3,21 +3,34 @@ import { initPomContext } from "../_lib/init/init-pom-context";
 import { doCreateAppointment } from "../_lib/ops/do-create-appointment";
 import { VetAppointmentListPage } from "../_lib/pom/pages/vet-appointment-list-page";
 import { VetAppointmentCancelPage } from "../_lib/pom/pages/vet-appointment-cancel-page";
+import { ToastComponent } from "../_lib/pom/layout/toast-component";
 
 test("vet can cancel appointment", async ({ page }) => {
   const context = await initPomContext({ page });
   const { dogName } = await doCreateAppointment(context);
 
-  const pg1 = new VetAppointmentListPage(context);
-  await pg1.checkReady();
-  await expect(pg1.appointmentCard({ dogName }).locator()).toBeVisible();
-  await pg1.appointmentCard({ dogName }).cancelAppointmentButton().click();
+  const pgAppointmentList = new VetAppointmentListPage(context);
+  const pgAppointmentCancel = new VetAppointmentCancelPage(context);
+  const toast = new ToastComponent(context);
 
-  const pg2 = new VetAppointmentCancelPage(context);
-  await pg2.checkReady();
-  await pg2.confirmButton().click();
+  await pgAppointmentList.checkReady();
+  await expect(
+    pgAppointmentList.appointmentCard({ dogName }).locator(),
+  ).toBeVisible();
+  await pgAppointmentList
+    .appointmentCard({ dogName })
+    .cancelAppointmentButton()
+    .click();
 
-  const pg3 = new VetAppointmentListPage(context);
-  await pg3.checkReady();
-  await expect(pg3.appointmentCard({ dogName }).locator()).not.toBeVisible();
+  await pgAppointmentCancel.checkReady();
+  await pgAppointmentCancel.confirmButton().click();
+
+  await expect(toast.locator()).toBeVisible();
+  await toast.closeButton().click();
+  await expect(toast.locator()).not.toBeVisible();
+
+  await pgAppointmentList.checkReady();
+  await expect(
+    pgAppointmentList.appointmentCard({ dogName }).locator(),
+  ).not.toBeVisible();
 });
