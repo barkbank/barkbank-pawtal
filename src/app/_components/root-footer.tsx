@@ -49,13 +49,13 @@ const RootFooter = () => {
         const target = isLocalPath ? "_self" : "_blank";
         return (
           <Link
-            className="m-3 flex flex-row gap-1 md:w-48 justify-items-start"
+            className="m-3 flex flex-row gap-1 md:w-48"
             key={route.label}
             href={route.href}
             target={target}
           >
             <span>{route.label}</span>
-            {!isLocalPath && <ExternalLink color="#000" className="w-4"/>}
+            {!isLocalPath && <ExternalLink color="#000" className="w-4" />}
           </Link>
         );
       })}
