@@ -17,12 +17,7 @@ export default async function Layout(props: { children: React.ReactNode }) {
       iconSrc: IMG_PATH.SIDEBAR_DASHBOARD,
       iconLightSrc: IMG_PATH.SIDEBAR_DASHBOARD_LIGHT,
     },
-    {
-      label: "Dashboard",
-      href: RoutePath.ADMIN_DASHBOARD_PAGE,
-      iconSrc: IMG_PATH.SIDEBAR_DASHBOARD,
-      iconLightSrc: IMG_PATH.SIDEBAR_DASHBOARD_LIGHT,
-    },
+    // WIP: Remove Dashboard, Database, User Access
     {
       label: "Database",
       href: RoutePath.ADMIN_DATABASE_PAGE,

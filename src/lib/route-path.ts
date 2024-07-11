@@ -68,7 +68,6 @@ export class RoutePath {
   static readonly ADMIN_TOOLS_REENCRYPT_PAGE = "/admin/tools/re-encrypt";
 
   // WIP: Remove these route paths.
-  static readonly ADMIN_DASHBOARD_PAGE = "/admin/dashboard";
   static readonly ADMIN_DATABASE_PAGE = "/admin/database";
   static readonly ADMIN_USER_ACCESS_PAGE = "/admin/user-access";
 

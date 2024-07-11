@@ -37,7 +37,9 @@ test("should redirect logged-in admin to admin dashboard", async ({ page }) => {
   const context = await initPomContext({ page });
   await doLoginKnownAdmin(context);
   const rootUrl = context.website.urlOf("/");
-  const expectedUrl = context.website.urlOf(RoutePath.ADMIN_DASHBOARD_PAGE);
+  const expectedUrl = context.website.urlOf(
+    RoutePath.ADMIN_DEFAULT_LOGGED_IN_PAGE,
+  );
   await page.goto(rootUrl);
   await expect(page).toHaveURL(expectedUrl);
 });
