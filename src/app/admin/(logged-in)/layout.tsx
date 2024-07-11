@@ -12,6 +12,12 @@ export default async function Layout(props: { children: React.ReactNode }) {
   }
   const routes: BarkNavRoute[] = [
     {
+      label: "Tools",
+      href: RoutePath.ADMIN_TOOLS_LIST_PAGE,
+      iconSrc: IMG_PATH.SIDEBAR_DASHBOARD,
+      iconLightSrc: IMG_PATH.SIDEBAR_DASHBOARD_LIGHT,
+    },
+    {
       label: "Dashboard",
       href: RoutePath.ADMIN_DASHBOARD_PAGE,
       iconSrc: IMG_PATH.SIDEBAR_DASHBOARD,

@@ -64,10 +64,16 @@ export class RoutePath {
     RoutePath.VET_SCHEDULE_APPOINTMENTS;
 
   static readonly ADMIN_LOGIN_PAGE = "/admin/login";
+  static readonly ADMIN_TOOLS_LIST_PAGE = "/admin/tools/list";
+  static readonly ADMIN_TOOLS_REENCRYPT_PAGE = "/admin/tools/re-encrypt";
+
+  // WIP: Remove these route paths.
   static readonly ADMIN_DASHBOARD_PAGE = "/admin/dashboard";
   static readonly ADMIN_DATABASE_PAGE = "/admin/database";
   static readonly ADMIN_USER_ACCESS_PAGE = "/admin/user-access";
-  static readonly ADMIN_DEFAULT_LOGGED_IN_PAGE = RoutePath.ADMIN_DASHBOARD_PAGE;
+
+  static readonly ADMIN_DEFAULT_LOGGED_IN_PAGE =
+    RoutePath.ADMIN_TOOLS_LIST_PAGE;
 
   static readonly API_VET_DOG_OWNER_DETAILS = (dogId: string) =>
     `/api/vet/dog-owners/${dogId}`;
