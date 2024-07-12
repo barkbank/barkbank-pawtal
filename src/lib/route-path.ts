@@ -55,10 +55,9 @@ export class RoutePath {
 
   // Admin Routes /admin
   static readonly ADMIN_LOGIN_PAGE = "/admin/login";
-  static readonly ADMIN_TOOLS_LIST_PAGE = "/admin/tools/list";
+  static readonly ADMIN_TOOLS_PAGE = "/admin/tools";
   static readonly ADMIN_TOOLS_REENCRYPT_PAGE = "/admin/tools/re-encrypt";
-  static readonly ADMIN_DEFAULT_LOGGED_IN_PAGE =
-    RoutePath.ADMIN_TOOLS_LIST_PAGE;
+  static readonly ADMIN_DEFAULT_LOGGED_IN_PAGE = RoutePath.ADMIN_TOOLS_PAGE;
 
   // API Routes /api
   static readonly API_VET_DOG_OWNER_DETAILS = (dogId: string) =>
