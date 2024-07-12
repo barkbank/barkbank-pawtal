@@ -1,14 +1,7 @@
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { BarkContext } from "../bark-context";
 import { CODE } from "@/lib/utilities/bark-code";
-import { z } from "zod";
-
-const ReEncryptResultSchema = z.object({
-  numRecords: z.number().min(0),
-  numValues: z.number().min(0),
-});
-
-type ReEncryptResult = z.infer<typeof ReEncryptResultSchema>;
+import { ReEncryptResult } from "../models/re-encrypt-result";
 
 export async function opReEncrypt(
   context: BarkContext,
