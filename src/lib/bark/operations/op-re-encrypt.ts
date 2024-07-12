@@ -29,37 +29,62 @@ export async function opReEncrypt(
     };
   });
   const t1 = Date.now();
-  const {numActualMillis, ...otherValues} = result;
-  return Ok({numActualMillis: t1 - t0, ...otherValues})
+  const { numActualMillis, ...otherValues } = result;
+  return Ok({ numActualMillis: t1 - t0, ...otherValues });
 }
 
 async function _reEncryptAdminRecords(
   context: BarkContext,
 ): Promise<Result<ReEncryptResult, typeof CODE.FAILED>> {
-  return Ok({ numRecords: 0, numValues: 0, numConcurrentMillis: 0, numActualMillis: 0 });
+  return Ok({
+    numRecords: 0,
+    numValues: 0,
+    numConcurrentMillis: 0,
+    numActualMillis: 0,
+  });
 }
 
 async function _reEncryptUserRecords(
   context: BarkContext,
 ): Promise<Result<ReEncryptResult, typeof CODE.FAILED>> {
-  return Ok({ numRecords: 0, numValues: 0, numConcurrentMillis: 0, numActualMillis: 0 });
+  return Ok({
+    numRecords: 0,
+    numValues: 0,
+    numConcurrentMillis: 0,
+    numActualMillis: 0,
+  });
 }
 
 async function _reEncryptDogRecords(
   context: BarkContext,
 ): Promise<Result<ReEncryptResult, typeof CODE.FAILED>> {
   // WIP: oii and encrypted reason
-  return Ok({ numRecords: 0, numValues: 0, numConcurrentMillis: 0, numActualMillis: 0 });
+  return Ok({
+    numRecords: 0,
+    numValues: 0,
+    numConcurrentMillis: 0,
+    numActualMillis: 0,
+  });
 }
 
 async function _reEncryptCallRecords(
   context: BarkContext,
 ): Promise<Result<ReEncryptResult, typeof CODE.FAILED>> {
-  return Ok({ numRecords: 0, numValues: 0, numConcurrentMillis: 0, numActualMillis: 0 });
+  return Ok({
+    numRecords: 0,
+    numValues: 0,
+    numConcurrentMillis: 0,
+    numActualMillis: 0,
+  });
 }
 
 async function _reEncryptReportRecords(
   context: BarkContext,
 ): Promise<Result<ReEncryptResult, typeof CODE.FAILED>> {
-  return Ok({ numRecords: 0, numValues: 0, numConcurrentMillis: 0, numActualMillis: 0 });
+  return Ok({
+    numRecords: 0,
+    numValues: 0,
+    numConcurrentMillis: 0,
+    numActualMillis: 0,
+  });
 }

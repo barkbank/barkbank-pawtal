@@ -8,21 +8,23 @@ import { ReEncryptResult } from "@/lib/bark/models/re-encrypt-result";
 import { useState } from "react";
 
 export default function Page() {
-  const {toast} = useToast();
+  const { toast } = useToast();
   const [result, setResult] = useState<ReEncryptResult | {}>({});
   const [error, setError] = useState<string>("");
   const reEncrypt = async () => {
-    toast({variant: "brandInfo", title: "Re-encrypting..."});
-    const {result, error} = await postReEncrypt();
+    toast({ variant: "brandInfo", title: "Re-encrypting..." });
+    const { result, error } = await postReEncrypt();
     if (error !== undefined) {
-      toast({variant: "brandError", title: "Re-encryption failed"})
+      toast({ variant: "brandError", title: "Re-encryption failed" });
       setError(error);
       return;
     }
-    const {numRecords, numValues} = result;
-    toast({variant: "brandSuccess", title: "Re-encryption successful",
-      description: `Processed ${numRecords} records and encrypted ${numValues} values.`
-    })
+    const { numRecords, numValues } = result;
+    toast({
+      variant: "brandSuccess",
+      title: "Re-encryption successful",
+      description: `Processed ${numRecords} records and encrypted ${numValues} values.`,
+    });
     setResult(result);
   };
   return (
@@ -32,7 +34,12 @@ export default function Page() {
         Use the Re-enrypt button below to re-enrypt all data with the latest
         key.
       </p>
-      <BarkButton variant="brand" className="w-full md:w-40" type="button" onClick={reEncrypt}>
+      <BarkButton
+        variant="brand"
+        className="w-full md:w-40"
+        type="button"
+        onClick={reEncrypt}
+      >
         Re-encrypt
       </BarkButton>
       <p>Re-encryption Result</p>
