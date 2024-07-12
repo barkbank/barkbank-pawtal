@@ -14,21 +14,6 @@ export default async function Layout(props: { children: React.ReactNode }) {
     {
       label: "Tools",
       href: RoutePath.ADMIN_TOOLS_LIST_PAGE,
-      iconSrc: IMG_PATH.SIDEBAR_DASHBOARD,
-      iconLightSrc: IMG_PATH.SIDEBAR_DASHBOARD_LIGHT,
-    },
-    // WIP: Remove Dashboard, Database, User Access
-    {
-      label: "Database",
-      href: RoutePath.ADMIN_DATABASE_PAGE,
-      iconSrc: IMG_PATH.SIDEBAR_DATABASE,
-      iconLightSrc: IMG_PATH.SIDEBAR_DATABASE_LIGHT,
-    },
-    {
-      label: "User Access",
-      href: RoutePath.ADMIN_USER_ACCESS_PAGE,
-      iconSrc: IMG_PATH.SIDEBAR_KEY,
-      iconLightSrc: IMG_PATH.SIDEBAR_KEY_LIGHT,
     },
   ];
   return <BarkNavLayout routes={routes}>{props.children}</BarkNavLayout>;

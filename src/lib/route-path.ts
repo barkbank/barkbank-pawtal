@@ -2,6 +2,7 @@ export class RoutePath {
   static readonly ROOT = "/";
   static readonly LOGOUT_PAGE = "/logout";
 
+  // User Routes /user
   static readonly USER_REGISTRATION = "/user/registration";
   static readonly USER_LOGIN_PAGE = "/user/login";
   static readonly USER_MY_PETS = "/user/my-pets";
@@ -26,57 +27,44 @@ export class RoutePath {
 
   static readonly USER_DEFAULT_LOGGED_IN_PAGE = RoutePath.USER_MY_PETS;
 
+  // Vet Routes /vet
   static readonly VET_LOGIN_PAGE = "/vet/login";
   static readonly VET_SCHEDULE_APPOINTMENTS = "/vet/schedule";
-
   static readonly VET_APPOINTMENTS_LIST = "/vet/appointments/list";
-
   static readonly VET_APPOINTMENTS_LIST_CANCELLED =
     "/vet/appointments/list-cancelled";
-
   static readonly VET_APPOINTMENTS_SUBMIT = (appointmentId: string) =>
     `/vet/appointments/submit/${appointmentId}`;
-
   static readonly VET_APPOINTMENTS_CANCEL = (appointmentId: string) =>
     `/vet/appointments/cancel/${appointmentId}`;
-
   static readonly VET_APPOINTMENTS_SUBMIT_REGEX =
     /.*[/]vet[/]appointments[/]submit[/][0-9]+/;
-
   static readonly VET_APPOINTMENTS_CANCEL_REGEX =
     /.*[/]vet[/]appointments[/]cancel[/][0-9]+/;
-
   static readonly VET_APPOINTMENTS = "/vet/appointments";
-
   static readonly VET_REPORTS = "/vet/reports";
   static readonly VET_REPORTS_LIST = "/vet/reports/list";
-
   static readonly VET_REPORTS_VIEW = (reportId: string) =>
     `/vet/reports/view/${reportId}`;
-
   static readonly VET_REPORTS_EDIT = (reportId: string) =>
     `/vet/reports/edit/${reportId}`;
-
   static readonly VET_REPORTS_VIEW_REGEX = /.*[/]vet[/]reports[/]view[/][0-9]+/;
   static readonly VET_REPORTS_EDIT_REGEX = /.*[/]vet[/]reports[/]edit[/][0-9]+/;
-
   static readonly VET_DEFAULT_LOGGED_IN_PAGE =
     RoutePath.VET_SCHEDULE_APPOINTMENTS;
 
+  // Admin Routes /admin
   static readonly ADMIN_LOGIN_PAGE = "/admin/login";
   static readonly ADMIN_TOOLS_LIST_PAGE = "/admin/tools/list";
   static readonly ADMIN_TOOLS_REENCRYPT_PAGE = "/admin/tools/re-encrypt";
-
-  // WIP: Remove these route paths.
-  static readonly ADMIN_DATABASE_PAGE = "/admin/database";
-  static readonly ADMIN_USER_ACCESS_PAGE = "/admin/user-access";
-
   static readonly ADMIN_DEFAULT_LOGGED_IN_PAGE =
     RoutePath.ADMIN_TOOLS_LIST_PAGE;
 
+  // API Routes /api
   static readonly API_VET_DOG_OWNER_DETAILS = (dogId: string) =>
     `/api/vet/dog-owners/${dogId}`;
 
+  // External Links to WebFlow Website
   static readonly WEBSITE_ABOUT_US = "https://www.barkbank.co/about";
   static readonly WEBSITE_PRIVACY_POLICY =
     "https://www.barkbank.co/privacy-policy";
