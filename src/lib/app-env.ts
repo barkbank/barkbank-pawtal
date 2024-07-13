@@ -25,6 +25,11 @@ export const APP_ENV = {
   BARKBANK_OTP_SENDER_NAME: "BARKBANK_OTP_SENDER_NAME",
 
   /**
+   * Secret key for hashing emails
+   */
+  BARKBANK_EMAIL_SECRET: "BARKBANK_EMAIL_SECRET",
+
+  /**
    * Secret key for PII secrets.
    */
   BARKBANK_PII_SECRET: "BARKBANK_PII_SECRET",

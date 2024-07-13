@@ -206,7 +206,7 @@ export class AppFactory {
   public getEmailHashService(): Promise<HashService> {
     if (this.promisedPiiHashService === null) {
       this.promisedPiiHashService = Promise.resolve(
-        new SecretHashService(this.envString(APP_ENV.BARKBANK_PII_SECRET)),
+        new SecretHashService(this.envString(APP_ENV.BARKBANK_EMAIL_SECRET)),
       );
       console.log("Created EmailHashService");
     }
