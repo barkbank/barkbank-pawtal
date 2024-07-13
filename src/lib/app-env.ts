@@ -29,21 +29,6 @@ export const APP_ENV = {
    */
   BARKBANK_EMAIL_SECRET: "BARKBANK_EMAIL_SECRET",
 
-  /**
-   * Secret key for PII secrets.
-   */
-  BARKBANK_PII_SECRET: "BARKBANK_PII_SECRET",
-
-  /**
-   * Secret key for Owner Identifiable Information (OII) secrets.
-   */
-  BARKBANK_OII_SECRET: "BARKBANK_OII_SECRET",
-
-  /**
-   * Secret key for text in general.
-   */
-  BARKBANK_TEXT_SECRET: "BARKBANK_TEXT_SECRET",
-
   BARKBANK_IKM1_HEX: "BARKBANK_IKM1_HEX",
   BARKBANK_IKM2_HEX: "BARKBANK_IKM2_HEX",
 
