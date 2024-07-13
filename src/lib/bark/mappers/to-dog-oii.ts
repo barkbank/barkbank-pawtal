@@ -1,18 +1,14 @@
-import { z } from "zod";
 import { BarkContext } from "../bark-context";
-
-const ResultSchema = z.object({
-  dogName: z.string(),
-});
-
-type ResultType = z.infer<typeof ResultSchema>;
+import { DogOii, DogOiiSchema } from "../models/dog-oii";
 
 export async function toDogOii(
   context: BarkContext,
   dogEncryptedOii: string,
-): Promise<ResultType> {
+): Promise<DogOii> {
   const { oiiEncryptionService } = context;
-  const jsonEncoded =
+  const decrypted =
     await oiiEncryptionService.getDecryptedData(dogEncryptedOii);
-  return ResultSchema.parse(JSON.parse(jsonEncoded));
+  const decoded = JSON.parse(decrypted);
+  const validated = DogOiiSchema.parse(decoded);
+  return validated;
 }

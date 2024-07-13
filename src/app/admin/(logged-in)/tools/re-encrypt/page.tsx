@@ -19,13 +19,12 @@ export default function Page() {
       setError(error);
       return;
     }
-    const { numRecords, numValues } = result;
     toast({
       variant: "brandSuccess",
       title: "Re-encryption successful",
-      description: `Processed ${numRecords} records and encrypted ${numValues} values.`,
     });
     setResult(result);
+    setError("");
   };
   return (
     <div className="prose m-3">
