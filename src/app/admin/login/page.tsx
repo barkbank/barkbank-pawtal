@@ -8,7 +8,7 @@ export default async function Page() {
     <BarkLoginPage
       title={"Admin Login"}
       accountType={AccountType.ADMIN}
-      successPath={RoutePath.ADMIN_DASHBOARD_PAGE}
+      successPath={RoutePath.ADMIN_DEFAULT_LOGGED_IN_PAGE}
       logoSrc={IMG_PATH.PURPLE_DOG_HOUSE}
       noAccountErrorMessage="Admin account does not exist"
     />

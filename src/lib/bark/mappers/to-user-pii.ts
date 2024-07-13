@@ -1,20 +1,12 @@
-import { z } from "zod";
 import { BarkContext } from "../bark-context";
-
-const ResultSchema = z.object({
-  userEmail: z.string().email(),
-  userName: z.string(),
-  userPhoneNumber: z.string(),
-});
-
-type ResultType = z.infer<typeof ResultSchema>;
+import { UserPii, UserPiiSchema } from "../models/user-pii";
 
 export async function toUserPii(
   context: BarkContext,
   userEncryptedPii: string,
-): Promise<ResultType> {
+): Promise<UserPii> {
   const { piiEncryptionService } = context;
   const jsonEncoded =
     await piiEncryptionService.getDecryptedData(userEncryptedPii);
-  return ResultSchema.parse(JSON.parse(jsonEncoded));
+  return UserPiiSchema.parse(JSON.parse(jsonEncoded));
 }

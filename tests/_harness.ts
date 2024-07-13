@@ -22,6 +22,7 @@ export class HarnessEncryptionService implements EncryptionService {
   }
   public async getEncryptedData(data: string): Promise<string> {
     return JSON.stringify({
+      salt: `${Date.now()} ${Math.random()}`,
       secret: this.secret,
       data,
     });
