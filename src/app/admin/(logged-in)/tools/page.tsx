@@ -18,7 +18,7 @@ export default function Page() {
     <div className="m-3 flex flex-col gap-3">
       <div className="prose">
         <h1>Tools</h1>
-        <p>A selection of tools for administrators.</p>
+        <p>A collection of tools for administrators.</p>
       </div>
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
         {toolSpecs.map((spec) => (
