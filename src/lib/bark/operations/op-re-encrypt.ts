@@ -5,12 +5,8 @@ import {
   ReEncryptResult,
   ReEncryptTableInfo,
 } from "../models/re-encrypt-result";
-import { EncryptedUserFields } from "../models/encrypted-user-fields";
 import { selectEncryptedUserFields } from "../queries/select-encrypted-user-fields";
-import { toUserPii } from "../mappers/to-user-pii";
-import { toEncryptedUserPii } from "../mappers/to-encrypted-user-pii";
 import { updateEncryptedUserFields } from "../queries/update-encrypted-user-fields";
-import { EncryptedAdminFields } from "../models/encrypted-admin-fields";
 import { DbContext } from "@/lib/data/db-utils";
 import { toReEncryptedUserFields } from "../mappers/to-re-encrypted-user-fields";
 import { toReEncryptedAdminFields } from "../mappers/to-re-encrypted-admin-fields";
