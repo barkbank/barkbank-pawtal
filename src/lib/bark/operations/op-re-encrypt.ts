@@ -15,6 +15,9 @@ import { updateEncryptedAdminFields } from "../queries/update-encrypted-admin-fi
 import { toReEncryptedDogFields } from "../mappers/to-re-encrypted-dog-fields";
 import { selectEncryptedDogFields } from "../queries/select-encrypted-dog-fields";
 import { updateEncryptedDogFields } from "../queries/update-encrypted-dog-fields";
+import { toReEncryptedReportFields } from "../mappers/to-re-encrypted-report-fields";
+import { selectEncryptedReportFields } from "../queries/select-encrypted-report-fields";
+import { updateEncryptedReportFields } from "../queries/update-encrypted-report-fields";
 
 export async function opReEncrypt(
   context: BarkContext,
@@ -110,9 +113,12 @@ async function _reEncryptDogRecords(
 async function _reEncryptReportRecords(
   context: BarkContext,
 ): Promise<Result<ReEncryptTableInfo, typeof CODE.FAILED>> {
-  return Ok({
-    table: "reports",
-    numRecords: 0,
-    numValues: 0,
+  return _reEncryptTable(context, {
+    tableName: "reports",
+    reEncrypt: toReEncryptedReportFields,
+    fetchAll: selectEncryptedReportFields,
+    updateOne: (ctx, encryptedReportFields) => {
+      return updateEncryptedReportFields(ctx, { encryptedReportFields });
+    },
   });
 }
