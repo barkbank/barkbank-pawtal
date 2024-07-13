@@ -44,7 +44,6 @@ import {
 } from "./services/email-otp-service";
 import { VetActorConfig } from "./vet/vet-actor";
 import { BarkContext } from "./bark/bark-context";
-import { PbkdfEncryptionProtocol } from "./encryption/pbkdf-encryption-protocol";
 import {
   HkdfEncryptionProtocol,
   HkdfInputKeyMaterial,
@@ -239,9 +238,6 @@ export class AppFactory {
       this.promisedPiiEncryptionService = Promise.resolve(
         new MultiProtocolEncryptionService([
           this.newHkdfEncryptionProtocol({ purpose: "pii" }),
-          new PbkdfEncryptionProtocol(
-            this.envString(APP_ENV.BARKBANK_PII_SECRET),
-          ),
         ]),
       );
       console.log("Created EncryptionService for PII");
@@ -254,9 +250,6 @@ export class AppFactory {
       this.promisedOiiEncryptionService = Promise.resolve(
         new MultiProtocolEncryptionService([
           this.newHkdfEncryptionProtocol({ purpose: "oii" }),
-          new PbkdfEncryptionProtocol(
-            this.envString(APP_ENV.BARKBANK_OII_SECRET),
-          ),
         ]),
       );
       console.log("Created EncryptionService for OII");
@@ -269,9 +262,6 @@ export class AppFactory {
       this.promisedTextEncryptionService = Promise.resolve(
         new MultiProtocolEncryptionService([
           this.newHkdfEncryptionProtocol({ purpose: "text" }),
-          new PbkdfEncryptionProtocol(
-            this.envString(APP_ENV.BARKBANK_TEXT_SECRET),
-          ),
         ]),
       );
       console.log("Created EncryptionService for text");

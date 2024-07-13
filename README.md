@@ -30,34 +30,10 @@ Additional notes:
 
 ### Second, create `.env.local`
 
-In the working directory of the `barkbank-pawtal` repository, ensure the following environment variables are defined in the `.env.local` file.
+In the working directory of the `barkbank-pawtal` repository, ensure the required environment variables are defined in the `.env.local` file. The easiest way is to copy from the `env.template` file.
 
 ```
-NEXTAUTH_SECRET="secret-for-next-auth"
-NEXTAUTH_URL=http://localhost:3000
-
-BARKBANK_SMTP_USER=""
-BARKBANK_SMTP_PASSWORD=""
-BARKBANK_SMTP_HOST=""  # Set to empty string, then the email can be read in the server logs.
-BARKBANK_SMTP_PORT=465
-BARKBANK_OTP_SENDER_NAME="Bark Bank OTP"
-BARKBANK_OTP_SENDER_EMAIL="otp@barkbank.co"
-BARKBANK_OTP_PERIOD_MILLIS=15000
-BARKBANK_OTP_NUM_RECENT_PERIODS=8
-BARKBANK_OTP_SECRET="secret-for-otp-generation"
-BARKBANK_PII_SECRET="secret-for-pii-privacy"
-BARKBANK_OII_SECRET="secret-for-oii-privacy"
-BARKBANK_TEXT_SECRET="secret-for-text-privacy"
-BARKBANK_IKM1_HEX="7f70f45f9f0cf9384a5b9f9d5b15d2b982f42bce4b971049e90e63972cfd871c"
-BARKBANK_IKM2_HEX="b445c469a7ea83f201df41f21345e33271601db7a736ed379eef5cac07c5dbf1"
-BARKBANK_DB_HOST=localhost
-BARKBANK_DB_PORT=5800
-BARKBANK_DB_NAME=devdb
-BARKBANK_DB_USER=postgres
-BARKBANK_DB_PASSWORD=password
-BARKBANK_ROOT_ADMIN_EMAIL=admin1@admin.com
-DANGEROUS_ENABLED=true
-DANGEROUS_CREDENTIALS=developer:password
+$ cat env.template > .env.local
 ```
 
 ### Third, start the service
