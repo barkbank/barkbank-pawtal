@@ -46,28 +46,33 @@ async function _reEncryptUserRecords(
   context: BarkContext,
 ): Promise<Result<ReEncryptTableInfo, typeof CODE.FAILED>> {
   const { dbPool } = context;
-  const records: EncryptedUserFields[] =
-    await selectEncryptedUserFields(dbPool);
-  const results: number[] = await Promise.all(
-    records.map(async (record) => {
-      const { userId, userEncryptedPii } = record;
-      const userPii = await toUserPii(context, userEncryptedPii);
-      const reEncryptedUserPii = await toEncryptedUserPii(context, userPii);
-      const encryptedUserFields: EncryptedUserFields = {
-        userId,
-        userEncryptedPii: reEncryptedUserPii,
-      };
-      const { updated } = await updateEncryptedUserFields(dbPool, {
-        encryptedUserFields,
-      });
-      return updated ? 1 : 0;
-    }),
-  );
-  const numRecords = results.reduce((a, b) => {return a + b}, 0)
+
+  const reEncrypt = async (src: EncryptedUserFields): Promise<EncryptedUserFields> => {
+    const { userId, userEncryptedPii } = src;
+    const userPii = await toUserPii(context, userEncryptedPii);
+    const reEncryptedUserPii = await toEncryptedUserPii(context, userPii);
+    const out: EncryptedUserFields = {
+      userId,
+      userEncryptedPii: reEncryptedUserPii,
+    };
+    return out;
+  }
+
+  const retrieve = (): Promise<EncryptedUserFields[]> => {
+    return selectEncryptedUserFields(dbPool);
+  }
+
+  const update = (encryptedUserFields: EncryptedUserFields) => {
+    updateEncryptedUserFields(dbPool, {encryptedUserFields})
+  }
+
+  const records = await retrieve();
+  const reEncryptedRecords = await Promise.all(records.map(reEncrypt))
+  await Promise.all(reEncryptedRecords.map(update));
   return Ok({
     table: "users",
-    numRecords,
-    numValues: numRecords,
+    numRecords: records.length,
+    numValues: records.length,
   });
 }
 
