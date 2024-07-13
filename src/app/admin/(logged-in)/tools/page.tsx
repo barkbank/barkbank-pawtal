@@ -42,7 +42,7 @@ function _ToolLink(props: { spec: _ToolSpec }) {
   return (
     <Link className="x-card flex flex-col items-center gap-3 p-3" href={href}>
       {icon}
-      <p className="text-base font-semibold">{name}</p>
+      <p className="text-center text-base font-semibold">{name}</p>
       <p className="text-center text-base font-light">{description}</p>
     </Link>
   );
