@@ -13,6 +13,9 @@ import { updateEncryptedUserFields } from "../queries/update-encrypted-user-fiel
 import { EncryptedAdminFields } from "../models/encrypted-admin-fields";
 import { DbContext } from "@/lib/data/db-utils";
 import { toReEncryptedUserFields } from "../mappers/to-re-encrypted-user-fields";
+import { toReEncryptedAdminFields } from "../mappers/to-re-encrypted-admin-fields";
+import { selectEncryptedAdminFields } from "../queries/select-encrypted-admin-fields";
+import { updateEncryptedAdminFields } from "../queries/update-encrypted-admin-fields";
 
 export async function opReEncrypt(
   context: BarkContext,
@@ -70,10 +73,13 @@ async function _reEncryptTable<T>(
 async function _reEncryptAdminRecords(
   context: BarkContext,
 ): Promise<Result<ReEncryptTableInfo, typeof CODE.FAILED>> {
-  return Ok({
-    table: "admin",
-    numRecords: 0,
-    numValues: 0,
+  return _reEncryptTable(context, {
+    tableName: "admins",
+    reEncrypt: toReEncryptedAdminFields,
+    fetchAll: selectEncryptedAdminFields,
+    updateOne: (ctx, encryptedAdminFields) => {
+      return updateEncryptedAdminFields(ctx, { encryptedAdminFields });
+    },
   });
 }
 
@@ -84,8 +90,9 @@ async function _reEncryptUserRecords(
     tableName: "users",
     reEncrypt: toReEncryptedUserFields,
     fetchAll: selectEncryptedUserFields,
-    updateOne: (ctx, encryptedUserFields) =>
-      updateEncryptedUserFields(ctx, { encryptedUserFields }),
+    updateOne: (ctx, encryptedUserFields) => {
+      return updateEncryptedUserFields(ctx, { encryptedUserFields });
+    },
   });
 }
 

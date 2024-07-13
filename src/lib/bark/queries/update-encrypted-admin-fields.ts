@@ -12,6 +12,7 @@ export async function updateEncryptedAdminFields(
   UPDATE admins
   SET admin_encrypted_pii = $2
   WHERE admin_id = $1
+  RETURNING 1
   `;
   const res = await dbQuery(dbContext, sql, [adminId, adminEncryptedPii]);
   if (res.rows.length !== 1) {
