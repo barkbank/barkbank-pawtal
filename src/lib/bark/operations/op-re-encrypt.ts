@@ -12,6 +12,7 @@ import { toEncryptedUserPii } from "../mappers/to-encrypted-user-pii";
 import { updateEncryptedUserFields } from "../queries/update-encrypted-user-fields";
 import { EncryptedAdminFields } from "../models/encrypted-admin-fields";
 import { DbContext } from "@/lib/data/db-utils";
+import { toReEncryptedUserFields } from "../mappers/to-re-encrypted-user-fields";
 
 export async function opReEncrypt(
   context: BarkContext,
@@ -41,7 +42,7 @@ async function _reEncryptTable<T>(
   context: BarkContext,
   args: {
     tableName: string;
-    reEncrypt: (src: T) => Promise<T>;
+    reEncrypt: (context: BarkContext, src: T) => Promise<T>;
     fetchAll: (dbContext: DbContext) => Promise<T[]>;
     updateOne: (dbContext: DbContext, reEncrypted: T) => Promise<void>;
   },
@@ -52,7 +53,7 @@ async function _reEncryptTable<T>(
     const records = await fetchAll(dbPool);
     await Promise.all(
       records.map(async (record) => {
-        const reEncrypted = await reEncrypt(record);
+        const reEncrypted = await reEncrypt(context, record);
         await updateOne(dbPool, reEncrypted);
       }),
     );
@@ -69,15 +70,6 @@ async function _reEncryptTable<T>(
 async function _reEncryptAdminRecords(
   context: BarkContext,
 ): Promise<Result<ReEncryptTableInfo, typeof CODE.FAILED>> {
-  const { dbPool } = context;
-
-  const reEncrypt = async (
-    src: EncryptedAdminFields,
-  ): Promise<EncryptedAdminFields> => {
-    const { adminId, adminEncryptedPii } = src;
-    return src;
-  };
-
   return Ok({
     table: "admin",
     numRecords: 0,
@@ -88,31 +80,12 @@ async function _reEncryptAdminRecords(
 async function _reEncryptUserRecords(
   context: BarkContext,
 ): Promise<Result<ReEncryptTableInfo, typeof CODE.FAILED>> {
-  const reEncrypt = async (
-    src: EncryptedUserFields,
-  ): Promise<EncryptedUserFields> => {
-    const { userId, userEncryptedPii } = src;
-    const userPii = await toUserPii(context, userEncryptedPii);
-    const reEncryptedUserPii = await toEncryptedUserPii(context, userPii);
-    const out: EncryptedUserFields = {
-      userId,
-      userEncryptedPii: reEncryptedUserPii,
-    };
-    return out;
-  };
-
-  const updateOne = (
-    dbContext: DbContext,
-    encryptedUserFields: EncryptedUserFields,
-  ): Promise<void> => {
-    return updateEncryptedUserFields(dbContext, { encryptedUserFields });
-  };
-
   return _reEncryptTable(context, {
     tableName: "users",
-    reEncrypt,
+    reEncrypt: toReEncryptedUserFields,
     fetchAll: selectEncryptedUserFields,
-    updateOne,
+    updateOne: (ctx, encryptedUserFields) =>
+      updateEncryptedUserFields(ctx, { encryptedUserFields }),
   });
 }
 
