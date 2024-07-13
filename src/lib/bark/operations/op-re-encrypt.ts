@@ -10,6 +10,8 @@ import { selectEncryptedUserFields } from "../queries/select-encrypted-user-fiel
 import { toUserPii } from "../mappers/to-user-pii";
 import { toEncryptedUserPii } from "../mappers/to-encrypted-user-pii";
 import { updateEncryptedUserFields } from "../queries/update-encrypted-user-fields";
+import { EncryptedAdminFields } from "../models/encrypted-admin-fields";
+import { DbContext } from "@/lib/data/db-utils";
 
 export async function opReEncrypt(
   context: BarkContext,
@@ -35,9 +37,47 @@ export async function opReEncrypt(
   });
 }
 
+async function _reEncryptTable<T>(
+  context: BarkContext,
+  args: {
+    tableName: string;
+    reEncrypt: (src: T) => Promise<T>;
+    fetchAll: (dbContext: DbContext) => Promise<T[]>;
+    updateOne: (dbContext: DbContext, reEncrypted: T) => Promise<void>;
+  },
+): Promise<Result<ReEncryptTableInfo, typeof CODE.FAILED>> {
+  const { dbPool } = context;
+  const { tableName, reEncrypt, fetchAll, updateOne } = args;
+  try {
+    const records = await fetchAll(dbPool);
+    await Promise.all(
+      records.map(async (record) => {
+        const reEncrypted = await reEncrypt(record);
+        await updateOne(dbPool, reEncrypted);
+      }),
+    );
+    return Ok({
+      table: tableName,
+      numRecords: records.length,
+    });
+  } catch (err) {
+    console.error(err);
+    return Err(CODE.FAILED);
+  }
+}
+
 async function _reEncryptAdminRecords(
   context: BarkContext,
 ): Promise<Result<ReEncryptTableInfo, typeof CODE.FAILED>> {
+  const { dbPool } = context;
+
+  const reEncrypt = async (
+    src: EncryptedAdminFields,
+  ): Promise<EncryptedAdminFields> => {
+    const { adminId, adminEncryptedPii } = src;
+    return src;
+  };
+
   return Ok({
     table: "admin",
     numRecords: 0,
@@ -48,8 +88,6 @@ async function _reEncryptAdminRecords(
 async function _reEncryptUserRecords(
   context: BarkContext,
 ): Promise<Result<ReEncryptTableInfo, typeof CODE.FAILED>> {
-  const { dbPool } = context;
-
   const reEncrypt = async (
     src: EncryptedUserFields,
   ): Promise<EncryptedUserFields> => {
@@ -63,21 +101,18 @@ async function _reEncryptUserRecords(
     return out;
   };
 
-  const retrieve = (): Promise<EncryptedUserFields[]> => {
-    return selectEncryptedUserFields(dbPool);
+  const updateOne = (
+    dbContext: DbContext,
+    encryptedUserFields: EncryptedUserFields,
+  ): Promise<void> => {
+    return updateEncryptedUserFields(dbContext, { encryptedUserFields });
   };
 
-  const update = (encryptedUserFields: EncryptedUserFields) => {
-    updateEncryptedUserFields(dbPool, { encryptedUserFields });
-  };
-
-  const records = await retrieve();
-  const reEncryptedRecords = await Promise.all(records.map(reEncrypt));
-  await Promise.all(reEncryptedRecords.map(update));
-  return Ok({
-    table: "users",
-    numRecords: records.length,
-    numValues: records.length,
+  return _reEncryptTable(context, {
+    tableName: "users",
+    reEncrypt,
+    fetchAll: selectEncryptedUserFields,
+    updateOne,
   });
 }
 

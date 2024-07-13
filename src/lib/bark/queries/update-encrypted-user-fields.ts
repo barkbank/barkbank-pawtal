@@ -4,7 +4,7 @@ import { EncryptedUserFields } from "../models/encrypted-user-fields";
 export async function updateEncryptedUserFields(
   dbContext: DbContext,
   args: { encryptedUserFields: EncryptedUserFields },
-): Promise<{ updated: boolean }> {
+): Promise<void> {
   const { encryptedUserFields } = args;
   const { userId, userEncryptedPii } = encryptedUserFields;
   const sql = `
@@ -14,6 +14,9 @@ export async function updateEncryptedUserFields(
   RETURNING 1
   `;
   const res = await dbQuery(dbContext, sql, [userId, userEncryptedPii]);
-  const updated = res.rows.length === 1;
-  return { updated };
+  if (res.rows.length !== 1) {
+    throw new Error(
+      `Failed to update encrypted user fields (userId: ${userId})`,
+    );
+  }
 }

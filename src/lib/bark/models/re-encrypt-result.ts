@@ -3,7 +3,6 @@ import { z } from "zod";
 const ReEncryptTableInfoSchema = z.object({
   table: z.string(),
   numRecords: z.number().min(0),
-  numValues: z.number().min(0),
 });
 
 export type ReEncryptTableInfo = z.infer<typeof ReEncryptTableInfoSchema>;
