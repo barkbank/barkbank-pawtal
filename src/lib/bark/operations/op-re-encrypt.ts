@@ -1,7 +1,7 @@
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { BarkContext } from "../bark-context";
 import { CODE } from "@/lib/utilities/bark-code";
-import { ReEncryptResult } from "../models/re-encrypt-result";
+import { ReEncryptResult, ReEncryptTableInfo } from "../models/re-encrypt-result";
 import { EncryptedUserFields } from "../models/encrypted-user-fields";
 import { selectEncryptedUserFields } from "../queries/select-encrypted-user-fields";
 import { toUserPii } from "../mappers/to-user-pii";
@@ -24,36 +24,19 @@ export async function opReEncrypt(
       return Err(res.error);
     }
   }
-  const results = responses.map((res): ReEncryptResult => res.result!);
-  const result = _sumResults(results);
+  const tables = responses.map((res): ReEncryptTableInfo => res.result!);
   const t1 = Date.now();
   return Ok({
-    ...result,
+    tables,
     numMillis: t1 - t0,
-  });
-}
-
-function _reduceResult(
-  a: ReEncryptResult,
-  b: ReEncryptResult,
-): ReEncryptResult {
-  return {
-    numRecords: a.numRecords + b.numRecords,
-    numValues: a.numValues + b.numValues,
-  };
-}
-
-function _sumResults(results: ReEncryptResult[]): ReEncryptResult {
-  return results.reduce(_reduceResult, {
-    numRecords: 0,
-    numValues: 0,
   });
 }
 
 async function _reEncryptAdminRecords(
   context: BarkContext,
-): Promise<Result<ReEncryptResult, typeof CODE.FAILED>> {
+): Promise<Result<ReEncryptTableInfo, typeof CODE.FAILED>> {
   return Ok({
+    table: "admin",
     numRecords: 0,
     numValues: 0,
   });
@@ -61,11 +44,11 @@ async function _reEncryptAdminRecords(
 
 async function _reEncryptUserRecords(
   context: BarkContext,
-): Promise<Result<ReEncryptResult, typeof CODE.FAILED>> {
+): Promise<Result<ReEncryptTableInfo, typeof CODE.FAILED>> {
   const { dbPool } = context;
   const records: EncryptedUserFields[] =
     await selectEncryptedUserFields(dbPool);
-  const results = await Promise.all(
+  const results: number[] = await Promise.all(
     records.map(async (record) => {
       const { userId, userEncryptedPii } = record;
       const userPii = await toUserPii(context, userEncryptedPii);
@@ -77,25 +60,23 @@ async function _reEncryptUserRecords(
       const { updated } = await updateEncryptedUserFields(dbPool, {
         encryptedUserFields,
       });
-      return updated
-        ? {
-            numRecords: 1,
-            numValues: 1,
-          }
-        : {
-            numRecords: 0,
-            numValues: 0,
-          };
+      return updated ? 1 : 0;
     }),
   );
-  return Ok(_sumResults(results));
+  const numRecords = results.reduce((a, b) => {return a + b}, 0)
+  return Ok({
+    table: "users",
+    numRecords,
+    numValues: numRecords,
+  });
 }
 
 async function _reEncryptDogRecords(
   context: BarkContext,
-): Promise<Result<ReEncryptResult, typeof CODE.FAILED>> {
+): Promise<Result<ReEncryptTableInfo, typeof CODE.FAILED>> {
   // WIP: oii and encrypted reason
   return Ok({
+    table: "dogs",
     numRecords: 0,
     numValues: 0,
   });
@@ -103,8 +84,9 @@ async function _reEncryptDogRecords(
 
 async function _reEncryptCallRecords(
   context: BarkContext,
-): Promise<Result<ReEncryptResult, typeof CODE.FAILED>> {
+): Promise<Result<ReEncryptTableInfo, typeof CODE.FAILED>> {
   return Ok({
+    table: "calls",
     numRecords: 0,
     numValues: 0,
   });
@@ -112,10 +94,10 @@ async function _reEncryptCallRecords(
 
 async function _reEncryptReportRecords(
   context: BarkContext,
-): Promise<Result<ReEncryptResult, typeof CODE.FAILED>> {
+): Promise<Result<ReEncryptTableInfo, typeof CODE.FAILED>> {
   return Ok({
+    table: "reports",
     numRecords: 0,
     numValues: 0,
-    numMillis: 0,
   });
 }

@@ -1,9 +1,16 @@
 import { z } from "zod";
 
-const ReEncryptResultSchema = z.object({
+const ReEncryptTableInfoSchema = z.object({
+  table: z.string(),
   numRecords: z.number().min(0),
   numValues: z.number().min(0),
-  numMillis: z.number().min(0).optional(),
+});
+
+export type ReEncryptTableInfo = z.infer<typeof ReEncryptTableInfoSchema>;
+
+const ReEncryptResultSchema = z.object({
+  tables: z.array(ReEncryptTableInfoSchema),
+  numMillis: z.number().min(0),
 });
 
 export type ReEncryptResult = z.infer<typeof ReEncryptResultSchema>;
