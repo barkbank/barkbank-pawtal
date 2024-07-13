@@ -12,10 +12,6 @@ import { toReEncryptedUserFields } from "../mappers/to-re-encrypted-user-fields"
 import { toReEncryptedAdminFields } from "../mappers/to-re-encrypted-admin-fields";
 import { selectEncryptedAdminFields } from "../queries/select-encrypted-admin-fields";
 import { updateEncryptedAdminFields } from "../queries/update-encrypted-admin-fields";
-import { toDogName } from "../mappers/to-dog-name";
-import { toDogOii } from "../mappers/to-dog-oii";
-import { toDogEncryptedOii } from "../mappers/to-dog-encrypted-oii";
-import { EncryptedDogFields } from "../models/encrypted-dog-fields";
 import { toReEncryptedDogFields } from "../mappers/to-re-encrypted-dog-fields";
 import { selectEncryptedDogFields } from "../queries/select-encrypted-dog-fields";
 import { updateEncryptedDogFields } from "../queries/update-encrypted-dog-fields";
@@ -28,7 +24,6 @@ export async function opReEncrypt(
     _reEncryptAdminRecords(context),
     _reEncryptUserRecords(context),
     _reEncryptDogRecords(context),
-    _reEncryptCallRecords(context),
     _reEncryptReportRecords(context),
   ]);
   for (const res of responses) {
@@ -109,16 +104,6 @@ async function _reEncryptDogRecords(
     updateOne: (ctx, encryptedDogFields) => {
       return updateEncryptedDogFields(ctx, { encryptedDogFields });
     },
-  });
-}
-
-async function _reEncryptCallRecords(
-  context: BarkContext,
-): Promise<Result<ReEncryptTableInfo, typeof CODE.FAILED>> {
-  return Ok({
-    table: "calls",
-    numRecords: 0,
-    numValues: 0,
   });
 }
 
