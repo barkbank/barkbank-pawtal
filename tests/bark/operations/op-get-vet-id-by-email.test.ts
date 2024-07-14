@@ -113,10 +113,11 @@ async function _insertVetAccount(
   type Row = z.infer<typeof RowSchema>;
   const sql = `
   INSERT INTO vet_accounts (
+    vet_account_name,
     vet_account_email,
     vet_id
   )
-  VALUES ($1, $2)
+  VALUES ('Mandy', $1, $2)
   RETURNING vet_account_id as "vetAccountId"
   `;
   const res = await dbQuery<Row>(db, sql, [email, vetId]);
