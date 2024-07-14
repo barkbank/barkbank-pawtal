@@ -1,5 +1,6 @@
 import { BarkNavLayout } from "@/components/bark/navigation/bark-nav-layout";
 import { BarkNavRoute } from "@/components/bark/navigation/bark-nav-route";
+import { Separator } from "@/components/ui/separator";
 import { getAuthenticatedVetActor } from "@/lib/auth";
 import { IMG_PATH } from "@/lib/image-path";
 import { RoutePath } from "@/lib/route-path";
@@ -30,5 +31,15 @@ export default async function Layout(props: { children: React.ReactNode }) {
       iconLightSrc: IMG_PATH.SIDEBAR_ADD_REPORT_LIGHT,
     },
   ];
-  return <BarkNavLayout routes={routes}>{props.children}</BarkNavLayout>;
+  return (
+    <BarkNavLayout routes={routes}>
+      <div className="flex flex-col">
+        <p className="mx-3 mt-3 text-sm font-light">
+          Logged in as {actor.getLoginEmail()}
+        </p>
+        <Separator className="mt-3" />
+        {props.children}
+      </div>
+    </BarkNavLayout>
+  );
 }

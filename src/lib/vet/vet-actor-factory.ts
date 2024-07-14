@@ -25,7 +25,7 @@ export class VetActorFactory {
     if (vetId === null) {
       return null;
     }
-    const actor = new VetActor(vetId, this.actorConfig);
+    const actor = new VetActor(vetId, this.actorConfig, { email: vetEmail });
     return actor;
   }
 
