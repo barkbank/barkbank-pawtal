@@ -51,5 +51,7 @@ export class VetActor {
     return undefined;
   }
 
-  // WIP: Implement getLogin(): VetLogin | undefined
+  public getLogin(): VetLogin | undefined {
+    return this.vetLogin;
+  }
 }
