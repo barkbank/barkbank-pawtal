@@ -1,5 +1,4 @@
 import { VetActor, VetActorConfig } from "./vet-actor";
-import { dbSelectVetIdByEmail } from "../data/db-vets";
 import { LRUCache } from "lru-cache";
 import { BarkContext } from "../bark/bark-context";
 import { opGetVetIdByEmail } from "../bark/operations/op-get-vet-id-by-email";
