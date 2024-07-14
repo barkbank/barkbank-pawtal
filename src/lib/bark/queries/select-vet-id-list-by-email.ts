@@ -7,6 +7,7 @@ const RowSchema = z.object({
 
 type Row = z.infer<typeof RowSchema>;
 
+// WIP: Remove if not used.
 export async function selectVetIdListByEmail(
   dbContext: DbContext,
   args: { email: string },
