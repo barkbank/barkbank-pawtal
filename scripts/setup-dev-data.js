@@ -117,11 +117,11 @@ function createVet(idx) {
     .then((vet) => {
       return new Promise((resolve) => {
         const sql = `
-        INSERT INTO vet_accounts (vet_account_email, vet_id)
-        VALUES ($1, $2)
-        RETURNING vet_id as "vetId"
+        INSERT INTO vet_accounts (vet_account_email, vet_account_name, vet_id)
+        VALUES ($1, $2, $3)
         `;
-        doQuery(sql, [`manager${idx}@vet.com`, vet.vetId]).then((_) => {
+        const args = [`manager${idx}@vet.com`, `Manager ${idx}`, vet.vetId];
+        doQuery(sql, args).then((_) => {
           resolve(vet);
         });
       });
