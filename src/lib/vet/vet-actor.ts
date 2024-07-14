@@ -41,16 +41,6 @@ export class VetActor {
     };
   }
 
-  public getLoginEmail(): string | undefined {
-    if (this.vetLogin?.account?.vetAccountEmail !== undefined) {
-      return this.vetLogin.account.vetAccountEmail;
-    }
-    if (this.vetLogin?.clinic.vetEmail !== undefined) {
-      return this.vetLogin.clinic.vetEmail;
-    }
-    return undefined;
-  }
-
   public getLogin(): VetLogin | undefined {
     return this.vetLogin;
   }
