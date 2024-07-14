@@ -109,10 +109,23 @@ function createVet(idx) {
     vetPhoneNumber: `+65${60000000 + idx}`,
     vetAddress: `${idx} Dog Park Drive`,
   };
-  return doRequest("POST", "/api/dangerous/vets", body).then((res) => {
-    console.log(`Created vet: ${email}`);
-    return res;
-  });
+  return doRequest("POST", "/api/dangerous/vets", body)
+    .then((res) => {
+      console.log(`Created vet: ${email}`);
+      return res;
+    })
+    .then((vet) => {
+      return new Promise((resolve) => {
+        const sql = `
+        INSERT INTO vet_accounts (vet_account_email, vet_id)
+        VALUES ($1, $2)
+        RETURNING vet_id as "vetId"
+        `;
+        doQuery(sql, [`manager${idx}@vet.com`, vet.vetId]).then((_) => {
+          resolve(vet);
+        });
+      });
+    });
 }
 
 function getUserEmail(idx) {
@@ -598,6 +611,7 @@ function deleteData() {
     .then(() => doQuery(`delete from calls`, []))
     .then(() => doQuery(`delete from dogs`, []))
     .then(() => doQuery(`delete from users`, []))
+    .then(() => doQuery(`delete from vet_accounts`, []))
     .then(() => doQuery(`delete from vets`, []))
     .then(() => doQuery(`delete from admins`, []))
     .then(() => console.log("Deleted data"));
