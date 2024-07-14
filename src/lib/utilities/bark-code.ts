@@ -28,6 +28,11 @@ export const CODE = {
   ERROR_ACCOUNT_ALREADY_EXISTS: "ERROR_ACCOUNT_ALREADY_EXISTS",
 
   /**
+   * When an email resolves to multiple Vet IDs.
+   */
+  ERROR_MULTIPLE_VET_IDS: "ERROR_MULTIPLE_VET_IDS",
+
+  /**
    * When OTP is invalid.
    */
   ERROR_INVALID_OTP: "ERROR_INVALID_OTP",

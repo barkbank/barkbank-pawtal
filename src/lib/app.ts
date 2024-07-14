@@ -22,10 +22,7 @@ import {
   OtpServiceImpl,
 } from "./services/otp";
 import pg from "pg";
-import {
-  VetActorFactory,
-  VetActorFactoryConfig,
-} from "./vet/vet-actor-factory";
+import { VetActorFactory } from "./vet/vet-actor-factory";
 import {
   UserActorFactory,
   UserActorFactoryConfig,
@@ -367,21 +364,21 @@ export class AppFactory {
   public getVetActorFactory(): Promise<VetActorFactory> {
     if (this.promisedVetActorFactory === null) {
       this.promisedVetActorFactory = new Promise(async (resolve) => {
-        const [dbPool, userMapper, dogMapper, textEncryptionService] =
+        const [context, dbPool, userMapper, dogMapper, textEncryptionService] =
           await Promise.all([
+            this.getBarkContext(),
             this.getDbPool(),
             this.getUserMapper(),
             this.getDogMapper(),
             this.getTextEncryptionService(),
           ]);
-        const factoryConfig: VetActorFactoryConfig = { dbPool };
         const actorConfig: VetActorConfig = {
           dbPool,
           userMapper,
           dogMapper,
           textEncryptionService,
         };
-        const factory = new VetActorFactory({ factoryConfig, actorConfig });
+        const factory = new VetActorFactory(context, { actorConfig });
         console.log("Created VetActorFactory");
         resolve(factory);
       });

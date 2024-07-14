@@ -1,8 +1,4 @@
-import {
-  dbInsertVet,
-  dbSelectVet,
-  dbSelectVetIdByEmail,
-} from "@/lib/data/db-vets";
+import { dbInsertVet, dbSelectVet } from "@/lib/data/db-vets";
 import { withDb } from "../_db_helpers";
 import { guaranteed } from "@/lib/utilities/bark-utils";
 import { getVetMapper, getVetSpec } from "../_fixtures";
@@ -38,22 +34,6 @@ describe("db-vets", () => {
       await withDb(async (db) => {
         const vet = await dbSelectVet(db, "111");
         expect(vet).toBeNull();
-      });
-    });
-  });
-  describe("dbSelectVetIdByEmail", () => {
-    it("should return vetId matching the email", async () => {
-      await withDb(async (db) => {
-        const specIn = getVetSpec(8);
-        const vetGen = await dbInsertVet(db, specIn);
-        const vetId = await dbSelectVetIdByEmail(db, specIn.vetEmail);
-        expect(vetId).toEqual(vetGen.vetId);
-      });
-    });
-    it("should return null when no vet matches the email", async () => {
-      await withDb(async (db) => {
-        const vetId = await dbSelectVetIdByEmail(db, "notavet@vet.com");
-        expect(vetId).toBeNull();
       });
     });
   });

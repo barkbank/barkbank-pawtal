@@ -40,10 +40,7 @@ import {
   AdminActorFactoryConfig,
 } from "@/lib/admin/admin-actor-factory";
 import { dbInsertUser, dbSelectUser } from "@/lib/data/db-users";
-import {
-  VetActorFactory,
-  VetActorFactoryConfig,
-} from "@/lib/vet/vet-actor-factory";
+import { VetActorFactory } from "@/lib/vet/vet-actor-factory";
 import { dbInsertVet, dbSelectVet } from "@/lib/data/db-vets";
 import { HashService } from "@/lib/services/hash";
 import { EncryptionService } from "@/lib/services/encryption";
@@ -80,6 +77,7 @@ import { SubProfile } from "@/lib/bark/models/sub-profile";
 import { getDogProfile } from "@/lib/user/actions/get-dog-profile";
 import { sprintf } from "sprintf-js";
 import { toSubProfile } from "@/lib/bark/mappers/to-sub-profile";
+import { BarkContext } from "@/lib/bark/bark-context";
 
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
@@ -316,9 +314,13 @@ export function userPii(idx: number): UserPii {
   };
 }
 
-export function getVetActorFactoryConfig(dbPool: Pool): VetActorFactoryConfig {
+export function getBarkContext(dbPool: Pool): BarkContext {
   return {
     dbPool,
+    emailHashService: getEmailHashService(),
+    piiEncryptionService: getPiiEncryptionService(),
+    oiiEncryptionService: getOiiEncryptionService(),
+    textEncryptionService: getTextEncryptionService(),
   };
 }
 
@@ -332,9 +334,9 @@ export function getVetActorConfig(dbPool: Pool): VetActorConfig {
 }
 
 export function getVetActorFactory(dbPool: Pool): VetActorFactory {
-  const factoryConfig = getVetActorFactoryConfig(dbPool);
+  const context = getBarkContext(dbPool);
   const actorConfig = getVetActorConfig(dbPool);
-  return new VetActorFactory({ factoryConfig, actorConfig });
+  return new VetActorFactory(context, { actorConfig });
 }
 
 export function getVetActor(vetId: string, dbPool: Pool): VetActor {

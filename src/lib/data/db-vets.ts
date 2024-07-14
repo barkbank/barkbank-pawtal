@@ -46,19 +46,3 @@ export async function dbSelectVet(
   }
   return null;
 }
-
-export async function dbSelectVetIdByEmail(
-  ctx: DbContext,
-  vetEmail: string,
-): Promise<string | null> {
-  const sql = `
-    SELECT vet_id
-    FROM vets
-    WHERE vet_email = $1
-  `;
-  const res = await dbQuery(ctx, sql, [vetEmail]);
-  if (res.rows.length === 1) {
-    return res.rows[0].vet_id;
-  }
-  return null;
-}
