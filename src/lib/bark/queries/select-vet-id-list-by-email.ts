@@ -13,9 +13,12 @@ export async function selectVetIdListByEmail(
 ): Promise<{ vetId: string }[]> {
   const { email } = args;
   const sql = `
-  SELECT vet_id as "vetId" FROM vets WHERE vet_email = $1
-  UNION ALL
-  SELECT vet_id as "vetId" FROM vet_accounts WHERE vet_account_email = $1
+  SELECT DISTINCT vet_id as "vetId"
+  FROM (
+    SELECT vet_id FROM vets WHERE vet_email = $1
+    UNION ALL
+    SELECT vet_id FROM vet_accounts WHERE vet_account_email = $1
+  ) as tVet
   `;
   const res = await dbQuery<Row>(dbContext, sql, [email]);
   return z.array(RowSchema).parse(res.rows);
