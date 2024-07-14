@@ -1,0 +1,15 @@
+import { z } from "zod";
+
+export const INELIGIBILITY_REASON = {
+  UNDER_ONE_YEAR_OLD: "UNDER_ONE_YEAR_OLD",
+  EIGHT_YEARS_OR_OLDER: "EIGHT_YEARS_OR_OLDER",
+  UNDER_20_KGS: "UNDER_20_KGS",
+  EVER_PREGNANT: "EVER_PREGNANT",
+  EVER_RECEIVED_BLOOD: "EVER_RECEIVED_BLOOD",
+  HEARTWORM_IN_LAST_6_MONTHS: "HEARTWORM_IN_LAST_6_MONTHS",
+  DONATED_IN_LAST_3_MONTHS: "DONATED_IN_LAST_3_MONTHS",
+  REPORTED_BY_VET: "REPORTED_BY_VET",
+} as const;
+
+export const IneligibilityReasonSchema = z.nativeEnum(INELIGIBILITY_REASON);
+export type IneligibilityReason = z.infer<typeof IneligibilityReasonSchema>;
