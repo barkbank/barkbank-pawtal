@@ -36,10 +36,14 @@ export default async function Layout(props: { children: React.ReactNode }) {
   return (
     <BarkNavLayout routes={routes}>
       <div className="flex flex-col">
-        <p className="mx-3 mt-3 text-sm font-light">
-          {vetLogin && <_LoginInfo vetLogin={vetLogin} />}
-        </p>
-        <Separator className="mt-3" />
+        {vetLogin !== undefined && (
+          <>
+            <p className="mx-3 mt-3 text-sm font-light">
+              <_LoginInfo vetLogin={vetLogin} />
+            </p>
+            <Separator className="mt-3" />
+          </>
+        )}
         {props.children}
       </div>
     </BarkNavLayout>
