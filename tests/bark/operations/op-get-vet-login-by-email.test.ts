@@ -1,17 +1,17 @@
 import { DbContext, dbQuery } from "@/lib/data/db-utils";
 import { withBarkContext } from "../_context";
 import { z } from "zod";
-import { opGetVetIdByEmail } from "@/lib/bark/operations/op-get-vet-id-by-email";
 import { CODE } from "@/lib/utilities/bark-code";
+import { opGetVetLoginByEmail } from "@/lib/bark/operations/op-get-vet-login-by-email";
 
-describe("opGetVetIdByEmail", () => {
+describe("opGetVetLoginByEmail", () => {
   it("can resolve by vets.vet_email", async () => {
     await withBarkContext(async ({ context }) => {
       const { dbPool } = context;
       const email = "hello@vet.com";
       const { vetId } = await _insertVet(dbPool, { email });
-      const res = await opGetVetIdByEmail(context, { email });
-      expect(res.result!.vetId).toEqual(vetId);
+      const res = await opGetVetLoginByEmail(context, { email });
+      expect(res.result!.vetLogin.clinic.vetId).toEqual(vetId);
     });
   });
   it("can resolve by vet_accounts.vet_account_email", async () => {
@@ -21,8 +21,8 @@ describe("opGetVetIdByEmail", () => {
       const accountEmail = "manager@vet.com";
       const { vetId } = await _insertVet(dbPool, { email });
       await _insertVetAccount(dbPool, { email: accountEmail, vetId });
-      const res = await opGetVetIdByEmail(context, { email: accountEmail });
-      expect(res.result!.vetId).toEqual(vetId);
+      const res = await opGetVetLoginByEmail(context, { email: accountEmail });
+      expect(res.result!.vetLogin.clinic.vetId).toEqual(vetId);
     });
   });
   it("returns ERROR_ACCOUNT_NOT_FOUND when there is no vet ID", async () => {
@@ -35,7 +35,7 @@ describe("opGetVetIdByEmail", () => {
       const { vetId } = await _insertVet(dbPool, { email });
       await _insertVetAccount(dbPool, { email: accountEmail, vetId });
 
-      const res = await opGetVetIdByEmail(context, { email: otherEmail });
+      const res = await opGetVetLoginByEmail(context, { email: otherEmail });
       expect(res.error).toEqual(CODE.ERROR_ACCOUNT_NOT_FOUND);
     });
   });
@@ -53,7 +53,7 @@ describe("opGetVetIdByEmail", () => {
       await _insertVetAccount(dbPool, { email: email2, vetId: vetId1 });
 
       // WHEN retrieving vet ID by email2
-      const res = await opGetVetIdByEmail(context, { email: email2 });
+      const res = await opGetVetLoginByEmail(context, { email: email2 });
 
       // THEN...
       expect(res.error).toEqual(CODE.ERROR_MULTIPLE_VET_IDS);
@@ -69,10 +69,10 @@ describe("opGetVetIdByEmail", () => {
       await _insertVetAccount(dbPool, { email, vetId });
 
       // WHEN
-      const res = await opGetVetIdByEmail(context, { email });
+      const res = await opGetVetLoginByEmail(context, { email });
 
       // THEN...
-      expect(res.result!.vetId).toEqual(vetId);
+      expect(res.result!.vetLogin.clinic.vetId).toEqual(vetId);
     });
   });
 });
@@ -113,10 +113,11 @@ async function _insertVetAccount(
   type Row = z.infer<typeof RowSchema>;
   const sql = `
   INSERT INTO vet_accounts (
+    vet_account_name,
     vet_account_email,
     vet_id
   )
-  VALUES ($1, $2)
+  VALUES ('Mandy', $1, $2)
   RETURNING vet_account_id as "vetAccountId"
   `;
   const res = await dbQuery<Row>(db, sql, [email, vetId]);

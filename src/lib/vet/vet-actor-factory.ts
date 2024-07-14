@@ -1,12 +1,13 @@
 import { VetActor, VetActorConfig } from "./vet-actor";
 import { LRUCache } from "lru-cache";
 import { BarkContext } from "../bark/bark-context";
-import { opGetVetIdByEmail } from "../bark/operations/op-get-vet-id-by-email";
+import { opGetVetLoginByEmail } from "../bark/operations/op-get-vet-login-by-email";
+import { VetLogin } from "../bark/models/vet-login";
 
 export class VetActorFactory {
   private context: BarkContext;
   private actorConfig: VetActorConfig;
-  private idCache: LRUCache<string, string>;
+  private cache: LRUCache<string, VetLogin>;
 
   constructor(
     context: BarkContext,
@@ -16,33 +17,35 @@ export class VetActorFactory {
   ) {
     this.context = context;
     this.actorConfig = args.actorConfig;
-    this.idCache = new LRUCache({ max: 10 });
+    this.cache = new LRUCache({ max: 10 });
   }
 
   public async getVetActor(vetEmail: string): Promise<VetActor | null> {
-    const vetId = await this.getVetIdByEmail(vetEmail);
-    if (vetId === null) {
+    const vetLogin = await this.getVetLoginByEmail(vetEmail);
+    if (vetLogin === null) {
       return null;
     }
-    const actor = new VetActor(vetId, this.actorConfig, { email: vetEmail });
+    const actor = new VetActor(vetLogin.clinic.vetId, this.actorConfig, {
+      vetLogin,
+    });
     return actor;
   }
 
-  private async getVetIdByEmail(vetEmail: string): Promise<string | null> {
-    const cachedVetId = this.idCache.get(vetEmail);
-    if (cachedVetId !== undefined) {
-      return cachedVetId;
+  private async getVetLoginByEmail(vetEmail: string): Promise<VetLogin | null> {
+    const cached = this.cache.get(vetEmail);
+    if (cached !== undefined) {
+      return cached;
     }
     const { context } = this;
-    const { result, error } = await opGetVetIdByEmail(context, {
+    const { result, error } = await opGetVetLoginByEmail(context, {
       email: vetEmail,
     });
     if (error !== undefined) {
       console.error(error);
       return null;
     }
-    const { vetId } = result;
-    this.idCache.set(vetEmail, vetId);
-    return vetId;
+    const { vetLogin } = result;
+    this.cache.set(vetEmail, vetLogin);
+    return vetLogin;
   }
 }

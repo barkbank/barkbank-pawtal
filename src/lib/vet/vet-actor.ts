@@ -2,7 +2,9 @@ import { Pool } from "pg";
 import { EncryptionService } from "../services/encryption";
 import { UserMapper } from "../data/user-mapper";
 import { DogMapper } from "../data/dog-mapper";
+import { VetLogin } from "../bark/models/vet-login";
 
+// TODO: Replace VetActorConfig with BarkContext
 export type VetActorConfig = {
   dbPool: Pool;
   userMapper: UserMapper;
@@ -16,16 +18,16 @@ export type VetActorConfig = {
 export class VetActor {
   private vetId: string;
   private config: VetActorConfig;
-  private loginEmail: string | undefined;
+  private vetLogin: VetLogin | undefined;
 
   constructor(
     vetId: string,
     config: VetActorConfig,
-    args?: { email?: string },
+    args?: { vetLogin?: VetLogin },
   ) {
     this.vetId = vetId;
     this.config = config;
-    this.loginEmail = args?.email;
+    this.vetLogin = args?.vetLogin;
   }
 
   public getVetId(): string {
@@ -39,8 +41,7 @@ export class VetActor {
     };
   }
 
-  // TODO: Guarantee this; i.e. return type should be string.
-  public getLoginEmail(): string | undefined {
-    return this.loginEmail;
+  public getLogin(): VetLogin | undefined {
+    return this.vetLogin;
   }
 }
