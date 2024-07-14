@@ -1,22 +1,21 @@
-import { Pool } from "pg";
 import { VetActor, VetActorConfig } from "./vet-actor";
 import { dbSelectVetIdByEmail } from "../data/db-vets";
 import { LRUCache } from "lru-cache";
-
-export type VetActorFactoryConfig = {
-  dbPool: Pool;
-};
+import { BarkContext } from "../bark/bark-context";
+import { opGetVetIdByEmail } from "../bark/operations/op-get-vet-id-by-email";
 
 export class VetActorFactory {
-  private factoryConfig: VetActorFactoryConfig;
+  private context: BarkContext;
   private actorConfig: VetActorConfig;
   private idCache: LRUCache<string, string>;
 
-  constructor(args: {
-    factoryConfig: VetActorFactoryConfig;
-    actorConfig: VetActorConfig;
-  }) {
-    this.factoryConfig = args.factoryConfig;
+  constructor(
+    context: BarkContext,
+    args: {
+      actorConfig: VetActorConfig;
+    },
+  ) {
+    this.context = context;
     this.actorConfig = args.actorConfig;
     this.idCache = new LRUCache({ max: 10 });
   }
@@ -35,11 +34,15 @@ export class VetActorFactory {
     if (cachedVetId !== undefined) {
       return cachedVetId;
     }
-    const { dbPool } = this.factoryConfig;
-    const vetId = await dbSelectVetIdByEmail(dbPool, vetEmail);
-    if (vetId === null) {
+    const { context } = this;
+    const { result, error } = await opGetVetIdByEmail(context, {
+      email: vetEmail,
+    });
+    if (error !== undefined) {
+      console.error(error);
       return null;
     }
+    const { vetId } = result;
     this.idCache.set(vetEmail, vetId);
     return vetId;
   }
