@@ -7,13 +7,18 @@ import { RoutePath } from "@/lib/route-path";
 import { MyDog } from "@/lib/user/user-models";
 import { useRouter } from "next/navigation";
 
-export function DogCard(props: {
+export type DogCardData = {
   dog: MyDog;
   ineligibilityReasons: IneligibilityReason[];
+};
+
+export function DogCard(props: {
+  data: DogCardData;
   cardIdx: number;
   isLastCard: boolean;
 }) {
-  const { dog } = props;
+  const { data } = props;
+  const { dog, ineligibilityReasons } = data;
   const { dogId, dogName, dogStatuses, dogAppointments } = dog;
   const router = useRouter();
   const gotoViewDog = () => {
@@ -39,6 +44,7 @@ export function DogCard(props: {
             dogStatuses={dogStatuses}
             dogAppointments={dogAppointments}
           />
+          <pre>{JSON.stringify(ineligibilityReasons, null, 2)}</pre>
         </div>
       </div>
     </>

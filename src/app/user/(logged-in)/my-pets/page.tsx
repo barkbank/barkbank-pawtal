@@ -3,8 +3,11 @@ import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
 import { getMyPets } from "@/lib/user/actions/get-my-pets";
 import { BarkButton } from "@/components/bark/bark-button";
-import { DogCard } from "./_lib/components/dog-card";
+import { DogCard, DogCardData } from "./_lib/components/dog-card";
 import { IneligibilityReason } from "@/lib/bark/enums/ineligibility-reason";
+import APP from "@/lib/app";
+import { opGetIneligibilityFactors } from "@/lib/bark/operations/op-get-ineligibility-factors";
+import { toIneligibilityReasons } from "@/lib/bark/mappers/to-ineligibility-reasons";
 
 export default async function Page() {
   const actor = await getAuthenticatedUserActor();
@@ -21,17 +24,28 @@ export default async function Page() {
       </div>
     );
   }
-  // WIP: Call opGetIneligibilityFactors for each dog in 'dogs'
-  // WIP: Convert factors to reasons using toIneligibilityReasons
-  const ineligibilityReasons: IneligibilityReason[] = [];
+  const context = await APP.getBarkContext();
+  const dataList: DogCardData[] = await Promise.all(
+    dogs.map(async (dog) => {
+      const {dogId} = dog;
+      const res = await opGetIneligibilityFactors(context, {dogId});
+      if (res.error !== undefined) {
+        throw new Error(res.error);
+      }
+      const ineligibilityReasons = toIneligibilityReasons(res.result.factors);
+      return {
+        dog,
+        ineligibilityReasons,
+      };
+    }),
+  );
   return (
     <div className="m-3 flex flex-col gap-3">
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-        {dogs.map((dog, idx, ary) => (
+        {dataList.map((data, idx, ary) => (
           <DogCard
-            key={dog.dogId}
-            dog={dog}
-            ineligibilityReasons={ineligibilityReasons}
+            key={data.dog.dogId}
+            data={data}
             cardIdx={idx}
             isLastCard={idx === ary.length - 1}
           />
