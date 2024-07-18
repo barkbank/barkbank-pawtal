@@ -8,6 +8,7 @@ import { toIneligibilityReasons } from "@/lib/bark/mappers/to-ineligibility-reas
 import { POS_NEG_NIL } from "@/lib/bark/enums/pos-neg-nil";
 import { REPORTED_INELIGIBILITY } from "@/lib/bark/enums/reported-ineligibility";
 import { INELIGIBILITY_REASON } from "@/lib/bark/enums/ineligibility-reason";
+import { MILLIS_PER_DAY } from "@/lib/utilities/bark-millis";
 
 describe("toIneligibilityReasons", () => {
   it("returns empty list when eligible", () => {
@@ -66,42 +67,50 @@ describe("toIneligibilityReasons", () => {
   });
   it("returns HEARTWORM_IN_LAST_6_MONTHS when less than 180 days ago", () => {
     // TODO: Standardise last 6 months to mean 180 days and last 3 months to mean 90 days. Update dog_statuses view to match.
+    const now = new Date();
     const factors = _givenFactors({
       overrides: {
         latestDogHeartwormResult: POS_NEG_NIL.POSITIVE,
-        latestDogHeartwormObservationTime: givenDate({ daysAgo: 179 }),
+        latestDogHeartwormObservationTime: new Date(
+          now.getTime() - 179 * MILLIS_PER_DAY,
+        ),
       },
     });
-    expect(toIneligibilityReasons(factors)).toEqual([
+    expect(toIneligibilityReasons(factors, { referenceTime: now })).toEqual([
       INELIGIBILITY_REASON.HEARTWORM_IN_LAST_6_MONTHS,
     ]);
   });
   it("does not return HEARTWORM_IN_LAST_6_MONTHS when more than 180 days or more ago.", () => {
+    const now = new Date();
     const factors = _givenFactors({
       overrides: {
         latestDogHeartwormResult: POS_NEG_NIL.POSITIVE,
-        latestDogHeartwormObservationTime: givenDate({ daysAgo: 180 }),
+        latestDogHeartwormObservationTime: new Date(
+          now.getTime() - 180 * MILLIS_PER_DAY,
+        ),
       },
     });
-    expect(toIneligibilityReasons(factors)).toEqual([]);
+    expect(toIneligibilityReasons(factors, { referenceTime: now })).toEqual([]);
   });
   it("returns DONATED_IN_LAST_3_MONTHS when less than 90 days ago", () => {
+    const now = new Date();
     const factors = _givenFactors({
       overrides: {
-        latestDonationTime: givenDate({ daysAgo: 89 }),
+        latestDonationTime: new Date(now.getTime() - 89 * MILLIS_PER_DAY),
       },
     });
-    expect(toIneligibilityReasons(factors)).toEqual([
+    expect(toIneligibilityReasons(factors, { referenceTime: now })).toEqual([
       INELIGIBILITY_REASON.DONATED_IN_LAST_3_MONTHS,
     ]);
   });
   it("does not return DONATED_IN_LAST_3_MONTHS when 90 or more days ago", () => {
+    const now = new Date();
     const factors = _givenFactors({
       overrides: {
-        latestDonationTime: givenDate({ daysAgo: 90 }),
+        latestDonationTime: new Date(now.getTime() - 90 * MILLIS_PER_DAY),
       },
     });
-    expect(toIneligibilityReasons(factors)).toEqual([]);
+    expect(toIneligibilityReasons(factors, { referenceTime: now })).toEqual([]);
   });
   it("returns REPORTED_BY_VET when PERMANENTLY_INELIGIBLE", () => {
     const factors = _givenFactors({
@@ -115,28 +124,30 @@ describe("toIneligibilityReasons", () => {
     ]);
   });
   it("returns REPORTED_BY_VET when TEMPORARILY_INELIGIBLE and not expired", () => {
+    const now = new Date();
     const factors = _givenFactors({
       overrides: {
         latestDogReportedIneligibility:
           REPORTED_INELIGIBILITY.TEMPORARILY_INELIGIBLE,
-        latestDogReportedIneligibilityExpiryTime: givenDate({ daysLater: 1 }),
+        latestDogReportedIneligibilityExpiryTime: new Date(
+          now.getTime() + 1 * MILLIS_PER_DAY,
+        ),
       },
     });
-    expect(toIneligibilityReasons(factors)).toEqual([
+    expect(toIneligibilityReasons(factors, { referenceTime: now })).toEqual([
       INELIGIBILITY_REASON.REPORTED_BY_VET,
     ]);
   });
   it("does not return REPORTED_BY_VET when TEMPORARILY_INELIGIBLE but expired", () => {
+    const now = new Date();
     const factors = _givenFactors({
       overrides: {
         latestDogReportedIneligibility:
           REPORTED_INELIGIBILITY.TEMPORARILY_INELIGIBLE,
-        latestDogReportedIneligibilityExpiryTime: givenDate({ daysLater: 0 }),
+        latestDogReportedIneligibilityExpiryTime: now,
       },
     });
-    expect(toIneligibilityReasons(factors)).toEqual([
-      INELIGIBILITY_REASON.REPORTED_BY_VET,
-    ]);
+    expect(toIneligibilityReasons(factors, { referenceTime: now })).toEqual([]);
   });
 });
 
