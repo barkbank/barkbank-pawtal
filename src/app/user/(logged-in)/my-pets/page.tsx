@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { getMyPets } from "@/lib/user/actions/get-my-pets";
 import { BarkButton } from "@/components/bark/bark-button";
 import { DogCard } from "./_lib/components/dog-card";
+import { IneligibilityReason } from "@/lib/bark/enums/ineligibility-reason";
 
 export default async function Page() {
   const actor = await getAuthenticatedUserActor();
@@ -22,7 +23,7 @@ export default async function Page() {
   }
   // WIP: Call opGetIneligibilityFactors for each dog in 'dogs'
   // WIP: Convert factors to reasons using toIneligibilityReasons
-  // WIP: Provide ineligibility reasons to DogCard
+  const ineligibilityReasons: IneligibilityReason[] = [];
   return (
     <div className="m-3 flex flex-col gap-3">
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
@@ -30,6 +31,7 @@ export default async function Page() {
           <DogCard
             key={dog.dogId}
             dog={dog}
+            ineligibilityReasons={ineligibilityReasons}
             cardIdx={idx}
             isLastCard={idx === ary.length - 1}
           />

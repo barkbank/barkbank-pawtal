@@ -2,13 +2,14 @@
 
 import { BarkDogAvatar } from "@/components/bark/bark-dog-avatar";
 import { BarkStatusBlock } from "@/components/bark/bark-status-block";
+import { IneligibilityReason } from "@/lib/bark/enums/ineligibility-reason";
 import { RoutePath } from "@/lib/route-path";
 import { MyDog } from "@/lib/user/user-models";
 import { useRouter } from "next/navigation";
 
-// WIP: Require ineligibility reasons.
 export function DogCard(props: {
   dog: MyDog;
+  ineligibilityReasons: IneligibilityReason[];
   cardIdx: number;
   isLastCard: boolean;
 }) {
