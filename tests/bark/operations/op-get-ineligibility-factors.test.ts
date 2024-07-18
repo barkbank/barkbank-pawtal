@@ -46,10 +46,12 @@ describe("opGetIneligibilityFactors", () => {
       );
       expect(factors.latestDogWeightKg).toEqual(dogWeightKg);
 
-      // These should be null because there are no reports
-      expect(factors.latestDogHeartwormResult).toBeNull();
+      // These should be null/empty/nill because there are no reports
+      expect(factors.latestDogHeartwormResult).toEqual(POS_NEG_NIL.NIL);
       expect(factors.latestDogHeartwormObservationTime).toBeNull();
-      expect(factors.latestDogReportedIneligibility).toBeNull();
+      expect(factors.latestDogReportedIneligibility).toEqual(
+        REPORTED_INELIGIBILITY.NIL,
+      );
       expect(factors.latestDogReportedIneligibilityExpiryTime).toBeNull();
       expect(factors.latestDonationTime).toBeNull();
     });
@@ -77,6 +79,7 @@ describe("opGetIneligibilityFactors", () => {
           visitTime,
           dogWeightKg: latestDogWeightKg,
           dogHeartworm: latestDogHeartwormResult,
+          dogDidDonateBlood: true,
         },
       });
       const { result, error } = await opGetIneligibilityFactors(context, {
@@ -102,7 +105,7 @@ describe("opGetIneligibilityFactors", () => {
         REPORTED_INELIGIBILITY.NIL,
       );
       expect(factors.latestDogReportedIneligibilityExpiryTime).toBeNull();
-      expect(factors.latestDonationTime).toBeNull();
+      expect(factors.latestDonationTime).toEqual(visitTime);
     });
   });
 });

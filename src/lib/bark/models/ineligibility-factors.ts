@@ -11,9 +11,9 @@ export const IneligibilityFactorsSchema = z.object({
 
   // From latest_values
   latestDogWeightKg: z.number().nullable(),
-  latestDogHeartwormResult: PosNegNilSchema.nullable(),
+  latestDogHeartwormResult: PosNegNilSchema,
   latestDogHeartwormObservationTime: z.date().nullable(),
-  latestDogReportedIneligibility: ReportedIneligibilitySchema.nullable(),
+  latestDogReportedIneligibility: ReportedIneligibilitySchema,
   latestDogReportedIneligibilityExpiryTime: z.date().nullable(),
   latestDonationTime: z.date().nullable(),
 });
