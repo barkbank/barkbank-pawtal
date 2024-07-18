@@ -20,6 +20,33 @@ import { z } from "zod";
 import { toUserPii } from "@/lib/bark/mappers/to-user-pii";
 import { DogSpec } from "@/lib/data/db-models";
 import { toDogName } from "@/lib/bark/mappers/to-dog-name";
+import { sprintf } from "sprintf-js";
+import {
+  SINGAPORE_TIME_ZONE,
+  parseCommonDate,
+} from "@/lib/utilities/bark-time";
+import { utcToZonedTime } from "date-fns-tz";
+
+export function givenDate(args: {
+  referenceDate?: Date | undefined;
+  yearsAgo?: number | undefined;
+  daysAgo?: number | undefined;
+}): Date {
+  const { referenceDate, yearsAgo, daysAgo } = args;
+  const sgt = utcToZonedTime(referenceDate ?? new Date(), SINGAPORE_TIME_ZONE);
+  let y = sgt.getUTCFullYear();
+  let m = sgt.getUTCMonth() + 1;
+  let d = sgt.getUTCDate();
+  if (yearsAgo !== undefined) {
+    y -= yearsAgo;
+  }
+  if (daysAgo !== undefined) {
+    d -= daysAgo;
+  }
+  const formatted = sprintf("%d-%02d-%02d", y, m, d);
+  const parsed = parseCommonDate(formatted, SINGAPORE_TIME_ZONE);
+  return parsed;
+}
 
 const GivenUserSchema = z.object({
   userId: z.string(),

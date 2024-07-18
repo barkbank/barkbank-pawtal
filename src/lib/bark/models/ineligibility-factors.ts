@@ -11,11 +11,11 @@ export const IneligibilityFactorsSchema = z.object({
 
   // From latest_values
   latestDogWeightKg: z.number().nullable(),
-  latestDogHeartwormResult: PosNegNilSchema,
-  latestDogHeartwormObservationTime: z.date(),
-  latestDogReportedIneligibility: ReportedIneligibilitySchema,
-  latestDogReportedIneligibilityExpiryTime: z.date(),
-  latestDonationTime: z.date(),
+  latestDogHeartwormResult: PosNegNilSchema.nullable(),
+  latestDogHeartwormObservationTime: z.date().nullable(),
+  latestDogReportedIneligibility: ReportedIneligibilitySchema.nullable(),
+  latestDogReportedIneligibilityExpiryTime: z.date().nullable(),
+  latestDonationTime: z.date().nullable(),
 });
 
 export type IneligibilityFactors = z.infer<typeof IneligibilityFactorsSchema>;
