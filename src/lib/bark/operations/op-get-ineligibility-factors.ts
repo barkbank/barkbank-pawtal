@@ -4,7 +4,6 @@ import { Err, Ok, Result } from "@/lib/utilities/result";
 import { IneligibilityFactors } from "../models/ineligibility-factors";
 import { selectIneligibilityFactors } from "../queries/select-ineligibility-factors";
 
-// WIP: Use this from???
 export async function opGetIneligibilityFactors(
   context: BarkContext,
   args: { dogId: string },

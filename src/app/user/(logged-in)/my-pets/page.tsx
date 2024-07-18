@@ -20,6 +20,9 @@ export default async function Page() {
       </div>
     );
   }
+  // WIP: Call opGetIneligibilityFactors for each dog in 'dogs'
+  // WIP: Convert factors to reasons using toIneligibilityReasons
+  // WIP: Provide ineligibility reasons to DogCard
   return (
     <div className="m-3 flex flex-col gap-3">
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2">

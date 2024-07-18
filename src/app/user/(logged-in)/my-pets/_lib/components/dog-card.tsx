@@ -6,6 +6,7 @@ import { RoutePath } from "@/lib/route-path";
 import { MyDog } from "@/lib/user/user-models";
 import { useRouter } from "next/navigation";
 
+// WIP: Require ineligibility reasons.
 export function DogCard(props: {
   dog: MyDog;
   cardIdx: number;
@@ -17,6 +18,7 @@ export function DogCard(props: {
   const gotoViewDog = () => {
     router.push(RoutePath.USER_VIEW_DOG(dogId));
   };
+  // WIP: Render ineligibility reasons
   return (
     <>
       <div
