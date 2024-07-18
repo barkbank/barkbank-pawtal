@@ -26,22 +26,32 @@ import {
   parseCommonDate,
 } from "@/lib/utilities/bark-time";
 import { utcToZonedTime } from "date-fns-tz";
+import { MILLIS_PER_DAY } from "@/lib/utilities/bark-millis";
 
 export function givenDate(args: {
   referenceDate?: Date | undefined;
   yearsAgo?: number | undefined;
   daysAgo?: number | undefined;
+  daysLater?: number | undefined;
 }): Date {
-  const { referenceDate, yearsAgo, daysAgo } = args;
-  const sgt = utcToZonedTime(referenceDate ?? new Date(), SINGAPORE_TIME_ZONE);
+  const { referenceDate, yearsAgo, daysAgo, daysLater } = args;
+  let sgt = utcToZonedTime(referenceDate ?? new Date(), SINGAPORE_TIME_ZONE);
+  if (daysAgo !== undefined) {
+    sgt = new Date(sgt.getTime() - daysAgo * MILLIS_PER_DAY);
+  }
+  if (daysLater !== undefined) {
+    sgt = new Date(sgt.getTime() + daysLater * MILLIS_PER_DAY);
+  }
   let y = sgt.getUTCFullYear();
   let m = sgt.getUTCMonth() + 1;
   let d = sgt.getUTCDate();
   if (yearsAgo !== undefined) {
     y -= yearsAgo;
-  }
-  if (daysAgo !== undefined) {
-    d -= daysAgo;
+
+    // Fix possible leap year problems.
+    if (m === 2 && d === 29) {
+      d = 28;
+    }
   }
   const formatted = sprintf("%d-%02d-%02d", y, m, d);
   const parsed = parseCommonDate(formatted, SINGAPORE_TIME_ZONE);
