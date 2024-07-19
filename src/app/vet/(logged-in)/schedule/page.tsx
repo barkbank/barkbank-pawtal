@@ -5,6 +5,9 @@ import { AppointmentScheduler } from "../../_lib/components/appointment-schedule
 import APP from "@/lib/app";
 import { opFetchCallTasksByVetId } from "@/lib/bark/operations/op-fetch-call-tasks-by-vet-id";
 import { BarkError } from "@/components/bark/bark-error";
+import { getMetadata } from "@/app/_lib/get-metadata";
+
+export const metadata = getMetadata({ title: "Schedule" });
 
 export default async function Page() {
   const actor = await getAuthenticatedVetActor();
