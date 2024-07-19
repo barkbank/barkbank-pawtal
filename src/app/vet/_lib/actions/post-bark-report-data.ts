@@ -3,6 +3,7 @@
 import APP from "@/lib/app";
 import { getAuthenticatedVetActor } from "@/lib/auth";
 import { BarkReportData } from "@/lib/bark/models/bark-report-data";
+import { opSendReportNotification } from "@/lib/bark/operations/op-send-report-notification";
 import { opSubmitReport } from "@/lib/bark/operations/op-submit-report";
 import { RoutePath } from "@/lib/route-path";
 import { CODE } from "@/lib/utilities/bark-code";
@@ -36,6 +37,10 @@ export async function postBarkReportData(args: {
   });
   if (res.error === undefined) {
     revalidatePath(RoutePath.VET_APPOINTMENTS, "layout");
+  }
+  const reportId = res.result?.reportId;
+  if (reportId !== undefined) {
+    await opSendReportNotification(context, { reportId });
   }
   return res;
 }
