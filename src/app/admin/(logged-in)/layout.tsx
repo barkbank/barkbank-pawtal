@@ -1,9 +1,11 @@
+import { getMetadata } from "@/app/_lib/get-metadata";
 import { BarkNavLayout } from "@/components/bark/navigation/bark-nav-layout";
 import { BarkNavRoute } from "@/components/bark/navigation/bark-nav-route";
 import { getAuthenticatedAdminActor } from "@/lib/auth";
-import { IMG_PATH } from "@/lib/image-path";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
+
+export const metadata = getMetadata({ title: "Admin" });
 
 export default async function Layout(props: { children: React.ReactNode }) {
   const actor = await getAuthenticatedAdminActor();

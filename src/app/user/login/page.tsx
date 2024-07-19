@@ -3,6 +3,9 @@ import BarkLoginPage from "@/components/bark/login/bark-login-page";
 import { AccountType } from "@/lib/auth-models";
 import { IMG_PATH } from "@/lib/image-path";
 import Link from "next/link";
+import { getMetadata } from "@/app/_lib/get-metadata";
+
+export const metadata = getMetadata({ title: "Login" });
 
 export default async function Page() {
   return (
