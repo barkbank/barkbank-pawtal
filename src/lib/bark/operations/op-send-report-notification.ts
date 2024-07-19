@@ -5,6 +5,7 @@ import { Email, EmailContact } from "@/lib/services/email";
 import { ReportNotification } from "../models/report-notification";
 import { selectReportNotification } from "../queries/select-report-notification";
 import { toReportNotification } from "../mappers/to-report-notification";
+import { escape } from "lodash";
 
 export async function opSendReportNotification(
   context: BarkContext,
@@ -52,12 +53,14 @@ async function _sendNotification(
     name: userName,
   };
   const subject = _getSubject();
-  const bodyText = _getBody({ userName, dogName });
+  const bodyText = _getBodyText({ userName, dogName });
+  const bodyHtml = _getBodyHtml({ userName, dogName });
   const email: Email = {
     sender,
     recipient,
     subject,
     bodyText,
+    bodyHtml,
   };
   const { error } = await emailService.sendEmail(email);
   if (error !== undefined) {
@@ -70,7 +73,7 @@ function _getSubject(): string {
   return `New Vet Report Available for Your Dog on Pawtal`;
 }
 
-function _getBody(args: { userName: string; dogName: string }): string {
+function _getBodyText(args: { userName: string; dogName: string }): string {
   const { userName, dogName } = args;
   const body = `
 Hi ${userName},
@@ -87,6 +90,20 @@ Warm regards,
 Team Bark Bank
 Website: https://www.barkbank.co/
 Instagram & TikTok: @barkbank.co
+  `;
+  return body.trim();
+}
+
+function _getBodyHtml(args: { userName: string; dogName: string }): string {
+  const { userName, dogName } = args;
+  const body = `
+    <p>Hi ${escape(userName)},</p>
+    <p>We are pleased to inform you that a new vet report for your dog, ${escape(dogName)}, has been submitted and is now available on Pawtal.</p>
+    <p>To review the report details, please log in to <a href="https://pawtal.barkbank.co">https://pawtal.barkbank.co</a>. Keeping track of these reports is essential for ensuring your dog's health and readiness for future blood donations.</p>
+    <p>If you have any questions or need assistance accessing the report, feel free to reach out to us via email at <a href="mailto:${CONTACT_EMAIL}">${CONTACT_EMAIL}</a>.</p>
+    <p>We appreciate your continued dedication to supporting our cause and helping dogs in need.</p>
+    <p>Warm regards,<br>Team Bark Bank</p>
+    <p>Website: <a href="https://www.barkbank.co/">https://www.barkbank.co/</a><br>Instagram & TikTok: <a href="https://instagram.com/barkbank.co">@barkbank.co</a></p>
   `;
   return body.trim();
 }
