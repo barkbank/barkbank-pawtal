@@ -11,6 +11,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import Link from "next/link";
+import { CONTACT_EMAIL } from "@/lib/bark/constants/contact-email";
 
 const criterias = [
   { text: ">20KG in weight", imgUrl: IMG_PATH.WEIGHING_MACHINE },
@@ -62,7 +63,7 @@ const registrationSteps = [
 ];
 
 const ContactEmail = () => (
-  <Link href="mailto:hello@barkbank.co">hello@barkbank.co</Link>
+  <Link href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</Link>
 );
 const PrivacyPolicy = () => (
   <Link href="https://www.barkbank.co/privacy-policy">

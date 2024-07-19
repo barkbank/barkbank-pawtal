@@ -321,6 +321,7 @@ export function getBarkContext(dbPool: Pool): BarkContext {
     piiEncryptionService: getPiiEncryptionService(),
     oiiEncryptionService: getOiiEncryptionService(),
     textEncryptionService: getTextEncryptionService(),
+    emailService: getEmailService(),
   };
 }
 

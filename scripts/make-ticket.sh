@@ -21,7 +21,7 @@ function getBranchName {
     local limit=8
     local branchName=$(getRandomBranchName $offset $limit)
     while [ -n "$(git log --oneline --all | grep $branchName\\b)" ]; do
-        offset=$(($offset + $limit))
+        # offset=$(($offset + $limit))
         limit=$(($limit * 2))
         branchName=$(getRandomBranchName $offset $limit)
     done

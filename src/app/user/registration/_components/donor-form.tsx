@@ -25,6 +25,7 @@ import { IMG_PATH } from "@/lib/image-path";
 import { AccountType } from "@/lib/auth-models";
 import { CODE } from "@/lib/utilities/bark-code";
 import { RequiredDateField } from "@/app/_lib/field-schemas/required-date-field";
+import { CONTACT_EMAIL } from "@/lib/bark/constants/contact-email";
 
 const FORM_SCHEMA = z.object({
   dogName: z.string(),
@@ -284,7 +285,7 @@ export default function DonorForm(props: {
               <BarkH4>Contact Us</BarkH4>
               <BarkP>
                 Feel free to reach out with any inquiries regarding your
-                registration by sending an email us at hello@barkbank.co.
+                registration by sending an email us at {CONTACT_EMAIL}.
                 We&apos;re here to assist!
               </BarkP>
             </div>

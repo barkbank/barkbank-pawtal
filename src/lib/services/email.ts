@@ -1,18 +1,23 @@
 import nodemailer from "nodemailer";
 import { Err, Ok, Result } from "../utilities/result";
+import { z } from "zod";
 
-export type EmailContact = {
-  email: string;
-  name?: string;
-};
+export const EmailContactSchema = z.object({
+  email: z.string(),
+  name: z.string().optional(),
+});
 
-export type Email = {
-  sender: EmailContact;
-  recipient: EmailContact;
-  subject: string;
-  bodyText?: string;
-  bodyHtml?: string;
-};
+export type EmailContact = z.infer<typeof EmailContactSchema>;
+
+export const EmailSchema = z.object({
+  sender: EmailContactSchema,
+  recipient: EmailContactSchema,
+  subject: z.string(),
+  bodyText: z.string().optional(),
+  bodyHtml: z.string().optional(),
+});
+
+export type Email = z.infer<typeof EmailSchema>;
 
 export interface EmailService {
   sendEmail: (email: Email) => Promise<Result<true, "FAILED">>;
