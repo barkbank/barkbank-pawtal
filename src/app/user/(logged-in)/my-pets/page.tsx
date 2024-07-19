@@ -4,7 +4,6 @@ import { redirect } from "next/navigation";
 import { getMyPets } from "@/lib/user/actions/get-my-pets";
 import { BarkButton } from "@/components/bark/bark-button";
 import { DogCard, DogCardData } from "./_lib/components/dog-card";
-import { IneligibilityReason } from "@/lib/bark/enums/ineligibility-reason";
 import APP from "@/lib/app";
 import { opGetIneligibilityFactors } from "@/lib/bark/operations/op-get-ineligibility-factors";
 import { toIneligibilityReasons } from "@/lib/bark/mappers/to-ineligibility-reasons";
@@ -27,8 +26,8 @@ export default async function Page() {
   const context = await APP.getBarkContext();
   const dataList: DogCardData[] = await Promise.all(
     dogs.map(async (dog) => {
-      const {dogId} = dog;
-      const res = await opGetIneligibilityFactors(context, {dogId});
+      const { dogId } = dog;
+      const res = await opGetIneligibilityFactors(context, { dogId });
       if (res.error !== undefined) {
         throw new Error(res.error);
       }
