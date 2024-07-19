@@ -1,6 +1,7 @@
 import { withDb } from "../_db_helpers";
 import {
   getEmailHashService,
+  getEmailService,
   getOiiEncryptionService,
   getPiiEncryptionService,
   getTextEncryptionService,
@@ -23,12 +24,14 @@ export async function withBarkContext(
     const piiEncryptionService = getPiiEncryptionService();
     const oiiEncryptionService = getOiiEncryptionService();
     const textEncryptionService = getTextEncryptionService();
+    const emailService = getEmailService();
     const context: BarkContext = {
       dbPool,
       emailHashService,
       piiEncryptionService,
       oiiEncryptionService,
       textEncryptionService,
+      emailService,
     };
     await testBody({ context, testContext: context, dbContext: dbPool });
   });

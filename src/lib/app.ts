@@ -486,12 +486,14 @@ export class AppFactory {
           piiEncryptionService,
           oiiEncryptionService,
           textEncryptionService,
+          emailService,
         ] = await Promise.all([
           this.getDbPool(),
           this.getEmailHashService(),
           this.getPiiEncryptionService(),
           this.getOiiEncryptionService(),
           this.getTextEncryptionService(),
+          this.getEmailService(),
         ]);
         const context: BarkContext = {
           dbPool,
@@ -499,6 +501,7 @@ export class AppFactory {
           piiEncryptionService,
           oiiEncryptionService,
           textEncryptionService,
+          emailService,
         };
         console.log("Created BarkContext");
         resolve(context);

@@ -1,6 +1,7 @@
 "use server";
 
 import APP from "@/lib/app";
+import { opSendWelcomeEmail } from "@/lib/bark/operations/op-send-welcome-email";
 import { RegistrationRequest } from "@/lib/services/registration";
 import { CODE } from "@/lib/utilities/bark-code";
 
@@ -13,5 +14,12 @@ export async function postRegistrationRequest(
   | typeof CODE.FAILED
 > {
   const service = await APP.getRegistrationService();
-  return service.handle(request);
+  const res = await service.handle(request);
+  if (res !== CODE.OK) {
+    return res;
+  }
+  const context = await APP.getBarkContext();
+  const { userEmail, userName, dogName } = request;
+  await opSendWelcomeEmail(context, { userEmail, userName, dogName });
+  return res;
 }
