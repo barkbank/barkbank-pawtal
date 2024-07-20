@@ -3,6 +3,11 @@ import { withBarkContext } from "../_context";
 import { z } from "zod";
 import { CODE } from "@/lib/utilities/bark-code";
 import { opGetVetLoginByEmail } from "@/lib/bark/operations/op-get-vet-login-by-email";
+import {
+  SecureVetAccountDao,
+  SecureVetAccountInsertion,
+} from "@/lib/bark/queries/secure-vet-account-dao";
+import { getEmailHashService, getPiiEncryptionService } from "../../_fixtures";
 
 describe("opGetVetLoginByEmail", () => {
   it("can resolve by vets.vet_email", async () => {
@@ -109,18 +114,16 @@ async function _insertVetAccount(
   args: { email: string; vetId: string },
 ): Promise<{ vetAccountId: string }> {
   const { email, vetId } = args;
-  const RowSchema = z.object({ vetAccountId: z.string() });
-  type Row = z.infer<typeof RowSchema>;
-  const sql = `
-  INSERT INTO vet_accounts (
-    vet_account_name,
-    vet_account_email,
-    vet_id
-  )
-  VALUES ('Mandy', $1, $2)
-  RETURNING vet_account_id as "vetAccountId"
-  `;
-  const res = await dbQuery<Row>(db, sql, [email, vetId]);
-  const row = RowSchema.parse(res.rows[0]);
-  return row;
+  const record: SecureVetAccountInsertion = {
+    vetId,
+    vetAccountHashedEmail: await getEmailHashService().getHashHex(email),
+    vetAccountEncryptedEmail:
+      await getPiiEncryptionService().getEncryptedData(email),
+    vetAccountEncryptedName:
+      await getPiiEncryptionService().getEncryptedData("Mandy"),
+  };
+  const dao = new SecureVetAccountDao(db);
+  const rec = await dao.insert({ record });
+  const { vetAccountId } = rec;
+  return { vetAccountId };
 }

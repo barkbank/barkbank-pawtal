@@ -19,28 +19,28 @@ export class VetClinicDao {
   async getList(): Promise<VetClinic[]> {
     const sql = this.getSql("ORDER BY vet_name ASC");
     const res = await dbQuery<VetClinic>(this.db, sql, []);
-    return this.toVetClinicList(res);
+    return this.toList(res);
   }
 
   async getByEmail(args: { email: string }): Promise<VetClinic | null> {
     const { email } = args;
     const sql = this.getSql("WHERE LOWER(vet_email) = LOWER($1)");
     const res = await dbQuery<VetClinic>(this.db, sql, [email]);
-    return this.toVetClinic(res);
+    return this.toRecord(res);
   }
 
   async getByVetId(args: { vetId: string }): Promise<VetClinic | null> {
     const { vetId } = args;
     const sql = this.getSql("WHERE vet_id = $1");
     const res = await dbQuery<VetClinic>(this.db, sql, [vetId]);
-    return this.toVetClinic(res);
+    return this.toRecord(res);
   }
 
-  private toVetClinicList(res: QueryResult<VetClinic>): VetClinic[] {
+  private toList(res: QueryResult<VetClinic>): VetClinic[] {
     return z.array(VetClinicSchema).parse(res.rows);
   }
 
-  private toVetClinic(res: QueryResult<VetClinic>): VetClinic | null {
+  private toRecord(res: QueryResult<VetClinic>): VetClinic | null {
     if (res.rows.length !== 1) {
       return null;
     }
