@@ -11,12 +11,17 @@ export async function toSecureVetAccount(
 ): Promise<SecureVetAccount> {
   const { emailHashService, piiEncryptionService } = context;
   const { vetAccountEmail, vetAccountName, ...others } = account;
-  const vetAccountHashedEmail =
-    await emailHashService.getHashHex(vetAccountEmail);
-  const vetAccountEncryptedEmail =
-    await piiEncryptionService.getEncryptedData(vetAccountEmail);
-  const vetAccountEncryptedName =
-    await piiEncryptionService.getEncryptedData(vetAccountName);
+
+  const [
+    vetAccountHashedEmail,
+    vetAccountEncryptedEmail,
+    vetAccountEncryptedName,
+  ] = await Promise.all([
+    emailHashService.getHashHex(vetAccountEmail),
+    piiEncryptionService.getEncryptedData(vetAccountEmail),
+    piiEncryptionService.getEncryptedData(vetAccountName),
+  ]);
+
   const out: SecureVetAccount = {
     ...others,
     vetAccountHashedEmail,
