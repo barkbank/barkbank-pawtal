@@ -14,7 +14,7 @@ export async function selectVetClinicByEmail(
     vet_phone_number as "vetPhoneNumber",
     vet_address as "vetAddress"
   FROM vets
-  WHERE vet_email = $1
+  WHERE LOWER(vet_email) = LOWER($1)
   `;
   const res = await dbQuery<VetClinic>(db, sql, [email]);
   if (res.rows.length !== 1) {
