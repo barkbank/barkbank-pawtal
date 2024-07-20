@@ -37,9 +37,12 @@ export default async function Page() {
 
 function _ClinicCard(props: { clinic: VetClinic }) {
   const { clinic } = props;
-  const { vetName, vetEmail, vetAddress, vetPhoneNumber } = clinic;
+  const { vetId, vetName, vetEmail, vetAddress, vetPhoneNumber } = clinic;
   return (
-    <div className="x-card x-card-bg flex flex-col gap-1 text-sm">
+    <Link
+      className="x-card x-card-bg flex flex-col gap-1 text-sm"
+      href={RoutePath.ADMIN_TOOLS_VETS_VIEW(vetId)}
+    >
       <p className="font-semibold">{vetName}</p>
       <p>Email: {vetEmail}</p>
       <p>Tel: {vetPhoneNumber}</p>
@@ -47,6 +50,6 @@ function _ClinicCard(props: { clinic: VetClinic }) {
         <p>Address:</p>
         <p>{vetAddress}</p>
       </div>
-    </div>
+    </Link>
   );
 }

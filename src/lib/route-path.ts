@@ -59,6 +59,8 @@ export class RoutePath {
   static readonly ADMIN_TOOLS_REENCRYPT_PAGE = "/admin/tools/re-encrypt";
   static readonly ADMIN_TOOLS_VETS_PAGE = "/admin/tools/vets";
   static readonly ADMIN_TOOLS_VETS_ADD_PAGE = "/admin/tools/vets/add";
+  static readonly ADMIN_TOOLS_VETS_VIEW = (vetId) =>
+    `/admin/tools/vets/view/${vetId}`;
   static readonly ADMIN_DEFAULT_LOGGED_IN_PAGE = RoutePath.ADMIN_TOOLS_PAGE;
 
   // API Routes /api
