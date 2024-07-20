@@ -5,6 +5,9 @@ import { VetLogin } from "../models/vet-models";
 import { dbRelease } from "@/lib/data/db-utils";
 import { selectVetLoginClinicByEmail } from "../queries/select-vet-login-clinic-by-email";
 import { selectVetLoginByAccountEmail } from "../queries/select-vet-login-by-account-email";
+import { selectSecureVetAccountByHashedEmail } from "../queries/select-secure-vet-account-by-hashed-email";
+import { selectVetClinicByEmail } from "../queries/select-vet-clinic-by-email";
+import { VetClinicDao } from "../queries/vet-clinic-dao";
 
 export async function opGetVetLoginByEmail(
   context: BarkContext,
@@ -22,8 +25,10 @@ export async function opGetVetLoginByEmail(
   const conn = await dbPool.connect();
   try {
     const hashedEmail = await emailHashService.getHashHex(email);
-    // WIP: Impl toVetAccount(SecureVetAccount)
-    // WIP: Impl toSecureVetAccount(VetAccount)
+    const secureAccount = await selectSecureVetAccountByHashedEmail(conn, {
+      hashedEmail,
+    });
+    // WIP Impl selectVetClinicById
 
     // WIP: Use selectVetAccountByHashedEmail to get a VetAccount | null
     // WIP: If account is available, use selectVetClinicById to get VetClinic | null - should not be null
