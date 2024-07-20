@@ -37,15 +37,15 @@ export class SecureVetAccountDao {
   }
 
   async insert(args: {
-    spec: SecureVetAccountSpec;
+    secureSpec: SecureVetAccountSpec;
   }): Promise<SecureVetAccount> {
-    const { spec } = args;
+    const { secureSpec } = args;
     const {
       vetId,
       vetAccountHashedEmail,
       vetAccountEncryptedEmail,
       vetAccountEncryptedName,
-    } = SecureVetAccountSpecSchema.parse(spec);
+    } = SecureVetAccountSpecSchema.parse(secureSpec);
     const sql = `
     INSERT INTO vet_accounts (
       vet_id,

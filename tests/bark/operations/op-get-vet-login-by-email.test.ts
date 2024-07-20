@@ -119,9 +119,9 @@ async function _insertVetAccount(
     vetAccountEmail: email,
     vetAccountName: "Mandy",
   };
-  const secured = await toSecureVetAccountSpec(context, spec);
+  const secureSpec = await toSecureVetAccountSpec(context, spec);
   const dao = new SecureVetAccountDao(dbPool);
-  const rec = await dao.insert({ spec: secured });
+  const rec = await dao.insert({ secureSpec });
   const { vetAccountId } = rec;
   return { vetAccountId };
 }

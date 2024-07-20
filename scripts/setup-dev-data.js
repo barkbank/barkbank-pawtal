@@ -103,28 +103,30 @@ function createAdmin(idx) {
 
 function createVet(idx) {
   const email = `vet${idx}@vet.com`;
-  const body = {
+  const vetSpec = {
     vetEmail: email,
     vetName: `Vet Clinic ${idx}`,
     vetPhoneNumber: `+65${60000000 + idx}`,
     vetAddress: `${idx} Dog Park Drive`,
   };
-  return doRequest("POST", "/api/dangerous/vets", body)
-    .then((res) => {
-      console.log(`Created vet: ${email}`);
-      return res;
-    })
-    .then((vet) => {
-      return new Promise((resolve) => {
-        const sql = `
-        INSERT INTO vet_accounts (vet_account_email, vet_account_name, vet_id)
-        VALUES ($1, $2, $3)
-        `;
-        const args = [`manager${idx}@vet.com`, `Manager ${idx}`, vet.vetId];
-        doQuery(sql, args).then((_) => {
-          resolve(vet);
-        });
-      });
+  return Promise.resolve()
+    .then(() =>
+      doRequest("POST", "/api/dangerous/vets", vetSpec).then((vet) => {
+        vet;
+      }),
+    )
+    .then(({ vet }) =>
+      doRequest("POST", "/api/dangerous/vet_accounts", {
+        vetId: vet.vetId,
+        vetAccountEmail: `manager${idx}@vet.com`,
+        vetAccountName: `Manager ${idx}`,
+      }).then((account) => {
+        vet, account;
+      }),
+    )
+    .then((result) => {
+      console.log({ _msg: "createVet", result });
+      return result;
     });
 }
 
