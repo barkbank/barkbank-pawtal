@@ -21,8 +21,15 @@ export async function opGetVetLoginByEmail(
   const { dbPool } = context;
   const conn = await dbPool.connect();
   try {
-    // WIP: Impl selectVetClinicByEmail -> VetClinic
     // WIP: Impl selectVetAccountByHashedEmail -> VetAccount
+
+    // WIP: Use selectVetAccountByHashedEmail to get a VetAccount | null
+    // WIP: If account is available, use selectVetClinicById to get VetClinic | null - should not be null
+    // WIP: If account is null, use selectVetClinicByEmail to get VetClinic | null
+
+    // WIP: If clinic is not available, return ERROR_ACCOUNT_NOT_FOUND
+    // WIP: Otherwise return a VetLogin.
+
     const [clinic, vetLogin] = await Promise.all([
       selectVetLoginClinicByEmail(conn, { email }),
       selectVetLoginByAccountEmail(conn, { email }),
