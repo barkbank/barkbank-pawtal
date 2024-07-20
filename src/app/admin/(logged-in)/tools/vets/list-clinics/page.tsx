@@ -27,7 +27,7 @@ export default async function Page() {
         ))}
       </div>
       <div>
-        <Link href={RoutePath.ADMIN_TOOLS_VETS_ADD_PAGE}>
+        <Link href={RoutePath.ADMIN_TOOLS_VETS_ADD_CLINIC}>
           <Button className="w-full p-6 md:w-40">Add</Button>
         </Link>
       </div>
@@ -41,7 +41,7 @@ function _ClinicCard(props: { clinic: VetClinic }) {
   return (
     <Link
       className="x-card x-card-bg flex flex-col gap-1 text-sm"
-      href={RoutePath.ADMIN_TOOLS_VETS_VIEW(vetId)}
+      href={RoutePath.ADMIN_TOOLS_VETS_VIEW_CLINIC(vetId)}
     >
       <p className="font-semibold">{vetName}</p>
       <p>Email: {vetEmail}</p>

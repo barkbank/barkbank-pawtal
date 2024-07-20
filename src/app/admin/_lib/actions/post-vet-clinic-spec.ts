@@ -27,6 +27,6 @@ export async function postVetClinicSpec(args: {
   if (error !== undefined) {
     return Err(error);
   }
-  revalidatePath(RoutePath.ADMIN_TOOLS_VETS_PAGE, "layout");
+  revalidatePath(RoutePath.ADMIN_TOOLS_VETS_LIST_CLINICS, "layout");
   return Ok(result);
 }

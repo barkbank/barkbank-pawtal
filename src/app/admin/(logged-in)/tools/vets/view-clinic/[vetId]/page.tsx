@@ -18,7 +18,7 @@ export default async function Page(props: { params: { vetId: string } }) {
   );
   return (
     <div className="m-3 flex flex-col gap-3">
-      <BarkBackLink href={RoutePath.ADMIN_TOOLS_VETS_PAGE} />
+      <BarkBackLink href={RoutePath.ADMIN_TOOLS_VETS_LIST_CLINICS} />
       <div className="prose">
         <h1>View Clinic</h1>
         <pre>{JSON.stringify({ clinic, accounts }, null, 2)}</pre>

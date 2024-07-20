@@ -34,11 +34,11 @@ export default function Page() {
       return;
     }
     toast({ variant: "default", title: "Created Vet Clinic" });
-    router.push(RoutePath.ADMIN_TOOLS_VETS_PAGE);
+    router.push(RoutePath.ADMIN_TOOLS_VETS_LIST_CLINICS);
   };
   return (
     <div className="m-3 flex flex-col gap-3">
-      <BarkBackLink href={RoutePath.ADMIN_TOOLS_VETS_PAGE} />
+      <BarkBackLink href={RoutePath.ADMIN_TOOLS_VETS_LIST_CLINICS} />
       <div className="prose">
         <h1>Add Vet Clinic</h1>
         <p>Fill in the form below to create a new Vet Clinic</p>
