@@ -11,5 +11,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   if (error !== undefined) {
     throw new Error(error);
   }
-  return NextResponse.json(result);
+  const { account } = result;
+  return NextResponse.json({ account });
 }

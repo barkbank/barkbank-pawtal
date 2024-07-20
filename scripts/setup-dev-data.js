@@ -111,8 +111,8 @@ function createVet(idx) {
   };
   return Promise.resolve()
     .then(() =>
-      doRequest("POST", "/api/dangerous/vets", vetSpec).then((vet) => {
-        vet;
+      doRequest("POST", "/api/dangerous/vets", vetSpec).then(({ vet }) => {
+        return { vet };
       }),
     )
     .then(({ vet }) =>
@@ -120,13 +120,16 @@ function createVet(idx) {
         vetId: vet.vetId,
         vetAccountEmail: `manager${idx}@vet.com`,
         vetAccountName: `Manager ${idx}`,
-      }).then((account) => {
-        vet, account;
+      }).then(({ account }) => {
+        return {
+          vet,
+          account,
+        };
       }),
     )
-    .then((result) => {
-      console.log({ _msg: "createVet", result });
-      return result;
+    .then(({ vet, account }) => {
+      console.log({ _msg: "createVet", vet, account });
+      return { vet, account };
     });
 }
 
