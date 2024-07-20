@@ -1,10 +1,11 @@
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { BarkContext } from "../bark-context";
 import { CODE } from "@/lib/utilities/bark-code";
-import { VetLogin } from "../models/vet-login";
+import { VetLogin } from "../models/vet-models";
 import { dbRelease } from "@/lib/data/db-utils";
-import { selectVetLoginClinicByEmail } from "../queries/select-vet-login-clinic-by-email";
-import { selectVetLoginByAccountEmail } from "../queries/select-vet-login-by-account-email";
+import { VetClinicDao } from "../queries/vet-clinic-dao";
+import { SecureVetAccountDao } from "../queries/secure-vet-account-dao";
+import { toVetAccount } from "../mappers/to-vet-account";
 
 export async function opGetVetLoginByEmail(
   context: BarkContext,
@@ -18,25 +19,38 @@ export async function opGetVetLoginByEmail(
   >
 > {
   const { email } = args;
-  const { dbPool } = context;
+  const { emailHashService, dbPool } = context;
   const conn = await dbPool.connect();
   try {
-    const [clinic, vetLogin] = await Promise.all([
-      selectVetLoginClinicByEmail(conn, { email }),
-      selectVetLoginByAccountEmail(conn, { email }),
-    ]);
-    if (clinic !== null && vetLogin !== null) {
-      if (clinic.vetId !== vetLogin.clinic.vetId) {
+    const hashedEmail = await emailHashService.getHashHex(email);
+    const secureAccountDao = new SecureVetAccountDao(conn);
+    const clinicDao = new VetClinicDao(conn);
+    const secureAccount = await secureAccountDao.getByHashedEmail({
+      hashedEmail,
+    });
+    const clinicByEmail = await clinicDao.getByEmail({ email });
+    const clinicByVetId =
+      secureAccount === null
+        ? null
+        : await clinicDao.getByVetId({ vetId: secureAccount.vetId });
+    if (clinicByEmail !== null && clinicByVetId !== null) {
+      if (clinicByEmail.vetId !== clinicByVetId.vetId) {
         return Err(CODE.ERROR_MULTIPLE_VET_IDS);
       }
     }
-    if (vetLogin !== null) {
-      return Ok({ vetLogin });
+    const clinic = clinicByEmail || clinicByVetId;
+    if (clinic === null) {
+      return Err(CODE.ERROR_ACCOUNT_NOT_FOUND);
     }
-    if (clinic !== null) {
-      return Ok({ vetLogin: { clinic } });
+    if (secureAccount === null) {
+      return Ok({
+        vetLogin: { clinic },
+      });
     }
-    return Err(CODE.ERROR_ACCOUNT_NOT_FOUND);
+    const account = await toVetAccount(context, secureAccount);
+    return Ok({
+      vetLogin: { clinic, account },
+    });
   } catch (err) {
     console.error(err);
     return Err(CODE.FAILED);

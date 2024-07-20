@@ -2,7 +2,7 @@ import { BarkNavLayout } from "@/components/bark/navigation/bark-nav-layout";
 import { BarkNavRoute } from "@/components/bark/navigation/bark-nav-route";
 import { Separator } from "@/components/ui/separator";
 import { getAuthenticatedVetActor } from "@/lib/auth";
-import { VetLogin } from "@/lib/bark/models/vet-login";
+import { VetLogin } from "@/lib/bark/models/vet-models";
 import { IMG_PATH } from "@/lib/image-path";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";

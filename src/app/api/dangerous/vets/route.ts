@@ -8,5 +8,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   const spec = body as VetSpec;
   const dbPool = await APP.getDbPool();
   const gen = await dbInsertVet(dbPool, spec);
-  return NextResponse.json(gen);
+  const vet = { ...spec, ...gen };
+  return NextResponse.json({ vet });
 }

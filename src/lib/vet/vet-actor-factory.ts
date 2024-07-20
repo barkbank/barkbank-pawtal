@@ -2,7 +2,7 @@ import { VetActor, VetActorConfig } from "./vet-actor";
 import { LRUCache } from "lru-cache";
 import { BarkContext } from "../bark/bark-context";
 import { opGetVetLoginByEmail } from "../bark/operations/op-get-vet-login-by-email";
-import { VetLogin } from "../bark/models/vet-login";
+import { VetLogin } from "../bark/models/vet-models";
 
 export class VetActorFactory {
   private context: BarkContext;

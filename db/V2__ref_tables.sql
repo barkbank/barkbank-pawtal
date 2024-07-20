@@ -26,10 +26,11 @@ CREATE TABLE vets (
 
 CREATE TABLE vet_accounts (
   vet_account_id BIGSERIAL,
-  vet_account_email TEXT NOT NULL,
   vet_id BIGINT,
-  vet_account_name TEXT NOT NULL,
-  CONSTRAINT vet_accounts_unique_email UNIQUE (vet_account_email),
+  vet_account_hashed_email TEXT NOT NULL,
+  vet_account_encrypted_email TEXT NOT NULL,
+  vet_account_encrypted_name TEXT NOT NULL,
+  CONSTRAINT vet_accounts_unique_hashed_email UNIQUE(vet_account_hashed_email),
   CONSTRAINT vet_accounts_fk_vets FOREIGN KEY (vet_id) REFERENCES vets (vet_id),
   CONSTRAINT vet_account_pk PRIMARY KEY (vet_account_id)
 );
