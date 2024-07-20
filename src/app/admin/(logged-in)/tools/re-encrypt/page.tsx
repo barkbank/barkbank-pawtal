@@ -12,15 +12,15 @@ export default function Page() {
   const [result, setResult] = useState<ReEncryptResult | {}>({});
   const [error, setError] = useState<string>("");
   const reEncrypt = async () => {
-    toast({ variant: "brandInfo", title: "Re-encrypting..." });
+    toast({ variant: "default", title: "Re-encrypting..." });
     const { result, error } = await postReEncrypt();
     if (error !== undefined) {
-      toast({ variant: "brandError", title: "Re-encryption failed" });
+      toast({ variant: "destructive", title: "Re-encryption failed" });
       setError(error);
       return;
     }
     toast({
-      variant: "brandSuccess",
+      variant: "default",
       title: "Re-encryption successful",
     });
     setResult(result);
