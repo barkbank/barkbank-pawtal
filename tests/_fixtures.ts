@@ -78,6 +78,7 @@ import { getDogProfile } from "@/lib/user/actions/get-dog-profile";
 import { sprintf } from "sprintf-js";
 import { toSubProfile } from "@/lib/bark/mappers/to-sub-profile";
 import { BarkContext } from "@/lib/bark/bark-context";
+import { EmailHashService } from "@/lib/services/email-hash-service";
 
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
@@ -88,7 +89,8 @@ export function ensureTimePassed(): void {
 }
 
 export function getEmailHashService(): HashService {
-  return new HarnessHashService();
+  const harness = new HarnessHashService();
+  return new EmailHashService(harness);
 }
 
 export function getPiiEncryptionService(): EncryptionService {
