@@ -1,7 +1,11 @@
 import { SimpleErrorPage } from "@/app/_components/simple-error-page";
+import { BarkBackLink } from "@/components/bark/bark-back-link";
+import { Button } from "@/components/ui/button";
 import APP from "@/lib/app";
 import { VetClinic } from "@/lib/bark/models/vet-models";
 import { opGetVetClinics } from "@/lib/bark/operations/op-get-vet-clinics";
+import { RoutePath } from "@/lib/route-path";
+import Link from "next/link";
 
 export default async function Page() {
   const context = await APP.getBarkContext();
@@ -11,7 +15,8 @@ export default async function Page() {
   }
   const { clinics } = result;
   return (
-    <div className="m-3">
+    <div className="m-3 flex flex-col gap-3">
+      <BarkBackLink href={RoutePath.ADMIN_TOOLS_PAGE} />
       <div className="prose">
         <h1>Vets</h1>
         <p>A tool for managing vet clinics and login accounts.</p>
@@ -20,6 +25,11 @@ export default async function Page() {
         {clinics.map((clinic) => (
           <_ClinicCard clinic={clinic} key={clinic.vetId} />
         ))}
+      </div>
+      <div>
+        <Link href={RoutePath.ADMIN_TOOLS_VETS_ADD_PAGE}>
+          <Button className="w-full p-6 md:w-40">Add</Button>
+        </Link>
       </div>
     </div>
   );
