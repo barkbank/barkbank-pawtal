@@ -1,4 +1,5 @@
 import { BarkBackLink } from "@/components/bark/bark-back-link";
+import { Button } from "@/components/ui/button";
 import APP from "@/lib/app";
 import { toVetAccount } from "@/lib/bark/mappers/to-vet-account";
 import { SecureVetAccountDao } from "@/lib/bark/queries/secure-vet-account-dao";
@@ -23,6 +24,12 @@ export default async function Page(props: { params: { vetId: string } }) {
         <h1>View Clinic</h1>
         <pre>{JSON.stringify({ clinic, accounts }, null, 2)}</pre>
       </div>
+      <Button variant="secondary" className="w-full p-6 md:w-40">
+        Edit Clinic
+      </Button>
+      <Button variant="secondary" className="w-full p-6 md:w-40">
+        Add Account
+      </Button>
     </div>
   );
 }
