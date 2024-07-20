@@ -48,13 +48,12 @@ import {
 import { EncryptionProtocol } from "./encryption/encryption-protocol";
 import { BARKBANK_ENV, BarkBankEnv } from "./barkbank-env";
 import { EmailHashService } from "./services/email-hash-service";
-import Email from "next-auth/providers/email";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
   private promisedEmailService: Promise<EmailService> | null = null;
   private promisedOtpService: Promise<OtpService> | null = null;
-  private promisedPiiHashService: Promise<HashService> | null = null;
+  private promisedEmailHashservice: Promise<HashService> | null = null;
   private promisedPiiEncryptionService: Promise<EncryptionService> | null =
     null;
   private promisedOiiEncryptionService: Promise<EncryptionService> | null =
@@ -202,15 +201,14 @@ export class AppFactory {
   }
 
   public getEmailHashService(): Promise<HashService> {
-    if (this.promisedPiiHashService === null) {
-      const secretHashService = new SecretHashService(
-        this.envString(APP_ENV.BARKBANK_EMAIL_SECRET),
-      );
+    if (this.promisedEmailHashservice === null) {
+      const secret = this.envString(APP_ENV.BARKBANK_EMAIL_SECRET);
+      const secretHashService = new SecretHashService(secret);
       const emailHashService = new EmailHashService(secretHashService);
-      this.promisedPiiHashService = Promise.resolve(emailHashService);
+      this.promisedEmailHashservice = Promise.resolve(emailHashService);
       console.log("Created EmailHashService");
     }
-    return this.promisedPiiHashService;
+    return this.promisedEmailHashservice;
   }
 
   private getHkdfInputKeyMaterialList(): HkdfInputKeyMaterial[] {
