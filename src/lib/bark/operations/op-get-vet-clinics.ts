@@ -10,7 +10,7 @@ export async function opGetVetClinics(
   const { dbPool } = context;
   try {
     const vetClinicDao = new VetClinicDao(dbPool);
-    const clinics: VetClinic[] = await vetClinicDao.getList();
+    const clinics: VetClinic[] = await vetClinicDao.listAll();
     return Ok({ clinics });
   } catch (err) {
     console.error(err);

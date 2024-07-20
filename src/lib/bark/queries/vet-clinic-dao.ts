@@ -20,7 +20,7 @@ export class VetClinicDao {
 
   constructor(private db: DbContext) {}
 
-  async getList(): Promise<VetClinic[]> {
+  async listAll(): Promise<VetClinic[]> {
     const sql = this.getSql("ORDER BY vet_name ASC");
     const res = await dbQuery<VetClinic>(this.db, sql, []);
     return this.toList(res);
