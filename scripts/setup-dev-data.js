@@ -498,7 +498,7 @@ function generateAccounts() {
   function createVetAccounts() {
     return Promise.all(
       irange(numVets).map((vetIdx) => {
-        return createVet(vetIdx).then((vet) => {
+        return createVet(vetIdx).then(({vet}) => {
           vetIdxToVetId[vetIdx] = vet.vetId;
         });
       }),
