@@ -18,10 +18,12 @@ export async function opGetVetLoginByEmail(
   >
 > {
   const { email } = args;
-  const { dbPool } = context;
+  const { emailHashService, dbPool } = context;
   const conn = await dbPool.connect();
   try {
-    // WIP: Impl selectVetAccountByHashedEmail -> VetAccount
+    const hashedEmail = await emailHashService.getHashHex(email);
+    // WIP: Impl toVetAccount(SecureVetAccount)
+    // WIP: Impl toSecureVetAccount(VetAccount)
 
     // WIP: Use selectVetAccountByHashedEmail to get a VetAccount | null
     // WIP: If account is available, use selectVetClinicById to get VetClinic | null - should not be null
