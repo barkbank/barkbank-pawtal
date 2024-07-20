@@ -1,7 +1,7 @@
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { BarkContext } from "../bark-context";
 import { CODE } from "@/lib/utilities/bark-code";
-import { VetLogin } from "../models/vet-login";
+import { VetLogin } from "../models/vet-models";
 import { dbRelease } from "@/lib/data/db-utils";
 import { selectVetLoginClinicByEmail } from "../queries/select-vet-login-clinic-by-email";
 import { selectVetLoginByAccountEmail } from "../queries/select-vet-login-by-account-email";
@@ -21,6 +21,8 @@ export async function opGetVetLoginByEmail(
   const { dbPool } = context;
   const conn = await dbPool.connect();
   try {
+    // WIP: Impl selectVetClinicByEmail -> VetClinic
+    // WIP: Impl selectVetAccountByHashedEmail -> VetAccount
     const [clinic, vetLogin] = await Promise.all([
       selectVetLoginClinicByEmail(conn, { email }),
       selectVetLoginByAccountEmail(conn, { email }),
@@ -34,6 +36,7 @@ export async function opGetVetLoginByEmail(
       return Ok({ vetLogin });
     }
     if (clinic !== null) {
+      // WIP: Fix this type error
       return Ok({ vetLogin: { clinic } });
     }
     return Err(CODE.ERROR_ACCOUNT_NOT_FOUND);

@@ -1,6 +1,7 @@
 import { DbContext, dbQuery } from "@/lib/data/db-utils";
 import { VetLoginClinic, VetLoginClinicSchema } from "../models/vet-login";
 
+// WIP: Remove when no longer used.
 export async function selectVetLoginClinicByEmail(
   db: DbContext,
   args: { email: string },

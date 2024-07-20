@@ -2,7 +2,7 @@ import { Pool } from "pg";
 import { EncryptionService } from "../services/encryption";
 import { UserMapper } from "../data/user-mapper";
 import { DogMapper } from "../data/dog-mapper";
-import { VetLogin } from "../bark/models/vet-login";
+import { VetLogin } from "../bark/models/vet-models";
 
 // TODO: Replace VetActorConfig with BarkContext
 export type VetActorConfig = {
