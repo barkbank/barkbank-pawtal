@@ -47,6 +47,8 @@ import {
 } from "./encryption/hkdf-encryption-protocol";
 import { EncryptionProtocol } from "./encryption/encryption-protocol";
 import { BARKBANK_ENV, BarkBankEnv } from "./barkbank-env";
+import { EmailHashService } from "./services/email-hash-service";
+import Email from "next-auth/providers/email";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -201,9 +203,11 @@ export class AppFactory {
 
   public getEmailHashService(): Promise<HashService> {
     if (this.promisedPiiHashService === null) {
-      this.promisedPiiHashService = Promise.resolve(
-        new SecretHashService(this.envString(APP_ENV.BARKBANK_EMAIL_SECRET)),
+      const secretHashService = new SecretHashService(
+        this.envString(APP_ENV.BARKBANK_EMAIL_SECRET),
       );
+      const emailHashService = new EmailHashService(secretHashService);
+      this.promisedPiiHashService = Promise.resolve(emailHashService);
       console.log("Created EmailHashService");
     }
     return this.promisedPiiHashService;
