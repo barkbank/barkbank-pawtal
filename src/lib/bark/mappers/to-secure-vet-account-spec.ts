@@ -1,7 +1,8 @@
 import { BarkContext } from "../bark-context";
 import {
   SecureVetAccountSpec,
-  SecureVetAccountSpecSchema, VetAccountSpec
+  SecureVetAccountSpecSchema,
+  VetAccountSpec,
 } from "../models/vet-models";
 
 export async function toSecureVetAccountSpec(

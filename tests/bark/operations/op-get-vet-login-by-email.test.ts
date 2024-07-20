@@ -3,11 +3,10 @@ import { withBarkContext } from "../_context";
 import { z } from "zod";
 import { CODE } from "@/lib/utilities/bark-code";
 import { opGetVetLoginByEmail } from "@/lib/bark/operations/op-get-vet-login-by-email";
-import {
-  SecureVetAccountDao,
-  SecureVetAccountInsertion,
-} from "@/lib/bark/queries/secure-vet-account-dao";
-import { getEmailHashService, getPiiEncryptionService } from "../../_fixtures";
+import { SecureVetAccountDao } from "@/lib/bark/queries/secure-vet-account-dao";
+import { VetAccountSpec } from "@/lib/bark/models/vet-models";
+import { toSecureVetAccountSpec } from "@/lib/bark/mappers/to-secure-vet-account-spec";
+import { BarkContext } from "@/lib/bark/bark-context";
 
 describe("opGetVetLoginByEmail", () => {
   it("can resolve by vets.vet_email", async () => {
@@ -25,7 +24,7 @@ describe("opGetVetLoginByEmail", () => {
       const email = "hello@vet.com";
       const accountEmail = "manager@vet.com";
       const { vetId } = await _insertVet(dbPool, { email });
-      await _insertVetAccount(dbPool, { email: accountEmail, vetId });
+      await _insertVetAccount(context, { email: accountEmail, vetId });
       const res = await opGetVetLoginByEmail(context, { email: accountEmail });
       expect(res.result!.vetLogin.clinic.vetId).toEqual(vetId);
     });
@@ -38,7 +37,7 @@ describe("opGetVetLoginByEmail", () => {
       const otherEmail = "other@vet.com";
 
       const { vetId } = await _insertVet(dbPool, { email });
-      await _insertVetAccount(dbPool, { email: accountEmail, vetId });
+      await _insertVetAccount(context, { email: accountEmail, vetId });
 
       const res = await opGetVetLoginByEmail(context, { email: otherEmail });
       expect(res.error).toEqual(CODE.ERROR_ACCOUNT_NOT_FOUND);
@@ -55,7 +54,7 @@ describe("opGetVetLoginByEmail", () => {
       // AND vet2 with email that has an account at vet1
       const email2 = "hello@vet2.com";
       await _insertVet(dbPool, { email: email2 });
-      await _insertVetAccount(dbPool, { email: email2, vetId: vetId1 });
+      await _insertVetAccount(context, { email: email2, vetId: vetId1 });
 
       // WHEN retrieving vet ID by email2
       const res = await opGetVetLoginByEmail(context, { email: email2 });
@@ -71,7 +70,7 @@ describe("opGetVetLoginByEmail", () => {
       // GIVEN vet1
       const email = "hello@vet1.com";
       const { vetId } = await _insertVet(dbPool, { email });
-      await _insertVetAccount(dbPool, { email, vetId });
+      await _insertVetAccount(context, { email, vetId });
 
       // WHEN
       const res = await opGetVetLoginByEmail(context, { email });
@@ -110,20 +109,19 @@ async function _insertVet(
 }
 
 async function _insertVetAccount(
-  db: DbContext,
+  context: BarkContext,
   args: { email: string; vetId: string },
 ): Promise<{ vetAccountId: string }> {
+  const { dbPool } = context;
   const { email, vetId } = args;
-  const record: SecureVetAccountInsertion = {
+  const spec: VetAccountSpec = {
     vetId,
-    vetAccountHashedEmail: await getEmailHashService().getHashHex(email),
-    vetAccountEncryptedEmail:
-      await getPiiEncryptionService().getEncryptedData(email),
-    vetAccountEncryptedName:
-      await getPiiEncryptionService().getEncryptedData("Mandy"),
+    vetAccountEmail: email,
+    vetAccountName: "Mandy",
   };
-  const dao = new SecureVetAccountDao(db);
-  const rec = await dao.insert({ record });
+  const secured = await toSecureVetAccountSpec(context, spec);
+  const dao = new SecureVetAccountDao(dbPool);
+  const rec = await dao.insert({ spec: secured });
   const { vetAccountId } = rec;
   return { vetAccountId };
 }

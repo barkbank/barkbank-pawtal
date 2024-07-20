@@ -1,14 +1,12 @@
 import { DbContext, dbQuery } from "@/lib/data/db-utils";
-import { SecureVetAccount, SecureVetAccountSchema } from "../models/vet-models";
+import {
+  SecureVetAccount,
+  SecureVetAccountSchema,
+  SecureVetAccountSpec,
+  SecureVetAccountSpecSchema,
+} from "../models/vet-models";
 import { QueryResult } from "pg";
 import { z } from "zod";
-
-export const SecureVetAccountInsertionSchema = SecureVetAccountSchema.omit({
-  vetAccountId: true,
-});
-export type SecureVetAccountInsertion = z.infer<
-  typeof SecureVetAccountInsertionSchema
->;
 
 export class SecureVetAccountDao {
   private selectFromVetAccounts = `
@@ -39,15 +37,15 @@ export class SecureVetAccountDao {
   }
 
   async insert(args: {
-    record: SecureVetAccountInsertion;
+    spec: SecureVetAccountSpec;
   }): Promise<SecureVetAccount> {
-    const { record } = args;
+    const { spec } = args;
     const {
       vetId,
       vetAccountHashedEmail,
       vetAccountEncryptedEmail,
       vetAccountEncryptedName,
-    } = SecureVetAccountInsertionSchema.parse(record);
+    } = SecureVetAccountSpecSchema.parse(spec);
     const sql = `
     INSERT INTO vet_accounts (
       vet_id,
