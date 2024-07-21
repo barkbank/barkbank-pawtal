@@ -9,13 +9,11 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { postAdminCommand } from "./_lib/post-admin-command";
 import { BarkForm } from "@/components/bark/bark-form";
-import { BarkFormSelect } from "@/components/bark/bark-form-select";
 import {
   getCommandNames,
   getCommandRequestExample,
   isCommandName,
 } from "@/lib/admin/rpc/command-index";
-import { BarkFormOption } from "@/components/bark/bark-form-option";
 import { BarkFormTextArea } from "@/components/bark/bark-form-text-area";
 import { BarkBackLink } from "@/components/bark/bark-back-link";
 import { RoutePath } from "@/lib/route-path";
@@ -58,7 +56,7 @@ export default function Page() {
     setResult(result);
     setError("");
   };
-  const commandOptions = getCommandNames();
+  const commandSuggestions = getCommandNames();
   const { commandName: selectedCommandName } = form.watch();
   const onUseExample = () => {
     if (isCommandName(selectedCommandName)) {
@@ -83,7 +81,7 @@ export default function Page() {
             form={form}
             label="Command"
             name="commandName"
-            suggestions={commandOptions}
+            suggestions={commandSuggestions}
             value={selectedCommandName}
             onEmptyQuery="MATCH_ALL"
           />
