@@ -1,10 +1,16 @@
 import { RoutePath } from "@/lib/route-path";
-import { FileKey2, Hospital } from "lucide-react";
+import { Braces, FileKey2, Hospital } from "lucide-react";
 import Link from "next/link";
 
 export default function Page() {
   const iconSize = 36;
   const toolSpecs: _ToolSpec[] = [
+    {
+      icon: <Braces size={iconSize} />,
+      name: "RPC",
+      description: "Admin RPC Commands",
+      href: RoutePath.ADMIN_TOOLS_RPC,
+    },
     {
       icon: <Hospital size={iconSize} />,
       name: "Vets",

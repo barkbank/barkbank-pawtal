@@ -9,4 +9,5 @@ export type AdminCommandArgs = {
 
 export interface AdminCommand {
   run(args: AdminCommandArgs): Promise<string>;
+  getExampleRequest(): string;
 }

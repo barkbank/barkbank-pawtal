@@ -11,7 +11,21 @@ const RequestSchema = z.object({
   accounts: z.array(VetAccountSpecSchema),
 });
 
+type Request = z.infer<typeof RequestSchema>;
+
 export class AddVetAccounts implements AdminCommand {
+  getExampleRequest(): string {
+    const example: Request = {
+      accounts: [
+        {
+          vetId: "123",
+          vetAccountEmail: "someone@domain",
+          vetAccountName: "Someone",
+        },
+      ],
+    };
+    return JSON.stringify(example, null, 2);
+  }
   async run(args: AdminCommandArgs): Promise<string> {
     const { context, request } = args;
     const obj = JSON.parse(request);
