@@ -15,8 +15,9 @@ export function BarkFormTextArea(props: {
   label: string;
   placeholder?: string;
   description?: string;
+  rows?: number;
 }) {
-  const { form, name, label, placeholder, description } = props;
+  const { form, name, label, placeholder, description, rows } = props;
   return (
     <FormField
       control={form.control}
@@ -28,6 +29,7 @@ export function BarkFormTextArea(props: {
             <Textarea
               placeholder={placeholder}
               className="resize-none text-base"
+              rows={rows}
               {...field}
             />
           </FormControl>
