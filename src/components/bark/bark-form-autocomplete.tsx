@@ -20,6 +20,7 @@ export function BarkFormAutocomplete(props: {
   placeholder?: string;
   description?: string | React.ReactNode;
   children?: React.ReactNode;
+  onEmptyQuery?: "MATCH_NONE" | "MATCH_ALL" | undefined;
 }) {
   const {
     form,
@@ -30,10 +31,12 @@ export function BarkFormAutocomplete(props: {
     placeholder,
     description,
     children,
+    onEmptyQuery,
   } = props;
   const [showList, setShowList] = useState<boolean>(false);
   const currentValue = value ?? "";
-  const matches = getMatches(currentValue, suggestions);
+  const _onEmptyQuery = onEmptyQuery ?? "MATCH_NONE";
+  const matches = _getMatches(currentValue, suggestions, _onEmptyQuery);
   console.log(`${matches.length} matches`);
 
   const onValueChange = (value: string) => {
@@ -97,9 +100,16 @@ export function BarkFormAutocomplete(props: {
   );
 }
 
-function getMatches(query: string | undefined, items: string[]): string[] {
+function _getMatches(
+  query: string | undefined,
+  items: string[],
+  onEmptyQuery: "MATCH_NONE" | "MATCH_ALL",
+): string[] {
   if (!query) {
-    return [];
+    if (onEmptyQuery === "MATCH_NONE") {
+      return [];
+    }
+    return items;
   }
   return getMatchingItems<string>({
     query,

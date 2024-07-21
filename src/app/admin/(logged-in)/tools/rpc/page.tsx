@@ -19,6 +19,7 @@ import { BarkFormOption } from "@/components/bark/bark-form-option";
 import { BarkFormTextArea } from "@/components/bark/bark-form-text-area";
 import { BarkBackLink } from "@/components/bark/bark-back-link";
 import { RoutePath } from "@/lib/route-path";
+import { BarkFormAutocomplete } from "@/components/bark/bark-form-autocomplete";
 
 const CommandRequestSchema = z.object({
   commandName: z.string(),
@@ -57,14 +58,7 @@ export default function Page() {
     setResult(result);
     setError("");
   };
-  const commandOptions: BarkFormOption[] = getCommandNames().map(
-    (commandName) => {
-      return {
-        value: commandName,
-        label: commandName,
-      };
-    },
-  );
+  const commandOptions = getCommandNames();
   const { commandName: selectedCommandName } = form.watch();
   const onUseExample = () => {
     if (isCommandName(selectedCommandName)) {
@@ -85,11 +79,13 @@ export default function Page() {
       <div className="x-card w-full">
         <p className="x-card-title">Request</p>
         <BarkForm form={form} onSubmit={onSubmit}>
-          <BarkFormSelect
+          <BarkFormAutocomplete
             form={form}
             label="Command"
             name="commandName"
-            options={commandOptions}
+            suggestions={commandOptions}
+            value={selectedCommandName}
+            onEmptyQuery="MATCH_ALL"
           />
           <BarkFormTextArea
             form={form}
