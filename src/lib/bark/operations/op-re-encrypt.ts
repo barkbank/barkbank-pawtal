@@ -18,6 +18,8 @@ import { updateEncryptedDogFields } from "../queries/update-encrypted-dog-fields
 import { toReEncryptedReportFields } from "../mappers/to-re-encrypted-report-fields";
 import { selectEncryptedReportFields } from "../queries/select-encrypted-report-fields";
 import { updateEncryptedReportFields } from "../queries/update-encrypted-report-fields";
+import { SecureVetAccountDao } from "../daos/secure-vet-account-dao";
+import { toReEncryptedVetAccountFields } from "../mappers/to-re-encrypted-vet-account-fields";
 
 export async function opReEncrypt(
   context: BarkContext,
@@ -28,7 +30,7 @@ export async function opReEncrypt(
     _reEncryptUserRecords(context),
     _reEncryptDogRecords(context),
     _reEncryptReportRecords(context),
-    // TODO: _reEncryptVetAccountRecords
+    _reEncryptVetAccountRecords(context),
   ]);
   for (const res of responses) {
     if (res.error !== undefined) {
@@ -120,6 +122,23 @@ async function _reEncryptReportRecords(
     fetchAll: selectEncryptedReportFields,
     updateOne: (ctx, encryptedReportFields) => {
       return updateEncryptedReportFields(ctx, { encryptedReportFields });
+    },
+  });
+}
+
+async function _reEncryptVetAccountRecords(
+  context: BarkContext,
+): Promise<Result<ReEncryptTableInfo, typeof CODE.FAILED>> {
+  return _reEncryptTable(context, {
+    tableName: "vet_accounts",
+    reEncrypt: toReEncryptedVetAccountFields,
+    fetchAll: async (db) => {
+      const dao = new SecureVetAccountDao(db);
+      return dao.listAll();
+    },
+    updateOne: async (db, secureAccount) => {
+      const dao = new SecureVetAccountDao(db);
+      dao.update({ secureAccount });
     },
   });
 }

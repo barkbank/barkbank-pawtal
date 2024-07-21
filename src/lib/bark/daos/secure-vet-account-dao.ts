@@ -36,6 +36,12 @@ export class SecureVetAccountDao {
     return this.toList(res);
   }
 
+  async listAll(): Promise<SecureVetAccount[]> {
+    const sql = this.getSql("ORDER BY vet_account_id");
+    const res = await dbQuery<SecureVetAccount>(this.db, sql, []);
+    return this.toList(res);
+  }
+
   async insert(args: {
     secureSpec: SecureVetAccountSpec;
   }): Promise<SecureVetAccount> {
@@ -68,6 +74,36 @@ export class SecureVetAccountDao {
       vetAccountEncryptedName,
     ]);
     return this.toRecord(res);
+  }
+
+  async update(args: { secureAccount: SecureVetAccount }): Promise<boolean> {
+    const { secureAccount } = args;
+    const {
+      vetAccountId,
+      vetId,
+      vetAccountHashedEmail,
+      vetAccountEncryptedEmail,
+      vetAccountEncryptedName,
+    } = secureAccount;
+    const sql = `
+    UPDATE vet_accounts
+    SET
+      vet_id = $2,
+      vet_account_hashed_email = $3,
+      vet_account_encrypted_email = $4,
+      vet_account_encrypted_name = $5
+    WHERE
+      vet_account_id = $1
+    RETURNING 1
+    `;
+    const res = await dbQuery(this.db, sql, [
+      vetAccountId,
+      vetId,
+      vetAccountHashedEmail,
+      vetAccountEncryptedEmail,
+      vetAccountEncryptedName,
+    ]);
+    return res.rows.length === 1;
   }
 
   async deleteByVetAccountId(args: { vetAccountId: string }): Promise<boolean> {
