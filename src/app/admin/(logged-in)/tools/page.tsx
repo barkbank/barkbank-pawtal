@@ -9,7 +9,7 @@ export default function Page() {
       icon: <Hospital size={iconSize} />,
       name: "Vets",
       description: "Manage vet clinics and login accounts",
-      href: RoutePath.ADMIN_TOOLS_VETS_PAGE,
+      href: RoutePath.ADMIN_TOOLS_VETS_LIST_CLINICS,
     },
     {
       icon: <FileKey2 size={iconSize} />,
