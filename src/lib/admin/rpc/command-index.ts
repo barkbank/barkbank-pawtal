@@ -1,10 +1,11 @@
-import { z } from "zod";
 import { AddVetAccounts } from "./commands/add-vet-accounts";
 import { ListVetClinics } from "./commands/list-vet-clinics";
+import { ListVetAccountsByVet } from "./commands/list-vet-accounts-by-vet";
 
 export const COMMANDS = {
   ListVetClinics: new ListVetClinics(),
   AddVetAccounts: new AddVetAccounts(),
+  ListVetAccountsByVet: new ListVetAccountsByVet(),
 } as const;
 
 export type CommandName = keyof typeof COMMANDS;
