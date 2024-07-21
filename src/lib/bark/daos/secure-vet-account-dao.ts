@@ -70,6 +70,17 @@ export class SecureVetAccountDao {
     return this.toRecord(res);
   }
 
+  async deleteByVetAccountId(args: { vetAccountId: string }): Promise<boolean> {
+    const { vetAccountId } = args;
+    const sql = `
+    DELETE FROM vet_accounts
+    WHERE vet_account_id = $1
+    RETURNING 1
+    `;
+    const res = await dbQuery(this.db, sql, [vetAccountId]);
+    return res.rows.length === 1;
+  }
+
   private toList(res: QueryResult<SecureVetAccount>): SecureVetAccount[] {
     return z.array(SecureVetAccountSchema).parse(res.rows);
   }
