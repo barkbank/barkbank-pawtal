@@ -97,21 +97,23 @@ export default function Page() {
             name="request"
             rows={8}
           />
-          <Button
-            variant="secondary"
-            className="w-full p-6 md:w-40"
-            type="button"
-            onClick={onUseExample}
-          >
-            Use Example Request
-          </Button>
-          <Button
-            variant="default"
-            className="w-full p-6 md:w-40"
-            type="submit"
-          >
-            Send Request
-          </Button>
+          <div className="flex flex-col gap-3 md:flex-row">
+            <Button
+              variant="default"
+              className="w-full p-6 md:w-40"
+              type="submit"
+            >
+              Send Request
+            </Button>
+            <Button
+              variant="secondary"
+              className="w-full p-6 md:w-40"
+              type="button"
+              onClick={onUseExample}
+            >
+              Load Example
+            </Button>
+          </div>
         </BarkForm>
       </div>
       {result !== "" && (
