@@ -28,6 +28,7 @@ export async function opReEncrypt(
     _reEncryptUserRecords(context),
     _reEncryptDogRecords(context),
     _reEncryptReportRecords(context),
+    // TODO: _reEncryptVetAccountRecords
   ]);
   for (const res of responses) {
     if (res.error !== undefined) {

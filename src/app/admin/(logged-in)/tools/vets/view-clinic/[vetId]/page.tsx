@@ -1,9 +1,9 @@
 import { BarkBackLink } from "@/components/bark/bark-back-link";
 import { Button } from "@/components/ui/button";
 import APP from "@/lib/app";
+import { SecureVetAccountDao } from "@/lib/bark/daos/secure-vet-account-dao";
+import { VetClinicDao } from "@/lib/bark/daos/vet-clinic-dao";
 import { toVetAccount } from "@/lib/bark/mappers/to-vet-account";
-import { SecureVetAccountDao } from "@/lib/bark/queries/secure-vet-account-dao";
-import { VetClinicDao } from "@/lib/bark/queries/vet-clinic-dao";
 import { RoutePath } from "@/lib/route-path";
 
 export default async function Page(props: { params: { vetId: string } }) {
