@@ -3,7 +3,7 @@ import { VetAccount, VetAccountSpec } from "../models/vet-models";
 import { CODE } from "@/lib/utilities/bark-code";
 import { BarkContext } from "../bark-context";
 import { toSecureVetAccountSpec } from "../mappers/to-secure-vet-account-spec";
-import { SecureVetAccountDao } from "../queries/secure-vet-account-dao";
+import { SecureVetAccountDao } from "../daos/secure-vet-account-dao";
 import { toVetAccount } from "../mappers/to-vet-account";
 
 export async function opAddVetAccount(

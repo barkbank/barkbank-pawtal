@@ -1,7 +1,7 @@
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { BarkContext } from "../bark-context";
 import { CODE } from "@/lib/utilities/bark-code";
-import { SecureVetAccountDao } from "../queries/secure-vet-account-dao";
+import { SecureVetAccountDao } from "../daos/secure-vet-account-dao";
 import { toVetAccount } from "../mappers/to-vet-account";
 import { VetAccount } from "../models/vet-models";
 

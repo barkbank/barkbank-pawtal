@@ -3,8 +3,8 @@ import { BarkContext } from "../bark-context";
 import { CODE } from "@/lib/utilities/bark-code";
 import { VetLogin } from "../models/vet-models";
 import { dbRelease } from "@/lib/data/db-utils";
-import { VetClinicDao } from "../queries/vet-clinic-dao";
-import { SecureVetAccountDao } from "../queries/secure-vet-account-dao";
+import { VetClinicDao } from "../daos/vet-clinic-dao";
+import { SecureVetAccountDao } from "../daos/secure-vet-account-dao";
 import { toVetAccount } from "../mappers/to-vet-account";
 
 export async function opGetVetLoginByEmail(
