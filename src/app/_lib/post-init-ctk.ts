@@ -1,5 +1,6 @@
 "use server";
 
+import { COOKIE_NAME } from "@/lib/cookie-names";
 import { randomUUID } from "crypto";
 import { cookies } from "next/headers";
 
@@ -8,12 +9,11 @@ import { cookies } from "next/headers";
  * @returns CTK
  */
 export async function postInitCtk(): Promise<string> {
-  const cookieName = "pawtal.ctk";
-  const existing = cookies().get(cookieName);
+  const existing = cookies().get(COOKIE_NAME.CTK);
   if (existing !== undefined) {
     return existing.value;
   }
   const ctk = randomUUID();
-  cookies().set(cookieName, ctk);
+  cookies().set(COOKIE_NAME.CTK, ctk);
   return ctk;
 }

@@ -7,7 +7,7 @@ import { postInitCtk } from "../_lib/post-init-ctk";
 const RootHeader = () => {
   useEffect(() => {
     postInitCtk();
-  }, [])
+  }, []);
   return <HeaderItems />;
 };
 

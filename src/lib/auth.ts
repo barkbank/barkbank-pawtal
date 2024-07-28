@@ -7,6 +7,9 @@ import { AdminActor } from "./admin/admin-actor";
 import { VetActor } from "./vet/vet-actor";
 import { UserActor } from "./user/user-actor";
 import { AccountType } from "./auth-models";
+import { randomUUID } from "crypto";
+import { cookies } from "next/headers";
+import { COOKIE_NAME } from "./cookie-names";
 
 export const NEXT_AUTH_OPTIONS: NextAuthOptions = {
   providers: [
@@ -34,6 +37,7 @@ export const NEXT_AUTH_OPTIONS: NextAuthOptions = {
             return null;
           }
           const getNextAuthUser = () => {
+            _setSessionCookies();
             return {
               id: credentials.email,
               email: credentials.email,
@@ -70,6 +74,11 @@ export const NEXT_AUTH_OPTIONS: NextAuthOptions = {
     }),
   ],
 };
+
+function _setSessionCookies() {
+  const stk = randomUUID();
+  cookies().set(COOKIE_NAME.STK, stk);
+}
 
 export async function isLoggedIn(accountType: AccountType): Promise<boolean> {
   async function getActor(): Promise<AdminActor | VetActor | UserActor | null> {
