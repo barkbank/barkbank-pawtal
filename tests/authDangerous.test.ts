@@ -1,5 +1,5 @@
 import { BARKBANK_ENV } from "@/lib/barkbank-env";
-import { authDangerous } from "@/middleware";
+import { _authDangerous } from "@/middleware";
 import { NextRequest } from "next/server";
 
 describe("authDangerous", () => {
@@ -13,7 +13,7 @@ describe("authDangerous", () => {
       BARKBANK_ENV: BARKBANK_ENV.PRODUCTION,
     };
     const request = {} as NextRequest;
-    const response = await authDangerous(request, envs);
+    const response = await _authDangerous(request, envs);
     expect(response?.status).toBe(404);
   });
 
@@ -22,7 +22,7 @@ describe("authDangerous", () => {
       BARKBANK_ENV: BARKBANK_ENV.TEST,
     };
     const request = {} as NextRequest;
-    const response = await authDangerous(request, envs);
+    const response = await _authDangerous(request, envs);
     expect(response?.status).toBe(401);
   });
 
@@ -36,7 +36,7 @@ describe("authDangerous", () => {
         get: jest.fn().mockReturnValue("Basic incorrect-credentials"),
       },
     };
-    const response = await authDangerous(request, envs);
+    const response = await _authDangerous(request, envs);
     expect(response?.status).toBe(401);
   });
 
@@ -55,7 +55,7 @@ describe("authDangerous", () => {
           ),
       },
     };
-    const response = await authDangerous(request, envs);
+    const response = await _authDangerous(request, envs);
     expect(response?.status).toBe(403);
   });
 
@@ -74,7 +74,7 @@ describe("authDangerous", () => {
           ),
       },
     };
-    const response = await authDangerous(request, envs);
+    const response = await _authDangerous(request, envs);
     expect(response).toBeNull();
   });
 });
