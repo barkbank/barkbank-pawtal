@@ -1,8 +1,6 @@
-import React from "react";
 import HeaderItems from "./header-items";
 
-const RootHeader = async () => {
+export default function RootHeader() {
+  // TODO: Move HeaderItems into RootHeader, this layer is pointless.
   return <HeaderItems />;
-};
-
-export default RootHeader;
+}

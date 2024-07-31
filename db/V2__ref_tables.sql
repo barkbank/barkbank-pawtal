@@ -134,3 +134,17 @@ CREATE TABLE reports (
   CONSTRAINT reports_unique_dog_visit_time UNIQUE (dog_id, visit_time),
   CONSTRAINT reports_pk PRIMARY KEY (report_id)
 );
+
+CREATE TABLE pawtal_events (
+  event_id BIGSERIAL,
+  event_ts TIMESTAMP WITH TIME ZONE NOT NULL,
+  event_type TEXT NOT NULL,
+  ctk TEXT NOT NULL,
+  account_type TEXT DEFAULT NULL,
+  account_id TEXT DEFAULT NULL,
+  stk TEXT DEFAULT NULL,
+  x_pathname TEXT DEFAULT NULL,
+  CONSTRAINT ui_events_pk PRIMARY KEY (event_id)
+);
+
+CREATE INDEX idx_pawtal_events_event_ts ON pawtal_events(event_ts);

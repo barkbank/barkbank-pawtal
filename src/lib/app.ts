@@ -48,6 +48,7 @@ import {
 import { EncryptionProtocol } from "./encryption/encryption-protocol";
 import { BARKBANK_ENV, BarkBankEnv } from "./barkbank-env";
 import { EmailHashService } from "./services/email-hash-service";
+import { TrackerService } from "./bark/services/tracker-service";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -71,6 +72,7 @@ export class AppFactory {
     null;
   private promisedEmailOtpService: Promise<EmailOtpService> | null = null;
   private promisedBarkContext: Promise<BarkContext> | null = null;
+  private promisedTrackerService: Promise<TrackerService> | null = null;
 
   constructor(envs: NodeJS.Dict<string>) {
     this.envs = envs;
@@ -98,6 +100,18 @@ export class AppFactory {
       return val;
     }
     return BARKBANK_ENV.PRODUCTION;
+  }
+
+  public getTrackerService(): Promise<TrackerService> {
+    if (this.promisedTrackerService === null) {
+      this.promisedTrackerService = new Promise(async (resolve) => {
+        const context = await this.getBarkContext();
+        const service = new TrackerService(context);
+        console.log("Created TrackerService");
+        resolve(service);
+      });
+    }
+    return this.promisedTrackerService;
   }
 
   public getEmailService(): Promise<EmailService> {
