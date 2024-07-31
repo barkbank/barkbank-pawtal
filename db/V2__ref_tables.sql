@@ -146,3 +146,5 @@ CREATE TABLE pawtal_events (
   x_pathname TEXT DEFAULT NULL,
   CONSTRAINT ui_events_pk PRIMARY KEY (event_id)
 );
+
+CREATE INDEX idx_pawtal_events_event_ts ON pawtal_events(event_ts);
