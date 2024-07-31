@@ -2,7 +2,7 @@ import { DbContext, dbQuery } from "@/lib/data/db-utils";
 import { PageLoadEvent } from "../models/tracker-models";
 
 const EVENT_TYPE = {
-  PAGE_LOAD: "ui.page-load",
+  PAGE_LOAD: "ui.pageload",
 } as const;
 
 // WIP: Write test for PawtalEventsDao
