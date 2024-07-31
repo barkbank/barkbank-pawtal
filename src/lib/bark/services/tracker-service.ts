@@ -9,7 +9,7 @@ import {
   CookieInfoSchema,
   SessionInfo,
   SessionInfoSchema,
-  TrackingInfo,
+  PageLoadEvent,
 } from "@/lib/bark/models/tracker-models";
 import {
   getAuthenticatedAdminActor,
@@ -22,19 +22,20 @@ import { PawtalEventsDao } from "../daos/pawtal-events-dao";
 
 export class TrackerService {
   constructor(private context: BarkContext) {}
-  async onClientInfo(args: { clientInfo: ClientInfo }): Promise<void> {
+
+  async onPageLoad(args: { clientInfo: ClientInfo }): Promise<void> {
     const clientInfo = ClientInfoSchema.parse(args.clientInfo);
     const cookieInfo = _getCookieInfo();
     const sessionInfo = await _getSessionInfo();
-    const trackingInfo: TrackingInfo = {
+    const pageLoadEvent: PageLoadEvent = {
+      eventTs: new Date(),
       ...clientInfo,
       ...cookieInfo,
       ...sessionInfo,
     };
     const dao = new PawtalEventsDao(this.context.dbPool);
-    await dao.insertTrackingInfo({ trackingInfo });
-    console.log({ trackingInfo });
-    // WIP: Write tracking information into the database.
+    await dao.insertPageLoadEvent({ pageLoadEvent });
+    console.log({ pageLoadEvent });
   }
 }
 

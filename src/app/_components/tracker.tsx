@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
-import { postClientInfo } from "../_lib/actions/post-client-info";
+import { postOnPageLoad } from "../_lib/actions/post-on-page-load";
 import { ClientInfo } from "@/lib/bark/models/tracker-models";
 
 export function Tracker() {
@@ -11,7 +11,7 @@ export function Tracker() {
     const clientInfo: ClientInfo = {
       pathname,
     };
-    postClientInfo({ clientInfo });
+    postOnPageLoad({ clientInfo });
   }, [pathname]);
   return null;
 }

@@ -1,4 +1,3 @@
-import { AccountType } from "@/lib/auth-models";
 import { z } from "zod";
 
 export const ClientInfoSchema = z.object({
@@ -15,8 +14,10 @@ export const CookieInfoSchema = z.object({
   ctk: z.string(),
 });
 
-export const TrackingInfoSchema = z
-  .object({})
+export const PageLoadEventSchema = z
+  .object({
+    eventTs: z.date(),
+  })
   .merge(ClientInfoSchema)
   .merge(CookieInfoSchema)
   .merge(SessionInfoSchema.partial());
@@ -24,4 +25,4 @@ export const TrackingInfoSchema = z
 export type ClientInfo = z.infer<typeof ClientInfoSchema>;
 export type SessionInfo = z.infer<typeof SessionInfoSchema>;
 export type CookieInfo = z.infer<typeof CookieInfoSchema>;
-export type TrackingInfo = z.infer<typeof TrackingInfoSchema>;
+export type PageLoadEvent = z.infer<typeof PageLoadEventSchema>;
