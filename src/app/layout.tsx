@@ -6,6 +6,7 @@ import RootHeader from "@/app/_components/root-header";
 import RootFooter from "@/app/_components/root-footer";
 import clsx from "clsx";
 import { Toaster } from "@/components/ui/toaster";
+import { Tracker } from "./_components/tracker";
 
 const siteFont = Montserrat({ subsets: ["latin"] });
 
@@ -32,6 +33,7 @@ export default function RootLayout({
           {children}
           <RootFooter />
           <Toaster />
+          <Tracker />
         </BarkAuthProvider>
       </body>
     </html>

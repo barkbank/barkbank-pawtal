@@ -17,6 +17,7 @@ export async function middleware(request: NextRequest): Promise<Response> {
     console.warn(`Access Granted for Dangerous API: ${method} ${path}`);
     return NextResponse.next();
   }
+  // WIP: Remove these ctk and stk things.
   const ctk = _getCtk();
   const stk = _getStk();
   const url = request.url;

@@ -1,14 +1,6 @@
-"use client";
-
-import React, { useEffect } from "react";
 import HeaderItems from "./header-items";
-import { postInitCtk } from "../_lib/post-init-ctk";
 
-const RootHeader = () => {
-  useEffect(() => {
-    postInitCtk();
-  }, []);
+export default function RootHeader() {
+  // TODO: Move HeaderItems into RootHeader, this layer is pointless.
   return <HeaderItems />;
-};
-
-export default RootHeader;
+}
