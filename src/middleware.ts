@@ -2,8 +2,6 @@ import { NextResponse } from "next/server";
 import { NextRequest } from "next/server";
 import { APP_ENV } from "./lib/app-env";
 import { BARKBANK_ENV } from "./lib/barkbank-env";
-import { cookies } from "next/headers";
-import { COOKIE_NAME } from "./lib/cookie-names";
 
 export async function middleware(request: NextRequest): Promise<Response> {
   const method = request.method;
@@ -17,29 +15,12 @@ export async function middleware(request: NextRequest): Promise<Response> {
     console.warn(`Access Granted for Dangerous API: ${method} ${path}`);
     return NextResponse.next();
   }
-  // WIP: Remove these ctk and stk things.
-  const ctk = _getCtk();
-  const stk = _getStk();
-  const url = request.url;
-  console.log(JSON.stringify({ ctk, stk, url }));
   return NextResponse.next();
 }
 
 export const config = {
   matcher: "/:path*",
 };
-
-function _getCtk() {
-  return cookies().get(COOKIE_NAME.CTK)?.value;
-}
-
-function _getStk() {
-  const ck = cookies();
-  if (ck.has(COOKIE_NAME.NEXT_AUTH_SESSION_TOKEN)) {
-    return cookies().get(COOKIE_NAME.STK)?.value;
-  }
-  return undefined;
-}
 
 function _responseWithStatus(status: number) {
   return NextResponse.json({ _error: { status } }, { status });
