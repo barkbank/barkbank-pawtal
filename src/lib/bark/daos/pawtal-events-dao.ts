@@ -5,14 +5,12 @@ const EVENT_TYPE = {
   PAGE_LOAD: "ui.pageload",
 } as const;
 
-// WIP: Write test for PawtalEventsDao
 export class PawtalEventsDao {
   constructor(private db: DbContext) {}
 
   async insertPageLoadEvent(args: {
     pageLoadEvent: PageLoadEvent;
   }): Promise<boolean> {
-    // WIP: migrate local schema.
     const sql = `
     INSERT INTO pawtal_events (
       event_ts,

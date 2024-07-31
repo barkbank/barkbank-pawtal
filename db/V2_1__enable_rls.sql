@@ -6,6 +6,7 @@ ALTER TABLE reports ENABLE ROW LEVEL SECURITY;
 ALTER TABLE users ENABLE ROW LEVEL SECURITY;
 ALTER TABLE vets ENABLE ROW LEVEL SECURITY;
 ALTER TABLE vet_accounts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE pawtal_events ENABLE ROW LEVEL SECURITY;
 
 -- It is not possible for flyway to enable RLS on flyway_schema_history while it
 -- is using the table. You'll have to do this manually...

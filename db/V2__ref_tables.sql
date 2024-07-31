@@ -145,4 +145,4 @@ CREATE TABLE pawtal_events (
   stk TEXT DEFAULT NULL,
   x_pathname TEXT DEFAULT NULL,
   CONSTRAINT ui_events_pk PRIMARY KEY (event_id)
-)
+);
