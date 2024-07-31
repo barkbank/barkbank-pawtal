@@ -2,16 +2,16 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
-import { postTrackingInfo } from "../_lib/actions/post-tracking-info";
-import { TrackingInfo } from "../_lib/models/tracking-info";
+import { postClientInfo } from "../_lib/actions/post-client-info";
+import { ClientInfo } from "@/lib/bark/models/tracker-models";
 
 export function Tracker() {
   const pathname = usePathname();
   useEffect(() => {
-    const trackingInfo: TrackingInfo = {
+    const clientInfo: ClientInfo = {
       pathname,
     };
-    postTrackingInfo({ trackingInfo });
+    postClientInfo({ clientInfo });
   }, [pathname]);
   return null;
 }
