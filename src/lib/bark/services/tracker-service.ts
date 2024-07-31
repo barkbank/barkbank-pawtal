@@ -9,6 +9,7 @@ import {
   CookieInfoSchema,
   SessionInfo,
   SessionInfoSchema,
+  TrackingInfo,
 } from "@/lib/bark/models/tracker-models";
 import {
   getAuthenticatedAdminActor,
@@ -17,6 +18,7 @@ import {
   getLoggedInSession,
 } from "@/lib/auth";
 import { AccountType } from "@/lib/auth-models";
+import { PawtalEventsDao } from "../daos/pawtal-events-dao";
 
 export class TrackerService {
   constructor(private context: BarkContext) {}
@@ -24,7 +26,14 @@ export class TrackerService {
     const clientInfo = ClientInfoSchema.parse(args.clientInfo);
     const cookieInfo = _getCookieInfo();
     const sessionInfo = await _getSessionInfo();
-    console.log({ ...clientInfo, ...cookieInfo, ...sessionInfo });
+    const trackingInfo: TrackingInfo = {
+      ...clientInfo,
+      ...cookieInfo,
+      ...sessionInfo,
+    };
+    const dao = new PawtalEventsDao(this.context.dbPool);
+    await dao.insertTrackingInfo({ trackingInfo });
+    console.log({ trackingInfo });
     // WIP: Write tracking information into the database.
   }
 }
