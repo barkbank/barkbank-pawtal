@@ -8,6 +8,7 @@ export const SessionInfoSchema = z.object({
   accountType: z.enum(["USER", "VET", "ADMIN"]),
   accountId: z.string(),
   stk: z.string(),
+  xVetAccountId: z.string().optional(),
 });
 
 export const CookieInfoSchema = z.object({
