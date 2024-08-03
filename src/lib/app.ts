@@ -50,9 +50,13 @@ import { BARKBANK_ENV, BarkBankEnv } from "./barkbank-env";
 import { EmailHashService } from "./services/email-hash-service";
 import { TrackerService } from "./bark/services/tracker-service";
 import { GlobalRef } from "./utilities/global-ref";
+import { randomUUID } from "crypto";
+import { opLogPawtalEvent } from "./bark/operations/op-log-pawtal-event";
+import { PAWTAL_EVENT_TYPE } from "./bark/enums/pawtal-event-type";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
+  private instanceId: string;
   private promisedEmailService: Promise<EmailService> | null = null;
   private promisedOtpService: Promise<OtpService> | null = null;
   private promisedEmailHashservice: Promise<HashService> | null = null;
@@ -77,6 +81,11 @@ export class AppFactory {
 
   constructor(envs: NodeJS.Dict<string>) {
     this.envs = envs;
+    this.instanceId = randomUUID();
+    opLogPawtalEvent({
+      eventType: PAWTAL_EVENT_TYPE.APP_CREATED,
+      params: { instanceId: this.instanceId },
+    });
   }
 
   private envOptionalString(key: AppEnv): string | undefined {
@@ -101,6 +110,10 @@ export class AppFactory {
       return val;
     }
     return BARKBANK_ENV.PRODUCTION;
+  }
+
+  public getInstanceId(): string {
+    return this.instanceId;
   }
 
   public getTrackerService(): Promise<TrackerService> {
