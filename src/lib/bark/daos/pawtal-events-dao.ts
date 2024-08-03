@@ -19,14 +19,22 @@ export class PawtalEventsDao {
       account_type,
       account_id,
       stk,
-      x_pathname
+      x_pathname,
+      x_vet_account_id
     )
-    VALUES ($1, $2, $3, $4, $5, $6, $7)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
     RETURNING 1
     `;
     const { pageLoadEvent: trackingInfo } = args;
-    const { eventTs, ctk, accountType, accountId, stk, pathname } =
-      trackingInfo;
+    const {
+      eventTs,
+      ctk,
+      accountType,
+      accountId,
+      stk,
+      pathname,
+      xVetAccountId,
+    } = trackingInfo;
     const res = await dbQuery(this.db, sql, [
       eventTs,
       EVENT_TYPE.PAGE_LOAD,
@@ -35,6 +43,7 @@ export class PawtalEventsDao {
       accountId,
       stk,
       pathname,
+      xVetAccountId,
     ]);
     return res.rows.length === 1;
   }

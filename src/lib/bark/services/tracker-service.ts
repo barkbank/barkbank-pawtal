@@ -19,6 +19,7 @@ import {
 } from "@/lib/auth";
 import { AccountType } from "@/lib/auth-models";
 import { PawtalEventsDao } from "../daos/pawtal-events-dao";
+import { z } from "zod";
 
 export class TrackerService {
   constructor(private context: BarkContext) {}
@@ -65,7 +66,9 @@ async function _getSessionInfo(): Promise<SessionInfo | undefined> {
     return undefined;
   }
   const { accountType } = session;
-  const accountId = await _getAccountId({ accountType });
+  const { accountId, xVetAccountId } = await _getAccountIdentifiers({
+    accountType,
+  });
   if (accountId === undefined) {
     return undefined;
   }
@@ -73,22 +76,36 @@ async function _getSessionInfo(): Promise<SessionInfo | undefined> {
   if (stk === undefined) {
     return undefined;
   }
-  const out: SessionInfo = { accountType, accountId, stk };
+  const out: SessionInfo = { accountType, accountId, stk, xVetAccountId };
   return SessionInfoSchema.parse(out);
 }
 
-async function _getAccountId(args: {
+const _AccountIdentifiersSchema = z.object({
+  accountId: z.string().optional(),
+  xVetAccountId: z.string().optional(),
+});
+
+type _AccountIdentifiers = z.infer<typeof _AccountIdentifiersSchema>;
+
+async function _getAccountIdentifiers(args: {
   accountType: AccountType;
-}): Promise<string | undefined> {
+}): Promise<_AccountIdentifiers> {
   const { accountType } = args;
   if (accountType === AccountType.ADMIN) {
-    return (await getAuthenticatedAdminActor())?.getAdminId();
+    const actor = await getAuthenticatedAdminActor();
+    const accountId = actor?.getAdminId();
+    return { accountId };
   }
   if (accountType === AccountType.VET) {
-    return (await getAuthenticatedVetActor())?.getVetId();
+    const actor = await getAuthenticatedVetActor();
+    const accountId = actor?.getVetId();
+    const xVetAccountId = actor?.getLogin()?.account?.vetAccountId;
+    return { accountId, xVetAccountId };
   }
   if (accountType === AccountType.USER) {
-    return (await getAuthenticatedUserActor())?.getUserId();
+    const actor = await getAuthenticatedUserActor();
+    const accountId = actor?.getUserId();
+    return { accountId };
   }
-  return undefined;
+  return {};
 }

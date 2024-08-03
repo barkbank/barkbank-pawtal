@@ -144,6 +144,7 @@ CREATE TABLE pawtal_events (
   account_id TEXT DEFAULT NULL,
   stk TEXT DEFAULT NULL,
   x_pathname TEXT DEFAULT NULL,
+  x_vet_account_id TEXT DEFAULT NULL,
   CONSTRAINT ui_events_pk PRIMARY KEY (event_id)
 );
 

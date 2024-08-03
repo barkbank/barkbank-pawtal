@@ -14,8 +14,9 @@ describe("PawtalEventsDao", () => {
           pathname: "/some/page",
           ctk: "ctk1",
           stk: "stk1",
-          accountType: "USER",
+          accountType: "VET",
           accountId: "123",
+          xVetAccountId: "456",
         };
         await dao.insertPageLoadEvent({ pageLoadEvent });
         const sql = `
@@ -23,10 +24,11 @@ describe("PawtalEventsDao", () => {
         FROM pawtal_events
         WHERE x_pathname = '/some/page'
         AND ctk = 'ctk1'
-        AND account_type = 'USER'
+        AND account_type = 'VET'
         AND account_id = '123'
         AND stk = 'stk1'
         AND event_type = 'ui.pageload'
+        AND x_vet_account_id = '456'
         `;
         const res = await dbQuery(dbPool, sql, []);
         expect(res.rows.length).toEqual(1);
