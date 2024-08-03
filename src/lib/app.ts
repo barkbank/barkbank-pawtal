@@ -49,6 +49,7 @@ import { EncryptionProtocol } from "./encryption/encryption-protocol";
 import { BARKBANK_ENV, BarkBankEnv } from "./barkbank-env";
 import { EmailHashService } from "./services/email-hash-service";
 import { TrackerService } from "./bark/services/tracker-service";
+import { GlobalRef } from "./utilities/global-ref";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -527,9 +528,13 @@ export class AppFactory {
   }
 }
 
-const APP: AppFactory = new AppFactory(process.env);
-console.log({
-  BARKBANK_ENV: APP.getBarkBankEnv(),
-  NODE_ENV: process.env.NODE_ENV,
-});
+const appSingleton = new GlobalRef<AppFactory>("pawtal.app");
+if (!appSingleton.value) {
+  appSingleton.value = new AppFactory(process.env);
+  console.log({
+    BARKBANK_ENV: appSingleton.value.getBarkBankEnv(),
+    NODE_ENV: process.env.NODE_ENV,
+  });
+}
+const APP: AppFactory = appSingleton.value;
 export default APP;
