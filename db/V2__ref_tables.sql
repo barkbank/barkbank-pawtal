@@ -139,7 +139,7 @@ CREATE TABLE pawtal_events (
   event_id BIGSERIAL,
   event_ts TIMESTAMP WITH TIME ZONE NOT NULL,
   event_type TEXT NOT NULL,
-  ctk TEXT NOT NULL,
+  ctk TEXT DEFAULT NULL,
   account_type TEXT DEFAULT NULL,
   account_id TEXT DEFAULT NULL,
   stk TEXT DEFAULT NULL,
