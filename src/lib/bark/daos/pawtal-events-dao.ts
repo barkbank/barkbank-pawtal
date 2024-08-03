@@ -1,9 +1,6 @@
 import { DbContext, dbQuery } from "@/lib/data/db-utils";
 import { PageLoadEvent } from "../models/tracker-models";
-
-const EVENT_TYPE = {
-  PAGE_LOAD: "ui.pageload",
-} as const;
+import { PAWTAL_EVENT_TYPE } from "../enums/pawtal-event-type";
 
 export class PawtalEventsDao {
   constructor(private db: DbContext) {}
@@ -37,7 +34,7 @@ export class PawtalEventsDao {
     } = trackingInfo;
     const res = await dbQuery(this.db, sql, [
       eventTs,
-      EVENT_TYPE.PAGE_LOAD,
+      PAWTAL_EVENT_TYPE.PAGE_LOAD,
       ctk,
       accountType,
       accountId,
