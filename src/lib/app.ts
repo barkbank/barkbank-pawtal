@@ -53,6 +53,7 @@ import { GlobalRef } from "./utilities/global-ref";
 import { randomUUID } from "crypto";
 import { opLogPawtalEvent } from "./bark/operations/op-log-pawtal-event";
 import { PAWTAL_EVENT_TYPE } from "./bark/enums/pawtal-event-type";
+import { CronService } from "./bark/services/cron-service";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -78,6 +79,7 @@ export class AppFactory {
   private promisedEmailOtpService: Promise<EmailOtpService> | null = null;
   private promisedBarkContext: Promise<BarkContext> | null = null;
   private promisedTrackerService: Promise<TrackerService> | null = null;
+  private promisedCronService: Promise<CronService> | null = null;
 
   constructor(envs: NodeJS.Dict<string>) {
     this.envs = envs;
@@ -120,6 +122,19 @@ export class AppFactory {
 
   public getInstanceId(): string {
     return this.instanceId;
+  }
+
+  public getCronService(): Promise<CronService> {
+    if (this.promisedCronService === null) {
+      this.promisedCronService = new Promise(async (resolve) => {
+        const context = await this.getBarkContext();
+        const instanceId = this.getInstanceId();
+        const service = new CronService({ context, instanceId });
+        this.logCreated("CronService");
+        resolve(service);
+      });
+    }
+    return this.promisedCronService;
   }
 
   public getTrackerService(): Promise<TrackerService> {
@@ -550,6 +565,9 @@ export class AppFactory {
 const appSingleton = new GlobalRef<AppFactory>("pawtal.app");
 if (!appSingleton.value) {
   appSingleton.value = new AppFactory(process.env);
+  appSingleton.value.getCronService().then((service) => {
+    service.start();
+  });
   console.log({
     BARKBANK_ENV: appSingleton.value.getBarkBankEnv(),
     NODE_ENV: process.env.NODE_ENV,
