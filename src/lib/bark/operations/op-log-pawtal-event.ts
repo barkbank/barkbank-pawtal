@@ -12,7 +12,8 @@ export function opLogPawtalEvent(args: {
   if ("eventType" in params) {
     throw new Error("params cannot have reserved name eventType");
   }
-  const event = { eventType, ...params };
+  const eventTs = new Date();
+  const event = { eventType, eventTs, ...params };
   const msg = JSON.stringify(event);
   console.log(msg);
 }

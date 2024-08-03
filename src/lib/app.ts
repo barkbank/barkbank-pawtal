@@ -49,9 +49,15 @@ import { EncryptionProtocol } from "./encryption/encryption-protocol";
 import { BARKBANK_ENV, BarkBankEnv } from "./barkbank-env";
 import { EmailHashService } from "./services/email-hash-service";
 import { TrackerService } from "./bark/services/tracker-service";
+import { GlobalRef } from "./utilities/global-ref";
+import { randomUUID } from "crypto";
+import { opLogPawtalEvent } from "./bark/operations/op-log-pawtal-event";
+import { PAWTAL_EVENT_TYPE } from "./bark/enums/pawtal-event-type";
+import { CronService } from "./bark/services/cron-service";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
+  private instanceId: string;
   private promisedEmailService: Promise<EmailService> | null = null;
   private promisedOtpService: Promise<OtpService> | null = null;
   private promisedEmailHashservice: Promise<HashService> | null = null;
@@ -73,9 +79,21 @@ export class AppFactory {
   private promisedEmailOtpService: Promise<EmailOtpService> | null = null;
   private promisedBarkContext: Promise<BarkContext> | null = null;
   private promisedTrackerService: Promise<TrackerService> | null = null;
+  private promisedCronService: Promise<CronService> | null = null;
 
   constructor(envs: NodeJS.Dict<string>) {
     this.envs = envs;
+    this.instanceId = randomUUID();
+    this.logCreated("AppFactory");
+  }
+
+  private logCreated(obj: string) {
+    const eventTs = new Date();
+    const instanceId = this.instanceId;
+    opLogPawtalEvent({
+      eventType: PAWTAL_EVENT_TYPE.APP_CREATED,
+      params: { eventTs, instanceId, obj },
+    });
   }
 
   private envOptionalString(key: AppEnv): string | undefined {
@@ -102,12 +120,29 @@ export class AppFactory {
     return BARKBANK_ENV.PRODUCTION;
   }
 
+  public getInstanceId(): string {
+    return this.instanceId;
+  }
+
+  public getCronService(): Promise<CronService> {
+    if (this.promisedCronService === null) {
+      this.promisedCronService = new Promise(async (resolve) => {
+        const context = await this.getBarkContext();
+        const instanceId = this.getInstanceId();
+        const service = new CronService({ context, instanceId });
+        this.logCreated("CronService");
+        resolve(service);
+      });
+    }
+    return this.promisedCronService;
+  }
+
   public getTrackerService(): Promise<TrackerService> {
     if (this.promisedTrackerService === null) {
       this.promisedTrackerService = new Promise(async (resolve) => {
         const context = await this.getBarkContext();
         const service = new TrackerService(context);
-        console.log("Created TrackerService");
+        this.logCreated("TrackerService");
         resolve(service);
       });
     }
@@ -119,7 +154,7 @@ export class AppFactory {
       this.promisedEmailService = new Promise<EmailService>((resolve) => {
         if (this.envString(APP_ENV.BARKBANK_SMTP_HOST) === "") {
           resolve(new PassthroughEmailService());
-          console.log("Created PassthroughEmailService as EmailService");
+          this.logCreated("PassthroughEmailService(EmailService)");
           return;
         }
 
@@ -130,7 +165,7 @@ export class AppFactory {
           smtpPassword: this.envString(APP_ENV.BARKBANK_SMTP_PASSWORD),
         };
         resolve(new NodemailerEmailService(config));
-        console.log("Created NodemailerEmailService as EmailService");
+        this.logCreated("NodemailerEmailService(EmailService)");
         return;
       });
     }
@@ -145,7 +180,7 @@ export class AppFactory {
       ) {
         this.promisedOtpService = new Promise<OtpService>((resolve) => {
           const service = new DevelopmentOtpService();
-          console.log("Created DevelopmentOtpService as OtpService");
+          this.logCreated("DevelopmentOtpService(OtpService)");
           resolve(service);
         });
       } else {
@@ -163,7 +198,7 @@ export class AppFactory {
             ),
           };
           const service = new OtpServiceImpl(config);
-          console.log("Created OtpServiceImpl as OtpService");
+          this.logCreated("OtpServiceImpl(OtpService)");
           resolve(service);
         });
       }
@@ -207,7 +242,7 @@ export class AppFactory {
           };
           const service = new EmailOtpService(config);
           resolve(service);
-          console.log("Created EmailOtpService");
+          this.logCreated("EmailOtpService");
         },
       );
     }
@@ -220,7 +255,7 @@ export class AppFactory {
       const secretHashService = new SecretHashService(secret);
       const emailHashService = new EmailHashService(secretHashService);
       this.promisedEmailHashservice = Promise.resolve(emailHashService);
-      console.log("Created EmailHashService");
+      this.logCreated("EmailHashService");
     }
     return this.promisedEmailHashservice;
   }
@@ -253,7 +288,7 @@ export class AppFactory {
           this.newHkdfEncryptionProtocol({ purpose: "pii" }),
         ]),
       );
-      console.log("Created EncryptionService for PII");
+      this.logCreated("PiiEncryptionService");
     }
     return this.promisedPiiEncryptionService;
   }
@@ -265,7 +300,7 @@ export class AppFactory {
           this.newHkdfEncryptionProtocol({ purpose: "oii" }),
         ]),
       );
-      console.log("Created EncryptionService for OII");
+      this.logCreated("OiiEncryptionService");
     }
     return this.promisedOiiEncryptionService;
   }
@@ -277,7 +312,7 @@ export class AppFactory {
           this.newHkdfEncryptionProtocol({ purpose: "text" }),
         ]),
       );
-      console.log("Created EncryptionService for text");
+      this.logCreated("TextEncryptionService");
     }
     return this.promisedTextEncryptionService;
   }
@@ -314,7 +349,7 @@ export class AppFactory {
           database: this.envString(APP_ENV.BARKBANK_DB_NAME),
           ssl,
         });
-        console.log("Created database connection pool");
+        this.logCreated("DbPool");
         resolve(dbPool);
       });
     }
@@ -352,7 +387,7 @@ export class AppFactory {
           dogMapper,
         };
         const factory = new AdminActorFactory(factoryConfig, actorConfig);
-        console.log("Created AdminActorFactory");
+        this.logCreated("AdminActorFactory");
         resolve(factory);
       });
     }
@@ -370,7 +405,7 @@ export class AppFactory {
           emailHashService,
           piiEncryptionService,
         });
-        console.log("Created AdminMapper");
+        this.logCreated("AdminMapper");
         resolve(mapper);
       });
     }
@@ -395,7 +430,7 @@ export class AppFactory {
           textEncryptionService,
         };
         const factory = new VetActorFactory(context, { actorConfig });
-        console.log("Created VetActorFactory");
+        this.logCreated("VetActorFactory");
         resolve(factory);
       });
     }
@@ -429,7 +464,7 @@ export class AppFactory {
           textEncryptionService,
         };
         const factory = new UserActorFactory(factoryConfig, actorConfig);
-        console.log("Created UserActorFactory");
+        this.logCreated("UserActorFactory");
         resolve(factory);
       });
     }
@@ -447,7 +482,7 @@ export class AppFactory {
           emailHashService,
           piiEncryptionService,
         });
-        console.log("Created UserMapper");
+        this.logCreated("UserMapper");
         resolve(mapper);
       });
     }
@@ -461,7 +496,7 @@ export class AppFactory {
         const mapper = new DogMapper({
           oiiEncryptionService,
         });
-        console.log("Created DogMapper");
+        this.logCreated("DogMapper");
         resolve(mapper);
       });
     }
@@ -486,7 +521,7 @@ export class AppFactory {
           userMapper,
           dogMapper,
         });
-        console.log("Created RegistrationHandler");
+        this.logCreated("RegistrationHandler");
         resolve(handler);
       });
     }
@@ -519,7 +554,7 @@ export class AppFactory {
           textEncryptionService,
           emailService,
         };
-        console.log("Created BarkContext");
+        this.logCreated("BarkContext");
         resolve(context);
       });
     }
@@ -527,9 +562,16 @@ export class AppFactory {
   }
 }
 
-const APP: AppFactory = new AppFactory(process.env);
-console.log({
-  BARKBANK_ENV: APP.getBarkBankEnv(),
-  NODE_ENV: process.env.NODE_ENV,
-});
+const appSingleton = new GlobalRef<AppFactory>("pawtal.app");
+if (!appSingleton.value) {
+  appSingleton.value = new AppFactory(process.env);
+  appSingleton.value.getCronService().then((service) => {
+    service.start();
+  });
+  console.log({
+    BARKBANK_ENV: appSingleton.value.getBarkBankEnv(),
+    NODE_ENV: process.env.NODE_ENV,
+  });
+}
+const APP: AppFactory = appSingleton.value;
 export default APP;

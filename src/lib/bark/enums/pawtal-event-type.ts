@@ -1,6 +1,8 @@
 import { z } from "zod";
 
 export const PAWTAL_EVENT_TYPE = {
+  APP_CREATED: "app.created",
+  CRON_RUN: "cron.run",
   PAGE_LOAD: "ui.pageload",
 } as const;
 
