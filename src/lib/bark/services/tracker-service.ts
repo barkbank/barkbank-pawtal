@@ -36,7 +36,7 @@ export class TrackerService {
     };
     const dao = new PawtalEventsDao(this.context.dbPool);
     await dao.insertPageLoadEvent({ pageLoadEvent });
-    console.log({ pageLoadEvent });
+    console.log(JSON.stringify({ logName: "PageLoadEvent", ...pageLoadEvent }));
   }
 }
 
