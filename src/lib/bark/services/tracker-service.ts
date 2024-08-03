@@ -1,5 +1,5 @@
 import { BarkContext } from "../bark-context";
-import { COOKIE_NAME } from "@/lib/cookie-names";
+import { COOKIE_NAME } from "../enums/cookie-name";
 import { randomUUID } from "crypto";
 import { cookies } from "next/headers";
 import {
