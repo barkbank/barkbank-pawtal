@@ -9,7 +9,7 @@ import { UserActor } from "./user/user-actor";
 import { AccountType } from "./auth-models";
 import { randomUUID } from "crypto";
 import { cookies } from "next/headers";
-import { COOKIE_NAME } from "./cookie-names";
+import { COOKIE_NAME } from "./bark/enums/cookie-name";
 
 export const NEXT_AUTH_OPTIONS: NextAuthOptions = {
   providers: [

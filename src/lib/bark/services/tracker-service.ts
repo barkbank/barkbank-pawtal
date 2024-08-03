@@ -1,5 +1,5 @@
 import { BarkContext } from "../bark-context";
-import { COOKIE_NAME } from "@/lib/cookie-names";
+import { COOKIE_NAME } from "../enums/cookie-name";
 import { randomUUID } from "crypto";
 import { cookies } from "next/headers";
 import {
@@ -20,6 +20,8 @@ import {
 import { AccountType } from "@/lib/auth-models";
 import { PawtalEventsDao } from "../daos/pawtal-events-dao";
 import { z } from "zod";
+import { opLogPawtalEvent } from "../operations/op-log-pawtal-event";
+import { PAWTAL_EVENT_TYPE } from "../enums/pawtal-event-type";
 
 export class TrackerService {
   constructor(private context: BarkContext) {}
@@ -36,7 +38,10 @@ export class TrackerService {
     };
     const dao = new PawtalEventsDao(this.context.dbPool);
     await dao.insertPageLoadEvent({ pageLoadEvent });
-    console.log({ pageLoadEvent });
+    opLogPawtalEvent({
+      eventType: PAWTAL_EVENT_TYPE.PAGE_LOAD,
+      params: pageLoadEvent,
+    });
   }
 }
 
