@@ -20,6 +20,8 @@ import {
 import { AccountType } from "@/lib/auth-models";
 import { PawtalEventsDao } from "../daos/pawtal-events-dao";
 import { z } from "zod";
+import { LOG_NAME } from "../enums/log-name";
+import { opLogEvent } from "../operations/op-log-event";
 
 export class TrackerService {
   constructor(private context: BarkContext) {}
@@ -36,7 +38,7 @@ export class TrackerService {
     };
     const dao = new PawtalEventsDao(this.context.dbPool);
     await dao.insertPageLoadEvent({ pageLoadEvent });
-    console.log(JSON.stringify({ logName: "PageLoadEvent", ...pageLoadEvent }));
+    opLogEvent({ logName: LOG_NAME.PAGE_LOAD_EVENT, params: pageLoadEvent });
   }
 }
 
