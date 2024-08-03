@@ -82,9 +82,15 @@ export class AppFactory {
   constructor(envs: NodeJS.Dict<string>) {
     this.envs = envs;
     this.instanceId = randomUUID();
+    this.logCreated("AppFactory");
+  }
+
+  private logCreated(obj: string) {
+    const eventTs = new Date();
+    const instanceId = this.instanceId;
     opLogPawtalEvent({
       eventType: PAWTAL_EVENT_TYPE.APP_CREATED,
-      params: { instanceId: this.instanceId },
+      params: { eventTs, instanceId, obj },
     });
   }
 
@@ -121,7 +127,7 @@ export class AppFactory {
       this.promisedTrackerService = new Promise(async (resolve) => {
         const context = await this.getBarkContext();
         const service = new TrackerService(context);
-        console.log("Created TrackerService");
+        this.logCreated("TrackerService");
         resolve(service);
       });
     }
@@ -133,7 +139,7 @@ export class AppFactory {
       this.promisedEmailService = new Promise<EmailService>((resolve) => {
         if (this.envString(APP_ENV.BARKBANK_SMTP_HOST) === "") {
           resolve(new PassthroughEmailService());
-          console.log("Created PassthroughEmailService as EmailService");
+          this.logCreated("PassthroughEmailService(EmailService)");
           return;
         }
 
@@ -144,7 +150,7 @@ export class AppFactory {
           smtpPassword: this.envString(APP_ENV.BARKBANK_SMTP_PASSWORD),
         };
         resolve(new NodemailerEmailService(config));
-        console.log("Created NodemailerEmailService as EmailService");
+        this.logCreated("NodemailerEmailService(EmailService)");
         return;
       });
     }
@@ -159,7 +165,7 @@ export class AppFactory {
       ) {
         this.promisedOtpService = new Promise<OtpService>((resolve) => {
           const service = new DevelopmentOtpService();
-          console.log("Created DevelopmentOtpService as OtpService");
+          this.logCreated("DevelopmentOtpService(OtpService)");
           resolve(service);
         });
       } else {
@@ -177,7 +183,7 @@ export class AppFactory {
             ),
           };
           const service = new OtpServiceImpl(config);
-          console.log("Created OtpServiceImpl as OtpService");
+          this.logCreated("OtpServiceImpl(OtpService)");
           resolve(service);
         });
       }
@@ -221,7 +227,7 @@ export class AppFactory {
           };
           const service = new EmailOtpService(config);
           resolve(service);
-          console.log("Created EmailOtpService");
+          this.logCreated("EmailOtpService");
         },
       );
     }
@@ -234,7 +240,7 @@ export class AppFactory {
       const secretHashService = new SecretHashService(secret);
       const emailHashService = new EmailHashService(secretHashService);
       this.promisedEmailHashservice = Promise.resolve(emailHashService);
-      console.log("Created EmailHashService");
+      this.logCreated("EmailHashService");
     }
     return this.promisedEmailHashservice;
   }
@@ -267,7 +273,7 @@ export class AppFactory {
           this.newHkdfEncryptionProtocol({ purpose: "pii" }),
         ]),
       );
-      console.log("Created EncryptionService for PII");
+      this.logCreated("PiiEncryptionService");
     }
     return this.promisedPiiEncryptionService;
   }
@@ -279,7 +285,7 @@ export class AppFactory {
           this.newHkdfEncryptionProtocol({ purpose: "oii" }),
         ]),
       );
-      console.log("Created EncryptionService for OII");
+      this.logCreated("OiiEncryptionService");
     }
     return this.promisedOiiEncryptionService;
   }
@@ -291,7 +297,7 @@ export class AppFactory {
           this.newHkdfEncryptionProtocol({ purpose: "text" }),
         ]),
       );
-      console.log("Created EncryptionService for text");
+      this.logCreated("TextEncryptionService");
     }
     return this.promisedTextEncryptionService;
   }
@@ -328,7 +334,7 @@ export class AppFactory {
           database: this.envString(APP_ENV.BARKBANK_DB_NAME),
           ssl,
         });
-        console.log("Created database connection pool");
+        this.logCreated("DbPool");
         resolve(dbPool);
       });
     }
@@ -366,7 +372,7 @@ export class AppFactory {
           dogMapper,
         };
         const factory = new AdminActorFactory(factoryConfig, actorConfig);
-        console.log("Created AdminActorFactory");
+        this.logCreated("AdminActorFactory");
         resolve(factory);
       });
     }
@@ -384,7 +390,7 @@ export class AppFactory {
           emailHashService,
           piiEncryptionService,
         });
-        console.log("Created AdminMapper");
+        this.logCreated("AdminMapper");
         resolve(mapper);
       });
     }
@@ -409,7 +415,7 @@ export class AppFactory {
           textEncryptionService,
         };
         const factory = new VetActorFactory(context, { actorConfig });
-        console.log("Created VetActorFactory");
+        this.logCreated("VetActorFactory");
         resolve(factory);
       });
     }
@@ -443,7 +449,7 @@ export class AppFactory {
           textEncryptionService,
         };
         const factory = new UserActorFactory(factoryConfig, actorConfig);
-        console.log("Created UserActorFactory");
+        this.logCreated("UserActorFactory");
         resolve(factory);
       });
     }
@@ -461,7 +467,7 @@ export class AppFactory {
           emailHashService,
           piiEncryptionService,
         });
-        console.log("Created UserMapper");
+        this.logCreated("UserMapper");
         resolve(mapper);
       });
     }
@@ -475,7 +481,7 @@ export class AppFactory {
         const mapper = new DogMapper({
           oiiEncryptionService,
         });
-        console.log("Created DogMapper");
+        this.logCreated("DogMapper");
         resolve(mapper);
       });
     }
@@ -500,7 +506,7 @@ export class AppFactory {
           userMapper,
           dogMapper,
         });
-        console.log("Created RegistrationHandler");
+        this.logCreated("RegistrationHandler");
         resolve(handler);
       });
     }
@@ -533,7 +539,7 @@ export class AppFactory {
           textEncryptionService,
           emailService,
         };
-        console.log("Created BarkContext");
+        this.logCreated("BarkContext");
         resolve(context);
       });
     }
