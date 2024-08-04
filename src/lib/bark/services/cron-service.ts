@@ -66,7 +66,7 @@ interface _Task {
  */
 const _SCHEDULE = {
   EVERY_5_SECONDS: "*/5 * * * * *",
-  AT_1800_UTC_EVERYDAY: "* 18 * * *",
+  AT_1800_UTC_EVERYDAY: "0 18 * * *",
 } as const;
 
 /**
