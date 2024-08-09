@@ -1,3 +1,4 @@
+import { expect } from "@playwright/test";
 import {
   GeneratedRegistration,
   GeneratedRegistrationSchema,
@@ -72,6 +73,15 @@ export async function doRegister(
   await pgReg.otpField().fill("000000");
   await pgReg.disclaimerCheckbox().click();
   await pgReg.submitButton().click();
+
+  // BARK-89: Only mention that a vet will reach out when a preferred vet has been selected
+  // First make sure the success page is loaded by expecting the dashboard button.
+  await expect(pgReg.enterDashboardButton()).toBeVisible();
+  if (withoutPreferredVet === true) {
+    await expect(pgReg.upcomingBloodProfilingMessage()).not.toBeVisible();
+  } else {
+    await expect(pgReg.upcomingBloodProfilingMessage()).toBeVisible();
+  }
 
   // Final
   await pgReg.enterDashboardButton().click();

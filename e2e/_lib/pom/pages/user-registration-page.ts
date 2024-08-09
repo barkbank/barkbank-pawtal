@@ -2,6 +2,7 @@ import { RoutePath } from "@/lib/route-path";
 import { PomPage } from "../core/pom-page";
 import { Locator } from "@playwright/test";
 
+// TODO: Visually there are three different pages here. So let us model it as three different POMs.
 export class UserRegistrationPage extends PomPage {
   url(): string {
     return this.website().urlOf(RoutePath.USER_REGISTRATION);
@@ -179,6 +180,10 @@ export class UserRegistrationPage extends PomPage {
 
   accountCreatedMessage(): Locator {
     return this.page().getByText("your account has been created");
+  }
+
+  upcomingBloodProfilingMessage(): Locator {
+    return this.page().getByText("Upcoming Blood Profiling");
   }
 
   enterDashboardButton(): Locator {
