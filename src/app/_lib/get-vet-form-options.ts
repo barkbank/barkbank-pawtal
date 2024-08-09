@@ -18,13 +18,16 @@ export async function getVetFormOptions(
     ORDER BY vet_name
   `;
   const res = await dbQuery<BarkFormOption>(dbPool, sql, []);
-  const options = [
-    {
-      value: "",
-      label: "None",
-      description: "Do not contact me about this dog",
-    },
-    ...res.rows,
-  ];
+  const options =
+    res.rows.length === 0
+      ? []
+      : [
+          {
+            value: "",
+            label: "None",
+            description: "Do not contact me about this dog",
+          },
+          ...res.rows,
+        ];
   return z.array(BarkFormOptionSchema).parse(options);
 }
