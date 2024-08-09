@@ -38,25 +38,33 @@ const MobileNav = (props: { navOptions: NavOption[] }) => {
   return (
     <nav className="border-b bg-white shadow-lg">
       <Collapsible.Root open={isOpen} onOpenChange={setIsOpen}>
-        <div className="mx-3 flex min-h-[72px] flex-row items-center justify-between">
-          <Link href={RoutePath.ROOT} className="w-[60px]">
-            <Image
-              src={IMG_PATH.BARK_BANK_LOGO}
-              alt="bark bank logo"
-              width={60}
-              height={60}
-            />
-          </Link>
+        <div className="mx-3 grid min-h-[72px] grid-cols-3 grid-rows-1 items-center">
+          <div className="flex flex-row justify-start">
+            <Link href={RoutePath.ROOT} className="w-[60px]">
+              <Image
+                src={IMG_PATH.BARK_BANK_LOGO}
+                alt="bark bank logo"
+                width={60}
+                height={60}
+              />
+            </Link>
+          </div>
 
-          <Collapsible.Trigger asChild>
-            <Button variant="outline" size="icon" id="bark-nav-menu-button">
-              {isOpen ? (
-                <XIcon className="h-4 w-4" />
-              ) : (
-                <MenuIcon className="h-4 w-4" />
-              )}
-            </Button>
-          </Collapsible.Trigger>
+          <div className="flex flex-row justify-center font-semibold">
+            PAWTAL
+          </div>
+
+          <div className="flex flex-row justify-end">
+            <Collapsible.Trigger asChild>
+              <Button variant="outline" size="icon" id="bark-nav-menu-button">
+                {isOpen ? (
+                  <XIcon className="h-4 w-4" />
+                ) : (
+                  <MenuIcon className="h-4 w-4" />
+                )}
+              </Button>
+            </Collapsible.Trigger>
+          </div>
         </div>
 
         <Collapsible.Content>
@@ -91,8 +99,8 @@ const MobileNav = (props: { navOptions: NavOption[] }) => {
 const DesktopNav = (props: { navOptions: NavOption[] }) => {
   const { navOptions } = props;
   return (
-    <nav className="flex h-[72px] flex-row items-center justify-between border-b bg-white shadow-lg">
-      <div className="ml-8 w-[72px] flex-none">
+    <nav className="grid h-[72px] grid-cols-3 grid-rows-1 items-center border-b bg-white shadow-lg">
+      <div className="ml-8 flex w-[72px] flex-row justify-start">
         <Link href={RoutePath.ROOT}>
           <Image
             src={IMG_PATH.BARK_BANK_LOGO}
@@ -103,22 +111,26 @@ const DesktopNav = (props: { navOptions: NavOption[] }) => {
         </Link>
       </div>
 
-      <div className="mr-8 flex gap-8 gap-x-8">
-        {navOptions.map((option) => {
-          const { label, href, target } = option;
-          const isLocalPath = href.startsWith("/");
-          return (
-            <Link
-              key={label}
-              target={target}
-              href={href}
-              className="flex flex-row gap-1"
-            >
-              {label}
-              {!isLocalPath && <ExternalLink color="#000" className="w-4" />}
-            </Link>
-          );
-        })}
+      <div className="flex flex-row justify-center font-semibold">PAWTAL</div>
+
+      <div className="flex flex-row justify-end">
+        <div className="mr-8 flex gap-8 gap-x-8">
+          {navOptions.map((option) => {
+            const { label, href, target } = option;
+            const isLocalPath = href.startsWith("/");
+            return (
+              <Link
+                key={label}
+                target={target}
+                href={href}
+                className="flex flex-row gap-1"
+              >
+                {label}
+                {!isLocalPath && <ExternalLink color="#000" className="w-4" />}
+              </Link>
+            );
+          })}
+        </div>
       </div>
     </nav>
   );
