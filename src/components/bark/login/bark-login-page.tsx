@@ -1,6 +1,5 @@
 import { isLoggedIn } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { BarkH1, BarkH2 } from "@/components/bark/bark-typography";
 import BarkLoginForm from "./bark-login-form";
 import Image from "next/image";
 import { AccountType } from "@/lib/auth-models";
@@ -26,7 +25,7 @@ export default async function BarkLoginPage(props: {
   }
   return (
     <>
-      <div className="my-10 flex flex-col items-center">
+      <div className="my-10 flex flex-col items-center gap-6">
         {/* Hero Section */}
         <div className=" flex w-full flex-col items-center px-6">
           <Image
@@ -36,11 +35,13 @@ export default async function BarkLoginPage(props: {
             width={100}
           />
           <div className="my-4 text-center">
-            <BarkH1>Bark Bank Canine Blood Donation Pawtal</BarkH1>
+            <h1 className="text-3xl font-bold">
+              Bark Bank Canine Blood Donation Pawtal
+            </h1>
           </div>
         </div>
         <div className="w-full max-w-[1000px] px-3">
-          <BarkH2>{title}</BarkH2>
+          <h2 className="text-2xl">{title}</h2>
           <BarkLoginForm
             accountType={accountType}
             successPath={successPath}
