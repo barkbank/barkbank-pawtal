@@ -22,11 +22,6 @@ const WEBSITE_NAV_OPTIONS: NavOption[] = [
     href: RoutePath.WEBSITE_URL,
     target: "_blank",
   },
-  {
-    label: "Visit FAQ",
-    href: RoutePath.WEBSITE_FAQ_URL,
-    target: "_blank",
-  },
 ];
 
 const AUTHENTICATED_OPTIONS: NavOption[] = [
