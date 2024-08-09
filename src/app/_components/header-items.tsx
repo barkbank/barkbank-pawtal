@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import React from "react";
-import { MenuIcon, XIcon } from "lucide-react";
+import { ExternalLink, MenuIcon, XIcon } from "lucide-react";
 import { RoutePath } from "@/lib/route-path";
 import Link from "next/link";
 import { IMG_PATH } from "@/lib/image-path";
@@ -52,6 +52,7 @@ const MobileNav = (props: { navOptions: NavOption[] }) => {
               height={60}
             />
           </Link>
+
           <Collapsible.Trigger asChild>
             <Button variant="outline" size="icon" id="bark-nav-menu-button">
               {isOpen ? (
@@ -64,18 +65,24 @@ const MobileNav = (props: { navOptions: NavOption[] }) => {
         </div>
 
         <Collapsible.Content>
-          <div className="mx-4 my-2 flex flex-col gap-6">
+          <div className="mx-4 my-2 flex flex-col items-end gap-6">
             {navOptions.map((option) => {
               const { label, href, target } = option;
+              const isLocalPath = href.startsWith("/");
               return (
                 <Link
                   key={label}
-                  className="text-right text-xl"
+                  className="text-xl"
                   target={target}
                   href={href}
                   onClick={() => setIsOpen(false)}
                 >
-                  {label}
+                  <div className="flex flex-row gap-1">
+                    {label}
+                    {!isLocalPath && (
+                      <ExternalLink color="#000" className="w-4" />
+                    )}
+                  </div>
                 </Link>
               );
             })}
@@ -104,9 +111,16 @@ const DesktopNav = (props: { navOptions: NavOption[] }) => {
       <div className="mr-8 flex gap-8 gap-x-8">
         {navOptions.map((option) => {
           const { label, href, target } = option;
+          const isLocalPath = href.startsWith("/");
           return (
-            <Link key={label} target={target} href={href}>
+            <Link
+              key={label}
+              target={target}
+              href={href}
+              className="flex flex-row gap-1"
+            >
               {label}
+              {!isLocalPath && <ExternalLink color="#000" className="w-4" />}
             </Link>
           );
         })}
