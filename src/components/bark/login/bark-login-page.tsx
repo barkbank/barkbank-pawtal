@@ -24,23 +24,13 @@ export default async function BarkLoginPage(props: {
     redirect(successPath);
   }
   return (
-    <>
-      <div className="my-10 flex flex-col items-center gap-6">
-        {/* Hero Section */}
-        <div className=" flex w-full flex-col items-center px-6">
-          <Image
-            src={logoSrc}
-            alt="" // Decorative image so alt text is empty
-            height={100}
-            width={100}
-          />
-          <div className="my-4 text-center">
-            <h1 className="text-3xl font-bold">
-              Bark Bank Canine Blood Donation Pawtal
-            </h1>
-          </div>
+    <div className="mt-3 flex w-full flex-row justify-center">
+      <div className="flex w-full max-w-screen-md flex-col items-center gap-3">
+        <Image src={logoSrc} alt="login logo" height={100} width={100} />
+        <div className="text-center">
+          <h1 className="text-3xl font-bold">Canine Blood Donation Pawtal</h1>
         </div>
-        <div className="w-full max-w-[1000px] px-3">
+        <div className="w-full px-3">
           <h2 className="text-2xl">{title}</h2>
           <BarkLoginForm
             accountType={accountType}
@@ -50,6 +40,6 @@ export default async function BarkLoginPage(props: {
           />
         </div>
       </div>
-    </>
+    </div>
   );
 }
