@@ -18,7 +18,7 @@ export async function getVetFormOptions(
     ORDER BY vet_name
   `;
   const res = await dbQuery<BarkFormOption>(dbPool, sql, []);
-  const options = [
+  const options = (res.rows.length === 0) ? [] : [
     {
       value: "",
       label: "None",
