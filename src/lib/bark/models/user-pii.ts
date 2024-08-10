@@ -1,8 +1,8 @@
 import { z } from "zod";
 
-// WIP: Add userTitle to schema. It is optional.
 export const UserPiiSchema = z.object({
   userEmail: z.string().email(),
+  userTitle: z.string().optional(),
   userName: z.string(),
   userPhoneNumber: z.string(),
 });

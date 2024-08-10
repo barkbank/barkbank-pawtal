@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const OwnerContactDetailsSchema = z.object({
   dogId: z.string(),
-  // WIP: Add userTitle
+  userTitle: z.string().optional(),
   userName: z.string(),
   userPhoneNumber: z.string(),
 
