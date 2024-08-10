@@ -1,5 +1,5 @@
 import { dbResultQuery } from "../../data/db-utils";
-import { MyDog } from "../user-models";
+import { MyDog } from "../../bark/models/user-models";
 import {
   DogAppointment,
   DogAppointmentSchema,

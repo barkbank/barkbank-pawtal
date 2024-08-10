@@ -6,7 +6,7 @@ import {
   dbRollback,
 } from "@/lib/data/db-utils";
 import { UserActor } from "../user-actor";
-import { MyAccountDetailsUpdate } from "../user-models";
+import { MyAccountDetailsUpdate } from "../../bark/models/user-models";
 import { PoolClient } from "pg";
 import { guaranteed } from "@/lib/utilities/bark-utils";
 import { CODE } from "@/lib/utilities/bark-code";

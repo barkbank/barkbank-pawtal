@@ -1,7 +1,7 @@
-import { UserResidency } from "../bark/enums/user-residency";
-import { DogGender } from "../bark/enums/dog-gender";
-import { DogAppointment } from "../bark/models/dog-appointment";
-import { DogStatuses } from "../bark/models/dog-statuses";
+import { UserResidency } from "../enums/user-residency";
+import { DogGender } from "../enums/dog-gender";
+import { DogAppointment } from "./dog-appointment";
+import { DogStatuses } from "./dog-statuses";
 
 // WIP: Define MyAccountSchema
 export type MyAccount = {

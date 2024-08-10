@@ -1,6 +1,6 @@
 import { UserActor } from "../user-actor";
 import { dbResultQuery } from "@/lib/data/db-utils";
-import { MyAccount } from "../user-models";
+import { MyAccount } from "../../bark/models/user-models";
 import { UserResidency } from "@/lib/bark/enums/user-residency";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { CODE } from "@/lib/utilities/bark-code";

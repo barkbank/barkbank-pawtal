@@ -1,6 +1,6 @@
 import { UserActor } from "../user-actor";
 import { dbResultQuery } from "@/lib/data/db-utils";
-import { MyLastContactedTime } from "../user-models";
+import { MyLastContactedTime } from "../../bark/models/user-models";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { CODE } from "@/lib/utilities/bark-code";
 
