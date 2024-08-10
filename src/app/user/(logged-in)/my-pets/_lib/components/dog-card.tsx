@@ -6,8 +6,8 @@ import {
   INELIGIBILITY_REASON,
   IneligibilityReason,
 } from "@/lib/bark/enums/ineligibility-reason";
+import { MyDog } from "@/lib/bark/models/user-models";
 import { RoutePath } from "@/lib/route-path";
-import { MyDog } from "@/lib/user/user-models";
 import { useRouter } from "next/navigation";
 
 export type DogCardData = {

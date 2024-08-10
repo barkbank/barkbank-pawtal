@@ -10,10 +10,10 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { postMyAccountDetails } from "../_actions/post-my-account-details";
-import { MyAccountDetailsUpdate } from "@/lib/user/user-models";
 import React from "react";
 import { BarkButton } from "@/components/bark/bark-button";
 import { CODE } from "@/lib/utilities/bark-code";
+import { MyAccountDetailsUpdate } from "@/lib/bark/models/user-models";
 
 const FORM_SCHEMA = z.object({
   userName: z.string().min(1, { message: "Name cannot be empty" }),

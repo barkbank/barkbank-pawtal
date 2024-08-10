@@ -1,8 +1,8 @@
 "use server";
 
 import { getAuthenticatedUserActor } from "@/lib/auth";
+import { MyAccountDetailsUpdate } from "@/lib/bark/models/user-models";
 import { updateMyAccountDetails } from "@/lib/user/actions/update-my-account-details";
-import { MyAccountDetailsUpdate } from "@/lib/user/user-models";
 import { CODE } from "@/lib/utilities/bark-code";
 import { revalidatePath } from "next/cache";
 
