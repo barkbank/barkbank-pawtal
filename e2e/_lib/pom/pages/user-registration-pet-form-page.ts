@@ -1,23 +1,20 @@
 import { RoutePath } from "@/lib/route-path";
 import { PomPage } from "../core/pom-page";
-import { Locator } from "@playwright/test";
+import { expect, Locator } from "@playwright/test";
 
-// TODO: Visually there are three different pages here. So let us model it as three different POMs.
-export class UserRegistrationPage extends PomPage {
+export class UserRegistrationPetFormPage extends PomPage {
   url(): string {
     return this.website().urlOf(RoutePath.USER_REGISTRATION);
+  }
+
+  async checkPageLoaded(): Promise<void> {
+    await expect(this.dogEverPregnantOptions()).toBeVisible();
   }
 
   dogFormHeader(): Locator {
     return this.page()
       .locator("form")
       .getByText("Tell us about your pet", { exact: true });
-  }
-
-  ownerFormHeader(): Locator {
-    return this.page()
-      .locator("form")
-      .getByText("Add your details", { exact: true });
   }
 
   dogNameField(): Locator {
@@ -120,6 +117,7 @@ export class UserRegistrationPage extends PomPage {
   dogPreferredVet_None(): Locator {
     return this.page().getByLabel("None");
   }
+
   dogPreferredVet_VetClinic1(): Locator {
     return this.page().getByLabel("Vet Clinic 1");
   }
@@ -130,63 +128,5 @@ export class UserRegistrationPage extends PomPage {
 
   cancelButton(): Locator {
     return this.page().getByRole("button", { name: "Cancel" });
-  }
-
-  userResidency_SINGAPORE(): Locator {
-    return this.page()
-      .getByText("Are you currently based in Singapore")
-      .locator("..")
-      .getByRole("button", { name: "Yes", exact: true });
-  }
-
-  userResidency_OTHER(): Locator {
-    return this.page()
-      .getByText("Are you currently based in Singapore")
-      .locator("..")
-      .getByRole("button", { name: "No", exact: true });
-  }
-
-  userNameField(): Locator {
-    return this.page().getByLabel("How would you like to be addressed?");
-  }
-
-  userPhoneNumberField(): Locator {
-    return this.page().getByLabel("At which phone number can you be reached?");
-  }
-
-  userEmailField(): Locator {
-    return this.page().getByLabel("Please provide a login email");
-  }
-
-  sendOtpButton(): Locator {
-    return this.page().getByRole("button", { name: "Send me an OTP" });
-  }
-
-  disclaimerCheckbox(): Locator {
-    return this.page().getByLabel("Disclaimer");
-  }
-
-  otpField(): Locator {
-    return this.page().getByLabel("Enter OTP");
-  }
-
-  submitButton(): Locator {
-    return this.page().getByRole("button", { name: "Submit" });
-  }
-
-  backButton(): Locator {
-    return this.page().getByRole("button", { name: "Back" });
-  }
-
-  accountCreatedMessage(): Locator {
-    return this.page().getByText("your account has been created");
-  }
-
-  upcomingBloodProfilingMessage(): Locator {
-    return this.page().getByText("Upcoming Blood Profiling");
-  }
-
-  enterDashboardButton(): Locator {
-    return this.page().getByRole("button", { name: "Enter My Dashboard" });
   }
 }
