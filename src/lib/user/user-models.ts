@@ -1,8 +1,4 @@
 import { UserResidency } from "../bark/enums/user-residency";
-import { ParticipationStatus } from "../bark/enums/participation-status";
-import { MedicalStatus } from "../bark/enums/medical-status";
-import { ProfileStatus } from "../bark/enums/profile-status";
-import { ServiceStatus } from "../bark/enums/service-status";
 import { DogGender } from "../bark/enums/dog-gender";
 import { DogAppointment } from "../bark/models/dog-appointment";
 import { DogStatuses } from "../bark/models/dog-statuses";
