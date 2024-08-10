@@ -41,7 +41,8 @@ const RootFooter = () => {
     : footerRoutes;
 
   // Note: So that the dock does not block the footer, a pb-16 padding is added.
-  // This is set to pb-0 for md screens and up.
+  // This is set to pb-0 for md screens and up. Check for authenticated status
+  // so that the padding is not added on the login and registration pages.
   return (
     <div className={clsx({ "pb-16 md:pb-0": isAuthenticated })}>
       <div
