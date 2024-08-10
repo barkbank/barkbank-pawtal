@@ -6,10 +6,17 @@ import { z } from "zod";
 
 export const MyAccountSchema = z.object({
   userCreationTime: z.date(),
+  userResidency: UserResidencySchema,
   userTitle: z.string().optional(),
   userName: z.string(),
-  userResidency: UserResidencySchema,
   userEmail: z.string().email(),
+  userPhoneNumber: z.string(),
+});
+
+export const MyAccountDetailsUpdateSchema = z.object({
+  userResidency: UserResidencySchema,
+  userTitle: z.string().optional(),
+  userName: z.string(),
   userPhoneNumber: z.string(),
 });
 
@@ -19,15 +26,11 @@ export const MyLastContactedTimeSchema = z.object({
 
 export type MyAccount = z.infer<typeof MyAccountSchema>;
 
-export type MyLastContactedTime = z.infer<typeof MyLastContactedTimeSchema>;
+export type MyAccountDetailsUpdate = z.infer<
+  typeof MyAccountDetailsUpdateSchema
+>;
 
-// WIP: Define MyAccountDetailsUpdateSchema
-export type MyAccountDetailsUpdate = {
-  // WIP: Add userTitle
-  userName: string;
-  userPhoneNumber: string;
-  userResidency: UserResidency;
-};
+export type MyLastContactedTime = z.infer<typeof MyLastContactedTimeSchema>;
 
 /**
  * Summary details of a user's dog for the My Pets view.
