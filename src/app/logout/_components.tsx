@@ -14,10 +14,10 @@ export function LogoutQuestion() {
     signOut();
   };
   return (
-    <div className="flex flex-col place-items-center p-3">
-      <div className="w-full max-w-80">
-        <BarkH2>Logout</BarkH2>
-        <BarkP>Are you sure you want to logout?</BarkP>
+    <div className="flex min-h-screen flex-col place-items-center p-6">
+      <div className="prose w-full max-w-80">
+        <h1>Logout</h1>
+        <p>Are you sure you want to logout?</p>
         <div className="mt-6 flex flex-col gap-3 md:flex-row">
           <BarkButton
             className="w-full md:w-1/2"

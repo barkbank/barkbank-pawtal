@@ -8,6 +8,7 @@ import { BarkNavRoute } from "@/components/bark/navigation/bark-nav-route";
 import { ExternalLink } from "lucide-react";
 import { VERSION } from "../_lib/version";
 import clsx from "clsx";
+import { usePathname } from "next/navigation";
 
 const footerRoutes: BarkNavRoute[] = [
   {
@@ -32,19 +33,21 @@ const loginPages: BarkNavRoute[] = [
 ];
 
 const RootFooter = () => {
+  const pathname = usePathname();
   const session = useSession();
   const { status } = session;
   const isUnauthenticated = status === "unauthenticated";
   const isAuthenticated = status === "authenticated";
+  const isLogoutPage = pathname === RoutePath.LOGOUT_PAGE;
+  const shouldAddPaddingForDock = isAuthenticated && !isLogoutPage;
   const routes = isUnauthenticated
     ? [...footerRoutes, ...loginPages]
     : footerRoutes;
 
   // Note: So that the dock does not block the footer, a pb-16 padding is added.
-  // This is set to pb-0 for md screens and up. Check for authenticated status
-  // so that the padding is not added on the login and registration pages.
+  // This is set to pb-0 for md screens and up.
   return (
-    <div className={clsx({ "pb-16 md:pb-0": isAuthenticated })}>
+    <div className={clsx({ "pb-16 md:pb-0": shouldAddPaddingForDock })}>
       <div
         id="bark-footer"
         className="flex flex-col items-center justify-center bg-grey md:flex-row"
