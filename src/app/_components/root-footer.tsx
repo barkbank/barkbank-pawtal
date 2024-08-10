@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { BarkNavRoute } from "@/components/bark/navigation/bark-nav-route";
 import { ExternalLink } from "lucide-react";
+import { VERSION } from "../_lib/version";
 
 const footerRoutes: BarkNavRoute[] = [
   {
@@ -40,25 +41,30 @@ const RootFooter = () => {
   // Note: So that the dock does not block the footer, a pb-16 padding is added.
   // This is set to pb-0 for md screens and up.
   return (
-    <div
-      id="bark-footer"
-      className="flex w-full flex-col items-center justify-center bg-grey pb-16 md:flex-row md:pb-0"
-    >
-      {routes.map((route) => {
-        const isLocalPath = route.href.startsWith("/");
-        const target = isLocalPath ? "_self" : "_blank";
-        return (
-          <Link
-            className="m-3 flex flex-row gap-1 md:w-48"
-            key={route.label}
-            href={route.href}
-            target={target}
-          >
-            <span>{route.label}</span>
-            {!isLocalPath && <ExternalLink color="#000" className="w-4" />}
-          </Link>
-        );
-      })}
+    <div className="pb-16 md:pb-0">
+      <div
+        id="bark-footer"
+        className="flex flex-col items-center justify-center bg-grey md:flex-row"
+      >
+        {routes.map((route) => {
+          const isLocalPath = route.href.startsWith("/");
+          const target = isLocalPath ? "_self" : "_blank";
+          return (
+            <Link
+              className="m-3 flex flex-row gap-1 md:w-48"
+              key={route.label}
+              href={route.href}
+              target={target}
+            >
+              <span>{route.label}</span>
+              {!isLocalPath && <ExternalLink color="#000" className="w-4" />}
+            </Link>
+          );
+        })}
+      </div>
+      <div className="flex flex-row justify-center bg-gray-500 p-1 text-sm text-white">
+        Bark Bank | Pawtal | Version {VERSION}
+      </div>
     </div>
   );
 };

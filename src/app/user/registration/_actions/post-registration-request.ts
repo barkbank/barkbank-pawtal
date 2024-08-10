@@ -19,7 +19,14 @@ export async function postRegistrationRequest(
     return res;
   }
   const context = await APP.getBarkContext();
-  const { userEmail, userName, dogName } = request;
-  await opSendWelcomeEmail(context, { userEmail, userName, dogName });
+  const { userEmail, userName, dogName, dogPreferredVetId } = request;
+  const hasPreferredVet =
+    dogPreferredVetId !== undefined && dogPreferredVetId !== "";
+  await opSendWelcomeEmail(context, {
+    userEmail,
+    userName,
+    dogName,
+    hasPreferredVet,
+  });
   return res;
 }

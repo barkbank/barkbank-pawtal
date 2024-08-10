@@ -5,6 +5,10 @@ import { Locator, expect } from "@playwright/test";
 export abstract class PomPage extends PomObject {
   abstract url(): string;
 
+  /**
+   * Check ready checks the URL and one evidence of page loaded. Override the
+   * checkPageLoaded method to customise the behaviour for the page.
+   */
   async checkReady() {
     await this.checkUrl();
     await this.checkPageLoaded();
@@ -15,6 +19,9 @@ export abstract class PomPage extends PomObject {
   }
 
   /**
+   * Typically you should be calling checkReady(), which will check URL and
+   * page-loaded.
+   *
    * Override this if there are things to check that demonstrate the page has
    * loaded successfully.
    */

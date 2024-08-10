@@ -1,69 +1,80 @@
 import { test, expect } from "@playwright/test";
 import { initPomContext } from "../_lib/init/init-pom-context";
 import { UserLoginPage } from "../_lib/pom/pages/user-login-page";
-import { UserRegistrationPage } from "../_lib/pom/pages/user-registration-page";
 import { getTestBirthday } from "../_lib/utils/get-test-birthday";
 import { generateRandomGUID } from "@/lib/utilities/bark-guid";
 import { NavComponent } from "../_lib/pom/layout/nav-component";
 import { UserMyAccountPage } from "../_lib/pom/pages/user-my-account-page";
 import { UserMyPetsPage } from "../_lib/pom/pages/user-my-pets-page";
+import { UserRegistrationPetFormPage } from "../_lib/pom/pages/user-registration-pet-form-page";
+import { UserRegistrationOwnerFormPage } from "../_lib/pom/pages/user-registration-owner-form-page";
+import { UserRegistrationSuccessPage } from "../_lib/pom/pages/user-registration-success-page";
 
 test("visitor can register a new user account", async ({ page }) => {
   // Navigating to the registration form
   const context = await initPomContext({ page });
-  const pg1 = new UserLoginPage(context);
-  await pg1.checkReady();
-  await pg1.registerLink().click();
 
-  // Fill in the dog form
-  const pg2 = new UserRegistrationPage(context);
-  await pg2.checkReady();
-  await expect(pg2.dogFormHeader()).toBeVisible();
-  await pg2.dogNameField().fill("Casper");
-  await pg2.dogBreedField().fill("White Sheet Dog");
+  // Should be at the user login page after init. Click the register link to
+  // start the registration process.
+  const pgLogin = new UserLoginPage(context);
+  await pgLogin.checkReady();
+  await pgLogin.registerLink().click();
+
+  // Should now be at the pet form. Fill in the pet form.
+  const pgPetForm = new UserRegistrationPetFormPage(context);
+  await pgPetForm.checkReady();
+  await expect(pgPetForm.dogFormHeader()).toBeVisible();
+  await pgPetForm.dogNameField().fill("Casper");
+  await pgPetForm.dogBreedField().fill("White Sheet Dog");
   const dogBirthday = getTestBirthday(6);
-  await pg2.dogBirthdayField().fill(dogBirthday);
-  await pg2.dogWeightField().fill("42");
-  await pg2.dogGender_MALE().click();
-  await pg2.dogBloodType_UNKNOWN().click();
-  if (await pg2.dogEverPregnant_NO().isEnabled()) {
-    await pg2.dogEverPregnant_NO().click();
+  await pgPetForm.dogBirthdayField().fill(dogBirthday);
+  await pgPetForm.dogWeightField().fill("42");
+  await pgPetForm.dogGender_MALE().click();
+  await pgPetForm.dogBloodType_UNKNOWN().click();
+  if (await pgPetForm.dogEverPregnant_NO().isEnabled()) {
+    await pgPetForm.dogEverPregnant_NO().click();
   }
-  await pg2.dogEverReceivedTransfusion_NO().click();
-  await pg2.dogPreferredVet_VetClinic1().click();
-  await pg2.nextButton().click();
+  await pgPetForm.dogEverReceivedTransfusion_NO().click();
+  await pgPetForm.dogPreferredVet_VetClinic1().click();
+  await pgPetForm.nextButton().click();
 
-  // Fill in the owner form
-  await expect(pg2.ownerFormHeader()).toBeVisible();
-  await pg2.userResidency_SINGAPORE().click();
-  await pg2.userNameField().fill("Ian Little");
-  await pg2.userPhoneNumberField().fill("87654321");
+  // Should now be at the owner form. Fill in the owner form.
+  const pgOwnerForm = new UserRegistrationOwnerFormPage(context);
+  await pgOwnerForm.checkReady();
+  await expect(pgOwnerForm.ownerFormHeader()).toBeVisible();
+  await pgOwnerForm.userResidency_SINGAPORE().click();
+  await pgOwnerForm.userNameField().fill("Ian Little");
+  await pgOwnerForm.userPhoneNumberField().fill("87654321");
   const guid = generateRandomGUID(8);
   const userEmail = `ian.${guid}@user.com`;
-  await pg2.userEmailField().fill(userEmail);
+  await pgOwnerForm.userEmailField().fill(userEmail);
 
-  // Go back to the dog form and back to the owner form. This checks if the data
-  // entered for dog and owner are preserved.
-  await pg2.backButton().click();
-  await expect(pg2.dogFormHeader()).toBeVisible();
-  await pg2.nextButton().click();
-  await expect(pg2.ownerFormHeader()).toBeVisible();
+  // Go back to the pet form and back to the owner form. This checks if the data
+  // entered for pet and owner are preserved.
+  await pgOwnerForm.backButton().click();
+  await pgPetForm.checkReady();
+  await pgPetForm.nextButton().click();
+  await pgOwnerForm.checkReady();
 
   // Request OTP and submit
-  await pg2.sendOtpButton().click();
-  await pg2.otpField().fill("000000");
-  await pg2.disclaimerCheckbox().click();
-  await pg2.submitButton().click();
+  await pgOwnerForm.sendOtpButton().click();
+  await pgOwnerForm.otpField().fill("000000");
+  await pgOwnerForm.disclaimerCheckbox().click();
+  await pgOwnerForm.submitButton().click();
 
-  // Registered page. Click enter dashboard button.
-  await expect(pg2.accountCreatedMessage()).toBeVisible();
-  await expect(pg2.enterDashboardButton()).toBeVisible();
-  await pg2.enterDashboardButton().click();
+  // Should now be at the registration success page. Verify presence of expected
+  // elements and click enter dashboard button.
+  const pgRegSuccess = new UserRegistrationSuccessPage(context);
+  await pgRegSuccess.checkReady();
+  await expect(pgRegSuccess.upcomingBloodProfilingMessage()).toBeVisible();
+  await expect(pgRegSuccess.accountCreatedMessage()).toBeVisible();
+  await expect(pgRegSuccess.enterDashboardButton()).toBeVisible();
+  await pgRegSuccess.enterDashboardButton().click();
 
   // Check for expected dog in my pets
-  const pg3 = new UserMyPetsPage(context);
-  await pg3.checkReady();
-  await expect(pg3.dogCardItem("Casper").locator()).toBeVisible();
+  const pgMyPets = new UserMyPetsPage(context);
+  await pgMyPets.checkReady();
+  await expect(pgMyPets.dogCardItem("Casper").locator()).toBeVisible();
 
   // Navigate to my account page
   const nav = new NavComponent(context);
@@ -71,10 +82,10 @@ test("visitor can register a new user account", async ({ page }) => {
   await nav.myAcountOption().click();
 
   // Check for account details
-  const pg4 = new UserMyAccountPage(context);
-  await pg4.checkReady();
-  await expect(pg4.exactText("Ian Little")).toBeVisible();
-  await expect(pg4.residencyItem()).toHaveValue("Singapore");
-  await expect(pg4.phoneNumberItem()).toHaveValue("87654321");
-  await expect(pg4.emailItem()).toHaveValue(userEmail);
+  const pgMyAccount = new UserMyAccountPage(context);
+  await pgMyAccount.checkReady();
+  await expect(pgMyAccount.exactText("Ian Little")).toBeVisible();
+  await expect(pgMyAccount.residencyItem()).toHaveValue("Singapore");
+  await expect(pgMyAccount.phoneNumberItem()).toHaveValue("87654321");
+  await expect(pgMyAccount.emailItem()).toHaveValue(userEmail);
 });
