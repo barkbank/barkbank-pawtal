@@ -13,11 +13,13 @@ export const MyAccountSchema = z.object({
   userPhoneNumber: z.string(),
 });
 
+export const MyLastContactedTimeSchema = z.object({
+  userLastContactedTime: z.date().nullable(),
+});
+
 export type MyAccount = z.infer<typeof MyAccountSchema>;
 
-export type MyLastContactedTime = {
-  userLastContactedTime: Date | null;
-};
+export type MyLastContactedTime = z.infer<typeof MyLastContactedTimeSchema>;
 
 // WIP: Define MyAccountDetailsUpdateSchema
 export type MyAccountDetailsUpdate = {
