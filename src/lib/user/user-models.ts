@@ -3,8 +3,10 @@ import { DogGender } from "../bark/enums/dog-gender";
 import { DogAppointment } from "../bark/models/dog-appointment";
 import { DogStatuses } from "../bark/models/dog-statuses";
 
+// WIP: Define MyAccountSchema
 export type MyAccount = {
   userCreationTime: Date;
+  // WIP: Add userTitle
   userName: string;
   userResidency: UserResidency;
   userEmail: string;
@@ -15,7 +17,9 @@ export type MyLastContactedTime = {
   userLastContactedTime: Date | null;
 };
 
+// WIP: Define MyAccountDetailsUpdateSchema
 export type MyAccountDetailsUpdate = {
+  // WIP: Add userTitle
   userName: string;
   userPhoneNumber: string;
   userResidency: UserResidency;

@@ -29,8 +29,10 @@ export type RegistrationServiceConfig = {
   otpService: OtpService;
 };
 
+// WIP: Define RegistrationRequestSchema
 export type RegistrationRequest = {
   emailOtp: string;
+  // WIP: Add userTitle
   userName: string;
   userEmail: string;
   userPhoneNumber: string;
