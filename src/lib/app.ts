@@ -32,7 +32,7 @@ import { isValidEmail } from "./utilities/bark-utils";
 import { UserMapper } from "./data/user-mapper";
 import { AdminMapper } from "./data/admin-mapper";
 import { DogMapper } from "./data/dog-mapper";
-import { RegistrationService } from "./services/registration";
+import { RegistrationService } from "./bark/services/registration-service";
 import { UserActorConfig } from "./user/user-actor";
 import { AdminActorConfig } from "./admin/admin-actor";
 import {

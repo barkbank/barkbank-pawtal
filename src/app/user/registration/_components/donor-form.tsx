@@ -14,7 +14,6 @@ import { RoutePath } from "@/lib/route-path";
 import { useRouter } from "next/navigation";
 import { BarkFormOption } from "@/components/bark/bark-form-option";
 import { postRegistrationRequest } from "@/app/user/registration/_actions/post-registration-request";
-import { RegistrationRequest } from "@/lib/services/registration";
 import { DogAntigenPresence } from "@/lib/bark/enums/dog-antigen-presence";
 import { YesNoUnknown } from "@/lib/bark/enums/yes-no-unknown";
 import { DogGender } from "@/lib/bark/enums/dog-gender";
@@ -27,6 +26,7 @@ import { CODE } from "@/lib/utilities/bark-code";
 import { RequiredDateField } from "@/app/_lib/field-schemas/required-date-field";
 import { CONTACT_EMAIL } from "@/lib/bark/constants/contact-email";
 import clsx from "clsx";
+import { RegistrationRequest } from "@/lib/bark/models/registration-models";
 
 const FORM_SCHEMA = z.object({
   dogName: z.string(),

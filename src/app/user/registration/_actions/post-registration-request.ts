@@ -1,8 +1,8 @@
 "use server";
 
 import APP from "@/lib/app";
+import { RegistrationRequest } from "@/lib/bark/models/registration-models";
 import { opSendWelcomeEmail } from "@/lib/bark/operations/op-send-welcome-email";
-import { RegistrationRequest } from "@/lib/services/registration";
 import { CODE } from "@/lib/utilities/bark-code";
 
 export async function postRegistrationRequest(

@@ -9,17 +9,14 @@ import {
   DogSecureOii,
   DogSpec,
 } from "@/lib/data/db-models";
-import { DogAntigenPresence } from "../bark/enums/dog-antigen-presence";
-import { YesNoUnknown } from "../bark/enums/yes-no-unknown";
-import { DogGender } from "../bark/enums/dog-gender";
-import { UserResidency } from "../bark/enums/user-residency";
 import { dbSelectUserIdByHashedEmail, dbInsertUser } from "@/lib/data/db-users";
 import { dbBegin, dbRollback, dbCommit, dbRelease } from "@/lib/data/db-utils";
 import { DogMapper } from "@/lib/data/dog-mapper";
 import { UserMapper } from "@/lib/data/user-mapper";
 import { HashService } from "@/lib/services/hash";
 import { OtpService } from "@/lib/services/otp";
-import { CODE } from "../utilities/bark-code";
+import { CODE } from "../../utilities/bark-code";
+import { RegistrationRequest } from "../models/registration-models";
 
 export type RegistrationServiceConfig = {
   dbPool: Pool;
@@ -29,27 +26,10 @@ export type RegistrationServiceConfig = {
   otpService: OtpService;
 };
 
-// WIP: Define RegistrationRequestSchema
-export type RegistrationRequest = {
-  emailOtp: string;
-  // WIP: Add userTitle
-  userName: string;
-  userEmail: string;
-  userPhoneNumber: string;
-  userResidency: UserResidency;
-  dogName: string;
-  dogBreed: string;
-  dogBirthday: Date;
-  dogGender: DogGender;
-  dogWeightKg: number | null;
-  dogDea1Point1: DogAntigenPresence;
-  dogEverPregnant: YesNoUnknown;
-  dogEverReceivedTransfusion: YesNoUnknown;
-  dogPreferredVetId?: string;
-};
-
 export class RegistrationService {
   private config: RegistrationServiceConfig;
+
+  // TODO: This should expect BarkContext
   constructor(config: RegistrationServiceConfig) {
     this.config = config;
   }

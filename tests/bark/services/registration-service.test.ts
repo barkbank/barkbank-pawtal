@@ -1,8 +1,5 @@
 import { Pool } from "pg";
-import { withDb } from "../_db_helpers";
-import { RegistrationRequest } from "@/lib/services/registration";
-import { RegistrationServiceConfig } from "@/lib/services/registration";
-import { RegistrationService } from "@/lib/services/registration";
+import { withDb } from "../../_db_helpers";
 import { DOG_ANTIGEN_PRESENCE } from "@/lib/bark/enums/dog-antigen-presence";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
@@ -19,16 +16,21 @@ import {
   getUserMapper,
   insertUser,
   insertVet,
-} from "../_fixtures";
+} from "../../_fixtures";
 import { dbSelectUser, dbSelectUserIdByHashedEmail } from "@/lib/data/db-users";
 import {
   dbSelectDogListByUserId,
   dbSelectPreferredVetIds,
 } from "@/lib/data/db-dogs";
-import { HarnessOtpService } from "../_harness";
+import { HarnessOtpService } from "../../_harness";
 import { dbQuery } from "@/lib/data/db-utils";
+import { RegistrationRequest } from "@/lib/bark/models/registration-models";
+import {
+  RegistrationService,
+  RegistrationServiceConfig,
+} from "@/lib/bark/services/registration-service";
 
-describe("RegistrationHandler", () => {
+describe("RegistrationService", () => {
   it("should return OK when user account is successfully created", async () => {
     await withDb(async (dbPool) => {
       // GIVEN a standard request
