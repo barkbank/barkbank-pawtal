@@ -24,7 +24,7 @@ export default async function BarkLoginPage(props: {
     redirect(successPath);
   }
   return (
-    <div className="mt-3 flex w-full flex-row justify-center">
+    <div className="flex min-h-screen w-full flex-row justify-center px-3 py-6">
       <div className="flex w-full max-w-screen-md flex-col items-center gap-3">
         <Image src={logoSrc} alt="login logo" height={100} width={100} />
         <div className="text-center">
