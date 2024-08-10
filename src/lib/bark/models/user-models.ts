@@ -1,7 +1,7 @@
-import { UserResidency, UserResidencySchema } from "../enums/user-residency";
-import { DogGender, DogGenderSchema } from "../enums/dog-gender";
-import { DogAppointment, DogAppointmentSchema } from "./dog-appointment";
-import { DogStatuses, DogStatusesSchema } from "./dog-statuses";
+import { UserResidencySchema } from "../enums/user-residency";
+import { DogGenderSchema } from "../enums/dog-gender";
+import { DogAppointmentSchema } from "./dog-appointment";
+import { DogStatusesSchema } from "./dog-statuses";
 import { z } from "zod";
 
 export const MyAccountSchema = z.object({
