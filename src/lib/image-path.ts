@@ -1,5 +1,5 @@
 export const IMG_PATH = {
-  BARK_BANK_LOGO: "/images/bark-bank-logo.svg",
+  BARK_BANK_LOGO: "/images/bark-bank-logo-300x300.png",
   BORDER_COLLIE_DOG_AVATAR: "/images/border-collie-dog-avatar.svg",
   BROWN_DOG_AVATAR: "/images/brown-dog-avatar.svg",
   CHECK_MAIL: "/images/check-mail.svg",
