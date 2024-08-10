@@ -80,7 +80,8 @@ test-ui-headed: playwright-browsers
 	npx playwright test --workers $(PW_WORKERS) --project "Mobile Chrome" --project "chromium" --headed
 
 run-playwright: playwright-browsers
-	npx playwright test --ui --project "Mobile Chrome" --project "chromium" --workers 1
+	npx playwright test --ui --project "Mobile Chrome" --project "chromium"
+#	npx playwright test --ui --project "Mobile Chrome" --project "chromium" --workers 1
 
 # Installs playwright browsers
 playwright-browsers:

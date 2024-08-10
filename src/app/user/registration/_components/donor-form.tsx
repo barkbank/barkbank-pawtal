@@ -26,6 +26,7 @@ import { AccountType } from "@/lib/auth-models";
 import { CODE } from "@/lib/utilities/bark-code";
 import { RequiredDateField } from "@/app/_lib/field-schemas/required-date-field";
 import { CONTACT_EMAIL } from "@/lib/bark/constants/contact-email";
+import clsx from "clsx";
 
 const FORM_SCHEMA = z.object({
   dogName: z.string(),
@@ -108,6 +109,10 @@ export default function DonorForm(props: {
         (vetOptions.length === 1 ? vetOptions[0].value : undefined),
     };
   }
+
+  const { dogPreferredVetId } = form.watch();
+  const hasPreferredVet =
+    dogPreferredVetId !== undefined && dogPreferredVetId !== "";
 
   async function doRegistration(): Promise<void> {
     setRegistrationError("");
@@ -251,7 +256,12 @@ export default function DonorForm(props: {
             </Button>
           </div>
 
-          <div className="mt-6 grid grid-cols-1 gap-20 md:grid-cols-3">
+          <div
+            className={clsx("mt-6 grid grid-cols-1 gap-20", {
+              "md:grid-cols-2": !hasPreferredVet,
+              "md:grid-cols-3": hasPreferredVet,
+            })}
+          >
             <div className="flex flex-col items-center text-center">
               <Image
                 src={IMG_PATH.CHECK_MAIL}
@@ -266,19 +276,21 @@ export default function DonorForm(props: {
               </BarkP>
             </div>
 
-            <div className="flex flex-col items-center text-center">
-              <Image
-                src={IMG_PATH.CONTACT_US}
-                alt=""
-                height={101}
-                width={100}
-              />
-              <BarkH4>Upcoming Blood Profiling</BarkH4>
-              <BarkP>
-                Your preferred vet will contact you within the week to schedule
-                a blood profiling session for your dog.
-              </BarkP>
-            </div>
+            {hasPreferredVet && (
+              <div className="flex flex-col items-center text-center">
+                <Image
+                  src={IMG_PATH.CONTACT_US}
+                  alt=""
+                  height={101}
+                  width={100}
+                />
+                <BarkH4>Upcoming Blood Profiling</BarkH4>
+                <BarkP>
+                  Your preferred vet will contact you within the week to
+                  schedule a blood profiling session for your dog.
+                </BarkP>
+              </div>
+            )}
 
             <div className="flex flex-col items-center text-center">
               <Image src={IMG_PATH.EMAIL} alt="" height={100} width={100} />
