@@ -41,14 +41,3 @@ export const MyDogSchema = z.object({
 });
 
 export type MyDog = z.infer<typeof MyDogSchema>;
-
-
-/**
- * @deprecated Do not use yet, we will expand this to be a full report.
- */
-export type MyDogReport = {
-  reportId: string;
-  visitTime: Date;
-  vetId: string;
-  vetName: string;
-};
