@@ -4,7 +4,7 @@ import { DogAppointmentSchema } from "./dog-appointment";
 import { DogStatusesSchema } from "./dog-statuses";
 import { z } from "zod";
 
-export const MyAccountSchema = z.object({
+export const UserAccountSchema = z.object({
   userCreationTime: z.date(),
   userResidency: UserResidencySchema,
   userTitle: z.string().optional(),
@@ -13,18 +13,16 @@ export const MyAccountSchema = z.object({
   userPhoneNumber: z.string(),
 });
 
-export type MyAccount = z.infer<typeof MyAccountSchema>;
+export type UserAccount = z.infer<typeof UserAccountSchema>;
 
-export const MyAccountDetailsUpdateSchema = z.object({
+export const UserAccountUpdateSchema = z.object({
   userResidency: UserResidencySchema,
   userTitle: z.string().optional(),
   userName: z.string(),
   userPhoneNumber: z.string(),
 });
 
-export type MyAccountDetailsUpdate = z.infer<
-  typeof MyAccountDetailsUpdateSchema
->;
+export type UserAccountUpdate = z.infer<typeof UserAccountUpdateSchema>;
 
 export const MyLastContactedTimeSchema = z.object({
   userLastContactedTime: z.date().nullable(),

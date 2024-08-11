@@ -13,7 +13,7 @@ import { postMyAccountDetails } from "../_actions/post-my-account-details";
 import React from "react";
 import { BarkButton } from "@/components/bark/bark-button";
 import { CODE } from "@/lib/utilities/bark-code";
-import { MyAccountDetailsUpdate } from "@/lib/bark/models/user-models";
+import { UserAccountUpdate } from "@/lib/bark/models/user-models";
 
 const FORM_SCHEMA = z.object({
   userName: z.string().min(1, { message: "Name cannot be empty" }),
@@ -45,7 +45,7 @@ export default function AccountEditForm({
 
   async function saveUser(values: FormDataType) {
     setUpdateError("");
-    const request: MyAccountDetailsUpdate = values;
+    const request: UserAccountUpdate = values;
 
     const response = await postMyAccountDetails(request);
     if (response === CODE.ERROR_NOT_LOGGED_IN) {

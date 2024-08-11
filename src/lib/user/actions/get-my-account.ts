@@ -1,6 +1,6 @@
 import { UserActor } from "../user-actor";
 import { dbResultQuery } from "@/lib/data/db-utils";
-import { MyAccount } from "../../bark/models/user-models";
+import { UserAccount } from "../../bark/models/user-models";
 import { UserResidency } from "@/lib/bark/enums/user-residency";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { CODE } from "@/lib/utilities/bark-code";
@@ -9,7 +9,7 @@ export async function getMyAccount(
   actor: UserActor,
 ): Promise<
   Result<
-    MyAccount,
+    UserAccount,
     typeof CODE.ERROR_USER_NOT_FOUND | typeof CODE.DB_QUERY_FAILURE
   >
 > {

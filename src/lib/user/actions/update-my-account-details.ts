@@ -6,19 +6,19 @@ import {
   dbRollback,
 } from "@/lib/data/db-utils";
 import { UserActor } from "../user-actor";
-import { MyAccountDetailsUpdate } from "../../bark/models/user-models";
+import { UserAccountUpdate } from "../../bark/models/user-models";
 import { PoolClient } from "pg";
 import { guaranteed } from "@/lib/utilities/bark-utils";
 import { CODE } from "@/lib/utilities/bark-code";
 
 type Context = {
   actor: UserActor;
-  update: MyAccountDetailsUpdate;
+  update: UserAccountUpdate;
 };
 
 export async function updateMyAccountDetails(
   actor: UserActor,
-  update: MyAccountDetailsUpdate,
+  update: UserAccountUpdate,
 ): Promise<
   | typeof CODE.OK
   | typeof CODE.ERROR_USER_NOT_FOUND
