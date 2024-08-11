@@ -5,6 +5,8 @@ import { UserMapper } from "../data/user-mapper";
 import { DogMapper } from "../data/dog-mapper";
 import { dbSelectUser } from "../data/db-users";
 import { EncryptionService } from "../services/encryption";
+import { BarkContext } from "../bark/bark-context";
+import { UserAccountService } from "../bark/services/user-account-service";
 
 export type UserActorConfig = {
   dbPool: Pool;
@@ -20,27 +22,28 @@ export type UserActorConfig = {
  * authorisation. E.g. view own PII and not that of another user.
  */
 export class UserActor {
-  private userId: string;
-  private config: UserActorConfig;
-
-  constructor(userId: string, config: UserActorConfig) {
-    this.userId = userId;
-    this.config = config;
-  }
+  constructor(
+    private args: {
+      userId: string;
+      config: UserActorConfig;
+      context: BarkContext;
+      userAccountService: UserAccountService;
+    },
+  ) {}
 
   public getParams(): UserActorConfig & { userId: string } {
     return {
-      ...this.config,
-      userId: this.userId,
+      ...this.args.config,
+      userId: this.args.userId,
     };
   }
 
   public getUserId(): string {
-    return this.userId;
+    return this.args.userId;
   }
 
   public async getOwnUserRecord(): Promise<UserRecord | null> {
-    const { dbPool } = this.config;
+    const { dbPool } = this.args.config;
     const record = await dbSelectUser(dbPool, this.getUserId());
     return record;
   }
@@ -50,7 +53,7 @@ export class UserActor {
     if (record === null) {
       return null;
     }
-    const { userMapper } = this.config;
+    const { userMapper } = this.args.config;
     return userMapper.mapUserRecordToUserPii(record);
   }
 }

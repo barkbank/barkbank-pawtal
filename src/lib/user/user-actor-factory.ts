@@ -3,34 +3,40 @@ import { HashService } from "../services/hash";
 import { Pool } from "pg";
 import { dbSelectUserIdByHashedEmail } from "../data/db-users";
 import { LRUCache } from "lru-cache";
-
-export type UserActorFactoryConfig = {
-  dbPool: Pool;
-  emailHashService: HashService;
-};
+import { BarkContext } from "../bark/bark-context";
+import { UserAccountService } from "../bark/services/user-account-service";
 
 /**
  * Responsible for creating user actors
  */
 export class UserActorFactory {
-  private config: UserActorFactoryConfig;
-  private actorConfig: UserActorConfig;
   private idCache: LRUCache<string, string>;
 
-  constructor(config: UserActorFactoryConfig, actorConfig: UserActorConfig) {
-    this.config = config;
-    this.actorConfig = actorConfig;
+  constructor(
+    private args: {
+      actorConfig: UserActorConfig;
+      context: BarkContext;
+      userAccountService: UserAccountService;
+    },
+  ) {
     this.idCache = new LRUCache({ max: 10 });
   }
 
   public async getUserActor(userEmail: string): Promise<UserActor | null> {
-    const { emailHashService } = this.config;
+    // WIP: There should be a getUserIdByEmail() method in UserAccountService
+    const { context, actorConfig, userAccountService } = this.args;
+    const { emailHashService } = context;
     const userHashedEmail = await emailHashService.getHashHex(userEmail);
     const userId = await this.getUserIdByHashedEmail(userHashedEmail);
     if (userId === null) {
       return null;
     }
-    return new UserActor(userId, this.actorConfig);
+    return new UserActor({
+      userId,
+      config: actorConfig,
+      context,
+      userAccountService,
+    });
   }
 
   private async getUserIdByHashedEmail(
@@ -40,7 +46,7 @@ export class UserActorFactory {
     if (cachedUserId !== undefined) {
       return cachedUserId;
     }
-    const { dbPool } = this.config;
+    const { dbPool } = this.args.context;
     const userId = await dbSelectUserIdByHashedEmail(dbPool, userHashedEmail);
     if (userId === null) {
       return null;
