@@ -47,6 +47,22 @@ export class UserAccountService {
     }
   }
 
+  async update(args: {
+    userId: string;
+    spec: UserAccountSpec;
+  }): Promise<
+    typeof CODE.OK | typeof CODE.FAILED | typeof CODE.ERROR_USER_NOT_FOUND
+  > {
+    const { userId, spec } = args;
+    const dao = new EncryptedUserAccountDao(this.context.dbPool);
+    const encrypted = await toEncryptedUserAccountSpec(this.context, spec);
+    const didUpdate = await dao.updateByUserId({ userId, spec: encrypted });
+    if (!didUpdate) {
+      return CODE.ERROR_USER_NOT_FOUND;
+    }
+    return CODE.OK;
+  }
+
   async getByUserId(args: {
     userId: string;
   }): Promise<

@@ -42,6 +42,29 @@ export class EncryptedUserAccountDao {
     return UserIdentifierSchema.parse(res.rows[0]);
   }
 
+  async updateByUserId(args: {
+    userId: string;
+    spec: EncryptedUserAccountSpec;
+  }): Promise<boolean> {
+    const { userId, spec } = args;
+    const sql = `
+    UPDATE users
+    SET
+      user_hashed_email = $2,
+      user_encrypted_pii = $3,
+      user_residency = $4
+    WHERE user_id = $1
+    RETURNING 1
+    `;
+    const res = await dbQuery(this.db, sql, [
+      userId,
+      spec.userHashedEmail,
+      spec.userEncryptedPii,
+      spec.userResidency,
+    ]);
+    return res.rows.length === 1;
+  }
+
   async getByUserId(args: {
     userId: string;
   }): Promise<EncryptedUserAccount | null> {
