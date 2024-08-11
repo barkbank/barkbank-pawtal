@@ -3,10 +3,11 @@ import { UserResidencySchema } from "../enums/user-residency";
 import { DogGenderSchema } from "../enums/dog-gender";
 import { DogAntigenPresenceSchema } from "../enums/dog-antigen-presence";
 import { YesNoUnknownSchema } from "../enums/yes-no-unknown";
+import { UserTitleSchema } from "../enums/user-title";
 
 export const RegistrationRequestSchema = z.object({
   emailOtp: z.string(),
-  userTitle: z.string().optional(),
+  userTitle: UserTitleSchema.optional(),
   userName: z.string(),
   userEmail: z.string(),
   userPhoneNumber: z.string(),

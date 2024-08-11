@@ -3,11 +3,12 @@ import { DogGenderSchema } from "../enums/dog-gender";
 import { DogAppointmentSchema } from "./dog-appointment";
 import { DogStatusesSchema } from "./dog-statuses";
 import { z } from "zod";
+import { UserTitleSchema } from "../enums/user-title";
 
 export const UserAccountSchema = z.object({
   userId: z.string(),
   userResidency: UserResidencySchema,
-  userTitle: z.string().optional(),
+  userTitle: UserTitleSchema.optional(),
   userName: z.string(),
   userEmail: z.string().email(),
   userPhoneNumber: z.string(),
@@ -16,7 +17,7 @@ export const UserAccountSchema = z.object({
 
 export const UserAccountUpdateSchema = z.object({
   userResidency: UserResidencySchema,
-  userTitle: z.string().optional(),
+  userTitle: UserTitleSchema.optional(),
   userName: z.string(),
   userPhoneNumber: z.string(),
 });

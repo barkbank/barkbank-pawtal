@@ -5,6 +5,7 @@ import {
   toEncryptedUserAccount,
   toUserAccount,
 } from "@/lib/bark/mappers/user-mappers";
+import { USER_TITLE } from "@/lib/bark/enums/user-title";
 
 describe("user-mappers", () => {
   it("provides functions to map between UserAccount and EncryptedUserAccount", async () => {
@@ -16,7 +17,7 @@ describe("user-mappers", () => {
         userName: "Alice Yogg",
         userPhoneNumber: "12345678",
         userResidency: USER_RESIDENCY.SINGAPORE,
-        userTitle: "Mushroom", // TODO: This should be an enumeration
+        userTitle: USER_TITLE.MS,
       };
       const encrypted = await toEncryptedUserAccount(context, given);
       const decrypted = await toUserAccount(context, encrypted);
