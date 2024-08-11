@@ -14,8 +14,6 @@ export const UserAccountSchema = z.object({
   userCreationTime: z.date(),
 });
 
-export type UserAccount = z.infer<typeof UserAccountSchema>;
-
 export const UserAccountUpdateSchema = z.object({
   userResidency: UserResidencySchema,
   userTitle: z.string().optional(),
@@ -23,13 +21,16 @@ export const UserAccountUpdateSchema = z.object({
   userPhoneNumber: z.string(),
 });
 
-export type UserAccountUpdate = z.infer<typeof UserAccountUpdateSchema>;
+export const EncryptedUserAccountSchema = z.object({
+  userId: z.string(),
+  userResidency: UserResidencySchema,
+  userEncryptedPii: z.string(),
+  userCreationTime: z.date(),
+});
 
 export const MyLastContactedTimeSchema = z.object({
   userLastContactedTime: z.date().nullable(),
 });
-
-export type MyLastContactedTime = z.infer<typeof MyLastContactedTimeSchema>;
 
 export const MyDogSchema = z.object({
   dogId: z.string(),
@@ -39,4 +40,8 @@ export const MyDogSchema = z.object({
   dogStatuses: DogStatusesSchema,
 });
 
+export type UserAccount = z.infer<typeof UserAccountSchema>;
+export type UserAccountUpdate = z.infer<typeof UserAccountUpdateSchema>;
+export type EncryptedUserAccount = z.infer<typeof EncryptedUserAccountSchema>;
+export type MyLastContactedTime = z.infer<typeof MyLastContactedTimeSchema>;
 export type MyDog = z.infer<typeof MyDogSchema>;
