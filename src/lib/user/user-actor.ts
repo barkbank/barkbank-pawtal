@@ -7,7 +7,7 @@ import { dbSelectUser } from "../data/db-users";
 import { EncryptionService } from "../services/encryption";
 import { BarkContext } from "../bark/bark-context";
 import { UserAccountService } from "../bark/services/user-account-service";
-import { UserAccount } from "../bark/models/user-models";
+import { UserAccount, UserAccountUpdate } from "../bark/models/user-models";
 
 export type UserActorConfig = {
   dbPool: Pool;
@@ -47,6 +47,13 @@ export class UserActor {
     const { userId, userAccountService } = this.args;
     const { result } = await userAccountService.getByUserId({ userId });
     return result ?? null;
+  }
+
+  async updateMyAccount(args: { update: UserAccountUpdate }) {
+    const { update } = args;
+    const { userId, userAccountService } = this.args;
+    const res = await userAccountService.applyUpdate({ userId, update });
+    return res;
   }
 
   public async getOwnUserRecord(): Promise<UserRecord | null> {
