@@ -2,8 +2,11 @@ import { BarkContext } from "../bark-context";
 import {
   EncryptedUserAccount,
   EncryptedUserAccountSchema,
+  EncryptedUserAccountSpec,
+  EncryptedUserAccountSpecSchema,
   UserAccount,
   UserAccountSchema,
+  UserAccountSpec,
 } from "../models/user-models";
 import { UserPii, UserPiiSchema } from "../models/user-pii";
 
@@ -49,4 +52,21 @@ export async function toUserAccount(
   const userPii = await toUserPii(context, userEncryptedPii);
   const out: UserAccount = { ...userPii, ...others };
   return UserAccountSchema.parse(out);
+}
+
+export async function toEncryptedUserAccountSpec(
+  context: BarkContext,
+  spec: UserAccountSpec,
+): Promise<EncryptedUserAccountSpec> {
+  const { emailHashService } = context;
+  const { userEmail, userTitle, userName, userPhoneNumber, ...others } = spec;
+  const userPii: UserPii = { userEmail, userTitle, userName, userPhoneNumber };
+  const userHashedEmail = await emailHashService.getHashHex(userEmail);
+  const userEncryptedPii = await toEncryptedUserPii(context, userPii);
+  const out: EncryptedUserAccountSpec = {
+    userHashedEmail,
+    userEncryptedPii,
+    ...others,
+  };
+  return EncryptedUserAccountSpecSchema.parse(out);
 }
