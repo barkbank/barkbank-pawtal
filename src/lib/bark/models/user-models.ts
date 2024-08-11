@@ -5,12 +5,13 @@ import { DogStatusesSchema } from "./dog-statuses";
 import { z } from "zod";
 
 export const UserAccountSchema = z.object({
-  userCreationTime: z.date(),
+  userId: z.string(),
   userResidency: UserResidencySchema,
   userTitle: z.string().optional(),
   userName: z.string(),
   userEmail: z.string().email(),
   userPhoneNumber: z.string(),
+  userCreationTime: z.date(),
 });
 
 export type UserAccount = z.infer<typeof UserAccountSchema>;

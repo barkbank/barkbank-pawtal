@@ -50,6 +50,7 @@ export async function getMyAccount(
     });
 
   const out: UserAccount = {
+    userId,
     userName,
     userEmail,
     userPhoneNumber,
