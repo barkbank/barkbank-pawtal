@@ -1,6 +1,10 @@
 import { USER_RESIDENCY } from "@/lib/bark/enums/user-residency";
 import { USER_TITLE } from "@/lib/bark/enums/user-title";
-import { UserAccount, UserAccountSpec } from "@/lib/bark/models/user-models";
+import {
+  UserAccount,
+  UserAccountSpec,
+  UserAccountUpdate,
+} from "@/lib/bark/models/user-models";
 import { withBarkContext } from "../_context";
 import { UserAccountService } from "@/lib/bark/services/user-account-service";
 import { CODE } from "@/lib/utilities/bark-code";
@@ -63,35 +67,34 @@ describe("UserAccountService", () => {
       });
     });
   });
-  describe("update()", () => {
+  describe("applyUpdate()", () => {
     it("updates user account", async () => {
       await withBarkContext(async ({ context }) => {
-        const spec1: UserAccountSpec = {
+        const spec: UserAccountSpec = {
           userEmail: "hether.brown@user.com",
           userTitle: USER_TITLE.MS,
           userName: "Hether Brown",
           userPhoneNumber: "6550 1866",
           userResidency: USER_RESIDENCY.SINGAPORE,
         };
-        const spec2: UserAccountSpec = {
-          userEmail: "hether.brown@user.com",
+        const update: UserAccountUpdate = {
           userTitle: USER_TITLE.MRS,
           userName: "Hether WILLIAMS",
           userPhoneNumber: "1800 888 818",
           userResidency: USER_RESIDENCY.OTHER,
         };
         const service = new UserAccountService(context);
-        const res1 = await service.create({ spec: spec1 });
+        const res1 = await service.create({ spec });
         const { userId } = res1.result!;
-        const res2 = await service.update({ userId, spec: spec2 });
+        const res2 = await service.applyUpdate({ userId, update });
         expect(res2).toEqual(CODE.OK);
         const res3 = await service.getByUserId({ userId });
         const acc: UserAccount = res3.result!;
-        expect(acc.userEmail).toEqual(spec2.userEmail);
-        expect(acc.userTitle).toEqual(spec2.userTitle);
-        expect(acc.userName).toEqual(spec2.userName);
-        expect(acc.userPhoneNumber).toEqual(spec2.userPhoneNumber);
-        expect(acc.userResidency).toEqual(spec2.userResidency);
+        expect(acc.userEmail).toEqual(spec.userEmail);
+        expect(acc.userTitle).toEqual(update.userTitle);
+        expect(acc.userName).toEqual(update.userName);
+        expect(acc.userPhoneNumber).toEqual(update.userPhoneNumber);
+        expect(acc.userResidency).toEqual(update.userResidency);
       });
     });
   });

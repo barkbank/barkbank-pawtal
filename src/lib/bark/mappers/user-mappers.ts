@@ -7,6 +7,7 @@ import {
   UserAccount,
   UserAccountSchema,
   UserAccountSpec,
+  UserAccountSpecSchema,
 } from "../models/user-models";
 import { UserPii, UserPiiSchema } from "../models/user-pii";
 
@@ -17,7 +18,7 @@ export async function toUserPii(
   const { piiEncryptionService } = context;
   const encoded = await piiEncryptionService.getDecryptedData(userEncryptedPii);
   const decoded = JSON.parse(encoded);
-  const validated = UserPiiSchema.parse(decoded);
+  const validated = UserPiiSchema.strict().parse(decoded);
   return validated;
 }
 
@@ -26,7 +27,7 @@ export async function toEncryptedUserPii(
   userPii: UserPii,
 ): Promise<string> {
   const { piiEncryptionService } = context;
-  const validated = UserPiiSchema.parse(userPii);
+  const validated = UserPiiSchema.strict().parse(userPii);
   const encoded = JSON.stringify(validated);
   const encrypted = await piiEncryptionService.getEncryptedData(encoded);
   return encrypted;
@@ -36,8 +37,9 @@ export async function toEncryptedUserAccount(
   context: BarkContext,
   userAccount: UserAccount,
 ): Promise<EncryptedUserAccount> {
+  const validated = UserAccountSchema.strict().parse(userAccount);
   const { userEmail, userTitle, userName, userPhoneNumber, ...others } =
-    userAccount;
+    validated;
   const userPii: UserPii = { userEmail, userTitle, userName, userPhoneNumber };
   const userEncryptedPii = await toEncryptedUserPii(context, userPii);
   const out: EncryptedUserAccount = { userEncryptedPii, ...others };
@@ -48,7 +50,8 @@ export async function toUserAccount(
   context: BarkContext,
   encrypted: EncryptedUserAccount,
 ): Promise<UserAccount> {
-  const { userEncryptedPii, ...others } = encrypted;
+  const validated = EncryptedUserAccountSchema.strict().parse(encrypted);
+  const { userEncryptedPii, ...others } = validated;
   const userPii = await toUserPii(context, userEncryptedPii);
   const out: UserAccount = { ...userPii, ...others };
   return UserAccountSchema.parse(out);
@@ -59,7 +62,9 @@ export async function toEncryptedUserAccountSpec(
   spec: UserAccountSpec,
 ): Promise<EncryptedUserAccountSpec> {
   const { emailHashService } = context;
-  const { userEmail, userTitle, userName, userPhoneNumber, ...others } = spec;
+  const validated = UserAccountSpecSchema.strict().parse(spec);
+  const { userEmail, userTitle, userName, userPhoneNumber, ...others } =
+    validated;
   const userPii: UserPii = { userEmail, userTitle, userName, userPhoneNumber };
   const userHashedEmail = await emailHashService.getHashHex(userEmail);
   const userEncryptedPii = await toEncryptedUserPii(context, userPii);

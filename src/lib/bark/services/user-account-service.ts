@@ -3,10 +3,12 @@ import { BarkContext } from "../bark-context";
 import {
   UserAccount,
   UserAccountSpec,
+  UserAccountSpecSchema,
+  UserAccountUpdate,
   UserIdentifier,
 } from "../models/user-models";
 import { CODE } from "@/lib/utilities/bark-code";
-import { dbBegin, dbCommit, dbRelease } from "@/lib/data/db-utils";
+import { dbBegin, dbCommit, dbRelease, dbRollback } from "@/lib/data/db-utils";
 import { EncryptedUserAccountDao } from "../daos/encrypted-user-account-dao";
 import {
   toEncryptedUserAccountSpec,
@@ -51,24 +53,50 @@ export class UserAccountService {
     }
   }
 
-  async update(args: {
+  async applyUpdate(args: {
     userId: string;
-    spec: UserAccountSpec;
+    update: UserAccountUpdate;
   }): Promise<
     typeof CODE.OK | typeof CODE.FAILED | typeof CODE.ERROR_USER_NOT_FOUND
   > {
-    const { userId, spec } = args;
+    const { context } = this;
+    const { dbPool } = context;
+    const { userId, update } = args;
+    const conn = await dbPool.connect();
     try {
-      const dao = new EncryptedUserAccountDao(this.context.dbPool);
-      const encrypted = await toEncryptedUserAccountSpec(this.context, spec);
-      const didUpdate = await dao.updateByUserId({ userId, spec: encrypted });
+      await dbBegin(conn);
+      const dao = new EncryptedUserAccountDao(conn);
+      const encryptedAccount = await dao.getByUserId({ userId });
+      if (encryptedAccount === null) {
+        return CODE.ERROR_USER_NOT_FOUND;
+      }
+      const account = await toUserAccount(context, encryptedAccount);
+      const merged = { ...account, ...update };
+      const { userEmail, userTitle, userName, userPhoneNumber, userResidency } =
+        merged;
+      const spec: UserAccountSpec = {
+        userEmail,
+        userTitle,
+        userName,
+        userPhoneNumber,
+        userResidency,
+      };
+      const encryptedSpec = await toEncryptedUserAccountSpec(context, spec);
+      const didUpdate = await dao.updateByUserId({
+        userId,
+        spec: encryptedSpec,
+      });
       if (!didUpdate) {
         return CODE.ERROR_USER_NOT_FOUND;
       }
+      await dbCommit(conn);
       return CODE.OK;
     } catch (err) {
       console.error(err);
+      await dbRollback(conn);
       return CODE.FAILED;
+    } finally {
+      await dbRelease(conn);
     }
   }
 
