@@ -2,7 +2,6 @@ import { getAuthenticatedUserActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
 import { getMyLatestCall } from "@/lib/user/actions/get-my-latest-call";
-import { getMyAccount } from "@/lib/user/actions/get-my-account";
 import { BarkH1 } from "@/components/bark/bark-typography";
 
 import { BarkButton } from "@/components/bark/bark-button";
@@ -13,11 +12,11 @@ export default async function Page() {
   if (actor === null) {
     redirect(RoutePath.USER_LOGIN_PAGE);
   }
-  const futureAccountDetails = getMyAccount(actor).then(({ result, error }) => {
-    if (error !== undefined) {
+  const futureAccountDetails = actor.getMyAccount().then((account) => {
+    if (account === null) {
       redirect(RoutePath.USER_LOGIN_PAGE);
     }
-    return result;
+    return account;
   });
   const futureLastContactedTime = getMyLatestCall(actor).then(
     ({ result, error }) => {
