@@ -1,6 +1,9 @@
 import { UserActor } from "../user-actor";
 import { dbResultQuery } from "@/lib/data/db-utils";
-import { MyLastContactedTime } from "../../bark/models/user-models";
+import {
+  MyLastContactedTime,
+  MyLastContactedTimeSchema,
+} from "../../bark/models/user-models";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { CODE } from "@/lib/utilities/bark-code";
 
@@ -37,5 +40,5 @@ export async function getMyLatestCall(
   if (res.rows.length === 0) {
     return Err(CODE.ERROR_USER_NOT_FOUND);
   }
-  return Ok(res.rows[0]);
+  return Ok(MyLastContactedTimeSchema.parse(res.rows[0]));
 }
