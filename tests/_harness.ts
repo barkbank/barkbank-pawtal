@@ -3,6 +3,7 @@ import { EncryptionService } from "@/lib/services/encryption";
 import { HashService } from "@/lib/services/hash";
 import { OtpService } from "@/lib/services/otp";
 import { Email, EmailService } from "@/lib/services/email";
+import { fromBase64, toBase64 } from "@/lib/utilities/bark-encodings";
 
 export class HarnessHashService implements HashService {
   public async digest(
@@ -21,14 +22,17 @@ export class HarnessEncryptionService implements EncryptionService {
     this.secret = secret;
   }
   public async getEncryptedData(data: string): Promise<string> {
-    return JSON.stringify({
+    const payload = {
       salt: `${Date.now()} ${Math.random()}`,
       secret: this.secret,
       data,
-    });
+    };
+    const jsonEncoded = JSON.stringify(payload);
+    return toBase64(jsonEncoded);
   }
   public async getDecryptedData(encryptedData: string): Promise<string> {
-    const obj = JSON.parse(encryptedData);
+    const jsonEncoded = fromBase64(encryptedData);
+    const obj = JSON.parse(jsonEncoded);
     if (obj.secret !== this.secret) {
       throw new Error(`Failed to decrypt: ${encryptedData}`);
     }
