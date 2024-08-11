@@ -1,6 +1,6 @@
 import { UserActor } from "../user-actor";
 import { dbResultQuery } from "@/lib/data/db-utils";
-import { UserAccount } from "../../bark/models/user-models";
+import { UserAccount, UserAccountSchema } from "../../bark/models/user-models";
 import { UserResidency } from "@/lib/bark/enums/user-residency";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { CODE } from "@/lib/utilities/bark-code";
@@ -49,10 +49,11 @@ export async function getMyAccount(
       userEncryptedPii,
     });
 
-  return Ok({
+  const out: UserAccount = {
     userName,
     userEmail,
     userPhoneNumber,
     ...otherFields,
-  });
+  };
+  return Ok(UserAccountSchema.parse(out));
 }
