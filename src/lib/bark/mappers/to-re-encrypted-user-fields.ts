@@ -1,7 +1,7 @@
 import { BarkContext } from "../bark-context";
 import { EncryptedUserFields } from "../models/encrypted-user-fields";
-import { toEncryptedUserPii } from "./to-encrypted-user-pii";
-import { toUserPii } from "./to-user-pii";
+import { toEncryptedUserPii } from "./user-mappers";
+import { toUserPii } from "./user-mappers";
 
 export async function toReEncryptedUserFields(
   context: BarkContext,

@@ -5,7 +5,7 @@ import {
   ReportNotificationSchema,
 } from "../models/report-notification";
 import { toDogOii } from "./to-dog-oii";
-import { toUserPii } from "./to-user-pii";
+import { toUserPii } from "./user-mappers";
 
 export async function toReportNotification(
   context: BarkContext,

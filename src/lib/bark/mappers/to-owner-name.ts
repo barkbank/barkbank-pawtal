@@ -1,5 +1,5 @@
 import { BarkContext } from "../bark-context";
-import { toUserPii } from "./to-user-pii";
+import { toUserPii } from "./user-mappers";
 
 export async function toOwnerName(
   context: BarkContext,

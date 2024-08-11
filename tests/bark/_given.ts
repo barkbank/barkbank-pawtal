@@ -17,7 +17,7 @@ import {
   BarkReportDataSchema,
 } from "@/lib/bark/models/bark-report-data";
 import { z } from "zod";
-import { toUserPii } from "@/lib/bark/mappers/to-user-pii";
+import { toUserPii } from "@/lib/bark/mappers/user-mappers";
 import { DogSpec } from "@/lib/data/db-models";
 import { toDogName } from "@/lib/bark/mappers/to-dog-name";
 import { sprintf } from "sprintf-js";
