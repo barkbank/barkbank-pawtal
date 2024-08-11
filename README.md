@@ -67,10 +67,7 @@ So user1 to user4 will get 1, 2, 3, and 4 dogs respectively, while user5 will ge
 
 2. Make your changes, add the UI tests. They live in the `e2e` directory.
 
-## Dev deployment
+## Deployments
 
-There is a dev deployment running in AWS at the URL below.
-
-- https://fewspg9b3p.ap-southeast-1.awsapprunner.com/
-
-Whenever changes are merged into the `main` branch, the dev deployment will be rebuilt and redeployed.
+- Development/Demo: https://pawtal.dev.barkbank.co
+- Production: https://pawtal.barkbank.co
