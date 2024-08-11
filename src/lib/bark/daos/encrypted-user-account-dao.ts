@@ -98,4 +98,20 @@ export class EncryptedUserAccountDao {
     }
     return EncryptedUserAccountSchema.parse(res.rows[0]);
   }
+
+  async getUserIdentifierByUserHashedEmail(args: {
+    userHashedEmail: string;
+  }): Promise<UserIdentifier | null> {
+    const { userHashedEmail } = args;
+    const sql = `
+    SELECT user_id as "userId"
+    FROM users
+    WHERE user_hashed_email = $1
+    `;
+    const res = await dbQuery<UserIdentifier>(this.db, sql, [userHashedEmail]);
+    if (res.rows.length !== 1) {
+      return null;
+    }
+    return UserIdentifierSchema.parse(res.rows[0]);
+  }
 }

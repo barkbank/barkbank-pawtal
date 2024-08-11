@@ -103,6 +103,7 @@ export async function dbSelectUser(
   return null;
 }
 
+// TODO: Can we remove this? Callers should be using UserAccountService.
 export async function dbSelectUserIdByHashedEmail(
   ctx: DbContext,
   userHashedEmail: string,

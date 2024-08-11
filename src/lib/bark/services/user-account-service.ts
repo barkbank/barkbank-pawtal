@@ -7,15 +7,19 @@ import {
 } from "../models/user-models";
 import { CODE } from "@/lib/utilities/bark-code";
 import { dbBegin, dbCommit, dbRelease } from "@/lib/data/db-utils";
-import { PoolClient } from "pg";
 import { EncryptedUserAccountDao } from "../daos/encrypted-user-account-dao";
 import {
   toEncryptedUserAccountSpec,
   toUserAccount,
 } from "../mappers/user-mappers";
+import { LRUCache } from "lru-cache";
 
 export class UserAccountService {
-  constructor(private context: BarkContext) {}
+  private idCache: LRUCache<string, UserIdentifier>;
+
+  constructor(private context: BarkContext) {
+    this.idCache = new LRUCache({ max: 10 });
+  }
 
   async create(args: {
     spec: UserAccountSpec;
@@ -26,7 +30,7 @@ export class UserAccountService {
     >
   > {
     const { spec } = args;
-    const conn = await this.getDbConnection();
+    const conn = await this.context.dbPool.connect();
     try {
       await dbBegin(conn);
       const encrypted = await toEncryptedUserAccountSpec(this.context, spec);
@@ -54,13 +58,18 @@ export class UserAccountService {
     typeof CODE.OK | typeof CODE.FAILED | typeof CODE.ERROR_USER_NOT_FOUND
   > {
     const { userId, spec } = args;
-    const dao = new EncryptedUserAccountDao(this.context.dbPool);
-    const encrypted = await toEncryptedUserAccountSpec(this.context, spec);
-    const didUpdate = await dao.updateByUserId({ userId, spec: encrypted });
-    if (!didUpdate) {
-      return CODE.ERROR_USER_NOT_FOUND;
+    try {
+      const dao = new EncryptedUserAccountDao(this.context.dbPool);
+      const encrypted = await toEncryptedUserAccountSpec(this.context, spec);
+      const didUpdate = await dao.updateByUserId({ userId, spec: encrypted });
+      if (!didUpdate) {
+        return CODE.ERROR_USER_NOT_FOUND;
+      }
+      return CODE.OK;
+    } catch (err) {
+      console.error(err);
+      return CODE.FAILED;
     }
-    return CODE.OK;
   }
 
   async getByUserId(args: {
@@ -69,16 +78,48 @@ export class UserAccountService {
     Result<UserAccount, typeof CODE.FAILED | typeof CODE.ERROR_USER_NOT_FOUND>
   > {
     const { userId } = args;
-    const dao = new EncryptedUserAccountDao(this.context.dbPool);
-    const encrypted = await dao.getByUserId({ userId });
-    if (encrypted === null) {
-      return Err(CODE.ERROR_USER_NOT_FOUND);
+    try {
+      const dao = new EncryptedUserAccountDao(this.context.dbPool);
+      const encrypted = await dao.getByUserId({ userId });
+      if (encrypted === null) {
+        return Err(CODE.ERROR_USER_NOT_FOUND);
+      }
+      const decrypted = await toUserAccount(this.context, encrypted);
+      return Ok(decrypted);
+    } catch (err) {
+      console.error(err);
+      return Err(CODE.FAILED);
     }
-    const decrypted = await toUserAccount(this.context, encrypted);
-    return Ok(decrypted);
   }
 
-  private getDbConnection(): Promise<PoolClient> {
-    return this.context.dbPool.connect();
+  async getUserIdByUserEmail(args: {
+    userEmail: string;
+  }): Promise<
+    Result<
+      UserIdentifier,
+      typeof CODE.ERROR_USER_NOT_FOUND | typeof CODE.FAILED
+    >
+  > {
+    const { userEmail } = args;
+    const { emailHashService, dbPool } = this.context;
+    try {
+      const userHashedEmail = await emailHashService.getHashHex(userEmail);
+      const cached = this.idCache.get(userHashedEmail);
+      if (cached !== undefined) {
+        return Ok(cached);
+      }
+      const dao = new EncryptedUserAccountDao(dbPool);
+      const identifier = await dao.getUserIdentifierByUserHashedEmail({
+        userHashedEmail,
+      });
+      if (identifier === null) {
+        return Err(CODE.ERROR_USER_NOT_FOUND);
+      }
+      this.idCache.set(userHashedEmail, identifier);
+      return Ok(identifier);
+    } catch (err) {
+      console.error(err);
+      return Err(CODE.FAILED);
+    }
   }
 }
