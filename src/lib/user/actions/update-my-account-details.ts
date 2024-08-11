@@ -6,7 +6,10 @@ import {
   dbRollback,
 } from "@/lib/data/db-utils";
 import { UserActor } from "../user-actor";
-import { UserAccountUpdate } from "../../bark/models/user-models";
+import {
+  UserAccountUpdate,
+  UserAccountUpdateSchema,
+} from "../../bark/models/user-models";
 import { PoolClient } from "pg";
 import { guaranteed } from "@/lib/utilities/bark-utils";
 import { CODE } from "@/lib/utilities/bark-code";
@@ -24,7 +27,7 @@ export async function updateMyAccountDetails(
   | typeof CODE.ERROR_USER_NOT_FOUND
   | typeof CODE.DB_QUERY_FAILURE
 > {
-  const ctx: Context = { actor, update };
+  const ctx: Context = { actor, update: UserAccountUpdateSchema.parse(update) };
   const { dbPool } = actor.getParams();
   const conn = await dbPool.connect();
   try {
