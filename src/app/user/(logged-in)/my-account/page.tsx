@@ -12,25 +12,22 @@ export default async function Page() {
   if (actor === null) {
     redirect(RoutePath.USER_LOGIN_PAGE);
   }
-  const futureAccountDetails = actor.getMyAccount().then((account) => {
-    if (account === null) {
-      redirect(RoutePath.USER_LOGIN_PAGE);
-    }
-    return account;
-  });
-  const futureLastContactedTime = getMyLatestCall(actor).then(
-    ({ result, error }) => {
-      if (error !== undefined) {
-        return undefined;
-      }
-      const { userLastContactedTime } = result;
-      return userLastContactedTime ?? undefined;
-    },
-  );
-  const [
-    { userCreationTime, userResidency, userName, userEmail, userPhoneNumber },
-    userLastContactedTime,
-  ] = await Promise.all([futureAccountDetails, futureLastContactedTime]);
+  const [account, latestCallResult] = await Promise.all([
+    actor.getMyAccount(),
+    getMyLatestCall(actor),
+  ])
+  if (account === null) {
+    redirect(RoutePath.USER_LOGIN_PAGE);
+  }
+  const {
+    userCreationTime,
+    userResidency,
+    userName,
+    userEmail,
+    userPhoneNumber,
+  } = account;
+  const userLastContactedTime =
+    latestCallResult.result?.userLastContactedTime ?? undefined;
 
   return (
     <main className="m-3 flex flex-col gap-6">
