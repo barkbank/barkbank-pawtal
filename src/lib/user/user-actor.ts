@@ -7,6 +7,7 @@ import { dbSelectUser } from "../data/db-users";
 import { EncryptionService } from "../services/encryption";
 import { BarkContext } from "../bark/bark-context";
 import { UserAccountService } from "../bark/services/user-account-service";
+import { UserAccount } from "../bark/models/user-models";
 
 export type UserActorConfig = {
   dbPool: Pool;
@@ -31,15 +32,21 @@ export class UserActor {
     },
   ) {}
 
-  public getParams(): UserActorConfig & { userId: string } {
+  getParams(): UserActorConfig & { userId: string } {
     return {
       ...this.args.config,
       userId: this.args.userId,
     };
   }
 
-  public getUserId(): string {
+  getUserId(): string {
     return this.args.userId;
+  }
+
+  async getMyAccount(): Promise<UserAccount | null> {
+    const { userId, userAccountService } = this.args;
+    const { result } = await userAccountService.getByUserId({ userId });
+    return result ?? null;
   }
 
   public async getOwnUserRecord(): Promise<UserRecord | null> {
