@@ -57,4 +57,22 @@ export class EncryptedUserAccountDao {
     }
     return EncryptedUserAccountSchema.parse(res.rows[0]);
   }
+
+  async getByUserHashedEmail(args: {
+    userHashedEmail: string;
+  }): Promise<EncryptedUserAccount | null> {
+    const { userHashedEmail } = args;
+    const sql = `
+    SELECT ${this.projection}
+    FROM users
+    WHERE user_hashed_email = $1
+    `;
+    const res = await dbQuery<EncryptedUserAccount>(this.db, sql, [
+      userHashedEmail,
+    ]);
+    if (res.rows.length !== 1) {
+      return null;
+    }
+    return EncryptedUserAccountSchema.parse(res.rows[0]);
+  }
 }
