@@ -55,19 +55,4 @@ export class UserActor {
     const res = await userAccountService.applyUpdate({ userId, update });
     return res;
   }
-
-  public async getOwnUserRecord(): Promise<UserRecord | null> {
-    const { dbPool } = this.args.config;
-    const record = await dbSelectUser(dbPool, this.getUserId());
-    return record;
-  }
-
-  public async getOwnUserPii(): Promise<UserPii | null> {
-    const record = await this.getOwnUserRecord();
-    if (record === null) {
-      return null;
-    }
-    const { userMapper } = this.args.config;
-    return userMapper.mapUserRecordToUserPii(record);
-  }
 }
