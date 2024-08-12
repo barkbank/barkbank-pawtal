@@ -1,10 +1,10 @@
 import { z } from "zod";
 
 export const USER_TITLE = {
-  MR: "Mr",
-  MS: "Ms",
-  MRS: "Mrs",
-  MDM: "Mdm",
+  MR: "MR",
+  MS: "MS",
+  MRS: "MRS",
+  MDM: "MDM",
 } as const;
 
 export const UserTitleSchema = z.nativeEnum(USER_TITLE);
