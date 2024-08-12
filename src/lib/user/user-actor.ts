@@ -1,9 +1,6 @@
 import { Pool } from "pg";
-import { UserRecord } from "../data/db-models";
-import { UserPii } from "../data/db-models";
 import { UserMapper } from "../data/user-mapper";
 import { DogMapper } from "../data/dog-mapper";
-import { dbSelectUser } from "../data/db-users";
 import { EncryptionService } from "../services/encryption";
 import { BarkContext } from "../bark/bark-context";
 import { UserAccountService } from "../bark/services/user-account-service";
