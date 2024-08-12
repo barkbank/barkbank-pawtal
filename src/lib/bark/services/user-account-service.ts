@@ -72,15 +72,7 @@ export class UserAccountService {
       }
       const account = await toUserAccount(context, encryptedAccount);
       const merged = { ...account, ...update };
-      const { userEmail, userTitle, userName, userPhoneNumber, userResidency } =
-        merged;
-      const spec: UserAccountSpec = {
-        userEmail,
-        userTitle,
-        userName,
-        userPhoneNumber,
-        userResidency,
-      };
+      const spec = UserAccountSpecSchema.parse(merged);
       const encryptedSpec = await toEncryptedUserAccountSpec(context, spec);
       const didUpdate = await dao.updateByUserId({
         userId,
