@@ -6,6 +6,7 @@ import { BarkContext } from "../bark/bark-context";
 import { UserAccountService } from "../bark/services/user-account-service";
 import { UserAccount, UserAccountUpdate } from "../bark/models/user-models";
 
+// TODO: Remove UserActorConfig when UserActor::getParams is no longer used.
 export type UserActorConfig = {
   dbPool: Pool;
   userMapper: UserMapper;
