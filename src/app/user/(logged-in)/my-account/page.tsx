@@ -15,7 +15,7 @@ export default async function Page() {
   const [account, latestCallResult] = await Promise.all([
     actor.getMyAccount(),
     getMyLatestCall(actor),
-  ])
+  ]);
   if (account === null) {
     redirect(RoutePath.USER_LOGIN_PAGE);
   }
