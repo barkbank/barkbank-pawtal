@@ -28,6 +28,11 @@ export class HarnessEncryptionService implements EncryptionService {
       data,
     };
     const jsonEncoded = JSON.stringify(payload);
+    // Use a Base64 encoding so that we can write tests that verify encryption
+    // by checking for the presence of certain secret values. For example,...
+    //
+    //     expect(encrypted).not.toContain(secret)
+    //
     return toBase64(jsonEncoded);
   }
   public async getDecryptedData(encryptedData: string): Promise<string> {
