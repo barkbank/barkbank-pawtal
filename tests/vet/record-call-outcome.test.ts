@@ -16,7 +16,7 @@ describe("recordCallOutcome", () => {
       const v2 = await insertVet(2, dbPool);
       await dbInsertDogVetPreference(dbPool, d1.dogId, v2.vetId);
 
-      const actor = getVetActor(v1.vetId, dbPool);
+      const actor = await getVetActor(v1.vetId, dbPool);
       const { result, error } = await recordCallOutcome(actor, {
         dogId: d1.dogId,
         callOutcome: CALL_OUTCOME.APPOINTMENT,
@@ -32,7 +32,7 @@ describe("recordCallOutcome", () => {
       const v1 = await insertVet(1, dbPool);
       await dbInsertDogVetPreference(dbPool, d1.dogId, v1.vetId);
 
-      const actor = getVetActor(v1.vetId, dbPool);
+      const actor = await getVetActor(v1.vetId, dbPool);
       const { result, error } = await recordCallOutcome(actor, {
         dogId: d1.dogId,
         callOutcome: CALL_OUTCOME.APPOINTMENT,
@@ -50,7 +50,7 @@ describe("recordCallOutcome", () => {
       const v1 = await insertVet(1, dbPool);
       await dbInsertDogVetPreference(dbPool, d1.dogId, v1.vetId);
 
-      const actor = getVetActor(v1.vetId, dbPool);
+      const actor = await getVetActor(v1.vetId, dbPool);
       const { result, error } = await recordCallOutcome(actor, {
         dogId: d1.dogId,
         callOutcome: CALL_OUTCOME.DECLINED,

@@ -79,6 +79,7 @@ import { EmailHashService } from "@/lib/services/email-hash-service";
 import { UserAccountService } from "@/lib/bark/services/user-account-service";
 import { RegistrationService } from "@/lib/bark/services/registration-service";
 import { VetAccountService } from "@/lib/bark/services/vet-account-service";
+import { VetClinicDao } from "@/lib/bark/daos/vet-clinic-dao";
 
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
@@ -353,18 +354,27 @@ export function getVetActorConfig(dbPool: Pool): VetActorConfig {
     dogMapper: getDogMapper(),
     textEncryptionService: getTextEncryptionService(),
     context: getBarkContext(dbPool),
+    vetAccountService: getVetAccountService(dbPool),
   };
 }
 
 export function getVetActorFactory(dbPool: Pool): VetActorFactory {
   const context = getBarkContext(dbPool);
   const actorConfig = getVetActorConfig(dbPool);
-  return new VetActorFactory(context, { actorConfig });
+  const vetAccountService = getVetAccountService(dbPool);
+  return new VetActorFactory({ context, vetAccountService, actorConfig });
 }
 
-export function getVetActor(vetId: string, dbPool: Pool): VetActor {
-  const config = getVetActorConfig(dbPool);
-  return new VetActor(vetId, config);
+export async function getVetActor(
+  vetId: string,
+  dbPool: Pool,
+): Promise<VetActor> {
+  const dao = new VetClinicDao(dbPool);
+  const clinic = await dao.getByVetId({ vetId });
+  const { vetEmail } = clinic!;
+  const factory = getVetActorFactory(dbPool);
+  const actor = await factory.getVetActor(vetEmail);
+  return actor!;
 }
 
 export async function insertVet(idx: number, dbPool: Pool): Promise<Vet> {

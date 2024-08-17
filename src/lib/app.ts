@@ -451,22 +451,34 @@ export class AppFactory {
   public getVetActorFactory(): Promise<VetActorFactory> {
     if (this.promisedVetActorFactory === null) {
       this.promisedVetActorFactory = new Promise(async (resolve) => {
-        const [context, dbPool, userMapper, dogMapper, textEncryptionService] =
-          await Promise.all([
-            this.getBarkContext(),
-            this.getDbPool(),
-            this.getUserMapper(),
-            this.getDogMapper(),
-            this.getTextEncryptionService(),
-          ]);
+        const [
+          context,
+          dbPool,
+          userMapper,
+          dogMapper,
+          textEncryptionService,
+          vetAccountService,
+        ] = await Promise.all([
+          this.getBarkContext(),
+          this.getDbPool(),
+          this.getUserMapper(),
+          this.getDogMapper(),
+          this.getTextEncryptionService(),
+          this.getVetAccountService(),
+        ]);
         const actorConfig: VetActorConfig = {
           dbPool,
           userMapper,
           dogMapper,
           textEncryptionService,
           context,
+          vetAccountService,
         };
-        const factory = new VetActorFactory(context, { actorConfig });
+        const factory = new VetActorFactory({
+          context,
+          vetAccountService,
+          actorConfig,
+        });
         this.logCreated("VetActorFactory");
         resolve(factory);
       });
