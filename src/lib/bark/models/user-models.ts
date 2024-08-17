@@ -13,7 +13,7 @@ export const UserAccountSchema = z.object({
   userId: z.string(),
   userResidency: UserResidencySchema,
   userTitle: UserTitleSchema.optional(),
-  userName: z.string(),
+  userName: z.string().min(1, { message: "Name cannot be empty" }),
   userEmail: z.string().email(),
   userPhoneNumber: z.string(),
   userCreationTime: z.date(),
@@ -22,7 +22,7 @@ export const UserAccountSchema = z.object({
 export const UserAccountSpecSchema = z.object({
   userEmail: z.string().email(),
   userTitle: UserTitleSchema.optional(),
-  userName: z.string(),
+  userName: z.string().min(1, { message: "Name cannot be empty" }),
   userPhoneNumber: z.string(),
   userResidency: UserResidencySchema,
 });
@@ -30,7 +30,7 @@ export const UserAccountSpecSchema = z.object({
 export const UserAccountUpdateSchema = z.object({
   userResidency: UserResidencySchema,
   userTitle: UserTitleSchema.optional(),
-  userName: z.string(),
+  userName: z.string().min(1, { message: "Name cannot be empty" }),
   userPhoneNumber: z.string(),
 });
 

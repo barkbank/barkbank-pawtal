@@ -16,8 +16,7 @@ export async function postMyAccountDetails(
   }
   const response = await actor.updateMyAccount({ update });
   if (response === CODE.OK) {
-    // TODO: Should this be /user/my-account?
-    revalidatePath("/user/(logged-in)/my-account");
+    revalidatePath("/user/my-account", "layout");
     return CODE.OK;
   }
   return CODE.FAILED;

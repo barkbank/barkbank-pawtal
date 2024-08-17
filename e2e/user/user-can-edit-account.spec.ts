@@ -5,10 +5,9 @@ import { doRegister } from "../_lib/ops/do-register";
 import { NavComponent } from "../_lib/pom/layout/nav-component";
 import { UserMyPetsPage } from "../_lib/pom/pages/user-my-pets-page";
 import { UserMyAccountPage } from "../_lib/pom/pages/user-my-account-page";
+import { USER_TITLE } from "@/lib/bark/enums/user-title";
 
-test("user can register, edit account details, save, and should see their details changed", async ({
-  page,
-}) => {
+test("user can edit account details", async ({ page }) => {
   // GIVEN
   const context = await initPomContext({ page });
   const {
@@ -34,14 +33,16 @@ test("user can register, edit account details, save, and should see their detail
   // WHEN user navigates to edit page, and saves
   await pgMyAccount.editButton().click();
   await pgEditMyAccount.checkReady();
-  await pgEditMyAccount.userNameField().fill("New Name");
+  await pgEditMyAccount.userTitleSelection().click();
+  await pgEditMyAccount.userTitleOption({ userTitle: USER_TITLE.MS }).click();
+  await pgEditMyAccount.userNameField().fill("Felicia Newman");
   await pgEditMyAccount.userPhoneNumberField().fill("+65 12345678");
   await pgEditMyAccount.userResidencyOption_OTHERS().click();
   await pgEditMyAccount.saveButton().click();
 
   // THEN
   await pgMyAccount.checkReady();
-  await expect(pgMyAccount.exactText("New Name")).toBeVisible();
+  await expect(pgMyAccount.exactText("Ms Felicia Newman")).toBeVisible();
   await expect(pgMyAccount.residencyItem()).toHaveValue("Other");
   await expect(pgMyAccount.emailItem()).toHaveValue(userEmail);
   await expect(pgMyAccount.phoneNumberItem()).toHaveValue("+65 12345678");

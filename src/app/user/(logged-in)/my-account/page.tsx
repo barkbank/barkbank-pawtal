@@ -16,7 +16,8 @@ export default async function Page() {
   if (account === null) {
     redirect(RoutePath.USER_LOGIN_PAGE);
   }
-  const { userResidency, userName, userEmail, userPhoneNumber } = account;
+  const { userTitle, userResidency, userName, userEmail, userPhoneNumber } =
+    account;
 
   return (
     <main className="m-3 flex flex-col gap-6">
@@ -24,6 +25,7 @@ export default async function Page() {
 
       <BarkUserContactDetails
         details={{
+          userTitle,
           userName,
           userEmail,
           userPhoneNumber,

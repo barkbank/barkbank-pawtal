@@ -8,7 +8,7 @@ import { formatDistanceStrict } from "date-fns";
 import { Skeleton } from "../ui/skeleton";
 import { NA_TEXT } from "@/app/_lib/constants";
 import { Input } from "../ui/input";
-import { UserTitle } from "@/lib/bark/enums/user-title";
+import { USER_TITLE, UserTitle } from "@/lib/bark/enums/user-title";
 
 export function BarkUserContactDetails(props: {
   details: null | {
@@ -103,7 +103,7 @@ function _getNameWithTitle(args: {
   userTitle?: UserTitle;
 }): string {
   const { userName, userTitle } = args;
-  if (userTitle === undefined) {
+  if (userTitle === undefined || userTitle === USER_TITLE.PREFER_NOT_TO_SAY) {
     return userName;
   }
   const formattedTitle = capitalize(userTitle);

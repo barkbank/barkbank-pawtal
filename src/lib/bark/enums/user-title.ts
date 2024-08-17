@@ -5,6 +5,7 @@ export const USER_TITLE = {
   MS: "MS",
   MRS: "MRS",
   MDM: "MDM",
+  PREFER_NOT_TO_SAY: "PREFER_NOT_TO_SAY",
 } as const;
 
 export const UserTitleSchema = z.nativeEnum(USER_TITLE);
