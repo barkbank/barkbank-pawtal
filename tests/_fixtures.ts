@@ -345,6 +345,7 @@ export function getVetActorConfig(dbPool: Pool): VetActorConfig {
     userMapper: getUserMapper(),
     dogMapper: getDogMapper(),
     textEncryptionService: getTextEncryptionService(),
+    context: getBarkContext(dbPool),
   };
 }
 

@@ -442,6 +442,7 @@ export class AppFactory {
           userMapper,
           dogMapper,
           textEncryptionService,
+          context,
         };
         const factory = new VetActorFactory(context, { actorConfig });
         this.logCreated("VetActorFactory");
