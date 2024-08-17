@@ -27,7 +27,7 @@ describe("getOwnerContactDetails", () => {
       const { dogId, ownerContactDetails } = await insertOwner(1, dbPool, {
         preferredVetId: vetId,
       });
-      const actor = getVetActor(vetId, dbPool);
+      const actor = await getVetActor(vetId, dbPool);
       const { result, error } = await getOwnerContactDetails(actor, dogId);
       expect(error).toBeUndefined();
       expect(result).toEqual(ownerContactDetails);
@@ -55,7 +55,7 @@ describe("getOwnerContactDetails", () => {
       await dbDeleteDogVetPreference(dbPool, d1.dogId, v1.vetId);
 
       // WHEN v1 retrieves owner details of d2
-      const actor = getVetActor(v1.vetId, dbPool);
+      const actor = await getVetActor(v1.vetId, dbPool);
       const { result, error } = await getOwnerContactDetails(actor, d2.dogId);
 
       // THEN
@@ -73,7 +73,7 @@ describe("getOwnerContactDetails", () => {
       });
 
       // WHEN
-      const actor = getVetActor(vetId, dbPool);
+      const actor = await getVetActor(vetId, dbPool);
       const { result, error } = await getOwnerContactDetails(actor, dogId);
 
       // THEN
@@ -99,7 +99,7 @@ describe("getOwnerContactDetails", () => {
       await dbInsertDogVetPreference(dbPool, d2.dogId, v2.vetId);
 
       // WHEN v1 requests for owner details of d2.
-      const actor = getVetActor(v1.vetId, dbPool);
+      const actor = await getVetActor(v1.vetId, dbPool);
       const { result, error } = await getOwnerContactDetails(actor, d2.dogId);
 
       // THEN
@@ -114,7 +114,7 @@ describe("getOwnerContactDetails", () => {
       const dogId = "99999"; // no such dog
 
       // WHEN
-      const actor = getVetActor(vetId, dbPool);
+      const actor = await getVetActor(vetId, dbPool);
       const { result, error } = await getOwnerContactDetails(actor, dogId);
 
       // THEN

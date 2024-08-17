@@ -53,6 +53,7 @@ import { PAWTAL_EVENT_TYPE } from "./bark/enums/pawtal-event-type";
 import { CronService } from "./bark/services/cron-service";
 import { UserAccountService } from "./bark/services/user-account-service";
 import { Visitor } from "./bark/actors/visitor";
+import { VetAccountService } from "./bark/services/vet-account-service";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -81,6 +82,7 @@ export class AppFactory {
   private promisedCronService: Promise<CronService> | null = null;
   private promisedUserAccountService: Promise<UserAccountService> | null = null;
   private promisedVisitor: Promise<Visitor> | null = null;
+  private promisedVetAccountService: Promise<VetAccountService> | null = null;
 
   constructor(envs: NodeJS.Dict<string>) {
     this.envs = envs;
@@ -123,6 +125,18 @@ export class AppFactory {
 
   public getInstanceId(): string {
     return this.instanceId;
+  }
+
+  getVetAccountService(): Promise<VetAccountService> {
+    if (this.promisedVetAccountService === null) {
+      this.promisedVetAccountService = new Promise(async (resolve) => {
+        const context = await this.getBarkContext();
+        const service = new VetAccountService({ context });
+        this.logCreated("VetAccountService");
+        resolve(service);
+      });
+    }
+    return this.promisedVetAccountService;
   }
 
   getVisitor(): Promise<Visitor> {
@@ -373,14 +387,21 @@ export class AppFactory {
   public getAdminActorFactory(): Promise<AdminActorFactory> {
     if (this.promisedAdminActorFactory === null) {
       this.promisedAdminActorFactory = new Promise(async (resolve) => {
-        const [dbPool, emailHashService, adminMapper, dogMapper, userMapper] =
-          await Promise.all([
-            this.getDbPool(),
-            this.getEmailHashService(),
-            this.getAdminMapper(),
-            this.getDogMapper(),
-            this.getUserMapper(),
-          ]);
+        const [
+          dbPool,
+          emailHashService,
+          adminMapper,
+          dogMapper,
+          userMapper,
+          vetAccountService,
+        ] = await Promise.all([
+          this.getDbPool(),
+          this.getEmailHashService(),
+          this.getAdminMapper(),
+          this.getDogMapper(),
+          this.getUserMapper(),
+          this.getVetAccountService(),
+        ]);
         const rootAdminEmail = this.envString(
           APP_ENV.BARKBANK_ROOT_ADMIN_EMAIL,
         );
@@ -399,6 +420,7 @@ export class AppFactory {
           adminMapper,
           userMapper,
           dogMapper,
+          vetAccountService,
         };
         const factory = new AdminActorFactory(factoryConfig, actorConfig);
         this.logCreated("AdminActorFactory");
@@ -429,22 +451,34 @@ export class AppFactory {
   public getVetActorFactory(): Promise<VetActorFactory> {
     if (this.promisedVetActorFactory === null) {
       this.promisedVetActorFactory = new Promise(async (resolve) => {
-        const [context, dbPool, userMapper, dogMapper, textEncryptionService] =
-          await Promise.all([
-            this.getBarkContext(),
-            this.getDbPool(),
-            this.getUserMapper(),
-            this.getDogMapper(),
-            this.getTextEncryptionService(),
-          ]);
+        const [
+          context,
+          dbPool,
+          userMapper,
+          dogMapper,
+          textEncryptionService,
+          vetAccountService,
+        ] = await Promise.all([
+          this.getBarkContext(),
+          this.getDbPool(),
+          this.getUserMapper(),
+          this.getDogMapper(),
+          this.getTextEncryptionService(),
+          this.getVetAccountService(),
+        ]);
         const actorConfig: VetActorConfig = {
           dbPool,
           userMapper,
           dogMapper,
           textEncryptionService,
           context,
+          vetAccountService,
         };
-        const factory = new VetActorFactory(context, { actorConfig });
+        const factory = new VetActorFactory({
+          context,
+          vetAccountService,
+          actorConfig,
+        });
         this.logCreated("VetActorFactory");
         resolve(factory);
       });

@@ -10,6 +10,8 @@ import { AdminPii } from "../data/db-models";
 import { DogMapper } from "../data/dog-mapper";
 import { UserMapper } from "../data/user-mapper";
 import { AdminMapper } from "../data/admin-mapper";
+import { VetAccountService } from "../bark/services/vet-account-service";
+import { VetAccountSpec, VetClinicSpec } from "../bark/models/vet-models";
 
 export type AdminActorConfig = {
   dbPool: Pool;
@@ -17,19 +19,37 @@ export type AdminActorConfig = {
   adminMapper: AdminMapper;
   userMapper: UserMapper;
   dogMapper: DogMapper;
+  vetAccountService: VetAccountService;
 };
 
 /**
  * Responsible for data access control for a given admin.
  */
 export class AdminActor {
-  private adminId: string;
-  private config: AdminActorConfig;
   private promisedAdminRecord: Promise<AdminRecord | null> | null = null;
 
-  constructor(adminId: string, config: AdminActorConfig) {
-    this.adminId = adminId;
-    this.config = config;
+  constructor(
+    private adminId: string,
+    private config: AdminActorConfig,
+  ) {}
+
+  async getVetClinics() {
+    return this.config.vetAccountService.getVetClinics();
+  }
+
+  async getVetAccountsByVetId(args: { vetId: string }) {
+    const { vetId } = args;
+    return this.config.vetAccountService.getVetAccountsByVetId({ vetId });
+  }
+
+  async createVetClinic(args: { spec: VetClinicSpec }) {
+    const { spec } = args;
+    return this.config.vetAccountService.createVetClinic({ spec });
+  }
+
+  async addVetAccount(args: { spec: VetAccountSpec }) {
+    const { spec } = args;
+    return this.config.vetAccountService.addVetAccount({ spec });
   }
 
   public getParams(): {
@@ -43,6 +63,7 @@ export class AdminActor {
     return { adminId: this.adminId, ...this.config };
   }
 
+  // TODO: Do we still need permissions?
   public async getPermissions(): Promise<AdminPermissions> {
     const record = await this.getOwnAdminRecord();
     if (record === null) {

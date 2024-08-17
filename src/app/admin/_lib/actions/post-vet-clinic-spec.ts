@@ -1,9 +1,7 @@
 "use server";
 
-import APP from "@/lib/app";
 import { getAuthenticatedAdminActor } from "@/lib/auth";
 import { VetClinic, VetClinicSpec } from "@/lib/bark/models/vet-models";
-import { opCreateVetClinic } from "@/lib/bark/operations/op-create-vet-clinic";
 import { RoutePath } from "@/lib/route-path";
 import { CODE } from "@/lib/utilities/bark-code";
 import { Err, Ok, Result } from "@/lib/utilities/result";
@@ -21,9 +19,8 @@ export async function postVetClinicSpec(args: {
   if (actor === null) {
     return Err(CODE.ERROR_NOT_LOGGED_IN);
   }
-  const context = await APP.getBarkContext();
   const { spec } = args;
-  const { result, error } = await opCreateVetClinic(context, { spec });
+  const { result, error } = await actor.createVetClinic({ spec });
   if (error !== undefined) {
     return Err(error);
   }
