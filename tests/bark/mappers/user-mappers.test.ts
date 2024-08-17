@@ -15,7 +15,7 @@ describe("user-mappers", () => {
         userCreationTime: new Date(),
         userEmail: "user@user.com",
         userName: "Alice Yogg",
-        userPhoneNumber: "12345678",
+        userPhoneNumber: "+65 9123 9123",
         userResidency: USER_RESIDENCY.SINGAPORE,
         userTitle: USER_TITLE.MS,
       };
@@ -26,8 +26,13 @@ describe("user-mappers", () => {
       expect(decrypted).toMatchObject(given);
 
       // AND there should not be any PII in encrypted
+      //
+      // NOTE: userTitle is excluded from this test because the userEncryptedPii
+      //     is base64 encoded and there is a reasonable chance of false
+      //     positives. The other fields contain characters that cannot be in
+      //     base64 encodings and are therefore unaffected by this issue.
       expect(JSON.stringify(encrypted)).not.toContain(given.userEmail);
-      expect(JSON.stringify(encrypted)).not.toContain(given.userTitle);
+      // expect(JSON.stringify(encrypted)).not.toContain(given.userTitle);
       expect(JSON.stringify(encrypted)).not.toContain(given.userName);
       expect(JSON.stringify(encrypted)).not.toContain(given.userPhoneNumber);
     });
