@@ -110,28 +110,25 @@ export default function OwnerForm(props: {
             { label: "No", value: USER_RESIDENCY.OTHER },
           ]}
         />
-        <BarkFormInput
-          form={form}
-          label="How would you like to be addressed?"
-          name="userName"
-        />
         <BarkFormSelect
           form={form}
-          label="Please also specify a preferred title"
+          label="Title"
           name="userTitle"
           options={USER_TITLE_OPTIONS}
           placeholder="-- Select --"
         />
+        <BarkFormInput form={form} label="Name" name="userName" />
         <BarkFormInput
           form={form}
-          label="At which phone number can you be reached?"
+          label="Phone Number"
           name="userPhoneNumber"
         />
         <BarkFormInput
           form={form}
-          label="Please provide a login email address"
+          label="Login Email"
           name="userEmail"
           type="email"
+          description="OTPs will be sent to this email when you login"
         />
         <BarkButton
           variant="brandInverse"
