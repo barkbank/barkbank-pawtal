@@ -3,13 +3,14 @@ import { EncryptionService } from "../services/encryption";
 import { UserMapper } from "../data/user-mapper";
 import { DogMapper } from "../data/dog-mapper";
 import { VetLogin } from "../bark/models/vet-models";
+import { BarkContext } from "../bark/bark-context";
 
-// TODO: Replace VetActorConfig with BarkContext
 export type VetActorConfig = {
   dbPool: Pool;
   userMapper: UserMapper;
   dogMapper: DogMapper;
   textEncryptionService: EncryptionService;
+  context: BarkContext;
 };
 
 /**

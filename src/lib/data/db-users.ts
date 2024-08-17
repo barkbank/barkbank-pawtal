@@ -1,6 +1,8 @@
 import { DbContext, dbQuery, toCamelCaseRow } from "./db-utils";
 import { UserRecord, UserGen, UserSpec } from "./db-models";
 
+// TODO: Update the tests that use these functions to either (i) use EncryptedUserAccountDao or (ii) own the functionality in some _helper.ts test-only file.
+
 export async function dbInsertUser(
   ctx: DbContext,
   userSpec: UserSpec,
@@ -103,6 +105,7 @@ export async function dbSelectUser(
   return null;
 }
 
+// TODO: Can we remove this? Callers should be using UserAccountService.
 export async function dbSelectUserIdByHashedEmail(
   ctx: DbContext,
   userHashedEmail: string,

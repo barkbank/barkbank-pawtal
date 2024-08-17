@@ -1,8 +1,6 @@
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
-import { getMyLatestCall } from "@/lib/user/actions/get-my-latest-call";
-import { getMyAccount } from "@/lib/user/actions/get-my-account";
 import { BarkH1 } from "@/components/bark/bark-typography";
 
 import { BarkButton } from "@/components/bark/bark-button";
@@ -13,25 +11,13 @@ export default async function Page() {
   if (actor === null) {
     redirect(RoutePath.USER_LOGIN_PAGE);
   }
-  const futureAccountDetails = getMyAccount(actor).then(({ result, error }) => {
-    if (error !== undefined) {
-      redirect(RoutePath.USER_LOGIN_PAGE);
-    }
-    return result;
-  });
-  const futureLastContactedTime = getMyLatestCall(actor).then(
-    ({ result, error }) => {
-      if (error !== undefined) {
-        return undefined;
-      }
-      const { userLastContactedTime } = result;
-      return userLastContactedTime ?? undefined;
-    },
-  );
-  const [
-    { userCreationTime, userResidency, userName, userEmail, userPhoneNumber },
-    userLastContactedTime,
-  ] = await Promise.all([futureAccountDetails, futureLastContactedTime]);
+
+  const account = await actor.getMyAccount();
+  if (account === null) {
+    redirect(RoutePath.USER_LOGIN_PAGE);
+  }
+  const { userTitle, userResidency, userName, userEmail, userPhoneNumber } =
+    account;
 
   return (
     <main className="m-3 flex flex-col gap-6">
@@ -39,12 +25,15 @@ export default async function Page() {
 
       <BarkUserContactDetails
         details={{
+          userTitle,
           userName,
           userEmail,
           userPhoneNumber,
           userResidency,
-          userCreationTime,
-          userLastContactedTime,
+        }}
+        options={{
+          showCreationTime: false,
+          showLastContactedTime: false,
         }}
       />
       <div className="flex flex-col gap-1">

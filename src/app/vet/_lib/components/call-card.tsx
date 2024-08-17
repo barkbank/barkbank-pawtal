@@ -47,7 +47,8 @@ export function CallCard(props: {
     );
   }
 
-  const { userName, userPhoneNumber, vetUserLastContactedTime } = result;
+  const { userTitle, userName, userPhoneNumber, vetUserLastContactedTime } =
+    result;
 
   // TODO: (Maybe) Add userResidency to OwnerContactDetails. For now, hardcoding
   // is safe because all available dogs have owners residing in Singapore.
@@ -86,6 +87,7 @@ export function CallCard(props: {
       <div className="flex flex-row items-start justify-between">
         <BarkUserContactDetails
           details={{
+            userTitle,
             userName,
             userPhoneNumber,
             userResidency,

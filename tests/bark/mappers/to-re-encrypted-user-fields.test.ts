@@ -1,9 +1,9 @@
 import { UserPii } from "@/lib/bark/models/user-pii";
 import { withBarkContext } from "../_context";
-import { toEncryptedUserPii } from "@/lib/bark/mappers/to-encrypted-user-pii";
+import { toEncryptedUserPii } from "@/lib/bark/mappers/user-mappers";
 import { EncryptedUserFields } from "@/lib/bark/models/encrypted-user-fields";
 import { toReEncryptedUserFields } from "@/lib/bark/mappers/to-re-encrypted-user-fields";
-import { toUserPii } from "@/lib/bark/mappers/to-user-pii";
+import { toUserPii } from "@/lib/bark/mappers/user-mappers";
 
 describe("toReEncryptedUserFields", () => {
   it("should re-encrypt Encrypted User Fields", async () => {

@@ -9,6 +9,7 @@ import { UserMyPetsPage } from "../_lib/pom/pages/user-my-pets-page";
 import { UserRegistrationPetFormPage } from "../_lib/pom/pages/user-registration-pet-form-page";
 import { UserRegistrationOwnerFormPage } from "../_lib/pom/pages/user-registration-owner-form-page";
 import { UserRegistrationSuccessPage } from "../_lib/pom/pages/user-registration-success-page";
+import { USER_TITLE } from "@/lib/bark/enums/user-title";
 
 test("visitor can register a new user account", async ({ page }) => {
   // Navigating to the registration form
@@ -44,6 +45,8 @@ test("visitor can register a new user account", async ({ page }) => {
   await expect(pgOwnerForm.ownerFormHeader()).toBeVisible();
   await pgOwnerForm.userResidency_SINGAPORE().click();
   await pgOwnerForm.userNameField().fill("Ian Little");
+  await pgOwnerForm.userTitleSelection().click();
+  await pgOwnerForm.userTitleOption({ userTitle: USER_TITLE.MR }).click();
   await pgOwnerForm.userPhoneNumberField().fill("87654321");
   const guid = generateRandomGUID(8);
   const userEmail = `ian.${guid}@user.com`;
@@ -84,7 +87,7 @@ test("visitor can register a new user account", async ({ page }) => {
   // Check for account details
   const pgMyAccount = new UserMyAccountPage(context);
   await pgMyAccount.checkReady();
-  await expect(pgMyAccount.exactText("Ian Little")).toBeVisible();
+  await expect(pgMyAccount.exactText("Mr Ian Little")).toBeVisible();
   await expect(pgMyAccount.residencyItem()).toHaveValue("Singapore");
   await expect(pgMyAccount.phoneNumberItem()).toHaveValue("87654321");
   await expect(pgMyAccount.emailItem()).toHaveValue(userEmail);

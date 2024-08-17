@@ -23,16 +23,13 @@ import {
 } from "./services/otp";
 import pg from "pg";
 import { VetActorFactory } from "./vet/vet-actor-factory";
-import {
-  UserActorFactory,
-  UserActorFactoryConfig,
-} from "./user/user-actor-factory";
+import { UserActorFactory } from "./user/user-actor-factory";
 import { APP_ENV, AppEnv, AppEnvSchema } from "./app-env";
 import { isValidEmail } from "./utilities/bark-utils";
 import { UserMapper } from "./data/user-mapper";
 import { AdminMapper } from "./data/admin-mapper";
 import { DogMapper } from "./data/dog-mapper";
-import { RegistrationService } from "./services/registration";
+import { RegistrationService } from "./bark/services/registration-service";
 import { UserActorConfig } from "./user/user-actor";
 import { AdminActorConfig } from "./admin/admin-actor";
 import {
@@ -54,6 +51,8 @@ import { randomUUID } from "crypto";
 import { opLogPawtalEvent } from "./bark/operations/op-log-pawtal-event";
 import { PAWTAL_EVENT_TYPE } from "./bark/enums/pawtal-event-type";
 import { CronService } from "./bark/services/cron-service";
+import { UserAccountService } from "./bark/services/user-account-service";
+import { Visitor } from "./bark/actors/visitor";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -80,6 +79,8 @@ export class AppFactory {
   private promisedBarkContext: Promise<BarkContext> | null = null;
   private promisedTrackerService: Promise<TrackerService> | null = null;
   private promisedCronService: Promise<CronService> | null = null;
+  private promisedUserAccountService: Promise<UserAccountService> | null = null;
+  private promisedVisitor: Promise<Visitor> | null = null;
 
   constructor(envs: NodeJS.Dict<string>) {
     this.envs = envs;
@@ -122,6 +123,19 @@ export class AppFactory {
 
   public getInstanceId(): string {
     return this.instanceId;
+  }
+
+  getVisitor(): Promise<Visitor> {
+    if (this.promisedVisitor === null) {
+      this.promisedVisitor = new Promise(async (resolve) => {
+        const context = await this.getBarkContext();
+        const registrationService = await this.getRegistrationService();
+        const visitor = new Visitor({ context, registrationService });
+        this.logCreated("Visitor");
+        resolve(visitor);
+      });
+    }
+    return this.promisedVisitor;
   }
 
   public getCronService(): Promise<CronService> {
@@ -428,6 +442,7 @@ export class AppFactory {
           userMapper,
           dogMapper,
           textEncryptionService,
+          context,
         };
         const factory = new VetActorFactory(context, { actorConfig });
         this.logCreated("VetActorFactory");
@@ -442,33 +457,47 @@ export class AppFactory {
       this.promisedUserActorFactory = new Promise(async (resolve) => {
         const [
           dbPool,
-          emailHashService,
           userMapper,
           dogMapper,
           textEncryptionService,
+          context,
+          userAccountService,
         ] = await Promise.all([
           this.getDbPool(),
-          this.getEmailHashService(),
           this.getUserMapper(),
           this.getDogMapper(),
           this.getTextEncryptionService(),
+          this.getBarkContext(),
+          this.getUserAccountService(),
         ]);
-        const factoryConfig: UserActorFactoryConfig = {
-          dbPool,
-          emailHashService,
-        };
         const actorConfig: UserActorConfig = {
           dbPool,
           userMapper,
           dogMapper,
           textEncryptionService,
         };
-        const factory = new UserActorFactory(factoryConfig, actorConfig);
+        const factory = new UserActorFactory({
+          actorConfig,
+          context,
+          userAccountService,
+        });
         this.logCreated("UserActorFactory");
         resolve(factory);
       });
     }
     return this.promisedUserActorFactory;
+  }
+
+  public getUserAccountService(): Promise<UserAccountService> {
+    if (this.promisedUserAccountService === null) {
+      this.promisedUserAccountService = new Promise(async (resolve) => {
+        const context = await this.getBarkContext();
+        const service = new UserAccountService(context);
+        this.logCreated("UserAccountService");
+        resolve(service);
+      });
+    }
+    return this.promisedUserAccountService;
   }
 
   public getUserMapper(): Promise<UserMapper> {
@@ -506,20 +535,20 @@ export class AppFactory {
   public getRegistrationService(): Promise<RegistrationService> {
     if (this.promisedRegistrationService === null) {
       this.promisedRegistrationService = new Promise(async (resolve) => {
-        const [dbPool, otpService, emailHashService, userMapper, dogMapper] =
+        const [dbPool, otpService, dogMapper, context, userAccountService] =
           await Promise.all([
             this.getDbPool(),
             this.getOtpService(),
-            this.getEmailHashService(),
-            this.getUserMapper(),
             this.getDogMapper(),
+            this.getBarkContext(),
+            this.getUserAccountService(),
           ]);
         const handler = new RegistrationService({
           dbPool,
           otpService,
-          emailHashService,
-          userMapper,
           dogMapper,
+          context,
+          userAccountService,
         });
         this.logCreated("RegistrationHandler");
         resolve(handler);

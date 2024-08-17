@@ -11,12 +11,17 @@ import { generateUser } from "../utils/generate-user";
 import { UserRegistrationPetFormPage } from "../pom/pages/user-registration-pet-form-page";
 import { UserRegistrationOwnerFormPage } from "../pom/pages/user-registration-owner-form-page";
 import { UserRegistrationSuccessPage } from "../pom/pages/user-registration-success-page";
+import { UserTitle } from "@/lib/bark/enums/user-title";
 
 export async function doRegister(
   context: PomContext,
-  args?: { isIncomplete?: boolean; withoutPreferredVet?: boolean },
+  args?: {
+    isIncomplete?: boolean;
+    withoutPreferredVet?: boolean;
+    userTitle?: UserTitle | undefined;
+  },
 ): Promise<GeneratedRegistration> {
-  const { isIncomplete, withoutPreferredVet } = args ?? {};
+  const { isIncomplete, withoutPreferredVet, userTitle } = args ?? {};
 
   const dogGender =
     isIncomplete === true
@@ -25,7 +30,7 @@ export async function doRegister(
   const dog = generateDog({ dogGender });
   const user = generateUser();
 
-  const { dogName, dogBreed, dogBirthday, dogWeightKg, ageYears } = dog;
+  const { dogName, dogBreed, dogBirthday, dogWeightKg } = dog;
   const { userName, userEmail, userPhoneNumber } = user;
 
   const pgPetForm = new UserRegistrationPetFormPage(context);
@@ -74,6 +79,10 @@ export async function doRegister(
   await pgOwnerForm.checkReady();
   await pgOwnerForm.userResidency_SINGAPORE().click();
   await pgOwnerForm.userNameField().fill(userName);
+  if (userTitle !== undefined) {
+    await pgOwnerForm.userTitleSelection().click();
+    await pgOwnerForm.userTitleOption({ userTitle }).click();
+  }
   await pgOwnerForm.userPhoneNumberField().fill(userPhoneNumber);
   await pgOwnerForm.userEmailField().fill(userEmail);
   await pgOwnerForm.sendOtpButton().click();

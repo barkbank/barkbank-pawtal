@@ -5,12 +5,14 @@ import { VetSchedulePage } from "../_lib/pom/pages/vet-schedule-page";
 import { doGetIsMobile } from "../_lib/ops/do-get-is-mobile";
 import { initPomContext } from "../_lib/init/init-pom-context";
 import { doRegister } from "../_lib/ops/do-register";
+import { USER_TITLE } from "@/lib/bark/enums/user-title";
 
 test("vet can record APPOINTMENT call outcome", async ({ page }) => {
   const context = await initPomContext({ page });
   const {
     dog: { dogName },
-  } = await doRegister(context);
+    user: { userName },
+  } = await doRegister(context, { userTitle: USER_TITLE.MRS });
 
   await doLogoutSequence(context);
   await doLoginKnownVet(context);
@@ -23,6 +25,7 @@ test("vet can record APPOINTMENT call outcome", async ({ page }) => {
   const isMobile = await doGetIsMobile(context);
   const activityArea = isMobile ? pg1.dogCard(dogName) : pg1.rightSidePane();
   await expect(activityArea.scheduleButton()).toBeVisible();
+  await expect(activityArea.exactText(`Mrs ${userName}`)).toBeVisible();
 
   await activityArea.scheduleButton().click();
   await expect(activityArea.scheduledBadge()).toBeVisible();

@@ -10,7 +10,11 @@ export function generateUser(): GeneratedUser {
   const userName = `${firstName} ${lastName} (${guid})`;
   const userEmail = `${firstName.toLowerCase()}_${lastName.toLowerCase()}_${guid}@uitest.com`;
   const userPhoneNumber = `${50000000 + Math.floor(Math.random() * 10000000)}`;
-  const result: GeneratedUser = { userName, userEmail, userPhoneNumber };
+  const result: GeneratedUser = {
+    userName,
+    userEmail,
+    userPhoneNumber,
+  };
   console.log("Generated User", result);
   return GeneratedUserSchema.parse(result);
 }

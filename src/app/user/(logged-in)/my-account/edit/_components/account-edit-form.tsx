@@ -3,49 +3,36 @@
 import { BarkForm } from "@/components/bark/bark-form";
 import { BarkFormInput } from "@/components/bark/bark-form-input";
 import { BarkFormRadioGroup } from "@/components/bark/bark-form-radio-group";
-import { USER_RESIDENCY, UserResidency } from "@/lib/bark/enums/user-residency";
+import { USER_RESIDENCY } from "@/lib/bark/enums/user-residency";
 import { RoutePath } from "@/lib/route-path";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { postMyAccountDetails } from "../_actions/post-my-account-details";
-import { MyAccountDetailsUpdate } from "@/lib/user/user-models";
 import React from "react";
 import { BarkButton } from "@/components/bark/bark-button";
 import { CODE } from "@/lib/utilities/bark-code";
+import {
+  UserAccountUpdate,
+  UserAccountUpdateSchema,
+} from "@/lib/bark/models/user-models";
+import { BarkFormSelect } from "@/components/bark/bark-form-select";
+import { USER_TITLE_OPTIONS } from "@/app/_lib/constants";
 
-const FORM_SCHEMA = z.object({
-  userName: z.string().min(1, { message: "Name cannot be empty" }),
-  userPhoneNumber: z.string(),
-  userResidency: z.nativeEnum(USER_RESIDENCY),
-});
-
-type FormDataType = z.infer<typeof FORM_SCHEMA>;
-
-export default function AccountEditForm({
-  userName,
-  userPhoneNumber,
-  userResidency,
-}: {
-  userName: string;
-  userPhoneNumber: string;
-  userResidency: UserResidency;
+export default function AccountEditForm(props: {
+  existing: UserAccountUpdate;
 }) {
+  const { existing } = props;
   const router = useRouter();
-  const form = useForm<FormDataType>({
-    resolver: zodResolver(FORM_SCHEMA),
-    defaultValues: {
-      userName,
-      userPhoneNumber,
-      userResidency,
-    },
+  const form = useForm<UserAccountUpdate>({
+    resolver: zodResolver(UserAccountUpdateSchema),
+    defaultValues: existing,
   });
   const [updateError, setUpdateError] = React.useState("");
 
-  async function saveUser(values: FormDataType) {
+  async function onSubmit(values: UserAccountUpdate) {
     setUpdateError("");
-    const request: MyAccountDetailsUpdate = values;
+    const request: UserAccountUpdate = values;
 
     const response = await postMyAccountDetails(request);
     if (response === CODE.ERROR_NOT_LOGGED_IN) {
@@ -61,7 +48,14 @@ export default function AccountEditForm({
 
   return (
     <>
-      <BarkForm onSubmit={saveUser} form={form}>
+      <BarkForm onSubmit={onSubmit} form={form}>
+        <BarkFormSelect
+          form={form}
+          label="My Title"
+          name="userTitle"
+          options={USER_TITLE_OPTIONS}
+          placeholder="-- Select --"
+        />
         <BarkFormInput form={form} label="My Name" name="userName" />
         <BarkFormInput
           form={form}

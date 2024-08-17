@@ -14,7 +14,6 @@ import { RoutePath } from "@/lib/route-path";
 import { useRouter } from "next/navigation";
 import { BarkFormOption } from "@/components/bark/bark-form-option";
 import { postRegistrationRequest } from "@/app/user/registration/_actions/post-registration-request";
-import { RegistrationRequest } from "@/lib/services/registration";
 import { DogAntigenPresence } from "@/lib/bark/enums/dog-antigen-presence";
 import { YesNoUnknown } from "@/lib/bark/enums/yes-no-unknown";
 import { DogGender } from "@/lib/bark/enums/dog-gender";
@@ -27,6 +26,11 @@ import { CODE } from "@/lib/utilities/bark-code";
 import { RequiredDateField } from "@/app/_lib/field-schemas/required-date-field";
 import { CONTACT_EMAIL } from "@/lib/bark/constants/contact-email";
 import clsx from "clsx";
+import {
+  RegistrationRequest,
+  RegistrationRequestSchema,
+} from "@/lib/bark/models/registration-models";
+import { UserTitleSchema } from "@/lib/bark/enums/user-title";
 
 const FORM_SCHEMA = z.object({
   dogName: z.string(),
@@ -39,6 +43,7 @@ const FORM_SCHEMA = z.object({
   dogEverPregnant: z.string(),
   dogPreferredVetId: z.string().optional(),
   userResidency: z.string(),
+  userTitle: UserTitleSchema.optional(),
   userName: z.string(),
   userPhoneNumber: z.string(),
   userEmail: z.string().email(),
@@ -86,8 +91,9 @@ export default function DonorForm(props: {
   function getRegistrationRequest(): RegistrationRequest {
     const vals = form.getValues();
 
-    return {
+    const out: RegistrationRequest = {
       emailOtp: vals.emailOtp,
+      userTitle: vals.userTitle,
       userName: vals.userName,
       userEmail: vals.userEmail,
       userPhoneNumber: vals.userPhoneNumber,
@@ -108,6 +114,7 @@ export default function DonorForm(props: {
         vals.dogPreferredVetId ??
         (vetOptions.length === 1 ? vetOptions[0].value : undefined),
     };
+    return RegistrationRequestSchema.parse(out);
   }
 
   const { dogPreferredVetId } = form.watch();
@@ -222,6 +229,7 @@ export default function DonorForm(props: {
           onSave={(values) => {
             form.setValue("userResidency", values.userResidency);
             form.setValue("userName", values.userName);
+            form.setValue("userTitle", values.userTitle);
             form.setValue("userPhoneNumber", values.userPhoneNumber);
             form.setValue("userEmail", values.userEmail);
             form.setValue("emailOtp", values.emailOtp);

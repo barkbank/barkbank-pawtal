@@ -6,6 +6,8 @@ import {
 } from "@/lib/bark/models/owner-contact-details";
 import { dbQuery } from "@/lib/data/db-utils";
 import { CODE } from "@/lib/utilities/bark-code";
+import { UserPii } from "@/lib/bark/models/user-pii";
+import { toUserPii } from "@/lib/bark/mappers/user-mappers";
 
 /**
  * Get contact details of a dog's owner.
@@ -91,12 +93,13 @@ async function toOwnerContactDetails(
   row: Row,
 ): Promise<OwnerContactDetails> {
   const { actor, dogId } = ctx;
-  const { userMapper } = actor.getParams();
+  const { context } = actor.getParams();
   const { isPreferredVet, userEncryptedPii, ...otherFields } = row;
-  const { userName, userPhoneNumber } =
-    await userMapper.mapUserEncryptedPiiToUserPii({ userEncryptedPii });
+  const userPii: UserPii = await toUserPii(context, userEncryptedPii);
+  const { userTitle, userName, userPhoneNumber } = userPii;
   return {
     dogId,
+    userTitle,
     userName,
     userPhoneNumber,
     ...otherFields,

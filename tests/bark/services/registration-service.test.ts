@@ -1,8 +1,4 @@
-import { Pool } from "pg";
-import { withDb } from "../_db_helpers";
-import { RegistrationRequest } from "@/lib/services/registration";
-import { RegistrationServiceConfig } from "@/lib/services/registration";
-import { RegistrationService } from "@/lib/services/registration";
+import { withDb } from "../../_db_helpers";
 import { DOG_ANTIGEN_PRESENCE } from "@/lib/bark/enums/dog-antigen-presence";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
@@ -13,22 +9,23 @@ import {
   parseCommonDate,
 } from "@/lib/utilities/bark-time";
 import {
-  getDogMapper,
-  getEmailHashService,
-  getOtpService,
+  getRegistrationService,
+  getUserAccountService,
   getUserMapper,
   insertUser,
   insertVet,
-} from "../_fixtures";
-import { dbSelectUser, dbSelectUserIdByHashedEmail } from "@/lib/data/db-users";
+} from "../../_fixtures";
 import {
   dbSelectDogListByUserId,
   dbSelectPreferredVetIds,
 } from "@/lib/data/db-dogs";
-import { HarnessOtpService } from "../_harness";
+import { HarnessOtpService } from "../../_harness";
 import { dbQuery } from "@/lib/data/db-utils";
+import { RegistrationRequest } from "@/lib/bark/models/registration-models";
+import { UserPiiSchema } from "@/lib/bark/models/user-pii";
+import { UserAccountSchema } from "@/lib/bark/models/user-models";
 
-describe("RegistrationHandler", () => {
+describe("RegistrationService", () => {
   it("should return OK when user account is successfully created", async () => {
     await withDb(async (dbPool) => {
       // GIVEN a standard request
@@ -36,28 +33,24 @@ describe("RegistrationHandler", () => {
       const request = getRegistrationRequest(preferredVet.vetId);
 
       // WHEN
-      const config = getConfig(dbPool);
-      const handler = new RegistrationService(config);
+      const handler = getRegistrationService(dbPool);
       const response = await handler.handle(request);
 
       // THEN
       expect(response).toEqual("OK");
 
       // AND a user should be created
-      const userHashedEmail = await config.emailHashService.getHashHex(
-        request.userEmail,
-      );
-      const userId = await dbSelectUserIdByHashedEmail(dbPool, userHashedEmail);
-      expect(userId).not.toBeNull();
-      const user = await dbSelectUser(dbPool, guaranteed(userId));
-      expect(user).not.toBeNull();
-      const userPii = await getUserMapper().mapUserRecordToUserPii(
-        guaranteed(user),
-      );
+      const userAccountService = getUserAccountService(dbPool);
+      const { userEmail } = request;
+      const res = await userAccountService.getUserIdByUserEmail({ userEmail });
+      const { userId } = res.result!;
+      const res2 = await userAccountService.getByUserId({ userId });
+      const userPii = UserPiiSchema.parse(res2.result);
+      const user = UserAccountSchema.parse(res2.result);
       expect(userPii.userEmail).toEqual(request.userEmail);
       expect(userPii.userName).toEqual(request.userName);
       expect(userPii.userPhoneNumber).toEqual(request.userPhoneNumber);
-      expect(user?.userResidency).toEqual(request.userResidency);
+      expect(user.userResidency).toEqual(request.userResidency);
 
       // AND a dog should be created
       const dogs = await dbSelectDogListByUserId(dbPool, guaranteed(userId));
@@ -88,8 +81,7 @@ describe("RegistrationHandler", () => {
       });
 
       // WHEN
-      const config = getConfig(dbPool);
-      const handler = new RegistrationService(config);
+      const handler = getRegistrationService(dbPool);
       const response = await handler.handle(request);
 
       // THEN
@@ -121,8 +113,7 @@ describe("RegistrationHandler", () => {
       });
 
       // WHEN
-      const config = getConfig(dbPool);
-      const handler = new RegistrationService(config);
+      const handler = getRegistrationService(dbPool);
       const response = await handler.handle(request);
 
       // THEN
@@ -138,28 +129,24 @@ describe("RegistrationHandler without vet id", () => {
       const request = getRegistrationRequest(undefined);
 
       // WHEN
-      const config = getConfig(dbPool);
-      const handler = new RegistrationService(config);
-      const response = await handler.handle(request);
+      const service = getRegistrationService(dbPool);
+      const response = await service.handle(request);
 
       // THEN
       expect(response).toEqual("OK");
 
       // AND a user should be created
-      const userHashedEmail = await config.emailHashService.getHashHex(
-        request.userEmail,
-      );
-      const userId = await dbSelectUserIdByHashedEmail(dbPool, userHashedEmail);
-      expect(userId).not.toBeNull();
-      const user = await dbSelectUser(dbPool, guaranteed(userId));
-      expect(user).not.toBeNull();
-      const userPii = await getUserMapper().mapUserRecordToUserPii(
-        guaranteed(user),
-      );
+      const userAccountService = getUserAccountService(dbPool);
+      const { userEmail } = request;
+      const res = await userAccountService.getUserIdByUserEmail({ userEmail });
+      const { userId } = res.result!;
+      const res2 = await userAccountService.getByUserId({ userId });
+      const userPii = UserPiiSchema.parse(res2.result);
+      const user = UserAccountSchema.parse(res2.result);
       expect(userPii.userEmail).toEqual(request.userEmail);
       expect(userPii.userName).toEqual(request.userName);
       expect(userPii.userPhoneNumber).toEqual(request.userPhoneNumber);
-      expect(user?.userResidency).toEqual(request.userResidency);
+      expect(user.userResidency).toEqual(request.userResidency);
 
       // AND a dog should be created
       const dogs = await dbSelectDogListByUserId(dbPool, guaranteed(userId));
@@ -181,16 +168,6 @@ describe("RegistrationHandler without vet id", () => {
     });
   });
 });
-
-function getConfig(dbPool: Pool): RegistrationServiceConfig {
-  return {
-    dbPool,
-    otpService: getOtpService(),
-    emailHashService: getEmailHashService(),
-    userMapper: getUserMapper(),
-    dogMapper: getDogMapper(),
-  };
-}
 
 function getRegistrationRequest(
   preferredVetId?: string,

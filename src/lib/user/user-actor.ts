@@ -1,11 +1,12 @@
 import { Pool } from "pg";
-import { UserRecord } from "../data/db-models";
-import { UserPii } from "../data/db-models";
 import { UserMapper } from "../data/user-mapper";
 import { DogMapper } from "../data/dog-mapper";
-import { dbSelectUser } from "../data/db-users";
 import { EncryptionService } from "../services/encryption";
+import { BarkContext } from "../bark/bark-context";
+import { UserAccountService } from "../bark/services/user-account-service";
+import { UserAccount, UserAccountUpdate } from "../bark/models/user-models";
 
+// TODO: Remove UserActorConfig when UserActor::getParams is no longer used.
 export type UserActorConfig = {
   dbPool: Pool;
   userMapper: UserMapper;
@@ -20,37 +21,36 @@ export type UserActorConfig = {
  * authorisation. E.g. view own PII and not that of another user.
  */
 export class UserActor {
-  private userId: string;
-  private config: UserActorConfig;
+  constructor(
+    private args: {
+      userId: string;
+      config: UserActorConfig;
+      context: BarkContext;
+      userAccountService: UserAccountService;
+    },
+  ) {}
 
-  constructor(userId: string, config: UserActorConfig) {
-    this.userId = userId;
-    this.config = config;
-  }
-
-  public getParams(): UserActorConfig & { userId: string } {
+  getParams(): UserActorConfig & { userId: string } {
     return {
-      ...this.config,
-      userId: this.userId,
+      ...this.args.config,
+      userId: this.args.userId,
     };
   }
 
-  public getUserId(): string {
-    return this.userId;
+  getUserId(): string {
+    return this.args.userId;
   }
 
-  public async getOwnUserRecord(): Promise<UserRecord | null> {
-    const { dbPool } = this.config;
-    const record = await dbSelectUser(dbPool, this.getUserId());
-    return record;
+  async getMyAccount(): Promise<UserAccount | null> {
+    const { userId, userAccountService } = this.args;
+    const { result } = await userAccountService.getByUserId({ userId });
+    return result ?? null;
   }
 
-  public async getOwnUserPii(): Promise<UserPii | null> {
-    const record = await this.getOwnUserRecord();
-    if (record === null) {
-      return null;
-    }
-    const { userMapper } = this.config;
-    return userMapper.mapUserRecordToUserPii(record);
+  async updateMyAccount(args: { update: UserAccountUpdate }) {
+    const { update } = args;
+    const { userId, userAccountService } = this.args;
+    const res = await userAccountService.applyUpdate({ userId, update });
+    return res;
   }
 }
