@@ -36,6 +36,11 @@ export class AdminActor {
     return this.config.vetAccountService.getVetClinics();
   }
 
+  async getVetAccountsByVetId(args: { vetId: string }) {
+    const { vetId } = args;
+    return this.config.vetAccountService.getVetAccountsByVetId({ vetId });
+  }
+
   public getParams(): {
     adminId: string;
     dbPool: Pool;
@@ -47,6 +52,7 @@ export class AdminActor {
     return { adminId: this.adminId, ...this.config };
   }
 
+  // TODO: Do we still need permissions?
   public async getPermissions(): Promise<AdminPermissions> {
     const record = await this.getOwnAdminRecord();
     if (record === null) {
