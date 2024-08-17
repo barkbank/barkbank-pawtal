@@ -34,12 +34,12 @@ export class UserRegistrationOwnerFormPage extends PomPage {
   }
 
   userNameField(): Locator {
-    return this.page().getByLabel("How would you like to be addressed?");
+    return this.page().getByLabel("Name", { exact: true });
   }
 
   userTitleSelection(): Locator {
     return this.page()
-      .getByText("Please also specify a preferred title")
+      .getByText("Title", { exact: true })
       .locator("..")
       .getByRole("combobox");
   }
@@ -54,11 +54,11 @@ export class UserRegistrationOwnerFormPage extends PomPage {
   }
 
   userPhoneNumberField(): Locator {
-    return this.page().getByLabel("At which phone number can you be reached?");
+    return this.page().getByLabel("Phone Number", { exact: true });
   }
 
   userEmailField(): Locator {
-    return this.page().getByLabel("Please provide a login email");
+    return this.page().getByLabel("Login Email", { exact: true });
   }
 
   sendOtpButton(): Locator {
