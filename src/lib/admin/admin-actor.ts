@@ -11,6 +11,7 @@ import { DogMapper } from "../data/dog-mapper";
 import { UserMapper } from "../data/user-mapper";
 import { AdminMapper } from "../data/admin-mapper";
 import { VetAccountService } from "../bark/services/vet-account-service";
+import { VetAccountSpec, VetClinicSpec } from "../bark/models/vet-models";
 
 export type AdminActorConfig = {
   dbPool: Pool;
@@ -39,6 +40,16 @@ export class AdminActor {
   async getVetAccountsByVetId(args: { vetId: string }) {
     const { vetId } = args;
     return this.config.vetAccountService.getVetAccountsByVetId({ vetId });
+  }
+
+  async createVetClinic(args: { spec: VetClinicSpec }) {
+    const { spec } = args;
+    return this.config.vetAccountService.createVetClinic({ spec });
+  }
+
+  async addVetAccount(args: { spec: VetAccountSpec }) {
+    const { spec } = args;
+    return this.config.vetAccountService.addVetAccount({ spec });
   }
 
   public getParams(): {

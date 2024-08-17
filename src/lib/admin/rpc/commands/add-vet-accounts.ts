@@ -1,11 +1,10 @@
-import { BarkContext } from "@/lib/bark/bark-context";
 import { AdminCommand, AdminCommandArgs } from "../admin-command";
 import { z } from "zod";
 import {
   VetAccountSpec,
   VetAccountSpecSchema,
 } from "@/lib/bark/models/vet-models";
-import { opAddVetAccount } from "@/lib/bark/operations/op-add-vet-account";
+import { AdminActor } from "../../admin-actor";
 
 const RequestSchema = z.object({
   accounts: z.array(VetAccountSpecSchema),
@@ -27,17 +26,17 @@ export class AddVetAccounts implements AdminCommand {
     return JSON.stringify(example, null, 2);
   }
   async run(args: AdminCommandArgs): Promise<string> {
-    const { context, request } = args;
+    const { actor, request } = args;
     const obj = JSON.parse(request);
     const req = RequestSchema.parse(obj);
-    const promises = req.accounts.map((spec) => this.insert({ context, spec }));
+    const promises = req.accounts.map((spec) => this.insert({ actor, spec }));
     const results = await Promise.all(promises);
     return JSON.stringify({ results });
   }
 
-  private async insert(args: { context: BarkContext; spec: VetAccountSpec }) {
-    const { context, spec } = args;
-    const { result, error } = await opAddVetAccount(context, { spec });
+  private async insert(args: { actor: AdminActor; spec: VetAccountSpec }) {
+    const { actor, spec } = args;
+    const { result, error } = await actor.addVetAccount({ spec });
     if (error !== undefined) {
       return { status: "ERROR", spec, error };
     }

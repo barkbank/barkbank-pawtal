@@ -8,8 +8,6 @@ import {
   VetClinic,
   VetClinicSpec,
 } from "@/lib/bark/models/vet-models";
-import { opCreateVetClinic } from "@/lib/bark/operations/op-create-vet-clinic";
-import { opAddVetAccount } from "@/lib/bark/operations/op-add-vet-account";
 import { CODE } from "@/lib/utilities/bark-code";
 
 describe("VetAccountService", () => {
@@ -115,7 +113,8 @@ async function _insertVet(
   const vetPhoneNumber = "61238888";
   const vetAddress = "26 Albert Ave Singpapore 912064";
   const spec: VetClinicSpec = { vetEmail, vetName, vetPhoneNumber, vetAddress };
-  const { result } = await opCreateVetClinic(context, { spec });
+  const service = new VetAccountService({ context });
+  const { result } = await service.createVetClinic({ spec });
   const { clinic } = result!;
   return clinic;
 }
@@ -130,6 +129,7 @@ async function _insertVetAccount(
     vetAccountEmail,
     vetAccountName: "Mandy",
   };
-  const { result } = await opAddVetAccount(context, { spec });
+  const service = new VetAccountService({ context });
+  const { result } = await service.addVetAccount({ spec });
   return { vetAccountId: result!.account.vetAccountId };
 }

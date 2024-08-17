@@ -1,14 +1,54 @@
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { BarkContext } from "../bark-context";
-import { VetAccount, VetClinic, VetLogin } from "../models/vet-models";
+import {
+  VetAccount,
+  VetAccountSpec,
+  VetClinic,
+  VetClinicSpec,
+  VetLogin,
+} from "../models/vet-models";
 import { CODE } from "@/lib/utilities/bark-code";
 import { VetClinicDao } from "../daos/vet-clinic-dao";
 import { SecureVetAccountDao } from "../daos/secure-vet-account-dao";
 import { toVetAccount } from "../mappers/to-vet-account";
 import { dbRelease } from "@/lib/data/db-utils";
+import { toSecureVetAccountSpec } from "../mappers/to-secure-vet-account-spec";
 
 export class VetAccountService {
   constructor(private config: { context: BarkContext }) {}
+
+  async createVetClinic(args: {
+    spec: VetClinicSpec;
+  }): Promise<Result<{ clinic: VetClinic }, typeof CODE.FAILED>> {
+    const { dbPool } = this.config.context;
+    const { spec } = args;
+    try {
+      const dao = new VetClinicDao(dbPool);
+      const clinic = await dao.insert({ spec });
+      return Ok({ clinic });
+    } catch (err) {
+      console.error(err);
+      return Err(CODE.FAILED);
+    }
+  }
+
+  async addVetAccount(args: {
+    spec: VetAccountSpec;
+  }): Promise<Result<{ account: VetAccount }, typeof CODE.FAILED>> {
+    const { context } = this.config;
+    const { dbPool } = context;
+    const { spec } = args;
+    try {
+      const dao = new SecureVetAccountDao(dbPool);
+      const secureSpec = await toSecureVetAccountSpec(context, spec);
+      const secureAccount = await dao.insert({ secureSpec });
+      const account = await toVetAccount(context, secureAccount);
+      return Ok({ account });
+    } catch (err) {
+      console.error(err);
+      return Err(CODE.FAILED);
+    }
+  }
 
   async getVetClinics(): Promise<
     Result<{ clinics: VetClinic[] }, typeof CODE.FAILED>
