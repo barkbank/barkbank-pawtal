@@ -53,6 +53,7 @@ import { PAWTAL_EVENT_TYPE } from "./bark/enums/pawtal-event-type";
 import { CronService } from "./bark/services/cron-service";
 import { UserAccountService } from "./bark/services/user-account-service";
 import { Visitor } from "./bark/actors/visitor";
+import { VetAccountService } from "./bark/services/vet-account-service";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -81,6 +82,7 @@ export class AppFactory {
   private promisedCronService: Promise<CronService> | null = null;
   private promisedUserAccountService: Promise<UserAccountService> | null = null;
   private promisedVisitor: Promise<Visitor> | null = null;
+  private promisedVetAccountService: Promise<VetAccountService> | null = null;
 
   constructor(envs: NodeJS.Dict<string>) {
     this.envs = envs;
@@ -123,6 +125,18 @@ export class AppFactory {
 
   public getInstanceId(): string {
     return this.instanceId;
+  }
+
+  getVetAccountService(): Promise<VetAccountService> {
+    if (this.promisedVetAccountService === null) {
+      this.promisedVetAccountService = new Promise(async (resolve) => {
+        const context = await this.getBarkContext();
+        const service = new VetAccountService({ context });
+        this.logCreated("VetAccountService");
+        resolve(service);
+      });
+    }
+    return this.promisedVetAccountService;
   }
 
   getVisitor(): Promise<Visitor> {

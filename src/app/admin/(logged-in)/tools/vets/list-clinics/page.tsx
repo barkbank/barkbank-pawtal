@@ -3,13 +3,12 @@ import { BarkBackLink } from "@/components/bark/bark-back-link";
 import { Button } from "@/components/ui/button";
 import APP from "@/lib/app";
 import { VetClinic } from "@/lib/bark/models/vet-models";
-import { opGetVetClinics } from "@/lib/bark/operations/op-get-vet-clinics";
 import { RoutePath } from "@/lib/route-path";
 import Link from "next/link";
 
 export default async function Page() {
-  const context = await APP.getBarkContext();
-  const { result, error } = await opGetVetClinics(context);
+  const vetAccountService = await APP.getVetAccountService();
+  const { result, error } = await vetAccountService.getVetClinics();
   if (error !== undefined) {
     return <SimpleErrorPage error={error} />;
   }
