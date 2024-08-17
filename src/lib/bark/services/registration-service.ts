@@ -1,35 +1,32 @@
 import { Pool, PoolClient } from "pg";
 import { dbInsertDog, dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import {
-  UserGen,
-  UserSpec,
   DogGen,
   DogOii,
   DogDetails,
   DogSecureOii,
   DogSpec,
 } from "@/lib/data/db-models";
-import { dbSelectUserIdByHashedEmail, dbInsertUser } from "@/lib/data/db-users";
 import { dbBegin, dbRollback, dbCommit, dbRelease } from "@/lib/data/db-utils";
 import { DogMapper } from "@/lib/data/dog-mapper";
-import { UserMapper } from "@/lib/data/user-mapper";
-import { HashService } from "@/lib/services/hash";
 import { OtpService } from "@/lib/services/otp";
 import { CODE } from "../../utilities/bark-code";
 import { RegistrationRequest } from "../models/registration-models";
+import { UserAccountSpecSchema } from "../models/user-models";
+import { BarkContext } from "../bark-context";
+import { UserAccountService } from "./user-account-service";
 
 export type RegistrationServiceConfig = {
   dbPool: Pool;
-  emailHashService: HashService;
-  userMapper: UserMapper;
   dogMapper: DogMapper;
   otpService: OtpService;
+  context: BarkContext;
+  userAccountService: UserAccountService;
 };
 
 export class RegistrationService {
   private config: RegistrationServiceConfig;
 
-  // TODO: This should expect BarkContext
   constructor(config: RegistrationServiceConfig) {
     this.config = config;
   }
@@ -50,7 +47,7 @@ export class RegistrationService {
     const conn = await this.config.dbPool.connect();
     try {
       await dbBegin(conn);
-      const { hasExistingUser, userGen } = await this.registerUser(
+      const { hasExistingUser, userId } = await this.registerUser(
         conn,
         request,
       );
@@ -58,7 +55,7 @@ export class RegistrationService {
         await dbRollback(conn);
         return CODE.ERROR_ACCOUNT_ALREADY_EXISTS;
       }
-      const dogGen = await this.registerDog(conn, request, userGen.userId);
+      const dogGen = await this.registerDog(conn, request, userId);
       const allInserted = await this.registerVetPreference(
         conn,
         request,
@@ -89,25 +86,23 @@ export class RegistrationService {
     conn: PoolClient,
     request: RegistrationRequest,
   ): Promise<
-    | { hasExistingUser: false; userGen: UserGen }
-    | { hasExistingUser: true; userGen: null }
+    | { hasExistingUser: false; userId: string }
+    | { hasExistingUser: true; userId?: undefined }
   > {
-    const userDetails = this.config.userMapper.toUserDetails(request);
-    const userPii = this.config.userMapper.toUserPii(request);
-    const securePii =
-      await this.config.userMapper.mapUserPiiToUserSecurePii(userPii);
-    const existingId = await dbSelectUserIdByHashedEmail(
-      conn,
-      securePii.userHashedEmail,
-    );
-    if (existingId !== null) {
-      return { hasExistingUser: true, userGen: null };
+    const { userAccountService } = this.config;
+    const spec = UserAccountSpecSchema.parse(request);
+    const { result, error } = await userAccountService.create({ spec, conn });
+    if (error === CODE.ERROR_ACCOUNT_ALREADY_EXISTS) {
+      return { hasExistingUser: true };
     }
-    const spec: UserSpec = { ...securePii, ...userDetails };
-    const userGen = await dbInsertUser(conn, spec);
-    return { hasExistingUser: false, userGen };
+    if (error !== undefined) {
+      throw new Error(error);
+    }
+    const { userId } = result;
+    return { hasExistingUser: false, userId };
   }
 
+  // TODO: Update this to use DogProfileService in future.
   private async registerDog(
     conn: PoolClient,
     request: RegistrationRequest,
@@ -122,6 +117,7 @@ export class RegistrationService {
     return gen;
   }
 
+  // TODO: This should be part of registerDog once it uses DogProfileService
   private async registerVetPreference(
     conn: PoolClient,
     request: RegistrationRequest,

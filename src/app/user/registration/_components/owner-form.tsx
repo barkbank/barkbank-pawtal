@@ -18,9 +18,13 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { CODE } from "@/lib/utilities/bark-code";
 import { BarkButton } from "@/components/bark/bark-button";
+import { BarkFormSelect } from "@/components/bark/bark-form-select";
+import { USER_TITLE_OPTIONS } from "@/app/_lib/constants";
+import { UserTitleSchema } from "@/lib/bark/enums/user-title";
 
 const FORM_SCHEMA = z.object({
   userName: z.string().min(1, { message: "Name cannot be empty" }),
+  userTitle: UserTitleSchema.optional(),
   userPhoneNumber: z.string(),
   userEmail: z.string().email(),
   userResidency: z.string().min(1, { message: "Residency must be specified" }),
@@ -110,6 +114,13 @@ export default function OwnerForm(props: {
           form={form}
           label="How would you like to be addressed?"
           name="userName"
+        />
+        <BarkFormSelect
+          form={form}
+          label="Please also specify a preferred title"
+          name="userTitle"
+          options={USER_TITLE_OPTIONS}
+          placeholder="-- Select --"
         />
         <BarkFormInput
           form={form}

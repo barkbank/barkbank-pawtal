@@ -6,8 +6,10 @@ export abstract class PomPage extends PomObject {
   abstract url(): string;
 
   /**
-   * Check ready checks the URL and one evidence of page loaded. Override the
-   * checkPageLoaded method to customise the behaviour for the page.
+   * Call this to check that we are at the correct URL and the page is loaded.
+   *
+   * Override checkPageLoaded to customise what constitutes a loaded page. By
+   * default it checks nothing.
    */
   async checkReady() {
     await this.checkUrl();
@@ -19,11 +21,11 @@ export abstract class PomPage extends PomObject {
   }
 
   /**
-   * Typically you should be calling checkReady(), which will check URL and
-   * page-loaded.
-   *
    * Override this if there are things to check that demonstrate the page has
    * loaded successfully.
+   *
+   * For readiness check, please call checkReady(). It will check both URL and
+   * page-loaded.
    */
   async checkPageLoaded() {
     // Do nothing.

@@ -25,7 +25,7 @@ export async function doRegister(
   const dog = generateDog({ dogGender });
   const user = generateUser();
 
-  const { dogName, dogBreed, dogBirthday, dogWeightKg, ageYears } = dog;
+  const { dogName, dogBreed, dogBirthday, dogWeightKg } = dog;
   const { userName, userEmail, userPhoneNumber } = user;
 
   const pgPetForm = new UserRegistrationPetFormPage(context);

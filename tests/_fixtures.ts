@@ -77,6 +77,7 @@ import { toSubProfile } from "@/lib/bark/mappers/to-sub-profile";
 import { BarkContext } from "@/lib/bark/bark-context";
 import { EmailHashService } from "@/lib/services/email-hash-service";
 import { UserAccountService } from "@/lib/bark/services/user-account-service";
+import { RegistrationService } from "@/lib/bark/services/registration-service";
 
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
@@ -161,6 +162,25 @@ export function getUserMapper(): UserMapper {
     emailHashService: getEmailHashService(),
     piiEncryptionService: getPiiEncryptionService(),
   });
+}
+
+export function getRegistrationService(dbPool: Pool) {
+  const otpService = getOtpService();
+  const dogMapper = getDogMapper();
+  const userAccountService = getUserAccountService(dbPool);
+  const context = getBarkContext(dbPool);
+  return new RegistrationService({
+    dbPool,
+    otpService,
+    dogMapper,
+    userAccountService,
+    context,
+  });
+}
+
+export function getUserAccountService(dbPool: Pool) {
+  const context = getBarkContext(dbPool);
+  return new UserAccountService(context);
 }
 
 export function getUserActor(dbPool: Pool, userId: string): UserActor {

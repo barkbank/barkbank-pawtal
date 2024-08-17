@@ -52,6 +52,7 @@ import { opLogPawtalEvent } from "./bark/operations/op-log-pawtal-event";
 import { PAWTAL_EVENT_TYPE } from "./bark/enums/pawtal-event-type";
 import { CronService } from "./bark/services/cron-service";
 import { UserAccountService } from "./bark/services/user-account-service";
+import { Visitor } from "./bark/actors/visitor";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -79,6 +80,7 @@ export class AppFactory {
   private promisedTrackerService: Promise<TrackerService> | null = null;
   private promisedCronService: Promise<CronService> | null = null;
   private promisedUserAccountService: Promise<UserAccountService> | null = null;
+  private promisedVisitor: Promise<Visitor> | null = null;
 
   constructor(envs: NodeJS.Dict<string>) {
     this.envs = envs;
@@ -121,6 +123,19 @@ export class AppFactory {
 
   public getInstanceId(): string {
     return this.instanceId;
+  }
+
+  getVisitor(): Promise<Visitor> {
+    if (this.promisedVisitor === null) {
+      this.promisedVisitor = new Promise(async (resolve) => {
+        const context = await this.getBarkContext();
+        const registrationService = await this.getRegistrationService();
+        const visitor = new Visitor({ context, registrationService });
+        this.logCreated("Visitor");
+        resolve(visitor);
+      });
+    }
+    return this.promisedVisitor;
   }
 
   public getCronService(): Promise<CronService> {
@@ -519,20 +534,20 @@ export class AppFactory {
   public getRegistrationService(): Promise<RegistrationService> {
     if (this.promisedRegistrationService === null) {
       this.promisedRegistrationService = new Promise(async (resolve) => {
-        const [dbPool, otpService, emailHashService, userMapper, dogMapper] =
+        const [dbPool, otpService, dogMapper, context, userAccountService] =
           await Promise.all([
             this.getDbPool(),
             this.getOtpService(),
-            this.getEmailHashService(),
-            this.getUserMapper(),
             this.getDogMapper(),
+            this.getBarkContext(),
+            this.getUserAccountService(),
           ]);
         const handler = new RegistrationService({
           dbPool,
           otpService,
-          emailHashService,
-          userMapper,
           dogMapper,
+          context,
+          userAccountService,
         });
         this.logCreated("RegistrationHandler");
         resolve(handler);

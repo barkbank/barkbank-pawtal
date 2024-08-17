@@ -15,6 +15,7 @@ import {
   toUserAccount,
 } from "../mappers/user-mappers";
 import { LRUCache } from "lru-cache";
+import { PoolClient } from "pg";
 
 export class UserAccountService {
   private idCache: LRUCache<string, UserIdentifier>;
@@ -25,6 +26,7 @@ export class UserAccountService {
 
   async create(args: {
     spec: UserAccountSpec;
+    conn?: PoolClient | undefined;
   }): Promise<
     Result<
       UserIdentifier,
@@ -32,25 +34,39 @@ export class UserAccountService {
     >
   > {
     const { spec } = args;
+    if (args.conn !== undefined) {
+      return this._create({ spec, conn: args.conn });
+    }
     const conn = await this.context.dbPool.connect();
     try {
       await dbBegin(conn);
-      const encrypted = await toEncryptedUserAccountSpec(this.context, spec);
-      const { userHashedEmail } = encrypted;
-      const dao = new EncryptedUserAccountDao(conn);
-      const existing = await dao.getByUserHashedEmail({ userHashedEmail });
-      if (existing !== null) {
-        return Err(CODE.ERROR_ACCOUNT_ALREADY_EXISTS);
-      }
-      const identifier = await dao.insert({ spec: encrypted });
+      const res = await this._create({ spec, conn });
       await dbCommit(conn);
-      return Ok(identifier);
+      return res;
     } catch (err) {
       console.error(err);
       return Err(CODE.FAILED);
     } finally {
       await dbRelease(conn);
     }
+  }
+
+  private async _create(args: {
+    spec: UserAccountSpec;
+    conn: PoolClient;
+  }): Promise<
+    Result<UserIdentifier, typeof CODE.ERROR_ACCOUNT_ALREADY_EXISTS>
+  > {
+    const { spec, conn } = args;
+    const encrypted = await toEncryptedUserAccountSpec(this.context, spec);
+    const { userHashedEmail } = encrypted;
+    const dao = new EncryptedUserAccountDao(conn);
+    const existing = await dao.getByUserHashedEmail({ userHashedEmail });
+    if (existing !== null) {
+      return Err(CODE.ERROR_ACCOUNT_ALREADY_EXISTS);
+    }
+    const identifier = await dao.insert({ spec: encrypted });
+    return Ok(identifier);
   }
 
   async applyUpdate(args: {

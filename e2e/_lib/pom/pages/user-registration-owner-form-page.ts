@@ -1,6 +1,8 @@
 import { RoutePath } from "@/lib/route-path";
 import { PomPage } from "../core/pom-page";
 import { expect, Locator } from "@playwright/test";
+import { USER_TITLE, UserTitle } from "@/lib/bark/enums/user-title";
+import { capitalize } from "lodash";
 
 export class UserRegistrationOwnerFormPage extends PomPage {
   url(): string {
@@ -33,6 +35,22 @@ export class UserRegistrationOwnerFormPage extends PomPage {
 
   userNameField(): Locator {
     return this.page().getByLabel("How would you like to be addressed?");
+  }
+
+  userTitleSelection(): Locator {
+    return this.page()
+      .getByText("Please also specify a preferred title")
+      .locator("..")
+      .getByRole("combobox");
+  }
+
+  userTitleOption(args: { userTitle: UserTitle }): Locator {
+    const { userTitle } = args;
+    if (userTitle === USER_TITLE.PREFER_NOT_TO_SAY) {
+      return this.page().getByLabel("Prefer not to say", { exact: true });
+    }
+    const label = capitalize(userTitle);
+    return this.page().getByLabel(label, { exact: true });
   }
 
   userPhoneNumberField(): Locator {
