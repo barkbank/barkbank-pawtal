@@ -312,7 +312,7 @@ export default function DonorForm(props: {
               <BarkH4>Contact Us</BarkH4>
               <BarkP>
                 Feel free to reach out with any inquiries regarding your
-                registration by sending an email us at {CONTACT_EMAIL}.
+                registration by sending an email to us at {CONTACT_EMAIL}.
                 We&apos;re here to assist!
               </BarkP>
             </div>
