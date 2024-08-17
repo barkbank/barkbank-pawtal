@@ -8,9 +8,11 @@ import { formatDistanceStrict } from "date-fns";
 import { Skeleton } from "../ui/skeleton";
 import { NA_TEXT } from "@/app/_lib/constants";
 import { Input } from "../ui/input";
+import { UserTitle } from "@/lib/bark/enums/user-title";
 
 export function BarkUserContactDetails(props: {
   details: null | {
+    userTitle?: UserTitle;
     userName: string;
     userEmail?: string;
     userPhoneNumber: string;
@@ -42,6 +44,7 @@ export function BarkUserContactDetails(props: {
   }
 
   const {
+    userTitle,
     userName,
     userEmail,
     userPhoneNumber,
@@ -65,10 +68,12 @@ export function BarkUserContactDetails(props: {
           addSuffix: true,
         });
 
+  const nameWithTitle = _getNameWithTitle({ userName, userTitle });
+
   return (
     <div className="flex w-full flex-col gap-2">
       <div className="mb-[7px] flex flex-col gap-[7px]">
-        <BarkH4>{userName}</BarkH4>
+        <BarkH4>{nameWithTitle}</BarkH4>
         {showCreationTime && userCreationTimeText !== undefined && (
           <p className="text-xs italic text-grey-60">
             Account created on: {userCreationTimeText}
@@ -91,6 +96,18 @@ export function BarkUserContactDetails(props: {
       </div>
     </div>
   );
+}
+
+function _getNameWithTitle(args: {
+  userName: string;
+  userTitle?: UserTitle;
+}): string {
+  const { userName, userTitle } = args;
+  if (userTitle === undefined) {
+    return userName;
+  }
+  const formattedTitle = capitalize(userTitle);
+  return `${formattedTitle} ${userName}`;
 }
 
 function _ContactItem(props: { icon: React.ReactNode; value: string }) {
