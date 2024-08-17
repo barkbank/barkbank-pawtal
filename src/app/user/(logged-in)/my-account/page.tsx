@@ -36,11 +36,6 @@ export default async function Page() {
           showLastContactedTime: false,
         }}
       />
-      <div className="flex flex-col gap-1">
-        <p className="text-sm font-bold">User ID Number</p>
-        <p>{actor.getUserId()}</p>
-      </div>
-
       <div className="flex flex-col gap-3">
         <BarkButton
           className="w-full md:w-40"
