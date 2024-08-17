@@ -17,8 +17,7 @@ import {
   UserAccountUpdateSchema,
 } from "@/lib/bark/models/user-models";
 import { BarkFormSelect } from "@/components/bark/bark-form-select";
-import { BarkFormOption } from "@/components/bark/bark-form-option";
-import { USER_TITLE } from "@/lib/bark/enums/user-title";
+import { USER_TITLE_OPTIONS } from "@/app/_lib/constants";
 
 export default function AccountEditForm(props: {
   existing: UserAccountUpdate;
@@ -47,14 +46,6 @@ export default function AccountEditForm(props: {
     setUpdateError("Failed to update account details");
   }
 
-  const titleOptions: BarkFormOption[] = [
-    { label: "Mr", value: USER_TITLE.MR },
-    { label: "Ms", value: USER_TITLE.MS },
-    { label: "Mrs", value: USER_TITLE.MRS },
-    { label: "Mdm", value: USER_TITLE.MDM },
-    { label: "Prefer not to say", value: USER_TITLE.PREFER_NOT_TO_SAY },
-  ];
-
   return (
     <>
       <BarkForm onSubmit={onSubmit} form={form}>
@@ -62,7 +53,7 @@ export default function AccountEditForm(props: {
           form={form}
           label="My Title"
           name="userTitle"
-          options={titleOptions}
+          options={USER_TITLE_OPTIONS}
           placeholder="-- Select --"
         />
         <BarkFormInput form={form} label="My Name" name="userName" />
