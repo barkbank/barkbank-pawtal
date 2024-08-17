@@ -18,8 +18,15 @@ export function BarkUserContactDetails(props: {
     userCreationTime?: Date;
     userLastContactedTime?: Date;
   };
+  options?: {
+    showCreationTime?: boolean;
+    showLastContactedTime?: boolean;
+  };
 }) {
-  const { details } = props;
+  const { details, options } = props;
+
+  const showCreationTime = options?.showCreationTime ?? true;
+  const showLastContactedTime = options?.showLastContactedTime ?? true;
 
   // Show a skeleton when details are not defined.
   if (details === null) {
@@ -62,15 +69,17 @@ export function BarkUserContactDetails(props: {
     <div className="flex w-full flex-col gap-2">
       <div className="mb-[7px] flex flex-col gap-[7px]">
         <BarkH4>{userName}</BarkH4>
-        {userCreationTimeText !== undefined && (
+        {showCreationTime && userCreationTimeText !== undefined && (
           <p className="text-xs italic text-grey-60">
             Account created on: {userCreationTimeText}
           </p>
         )}
-        <p className="text-xs italic text-grey-60">
-          Last contacted:{" "}
-          {latestCallText !== undefined ? latestCallText : NA_TEXT}
-        </p>
+        {showLastContactedTime && (
+          <p className="text-xs italic text-grey-60">
+            Last contacted:{" "}
+            {latestCallText !== undefined ? latestCallText : NA_TEXT}
+          </p>
+        )}
       </div>
       <div className="flex flex-col gap-3">
         <_ContactItem
