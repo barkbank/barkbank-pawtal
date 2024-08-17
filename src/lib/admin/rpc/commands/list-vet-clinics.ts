@@ -1,4 +1,3 @@
-import APP from "@/lib/app";
 import { AdminCommand, AdminCommandArgs } from "../admin-command";
 
 export class ListVetClinics implements AdminCommand {
@@ -7,9 +6,8 @@ export class ListVetClinics implements AdminCommand {
   }
 
   async run(args: AdminCommandArgs): Promise<string> {
-    // WIP: Should call actor.getVetClinics()
-    const service = await APP.getVetAccountService();
-    const { result, error } = await service.getVetClinics();
+    const { actor } = args;
+    const { result, error } = await actor.getVetClinics();
     if (error) {
       throw new Error(error);
     }

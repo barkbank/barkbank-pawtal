@@ -78,6 +78,7 @@ import { BarkContext } from "@/lib/bark/bark-context";
 import { EmailHashService } from "@/lib/services/email-hash-service";
 import { UserAccountService } from "@/lib/bark/services/user-account-service";
 import { RegistrationService } from "@/lib/bark/services/registration-service";
+import { VetAccountService } from "@/lib/bark/services/vet-account-service";
 
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
@@ -219,13 +220,19 @@ export function getAdminActorFactoryConfig(
   return { ...base, ...overrides };
 }
 
-export function getAdminActorConfig(db: Pool): AdminActorConfig {
+export function getVetAccountService(dbPool: Pool) {
+  const context = getBarkContext(dbPool);
+  return new VetAccountService({ context });
+}
+
+export function getAdminActorConfig(dbPool: Pool): AdminActorConfig {
   return {
-    dbPool: db,
+    dbPool,
     emailHashService: getEmailHashService(),
     adminMapper: getAdminMapper(),
     userMapper: getUserMapper(),
     dogMapper: getDogMapper(),
+    vetAccountService: getVetAccountService(dbPool),
   };
 }
 

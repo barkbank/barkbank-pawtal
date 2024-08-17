@@ -387,14 +387,21 @@ export class AppFactory {
   public getAdminActorFactory(): Promise<AdminActorFactory> {
     if (this.promisedAdminActorFactory === null) {
       this.promisedAdminActorFactory = new Promise(async (resolve) => {
-        const [dbPool, emailHashService, adminMapper, dogMapper, userMapper] =
-          await Promise.all([
-            this.getDbPool(),
-            this.getEmailHashService(),
-            this.getAdminMapper(),
-            this.getDogMapper(),
-            this.getUserMapper(),
-          ]);
+        const [
+          dbPool,
+          emailHashService,
+          adminMapper,
+          dogMapper,
+          userMapper,
+          vetAccountService,
+        ] = await Promise.all([
+          this.getDbPool(),
+          this.getEmailHashService(),
+          this.getAdminMapper(),
+          this.getDogMapper(),
+          this.getUserMapper(),
+          this.getVetAccountService(),
+        ]);
         const rootAdminEmail = this.envString(
           APP_ENV.BARKBANK_ROOT_ADMIN_EMAIL,
         );
@@ -413,6 +420,7 @@ export class AppFactory {
           adminMapper,
           userMapper,
           dogMapper,
+          vetAccountService,
         };
         const factory = new AdminActorFactory(factoryConfig, actorConfig);
         this.logCreated("AdminActorFactory");

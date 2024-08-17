@@ -10,6 +10,7 @@ import { AdminPii } from "../data/db-models";
 import { DogMapper } from "../data/dog-mapper";
 import { UserMapper } from "../data/user-mapper";
 import { AdminMapper } from "../data/admin-mapper";
+import { VetAccountService } from "../bark/services/vet-account-service";
 
 export type AdminActorConfig = {
   dbPool: Pool;
@@ -17,19 +18,22 @@ export type AdminActorConfig = {
   adminMapper: AdminMapper;
   userMapper: UserMapper;
   dogMapper: DogMapper;
+  vetAccountService: VetAccountService;
 };
 
 /**
  * Responsible for data access control for a given admin.
  */
 export class AdminActor {
-  private adminId: string;
-  private config: AdminActorConfig;
   private promisedAdminRecord: Promise<AdminRecord | null> | null = null;
 
-  constructor(adminId: string, config: AdminActorConfig) {
-    this.adminId = adminId;
-    this.config = config;
+  constructor(
+    private adminId: string,
+    private config: AdminActorConfig,
+  ) {}
+
+  async getVetClinics() {
+    return this.config.vetAccountService.getVetClinics();
   }
 
   public getParams(): {
