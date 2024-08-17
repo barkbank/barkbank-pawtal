@@ -44,7 +44,7 @@ Keep this terminal window handy. In the local deployment configured above, OTP e
 
 ### Fourth, create local accounts
 
-Run `make local-accounts` to create the following accounts in the local deployment:
+Run `make db-refill` to create the following accounts in the local deployment:
 
 - Admin Accounts: admin1@admin.com, admin2@admin.com, admin3@admin.com
 - User Accounts: user1@user.com, user2@user.com, user3@user.com, ... (9 users)

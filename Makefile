@@ -108,23 +108,21 @@ npm-check-updates:
 ######################################################################
 # Local database
 #
-.PHONY: local-accounts reset reset-local-database
-
-
-# Creates test user, vet, and admin accounts in the local dev
-# database.
-local-accounts:
-	npx node scripts/setup-dev-data.js
-
-# Reset the local dev database with the latest schema and recretes the
-# local accounts.
-reset: reset-local-database local-accounts
+.PHONY: db-reset db-refill
 
 
 # Reset the local dev database. This assumes that the barkbank-schema
 # repository is a sibling directory of barkbank-pawtal.
-reset-local-database:
+db-reset:
 	bash scripts/reset-local-database.sh
+
+
+# Purges the database and recreates test users, vets, and admins in
+# the local dev database. For efficiency, this does not recreate a
+# database. So, it is a prerequisite that a local database is
+# running. If it is not, use db-reset.
+db-refill:
+	npx node scripts/setup-dev-data.js
 
 
 ######################################################################
