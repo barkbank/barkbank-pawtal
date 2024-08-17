@@ -2,7 +2,7 @@
 
 import { Stepper } from "@/components/ui/stepper";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import PetForm from "./pet-form";
@@ -66,6 +66,13 @@ export default function DonorForm(props: {
   const [registrationError, setRegistrationError] = React.useState<
     string | React.ReactNode
   >("");
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }, [currentStep]);
 
   const form = useForm<FormDataType>({
     resolver: zodResolver(FORM_SCHEMA),
