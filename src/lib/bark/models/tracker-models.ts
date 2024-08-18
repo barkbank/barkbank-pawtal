@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const ClientInfoSchema = z.object({
   pathname: z.string(),
+  queryString: z.string(),
 });
 
 export const SessionInfoSchema = z.object({
