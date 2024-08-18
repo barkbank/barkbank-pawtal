@@ -17,6 +17,7 @@ export class PawtalEventsDao {
       account_id,
       stk,
       x_pathname,
+      x_query_string,
       x_vet_account_id
     )
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
@@ -30,6 +31,7 @@ export class PawtalEventsDao {
       accountId,
       stk,
       pathname,
+      queryString,
       xVetAccountId,
     } = trackingInfo;
     const res = await dbQuery(this.db, sql, [
@@ -40,6 +42,7 @@ export class PawtalEventsDao {
       accountId,
       stk,
       pathname,
+      queryString,
       xVetAccountId,
     ]);
     return res.rows.length === 1;
