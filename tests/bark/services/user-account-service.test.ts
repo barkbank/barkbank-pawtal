@@ -3,6 +3,7 @@ import { USER_TITLE } from "@/lib/bark/enums/user-title";
 import {
   UserAccount,
   UserAccountSpec,
+  UserAccountSpecSchema,
   UserAccountUpdate,
 } from "@/lib/bark/models/user-models";
 import { withBarkContext } from "../_context";
@@ -98,4 +99,30 @@ describe("UserAccountService", () => {
       });
     });
   });
+  describe("getAll()", () => {
+    it("returns all users", async () => {
+      await withBarkContext(async ({ context }) => {
+        const spec1 = _mockSpec(1);
+        const spec2 = _mockSpec(2);
+        const service = new UserAccountService(context);
+        await service.create({ spec: spec1 });
+        await service.create({ spec: spec2 });
+        const res = await service.getAll();
+        const [u1, u2] = res.result!;
+        expect(u1.userName).toEqual(spec1.userName);
+        expect(u2.userName).toEqual(spec2.userName);
+      });
+    });
+  });
 });
+
+function _mockSpec(idx: number): UserAccountSpec {
+  const spec: UserAccountSpec = {
+    userEmail: `user${idx}@testuser.com`,
+    userTitle: USER_TITLE.MR,
+    userName: `Tom ${idx}`,
+    userPhoneNumber: `3300 100 ${idx}`,
+    userResidency: USER_RESIDENCY.SINGAPORE,
+  };
+  return UserAccountSpecSchema.parse(spec);
+}
