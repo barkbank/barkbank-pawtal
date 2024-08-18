@@ -1,10 +1,16 @@
 import { RoutePath } from "@/lib/route-path";
-import { Braces, FileKey2, Hospital } from "lucide-react";
+import { Braces, FileKey2, Hospital, Users } from "lucide-react";
 import Link from "next/link";
 
 export default function Page() {
   const iconSize = 36;
   const toolSpecs: _ToolSpec[] = [
+    {
+      icon: <Users size={iconSize} />,
+      name: "Users",
+      description: "Manage user accounts",
+      href: RoutePath.ADMIN_TOOLS_USERS_LIST,
+    },
     {
       icon: <Braces size={iconSize} />,
       name: "RPC",

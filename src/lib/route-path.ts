@@ -63,6 +63,9 @@ export class RoutePath {
   static readonly ADMIN_TOOLS_VETS_ADD_CLINIC = "/admin/tools/vets/add-clinic";
   static readonly ADMIN_TOOLS_VETS_VIEW_CLINIC = (vetId: string) =>
     `/admin/tools/vets/view-clinic/${vetId}`;
+  static readonly ADMIN_TOOLS_USERS_LIST = "/admin/tools/users/list";
+  static readonly ADMIN_TOOLS_USERS_VIEW = (userId: string) =>
+    `/admin/tools/users/view/${userId}`;
   static readonly ADMIN_DEFAULT_LOGGED_IN_PAGE = RoutePath.ADMIN_TOOLS_PAGE;
 
   // API Routes /api
