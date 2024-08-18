@@ -20,7 +20,7 @@ export class PawtalEventsDao {
       x_query_string,
       x_vet_account_id
     )
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
     RETURNING 1
     `;
     const { pageLoadEvent: trackingInfo } = args;
