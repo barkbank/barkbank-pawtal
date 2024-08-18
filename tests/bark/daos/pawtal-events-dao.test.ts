@@ -12,6 +12,7 @@ describe("PawtalEventsDao", () => {
         const pageLoadEvent: PageLoadEvent = {
           eventTs: new Date(),
           pathname: "/some/page",
+          queryString: "utm=123",
           ctk: "ctk1",
           stk: "stk1",
           accountType: "VET",
@@ -29,6 +30,7 @@ describe("PawtalEventsDao", () => {
         AND stk = 'stk1'
         AND event_type = 'ui.pageload'
         AND x_vet_account_id = '456'
+        AND x_query_string = 'utm=123'
         `;
         const res = await dbQuery(dbPool, sql, []);
         expect(res.rows.length).toEqual(1);
@@ -41,6 +43,7 @@ describe("PawtalEventsDao", () => {
         const pageLoadEvent: PageLoadEvent = {
           eventTs: new Date(),
           pathname: "/some/page",
+          queryString: "",
           ctk: "ctk1",
         };
         await dao.insertPageLoadEvent({ pageLoadEvent });
@@ -48,6 +51,7 @@ describe("PawtalEventsDao", () => {
         SELECT 1
         FROM pawtal_events
         WHERE x_pathname = '/some/page'
+        AND x_query_string = ''
         AND ctk = 'ctk1'
         AND account_type IS NULL
         AND account_id IS NULL
