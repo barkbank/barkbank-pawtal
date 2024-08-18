@@ -394,6 +394,7 @@ export class AppFactory {
           dogMapper,
           userMapper,
           vetAccountService,
+          userAccountService,
         ] = await Promise.all([
           this.getDbPool(),
           this.getEmailHashService(),
@@ -401,6 +402,7 @@ export class AppFactory {
           this.getDogMapper(),
           this.getUserMapper(),
           this.getVetAccountService(),
+          this.getUserAccountService(),
         ]);
         const rootAdminEmail = this.envString(
           APP_ENV.BARKBANK_ROOT_ADMIN_EMAIL,
@@ -421,6 +423,7 @@ export class AppFactory {
           userMapper,
           dogMapper,
           vetAccountService,
+          userAccountService,
         };
         const factory = new AdminActorFactory(factoryConfig, actorConfig);
         this.logCreated("AdminActorFactory");

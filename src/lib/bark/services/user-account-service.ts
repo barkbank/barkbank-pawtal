@@ -108,6 +108,23 @@ export class UserAccountService {
     }
   }
 
+  async getAll(): Promise<Result<UserAccount[], typeof CODE.FAILED>> {
+    const { context } = this;
+    const { dbPool } = context;
+    try {
+      const dao = new EncryptedUserAccountDao(dbPool);
+      const encryptedAccounts = await dao.getAll();
+      const futureAccounts = encryptedAccounts.map((i) =>
+        toUserAccount(context, i),
+      );
+      const accounts = await Promise.all(futureAccounts);
+      return Ok(accounts);
+    } catch (err) {
+      console.error(err);
+      return Err(CODE.FAILED);
+    }
+  }
+
   async getByUserId(args: {
     userId: string;
   }): Promise<

@@ -6,6 +6,7 @@ import {
   UserIdentifier,
   UserIdentifierSchema,
 } from "../models/user-models";
+import { z } from "zod";
 
 export class EncryptedUserAccountDao {
   private projection: string = `
@@ -63,6 +64,16 @@ export class EncryptedUserAccountDao {
       spec.userResidency,
     ]);
     return res.rows.length === 1;
+  }
+
+  async getAll(): Promise<EncryptedUserAccount[]> {
+    const sql = `
+    SELECT ${this.projection}
+    FROM users
+    ORDER BY user_id ASC
+    `;
+    const res = await dbQuery<EncryptedUserAccount>(this.db, sql, []);
+    return z.array(EncryptedUserAccountSchema).parse(res.rows);
   }
 
   async getByUserId(args: {
