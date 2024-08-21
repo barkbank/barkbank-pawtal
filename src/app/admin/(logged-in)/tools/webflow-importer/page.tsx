@@ -37,8 +37,6 @@ const RegistrationDataSchema = z.object({
   ),
 });
 
-type RegistrationData = z.infer<typeof RegistrationDataSchema>;
-
 export default function Page() {
   const [result, setResult] = useState("No Results");
   const form = useForm<FormData>({
