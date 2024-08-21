@@ -75,8 +75,8 @@ export default function Page() {
       <div className="prose">
         <h1>WebFlow Importer</h1>
         <p>
-          Paste the JSON encoded data and click "Import" to import users that
-          registered on WebFlow.
+          Paste the JSON encoded data and click &ldquo;Import&rdquo; to import
+          users that registered on WebFlow.
         </p>
         <BarkForm form={form} onSubmit={onSubmit}>
           <BarkFormTextArea
