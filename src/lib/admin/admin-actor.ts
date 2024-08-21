@@ -13,6 +13,8 @@ import { AdminMapper } from "../data/admin-mapper";
 import { VetAccountService } from "../bark/services/vet-account-service";
 import { VetAccountSpec, VetClinicSpec } from "../bark/models/vet-models";
 import { UserAccountService } from "../bark/services/user-account-service";
+import { RegistrationRequest } from "../bark/models/registration-models";
+import { RegistrationService } from "../bark/services/registration-service";
 
 export type AdminActorConfig = {
   dbPool: Pool;
@@ -22,6 +24,7 @@ export type AdminActorConfig = {
   dogMapper: DogMapper;
   vetAccountService: VetAccountService;
   userAccountService: UserAccountService;
+  registrationService: RegistrationService;
 };
 
 /**
@@ -61,6 +64,11 @@ export class AdminActor {
   async getUserAccountByUserId(args: { userId: string }) {
     const { userId } = args;
     return this.config.userAccountService.getByUserId({ userId });
+  }
+
+  async registerWebFlowUsers(args: { request: RegistrationRequest }) {
+    const { request } = args;
+    return this.config.registrationService.addUserAndDog(request);
   }
 
   public getParams(): {
