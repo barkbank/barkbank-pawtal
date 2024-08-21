@@ -33,8 +33,8 @@ describe("RegistrationService", () => {
       const request = getRegistrationRequest(preferredVet.vetId);
 
       // WHEN
-      const handler = getRegistrationService(dbPool);
-      const response = await handler.handle(request);
+      const service = getRegistrationService(dbPool);
+      const response = await service.validateUserAndRegister(request);
 
       // THEN
       expect(response).toEqual("OK");
@@ -81,8 +81,8 @@ describe("RegistrationService", () => {
       });
 
       // WHEN
-      const handler = getRegistrationService(dbPool);
-      const response = await handler.handle(request);
+      const service = getRegistrationService(dbPool);
+      const response = await service.validateUserAndRegister(request);
 
       // THEN
       expect(response).toEqual("ERROR_INVALID_OTP");
@@ -113,8 +113,8 @@ describe("RegistrationService", () => {
       });
 
       // WHEN
-      const handler = getRegistrationService(dbPool);
-      const response = await handler.handle(request);
+      const service = getRegistrationService(dbPool);
+      const response = await service.validateUserAndRegister(request);
 
       // THEN
       expect(response).toEqual("ERROR_ACCOUNT_ALREADY_EXISTS");
@@ -130,7 +130,7 @@ describe("RegistrationHandler without vet id", () => {
 
       // WHEN
       const service = getRegistrationService(dbPool);
-      const response = await service.handle(request);
+      const response = await service.validateUserAndRegister(request);
 
       // THEN
       expect(response).toEqual("OK");

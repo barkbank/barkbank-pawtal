@@ -1,5 +1,5 @@
 import { RoutePath } from "@/lib/route-path";
-import { Braces, FileKey2, Hospital, Users } from "lucide-react";
+import { Braces, FileKey2, Hospital, Import, Users } from "lucide-react";
 import Link from "next/link";
 
 export default function Page() {
@@ -12,16 +12,16 @@ export default function Page() {
       href: RoutePath.ADMIN_TOOLS_USERS_LIST,
     },
     {
-      icon: <Braces size={iconSize} />,
-      name: "RPC",
-      description: "Admin RPC Commands",
-      href: RoutePath.ADMIN_TOOLS_RPC,
-    },
-    {
       icon: <Hospital size={iconSize} />,
       name: "Vets",
       description: "Manage vet clinics and login accounts",
       href: RoutePath.ADMIN_TOOLS_VETS_LIST_CLINICS,
+    },
+    {
+      icon: <Braces size={iconSize} />,
+      name: "RPC",
+      description: "Admin RPC Commands",
+      href: RoutePath.ADMIN_TOOLS_RPC,
     },
     {
       icon: <FileKey2 size={iconSize} />,
@@ -29,6 +29,12 @@ export default function Page() {
       description:
         "Re-encrypts all encrypted values using the latest encryption key",
       href: RoutePath.ADMIN_TOOLS_REENCRYPT_PAGE,
+    },
+    {
+      icon: <Import size={iconSize} />,
+      name: "WebFlow Importer",
+      description: "Import WebFlow registraitons",
+      href: RoutePath.ADMIN_TOOLS_WEBFLOW_IMPORTER,
     },
   ];
 

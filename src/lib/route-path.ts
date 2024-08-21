@@ -58,6 +58,8 @@ export class RoutePath {
   static readonly ADMIN_TOOLS_PAGE = "/admin/tools";
   static readonly ADMIN_TOOLS_RPC = "/admin/tools/rpc";
   static readonly ADMIN_TOOLS_REENCRYPT_PAGE = "/admin/tools/re-encrypt";
+  static readonly ADMIN_TOOLS_WEBFLOW_IMPORTER =
+    "/admin/tools/webflow-importer";
   static readonly ADMIN_TOOLS_VETS_LIST_CLINICS =
     "/admin/tools/vets/list-clinics";
   static readonly ADMIN_TOOLS_VETS_ADD_CLINIC = "/admin/tools/vets/add-clinic";

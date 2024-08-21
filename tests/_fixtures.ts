@@ -235,6 +235,7 @@ export function getAdminActorConfig(dbPool: Pool): AdminActorConfig {
     dogMapper: getDogMapper(),
     vetAccountService: getVetAccountService(dbPool),
     userAccountService: getUserAccountService(dbPool),
+    registrationService: getRegistrationService(dbPool),
   };
 }
 
