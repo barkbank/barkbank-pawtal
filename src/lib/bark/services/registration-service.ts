@@ -31,7 +31,7 @@ export class RegistrationService {
     this.config = config;
   }
 
-  public async handle(
+  public async validateUserAndRegister(
     request: RegistrationRequest,
   ): Promise<
     | typeof CODE.OK
@@ -43,7 +43,20 @@ export class RegistrationService {
     if (!isValidOtp) {
       return CODE.ERROR_INVALID_OTP;
     }
+    return this.addUserAndDog(request);
+  }
 
+  /**
+   * Add user and dog WITHOUT validating the OTP. Should only be called from
+   * AdminActor or from validateUserAndRegister.
+   */
+  public async addUserAndDog(
+    request: RegistrationRequest,
+  ): Promise<
+    | typeof CODE.OK
+    | typeof CODE.ERROR_ACCOUNT_ALREADY_EXISTS
+    | typeof CODE.FAILED
+  > {
     const conn = await this.config.dbPool.connect();
     try {
       await dbBegin(conn);

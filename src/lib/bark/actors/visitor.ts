@@ -23,7 +23,7 @@ export class Visitor {
     const { context, registrationService } = this.config;
     const { request } = args;
 
-    const res = await registrationService.handle(request);
+    const res = await registrationService.validateUserAndRegister(request);
     if (res !== CODE.OK) {
       return res;
     }
