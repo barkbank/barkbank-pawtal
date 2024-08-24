@@ -110,7 +110,7 @@ export default function OwnerForm(props: {
 
   const disclaimerElm = (
     <>
-      By submitting this form, you agree to the{" "}
+      By submitting this form, you agree to our{" "}
       <_Link href={RoutePath.WEBSITE_TERMS_OF_USE}>Terms of Use</_Link> and{" "}
       <_Link href={RoutePath.WEBSITE_PRIVACY_POLICY}>Privacy Policy</_Link>. We
       respect your privacy and are committed to protecting your personal
