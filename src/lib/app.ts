@@ -144,7 +144,12 @@ export class AppFactory {
       this.promisedVisitor = new Promise(async (resolve) => {
         const context = await this.getBarkContext();
         const registrationService = await this.getRegistrationService();
-        const visitor = new Visitor({ context, registrationService });
+        const userAccountService = await this.getUserAccountService();
+        const visitor = new Visitor({
+          context,
+          registrationService,
+          userAccountService,
+        });
         this.logCreated("Visitor");
         resolve(visitor);
       });
