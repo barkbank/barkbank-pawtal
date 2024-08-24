@@ -21,6 +21,9 @@ import { BarkButton } from "@/components/bark/bark-button";
 import { BarkFormSelect } from "@/components/bark/bark-form-select";
 import { USER_TITLE_OPTIONS } from "@/app/_lib/constants";
 import { UserTitleSchema } from "@/lib/bark/enums/user-title";
+import Link from "next/link";
+import { RoutePath } from "@/lib/route-path";
+import { ExternalLink } from "lucide-react";
 
 const FORM_SCHEMA = z.object({
   userName: z.string().min(1, { message: "Name cannot be empty" }),
@@ -96,6 +99,25 @@ export default function OwnerForm(props: {
     onPrev();
   }
 
+  const _Link = (props: { href: string; children: React.ReactNode }) => {
+    const { href, children } = props;
+    return (
+      <Link href={href} className="inline-block text-blue-400" target="_blank">
+        {children} <ExternalLink className="inline-block" size={12} />
+      </Link>
+    );
+  };
+
+  const disclaimerElm = (
+    <>
+      By submitting this form, you agree to the{" "}
+      <_Link href={RoutePath.WEBSITE_TERMS_OF_USE}>Terms of Use</_Link> and{" "}
+      <_Link href={RoutePath.WEBSITE_PRIVACY_POLICY}>Privacy Policy</_Link>. We
+      respect your privacy and are committed to protecting your personal
+      information.
+    </>
+  );
+
   return (
     <>
       <BarkForm onSubmit={onSubmit} form={form}>
@@ -160,8 +182,7 @@ export default function OwnerForm(props: {
           form={form}
           label="Disclaimer"
           name="termsAndConditions"
-          optionLabel="By submitting this form, you agree to share your information with your preferred vets to schedule appointments for blood 
-        profiling and donation."
+          optionLabel={disclaimerElm}
         />
 
         {registrationError && (

@@ -16,7 +16,7 @@ export function BarkFormSingleCheckbox(props: {
   form: UseFormReturn<any>;
   name: string;
   label: string;
-  optionLabel: string;
+  optionLabel: string | React.ReactNode;
   description?: string;
 }) {
   const { form, name, label, optionLabel, description } = props;

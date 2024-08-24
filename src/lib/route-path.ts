@@ -78,6 +78,7 @@ export class RoutePath {
   static readonly WEBSITE_ABOUT_US = "https://www.barkbank.co/about";
   static readonly WEBSITE_PRIVACY_POLICY =
     "https://www.barkbank.co/privacy-policy";
+  static readonly WEBSITE_TERMS_OF_USE = "https://www.barkbank.co/terms-of-use";
   static readonly WEBSITE_FAQ_URL = "https://www.barkbank.co/faq";
   static readonly WEBSITE_URL = "https://www.barkbank.co/";
 }
