@@ -16,6 +16,10 @@ const footerRoutes: BarkNavRoute[] = [
     href: RoutePath.WEBSITE_ABOUT_US,
   },
   {
+    label: "Terms of Use",
+    href: RoutePath.WEBSITE_TERMS_OF_USE,
+  },
+  {
     label: "Privacy Policy",
     href: RoutePath.WEBSITE_PRIVACY_POLICY,
   },
