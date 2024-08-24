@@ -1,3 +1,4 @@
+import { Semaphore } from "@/lib/utilities/semaphore";
 import { BarkContext } from "../bark-context";
 import { PawtalEventsDao } from "../daos/pawtal-events-dao";
 import { SentEmailEvent } from "../models/email-models";
@@ -5,21 +6,32 @@ import { PageLoadEvent } from "../models/tracker-models";
 
 export class PawtalEventsService {
   private dao: PawtalEventsDao;
+  private sem: Semaphore;
+
   constructor(private config: { context: BarkContext }) {
     this.dao = new PawtalEventsDao(config.context.dbPool);
+
+    // The semaphore limits the number of concurrent writes to the DAO.
+    this.sem = new Semaphore(5);
   }
 
   async submitPageLoadEvent(args: {
     pageLoadEvent: PageLoadEvent;
   }): Promise<boolean> {
     const { pageLoadEvent } = args;
-    return this.dao.insertPageLoadEvent({ pageLoadEvent });
+    await this.sem.acquire();
+    const out = await this.dao.insertPageLoadEvent({ pageLoadEvent });
+    this.sem.release();
+    return out;
   }
 
   async submitSentEmailEvent(args: {
     sentEmailEvent: SentEmailEvent;
   }): Promise<boolean> {
     const { sentEmailEvent } = args;
-    return this.dao.insertSentEmailEvent({ sentEmailEvent });
+    await this.sem.acquire();
+    const out = await this.dao.insertSentEmailEvent({ sentEmailEvent });
+    this.sem.release();
+    return out;
   }
 }

@@ -190,8 +190,8 @@ export class AppFactory {
   public getTrackerService(): Promise<TrackerService> {
     if (this.promisedTrackerService === null) {
       this.promisedTrackerService = new Promise(async (resolve) => {
-        const context = await this.getBarkContext();
-        const service = new TrackerService(context);
+        const pawtalEventsService = await this.getPawtalEventsService();
+        const service = new TrackerService({ pawtalEventsService });
         this.logCreated("TrackerService");
         resolve(service);
       });
