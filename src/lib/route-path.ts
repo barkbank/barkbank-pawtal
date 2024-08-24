@@ -4,6 +4,10 @@ export class RoutePath {
 
   // User Routes /user
   static readonly USER_REGISTRATION = "/user/registration";
+  static readonly USER_REGISTRATION_UTM_NEW_USER =
+    "/user/registration?utm_source=pawtal&utm_medium=ul_new";
+  static readonly USER_REGISTRATION_UTM_ACCOUNT_NOT_FOUND =
+    "/user/registration?utm_source=pawtal&utm_medium=ul_not_found";
   static readonly USER_LOGIN_PAGE = "/user/login";
   static readonly USER_MY_PETS = "/user/my-pets";
   static readonly USER_ADD_DOG = "/user/my-pets/add-dog";
