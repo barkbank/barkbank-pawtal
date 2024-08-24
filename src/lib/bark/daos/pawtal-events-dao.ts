@@ -1,10 +1,24 @@
 import { DbContext, dbQuery } from "@/lib/data/db-utils";
 import { PageLoadEvent, PageLoadEventSchema } from "../models/tracker-models";
-import { PAWTAL_EVENT_TYPE } from "../enums/pawtal-event-type";
+import { PAWTAL_EVENT_TYPE, PawtalEventType } from "../enums/pawtal-event-type";
 import { SentEmailEvent, SentEmailEventSchema } from "../models/email-models";
+import { z } from "zod";
 
 export class PawtalEventsDao {
   constructor(private db: DbContext) {}
+
+  async getEventCountByType(args: {
+    eventType: PawtalEventType;
+  }): Promise<{ eventCount: number }> {
+    const sql = `
+    SELECT COUNT(*)::INTEGER as "eventCount"
+    FROM pawtal_events
+    WHERE event_type = $1
+    `;
+    const RowSchema = z.object({ eventCount: z.number() });
+    const res = await dbQuery<typeof RowSchema>(this.db, sql, [args.eventType]);
+    return RowSchema.parse(res.rows[0]);
+  }
 
   async insertPageLoadEvent(args: {
     pageLoadEvent: PageLoadEvent;

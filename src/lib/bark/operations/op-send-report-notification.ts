@@ -6,21 +6,33 @@ import { ReportNotification } from "../models/report-notification";
 import { selectReportNotification } from "../queries/select-report-notification";
 import { toReportNotification } from "../mappers/to-report-notification";
 import { escape } from "lodash";
+import { PawtalEventsService } from "../services/pawtal-events-service";
+import { PAWTAL_EVENT_TYPE } from "../enums/pawtal-event-type";
+import { AccountType } from "@/lib/auth-models";
 
 export async function opSendReportNotification(
   context: BarkContext,
   args: {
     reportId: string;
+    pawtalEventsService: PawtalEventsService;
   },
 ): Promise<
   typeof CODE.OK | typeof CODE.FAILED | typeof CODE.ERROR_REPORT_NOT_FOUND
 > {
-  const { reportId } = args;
+  const { reportId, pawtalEventsService } = args;
   const notification = await _getNotification(context, { reportId });
   if (notification === null) {
     return CODE.ERROR_REPORT_NOT_FOUND;
   }
   const res = await _sendNotification(context, { notification });
+  await pawtalEventsService.submitSentEmailEvent({
+    sentEmailEvent: {
+      eventTs: new Date(),
+      eventType: PAWTAL_EVENT_TYPE.EMAIL_SENT_REPORT_NOTIFICATION,
+      accountType: AccountType.USER,
+      accountId: notification.userId,
+    },
+  });
   return res;
 }
 

@@ -11,6 +11,7 @@ export async function selectReportNotification(
   const { reportId } = args;
   const sql = `
   SELECT
+    tUser.user_id as "userId",
     tUser.user_encrypted_pii as "userEncryptedPii",
     tDog.dog_encrypted_oii as "dogEncryptedOii"
   FROM reports as tReport

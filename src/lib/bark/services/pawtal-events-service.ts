@@ -3,6 +3,7 @@ import { BarkContext } from "../bark-context";
 import { PawtalEventsDao } from "../daos/pawtal-events-dao";
 import { SentEmailEvent } from "../models/email-models";
 import { PageLoadEvent } from "../models/tracker-models";
+import { PawtalEventType } from "../enums/pawtal-event-type";
 
 export class PawtalEventsService {
   private dao: PawtalEventsDao;
@@ -33,5 +34,11 @@ export class PawtalEventsService {
     const out = await this.dao.insertSentEmailEvent({ sentEmailEvent });
     this.sem.release();
     return out;
+  }
+
+  async getEventCountByType(args: {
+    eventType: PawtalEventType;
+  }): Promise<{ eventCount: number }> {
+    return this.dao.getEventCountByType(args);
   }
 }
