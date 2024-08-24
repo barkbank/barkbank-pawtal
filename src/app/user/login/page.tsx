@@ -17,7 +17,10 @@ export default async function Page() {
       noAccountErrorMessage={
         <>
           User account does not exist. Click{" "}
-          <Link href={RoutePath.USER_REGISTRATION} className="text-blue-400">
+          <Link
+            href={RoutePath.USER_REGISTRATION_UTM_ACCOUNT_NOT_FOUND}
+            className="text-blue-400"
+          >
             here
           </Link>{" "}
           to create an account.
@@ -26,7 +29,10 @@ export default async function Page() {
       emailDescription={
         <>
           If you are a new user, please{" "}
-          <Link href={RoutePath.USER_REGISTRATION} className="text-blue-400">
+          <Link
+            href={RoutePath.USER_REGISTRATION_UTM_NEW_USER}
+            className="text-blue-400"
+          >
             register here
           </Link>
           .

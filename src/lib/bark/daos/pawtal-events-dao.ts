@@ -3,6 +3,7 @@ import { PageLoadEvent, PageLoadEventSchema } from "../models/tracker-models";
 import { PAWTAL_EVENT_TYPE, PawtalEventType } from "../enums/pawtal-event-type";
 import { SentEmailEvent, SentEmailEventSchema } from "../models/email-models";
 import { z } from "zod";
+import { isEmpty } from "lodash";
 
 export class PawtalEventsDao {
   constructor(private db: DbContext) {}
@@ -27,6 +28,7 @@ export class PawtalEventsDao {
     INSERT INTO pawtal_events (
       event_ts,
       event_type,
+      event_data,
       ctk,
       account_type,
       account_id,
@@ -35,13 +37,16 @@ export class PawtalEventsDao {
       x_query_string,
       x_vet_account_id
     )
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
     RETURNING 1
     `;
     const x = PageLoadEventSchema.parse(args.pageLoadEvent);
+    const { queryParams } = x;
+    const eventData = isEmpty(queryParams) ? undefined : { queryParams };
     const res = await dbQuery(this.db, sql, [
       x.eventTs,
       PAWTAL_EVENT_TYPE.PAGE_LOAD,
+      eventData,
       x.ctk,
       x.accountType,
       x.accountId,

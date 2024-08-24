@@ -20,13 +20,18 @@ function _Fallback() {
 function _Effect() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const queryString = searchParams.toString();
   useEffect(() => {
+    const queryString = searchParams.toString();
+    const queryParams: Record<string, string> = {};
+    searchParams.forEach((value, key) => {
+      queryParams[key] = value;
+    });
     const clientInfo: ClientInfo = {
       pathname,
       queryString,
+      queryParams,
     };
     postOnPageLoad({ clientInfo });
-  }, [pathname, queryString]);
+  }, [pathname, searchParams]);
   return null;
 }
