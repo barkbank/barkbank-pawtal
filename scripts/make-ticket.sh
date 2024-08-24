@@ -29,8 +29,13 @@ function getBranchName {
 }
 
 function main {
+    echo "Git Fetching..."
     git fetch --all --prune
+
+    echo "Choosing a ticket name..."
     local branchName=$(getBranchName)
+
+    echo "Claiming the ticket..."
     git checkout -b ${branchName} origin/main
     git push -u origin ${branchName}
 }
