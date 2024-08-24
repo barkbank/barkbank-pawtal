@@ -3,6 +3,7 @@ import { PAWTAL_EVENT_TYPE } from "../enums/pawtal-event-type";
 import { AccountTypeSchema } from "@/lib/auth-models";
 
 export const SentEmailEventSchema = z.object({
+  eventTs: z.date(),
   eventType: z.enum([
     PAWTAL_EVENT_TYPE.EMAIL_SENT_OTP_REGISTRATION,
     PAWTAL_EVENT_TYPE.EMAIL_SENT_OTP_LOGIN,

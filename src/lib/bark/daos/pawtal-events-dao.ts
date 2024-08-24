@@ -23,7 +23,7 @@ export class PawtalEventsDao {
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
     RETURNING 1
     `;
-    const { pageLoadEvent: trackingInfo } = args;
+    const { pageLoadEvent } = args;
     const {
       eventTs,
       ctk,
@@ -33,7 +33,7 @@ export class PawtalEventsDao {
       pathname,
       queryString,
       xVetAccountId,
-    } = trackingInfo;
+    } = pageLoadEvent;
     const res = await dbQuery(this.db, sql, [
       eventTs,
       PAWTAL_EVENT_TYPE.PAGE_LOAD,
