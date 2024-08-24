@@ -1,10 +1,19 @@
 import { RoutePath } from "@/lib/route-path";
 import { PomPage } from "../core/pom-page";
 import { expect, Locator } from "@playwright/test";
+import { PomContext } from "../core/pom-object";
 
 export class UserRegistrationPetFormPage extends PomPage {
+  constructor(
+    private superctx: PomContext,
+    private config?: { routePath?: string | undefined },
+  ) {
+    super(superctx);
+  }
+
   url(): string {
-    return this.website().urlOf(RoutePath.USER_REGISTRATION);
+    const routePath = this.config?.routePath ?? RoutePath.USER_REGISTRATION;
+    return this.website().urlOf(routePath);
   }
 
   async checkPageLoaded(): Promise<void> {

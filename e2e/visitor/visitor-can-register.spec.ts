@@ -10,6 +10,7 @@ import { UserRegistrationPetFormPage } from "../_lib/pom/pages/user-registration
 import { UserRegistrationOwnerFormPage } from "../_lib/pom/pages/user-registration-owner-form-page";
 import { UserRegistrationSuccessPage } from "../_lib/pom/pages/user-registration-success-page";
 import { USER_TITLE } from "@/lib/bark/enums/user-title";
+import { RoutePath } from "@/lib/route-path";
 
 test("visitor can register a new user account", async ({ page }) => {
   // Navigating to the registration form
@@ -22,7 +23,9 @@ test("visitor can register a new user account", async ({ page }) => {
   await pgLogin.registerLink().click();
 
   // Should now be at the pet form. Fill in the pet form.
-  const pgPetForm = new UserRegistrationPetFormPage(context);
+  const pgPetForm = new UserRegistrationPetFormPage(context, {
+    routePath: RoutePath.USER_REGISTRATION_UTM_NEW_USER,
+  });
   await pgPetForm.checkReady();
   await expect(pgPetForm.dogFormHeader()).toBeVisible();
   await pgPetForm.dogNameField().fill("Casper");
@@ -40,7 +43,9 @@ test("visitor can register a new user account", async ({ page }) => {
   await pgPetForm.nextButton().click();
 
   // Should now be at the owner form. Fill in the owner form.
-  const pgOwnerForm = new UserRegistrationOwnerFormPage(context);
+  const pgOwnerForm = new UserRegistrationOwnerFormPage(context, {
+    routePath: RoutePath.USER_REGISTRATION_UTM_NEW_USER,
+  });
   await pgOwnerForm.checkReady();
   await expect(pgOwnerForm.ownerFormHeader()).toBeVisible();
   await pgOwnerForm.userResidency_SINGAPORE().click();
@@ -67,7 +72,9 @@ test("visitor can register a new user account", async ({ page }) => {
 
   // Should now be at the registration success page. Verify presence of expected
   // elements and click enter dashboard button.
-  const pgRegSuccess = new UserRegistrationSuccessPage(context);
+  const pgRegSuccess = new UserRegistrationSuccessPage(context, {
+    routePath: RoutePath.USER_REGISTRATION_UTM_NEW_USER,
+  });
   await pgRegSuccess.checkReady();
   await expect(pgRegSuccess.upcomingBloodProfilingMessage()).toBeVisible();
   await expect(pgRegSuccess.accountCreatedMessage()).toBeVisible();
