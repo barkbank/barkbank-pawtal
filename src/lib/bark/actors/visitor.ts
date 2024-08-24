@@ -7,7 +7,7 @@ import { UserAccountService } from "../services/user-account-service";
 import { SentEmailEvent } from "../models/email-models";
 import { PAWTAL_EVENT_TYPE } from "../enums/pawtal-event-type";
 import { AccountType } from "@/lib/auth-models";
-import { PawtalEventsDao } from "../daos/pawtal-events-dao";
+import { PawtalEventsService } from "../services/pawtal-events-service";
 
 export class Visitor {
   constructor(
@@ -15,6 +15,7 @@ export class Visitor {
       context: BarkContext;
       registrationService: RegistrationService;
       userAccountService: UserAccountService;
+      pawtalEventsService: PawtalEventsService;
     },
   ) {}
 
@@ -26,7 +27,12 @@ export class Visitor {
     | typeof CODE.ERROR_ACCOUNT_ALREADY_EXISTS
     | typeof CODE.FAILED
   > {
-    const { context, registrationService, userAccountService } = this.config;
+    const {
+      context,
+      registrationService,
+      userAccountService,
+      pawtalEventsService,
+    } = this.config;
     const { request } = args;
 
     const resRegistration =
@@ -69,9 +75,7 @@ export class Visitor {
       accountType: AccountType.USER,
       accountId: resIdLookup.result.userId,
     };
-    // TODO: EventsService? or BarkEmailService?
-    const eventsDao = new PawtalEventsDao(context.dbPool);
-    await eventsDao.insertSentEmailEvent({ sentEmailEvent });
+    await pawtalEventsService.submitSentEmailEvent({ sentEmailEvent });
 
     return resRegistration;
   }

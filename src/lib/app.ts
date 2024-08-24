@@ -54,6 +54,7 @@ import { CronService } from "./bark/services/cron-service";
 import { UserAccountService } from "./bark/services/user-account-service";
 import { Visitor } from "./bark/actors/visitor";
 import { VetAccountService } from "./bark/services/vet-account-service";
+import { PawtalEventsService } from "./bark/services/pawtal-events-service";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -83,6 +84,8 @@ export class AppFactory {
   private promisedUserAccountService: Promise<UserAccountService> | null = null;
   private promisedVisitor: Promise<Visitor> | null = null;
   private promisedVetAccountService: Promise<VetAccountService> | null = null;
+  private promisedPawtalEventsService: Promise<PawtalEventsService> | null =
+    null;
 
   constructor(envs: NodeJS.Dict<string>) {
     this.envs = envs;
@@ -139,16 +142,30 @@ export class AppFactory {
     return this.promisedVetAccountService;
   }
 
+  getPawtalEventsService(): Promise<PawtalEventsService> {
+    if (this.promisedPawtalEventsService === null) {
+      this.promisedPawtalEventsService = new Promise(async (resolve) => {
+        const context = await this.getBarkContext();
+        const service = new PawtalEventsService({ context });
+        this.logCreated("PawtalEventsService");
+        resolve(service);
+      });
+    }
+    return this.promisedPawtalEventsService;
+  }
+
   getVisitor(): Promise<Visitor> {
     if (this.promisedVisitor === null) {
       this.promisedVisitor = new Promise(async (resolve) => {
         const context = await this.getBarkContext();
         const registrationService = await this.getRegistrationService();
         const userAccountService = await this.getUserAccountService();
+        const pawtalEventsService = await this.getPawtalEventsService();
         const visitor = new Visitor({
           context,
           registrationService,
           userAccountService,
+          pawtalEventsService,
         });
         this.logCreated("Visitor");
         resolve(visitor);
