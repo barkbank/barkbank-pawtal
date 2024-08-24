@@ -1,3 +1,4 @@
+import { AccountTypeSchema } from "@/lib/auth-models";
 import { z } from "zod";
 
 export const ClientInfoSchema = z.object({
@@ -6,7 +7,7 @@ export const ClientInfoSchema = z.object({
 });
 
 export const SessionInfoSchema = z.object({
-  accountType: z.enum(["USER", "VET", "ADMIN"]),
+  accountType: AccountTypeSchema,
   accountId: z.string(),
   stk: z.string(),
   xVetAccountId: z.string().optional(),

@@ -1,4 +1,3 @@
-import { BarkContext } from "../bark-context";
 import { COOKIE_NAME } from "../enums/cookie-name";
 import { randomUUID } from "crypto";
 import { cookies } from "next/headers";
@@ -18,13 +17,17 @@ import {
   getLoggedInSession,
 } from "@/lib/auth";
 import { AccountType } from "@/lib/auth-models";
-import { PawtalEventsDao } from "../daos/pawtal-events-dao";
 import { z } from "zod";
 import { opLogPawtalEvent } from "../operations/op-log-pawtal-event";
 import { PAWTAL_EVENT_TYPE } from "../enums/pawtal-event-type";
+import { PawtalEventsService } from "./pawtal-events-service";
 
 export class TrackerService {
-  constructor(private context: BarkContext) {}
+  constructor(
+    private config: {
+      pawtalEventsService: PawtalEventsService;
+    },
+  ) {}
 
   async onPageLoad(args: { clientInfo: ClientInfo }): Promise<void> {
     const clientInfo = ClientInfoSchema.parse(args.clientInfo);
@@ -36,8 +39,9 @@ export class TrackerService {
       ...cookieInfo,
       ...sessionInfo,
     };
-    const dao = new PawtalEventsDao(this.context.dbPool);
-    await dao.insertPageLoadEvent({ pageLoadEvent });
+    await this.config.pawtalEventsService.submitPageLoadEvent({
+      pageLoadEvent,
+    });
     opLogPawtalEvent({
       eventType: PAWTAL_EVENT_TYPE.PAGE_LOAD,
       params: pageLoadEvent,
