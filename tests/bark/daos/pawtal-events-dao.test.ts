@@ -13,6 +13,7 @@ describe("PawtalEventsDao", () => {
           eventTs: new Date(),
           pathname: "/some/page",
           queryString: "utm=123",
+          queryParams: { utm: "123" },
           ctk: "ctk1",
           stk: "stk1",
           accountType: "VET",
@@ -31,6 +32,7 @@ describe("PawtalEventsDao", () => {
         AND event_type = 'ui.pageload'
         AND x_vet_account_id = '456'
         AND x_query_string = 'utm=123'
+        AND event_data->'queryParams'->>'utm' = '123'
         `;
         const res = await dbQuery(dbPool, sql, []);
         expect(res.rows.length).toEqual(1);
@@ -44,6 +46,7 @@ describe("PawtalEventsDao", () => {
           eventTs: new Date(),
           pathname: "/some/page",
           queryString: "",
+          queryParams: {},
           ctk: "ctk1",
         };
         await dao.insertPageLoadEvent({ pageLoadEvent });
@@ -57,6 +60,7 @@ describe("PawtalEventsDao", () => {
         AND account_id IS NULL
         AND stk IS NULL
         AND event_type = 'ui.pageload'
+        AND event_data IS NULL
         `;
         const res = await dbQuery(dbPool, sql, []);
         expect(res.rows.length).toEqual(1);
