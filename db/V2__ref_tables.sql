@@ -146,6 +146,7 @@ CREATE TABLE pawtal_events (
   x_pathname TEXT DEFAULT NULL,
   x_vet_account_id TEXT DEFAULT NULL,
   x_query_string TEXT DEFAULT NULL,
+  event_data JSONB DEFAULT NULL,
   CONSTRAINT ui_events_pk PRIMARY KEY (event_id)
 );
 
