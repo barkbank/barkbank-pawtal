@@ -8,16 +8,21 @@ export const PawtalEventSchema = z.object({
   eventTs: z.date(),
   eventType: PawtalEventTypeSchema,
   eventData: JSONSchema.optional(),
-  ctk: z.string().optional(),
-  stk: z.string().optional(),
-  accountType: AccountTypeSchema.optional(),
-  accountId: z.string().optional(),
-  pathname: z.string().optional(),
-  vetAccountId: z.string().optional(),
-  queryString: z.string().optional(),
+  ctk: z.string().optional().nullable(),
+  stk: z.string().optional().nullable(),
+  accountType: AccountTypeSchema.optional().nullable(),
+  accountId: z.string().optional().nullable(),
+  pathname: z.string().optional().nullable(),
+  vetAccountId: z.string().optional().nullable(),
+  queryString: z.string().optional().nullable(),
 });
 
 export const PawtalEventSpecSchema = PawtalEventSchema.omit({ eventId: true });
 
+export const PawtalEventIdentifierSchema = z.object({
+  eventId: z.string(),
+});
+
 export type PawtalEvent = z.infer<typeof PawtalEventSchema>;
 export type PawtalEventSpec = z.infer<typeof PawtalEventSpecSchema>;
+export type PawtalEventIdentifier = z.infer<typeof PawtalEventIdentifierSchema>;
