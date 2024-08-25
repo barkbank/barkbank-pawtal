@@ -52,13 +52,13 @@ AS (
                     AND tLatest.latest_dog_heartworm_observation_time IS NOT NULL
                     AND (
                         CURRENT_TIMESTAMP - tLatest.latest_dog_heartworm_observation_time
-                    ) < INTERVAL '6 months'
+                    ) < INTERVAL '180 days'
                 ) THEN 'TEMPORARILY_INELIGIBLE'::t_medical_status
                 WHEN (
                     tLatest.latest_blood_donation_time IS NOT NULL
                     AND (
                         CURRENT_TIMESTAMP - tLatest.latest_blood_donation_time
-                    ) < INTERVAL '3 months'
+                    ) < INTERVAL '90 days'
                 ) THEN 'TEMPORARILY_INELIGIBLE'::t_medical_status
                 WHEN (
                     tLatest.latest_dog_reported_ineligibility = 'TEMPORARILY_INELIGIBLE'
