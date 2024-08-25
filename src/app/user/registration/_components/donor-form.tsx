@@ -2,7 +2,7 @@
 
 import { Stepper } from "@/components/ui/stepper";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import PetForm from "./pet-form";
@@ -31,6 +31,10 @@ import {
   RegistrationRequestSchema,
 } from "@/lib/bark/models/registration-models";
 import { UserTitleSchema } from "@/lib/bark/enums/user-title";
+import { postPawtalEvent } from "@/app/_lib/actions/post-pawtal-event";
+import { PAWTAL_EVENT_TYPE } from "@/lib/bark/enums/pawtal-event-type";
+import { PawtalEventClientSpec } from "@/lib/bark/models/event-models";
+import { v4 as uuidv4 } from "uuid";
 
 const FORM_SCHEMA = z.object({
   dogName: z.string(),
@@ -56,6 +60,14 @@ type FormDataType = z.infer<typeof FORM_SCHEMA>;
 const steps = ["Tell us about your pet", "Add your details", "Enter Pawtal!"];
 const STEPS = { PET: 0, OWNER: 1, SUCCESS: 2 };
 
+type FunnelState = {
+  started?: boolean;
+  completedDogProfile?: boolean;
+  requestedOtp?: boolean;
+  submittedRegistration?: boolean;
+  accountCreated?: boolean;
+};
+
 export default function DonorForm(props: {
   breeds: string[];
   vetOptions: BarkFormOption[];
@@ -66,6 +78,9 @@ export default function DonorForm(props: {
   const [registrationError, setRegistrationError] = React.useState<
     string | React.ReactNode
   >("");
+  const [rtk] = useState<string>(uuidv4());
+  const [funnelState, setFunnelState] = useState<FunnelState>({});
+  const [funnelEvents, setFunnelEvents] = useState<FunnelState>({});
 
   useEffect(() => {
     window.scrollTo({
@@ -94,6 +109,47 @@ export default function DonorForm(props: {
       termsAndConditions: false,
     },
   });
+
+  async function _postEvent(step: string) {
+    const spec: PawtalEventClientSpec = {
+      eventType: PAWTAL_EVENT_TYPE.REGISTRATION,
+      eventData: {
+        rtk,
+        step,
+      },
+    };
+    await postPawtalEvent({ spec });
+  }
+
+  useEffect(() => {
+    if (funnelState.started && !funnelEvents.started) {
+      _postEvent("000-start");
+      setFunnelEvents({ ...funnelEvents, started: true });
+    }
+    if (funnelState.completedDogProfile && !funnelEvents.completedDogProfile) {
+      _postEvent("100-dog");
+      setFunnelEvents({ ...funnelEvents, completedDogProfile: true });
+    }
+    if (funnelState.requestedOtp && !funnelEvents.requestedOtp) {
+      _postEvent("200-otp");
+      setFunnelEvents({ ...funnelEvents, requestedOtp: true });
+    }
+    if (
+      funnelState.submittedRegistration &&
+      !funnelEvents.submittedRegistration
+    ) {
+      _postEvent("300-owner");
+      setFunnelEvents({ ...funnelEvents, submittedRegistration: true });
+    }
+    if (funnelState.accountCreated && !funnelEvents.accountCreated) {
+      _postEvent("400-account");
+      setFunnelEvents({ ...funnelEvents, accountCreated: true });
+    }
+  }, [funnelState, funnelEvents]);
+
+  useEffect(() => {
+    setFunnelState({ ...funnelState, started: true });
+  }, []);
 
   function getRegistrationRequest(): RegistrationRequest {
     const vals = form.getValues();
@@ -132,6 +188,7 @@ export default function DonorForm(props: {
     setRegistrationError("");
     const req = getRegistrationRequest();
     const res = await postRegistrationRequest(req);
+    setFunnelState({ ...funnelState, submittedRegistration: true });
     if (res === CODE.ERROR_INVALID_OTP) {
       setRegistrationError(
         "The OTP submitted is invalid. Please request for another and try again.",
@@ -178,6 +235,7 @@ export default function DonorForm(props: {
       return;
     }
     setCurrentStep(STEPS.SUCCESS);
+    setFunnelState({ ...funnelState, accountCreated: true });
   }
 
   return (
@@ -223,6 +281,7 @@ export default function DonorForm(props: {
           onNext={() => {
             setRegistrationError("");
             setCurrentStep(STEPS.OWNER);
+            setFunnelState({ ...funnelState, completedDogProfile: true });
           }}
           prevLabel="Cancel"
           nextLabel="Next"
@@ -248,6 +307,9 @@ export default function DonorForm(props: {
             form.setValue("emailOtp", "");
           }}
           onNext={doRegistration}
+          onRequestedOtp={() => {
+            setFunnelState({ ...funnelState, requestedOtp: true });
+          }}
           prevLabel="Back"
           nextLabel="Submit"
         />

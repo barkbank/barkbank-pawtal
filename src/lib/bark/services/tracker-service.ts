@@ -50,12 +50,12 @@ export class TrackerService {
 }
 
 function _getCookieInfo(): CookieInfo {
-  const ctk = _getOrCreateCtk();
+  const ctk = getOrCreateCtk();
   const out: CookieInfo = { ctk };
   return CookieInfoSchema.parse(out);
 }
 
-function _getOrCreateCtk(): string {
+export function getOrCreateCtk(): string {
   const existing = cookies().get(COOKIE_NAME.CTK);
   if (existing !== undefined) {
     return existing.value;

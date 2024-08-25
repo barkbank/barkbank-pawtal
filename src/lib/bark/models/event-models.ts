@@ -17,7 +17,19 @@ export const PawtalEventSchema = z.object({
   queryString: z.string().optional().nullable(),
 });
 
+/**
+ * Spec for inserting into the database. It excludes Event ID because the DB
+ * provides it.
+ */
 export const PawtalEventSpecSchema = PawtalEventSchema.omit({ eventId: true });
+
+/**
+ * Spec for events from client. Building on PawtalEventSpecSchema, it excludes
+ * Event Timestamp because we want to use server-side time.
+ */
+export const PawtalEventClientSpecSchema = PawtalEventSpecSchema.omit({
+  eventTs: true,
+});
 
 export const PawtalEventIdentifierSchema = z.object({
   eventId: z.string(),
@@ -25,4 +37,5 @@ export const PawtalEventIdentifierSchema = z.object({
 
 export type PawtalEvent = z.infer<typeof PawtalEventSchema>;
 export type PawtalEventSpec = z.infer<typeof PawtalEventSpecSchema>;
+export type PawtalEventClientSpec = z.infer<typeof PawtalEventClientSpecSchema>;
 export type PawtalEventIdentifier = z.infer<typeof PawtalEventIdentifierSchema>;

@@ -45,6 +45,7 @@ export default function OwnerForm(props: {
   onSave: (values: FormDataType) => void;
   onPrev: () => void;
   onNext: () => void;
+  onRequestedOtp: () => void;
   prevLabel: string;
   nextLabel: string;
 }) {
@@ -54,6 +55,7 @@ export default function OwnerForm(props: {
     onSave,
     onNext,
     onPrev,
+    onRequestedOtp,
     nextLabel,
     prevLabel,
   } = props;
@@ -82,6 +84,7 @@ export default function OwnerForm(props: {
         setOtpState({ status: "SEND_FAILED", email: userEmail });
       } else {
         setOtpState({ status: "SEND_SUCCESS", email: userEmail });
+        onRequestedOtp();
       }
     } else {
       setOtpState({ status: "PENDING", email: "" });

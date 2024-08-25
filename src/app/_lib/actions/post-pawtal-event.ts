@@ -1,10 +1,17 @@
 "use server";
 
 import APP from "@/lib/app";
-import { PawtalEventSpec } from "@/lib/bark/models/event-models";
+import {
+  PawtalEventClientSpec,
+  PawtalEventClientSpecSchema,
+  PawtalEventSpec,
+} from "@/lib/bark/models/event-models";
+import { getOrCreateCtk } from "@/lib/bark/services/tracker-service";
 
-export async function postPawtalEvent(args: {spec: PawtalEventSpec}) {
-  const {spec} = args;
+export async function postPawtalEvent(args: { spec: PawtalEventClientSpec }) {
+  const clientSpec = PawtalEventClientSpecSchema.parse(args.spec);
+  const ctk = getOrCreateCtk();
+  const spec: PawtalEventSpec = { eventTs: new Date(), ctk, ...clientSpec };
   const service = await APP.getPawtalEventService();
-  return service.submit({spec});
+  return service.submit({ spec });
 }
