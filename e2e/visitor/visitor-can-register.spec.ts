@@ -11,8 +11,9 @@ import { UserRegistrationOwnerFormPage } from "../_lib/pom/pages/user-registrati
 import { UserRegistrationSuccessPage } from "../_lib/pom/pages/user-registration-success-page";
 import { USER_TITLE } from "@/lib/bark/enums/user-title";
 import { RoutePath } from "@/lib/route-path";
+import { ApiClient } from "../_lib/pom/api/api-client";
 
-test("visitor can register a new user account", async ({ page }) => {
+test("visitor can register a new user account", async ({ page, request }) => {
   // Navigating to the registration form
   const context = await initPomContext({ page });
 
@@ -98,4 +99,23 @@ test("visitor can register a new user account", async ({ page }) => {
   await expect(pgMyAccount.residencyItem()).toHaveValue("Singapore");
   await expect(pgMyAccount.phoneNumberItem()).toHaveValue("87654321");
   await expect(pgMyAccount.emailItem()).toHaveValue(userEmail);
+
+  // Registration Events
+  const api = new ApiClient(context, request);
+  const sql = `
+  SELECT
+    COUNT(*)::INTEGER as "Total",
+    COUNT(CASE WHEN event_data->'rtk' IS NOT NULL THEN 1 END)::INTEGER as "With RTK",
+    COUNT(CASE WHEN event_data->'step' IS NOT NULL THEN 1 END)::INTEGER as "With Step",
+    COUNT(CASE WHEN event_data->'queryParams' IS NOT NULL THEN 1 END)::INTEGER as "With Query Params"
+  FROM pawtal_events
+  WHERE event_type = 'registration'
+  `;
+  const rows = await api.sql(sql, []);
+  const row = rows[0];
+  console.log({ row });
+  expect(row["Total"]).toBeGreaterThan(0);
+  expect(row["Total"]).toEqual(row["With RTK"]);
+  expect(row["Total"]).toEqual(row["With Step"]);
+  expect(row["Total"]).toEqual(row["With Query Params"]);
 });
