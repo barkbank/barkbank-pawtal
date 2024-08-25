@@ -9,16 +9,16 @@ describe("opSendReportNotification", () => {
   it("sends email to owner", async () => {
     await withBarkContext(async ({ context }) => {
       const { reportId, ownerName } = await givenReport(context);
-      const pawtalEventsService = new PawtalEventService({ context });
+      const pawtalEventService = new PawtalEventService({ context });
       await opSendReportNotification(context, {
         reportId,
-        pawtalEventService: pawtalEventsService,
+        pawtalEventService,
       });
       const emailService: HarnessEmailService =
         context.emailService as HarnessEmailService;
       expect(emailService.emails[0].recipient.name).toEqual(ownerName);
       expect(
-        await pawtalEventsService.getEventCountByType({
+        await pawtalEventService.getEventCountByType({
           eventType: PAWTAL_EVENT_TYPE.EMAIL_SENT_REPORT_NOTIFICATION,
         }),
       ).toMatchObject({ eventCount: 1 });
