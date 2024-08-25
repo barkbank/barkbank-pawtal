@@ -22,6 +22,11 @@ import { opLogPawtalEvent } from "../operations/op-log-pawtal-event";
 import { PAWTAL_EVENT_TYPE } from "../enums/pawtal-event-type";
 import { PawtalEventService } from "./pawtal-event-service";
 import { toPawtalEventSpecFromPageLoadEvent } from "../mappers/event-mappers";
+import {
+  PawtalEventClientSpec,
+  PawtalEventClientSpecSchema,
+  PawtalEventSpec,
+} from "../models/event-models";
 
 export class TrackerService {
   constructor(
@@ -47,15 +52,22 @@ export class TrackerService {
       params: pageLoadEvent,
     });
   }
+
+  async onPawtalEvent(args: { spec: PawtalEventClientSpec }): Promise<void> {
+    const clientSpec = PawtalEventClientSpecSchema.parse(args.spec);
+    const ctk = _getOrCreateCtk();
+    const spec: PawtalEventSpec = { eventTs: new Date(), ctk, ...clientSpec };
+    return this.config.pawtalEventService.submit({ spec });
+  }
 }
 
 function _getCookieInfo(): CookieInfo {
-  const ctk = getOrCreateCtk();
+  const ctk = _getOrCreateCtk();
   const out: CookieInfo = { ctk };
   return CookieInfoSchema.parse(out);
 }
 
-export function getOrCreateCtk(): string {
+function _getOrCreateCtk(): string {
   const existing = cookies().get(COOKIE_NAME.CTK);
   if (existing !== undefined) {
     return existing.value;
