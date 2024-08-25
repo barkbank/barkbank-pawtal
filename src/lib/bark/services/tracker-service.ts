@@ -56,7 +56,7 @@ export class TrackerService {
   async onPawtalEvent(args: { spec: PawtalEventClientSpec }): Promise<void> {
     const clientSpec = PawtalEventClientSpecSchema.parse(args.spec);
     const ctk = _getOrCreateCtk();
-    const spec: PawtalEventSpec = { eventTs: new Date(), ctk, ...clientSpec };
+    const spec: PawtalEventSpec = { ...clientSpec, eventTs: new Date(), ctk };
     return this.config.pawtalEventService.submit({ spec });
   }
 }
