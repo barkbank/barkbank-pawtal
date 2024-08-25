@@ -66,7 +66,6 @@ describe("toIneligibilityReasons", () => {
     ]);
   });
   it("returns HEARTWORM_IN_LAST_6_MONTHS when less than 180 days ago", () => {
-    // TODO: Standardise last 6 months to mean 180 days and last 3 months to mean 90 days. Update dog_statuses view to match.
     const now = new Date();
     const factors = _givenFactors({
       overrides: {
