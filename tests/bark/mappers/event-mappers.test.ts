@@ -80,7 +80,10 @@ describe("event-mappers", () => {
         accountId: "34",
       };
       const spec = toPawtalEventSpecFromSentEmailEvent(event);
+      // SentEmailEvent is a subset of PawtalEventSpec. Therefore we can compare
+      // them directly.
       expect(spec).toMatchObject(event);
+      expect(event).toMatchObject(spec);
     });
   });
 });
