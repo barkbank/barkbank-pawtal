@@ -1,9 +1,8 @@
 import { Semaphore } from "@/lib/utilities/semaphore";
 import { BarkContext } from "../bark-context";
 import { PawtalEventDao } from "../daos/pawtal-event-dao";
-import { SentEmailEvent } from "../models/email-models";
-import { PageLoadEvent } from "../models/tracker-models";
 import { PawtalEventType } from "../enums/pawtal-event-type";
+import { PawtalEventSpec } from "../models/event-models";
 
 export class PawtalEventService {
   private dao: PawtalEventDao;
@@ -16,24 +15,14 @@ export class PawtalEventService {
     this.sem = new Semaphore(5);
   }
 
-  async submitPageLoadEvent(args: {
-    pageLoadEvent: PageLoadEvent;
-  }): Promise<boolean> {
-    const { pageLoadEvent } = args;
+  async submit(args: { spec: PawtalEventSpec }): Promise<void> {
+    const { spec } = args;
     await this.sem.acquire();
-    const out = await this.dao.insertPageLoadEvent({ pageLoadEvent });
-    this.sem.release();
-    return out;
-  }
-
-  async submitSentEmailEvent(args: {
-    sentEmailEvent: SentEmailEvent;
-  }): Promise<boolean> {
-    const { sentEmailEvent } = args;
-    await this.sem.acquire();
-    const out = await this.dao.insertSentEmailEvent({ sentEmailEvent });
-    this.sem.release();
-    return out;
+    try {
+      await this.dao.insert({ spec });
+    } finally {
+      this.sem.release();
+    }
   }
 
   async getEventCountByType(args: {

@@ -21,6 +21,7 @@ import { z } from "zod";
 import { opLogPawtalEvent } from "../operations/op-log-pawtal-event";
 import { PAWTAL_EVENT_TYPE } from "../enums/pawtal-event-type";
 import { PawtalEventService } from "./pawtal-event-service";
+import { toPawtalEventSpecFromPageLoadEvent } from "../mappers/event-mappers";
 
 export class TrackerService {
   constructor(
@@ -39,9 +40,8 @@ export class TrackerService {
       ...cookieInfo,
       ...sessionInfo,
     };
-    await this.config.pawtalEventsService.submitPageLoadEvent({
-      pageLoadEvent,
-    });
+    const spec = toPawtalEventSpecFromPageLoadEvent(pageLoadEvent);
+    await this.config.pawtalEventsService.submit({ spec });
     opLogPawtalEvent({
       eventType: PAWTAL_EVENT_TYPE.PAGE_LOAD,
       params: pageLoadEvent,

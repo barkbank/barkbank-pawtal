@@ -8,6 +8,7 @@ import { SentEmailEvent } from "../models/email-models";
 import { PAWTAL_EVENT_TYPE } from "../enums/pawtal-event-type";
 import { AccountType } from "@/lib/auth-models";
 import { PawtalEventService } from "../services/pawtal-event-service";
+import { toPawtalEventSpecFromSentEmailEvent } from "../mappers/event-mappers";
 
 export class Visitor {
   constructor(
@@ -75,7 +76,8 @@ export class Visitor {
       accountType: AccountType.USER,
       accountId: resIdLookup.result.userId,
     };
-    await pawtalEventsService.submitSentEmailEvent({ sentEmailEvent });
+    const spec = toPawtalEventSpecFromSentEmailEvent(sentEmailEvent);
+    await pawtalEventsService.submit({ spec });
 
     return resRegistration;
   }

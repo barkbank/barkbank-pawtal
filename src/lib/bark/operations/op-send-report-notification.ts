@@ -9,6 +9,7 @@ import { escape } from "lodash";
 import { PawtalEventService } from "../services/pawtal-event-service";
 import { PAWTAL_EVENT_TYPE } from "../enums/pawtal-event-type";
 import { AccountType } from "@/lib/auth-models";
+import { toPawtalEventSpecFromSentEmailEvent } from "../mappers/event-mappers";
 
 export async function opSendReportNotification(
   context: BarkContext,
@@ -25,14 +26,13 @@ export async function opSendReportNotification(
     return CODE.ERROR_REPORT_NOT_FOUND;
   }
   const res = await _sendNotification(context, { notification });
-  await pawtalEventsService.submitSentEmailEvent({
-    sentEmailEvent: {
-      eventTs: new Date(),
-      eventType: PAWTAL_EVENT_TYPE.EMAIL_SENT_REPORT_NOTIFICATION,
-      accountType: AccountType.USER,
-      accountId: notification.userId,
-    },
+  const spec = toPawtalEventSpecFromSentEmailEvent({
+    eventTs: new Date(),
+    eventType: PAWTAL_EVENT_TYPE.EMAIL_SENT_REPORT_NOTIFICATION,
+    accountType: AccountType.USER,
+    accountId: notification.userId,
   });
+  await pawtalEventsService.submit({ spec });
   return res;
 }
 
