@@ -1,12 +1,10 @@
 import { withBarkContext } from "../_context";
-import { PageLoadEvent } from "@/lib/bark/models/tracker-models";
-import { dbQuery } from "@/lib/data/db-utils";
 import { PawtalEventSpec } from "@/lib/bark/models/event-models";
 import { PAWTAL_EVENT_TYPE } from "@/lib/bark/enums/pawtal-event-type";
 import { AccountType } from "@/lib/auth-models";
 import { PawtalEventDao } from "@/lib/bark/daos/pawtal-event-dao";
 
-describe("PawtalEventsDao", () => {
+describe("PawtalEventDao", () => {
   it("can be used to insert an event", async () => {
     await withBarkContext(async ({ context }) => {
       const dao = new PawtalEventDao(context.dbPool);
