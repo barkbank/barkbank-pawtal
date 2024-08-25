@@ -54,7 +54,7 @@ import { CronService } from "./bark/services/cron-service";
 import { UserAccountService } from "./bark/services/user-account-service";
 import { Visitor } from "./bark/actors/visitor";
 import { VetAccountService } from "./bark/services/vet-account-service";
-import { PawtalEventsService } from "./bark/services/pawtal-events-service";
+import { PawtalEventService } from "./bark/services/pawtal-event-service";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -84,7 +84,7 @@ export class AppFactory {
   private promisedUserAccountService: Promise<UserAccountService> | null = null;
   private promisedVisitor: Promise<Visitor> | null = null;
   private promisedVetAccountService: Promise<VetAccountService> | null = null;
-  private promisedPawtalEventsService: Promise<PawtalEventsService> | null =
+  private promisedPawtalEventsService: Promise<PawtalEventService> | null =
     null;
 
   constructor(envs: NodeJS.Dict<string>) {
@@ -142,11 +142,11 @@ export class AppFactory {
     return this.promisedVetAccountService;
   }
 
-  getPawtalEventsService(): Promise<PawtalEventsService> {
+  getPawtalEventsService(): Promise<PawtalEventService> {
     if (this.promisedPawtalEventsService === null) {
       this.promisedPawtalEventsService = new Promise(async (resolve) => {
         const context = await this.getBarkContext();
-        const service = new PawtalEventsService({ context });
+        const service = new PawtalEventService({ context });
         this.logCreated("PawtalEventsService");
         resolve(service);
       });

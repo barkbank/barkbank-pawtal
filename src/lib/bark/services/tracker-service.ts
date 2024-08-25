@@ -20,12 +20,12 @@ import { AccountType } from "@/lib/auth-models";
 import { z } from "zod";
 import { opLogPawtalEvent } from "../operations/op-log-pawtal-event";
 import { PAWTAL_EVENT_TYPE } from "../enums/pawtal-event-type";
-import { PawtalEventsService } from "./pawtal-events-service";
+import { PawtalEventService } from "./pawtal-event-service";
 
 export class TrackerService {
   constructor(
     private config: {
-      pawtalEventsService: PawtalEventsService;
+      pawtalEventsService: PawtalEventService;
     },
   ) {}
 

@@ -5,8 +5,7 @@ import { SentEmailEvent } from "../models/email-models";
 import { PageLoadEvent } from "../models/tracker-models";
 import { PawtalEventType } from "../enums/pawtal-event-type";
 
-// WIP: Rename to PawtalEventService
-export class PawtalEventsService {
+export class PawtalEventService {
   private dao: PawtalEventDao;
   private sem: Semaphore;
 

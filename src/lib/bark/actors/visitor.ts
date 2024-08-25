@@ -7,7 +7,7 @@ import { UserAccountService } from "../services/user-account-service";
 import { SentEmailEvent } from "../models/email-models";
 import { PAWTAL_EVENT_TYPE } from "../enums/pawtal-event-type";
 import { AccountType } from "@/lib/auth-models";
-import { PawtalEventsService } from "../services/pawtal-events-service";
+import { PawtalEventService } from "../services/pawtal-event-service";
 
 export class Visitor {
   constructor(
@@ -15,7 +15,7 @@ export class Visitor {
       context: BarkContext;
       registrationService: RegistrationService;
       userAccountService: UserAccountService;
-      pawtalEventsService: PawtalEventsService;
+      pawtalEventsService: PawtalEventService;
     },
   ) {}
 
