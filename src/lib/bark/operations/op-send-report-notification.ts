@@ -6,33 +6,33 @@ import { ReportNotification } from "../models/report-notification";
 import { selectReportNotification } from "../queries/select-report-notification";
 import { toReportNotification } from "../mappers/to-report-notification";
 import { escape } from "lodash";
-import { PawtalEventsService } from "../services/pawtal-events-service";
+import { PawtalEventService } from "../services/pawtal-event-service";
 import { PAWTAL_EVENT_TYPE } from "../enums/pawtal-event-type";
 import { AccountType } from "@/lib/auth-models";
+import { toPawtalEventSpecFromSentEmailEvent } from "../mappers/event-mappers";
 
 export async function opSendReportNotification(
   context: BarkContext,
   args: {
     reportId: string;
-    pawtalEventsService: PawtalEventsService;
+    pawtalEventService: PawtalEventService;
   },
 ): Promise<
   typeof CODE.OK | typeof CODE.FAILED | typeof CODE.ERROR_REPORT_NOT_FOUND
 > {
-  const { reportId, pawtalEventsService } = args;
+  const { reportId, pawtalEventService } = args;
   const notification = await _getNotification(context, { reportId });
   if (notification === null) {
     return CODE.ERROR_REPORT_NOT_FOUND;
   }
   const res = await _sendNotification(context, { notification });
-  await pawtalEventsService.submitSentEmailEvent({
-    sentEmailEvent: {
-      eventTs: new Date(),
-      eventType: PAWTAL_EVENT_TYPE.EMAIL_SENT_REPORT_NOTIFICATION,
-      accountType: AccountType.USER,
-      accountId: notification.userId,
-    },
+  const spec = toPawtalEventSpecFromSentEmailEvent({
+    eventTs: new Date(),
+    eventType: PAWTAL_EVENT_TYPE.EMAIL_SENT_REPORT_NOTIFICATION,
+    accountType: AccountType.USER,
+    accountId: notification.userId,
   });
+  await pawtalEventService.submit({ spec });
   return res;
 }
 

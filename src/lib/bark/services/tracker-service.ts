@@ -20,12 +20,13 @@ import { AccountType } from "@/lib/auth-models";
 import { z } from "zod";
 import { opLogPawtalEvent } from "../operations/op-log-pawtal-event";
 import { PAWTAL_EVENT_TYPE } from "../enums/pawtal-event-type";
-import { PawtalEventsService } from "./pawtal-events-service";
+import { PawtalEventService } from "./pawtal-event-service";
+import { toPawtalEventSpecFromPageLoadEvent } from "../mappers/event-mappers";
 
 export class TrackerService {
   constructor(
     private config: {
-      pawtalEventsService: PawtalEventsService;
+      pawtalEventService: PawtalEventService;
     },
   ) {}
 
@@ -39,9 +40,8 @@ export class TrackerService {
       ...cookieInfo,
       ...sessionInfo,
     };
-    await this.config.pawtalEventsService.submitPageLoadEvent({
-      pageLoadEvent,
-    });
+    const spec = toPawtalEventSpecFromPageLoadEvent(pageLoadEvent);
+    await this.config.pawtalEventService.submit({ spec });
     opLogPawtalEvent({
       eventType: PAWTAL_EVENT_TYPE.PAGE_LOAD,
       params: pageLoadEvent,

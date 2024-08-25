@@ -54,7 +54,7 @@ import { CronService } from "./bark/services/cron-service";
 import { UserAccountService } from "./bark/services/user-account-service";
 import { Visitor } from "./bark/actors/visitor";
 import { VetAccountService } from "./bark/services/vet-account-service";
-import { PawtalEventsService } from "./bark/services/pawtal-events-service";
+import { PawtalEventService } from "./bark/services/pawtal-event-service";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -84,8 +84,7 @@ export class AppFactory {
   private promisedUserAccountService: Promise<UserAccountService> | null = null;
   private promisedVisitor: Promise<Visitor> | null = null;
   private promisedVetAccountService: Promise<VetAccountService> | null = null;
-  private promisedPawtalEventsService: Promise<PawtalEventsService> | null =
-    null;
+  private promisedPawtalEventService: Promise<PawtalEventService> | null = null;
 
   constructor(envs: NodeJS.Dict<string>) {
     this.envs = envs;
@@ -142,16 +141,16 @@ export class AppFactory {
     return this.promisedVetAccountService;
   }
 
-  getPawtalEventsService(): Promise<PawtalEventsService> {
-    if (this.promisedPawtalEventsService === null) {
-      this.promisedPawtalEventsService = new Promise(async (resolve) => {
+  getPawtalEventService(): Promise<PawtalEventService> {
+    if (this.promisedPawtalEventService === null) {
+      this.promisedPawtalEventService = new Promise(async (resolve) => {
         const context = await this.getBarkContext();
-        const service = new PawtalEventsService({ context });
-        this.logCreated("PawtalEventsService");
+        const service = new PawtalEventService({ context });
+        this.logCreated("PawtalEventService");
         resolve(service);
       });
     }
-    return this.promisedPawtalEventsService;
+    return this.promisedPawtalEventService;
   }
 
   getVisitor(): Promise<Visitor> {
@@ -160,12 +159,12 @@ export class AppFactory {
         const context = await this.getBarkContext();
         const registrationService = await this.getRegistrationService();
         const userAccountService = await this.getUserAccountService();
-        const pawtalEventsService = await this.getPawtalEventsService();
+        const pawtalEventService = await this.getPawtalEventService();
         const visitor = new Visitor({
           context,
           registrationService,
           userAccountService,
-          pawtalEventsService,
+          pawtalEventService,
         });
         this.logCreated("Visitor");
         resolve(visitor);
@@ -190,8 +189,8 @@ export class AppFactory {
   public getTrackerService(): Promise<TrackerService> {
     if (this.promisedTrackerService === null) {
       this.promisedTrackerService = new Promise(async (resolve) => {
-        const pawtalEventsService = await this.getPawtalEventsService();
-        const service = new TrackerService({ pawtalEventsService });
+        const pawtalEventService = await this.getPawtalEventService();
+        const service = new TrackerService({ pawtalEventService });
         this.logCreated("TrackerService");
         resolve(service);
       });

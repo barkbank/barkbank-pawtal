@@ -7,7 +7,8 @@ import { UserAccountService } from "../services/user-account-service";
 import { SentEmailEvent } from "../models/email-models";
 import { PAWTAL_EVENT_TYPE } from "../enums/pawtal-event-type";
 import { AccountType } from "@/lib/auth-models";
-import { PawtalEventsService } from "../services/pawtal-events-service";
+import { PawtalEventService } from "../services/pawtal-event-service";
+import { toPawtalEventSpecFromSentEmailEvent } from "../mappers/event-mappers";
 
 export class Visitor {
   constructor(
@@ -15,7 +16,7 @@ export class Visitor {
       context: BarkContext;
       registrationService: RegistrationService;
       userAccountService: UserAccountService;
-      pawtalEventsService: PawtalEventsService;
+      pawtalEventService: PawtalEventService;
     },
   ) {}
 
@@ -31,7 +32,7 @@ export class Visitor {
       context,
       registrationService,
       userAccountService,
-      pawtalEventsService,
+      pawtalEventService,
     } = this.config;
     const { request } = args;
 
@@ -75,7 +76,8 @@ export class Visitor {
       accountType: AccountType.USER,
       accountId: resIdLookup.result.userId,
     };
-    await pawtalEventsService.submitSentEmailEvent({ sentEmailEvent });
+    const spec = toPawtalEventSpecFromSentEmailEvent(sentEmailEvent);
+    await pawtalEventService.submit({ spec });
 
     return resRegistration;
   }

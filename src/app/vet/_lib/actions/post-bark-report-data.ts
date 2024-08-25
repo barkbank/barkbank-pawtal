@@ -30,7 +30,7 @@ export async function postBarkReportData(args: {
   const { vetId: actorVetId } = actor.getParams();
   const { appointmentId, reportData } = args;
   const context = await APP.getBarkContext();
-  const pawtalEventsService = await APP.getPawtalEventsService();
+  const pawtalEventService = await APP.getPawtalEventService();
   const res = await opSubmitReport(context, {
     appointmentId,
     reportData,
@@ -41,7 +41,7 @@ export async function postBarkReportData(args: {
   }
   const reportId = res.result?.reportId;
   if (reportId !== undefined) {
-    await opSendReportNotification(context, { reportId, pawtalEventsService });
+    await opSendReportNotification(context, { reportId, pawtalEventService });
   }
   return res;
 }
