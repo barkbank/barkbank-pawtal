@@ -1,15 +1,15 @@
-import { PawtalEventsDao } from "@/lib/bark/daos/pawtal-events-dao";
 import { withBarkContext } from "../_context";
 import { PageLoadEvent } from "@/lib/bark/models/tracker-models";
 import { dbQuery } from "@/lib/data/db-utils";
 import { PawtalEventSpec } from "@/lib/bark/models/event-models";
 import { PAWTAL_EVENT_TYPE } from "@/lib/bark/enums/pawtal-event-type";
 import { AccountType } from "@/lib/auth-models";
+import { PawtalEventDao } from "@/lib/bark/daos/pawtal-event-dao";
 
 describe("PawtalEventsDao", () => {
   it("can be used to insert an event", async () => {
     await withBarkContext(async ({ context }) => {
-      const dao = new PawtalEventsDao(context.dbPool);
+      const dao = new PawtalEventDao(context.dbPool);
       const spec: PawtalEventSpec = {
         eventTs: new Date(),
         eventType: PAWTAL_EVENT_TYPE.PAGE_LOAD,
@@ -37,7 +37,7 @@ describe("PawtalEventsDao", () => {
     it("should insert full event", async () => {
       await withBarkContext(async ({ context }) => {
         const { dbPool } = context;
-        const dao = new PawtalEventsDao(dbPool);
+        const dao = new PawtalEventDao(dbPool);
         const pageLoadEvent: PageLoadEvent = {
           eventTs: new Date(),
           pathname: "/some/page",
@@ -70,7 +70,7 @@ describe("PawtalEventsDao", () => {
     it("should insert partial event", async () => {
       await withBarkContext(async ({ context }) => {
         const { dbPool } = context;
-        const dao = new PawtalEventsDao(dbPool);
+        const dao = new PawtalEventDao(dbPool);
         const pageLoadEvent: PageLoadEvent = {
           eventTs: new Date(),
           pathname: "/some/page",

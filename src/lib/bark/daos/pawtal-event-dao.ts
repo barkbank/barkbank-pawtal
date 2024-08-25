@@ -13,8 +13,7 @@ import {
   PawtalEventSpecSchema,
 } from "../models/event-models";
 
-// WIP: Rename to PawtalEventDao (singular)
-export class PawtalEventsDao {
+export class PawtalEventDao {
   private projection = `
   event_id as "eventId",
   event_ts as "eventTs",

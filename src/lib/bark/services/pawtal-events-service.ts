@@ -1,16 +1,17 @@
 import { Semaphore } from "@/lib/utilities/semaphore";
 import { BarkContext } from "../bark-context";
-import { PawtalEventsDao } from "../daos/pawtal-events-dao";
+import { PawtalEventDao } from "../daos/pawtal-event-dao";
 import { SentEmailEvent } from "../models/email-models";
 import { PageLoadEvent } from "../models/tracker-models";
 import { PawtalEventType } from "../enums/pawtal-event-type";
 
+// WIP: Rename to PawtalEventService
 export class PawtalEventsService {
-  private dao: PawtalEventsDao;
+  private dao: PawtalEventDao;
   private sem: Semaphore;
 
   constructor(private config: { context: BarkContext }) {
-    this.dao = new PawtalEventsDao(config.context.dbPool);
+    this.dao = new PawtalEventDao(config.context.dbPool);
 
     // The semaphore limits the number of concurrent writes to the DAO.
     this.sem = new Semaphore(5);
