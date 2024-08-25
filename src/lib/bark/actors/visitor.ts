@@ -16,7 +16,7 @@ export class Visitor {
       context: BarkContext;
       registrationService: RegistrationService;
       userAccountService: UserAccountService;
-      pawtalEventsService: PawtalEventService;
+      pawtalEventService: PawtalEventService;
     },
   ) {}
 
@@ -32,7 +32,7 @@ export class Visitor {
       context,
       registrationService,
       userAccountService,
-      pawtalEventsService,
+      pawtalEventService,
     } = this.config;
     const { request } = args;
 
@@ -77,7 +77,7 @@ export class Visitor {
       accountId: resIdLookup.result.userId,
     };
     const spec = toPawtalEventSpecFromSentEmailEvent(sentEmailEvent);
-    await pawtalEventsService.submit({ spec });
+    await pawtalEventService.submit({ spec });
 
     return resRegistration;
   }

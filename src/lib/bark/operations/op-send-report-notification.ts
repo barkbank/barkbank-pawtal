@@ -15,12 +15,12 @@ export async function opSendReportNotification(
   context: BarkContext,
   args: {
     reportId: string;
-    pawtalEventsService: PawtalEventService;
+    pawtalEventService: PawtalEventService;
   },
 ): Promise<
   typeof CODE.OK | typeof CODE.FAILED | typeof CODE.ERROR_REPORT_NOT_FOUND
 > {
-  const { reportId, pawtalEventsService } = args;
+  const { reportId, pawtalEventService } = args;
   const notification = await _getNotification(context, { reportId });
   if (notification === null) {
     return CODE.ERROR_REPORT_NOT_FOUND;
@@ -32,7 +32,7 @@ export async function opSendReportNotification(
     accountType: AccountType.USER,
     accountId: notification.userId,
   });
-  await pawtalEventsService.submit({ spec });
+  await pawtalEventService.submit({ spec });
   return res;
 }
 

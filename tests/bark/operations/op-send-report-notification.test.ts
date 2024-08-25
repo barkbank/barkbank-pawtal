@@ -12,7 +12,7 @@ describe("opSendReportNotification", () => {
       const pawtalEventsService = new PawtalEventService({ context });
       await opSendReportNotification(context, {
         reportId,
-        pawtalEventsService,
+        pawtalEventService: pawtalEventsService,
       });
       const emailService: HarnessEmailService =
         context.emailService as HarnessEmailService;

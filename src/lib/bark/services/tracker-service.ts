@@ -26,7 +26,7 @@ import { toPawtalEventSpecFromPageLoadEvent } from "../mappers/event-mappers";
 export class TrackerService {
   constructor(
     private config: {
-      pawtalEventsService: PawtalEventService;
+      pawtalEventService: PawtalEventService;
     },
   ) {}
 
@@ -41,7 +41,7 @@ export class TrackerService {
       ...sessionInfo,
     };
     const spec = toPawtalEventSpecFromPageLoadEvent(pageLoadEvent);
-    await this.config.pawtalEventsService.submit({ spec });
+    await this.config.pawtalEventService.submit({ spec });
     opLogPawtalEvent({
       eventType: PAWTAL_EVENT_TYPE.PAGE_LOAD,
       params: pageLoadEvent,
