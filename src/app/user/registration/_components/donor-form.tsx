@@ -11,7 +11,7 @@ import { BarkH4, BarkP } from "@/components/bark/bark-typography";
 import Image from "next/image";
 import Link from "next/link";
 import { RoutePath } from "@/lib/route-path";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { BarkFormOption } from "@/components/bark/bark-form-option";
 import { postRegistrationRequest } from "@/app/user/registration/_actions/post-registration-request";
 import { DogAntigenPresence } from "@/lib/bark/enums/dog-antigen-presence";
@@ -35,6 +35,7 @@ import { postPawtalEvent } from "@/app/_lib/actions/post-pawtal-event";
 import { PAWTAL_EVENT_TYPE } from "@/lib/bark/enums/pawtal-event-type";
 import { PawtalEventClientSpec } from "@/lib/bark/models/event-models";
 import { v4 as uuidv4 } from "uuid";
+import { toQueryParams } from "@/app/_lib/to-query-params";
 
 const FORM_SCHEMA = z.object({
   dogName: z.string(),
@@ -79,8 +80,11 @@ export default function DonorForm(props: {
     string | React.ReactNode
   >("");
   const [rtk] = useState<string>(uuidv4());
-  const [funnelState, setFunnelState] = useState<FunnelState>({});
+  const [funnelState, setFunnelState] = useState<FunnelState>(() => {
+    return { started: true };
+  });
   const [funnelEvents, setFunnelEvents] = useState<FunnelState>({});
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     window.scrollTo({
@@ -110,18 +114,20 @@ export default function DonorForm(props: {
     },
   });
 
-  async function _postEvent(step: string) {
-    const spec: PawtalEventClientSpec = {
-      eventType: PAWTAL_EVENT_TYPE.REGISTRATION,
-      eventData: {
-        rtk,
-        step,
-      },
-    };
-    await postPawtalEvent({ spec });
-  }
-
   useEffect(() => {
+    const queryParams = toQueryParams(searchParams);
+    async function _postEvent(step: string) {
+      const spec: PawtalEventClientSpec = {
+        eventType: PAWTAL_EVENT_TYPE.REGISTRATION,
+        eventData: {
+          rtk,
+          step,
+          queryParams,
+        },
+      };
+      await postPawtalEvent({ spec });
+    }
+
     if (funnelState.started && !funnelEvents.started) {
       _postEvent("000-start");
       setFunnelEvents({ ...funnelEvents, started: true });
@@ -145,11 +151,7 @@ export default function DonorForm(props: {
       _postEvent("400-account");
       setFunnelEvents({ ...funnelEvents, accountCreated: true });
     }
-  }, [funnelState, funnelEvents]);
-
-  useEffect(() => {
-    setFunnelState({ ...funnelState, started: true });
-  }, []);
+  }, [funnelState, funnelEvents, searchParams, rtk]);
 
   function getRegistrationRequest(): RegistrationRequest {
     const vals = form.getValues();
