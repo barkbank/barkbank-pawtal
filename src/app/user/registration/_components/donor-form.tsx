@@ -74,8 +74,8 @@ export default function DonorForm(props: {
 }) {
   const { breeds, vetOptions } = props;
   const router = useRouter();
-  const [currentStep, setCurrentStep] = React.useState(STEPS.PET);
-  const [registrationError, setRegistrationError] = React.useState<
+  const [currentStep, setCurrentStep] = useState(STEPS.PET);
+  const [registrationError, setRegistrationError] = useState<
     string | React.ReactNode
   >("");
   const [rtk] = useState<string>(uuidv4());
