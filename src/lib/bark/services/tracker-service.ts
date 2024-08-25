@@ -22,6 +22,11 @@ import { opLogPawtalEvent } from "../operations/op-log-pawtal-event";
 import { PAWTAL_EVENT_TYPE } from "../enums/pawtal-event-type";
 import { PawtalEventService } from "./pawtal-event-service";
 import { toPawtalEventSpecFromPageLoadEvent } from "../mappers/event-mappers";
+import {
+  PawtalEventClientSpec,
+  PawtalEventClientSpecSchema,
+  PawtalEventSpec,
+} from "../models/event-models";
 
 export class TrackerService {
   constructor(
@@ -46,6 +51,13 @@ export class TrackerService {
       eventType: PAWTAL_EVENT_TYPE.PAGE_LOAD,
       params: pageLoadEvent,
     });
+  }
+
+  async onPawtalEvent(args: { spec: PawtalEventClientSpec }): Promise<void> {
+    const clientSpec = PawtalEventClientSpecSchema.parse(args.spec);
+    const ctk = _getOrCreateCtk();
+    const spec: PawtalEventSpec = { ...clientSpec, eventTs: new Date(), ctk };
+    return this.config.pawtalEventService.submit({ spec });
   }
 }
 
