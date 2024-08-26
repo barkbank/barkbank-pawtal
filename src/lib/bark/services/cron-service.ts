@@ -1,60 +1,54 @@
 import cron from "node-cron";
 
-import { BarkContext } from "../bark-context";
-import { opLogPawtalEvent } from "../operations/op-log-pawtal-event";
 import { PAWTAL_EVENT_TYPE } from "../enums/pawtal-event-type";
 import { JSONValue } from "@/lib/utilities/json-schema";
-import { select1AsPing } from "../queries/select-1-as-ping";
+import { PawtalEventService } from "./pawtal-event-service";
+import { PawtalEventSpec } from "../models/event-models";
 
 export type CronTask = {
-  schedule: string;
-  name: string;
-  run: () => Promise<JSONValue>;
+  taskSchedule: string;
+  taskName: string;
+  runTask: () => Promise<JSONValue>;
 };
 
 export class CronService {
-  constructor(private args: { context: BarkContext; instanceId: string }) {}
+  constructor(
+    private config: {
+      tasks: CronTask[];
+      instanceId: string;
+      pawtalEventService: PawtalEventService;
+    },
+  ) {}
   start() {
-    const { context } = this.args;
-    this.schedule(new _PingDatatbaseTask({ context }));
+    const { tasks } = this.config;
+    for (const task of tasks) {
+      this.schedule(task);
+    }
   }
 
-  private schedule(task: _Task) {
-    const instanceId = this.args.instanceId;
-    cron.schedule(task.getSchedule(), () => {
-      task.run().then((res) => {
-        const eventType = PAWTAL_EVENT_TYPE.CRON_RUN;
-        const taskName = task.getName();
-        const taskOut = res;
-        opLogPawtalEvent({
-          eventType,
-          params: { instanceId, taskName, taskOut },
-        });
+  private schedule(task: CronTask) {
+    const { instanceId, pawtalEventService } = this.config;
+    const { taskSchedule, taskName, runTask } = task;
+    cron.schedule(taskSchedule, () => {
+      const t0 = Date.now();
+      runTask().then((taskOutput) => {
+        const t1 = Date.now();
+        const runMillis = t1 - t0;
+        const spec: PawtalEventSpec = {
+          eventTs: new Date(),
+          eventType: PAWTAL_EVENT_TYPE.CRON_RUN,
+          eventData: {
+            taskName,
+            taskSchedule,
+            taskOutput,
+            runMillis,
+            instanceId,
+          },
+        };
+        pawtalEventService.submit({ spec });
       });
     });
   }
-}
-
-interface _Task {
-  getName(): string;
-
-  /**
-   * https://www.npmjs.com/package/node-cron
-   *
-   *    ┌────────────── second (optional)
-   *    │ ┌──────────── minute
-   *    │ │ ┌────────── hour
-   *    │ │ │ ┌──────── day of month
-   *    │ │ │ │ ┌────── month
-   *    │ │ │ │ │ ┌──── day of week
-   *    │ │ │ │ │ │
-   *    │ │ │ │ │ │
-   *    * * * * * *
-   *      * * * * *
-   */
-  getSchedule(): string;
-
-  run(): Promise<Record<string, any>>;
 }
 
 /**
@@ -75,22 +69,3 @@ export const CRON_SCHEDULE = {
   EVERY_5_SECONDS: "*/5 * * * * *",
   EVERYDAY_AT_0200_SGT: "0 18 * * *",
 } as const;
-
-/**
- * Ping the database once a day at 18:00 UTC (i.e. 02:00 SGT).
- */
-class _PingDatatbaseTask implements _Task {
-  constructor(private args: { context: BarkContext }) {}
-
-  getName(): string {
-    return "_PingDatatbaseTask";
-  }
-
-  getSchedule(): string {
-    return CRON_SCHEDULE.EVERYDAY_AT_0200_SGT;
-  }
-
-  run(): Promise<Record<string, any>> {
-    return select1AsPing(this.args.context.dbPool);
-  }
-}
