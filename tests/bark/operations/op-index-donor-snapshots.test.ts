@@ -42,6 +42,44 @@ describe("opIndexDonorSnapshots", () => {
       expect(res.rows.length).toEqual(2);
     });
   });
+  it("uses Singapore time zone for dates", async () => {
+    await withBarkContext(async ({ context }) => {
+      const { dbPool } = context;
+      const rs = getRegistrationService(dbPool);
+      await rs.addUserAndDog(
+        _mockRequest({ userEmail: "u1@u.com", dogBreed: "Breed1" }),
+      );
+      await rs.addUserAndDog(
+        _mockRequest({ userEmail: "u2@u.com", dogBreed: "Breed2" }),
+      );
+      await opIndexDonorSnapshots(context, {
+        referenceDate: parseCommonDateTime(
+          "9 Aug 2024, 23:59",
+          SINGAPORE_TIME_ZONE,
+        ),
+      });
+      await opIndexDonorSnapshots(context, {
+        referenceDate: parseCommonDateTime(
+          "10 Aug 2024, 00:00",
+          SINGAPORE_TIME_ZONE,
+        ),
+      });
+      const sql = `
+      SELECT "day"::text, COUNT(*)::integer as "numDogs"
+      FROM donor_snapshots
+      GROUP BY "day"
+      ORDER BY "day" ASC
+      `;
+      const res = await dbQuery<{ day: string; numDogs: number }>(
+        dbPool,
+        sql,
+        [],
+      );
+      expect(res.rows[0]).toMatchObject({ day: "2024-08-09", numDogs: 2 });
+      expect(res.rows[1]).toMatchObject({ day: "2024-08-10", numDogs: 2 });
+      expect(res.rows.length).toEqual(2);
+    });
+  });
 });
 
 function _mockRequest(
