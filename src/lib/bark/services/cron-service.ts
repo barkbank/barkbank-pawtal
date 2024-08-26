@@ -4,6 +4,13 @@ import { BarkContext } from "../bark-context";
 import { dbQuery } from "@/lib/data/db-utils";
 import { opLogPawtalEvent } from "../operations/op-log-pawtal-event";
 import { PAWTAL_EVENT_TYPE } from "../enums/pawtal-event-type";
+import { JSONValue } from "@/lib/utilities/json-schema";
+
+export type CronTask = {
+  schedule: string;
+  name: string;
+  run: () => Promise<JSONValue>;
+};
 
 export class CronService {
   constructor(private args: { context: BarkContext; instanceId: string }) {}
