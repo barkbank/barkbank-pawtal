@@ -19,18 +19,12 @@ describe("opIndexDonorSnapshots", () => {
     await withBarkContext(async ({ context }) => {
       const { dbPool } = context;
       const rs = getRegistrationService(dbPool);
-      await rs.addUserAndDog(
-        _mockRequest({ userEmail: "u1@u.com", dogBreed: "Breed1" }),
-      );
-      await rs.addUserAndDog(
-        _mockRequest({ userEmail: "u2@u.com", dogBreed: "Breed2" }),
-      );
-      await opIndexDonorSnapshots(context, {
-        referenceDate: parseCommonDateTime(
-          "9 Aug 2024, 23:59",
-          SINGAPORE_TIME_ZONE,
-        ),
-      });
+      const r1 = _mockRequest({ userEmail: "u1@u.com", dogBreed: "Breed1" });
+      const r2 = _mockRequest({ userEmail: "u2@u.com", dogBreed: "Breed2" });
+      await rs.addUserAndDog(r1);
+      await rs.addUserAndDog(r2);
+      const d1 = parseCommonDateTime("9 Aug 2024, 23:59", SINGAPORE_TIME_ZONE);
+      await opIndexDonorSnapshots(context, { referenceDate: d1 });
       const sql = `
       SELECT dog_breed as "dogBreed"
       FROM donor_snapshots
@@ -46,24 +40,15 @@ describe("opIndexDonorSnapshots", () => {
     await withBarkContext(async ({ context }) => {
       const { dbPool } = context;
       const rs = getRegistrationService(dbPool);
-      await rs.addUserAndDog(
-        _mockRequest({ userEmail: "u1@u.com", dogBreed: "Breed1" }),
-      );
-      await rs.addUserAndDog(
-        _mockRequest({ userEmail: "u2@u.com", dogBreed: "Breed2" }),
-      );
-      await opIndexDonorSnapshots(context, {
-        referenceDate: parseCommonDateTime(
-          "9 Aug 2024, 23:59",
-          SINGAPORE_TIME_ZONE,
-        ),
-      });
-      await opIndexDonorSnapshots(context, {
-        referenceDate: parseCommonDateTime(
-          "10 Aug 2024, 00:00",
-          SINGAPORE_TIME_ZONE,
-        ),
-      });
+      const r1 = _mockRequest({ userEmail: "u1@u.com", dogBreed: "Breed1" });
+      const r2 = _mockRequest({ userEmail: "u2@u.com", dogBreed: "Breed2" });
+      await rs.addUserAndDog(r1);
+      await rs.addUserAndDog(r2);
+      const d1 = parseCommonDateTime("9 Aug 2024, 23:59", SINGAPORE_TIME_ZONE);
+      const d2 = parseCommonDateTime("10 Aug 2024, 00:00", SINGAPORE_TIME_ZONE);
+      console.log({ d1, d2 });
+      await opIndexDonorSnapshots(context, { referenceDate: d1 });
+      await opIndexDonorSnapshots(context, { referenceDate: d2 });
       const sql = `
       SELECT "day"::text, COUNT(*)::integer as "numDogs"
       FROM donor_snapshots
