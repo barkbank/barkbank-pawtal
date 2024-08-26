@@ -1,10 +1,10 @@
 import cron from "node-cron";
 
 import { BarkContext } from "../bark-context";
-import { dbQuery } from "@/lib/data/db-utils";
 import { opLogPawtalEvent } from "../operations/op-log-pawtal-event";
 import { PAWTAL_EVENT_TYPE } from "../enums/pawtal-event-type";
 import { JSONValue } from "@/lib/utilities/json-schema";
+import { select1AsPing } from "../queries/select-1-as-ping";
 
 export type CronTask = {
   schedule: string;
@@ -90,12 +90,7 @@ class _PingDatatbaseTask implements _Task {
     return CRON_SCHEDULE.EVERYDAY_AT_0200_SGT;
   }
 
-  async run(): Promise<Record<string, any>> {
-    const res = await dbQuery<{ ping: number }>(
-      this.args.context.dbPool,
-      `SELECT 1 as "ping"`,
-      [],
-    );
-    return res.rows[0];
+  run(): Promise<Record<string, any>> {
+    return select1AsPing(this.args.context.dbPool);
   }
 }
