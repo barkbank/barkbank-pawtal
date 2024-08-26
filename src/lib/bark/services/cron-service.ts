@@ -73,7 +73,7 @@ interface _Task {
  */
 export const CRON_SCHEDULE = {
   EVERY_5_SECONDS: "*/5 * * * * *",
-  AT_0200_SGT_EVERYDAY: "0 18 * * *",
+  EVERYDAY_AT_0200_SGT: "0 18 * * *",
 } as const;
 
 /**
@@ -87,7 +87,7 @@ class _PingDatatbaseTask implements _Task {
   }
 
   getSchedule(): string {
-    return CRON_SCHEDULE.AT_0200_SGT_EVERYDAY;
+    return CRON_SCHEDULE.EVERYDAY_AT_0200_SGT;
   }
 
   async run(): Promise<Record<string, any>> {
