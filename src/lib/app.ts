@@ -201,7 +201,7 @@ export class AppFactory {
   private async _newIndexDonorSnapshotsTask(): Promise<CronTask> {
     const context = await this.getBarkContext();
     const task: CronTask = {
-      taskName: "index donor_snapshots",
+      taskName: "index_donor_snapshots",
       taskSchedule: CRON_SCHEDULE.EVERYDAY_AT_0200_SGT,
       runTask: async () => {
         const referenceDate = new Date();
