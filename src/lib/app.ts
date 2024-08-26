@@ -50,11 +50,16 @@ import { GlobalRef } from "./utilities/global-ref";
 import { randomUUID } from "crypto";
 import { opLogPawtalEvent } from "./bark/operations/op-log-pawtal-event";
 import { PAWTAL_EVENT_TYPE } from "./bark/enums/pawtal-event-type";
-import { CronService } from "./bark/services/cron-service";
+import {
+  CRON_SCHEDULE,
+  CronService,
+  CronTask,
+} from "./bark/services/cron-service";
 import { UserAccountService } from "./bark/services/user-account-service";
 import { Visitor } from "./bark/actors/visitor";
 import { VetAccountService } from "./bark/services/vet-account-service";
 import { PawtalEventService } from "./bark/services/pawtal-event-service";
+import { opIndexDonorSnapshots } from "./bark/operations/op-index-donor-snapshots";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -176,14 +181,40 @@ export class AppFactory {
   public getCronService(): Promise<CronService> {
     if (this.promisedCronService === null) {
       this.promisedCronService = new Promise(async (resolve) => {
-        const context = await this.getBarkContext();
         const instanceId = this.getInstanceId();
-        const service = new CronService({ context, instanceId });
+        const pawtalEventService = await this.getPawtalEventService();
+        const tasks: CronTask[] = await Promise.all([
+          this._newIndexDonorSnapshotsTask(),
+        ]);
+        const service = new CronService({
+          tasks,
+          instanceId,
+          pawtalEventService,
+        });
         this.logCreated("CronService");
         resolve(service);
       });
     }
     return this.promisedCronService;
+  }
+
+  private async _newIndexDonorSnapshotsTask(): Promise<CronTask> {
+    const context = await this.getBarkContext();
+    const task: CronTask = {
+      taskName: "index_donor_snapshots",
+      taskSchedule: CRON_SCHEDULE.EVERYDAY_AT_0200_SGT,
+      runTask: async () => {
+        const referenceDate = new Date();
+        const { result, error } = await opIndexDonorSnapshots(context, {
+          referenceDate,
+        });
+        if (error !== undefined) {
+          return { error };
+        }
+        return result;
+      },
+    };
+    return task;
   }
 
   public getTrackerService(): Promise<TrackerService> {
