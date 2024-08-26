@@ -24,7 +24,11 @@ describe("opIndexDonorSnapshots", () => {
       await rs.addUserAndDog(r1);
       await rs.addUserAndDog(r2);
       const d1 = parseCommonDateTime("9 Aug 2024, 23:59", SINGAPORE_TIME_ZONE);
-      await opIndexDonorSnapshots(context, { referenceDate: d1 });
+      const { result, error } = await opIndexDonorSnapshots(context, {
+        referenceDate: d1,
+      });
+      expect(error).toBeUndefined();
+      expect(result?.donorCount).toEqual(2);
       const sql = `
       SELECT dog_breed as "dogBreed"
       FROM donor_snapshots

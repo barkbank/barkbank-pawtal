@@ -205,8 +205,13 @@ export class AppFactory {
       taskSchedule: CRON_SCHEDULE.EVERYDAY_AT_0200_SGT,
       runTask: async () => {
         const referenceDate = new Date();
-        await opIndexDonorSnapshots(context, { referenceDate });
-        return null;
+        const { result, error } = await opIndexDonorSnapshots(context, {
+          referenceDate,
+        });
+        if (error !== undefined) {
+          return { error };
+        }
+        return result;
       },
     };
     return task;
