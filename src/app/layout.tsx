@@ -7,6 +7,8 @@ import RootFooter from "@/app/_components/root-footer";
 import clsx from "clsx";
 import { Toaster } from "@/components/ui/toaster";
 import { Tracker } from "./_components/tracker";
+import { GoogleAnalytics } from "@next/third-parties/google";
+import APP from "@/lib/app";
 
 const siteFont = Montserrat({ subsets: ["latin"] });
 
@@ -20,6 +22,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const measurementId = APP.getGoogleAnalyticsMeasurementId();
   return (
     <html lang="en">
       <body
@@ -36,6 +39,7 @@ export default function RootLayout({
           <Tracker />
         </BarkAuthProvider>
       </body>
+      {measurementId && <GoogleAnalytics gaId={measurementId} />}
     </html>
   );
 }
