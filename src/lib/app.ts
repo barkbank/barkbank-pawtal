@@ -134,8 +134,8 @@ export class AppFactory {
     return this.instanceId;
   }
 
-  getGoogleAnalyticsMeasurementId(): string {
-    const measurementId = this.envString(APP_ENV.GA_MEASUREMENT_ID);
+  getGoogleAnalyticsMeasurementId(): string | undefined {
+    const measurementId = this.envOptionalString(APP_ENV.GA_MEASUREMENT_ID);
     console.log({ measurementId });
     return measurementId;
   }

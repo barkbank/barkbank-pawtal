@@ -39,7 +39,7 @@ export default function RootLayout({
           <Tracker />
         </BarkAuthProvider>
       </body>
-      <GoogleAnalytics gaId={measurementId} />
+      {measurementId && <GoogleAnalytics gaId={measurementId} />}
     </html>
   );
 }
