@@ -134,6 +134,12 @@ export class AppFactory {
     return this.instanceId;
   }
 
+  getGoogleAnalyticsMeasurementId(): string {
+    const measurementId = this.envString(APP_ENV.GA_MEASUREMENT_ID);
+    console.log({ measurementId });
+    return measurementId;
+  }
+
   getVetAccountService(): Promise<VetAccountService> {
     if (this.promisedVetAccountService === null) {
       this.promisedVetAccountService = new Promise(async (resolve) => {

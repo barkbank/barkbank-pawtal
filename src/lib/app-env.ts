@@ -53,6 +53,11 @@ export const APP_ENV = {
    */
   DANGEROUS_ENABLED: "DANGEROUS_ENABLED",
   DANGEROUS_CREDENTIALS: "DANGEROUS_CREDENTIALS",
+
+  /**
+   * Google Analytics Measurement ID
+   */
+  GA_MEASUREMENT_ID: "GA_MEASUREMENT_ID",
 } as const;
 
 export const AppEnvSchema = z.nativeEnum(APP_ENV);
