@@ -31,9 +31,19 @@ export const EncryptedAdminAccountSpecSchema = EncryptedAdminAccountSchema.omit(
   { adminId: true },
 );
 
+export const AdminAccountSpecSchema = AdminAccountSchema.omit({
+  adminId: true,
+});
+
+export const AdminIdentifierSchema = z.object({
+  adminId: z.string(),
+});
+
 export type AdminAccount = z.infer<typeof AdminAccountSchema>;
 export type AdminPii = z.infer<typeof AdminPiiSchema>;
 export type EncryptedAdminAccount = z.infer<typeof EncryptedAdminAccountSchema>;
 export type EncryptedAdminAccountSpec = z.infer<
   typeof EncryptedAdminAccountSpecSchema
 >;
+export type AdminAccountSpec = z.infer<typeof AdminAccountSpecSchema>;
+export type AdminIdentifier = z.infer<typeof AdminIdentifierSchema>;

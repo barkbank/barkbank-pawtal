@@ -2,10 +2,13 @@ import { BarkContext } from "../bark-context";
 import {
   AdminAccount,
   AdminAccountSchema,
+  AdminAccountSpec,
   AdminPii,
   AdminPiiSchema,
   EncryptedAdminAccount,
   EncryptedAdminAccountSchema,
+  EncryptedAdminAccountSpec,
+  EncryptedAdminAccountSpecSchema,
 } from "../models/admin-models";
 
 export async function toEncryptedAdminAccount(
@@ -21,6 +24,19 @@ export async function toEncryptedAdminAccount(
   const adminHashedEmail = await emailHashService.getHashHex(adminEmail);
   const out = { adminEncryptedPii, adminHashedEmail, ...adminAccount };
   return EncryptedAdminAccountSchema.parse(out);
+}
+
+export async function toEncryptedAdminAccountSpec(
+  context: BarkContext,
+  adminAccountSpec: AdminAccountSpec,
+): Promise<EncryptedAdminAccountSpec> {
+  const { emailHashService } = context;
+  const { adminEmail } = adminAccountSpec;
+  const adminPii = AdminPiiSchema.parse(adminAccountSpec);
+  const adminEncryptedPii = await toAdminEncryptedPii(context, adminPii);
+  const adminHashedEmail = await emailHashService.getHashHex(adminEmail);
+  const out = { adminEncryptedPii, adminHashedEmail, ...adminAccountSpec };
+  return EncryptedAdminAccountSpecSchema.parse(out);
 }
 
 export async function toAdminAccount(
