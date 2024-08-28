@@ -1,5 +1,5 @@
 import { BarkContext } from "../bark-context";
-import { AdminPii, AdminPiiSchema } from "../models/admin-pii";
+import { AdminPii, AdminPiiSchema } from "../models/admin-models";
 
 export async function toAdminPii(
   context: BarkContext,

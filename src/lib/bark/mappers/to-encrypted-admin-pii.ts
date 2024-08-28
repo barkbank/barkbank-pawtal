@@ -1,5 +1,5 @@
 import { BarkContext } from "../bark-context";
-import { AdminPii } from "../models/admin-pii";
+import { AdminPii } from "../models/admin-models";
 
 export function toEncryptedAdminPii(
   context: BarkContext,
