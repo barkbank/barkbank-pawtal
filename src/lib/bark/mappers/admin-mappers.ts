@@ -2,12 +2,11 @@ import { BarkContext } from "../bark-context";
 import {
   AdminAccount,
   AdminAccountSchema,
+  AdminPii,
   AdminPiiSchema,
   EncryptedAdminAccount,
   EncryptedAdminAccountSchema,
 } from "../models/admin-models";
-import { toAdminPii } from "./to-admin-pii";
-import { toEncryptedAdminPii } from "./to-encrypted-admin-pii";
 
 export async function toEncryptedAdminAccount(
   context: BarkContext,
@@ -15,7 +14,7 @@ export async function toEncryptedAdminAccount(
 ): Promise<EncryptedAdminAccount> {
   const { emailHashService } = context;
   const { adminEmail } = adminAccount;
-  const adminEncryptedPii = await toEncryptedAdminPii(
+  const adminEncryptedPii = await toAdminEncryptedPii(
     context,
     AdminPiiSchema.parse(adminAccount),
   );
@@ -32,4 +31,27 @@ export async function toAdminAccount(
   const adminPii = await toAdminPii(context, adminEncryptedPii);
   const out = { ...adminPii, ...encryptedAdminAccount };
   return AdminAccountSchema.parse(out);
+}
+
+export async function toAdminPii(
+  context: BarkContext,
+  adminEncryptedPii: string,
+): Promise<AdminPii> {
+  const { piiEncryptionService } = context;
+  const decrypted =
+    await piiEncryptionService.getDecryptedData(adminEncryptedPii);
+  const decoded = JSON.parse(decrypted);
+  const validated = AdminPiiSchema.parse(decoded);
+  return validated;
+}
+
+export function toAdminEncryptedPii(
+  context: BarkContext,
+  adminPii: AdminPii,
+): Promise<string> {
+  const { piiEncryptionService } = context;
+  const validated = AdminPiiSchema.parse(adminPii);
+  const encoded = JSON.stringify(validated);
+  const encrypted = piiEncryptionService.getEncryptedData(encoded);
+  return encrypted;
 }

@@ -2,8 +2,8 @@ import { withBarkContext } from "../_context";
 import { toReEncryptedAdminFields } from "@/lib/bark/mappers/to-re-encrypted-admin-fields";
 import { AdminPii } from "@/lib/bark/models/admin-pii";
 import { EncryptedAdminFields } from "@/lib/bark/models/encrypted-admin-fields";
-import { toEncryptedAdminPii } from "@/lib/bark/mappers/to-encrypted-admin-pii";
-import { toAdminPii } from "@/lib/bark/mappers/to-admin-pii";
+import { toAdminEncryptedPii } from "@/lib/bark/mappers/admin-mappers";
+import { toAdminPii } from "@/lib/bark/mappers/admin-mappers";
 
 describe("toReEncryptedAdminFields", () => {
   it("should re-encrypt Encrypted User Fields", async () => {
@@ -17,7 +17,7 @@ describe("toReEncryptedAdminFields", () => {
       };
 
       // AND encrypted user fields...
-      const adminEncryptedPii = await toEncryptedAdminPii(context, adminPii);
+      const adminEncryptedPii = await toAdminEncryptedPii(context, adminPii);
       const encryptedAdminFields: EncryptedAdminFields = {
         adminId,
         adminEncryptedPii,
