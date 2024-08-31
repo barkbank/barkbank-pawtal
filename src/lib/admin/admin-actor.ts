@@ -42,6 +42,10 @@ export class AdminActor {
     });
   }
 
+  async getAllAdminAccounts() {
+    return this.config.adminAccountService.getAllAdminAccounts();
+  }
+
   async getVetClinics() {
     return this.config.vetAccountService.getVetClinics();
   }

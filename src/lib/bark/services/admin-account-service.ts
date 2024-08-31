@@ -41,6 +41,24 @@ export class AdminAccountService {
     }
   }
 
+  async getAllAdminAccounts(): Promise<
+    Result<AdminAccount[], typeof CODE.FAILED>
+  > {
+    try {
+      const context = this.getContext();
+      const dao = this.getDao();
+      const encryptedAccounts = await dao.getList();
+      const futureAccounts = encryptedAccounts.map(async (encrypted) => {
+        return toAdminAccount(context, encrypted);
+      });
+      const accounts = await Promise.all(futureAccounts);
+      return Ok(accounts);
+    } catch (err) {
+      console.error(err);
+      return Err(CODE.FAILED);
+    }
+  }
+
   // TODO: Cache this lookup using LRUCache. UserAccountService has an example.
   async getAdminIdByAdminEmail(args: {
     adminEmail: string;
