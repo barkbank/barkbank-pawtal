@@ -37,22 +37,22 @@ export class EncryptedAdminAccountDao {
     return EncryptedAdminAccountSchema.parse(res.rows[0]);
   }
 
-  async getByAdminHashedEmail(args: {
+  async getAdminIdByAdminHashedEmail(args: {
     adminHashedEmail: string;
-  }): Promise<EncryptedAdminAccount | null> {
+  }): Promise<AdminIdentifier | null> {
     const { adminHashedEmail } = args;
     const sql = `
-    SELECT ${this.projection}
+    SELECT admin_id as "adminId"
     FROM admins
     WHERE admin_hashed_email = $1
     `;
-    const res = await dbQuery<EncryptedAdminAccount>(this.db, sql, [
+    const res = await dbQuery<AdminIdentifier>(this.db, sql, [
       adminHashedEmail,
     ]);
     if (res.rows.length !== 1) {
       return null;
     }
-    return EncryptedAdminAccountSchema.parse(res.rows[0]);
+    return AdminIdentifierSchema.parse(res.rows[0]);
   }
 
   async getList(): Promise<EncryptedAdminAccount[]> {

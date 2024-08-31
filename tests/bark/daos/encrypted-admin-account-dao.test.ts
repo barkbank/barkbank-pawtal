@@ -40,18 +40,15 @@ describe("EncryptedAdminAccountDao", () => {
       expect(id1).toBeLessThan(id2);
     });
   });
-  it("getByAdminHashedEmail", async () => {
+  it("getAdminIdByAdminHashedEmail", async () => {
     await withBarkContext(async ({ context }) => {
       const s1 = _mockAdminAccountSpec();
       const e1 = await toEncryptedAdminAccountSpec(context, s1);
       const { adminHashedEmail } = e1;
       const dao = new EncryptedAdminAccountDao(context.dbPool);
       const { adminId } = await dao.insert({ spec: e1 });
-      const e2 = await dao.getByAdminHashedEmail({ adminHashedEmail });
-      const a2 = await toAdminAccount(context, e2!);
-      const s2 = AdminAccountSpecSchema.parse(a2);
-      expect(s2).toMatchObject(s1);
-      expect(s1).toMatchObject(s2);
+      const id2 = await dao.getAdminIdByAdminHashedEmail({ adminHashedEmail });
+      expect(id2?.adminId).toEqual(adminId);
     });
   });
 });
