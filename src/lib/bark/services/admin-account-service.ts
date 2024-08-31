@@ -41,6 +41,7 @@ export class AdminAccountService {
     }
   }
 
+  // TODO: Cache this lookup using LRUCache. UserAccountService has an example.
   async getAdminIdByAdminEmail(args: {
     adminEmail: string;
   }): Promise<

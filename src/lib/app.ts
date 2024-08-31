@@ -60,6 +60,7 @@ import { Visitor } from "./bark/actors/visitor";
 import { VetAccountService } from "./bark/services/vet-account-service";
 import { PawtalEventService } from "./bark/services/pawtal-event-service";
 import { opIndexDonorSnapshots } from "./bark/operations/op-index-donor-snapshots";
+import { AdminAccountService } from "./bark/services/admin-account-service";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -90,6 +91,8 @@ export class AppFactory {
   private promisedVisitor: Promise<Visitor> | null = null;
   private promisedVetAccountService: Promise<VetAccountService> | null = null;
   private promisedPawtalEventService: Promise<PawtalEventService> | null = null;
+  private promisedAdminAccountService: Promise<AdminAccountService> | null =
+    null;
 
   constructor(envs: NodeJS.Dict<string>) {
     this.envs = envs;
@@ -132,6 +135,18 @@ export class AppFactory {
 
   public getInstanceId(): string {
     return this.instanceId;
+  }
+
+  getAdminAccountService(): Promise<AdminAccountService> {
+    if (this.promisedAdminAccountService === null) {
+      this.promisedAdminAccountService = new Promise(async (resolve) => {
+        const context = await this.getBarkContext();
+        const service = new AdminAccountService({ context });
+        this.logCreated("AdminAccountService");
+        resolve(service);
+      });
+    }
+    return this.promisedAdminAccountService;
   }
 
   getGoogleAnalyticsMeasurementId(): string | undefined {
@@ -454,6 +469,7 @@ export class AppFactory {
           vetAccountService,
           userAccountService,
           registrationService,
+          adminAccountService,
         ] = await Promise.all([
           this.getDbPool(),
           this.getEmailHashService(),
@@ -463,6 +479,7 @@ export class AppFactory {
           this.getVetAccountService(),
           this.getUserAccountService(),
           this.getRegistrationService(),
+          this.getAdminAccountService(),
         ]);
         const rootAdminEmail = this.envString(
           APP_ENV.BARKBANK_ROOT_ADMIN_EMAIL,
@@ -470,13 +487,7 @@ export class AppFactory {
         if (!isValidEmail(rootAdminEmail)) {
           throw new Error("BARKBANK_ROOT_ADMIN_EMAIL is not a valid email");
         }
-        const factoryConfig: AdminActorFactoryConfig = {
-          dbPool,
-          emailHashService,
-          adminMapper,
-          rootAdminEmail,
-        };
-        const actorConfig: AdminActorConfig = {
+        const adminActorConfig: AdminActorConfig = {
           dbPool,
           emailHashService,
           adminMapper,
@@ -486,7 +497,15 @@ export class AppFactory {
           userAccountService,
           registrationService,
         };
-        const factory = new AdminActorFactory(factoryConfig, actorConfig);
+        const factoryConfig: AdminActorFactoryConfig = {
+          dbPool,
+          emailHashService,
+          adminMapper,
+          rootAdminEmail,
+          adminAccountService,
+          adminActorConfig,
+        };
+        const factory = new AdminActorFactory(factoryConfig);
         this.logCreated("AdminActorFactory");
         resolve(factory);
       });
