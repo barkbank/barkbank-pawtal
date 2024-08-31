@@ -1,5 +1,4 @@
 import { AdminActor, AdminActorConfig } from "./admin-actor";
-import { Pool } from "pg";
 import { AdminAccountService } from "../bark/services/admin-account-service";
 import { AdminAccountSpec } from "../bark/models/admin-models";
 
