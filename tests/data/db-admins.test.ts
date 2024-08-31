@@ -1,8 +1,4 @@
-import {
-  dbInsertAdmin,
-  dbSelectAdmin,
-  dbSelectAdminIdByAdminHashedEmail,
-} from "@/lib/data/db-admins";
+import { dbInsertAdmin, dbSelectAdmin } from "@/lib/data/db-admins";
 import { withDb } from "../_db_helpers";
 import { guaranteed } from "@/lib/utilities/bark-utils";
 import { adminSpec, getAdminMapper } from "../_fixtures";
@@ -40,28 +36,6 @@ describe("db-admins", () => {
       await withDb(async (db) => {
         const admin = await dbSelectAdmin(db, "111");
         expect(admin).toBeNull();
-      });
-    });
-  });
-  describe("dbSelectAdminIdByAdminHashedEmail", () => {
-    it("should return adminId matching the hashed email", async () => {
-      await withDb(async (db) => {
-        const specIn = await adminSpec(2);
-        const adminGen = await dbInsertAdmin(db, specIn);
-        const adminId = await dbSelectAdminIdByAdminHashedEmail(
-          db,
-          specIn.adminHashedEmail,
-        );
-        expect(adminId).toEqual(adminGen.adminId);
-      });
-    });
-    it("should return null when no admin matches the hashed email", async () => {
-      await withDb(async (db) => {
-        const adminId = await dbSelectAdminIdByAdminHashedEmail(
-          db,
-          "not_found",
-        );
-        expect(adminId).toBeNull();
       });
     });
   });

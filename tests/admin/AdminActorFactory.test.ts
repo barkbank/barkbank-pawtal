@@ -5,15 +5,15 @@ import {
   insertAdmin,
   getAdminActorFactoryConfig,
   someEmail,
-  getAdminSecurePii,
-  getHashedEmail,
+  getAdminSecurePii, getAdminAccountService
 } from "../_fixtures";
 import { AdminPii } from "@/lib/data/db-models";
 import { AdminSecurePii, AdminSpec } from "@/lib/data/db-models";
 import {
-  dbInsertAdmin,
-  dbSelectAdminIdByAdminHashedEmail,
+  dbInsertAdmin
 } from "@/lib/data/db-admins";
+import { withBarkContext } from "../bark/_context";
+import { CODE } from "@/lib/utilities/bark-code";
 
 describe("AdminActorFactory", () => {
   describe("getAdminActor", () => {
@@ -111,26 +111,29 @@ describe("AdminActorFactory", () => {
       });
     });
     it("should not create root admin account if called with another email", async () => {
-      await withDb(async (db) => {
+      // Or another way to put is that we want the root admin account to be
+      // initialised only when the root admin themself logs in.
+      await withBarkContext(async ({ context }) => {
+        const { dbPool } = context;
+        const service = getAdminAccountService(dbPool);
+
         // Given BARKBANK_ROOT_ADMIN_EMAIL is a valid email; AND no existing
         // admin account exists for the email;
         const rootAdminEmail = someEmail(123);
 
         // WHEN called with some other email;
-        await insertAdmin(1, db);
+        await insertAdmin(1, dbPool);
         const factory = new AdminActorFactory(
-          getAdminActorFactoryConfig(db, { rootAdminEmail }),
+          getAdminActorFactoryConfig(dbPool, { rootAdminEmail }),
         );
         await factory.getAdminActor(adminPii(1).adminEmail);
 
         // THEN no admin account should be created for the configured root admin
         // email.
-        const rootAdminHashedEmail = await getHashedEmail(rootAdminEmail);
-        const adminId = await dbSelectAdminIdByAdminHashedEmail(
-          db,
-          rootAdminHashedEmail,
-        );
-        expect(adminId).toBeNull();
+        const resLookup = await service.getAdminIdByAdminEmail({
+          adminEmail: rootAdminEmail,
+        });
+        expect(resLookup.error).toEqual(CODE.ERROR_ACCOUNT_NOT_FOUND);
       });
     });
   });
