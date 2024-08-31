@@ -80,6 +80,7 @@ import { UserAccountService } from "@/lib/bark/services/user-account-service";
 import { RegistrationService } from "@/lib/bark/services/registration-service";
 import { VetAccountService } from "@/lib/bark/services/vet-account-service";
 import { VetClinicDao } from "@/lib/bark/daos/vet-clinic-dao";
+import { AdminAccountService } from "@/lib/bark/services/admin-account-service";
 
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
@@ -208,15 +209,19 @@ export function getUserActorFactory(dbPool: Pool) {
   return new UserActorFactory({ context, actorConfig, userAccountService });
 }
 
+export function getAdminAccountService(dbPool: Pool) {
+  const context = getBarkContext(dbPool);
+  return new AdminAccountService({ context });
+}
+
 export function getAdminActorFactoryConfig(
   db: Pool,
   overrides?: Partial<AdminActorFactoryConfig>,
 ): AdminActorFactoryConfig {
   const base: AdminActorFactoryConfig = {
-    dbPool: db,
-    emailHashService: getEmailHashService(),
-    adminMapper: getAdminMapper(),
     rootAdminEmail: "",
+    adminAccountService: getAdminAccountService(db),
+    adminActorConfig: getAdminActorConfig(db),
   };
   return { ...base, ...overrides };
 }
@@ -240,10 +245,8 @@ export function getAdminActorConfig(dbPool: Pool): AdminActorConfig {
 }
 
 export function getAdminActorFactory(dbPool: Pool) {
-  return new AdminActorFactory(
-    getAdminActorFactoryConfig(dbPool),
-    getAdminActorConfig(dbPool),
-  );
+  const config = getAdminActorFactoryConfig(dbPool);
+  return new AdminActorFactory(config);
 }
 
 export function getAdminActor(dbPool: Pool, adminId: string): AdminActor {
