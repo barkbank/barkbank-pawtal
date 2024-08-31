@@ -18,5 +18,9 @@ export default async function Layout(props: { children: React.ReactNode }) {
       href: RoutePath.ADMIN_TOOLS_PAGE,
     },
   ];
-  return <BarkNavLayout routes={routes}>{props.children}</BarkNavLayout>;
+  return (
+    <BarkNavLayout routes={routes} showSidebar={false}>
+      {props.children}
+    </BarkNavLayout>
+  );
 }
