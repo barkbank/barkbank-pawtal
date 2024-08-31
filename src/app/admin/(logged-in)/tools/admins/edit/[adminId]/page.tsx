@@ -21,7 +21,7 @@ export default async function Page(props: { params: { adminId: string } }) {
 
   return (
     <div className="m-3 flex flex-col gap-6">
-      <BarkBackLink href={RoutePath.ADMIN_TOOLS_ADMINS_LIST} />
+      <BarkBackLink href={RoutePath.ADMIN_TOOLS_ADMINS_VIEW(adminId)} />
       <div className="prose">
         <h1>Edit Admin</h1>
         <p>Editing admin account {adminId}</p>

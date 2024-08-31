@@ -43,7 +43,7 @@ function _AdminCard(props: { account: AdminAccount }) {
   return (
     <Link
       className="x-card x-card-bg flex flex-col gap-1 text-sm"
-      href={RoutePath.ADMIN_TOOLS_ADMINS_EDIT(adminId)}
+      href={RoutePath.ADMIN_TOOLS_ADMINS_VIEW(adminId)}
     >
       <p className="font-semibold">{adminName}</p>
       <p>Email: {adminEmail}</p>
