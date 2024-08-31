@@ -75,11 +75,11 @@ export class RoutePath {
   static readonly ADMIN_TOOLS_USERS_VIEW = (userId: string) =>
     `/admin/tools/users/view/${userId}`;
 
-  static readonly ADMIN_TOOLS_ADMIN_LIST = "/admin/tools/admins/list";
-  static readonly ADMIN_TOOLS_ADMIN_ADD = "/admin/tools/admins/add";
-  static readonly ADMIN_TOOLS_ADMIN_VIEW = (adminId: string) =>
+  static readonly ADMIN_TOOLS_ADMINS_LIST = "/admin/tools/admins/list";
+  static readonly ADMIN_TOOLS_ADMINS_ADD = "/admin/tools/admins/add";
+  static readonly ADMIN_TOOLS_ADMINS_VIEW = (adminId: string) =>
     `/admin/tools/admins/view/${adminId}`;
-  static readonly ADMIN_TOOLS_ADMIN_EDIT = (adminId: string) =>
+  static readonly ADMIN_TOOLS_ADMINS_EDIT = (adminId: string) =>
     `/admin/tools/admins/edit/${adminId}`;
 
   static readonly ADMIN_DEFAULT_LOGGED_IN_PAGE = RoutePath.ADMIN_TOOLS_PAGE;
