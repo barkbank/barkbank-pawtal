@@ -13,8 +13,9 @@ import { RegistrationRequest } from "../bark/models/registration-models";
 import { RegistrationService } from "../bark/services/registration-service";
 import {
   AdminPermissions,
-  NO_ADMIN_PERMISSIONS,
+  NO_ADMIN_PERMISSIONS
 } from "../bark/models/admin-models";
+import { AdminAccountService } from "../bark/services/admin-account-service";
 
 export type AdminActorConfig = {
   dbPool: Pool;
@@ -22,6 +23,7 @@ export type AdminActorConfig = {
   adminMapper: AdminMapper;
   userMapper: UserMapper;
   dogMapper: DogMapper;
+  adminAccountService: AdminAccountService;
   vetAccountService: VetAccountService;
   userAccountService: UserAccountService;
   registrationService: RegistrationService;
@@ -83,7 +85,7 @@ export class AdminActor {
   }
 
   // TODO: Do we still need permissions?
-  public async getPermissions(): Promise<AdminPermissions> {
+  async getPermissions(): Promise<AdminPermissions> {
     const record = await this.getOwnAdminRecord();
     if (record === null) {
       return NO_ADMIN_PERMISSIONS;
@@ -103,7 +105,7 @@ export class AdminActor {
     return permissions;
   }
 
-  public getAdminId(): string {
+  getAdminId(): string {
     return this.adminId;
   }
 
