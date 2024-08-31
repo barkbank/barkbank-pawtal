@@ -10,11 +10,12 @@ import { NO_ADMIN_PERMISSIONS, AdminSpec } from "../data/db-models";
 import { AdminPii } from "../data/db-models";
 import { AdminMapper } from "../data/admin-mapper";
 import { AdminAccountService } from "../bark/services/admin-account-service";
+import { AdminAccountSpec } from "../bark/models/admin-models";
 
 export type AdminActorFactoryConfig = {
   dbPool: Pool;
-  emailHashService: HashService;
-  adminMapper: AdminMapper;
+  emailHashService: HashService; // WIP: Remove
+  adminMapper: AdminMapper; // WIP: Remove
   rootAdminEmail: string;
   adminAccountService: AdminAccountService;
   adminActorConfig: AdminActorConfig;
@@ -25,15 +26,14 @@ export class AdminActorFactory {
   constructor(private config: AdminActorFactoryConfig) {}
 
   public async getAdminActor(adminEmail: string): Promise<AdminActor | null> {
-    const {
-      dbPool,
-      emailHashService,
-      adminMapper,
-      rootAdminEmail,
-      adminActorConfig,
-    } = this.config;
-    const adminHashedEmail = await emailHashService.getHashHex(adminEmail);
-    const adminId = await this.getAdminIdByHashedEmail(adminHashedEmail);
+    const { dbPool, rootAdminEmail, adminAccountService, adminActorConfig } =
+      this.config;
+
+    const resLookup = await adminAccountService.getAdminIdByAdminEmail({
+      adminEmail,
+    });
+    const adminId = resLookup.result?.adminId ?? null;
+
     if (adminId === null && adminEmail !== rootAdminEmail) {
       // Reject attempt to get admin actor
       return null;
@@ -45,6 +45,7 @@ export class AdminActorFactory {
     if (adminId !== null && adminEmail === rootAdminEmail) {
       // Ensure actor for the root admin account can manage admin accounts and return it.
       const actor = new AdminActor(adminId, adminActorConfig);
+      // WIP: adminAccountService.grantPermissionToManageAdminAccounts
       const didGrant = await dbGrantCanManageAdminAccounts(
         dbPool,
         actor.getAdminId(),
@@ -58,35 +59,23 @@ export class AdminActorFactory {
     }
     if (adminId === null && adminEmail === rootAdminEmail) {
       // Create root admin account
-      const pii: AdminPii = {
+      const spec: AdminAccountSpec = {
         adminEmail: rootAdminEmail,
         adminName: "Root",
         adminPhoneNumber: "",
-      };
-      const securePii = await adminMapper.mapAdminPiiToAdminSecurePii(pii);
-      const spec: AdminSpec = {
-        ...securePii,
-        ...NO_ADMIN_PERMISSIONS,
         adminCanManageAdminAccounts: true,
+        adminCanManageDonors: true,
+        adminCanManageUserAccounts: true,
+        adminCanManageVetAccounts: true,
       };
-      const gen = await dbInsertAdmin(dbPool, spec);
+      const resCreate = await adminAccountService.createAdminAccount({ spec });
+      if (resCreate.error !== undefined) {
+        console.error(resCreate.error);
+        return null;
+      }
       console.log("Created root admin account");
-      return new AdminActor(gen.adminId, adminActorConfig);
+      return new AdminActor(resCreate.result.adminId, adminActorConfig);
     }
     throw new Error("BUG - Unhandled case");
-  }
-
-  private async getAdminIdByHashedEmail(
-    adminHashedEmail: string,
-  ): Promise<string | null> {
-    const { dbPool } = this.config;
-    const adminId = await dbSelectAdminIdByAdminHashedEmail(
-      dbPool,
-      adminHashedEmail,
-    );
-    if (adminId === null) {
-      return null;
-    }
-    return adminId;
   }
 }

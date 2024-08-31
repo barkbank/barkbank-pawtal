@@ -76,6 +76,7 @@ export class AdminMapper {
     return this.toAdminPii(adminPii);
   }
 
+  // WIP: Can remove?
   public async mapAdminPiiToAdminSecurePii(
     adminPii: AdminPii,
   ): Promise<AdminSecurePii> {

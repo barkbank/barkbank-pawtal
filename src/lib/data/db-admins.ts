@@ -1,6 +1,7 @@
 import { DbContext, dbQuery, toCamelCaseRow } from "./db-utils";
 import { AdminRecord, AdminGen, AdminSpec } from "./db-models";
 
+// WIP: Can remove?
 export async function dbInsertAdmin(
   ctx: DbContext,
   adminSpec: AdminSpec,
@@ -53,6 +54,7 @@ export async function dbSelectAdmin(
   return null;
 }
 
+// WIP: Can remove?
 export async function dbSelectAdminIdByAdminHashedEmail(
   ctx: DbContext,
   adminHashedEmail: string,
@@ -69,6 +71,7 @@ export async function dbSelectAdminIdByAdminHashedEmail(
   return null;
 }
 
+// WIP: Can remove?
 export async function dbGrantCanManageAdminAccounts(
   ctx: DbContext,
   adminId: string,
