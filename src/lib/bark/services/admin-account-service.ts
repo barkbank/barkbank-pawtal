@@ -1,9 +1,16 @@
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { BarkContext } from "../bark-context";
-import { AdminAccountSpec, AdminIdentifier } from "../models/admin-models";
+import {
+  AdminAccount,
+  AdminAccountSpec,
+  AdminIdentifier,
+} from "../models/admin-models";
 import { CODE } from "@/lib/utilities/bark-code";
 import { EncryptedAdminAccountDao } from "../daos/encrypted-admin-account-dao";
-import { toEncryptedAdminAccountSpec } from "../mappers/admin-mappers";
+import {
+  toAdminAccount,
+  toEncryptedAdminAccountSpec,
+} from "../mappers/admin-mappers";
 
 export class AdminAccountService {
   constructor(private config: { context: BarkContext }) {}
@@ -52,6 +59,30 @@ export class AdminAccountService {
         return Err(CODE.ERROR_ACCOUNT_NOT_FOUND);
       }
       return Ok(id);
+    } catch (err) {
+      console.error(err);
+      return Err(CODE.FAILED);
+    }
+  }
+
+  async getAdminAccountByAdminId(args: {
+    adminId: string;
+  }): Promise<
+    Result<
+      AdminAccount,
+      typeof CODE.FAILED | typeof CODE.ERROR_ACCOUNT_NOT_FOUND
+    >
+  > {
+    try {
+      const { adminId } = args;
+      const context = this.getContext();
+      const dao = this.getDao();
+      const encryptedAccount = await dao.getByAdminId({ adminId });
+      if (encryptedAccount === null) {
+        return Err(CODE.ERROR_ACCOUNT_NOT_FOUND);
+      }
+      const account = await toAdminAccount(context, encryptedAccount);
+      return Ok(account);
     } catch (err) {
       console.error(err);
       return Err(CODE.FAILED);
