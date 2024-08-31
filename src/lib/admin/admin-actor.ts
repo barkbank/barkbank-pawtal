@@ -107,6 +107,7 @@ export class AdminActor {
     return this.adminId;
   }
 
+  // WIP: Replace this with a getOwnAdminAccount(): Promise<AdminAccount>
   public getOwnAdminRecord(): Promise<AdminRecord | null> {
     // Caches own admin. It is safe to do this because a new AdminActor is
     // created on every server request as part of session validation; starting
@@ -118,6 +119,7 @@ export class AdminActor {
     return this.promisedAdminRecord;
   }
 
+  // WIP: Replace this with a getOwnAdminAccount(): Promise<AdminAccount>
   public async getOwnPii(): Promise<AdminPii | null> {
     const admin = await this.getOwnAdminRecord();
     if (admin === null) {
@@ -129,21 +131,25 @@ export class AdminActor {
     return adminPii;
   }
 
+  // WIP: Replace this with a getOwnAdminAccount(): Promise<AdminAccount>
   public async canManageAdminAccounts(): Promise<boolean> {
     const admin = await this.getOwnAdminRecord();
     return admin ? admin.adminCanManageAdminAccounts : false;
   }
 
+  // WIP: Replace this with a getOwnAdminAccount(): Promise<AdminAccount>
   public async canManageVetAccounts(): Promise<boolean> {
     const admin = await this.getOwnAdminRecord();
     return admin ? admin.adminCanManageVetAccounts : false;
   }
 
+  // WIP: Replace this with a getOwnAdminAccount(): Promise<AdminAccount>
   public async canManageUserAccounts(): Promise<boolean> {
     const admin = await this.getOwnAdminRecord();
     return admin ? admin.adminCanManageUserAccounts : false;
   }
 
+  // WIP: Replace this with a getOwnAdminAccount(): Promise<AdminAccount>
   public async canManageDonors(): Promise<boolean> {
     const admin = await this.getOwnAdminRecord();
     return admin ? admin.adminCanManageDonors : false;
