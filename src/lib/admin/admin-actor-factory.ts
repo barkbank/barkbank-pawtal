@@ -38,18 +38,19 @@ export class AdminActorFactory {
       // Reject attempt to get admin actor
       return null;
     }
+
     if (adminId !== null && adminEmail !== rootAdminEmail) {
       // Return actor for the normal admin account
       return new AdminActor(adminId, adminActorConfig);
     }
+
     if (adminId !== null && adminEmail === rootAdminEmail) {
       // Ensure actor for the root admin account can manage admin accounts and return it.
       const actor = new AdminActor(adminId, adminActorConfig);
-      // WIP: adminAccountService.grantPermissionToManageAdminAccounts
-      const didGrant = await dbGrantCanManageAdminAccounts(
-        dbPool,
-        actor.getAdminId(),
-      );
+      const didGrant =
+        await adminAccountService.grantPermissionsToManageAdminAccounts({
+          adminId,
+        });
       if (didGrant) {
         console.log(
           "Granted to root admin account the permission to manage admin accounts",
@@ -57,6 +58,7 @@ export class AdminActorFactory {
       }
       return actor;
     }
+
     if (adminId === null && adminEmail === rootAdminEmail) {
       // Create root admin account
       const spec: AdminAccountSpec = {
@@ -64,9 +66,9 @@ export class AdminActorFactory {
         adminName: "Root",
         adminPhoneNumber: "",
         adminCanManageAdminAccounts: true,
-        adminCanManageDonors: true,
-        adminCanManageUserAccounts: true,
-        adminCanManageVetAccounts: true,
+        adminCanManageDonors: false,
+        adminCanManageUserAccounts: false,
+        adminCanManageVetAccounts: false,
       };
       const resCreate = await adminAccountService.createAdminAccount({ spec });
       if (resCreate.error !== undefined) {
@@ -76,6 +78,7 @@ export class AdminActorFactory {
       console.log("Created root admin account");
       return new AdminActor(resCreate.result.adminId, adminActorConfig);
     }
+
     throw new Error("BUG - Unhandled case");
   }
 }

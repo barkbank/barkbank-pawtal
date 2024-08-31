@@ -91,4 +91,20 @@ export class EncryptedAdminAccountDao {
     ]);
     return AdminIdentifierSchema.parse(res.rows[0]);
   }
+
+  async grantPermissionsToManageAdminAccounts(args: {
+    adminId: string;
+  }): Promise<boolean> {
+    const { adminId } = args;
+    const sql = `
+    UPDATE admins
+    SET admin_can_manage_admin_accounts = TRUE
+    WHERE admin_id = $1
+    AND admin_can_manage_admin_accounts = FALSE
+    RETURNING 1
+    `;
+    const res = await dbQuery(this.db, sql, [adminId]);
+    const didUpdate = res.rows.length === 1;
+    return didUpdate;
+  }
 }

@@ -89,4 +89,18 @@ export class AdminAccountService {
       return Err(CODE.FAILED);
     }
   }
+
+  async grantPermissionsToManageAdminAccounts(args: {
+    adminId: string;
+  }): Promise<Result<boolean, typeof CODE.FAILED>> {
+    try {
+      const { adminId } = args;
+      const didUpdate =
+        await this.getDao().grantPermissionsToManageAdminAccounts({ adminId });
+      return Ok(didUpdate);
+    } catch (err) {
+      console.error(err);
+      return Err(CODE.FAILED);
+    }
+  }
 }
