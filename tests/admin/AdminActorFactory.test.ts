@@ -4,15 +4,14 @@ import {
   adminPii,
   insertAdmin,
   getAdminActorFactoryConfig,
-  someEmail,
-  getAdminSecurePii,
-  getAdminAccountService,
+  someEmail, getAdminAccountService
 } from "../_fixtures";
-import { AdminPii } from "@/lib/data/db-models";
-import { AdminSecurePii, AdminSpec } from "@/lib/data/db-models";
-import { dbInsertAdmin } from "@/lib/data/db-admins";
 import { withBarkContext } from "../bark/_context";
 import { CODE } from "@/lib/utilities/bark-code";
+import {
+  AdminAccountSpec,
+  AdminAccountSpecSchema,
+} from "@/lib/bark/models/admin-models";
 
 describe("AdminActorFactory", () => {
   describe("getAdminActor", () => {
@@ -69,22 +68,18 @@ describe("AdminActorFactory", () => {
         // to manage donors, user accounts, and vet accounts; AND the admin name
         // is “Adam”; AND the admin phone number is “87651234”;
         const rootAdminEmail = someEmail(123);
-        // WIP: Use AdminAccountService to create this test account
-        const existingPii: AdminPii = {
+        const spec = _mockSpec({
           adminEmail: rootAdminEmail,
           adminName: "Adam",
           adminPhoneNumber: "87651234",
-        };
-        const personalData: AdminSecurePii =
-          await getAdminSecurePii(existingPii);
-        const spec: AdminSpec = {
-          ...personalData,
           adminCanManageAdminAccounts: false,
           adminCanManageDonors: true,
           adminCanManageUserAccounts: true,
           adminCanManageVetAccounts: true,
-        };
-        const adminGen = await dbInsertAdmin(db, spec);
+        });
+        const service = getAdminAccountService(db);
+        const { adminId } = (await service.createAdminAccount({ spec }))
+          .result!;
 
         // WHEN called with the existing root email;
         const factoryConfig = getAdminActorFactoryConfig(db, {
@@ -102,14 +97,14 @@ describe("AdminActorFactory", () => {
         expect(actor).not.toBeNull();
         const resAccount = await actor!.getOwnAdminAccount();
         const account = resAccount.result!;
-        expect(account.adminId).toEqual(adminGen.adminId);
+        expect(account.adminId).toEqual(adminId);
         expect(account.adminCanManageAdminAccounts).toBe(true);
         expect(account.adminCanManageVetAccounts).toBe(true);
         expect(account.adminCanManageUserAccounts).toBe(true);
         expect(account.adminCanManageDonors).toBe(true);
         expect(account.adminEmail).toEqual(rootAdminEmail);
-        expect(account.adminName).toEqual(existingPii.adminName);
-        expect(account.adminPhoneNumber).toEqual(existingPii.adminPhoneNumber);
+        expect(account.adminName).toEqual(spec.adminName);
+        expect(account.adminPhoneNumber).toEqual(spec.adminPhoneNumber);
       });
     });
     it("should not create root admin account if called with another email", async () => {
@@ -124,20 +119,33 @@ describe("AdminActorFactory", () => {
         const rootAdminEmail = someEmail(123);
 
         // WHEN called with some other email;
-        // WIP: Use AdminAccountService to create this test account
-        await insertAdmin(1, dbPool);
-        const factory = new AdminActorFactory(
-          getAdminActorFactoryConfig(dbPool, { rootAdminEmail }),
-        );
-        await factory.getAdminActor(adminPii(1).adminEmail);
+        const spec = _mockSpec();
+        const { adminId } = (await service.createAdminAccount({ spec }))
+          .result!;
+        const config = getAdminActorFactoryConfig(dbPool, { rootAdminEmail });
+        const factory = new AdminActorFactory(config);
+        await factory.getAdminActor(spec.adminEmail);
 
         // THEN no admin account should be created for the configured root admin
         // email.
-        const resLookup = await service.getAdminIdByAdminEmail({
+        const { error } = await service.getAdminIdByAdminEmail({
           adminEmail: rootAdminEmail,
         });
-        expect(resLookup.error).toEqual(CODE.ERROR_ACCOUNT_NOT_FOUND);
+        expect(error).toEqual(CODE.ERROR_ACCOUNT_NOT_FOUND);
       });
     });
   });
 });
+
+function _mockSpec(overrides?: Partial<AdminAccountSpec>): AdminAccountSpec {
+  const base: AdminAccountSpec = {
+    adminEmail: "edmin@mockuser.com",
+    adminName: "Ed Min",
+    adminPhoneNumber: "1800 688 943",
+    adminCanManageAdminAccounts: true,
+    adminCanManageVetAccounts: false,
+    adminCanManageUserAccounts: false,
+    adminCanManageDonors: false,
+  };
+  return AdminAccountSpecSchema.parse({ ...base, ...overrides });
+}
