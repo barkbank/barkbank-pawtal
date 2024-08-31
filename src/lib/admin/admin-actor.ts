@@ -46,6 +46,13 @@ export class AdminActor {
     return this.config.adminAccountService.getAllAdminAccounts();
   }
 
+  async getAdminAccountByAdminId(args: { adminId: string }) {
+    const { adminId } = args;
+    return this.config.adminAccountService.getAdminAccountByAdminId({
+      adminId,
+    });
+  }
+
   async getVetClinics() {
     return this.config.vetAccountService.getVetClinics();
   }
