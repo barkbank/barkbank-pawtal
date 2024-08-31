@@ -1,7 +1,7 @@
 import { DbContext, dbQuery, toCamelCaseRow } from "./db-utils";
 import { AdminRecord, AdminGen, AdminSpec } from "./db-models";
 
-// WIP: Can remove?
+// TODO: Remove all usage of dbInsertAdmin
 export async function dbInsertAdmin(
   ctx: DbContext,
   adminSpec: AdminSpec,
@@ -29,6 +29,7 @@ export async function dbInsertAdmin(
   return toCamelCaseRow(res.rows[0]);
 }
 
+// TODO: Remove all usage of dbSelectAdmin
 export async function dbSelectAdmin(
   ctx: DbContext,
   adminId: string,
