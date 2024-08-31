@@ -37,6 +37,24 @@ export class EncryptedAdminAccountDao {
     return EncryptedAdminAccountSchema.parse(res.rows[0]);
   }
 
+  async getByAdminHashedEmail(args: {
+    adminHashedEmail: string;
+  }): Promise<EncryptedAdminAccount | null> {
+    const { adminHashedEmail } = args;
+    const sql = `
+    SELECT ${this.projection}
+    FROM admins
+    WHERE admin_hashed_email = $1
+    `;
+    const res = await dbQuery<EncryptedAdminAccount>(this.db, sql, [
+      adminHashedEmail,
+    ]);
+    if (res.rows.length !== 1) {
+      return null;
+    }
+    return EncryptedAdminAccountSchema.parse(res.rows[0]);
+  }
+
   async getList(): Promise<EncryptedAdminAccount[]> {
     const sql = `
     SELECT ${this.projection}
