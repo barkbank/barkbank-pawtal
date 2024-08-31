@@ -57,7 +57,7 @@ export default function Page() {
         <h1>Tools</h1>
         <p>A collection of tools for administrators.</p>
       </div>
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-5">
         {toolSpecs.map((spec) => (
           <_ToolLink key={spec.name} spec={spec} />
         ))}
