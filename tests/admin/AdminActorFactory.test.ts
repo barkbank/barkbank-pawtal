@@ -5,14 +5,14 @@ import {
   insertAdmin,
   getAdminActorFactoryConfig,
   someEmail,
-  getAdminSecurePii,
   getAdminAccountService,
 } from "../_fixtures";
-import { AdminPii } from "@/lib/data/db-models";
-import { AdminSecurePii, AdminSpec } from "@/lib/data/db-models";
-import { dbInsertAdmin } from "@/lib/data/db-admins";
 import { withBarkContext } from "../bark/_context";
 import { CODE } from "@/lib/utilities/bark-code";
+import {
+  AdminAccountSpec,
+  AdminAccountSpecSchema,
+} from "@/lib/bark/models/admin-models";
 
 describe("AdminActorFactory", () => {
   describe("getAdminActor", () => {
@@ -50,14 +50,15 @@ describe("AdminActorFactory", () => {
         // other permissions should be granted; AND the admin name should be
         // “Root”; AND the admin phone number should be empty string.
         expect(actor).not.toBeNull();
-        expect(await actor?.canManageAdminAccounts()).toBe(true);
-        expect(await actor?.canManageVetAccounts()).toBe(false);
-        expect(await actor?.canManageUserAccounts()).toBe(false);
-        expect(await actor?.canManageDonors()).toBe(false);
-        const pii = await actor?.getOwnPii();
-        expect(pii?.adminEmail).toEqual(rootAdminEmail);
-        expect(pii?.adminName).toEqual("Root");
-        expect(pii?.adminPhoneNumber).toEqual("");
+        const resAccount = await actor!.getOwnAdminAccount();
+        const account = resAccount.result!;
+        expect(account.adminCanManageAdminAccounts).toBe(true);
+        expect(account.adminCanManageVetAccounts).toBe(false);
+        expect(account.adminCanManageUserAccounts).toBe(false);
+        expect(account.adminCanManageDonors).toBe(false);
+        expect(account.adminEmail).toEqual(rootAdminEmail);
+        expect(account.adminName).toEqual("Root");
+        expect(account.adminPhoneNumber).toEqual("");
       });
     });
     it("should grant permission manage admin accounts to existing root admin account", async () => {
@@ -68,21 +69,18 @@ describe("AdminActorFactory", () => {
         // to manage donors, user accounts, and vet accounts; AND the admin name
         // is “Adam”; AND the admin phone number is “87651234”;
         const rootAdminEmail = someEmail(123);
-        const existingPii: AdminPii = {
+        const spec = _mockSpec({
           adminEmail: rootAdminEmail,
           adminName: "Adam",
           adminPhoneNumber: "87651234",
-        };
-        const personalData: AdminSecurePii =
-          await getAdminSecurePii(existingPii);
-        const spec: AdminSpec = {
-          ...personalData,
           adminCanManageAdminAccounts: false,
           adminCanManageDonors: true,
           adminCanManageUserAccounts: true,
           adminCanManageVetAccounts: true,
-        };
-        const adminGen = await dbInsertAdmin(db, spec);
+        });
+        const service = getAdminAccountService(db);
+        const { adminId } = (await service.createAdminAccount({ spec }))
+          .result!;
 
         // WHEN called with the existing root email;
         const factoryConfig = getAdminActorFactoryConfig(db, {
@@ -98,15 +96,16 @@ describe("AdminActorFactory", () => {
         // should still be “Adam”; AND the admin phone number should still be
         // “87651234”.
         expect(actor).not.toBeNull();
-        expect(actor?.getAdminId()).toEqual(adminGen.adminId);
-        expect(await actor?.canManageAdminAccounts()).toBe(true);
-        expect(await actor?.canManageVetAccounts()).toBe(true);
-        expect(await actor?.canManageUserAccounts()).toBe(true);
-        expect(await actor?.canManageDonors()).toBe(true);
-        const pii = await actor?.getOwnPii();
-        expect(pii?.adminEmail).toEqual(rootAdminEmail);
-        expect(pii?.adminName).toEqual(existingPii.adminName);
-        expect(pii?.adminPhoneNumber).toEqual(existingPii.adminPhoneNumber);
+        const resAccount = await actor!.getOwnAdminAccount();
+        const account = resAccount.result!;
+        expect(account.adminId).toEqual(adminId);
+        expect(account.adminCanManageAdminAccounts).toBe(true);
+        expect(account.adminCanManageVetAccounts).toBe(true);
+        expect(account.adminCanManageUserAccounts).toBe(true);
+        expect(account.adminCanManageDonors).toBe(true);
+        expect(account.adminEmail).toEqual(rootAdminEmail);
+        expect(account.adminName).toEqual(spec.adminName);
+        expect(account.adminPhoneNumber).toEqual(spec.adminPhoneNumber);
       });
     });
     it("should not create root admin account if called with another email", async () => {
@@ -121,19 +120,33 @@ describe("AdminActorFactory", () => {
         const rootAdminEmail = someEmail(123);
 
         // WHEN called with some other email;
-        await insertAdmin(1, dbPool);
-        const factory = new AdminActorFactory(
-          getAdminActorFactoryConfig(dbPool, { rootAdminEmail }),
-        );
-        await factory.getAdminActor(adminPii(1).adminEmail);
+        const spec = _mockSpec();
+        const { adminId } = (await service.createAdminAccount({ spec }))
+          .result!;
+        const config = getAdminActorFactoryConfig(dbPool, { rootAdminEmail });
+        const factory = new AdminActorFactory(config);
+        await factory.getAdminActor(spec.adminEmail);
 
         // THEN no admin account should be created for the configured root admin
         // email.
-        const resLookup = await service.getAdminIdByAdminEmail({
+        const { error } = await service.getAdminIdByAdminEmail({
           adminEmail: rootAdminEmail,
         });
-        expect(resLookup.error).toEqual(CODE.ERROR_ACCOUNT_NOT_FOUND);
+        expect(error).toEqual(CODE.ERROR_ACCOUNT_NOT_FOUND);
       });
     });
   });
 });
+
+function _mockSpec(overrides?: Partial<AdminAccountSpec>): AdminAccountSpec {
+  const base: AdminAccountSpec = {
+    adminEmail: "edmin@mockuser.com",
+    adminName: "Ed Min",
+    adminPhoneNumber: "1800 688 943",
+    adminCanManageAdminAccounts: true,
+    adminCanManageVetAccounts: false,
+    adminCanManageUserAccounts: false,
+    adminCanManageDonors: false,
+  };
+  return AdminAccountSpecSchema.parse({ ...base, ...overrides });
+}

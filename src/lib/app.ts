@@ -493,6 +493,7 @@ export class AppFactory {
           adminMapper,
           userMapper,
           dogMapper,
+          adminAccountService,
           vetAccountService,
           userAccountService,
           registrationService,
