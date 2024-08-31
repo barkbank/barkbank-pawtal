@@ -50,14 +50,15 @@ describe("AdminActorFactory", () => {
         // other permissions should be granted; AND the admin name should be
         // “Root”; AND the admin phone number should be empty string.
         expect(actor).not.toBeNull();
-        expect(await actor?.canManageAdminAccounts()).toBe(true);
-        expect(await actor?.canManageVetAccounts()).toBe(false);
-        expect(await actor?.canManageUserAccounts()).toBe(false);
-        expect(await actor?.canManageDonors()).toBe(false);
-        const pii = await actor?.getOwnPii();
-        expect(pii?.adminEmail).toEqual(rootAdminEmail);
-        expect(pii?.adminName).toEqual("Root");
-        expect(pii?.adminPhoneNumber).toEqual("");
+        const resAccount = await actor!.getOwnAdminAccount();
+        const account = resAccount.result!;
+        expect(account.adminCanManageAdminAccounts).toBe(true);
+        expect(account.adminCanManageVetAccounts).toBe(false);
+        expect(account.adminCanManageUserAccounts).toBe(false);
+        expect(account.adminCanManageDonors).toBe(false);
+        expect(account.adminEmail).toEqual(rootAdminEmail);
+        expect(account.adminName).toEqual("Root");
+        expect(account.adminPhoneNumber).toEqual("");
       });
     });
     it("should grant permission manage admin accounts to existing root admin account", async () => {
@@ -68,6 +69,7 @@ describe("AdminActorFactory", () => {
         // to manage donors, user accounts, and vet accounts; AND the admin name
         // is “Adam”; AND the admin phone number is “87651234”;
         const rootAdminEmail = someEmail(123);
+        // WIP: Use AdminAccountService to create this test account
         const existingPii: AdminPii = {
           adminEmail: rootAdminEmail,
           adminName: "Adam",
@@ -98,15 +100,16 @@ describe("AdminActorFactory", () => {
         // should still be “Adam”; AND the admin phone number should still be
         // “87651234”.
         expect(actor).not.toBeNull();
-        expect(actor?.getAdminId()).toEqual(adminGen.adminId);
-        expect(await actor?.canManageAdminAccounts()).toBe(true);
-        expect(await actor?.canManageVetAccounts()).toBe(true);
-        expect(await actor?.canManageUserAccounts()).toBe(true);
-        expect(await actor?.canManageDonors()).toBe(true);
-        const pii = await actor?.getOwnPii();
-        expect(pii?.adminEmail).toEqual(rootAdminEmail);
-        expect(pii?.adminName).toEqual(existingPii.adminName);
-        expect(pii?.adminPhoneNumber).toEqual(existingPii.adminPhoneNumber);
+        const resAccount = await actor!.getOwnAdminAccount();
+        const account = resAccount.result!;
+        expect(account.adminId).toEqual(adminGen.adminId);
+        expect(account.adminCanManageAdminAccounts).toBe(true);
+        expect(account.adminCanManageVetAccounts).toBe(true);
+        expect(account.adminCanManageUserAccounts).toBe(true);
+        expect(account.adminCanManageDonors).toBe(true);
+        expect(account.adminEmail).toEqual(rootAdminEmail);
+        expect(account.adminName).toEqual(existingPii.adminName);
+        expect(account.adminPhoneNumber).toEqual(existingPii.adminPhoneNumber);
       });
     });
     it("should not create root admin account if called with another email", async () => {
@@ -121,6 +124,7 @@ describe("AdminActorFactory", () => {
         const rootAdminEmail = someEmail(123);
 
         // WHEN called with some other email;
+        // WIP: Use AdminAccountService to create this test account
         await insertAdmin(1, dbPool);
         const factory = new AdminActorFactory(
           getAdminActorFactoryConfig(dbPool, { rootAdminEmail }),
