@@ -1,9 +1,5 @@
 import { Pool } from "pg";
-import {
-  AdminPermissions,
-  AdminRecord,
-  NO_ADMIN_PERMISSIONS,
-} from "../data/db-models";
+import { AdminRecord } from "../data/db-models";
 import { HashService } from "../services/hash";
 import { dbSelectAdmin } from "../data/db-admins";
 import { AdminPii } from "../data/db-models";
@@ -15,6 +11,10 @@ import { VetAccountSpec, VetClinicSpec } from "../bark/models/vet-models";
 import { UserAccountService } from "../bark/services/user-account-service";
 import { RegistrationRequest } from "../bark/models/registration-models";
 import { RegistrationService } from "../bark/services/registration-service";
+import {
+  AdminPermissions,
+  NO_ADMIN_PERMISSIONS,
+} from "../bark/models/admin-models";
 
 export type AdminActorConfig = {
   dbPool: Pool;
