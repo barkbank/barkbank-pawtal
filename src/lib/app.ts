@@ -498,9 +498,6 @@ export class AppFactory {
           registrationService,
         };
         const factoryConfig: AdminActorFactoryConfig = {
-          dbPool,
-          emailHashService,
-          adminMapper,
           rootAdminEmail,
           adminAccountService,
           adminActorConfig,

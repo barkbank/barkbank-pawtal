@@ -219,9 +219,6 @@ export function getAdminActorFactoryConfig(
   overrides?: Partial<AdminActorFactoryConfig>,
 ): AdminActorFactoryConfig {
   const base: AdminActorFactoryConfig = {
-    dbPool: db,
-    emailHashService: getEmailHashService(),
-    adminMapper: getAdminMapper(),
     rootAdminEmail: "",
     adminAccountService: getAdminAccountService(db),
     adminActorConfig: getAdminActorConfig(db),

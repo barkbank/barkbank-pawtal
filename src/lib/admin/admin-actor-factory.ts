@@ -1,32 +1,19 @@
 import { AdminActor, AdminActorConfig } from "./admin-actor";
-import { HashService } from "../services/hash";
 import { Pool } from "pg";
-import {
-  dbGrantCanManageAdminAccounts,
-  dbInsertAdmin,
-  dbSelectAdminIdByAdminHashedEmail,
-} from "../data/db-admins";
-import { NO_ADMIN_PERMISSIONS, AdminSpec } from "../data/db-models";
-import { AdminPii } from "../data/db-models";
-import { AdminMapper } from "../data/admin-mapper";
 import { AdminAccountService } from "../bark/services/admin-account-service";
 import { AdminAccountSpec } from "../bark/models/admin-models";
 
 export type AdminActorFactoryConfig = {
-  dbPool: Pool;
-  emailHashService: HashService; // WIP: Remove
-  adminMapper: AdminMapper; // WIP: Remove
   rootAdminEmail: string;
   adminAccountService: AdminAccountService;
   adminActorConfig: AdminActorConfig;
 };
 
-// WIP: Update this to use AdminAccountService
 export class AdminActorFactory {
   constructor(private config: AdminActorFactoryConfig) {}
 
   public async getAdminActor(adminEmail: string): Promise<AdminActor | null> {
-    const { dbPool, rootAdminEmail, adminAccountService, adminActorConfig } =
+    const { rootAdminEmail, adminAccountService, adminActorConfig } =
       this.config;
 
     const resLookup = await adminAccountService.getAdminIdByAdminEmail({
