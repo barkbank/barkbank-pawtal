@@ -1,4 +1,4 @@
-import { DbContext, dbQuery, toCamelCaseRow } from "./db-utils";
+import { DbContext, dbQuery } from "./db-utils";
 import { UserRecord, UserGen, UserSpec } from "./db-models";
 
 // TODO: Update the tests that use these functions to either (i) use EncryptedUserAccountDao or (ii) own the functionality in some _helper.ts test-only file.
@@ -25,61 +25,6 @@ export async function dbInsertUser(
     userSpec.userResidency,
   ]);
   return res.rows[0];
-}
-
-// TODO: dbTryInsertUser is not used anywhere. consider removing.
-export async function dbTryInsertUser(
-  ctx: DbContext,
-  userSpec: UserSpec,
-): Promise<UserGen | null> {
-  const sql = `
-  INSERT INTO users (
-    user_hashed_email,
-    user_encrypted_pii,
-    user_residency
-  )
-  VALUES ($1, $2, $3)
-  ON CONFLICT (user_hashed_email) DO NOTHING
-  RETURNING
-    user_id,
-    user_creation_time,
-    user_modification_time
-  `;
-  const res = await dbQuery(ctx, sql, [
-    userSpec.userHashedEmail,
-    userSpec.userEncryptedPii,
-    userSpec.userResidency,
-  ]);
-  if (res.rows.length !== 1) {
-    return null;
-  }
-  return toCamelCaseRow(res.rows[0]);
-}
-
-// TODO: dbUpdateUser is only used in tests, to test itself. consider removing.
-export async function dbUpdateUser(
-  ctx: DbContext,
-  userId: string,
-  userSpec: UserSpec,
-): Promise<UserGen> {
-  const sql = `
-  UPDATE users SET
-    user_hashed_email = $2,
-    user_encrypted_pii = $3,
-    user_residency = $4
-  WHERE user_id = $1
-  RETURNING
-    user_id,
-    user_creation_time,
-    user_modification_time
-  `;
-  const res = await dbQuery(ctx, sql, [
-    userId,
-    userSpec.userHashedEmail,
-    userSpec.userEncryptedPii,
-    userSpec.userResidency,
-  ]);
-  return toCamelCaseRow(res.rows[0]);
 }
 
 // TODO: dbSelectUser is only really useful for tests, and that's debatable. can we remove it?
