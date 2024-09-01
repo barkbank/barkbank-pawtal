@@ -24,7 +24,7 @@ export default async function Page() {
         <h1>Admin Management</h1>
         <p>A tool for managing admin accounts.</p>
       </div>
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
         {adminAccounts.map((account) => (
           <_AdminCard account={account} key={account.adminId} />
         ))}
