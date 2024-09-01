@@ -67,6 +67,11 @@ export class AdminActor {
     });
   }
 
+  async deleteAdminAccount(args: { adminId: string }) {
+    const { adminId } = args;
+    return this.config.adminAccountService.deleteAdminAccount({ adminId });
+  }
+
   async getVetClinics() {
     return this.config.vetAccountService.getVetClinics();
   }

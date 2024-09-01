@@ -122,6 +122,18 @@ export class EncryptedAdminAccountDao {
     return didUpdate;
   }
 
+  async delete(args: { adminId: string }): Promise<boolean> {
+    const { adminId } = args;
+    const sql = `
+    DELETE FROM admins
+    WHERE admin_id = $1
+    RETURNING 1
+    `;
+    const res = await dbQuery(this.db, sql, [adminId]);
+    const didDelete = res.rows.length === 1;
+    return didDelete;
+  }
+
   async grantPermissionsToManageAdminAccounts(args: {
     adminId: string;
   }): Promise<boolean> {

@@ -65,6 +65,25 @@ export class AdminAccountService {
     }
   }
 
+  async deleteAdminAccount(args: {
+    adminId: string;
+  }): Promise<
+    typeof CODE.OK | typeof CODE.FAILED | typeof CODE.ERROR_ACCOUNT_NOT_FOUND
+  > {
+    try {
+      const { adminId } = args;
+      const dao = this.getDao();
+      const didDelete = await dao.delete({ adminId });
+      if (!didDelete) {
+        return CODE.ERROR_ACCOUNT_NOT_FOUND;
+      }
+      return CODE.OK;
+    } catch (err) {
+      console.error(err);
+      return CODE.FAILED;
+    }
+  }
+
   async getAllAdminAccounts(): Promise<
     Result<AdminAccount[], typeof CODE.FAILED>
   > {
