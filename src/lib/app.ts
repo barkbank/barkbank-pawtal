@@ -499,6 +499,7 @@ export class AppFactory {
           vetAccountService,
           userAccountService,
           registrationService,
+          rootAdminEmail,
         };
         const factoryConfig: AdminActorFactoryConfig = {
           rootAdminEmail,

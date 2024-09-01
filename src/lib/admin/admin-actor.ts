@@ -25,7 +25,6 @@ import {
 import { Err, Result } from "../utilities/result";
 import { CODE } from "../utilities/bark-code";
 import { UserAccount } from "../bark/models/user-models";
-import APP from "../app";
 
 export type AdminActorConfig = {
   dbPool: Pool;
@@ -37,6 +36,7 @@ export type AdminActorConfig = {
   vetAccountService: VetAccountService;
   userAccountService: UserAccountService;
   registrationService: RegistrationService;
+  rootAdminEmail: string;
 };
 
 /**
@@ -58,7 +58,7 @@ export class AdminActor {
       return false;
     }
     const { adminEmail } = result;
-    const rootAdminEmail = APP.getRootAdminEmail();
+    const { rootAdminEmail } = this.config;
     return adminEmail === rootAdminEmail;
   }
 
