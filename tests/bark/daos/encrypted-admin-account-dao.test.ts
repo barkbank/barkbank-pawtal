@@ -23,6 +23,30 @@ describe("EncryptedAdminAccountDao", () => {
       expect(s1).toMatchObject(s2);
     });
   });
+  it("update modifies an account", async () => {
+    await withBarkContext(async ({ context }) => {
+      const dao = new EncryptedAdminAccountDao(context.dbPool);
+
+      const s1 = _mockAdminAccountSpec({
+        adminName: "John",
+        adminCanManageDonors: false,
+      });
+      const e1 = await toEncryptedAdminAccountSpec(context, s1);
+      const { adminId } = await dao.insert({ spec: e1 });
+
+      const s2 = _mockAdminAccountSpec({
+        adminName: "John Green",
+        adminCanManageDonors: true,
+      });
+      const e2 = await toEncryptedAdminAccountSpec(context, s2);
+      const didUpdate = await dao.update({ adminId, spec: e2 });
+      expect(didUpdate).toBe(true);
+
+      const e3 = await dao.getByAdminId({ adminId });
+      expect(e3).toMatchObject(e2);
+      expect(e3).not.toMatchObject(e1);
+    });
+  });
   it("getList returns admins in ID order", async () => {
     await withBarkContext(async ({ context }) => {
       const s1 = _mockAdminAccountSpec({ adminEmail: "admin1@test.com" });

@@ -1,5 +1,6 @@
 import { DbContext, dbQuery } from "@/lib/data/db-utils";
 import {
+  AdminAccountSpec,
   AdminIdentifier,
   AdminIdentifierSchema,
   EncryptedAdminAccount,
@@ -90,6 +91,36 @@ export class EncryptedAdminAccountDao {
       spec.adminCanManageDonors,
     ]);
     return AdminIdentifierSchema.parse(res.rows[0]);
+  }
+
+  async update(args: {
+    adminId: string;
+    spec: EncryptedAdminAccountSpec;
+  }): Promise<boolean> {
+    const { adminId, spec } = args;
+    const sql = `
+    UPDATE admins
+    SET
+      admin_hashed_email = $2,
+      admin_encrypted_pii = $3,
+      admin_can_manage_admin_accounts = $4,
+      admin_can_manage_vet_accounts = $5,
+      admin_can_manage_user_accounts = $6,
+      admin_can_manage_donors = $7
+    WHERE admin_id = $1
+    RETURNING 1
+    `;
+    const res = await dbQuery(this.db, sql, [
+      adminId,
+      spec.adminHashedEmail,
+      spec.adminEncryptedPii,
+      spec.adminCanManageAdminAccounts,
+      spec.adminCanManageVetAccounts,
+      spec.adminCanManageUserAccounts,
+      spec.adminCanManageDonors,
+    ]);
+    const didUpdate = res.rows.length === 1;
+    return didUpdate;
   }
 
   async grantPermissionsToManageAdminAccounts(args: {
