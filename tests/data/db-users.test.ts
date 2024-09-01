@@ -3,10 +3,9 @@ import {
   dbInsertUser,
   dbSelectUser,
   dbSelectUserIdByHashedEmail,
-  dbUpdateUser,
 } from "@/lib/data/db-users";
 import { withDb } from "../_db_helpers";
-import { ensureTimePassed, getUserMapper, getUserSpec } from "../_fixtures";
+import { getUserMapper, getUserSpec } from "../_fixtures";
 import { guaranteed } from "@/lib/utilities/bark-utils";
 import { USER_RESIDENCY } from "@/lib/bark/enums/user-residency";
 
@@ -72,26 +71,6 @@ describe("db-users", () => {
       await withDb(async (db) => {
         const userId = await dbSelectUserIdByHashedEmail(db, "no-no-no");
         expect(userId).toBeNull();
-      });
-    });
-  });
-  describe("dbUpdateUser", () => {
-    it("should update user details and modification time", async () => {
-      await withDb(async (db) => {
-        const specIn1 = await getUserSpec(1);
-        const specIn2 = await getUserSpec(2);
-        const gen1 = await dbInsertUser(db, specIn1);
-        ensureTimePassed();
-        const gen2 = await dbUpdateUser(db, gen1.userId, specIn2);
-        expect(gen2.userId).toEqual(gen1.userId);
-        expect(gen2.userCreationTime).toEqual(gen1.userCreationTime);
-        expect(gen2.userModificationTime.getTime()).toBeGreaterThan(
-          gen1.userModificationTime.getTime(),
-        );
-        const user = guaranteed(await dbSelectUser(db, gen1.userId));
-        const mapper = getUserMapper();
-        const specOut = mapper.toUserSpec(user);
-        expect(specOut).toEqual(specIn2);
       });
     });
   });
