@@ -457,6 +457,10 @@ export class AppFactory {
     return this.promisedDbPool;
   }
 
+  getRootAdminEmail(): string {
+    return this.envString(APP_ENV.BARKBANK_ROOT_ADMIN_EMAIL);
+  }
+
   public getAdminActorFactory(): Promise<AdminActorFactory> {
     if (this.promisedAdminActorFactory === null) {
       this.promisedAdminActorFactory = new Promise(async (resolve) => {
@@ -481,9 +485,7 @@ export class AppFactory {
           this.getRegistrationService(),
           this.getAdminAccountService(),
         ]);
-        const rootAdminEmail = this.envString(
-          APP_ENV.BARKBANK_ROOT_ADMIN_EMAIL,
-        );
+        const rootAdminEmail = this.getRootAdminEmail();
         if (!isValidEmail(rootAdminEmail)) {
           throw new Error("BARKBANK_ROOT_ADMIN_EMAIL is not a valid email");
         }
