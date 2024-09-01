@@ -13,7 +13,12 @@ import { revalidatePath } from "next/cache";
 export async function postCreateAdmin(args: {
   spec: AdminAccountSpec;
 }): Promise<
-  Result<AdminIdentifier, typeof CODE.ERROR_NOT_LOGGED_IN | typeof CODE.FAILED>
+  Result<
+    AdminIdentifier,
+    | typeof CODE.ERROR_NOT_LOGGED_IN
+    | typeof CODE.FAILED
+    | typeof CODE.ERROR_NOT_ALLOWED
+  >
 > {
   const actor = await getAuthenticatedAdminActor();
   if (actor === null) {

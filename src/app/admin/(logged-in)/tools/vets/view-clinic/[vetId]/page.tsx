@@ -7,6 +7,7 @@ import { toVetAccount } from "@/lib/bark/mappers/to-vet-account";
 import { RoutePath } from "@/lib/route-path";
 
 export default async function Page(props: { params: { vetId: string } }) {
+  // WIP: Use AdminActor
   const { vetId } = props.params;
   const context = await APP.getBarkContext();
   const { dbPool } = context;
