@@ -1,6 +1,5 @@
 import { DbContext, dbQuery } from "@/lib/data/db-utils";
 import {
-  AdminAccountSpec,
   AdminIdentifier,
   AdminIdentifierSchema,
   EncryptedAdminAccount,

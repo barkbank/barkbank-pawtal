@@ -41,6 +41,25 @@ export class AdminAccountService {
     }
   }
 
+  async updateAdminAccount(args: {
+    adminId: string;
+    spec: AdminAccountSpec;
+  }): Promise<Result<{ didUpdate: boolean }, typeof CODE.FAILED>> {
+    try {
+      const { adminId, spec } = args;
+      const encryptedSpec = await toEncryptedAdminAccountSpec(
+        this.getContext(),
+        spec,
+      );
+      const dao = this.getDao();
+      const didUpdate = await dao.update({ adminId, spec: encryptedSpec });
+      return Ok({ didUpdate });
+    } catch (err) {
+      console.error(err);
+      return Err(CODE.FAILED);
+    }
+  }
+
   async getAllAdminAccounts(): Promise<
     Result<AdminAccount[], typeof CODE.FAILED>
   > {

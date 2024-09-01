@@ -59,6 +59,14 @@ export class AdminActor {
     return this.config.adminAccountService.createAdminAccount({ spec });
   }
 
+  async updateAdminAccount(args: { adminId: string; spec: AdminAccountSpec }) {
+    const { adminId, spec } = args;
+    return this.config.adminAccountService.updateAdminAccount({
+      adminId,
+      spec,
+    });
+  }
+
   async getVetClinics() {
     return this.config.vetAccountService.getVetClinics();
   }
