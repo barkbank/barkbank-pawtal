@@ -5,7 +5,7 @@ import { getAuthenticatedAdminActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
 
-export const metadata = getMetadata({ title: "Admin" });
+export const metadata = getMetadata({ title: "Tools" });
 
 export default async function Layout(props: { children: React.ReactNode }) {
   const actor = await getAuthenticatedAdminActor();

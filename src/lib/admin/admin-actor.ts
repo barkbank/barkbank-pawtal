@@ -25,6 +25,7 @@ import {
 import { Err, Result } from "../utilities/result";
 import { CODE } from "../utilities/bark-code";
 import { UserAccount } from "../bark/models/user-models";
+import APP from "../app";
 
 export type AdminActorConfig = {
   dbPool: Pool;
@@ -49,6 +50,16 @@ export class AdminActor {
 
   getAdminId(): string {
     return this.adminId;
+  }
+
+  async getIsRoot() {
+    const { result } = await this.getOwnAdminAccount();
+    if (result === undefined) {
+      return false;
+    }
+    const { adminEmail } = result;
+    const rootAdminEmail = APP.getRootAdminEmail();
+    return adminEmail === rootAdminEmail;
   }
 
   async getOwnAdminAccount() {
