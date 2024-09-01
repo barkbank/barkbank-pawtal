@@ -81,6 +81,8 @@ export class RoutePath {
     `/admin/tools/admins/view/${adminId}`;
   static readonly ADMIN_TOOLS_ADMINS_EDIT = (adminId: string) =>
     `/admin/tools/admins/edit/${adminId}`;
+  static readonly ADMIN_TOOLS_ADMINS_DELETE = (adminId: string) =>
+    `/admin/tools/admins/delete/${adminId}`;
 
   static readonly ADMIN_DEFAULT_LOGGED_IN_PAGE = RoutePath.ADMIN_TOOLS_PAGE;
 

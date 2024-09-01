@@ -58,13 +58,20 @@ export default async function Page(props: { params: { adminId: string } }) {
           <_Permission label="manage donors" value={adminCanManageDonors} />
         </ul>
       </div>
-      <div>
+      <div className="flex flex-col gap-3 md:flex-row">
         <BarkButton
           className="w-full md:w-40"
-          variant="default"
+          variant="secondary"
           href={RoutePath.ADMIN_TOOLS_ADMINS_EDIT(adminId)}
         >
           Edit
+        </BarkButton>
+        <BarkButton
+          className="w-full md:w-40"
+          variant="secondary"
+          href={RoutePath.ADMIN_TOOLS_ADMINS_DELETE(adminId)}
+        >
+          Delete
         </BarkButton>
       </div>
     </div>
