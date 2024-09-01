@@ -1,5 +1,6 @@
 import { SimpleErrorPage } from "@/app/_components/simple-error-page";
 import { BarkBackLink } from "@/components/bark/bark-back-link";
+import { BarkButton } from "@/components/bark/bark-button";
 import { Button } from "@/components/ui/button";
 import { getAuthenticatedAdminActor } from "@/lib/auth";
 import { AdminAccount } from "@/lib/bark/models/admin-models";
@@ -29,9 +30,13 @@ export default async function Page() {
         ))}
       </div>
       <div>
-        <Link href={RoutePath.ADMIN_TOOLS_ADMINS_ADD}>
-          <Button className="w-full p-6 md:w-40">Add</Button>
-        </Link>
+        <BarkButton
+          className="w-full md:w-40"
+          variant="default"
+          href={RoutePath.ADMIN_TOOLS_ADMINS_ADD}
+        >
+          Add
+        </BarkButton>
       </div>
     </div>
   );

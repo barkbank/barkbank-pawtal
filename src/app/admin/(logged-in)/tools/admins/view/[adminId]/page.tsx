@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { SimpleErrorPage } from "@/app/_components/simple-error-page";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { BarkButton } from "@/components/bark/bark-button";
 
 export default async function Page(props: { params: { adminId: string } }) {
   const actor = await getAuthenticatedAdminActor();
@@ -58,9 +59,13 @@ export default async function Page(props: { params: { adminId: string } }) {
         </ul>
       </div>
       <div>
-        <Link href={RoutePath.ADMIN_TOOLS_ADMINS_EDIT(adminId)}>
-          <Button className="w-full p-6 md:w-40">Edit</Button>
-        </Link>
+        <BarkButton
+          className="w-full md:w-40"
+          variant="default"
+          href={RoutePath.ADMIN_TOOLS_ADMINS_EDIT(adminId)}
+        >
+          Edit
+        </BarkButton>
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import { Form } from "../ui/form";
 import React from "react";
 
 export function BarkForm(props: {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   form: UseFormReturn<any>;
   onSubmit: (values: any) => Promise<void>;
 }) {
