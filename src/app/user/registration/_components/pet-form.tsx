@@ -40,7 +40,6 @@ export default function PetForm(props: {
   vetOptions: BarkFormOption[];
   defaultValues: FormDataType;
   onSave: (values: FormDataType) => void;
-  onPrev: () => void;
   onNext: () => void;
   prevLabel: string;
   nextLabel: string;
@@ -50,7 +49,6 @@ export default function PetForm(props: {
     vetOptions,
     defaultValues,
     onSave,
-    onPrev,
     onNext,
     prevLabel,
     nextLabel,
@@ -64,11 +62,6 @@ export default function PetForm(props: {
     console.log(values);
     onSave(values);
     onNext();
-  }
-
-  async function onPrevClick() {
-    onSave(form.getValues());
-    onPrev();
   }
 
   const currentValues = form.watch();
@@ -193,20 +186,13 @@ export default function PetForm(props: {
           />
         )}
 
-        <div className="mt-3 flex gap-3">
-          <BarkButton
-            variant="brandInverse"
-            onClick={onPrevClick}
-            className="w-full"
-            type="button"
-          >
-            {prevLabel}
-          </BarkButton>
-
-          <BarkButton variant="brand" type="submit" className="w-full">
-            {nextLabel}
-          </BarkButton>
-        </div>
+        <BarkButton
+          variant="brand"
+          type="submit"
+          className="mt-3 w-full md:w-48"
+        >
+          {nextLabel}
+        </BarkButton>
       </BarkForm>
     </>
   );
