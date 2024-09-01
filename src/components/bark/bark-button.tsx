@@ -4,7 +4,7 @@ import { Button, buttonVariants } from "../ui/button";
 
 type _BaseProps = {
   children: React.ReactNode;
-  variant: "brand" | "brandInverse";
+  variant: "brand" | "brandInverse" | "default" | "secondary" | "destructive";
   className?: string;
   disabled?: boolean;
 };

@@ -64,14 +64,27 @@ export class RoutePath {
   static readonly ADMIN_TOOLS_REENCRYPT_PAGE = "/admin/tools/re-encrypt";
   static readonly ADMIN_TOOLS_WEBFLOW_IMPORTER =
     "/admin/tools/webflow-importer";
+
   static readonly ADMIN_TOOLS_VETS_LIST_CLINICS =
     "/admin/tools/vets/list-clinics";
   static readonly ADMIN_TOOLS_VETS_ADD_CLINIC = "/admin/tools/vets/add-clinic";
   static readonly ADMIN_TOOLS_VETS_VIEW_CLINIC = (vetId: string) =>
     `/admin/tools/vets/view-clinic/${vetId}`;
+
   static readonly ADMIN_TOOLS_USERS_LIST = "/admin/tools/users/list";
   static readonly ADMIN_TOOLS_USERS_VIEW = (userId: string) =>
     `/admin/tools/users/view/${userId}`;
+
+  static readonly ADMIN_TOOLS_ADMINS_SUBTREE = "/admin/tools/admins";
+  static readonly ADMIN_TOOLS_ADMINS_LIST = "/admin/tools/admins/list";
+  static readonly ADMIN_TOOLS_ADMINS_ADD = "/admin/tools/admins/add";
+  static readonly ADMIN_TOOLS_ADMINS_VIEW = (adminId: string) =>
+    `/admin/tools/admins/view/${adminId}`;
+  static readonly ADMIN_TOOLS_ADMINS_EDIT = (adminId: string) =>
+    `/admin/tools/admins/edit/${adminId}`;
+  static readonly ADMIN_TOOLS_ADMINS_DELETE = (adminId: string) =>
+    `/admin/tools/admins/delete/${adminId}`;
+
   static readonly ADMIN_DEFAULT_LOGGED_IN_PAGE = RoutePath.ADMIN_TOOLS_PAGE;
 
   // API Routes /api

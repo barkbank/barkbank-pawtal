@@ -64,6 +64,29 @@ export class VetAccountService {
     }
   }
 
+  async getVetClinicByVetId(args: {
+    vetId: string;
+  }): Promise<
+    Result<
+      { clinic: VetClinic },
+      typeof CODE.FAILED | typeof CODE.ERROR_VET_NOT_FOUND
+    >
+  > {
+    try {
+      const { vetId } = args;
+      const { dbPool } = this.config.context;
+      const vetClinicDao = new VetClinicDao(dbPool);
+      const clinic = await vetClinicDao.getByVetId({ vetId });
+      if (clinic === null) {
+        return Err(CODE.ERROR_VET_NOT_FOUND);
+      }
+      return Ok({ clinic });
+    } catch (err) {
+      console.error(err);
+      return Err(CODE.FAILED);
+    }
+  }
+
   async getVetAccountsByVetId(args: {
     vetId: string;
   }): Promise<Result<{ accounts: VetAccount[] }, typeof CODE.FAILED>> {

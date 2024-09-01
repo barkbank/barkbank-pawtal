@@ -41,6 +41,67 @@ export class AdminAccountService {
     }
   }
 
+  async updateAdminAccount(args: {
+    adminId: string;
+    spec: AdminAccountSpec;
+  }): Promise<
+    typeof CODE.OK | typeof CODE.FAILED | typeof CODE.ERROR_ACCOUNT_NOT_FOUND
+  > {
+    try {
+      const { adminId, spec } = args;
+      const encryptedSpec = await toEncryptedAdminAccountSpec(
+        this.getContext(),
+        spec,
+      );
+      const dao = this.getDao();
+      const didUpdate = await dao.update({ adminId, spec: encryptedSpec });
+      if (!didUpdate) {
+        return CODE.ERROR_ACCOUNT_NOT_FOUND;
+      }
+      return CODE.OK;
+    } catch (err) {
+      console.error(err);
+      return CODE.FAILED;
+    }
+  }
+
+  async deleteAdminAccount(args: {
+    adminId: string;
+  }): Promise<
+    typeof CODE.OK | typeof CODE.FAILED | typeof CODE.ERROR_ACCOUNT_NOT_FOUND
+  > {
+    try {
+      const { adminId } = args;
+      const dao = this.getDao();
+      const didDelete = await dao.delete({ adminId });
+      if (!didDelete) {
+        return CODE.ERROR_ACCOUNT_NOT_FOUND;
+      }
+      return CODE.OK;
+    } catch (err) {
+      console.error(err);
+      return CODE.FAILED;
+    }
+  }
+
+  async getAllAdminAccounts(): Promise<
+    Result<AdminAccount[], typeof CODE.FAILED>
+  > {
+    try {
+      const context = this.getContext();
+      const dao = this.getDao();
+      const encryptedAccounts = await dao.getList();
+      const futureAccounts = encryptedAccounts.map(async (encrypted) => {
+        return toAdminAccount(context, encrypted);
+      });
+      const accounts = await Promise.all(futureAccounts);
+      return Ok(accounts);
+    } catch (err) {
+      console.error(err);
+      return Err(CODE.FAILED);
+    }
+  }
+
   // TODO: Cache this lookup using LRUCache. UserAccountService has an example.
   async getAdminIdByAdminEmail(args: {
     adminEmail: string;

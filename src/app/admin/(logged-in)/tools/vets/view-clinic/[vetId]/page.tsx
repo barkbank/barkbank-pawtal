@@ -1,22 +1,14 @@
 import { BarkBackLink } from "@/components/bark/bark-back-link";
 import { Button } from "@/components/ui/button";
-import APP from "@/lib/app";
-import { SecureVetAccountDao } from "@/lib/bark/daos/secure-vet-account-dao";
-import { VetClinicDao } from "@/lib/bark/daos/vet-clinic-dao";
-import { toVetAccount } from "@/lib/bark/mappers/to-vet-account";
+import { getAuthenticatedAdminActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 
 export default async function Page(props: { params: { vetId: string } }) {
   const { vetId } = props.params;
-  const context = await APP.getBarkContext();
-  const { dbPool } = context;
-  const clinicDao = new VetClinicDao(dbPool);
-  const accountDao = new SecureVetAccountDao(dbPool);
-  const clinic = await clinicDao.getByVetId({ vetId });
-  const secureAccounts = await accountDao.listByVetId({ vetId });
-  const accounts = await Promise.all(
-    secureAccounts.map((secureAccount) => toVetAccount(context, secureAccount)),
-  );
+  const actor = (await getAuthenticatedAdminActor())!;
+  const { clinic } = (await actor.getVetClinicByVetId({ vetId })).result!;
+  const { accounts } = (await actor.getVetAccountsByVetId({ vetId })).result!;
+
   return (
     <div className="m-3 flex flex-col gap-3">
       <BarkBackLink href={RoutePath.ADMIN_TOOLS_VETS_LIST_CLINICS} />

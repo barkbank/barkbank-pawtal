@@ -13,6 +13,23 @@ export const AdminPermissionsSchema = z.object({
   adminCanManageDonors: z.boolean(),
 });
 
+export function getEmptyAdminPermissionsRecord(): Record<string, boolean> {
+  return Object.keys(AdminPermissionsSchema.shape).reduce(
+    (acc, key) => {
+      acc[key] = false;
+      return acc;
+    },
+    {} as Record<string, boolean>,
+  );
+}
+
+/**
+ * An object of AdminPermissionsSchema type where all permissions are false.
+ */
+export const NO_ADMIN_PERMISSIONS = AdminPermissionsSchema.parse(
+  getEmptyAdminPermissionsRecord(),
+);
+
 export const AdminAccountSchema = z
   .object({
     adminId: z.string(),
@@ -49,10 +66,3 @@ export type EncryptedAdminAccountSpec = z.infer<
 export type AdminAccountSpec = z.infer<typeof AdminAccountSpecSchema>;
 export type AdminIdentifier = z.infer<typeof AdminIdentifierSchema>;
 export type AdminPermissions = z.infer<typeof AdminPermissionsSchema>;
-
-export const NO_ADMIN_PERMISSIONS: AdminPermissions = {
-  adminCanManageAdminAccounts: false,
-  adminCanManageVetAccounts: false,
-  adminCanManageUserAccounts: false,
-  adminCanManageDonors: false,
-};

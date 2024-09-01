@@ -1,14 +1,14 @@
 import { SimpleErrorPage } from "@/app/_components/simple-error-page";
 import { BarkBackLink } from "@/components/bark/bark-back-link";
 import { Button } from "@/components/ui/button";
-import APP from "@/lib/app";
+import { getAuthenticatedAdminActor } from "@/lib/auth";
 import { VetClinic } from "@/lib/bark/models/vet-models";
 import { RoutePath } from "@/lib/route-path";
 import Link from "next/link";
 
 export default async function Page() {
-  const vetAccountService = await APP.getVetAccountService();
-  const { result, error } = await vetAccountService.getVetClinics();
+  const actor = await getAuthenticatedAdminActor();
+  const { result, error } = await actor!.getVetClinics();
   if (error !== undefined) {
     return <SimpleErrorPage error={error} />;
   }

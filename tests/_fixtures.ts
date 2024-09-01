@@ -219,7 +219,7 @@ export function getAdminActorFactoryConfig(
   overrides?: Partial<AdminActorFactoryConfig>,
 ): AdminActorFactoryConfig {
   const base: AdminActorFactoryConfig = {
-    rootAdminEmail: "",
+    rootAdminEmail: getRootAdminEmail(),
     adminAccountService: getAdminAccountService(db),
     adminActorConfig: getAdminActorConfig(db),
   };
@@ -229,6 +229,10 @@ export function getAdminActorFactoryConfig(
 export function getVetAccountService(dbPool: Pool) {
   const context = getBarkContext(dbPool);
   return new VetAccountService({ context });
+}
+
+export function getRootAdminEmail() {
+  return "";
 }
 
 export function getAdminActorConfig(dbPool: Pool): AdminActorConfig {
@@ -242,6 +246,7 @@ export function getAdminActorConfig(dbPool: Pool): AdminActorConfig {
     vetAccountService: getVetAccountService(dbPool),
     userAccountService: getUserAccountService(dbPool),
     registrationService: getRegistrationService(dbPool),
+    rootAdminEmail: getRootAdminEmail(),
   };
 }
 

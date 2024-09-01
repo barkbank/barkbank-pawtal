@@ -5,7 +5,7 @@ import { getAuthenticatedAdminActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
 
-export const metadata = getMetadata({ title: "Admin" });
+export const metadata = getMetadata({ title: "Tools" });
 
 export default async function Layout(props: { children: React.ReactNode }) {
   const actor = await getAuthenticatedAdminActor();
@@ -18,5 +18,9 @@ export default async function Layout(props: { children: React.ReactNode }) {
       href: RoutePath.ADMIN_TOOLS_PAGE,
     },
   ];
-  return <BarkNavLayout routes={routes}>{props.children}</BarkNavLayout>;
+  return (
+    <BarkNavLayout routes={routes} showSidebar={false}>
+      {props.children}
+    </BarkNavLayout>
+  );
 }
