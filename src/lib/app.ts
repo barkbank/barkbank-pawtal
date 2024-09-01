@@ -27,7 +27,6 @@ import { UserActorFactory } from "./user/user-actor-factory";
 import { APP_ENV, AppEnv, AppEnvSchema } from "./app-env";
 import { isValidEmail } from "./utilities/bark-utils";
 import { UserMapper } from "./data/user-mapper";
-import { AdminMapper } from "./data/admin-mapper";
 import { DogMapper } from "./data/dog-mapper";
 import { RegistrationService } from "./bark/services/registration-service";
 import { UserActorConfig } from "./user/user-actor";
@@ -76,7 +75,6 @@ export class AppFactory {
     null;
   private promisedDbPool: Promise<pg.Pool> | null = null;
   private promisedAdminActorFactory: Promise<AdminActorFactory> | null = null;
-  private promisedAdminMapper: Promise<AdminMapper> | null = null;
   private promisedVetActorFactory: Promise<VetActorFactory> | null = null;
   private promisedUserActorFactory: Promise<UserActorFactory> | null = null;
   private promisedUserMapper: Promise<UserMapper> | null = null;
@@ -497,24 +495,6 @@ export class AppFactory {
       });
     }
     return this.promisedAdminActorFactory;
-  }
-
-  public getAdminMapper(): Promise<AdminMapper> {
-    if (this.promisedAdminMapper === null) {
-      this.promisedAdminMapper = new Promise(async (resolve) => {
-        const [emailHashService, piiEncryptionService] = await Promise.all([
-          this.getEmailHashService(),
-          this.getPiiEncryptionService(),
-        ]);
-        const mapper = new AdminMapper({
-          emailHashService,
-          piiEncryptionService,
-        });
-        this.logCreated("AdminMapper");
-        resolve(mapper);
-      });
-    }
-    return this.promisedAdminMapper;
   }
 
   public getVetActorFactory(): Promise<VetActorFactory> {
