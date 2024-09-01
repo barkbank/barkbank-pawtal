@@ -10,6 +10,7 @@ import {
   AdminSpec,
 } from "./db-models";
 
+// TODO: Deprecated. Remove if possible.
 export class AdminMapper {
   private emailHashService: HashService;
   private piiEncryptionService: EncryptionService;

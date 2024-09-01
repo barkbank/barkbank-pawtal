@@ -465,21 +465,11 @@ export class AppFactory {
     if (this.promisedAdminActorFactory === null) {
       this.promisedAdminActorFactory = new Promise(async (resolve) => {
         const [
-          dbPool,
-          emailHashService,
-          adminMapper,
-          dogMapper,
-          userMapper,
           vetAccountService,
           userAccountService,
           registrationService,
           adminAccountService,
         ] = await Promise.all([
-          this.getDbPool(),
-          this.getEmailHashService(),
-          this.getAdminMapper(),
-          this.getDogMapper(),
-          this.getUserMapper(),
           this.getVetAccountService(),
           this.getUserAccountService(),
           this.getRegistrationService(),
@@ -490,11 +480,6 @@ export class AppFactory {
           throw new Error("BARKBANK_ROOT_ADMIN_EMAIL is not a valid email");
         }
         const adminActorConfig: AdminActorConfig = {
-          dbPool,
-          emailHashService,
-          adminMapper,
-          userMapper,
-          dogMapper,
           adminAccountService,
           vetAccountService,
           userAccountService,

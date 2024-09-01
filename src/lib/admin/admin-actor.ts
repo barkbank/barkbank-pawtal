@@ -1,8 +1,3 @@
-import { Pool } from "pg";
-import { HashService } from "../services/hash";
-import { DogMapper } from "../data/dog-mapper";
-import { UserMapper } from "../data/user-mapper";
-import { AdminMapper } from "../data/admin-mapper";
 import { VetAccountService } from "../bark/services/vet-account-service";
 import {
   VetAccount,
@@ -27,11 +22,6 @@ import { CODE } from "../utilities/bark-code";
 import { UserAccount } from "../bark/models/user-models";
 
 export type AdminActorConfig = {
-  dbPool: Pool;
-  emailHashService: HashService;
-  adminMapper: AdminMapper;
-  userMapper: UserMapper;
-  dogMapper: DogMapper;
   adminAccountService: AdminAccountService;
   vetAccountService: VetAccountService;
   userAccountService: UserAccountService;
