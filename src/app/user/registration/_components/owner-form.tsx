@@ -157,7 +157,7 @@ export default function OwnerForm(props: {
         />
         <BarkButton
           variant="brandInverse"
-          className="mt-3"
+          className="mt-3 w-full md:w-48"
           onClick={onRequestOtp}
           type="button"
         >
@@ -199,13 +199,13 @@ export default function OwnerForm(props: {
           <BarkButton
             variant="brandInverse"
             onClick={onPrevClick}
-            className="w-full"
+            className="w-full md:w-48"
             type="button"
           >
             {prevLabel}
           </BarkButton>
 
-          <BarkButton variant="brand" type="submit" className="w-full">
+          <BarkButton variant="brand" type="submit" className="w-full md:w-48">
             {nextLabel}
           </BarkButton>
         </div>

@@ -276,10 +276,6 @@ export default function DonorForm(props: {
             form.setValue("dogEverPregnant", values.dogEverPregnant);
             form.setValue("dogPreferredVetId", values.dogPreferredVetId);
           }}
-          onPrev={() => {
-            // TODO: The PREV action is destructive, there should be a confirmation dialog.
-            router.push(RoutePath.ROOT);
-          }}
           onNext={() => {
             setRegistrationError("");
             setCurrentStep(STEPS.OWNER);
