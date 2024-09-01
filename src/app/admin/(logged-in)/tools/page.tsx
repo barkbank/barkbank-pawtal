@@ -1,9 +1,4 @@
-import APP from "@/lib/app";
 import { getAuthenticatedAdminActor } from "@/lib/auth";
-import {
-  AdminPermissions,
-  AdminPermissionsSchema,
-} from "@/lib/bark/models/admin-models";
 import { RoutePath } from "@/lib/route-path";
 import {
   Braces,
@@ -16,11 +11,9 @@ import {
 import Link from "next/link";
 
 export default async function Page() {
-  const rootAdminEmail = APP.getRootAdminEmail();
   const actor = (await getAuthenticatedAdminActor())!;
   const account = (await actor.getOwnAdminAccount()).result!;
-  const { adminEmail } = account;
-  const isRoot = adminEmail === rootAdminEmail;
+  const isRoot = await actor.getIsRoot();
   const iconSize = 36;
   const toolSpecs: _ToolSpec[] = [
     {
