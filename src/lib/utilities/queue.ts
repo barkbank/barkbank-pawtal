@@ -1,4 +1,3 @@
-// TODO: Do we need this?
 export class Queue<T> {
   private head: _Item<T> | undefined;
   private tail: _Item<T> | undefined;
