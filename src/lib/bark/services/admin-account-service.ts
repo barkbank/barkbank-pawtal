@@ -44,7 +44,9 @@ export class AdminAccountService {
   async updateAdminAccount(args: {
     adminId: string;
     spec: AdminAccountSpec;
-  }): Promise<Result<{ didUpdate: boolean }, typeof CODE.FAILED>> {
+  }): Promise<
+    typeof CODE.OK | typeof CODE.FAILED | typeof CODE.ERROR_ACCOUNT_NOT_FOUND
+  > {
     try {
       const { adminId, spec } = args;
       const encryptedSpec = await toEncryptedAdminAccountSpec(
@@ -53,10 +55,13 @@ export class AdminAccountService {
       );
       const dao = this.getDao();
       const didUpdate = await dao.update({ adminId, spec: encryptedSpec });
-      return Ok({ didUpdate });
+      if (!didUpdate) {
+        return CODE.ERROR_ACCOUNT_NOT_FOUND;
+      }
+      return CODE.OK;
     } catch (err) {
       console.error(err);
-      return Err(CODE.FAILED);
+      return CODE.FAILED;
     }
   }
 

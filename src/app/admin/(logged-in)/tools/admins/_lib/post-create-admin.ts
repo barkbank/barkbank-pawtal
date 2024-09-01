@@ -5,8 +5,10 @@ import {
   AdminAccountSpec,
   AdminIdentifier,
 } from "@/lib/bark/models/admin-models";
+import { RoutePath } from "@/lib/route-path";
 import { CODE } from "@/lib/utilities/bark-code";
 import { Err, Result } from "@/lib/utilities/result";
+import { revalidatePath } from "next/cache";
 
 export async function postCreateAdmin(args: {
   spec: AdminAccountSpec;
@@ -18,5 +20,9 @@ export async function postCreateAdmin(args: {
     return Err(CODE.ERROR_NOT_LOGGED_IN);
   }
   const { spec } = args;
-  return actor.createAdminAccount({ spec });
+  const res = await actor.createAdminAccount({ spec });
+  if (res.error === undefined) {
+    revalidatePath(RoutePath.ADMIN_TOOLS_ADMINS_SUBTREE, "layout");
+  }
+  return res;
 }

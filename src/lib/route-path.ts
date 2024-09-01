@@ -75,6 +75,7 @@ export class RoutePath {
   static readonly ADMIN_TOOLS_USERS_VIEW = (userId: string) =>
     `/admin/tools/users/view/${userId}`;
 
+  static readonly ADMIN_TOOLS_ADMINS_SUBTREE = "/admin/tools/admins";
   static readonly ADMIN_TOOLS_ADMINS_LIST = "/admin/tools/admins/list";
   static readonly ADMIN_TOOLS_ADMINS_ADD = "/admin/tools/admins/add";
   static readonly ADMIN_TOOLS_ADMINS_VIEW = (adminId: string) =>
