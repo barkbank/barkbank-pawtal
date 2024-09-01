@@ -237,11 +237,6 @@ export function getRootAdminEmail() {
 
 export function getAdminActorConfig(dbPool: Pool): AdminActorConfig {
   return {
-    dbPool,
-    emailHashService: getEmailHashService(),
-    adminMapper: getAdminMapper(),
-    userMapper: getUserMapper(),
-    dogMapper: getDogMapper(),
     adminAccountService: getAdminAccountService(dbPool),
     vetAccountService: getVetAccountService(dbPool),
     userAccountService: getUserAccountService(dbPool),
