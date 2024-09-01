@@ -12,7 +12,7 @@ export async function postVetClinicSpec(args: {
 }): Promise<
   Result<
     { clinic: VetClinic },
-    typeof CODE.ERROR_NOT_LOGGED_IN | typeof CODE.FAILED
+    typeof CODE.ERROR_NOT_LOGGED_IN | typeof CODE.FAILED | typeof CODE.ERROR_NOT_ALLOWED
   >
 > {
   const actor = await getAuthenticatedAdminActor();
