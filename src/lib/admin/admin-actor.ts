@@ -62,6 +62,7 @@ export class AdminActor {
     return adminEmail === rootAdminEmail;
   }
 
+  // TODO: Cache the response
   async getOwnAdminAccount() {
     const { adminId } = this;
     return this.config.adminAccountService.getAdminAccountByAdminId({
