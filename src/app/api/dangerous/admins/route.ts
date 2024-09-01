@@ -17,7 +17,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
   const service = await APP.getAdminAccountService();
   const { result, error } = await service.createAdminAccount({ spec });
   if (error !== undefined) {
-    return NextResponse.json({ error });
+    throw new Error(error);
   }
   return NextResponse.json(result);
 }
