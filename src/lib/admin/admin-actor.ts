@@ -9,6 +9,7 @@ import { UserAccountService } from "../bark/services/user-account-service";
 import { RegistrationRequest } from "../bark/models/registration-models";
 import { RegistrationService } from "../bark/services/registration-service";
 import { AdminAccountService } from "../bark/services/admin-account-service";
+import { AdminAccountSpec } from "../bark/models/admin-models";
 
 export type AdminActorConfig = {
   dbPool: Pool;
@@ -51,6 +52,11 @@ export class AdminActor {
     return this.config.adminAccountService.getAdminAccountByAdminId({
       adminId,
     });
+  }
+
+  async createAdminAccount(args: { spec: AdminAccountSpec }) {
+    const { spec } = args;
+    return this.config.adminAccountService.createAdminAccount({ spec });
   }
 
   async getVetClinics() {
