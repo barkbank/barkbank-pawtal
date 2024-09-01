@@ -155,6 +155,24 @@ export class AdminActor {
     return this.config.vetAccountService.getVetClinics();
   }
 
+  async getVetClinicByVetId(args: {
+    vetId: string;
+  }): Promise<
+    Result<
+      { clinic: VetClinic },
+      | typeof CODE.FAILED
+      | typeof CODE.ERROR_VET_NOT_FOUND
+      | typeof CODE.ERROR_NOT_ALLOWED
+    >
+  > {
+    const { vetId } = args;
+    const permissions = await this.getOwnPermissions();
+    if (!permissions.adminCanManageVetAccounts) {
+      return Err(CODE.ERROR_NOT_ALLOWED);
+    }
+    return this.config.vetAccountService.getVetClinicByVetId({ vetId });
+  }
+
   async getVetAccountsByVetId(args: {
     vetId: string;
   }): Promise<
