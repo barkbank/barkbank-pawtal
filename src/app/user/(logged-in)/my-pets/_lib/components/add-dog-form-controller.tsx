@@ -9,7 +9,7 @@ import { Err, Ok, Result } from "@/lib/utilities/result";
 import { CODE } from "@/lib/utilities/bark-code";
 import { GeneralDogForm } from "./general-dog-form";
 import { useToast } from "@/components/ui/use-toast";
-import { MINIMUM_TOAST_MILLIS } from "@/app/_lib/toast-delay";
+import { MINIMUM_TOAST_MILLIS } from "@/app/_lib/constants";
 import { asyncSleep } from "@/lib/utilities/async-sleep";
 
 export default function AddDogFormController(props: {

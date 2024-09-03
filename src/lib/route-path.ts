@@ -35,8 +35,6 @@ export class RoutePath {
   static readonly VET_LOGIN_PAGE = "/vet/login";
   static readonly VET_SCHEDULE_APPOINTMENTS = "/vet/schedule";
   static readonly VET_APPOINTMENTS_LIST = "/vet/appointments/list";
-  static readonly VET_APPOINTMENTS_LIST_CANCELLED =
-    "/vet/appointments/list-cancelled";
   static readonly VET_APPOINTMENTS_SUBMIT = (appointmentId: string) =>
     `/vet/appointments/submit/${appointmentId}`;
   static readonly VET_APPOINTMENTS_CANCEL = (appointmentId: string) =>

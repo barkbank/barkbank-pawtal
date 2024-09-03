@@ -10,3 +10,8 @@ export const USER_TITLE_OPTIONS: BarkFormOption[] = [
   { label: "Mdm", value: USER_TITLE.MDM },
   { label: "Prefer not to say", value: USER_TITLE.PREFER_NOT_TO_SAY },
 ];
+
+/**
+ * The minimum number of milliseconds to display a toast.
+ */
+export const MINIMUM_TOAST_MILLIS = 1337;
