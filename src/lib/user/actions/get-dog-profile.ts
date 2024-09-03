@@ -6,6 +6,7 @@ import { CODE } from "@/lib/utilities/bark-code";
 import { EncryptedDogProfileSchema } from "@/lib/bark/models/encrypted-dog-profile";
 import { z } from "zod";
 
+// WIP: Move this into PawtalService::getDogProfile
 export async function getDogProfile(
   actor: UserActor,
   dogId: string,
