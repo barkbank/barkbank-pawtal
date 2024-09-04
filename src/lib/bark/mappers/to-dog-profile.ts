@@ -1,6 +1,6 @@
 import { BarkContext } from "../bark-context";
 import { DogProfile } from "../models/dog-profile";
-import { EncryptedDogProfile } from "../models/encrypted-dog-profile";
+import { EncryptedDogProfile } from "../models/dog-profile";
 import { toDogName } from "./to-dog-name";
 
 export async function toDogProfile(
