@@ -25,5 +25,10 @@ export const EncryptedDogProfileSchema = DogProfileSchema.omit({
   dogEncryptedOii: z.string(),
 });
 
+export const DogIdentifierSchema = z.object({
+  dogId: z.string(),
+});
+
 export type DogProfile = z.infer<typeof DogProfileSchema>;
+export type DogIdentifier = z.infer<typeof DogIdentifierSchema>;
 export type EncryptedDogProfile = z.infer<typeof EncryptedDogProfileSchema>;
