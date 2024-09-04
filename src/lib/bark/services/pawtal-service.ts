@@ -10,9 +10,10 @@ export class PawtalService {
   async getMyDogs(args: {
     userId: string;
   }): Promise<Result<{ myDogs: MyDog[] }, typeof CODE.FAILED>> {
-    throw new Error("WIP: Implement getMyDogs - Replaces getMyPets");
+    throw new Error("TODO: Implement getMyDogs - Replaces getMyPets");
   }
 
+  // TODO: When this is implemented, we should be able to remove getDogProfile
   async getDogProfile(args: {
     dogId: string;
   }): Promise<Result<{ dogProfile: DogProfile }, typeof CODE.FAILED>> {

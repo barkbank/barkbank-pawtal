@@ -14,7 +14,7 @@ import { Err, Ok, Result } from "@/lib/utilities/result";
 import { CODE } from "@/lib/utilities/bark-code";
 import { DogStatuses } from "@/lib/bark/models/dog-statuses";
 
-// WIP: Move this into PawtalService::getMyPets
+// TODO: Move this into PawtalService::getMyPets
 export async function getMyPets(
   actor: UserActor,
 ): Promise<Result<MyDog[], typeof CODE.DB_QUERY_FAILURE>> {
