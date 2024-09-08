@@ -46,4 +46,15 @@ export class VetPreferenceDao {
     const res = await dbQuery<VetPreference>(this.db, sql, [dogId]);
     return z.array(VetPreferenceSchema).parse(res.rows);
   }
+
+  async listByUser(args: { userId: string }): Promise<VetPreference[]> {
+    const { userId } = args;
+    const sql = `
+    SELECT ${this.projection}
+    FROM dog_vet_preferences
+    WHERE user_id = $1
+    `;
+    const res = await dbQuery<VetPreference>(this.db, sql, [userId]);
+    return z.array(VetPreferenceSchema).parse(res.rows);
+  }
 }

@@ -70,8 +70,14 @@ export class EncryptedDogDao {
   }
 
   async listByUser(args: { userId: string }): Promise<EncryptedDog[]> {
-    // TODO: Impl listByUser
-    throw new Error("Not implemented");
+    const { userId } = args;
+    const sql = `
+    SELECT ${this.projection}
+    FROM ${this.table}
+    WHERE user_id = $1
+    `;
+    const res = await dbQuery<EncryptedDog>(this.db, sql, [userId]);
+    return z.array(EncryptedDogSchema).parse(res.rows);
   }
 
   async listByVet(args: { vetId: string }): Promise<EncryptedDog[]> {

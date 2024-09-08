@@ -88,7 +88,40 @@ export class DogProfileService {
   async listDogProfiles(args: {
     userId: string;
   }): Promise<Result<DogProfile[], typeof CODE.FAILED>> {
-    throw new Error("Not implemented");
+    const conn = await this.connect();
+    try {
+      await dbBegin(conn);
+      const dogDao = new EncryptedDogDao(conn);
+      const preferenceDao = new VetPreferenceDao(conn);
+      const { userId } = args;
+      const dogs = await dogDao.listByUser({ userId });
+      const preferences: VetPreference[] = await preferenceDao.listByUser({
+        userId,
+      });
+      const dogPrefs: Record<string, VetPreference[]> = {};
+      for (const pref of preferences) {
+        if (!dogPrefs[pref.dogId]) {
+          dogPrefs[pref.dogId] = [];
+        }
+        dogPrefs[pref.dogId].push(pref);
+      }
+      const profiles = await Promise.all(
+        dogs.map(async (dog) => {
+          return this.toDogProfile({
+            dog,
+            preferences: dogPrefs[dog.dogId] ?? [],
+          });
+        }),
+      );
+      await dbCommit(conn);
+      return Ok(profiles);
+    } catch (err) {
+      console.error(err);
+      return Err(CODE.FAILED);
+    } finally {
+      await dbRollback(conn);
+      await dbRelease(conn);
+    }
   }
 
   async updateDogProfile(args: {
