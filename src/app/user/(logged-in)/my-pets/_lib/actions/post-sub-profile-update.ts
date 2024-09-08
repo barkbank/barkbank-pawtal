@@ -1,7 +1,7 @@
 "use server";
 
 import { getAuthenticatedUserActor } from "@/lib/auth";
-import { SubProfile } from "@/lib/bark/models/sub-profile";
+import { SubProfile } from "@/lib/bark/models/dog-profile-models";
 import { RoutePath } from "@/lib/route-path";
 import { updateSubProfile } from "@/lib/user/actions/update-sub-profile";
 import { CODE } from "@/lib/utilities/bark-code";

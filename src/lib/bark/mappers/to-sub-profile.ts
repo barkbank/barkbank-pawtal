@@ -1,5 +1,5 @@
 import { DogProfile } from "../models/dog-profile-models";
-import { SubProfile, SubProfileSchema } from "../models/sub-profile";
+import { SubProfile, SubProfileSchema } from "../models/dog-profile-models";
 
 export function toSubProfile(dogProfile: DogProfile): SubProfile {
   const {

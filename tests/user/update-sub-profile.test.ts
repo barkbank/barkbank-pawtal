@@ -1,4 +1,4 @@
-import { SubProfile } from "@/lib/bark/models/sub-profile";
+import { SubProfile } from "@/lib/bark/models/dog-profile-models";
 import { withDb } from "../_db_helpers";
 import { CALL_OUTCOME } from "@/lib/bark/enums/call-outcome";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";

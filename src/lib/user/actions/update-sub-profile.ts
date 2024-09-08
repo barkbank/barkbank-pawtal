@@ -1,6 +1,9 @@
 import { PoolClient } from "pg";
 import { UserActor } from "../user-actor";
-import { SubProfile, SubProfileSchema } from "@/lib/bark/models/sub-profile";
+import {
+  SubProfile,
+  SubProfileSchema,
+} from "@/lib/bark/models/dog-profile-models";
 import {
   dbBegin,
   dbCommit,

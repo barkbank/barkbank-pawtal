@@ -11,7 +11,10 @@ import { BarkFormOption } from "@/components/bark/bark-form-option";
 import { YesNoSchema } from "@/lib/bark/enums/yes-no";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { DogProfile } from "@/lib/bark/models/dog-profile-models";
-import { SubProfile, SubProfileSchema } from "@/lib/bark/models/sub-profile";
+import {
+  SubProfile,
+  SubProfileSchema,
+} from "@/lib/bark/models/dog-profile-models";
 import { Result } from "@/lib/utilities/result";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";

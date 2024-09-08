@@ -3,7 +3,7 @@
 import { BarkFormOption } from "@/components/bark/bark-form-option";
 import { SubProfileForm } from "./sub-profile-form";
 import { DogProfile } from "@/lib/bark/models/dog-profile-models";
-import { SubProfile } from "@/lib/bark/models/sub-profile";
+import { SubProfile } from "@/lib/bark/models/dog-profile-models";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { useRouter } from "next/navigation";
 import { RoutePath } from "@/lib/route-path";
