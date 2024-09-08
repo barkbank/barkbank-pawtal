@@ -29,7 +29,7 @@ export const VetPreferenceSchema = z.object({
  * The dog fields that can be updated prior to the first medical report. This
  * can be used by registration and add-dog.
  */
-export const DogProfileSchema = z.object({
+export const DogProfileSpecSchema = z.object({
   dogName: z.string(),
   dogBreed: z.string(),
   dogBirthday: z.date(),
@@ -67,5 +67,5 @@ export const SubProfileSchema = z.object({
 export type EncryptedDog = z.infer<typeof EncryptedDogSchema>;
 export type EncryptedDogSpec = z.infer<typeof EncryptedDogSpecSchema>;
 export type VetPreference = z.infer<typeof VetPreferenceSchema>;
-export type DogProfile = z.infer<typeof DogProfileSchema>;
+export type DogProfileSpec = z.infer<typeof DogProfileSpecSchema>;
 export type SubProfile = z.infer<typeof SubProfileSchema>;

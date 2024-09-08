@@ -1,13 +1,13 @@
 import { BarkReportSchema } from "@/lib/bark/models/bark-report";
 import { DogAppointmentSchema } from "@/lib/bark/models/dog-appointment";
 import { DogPreferredVetSchema } from "@/lib/bark/models/dog-preferred-vet";
-import { DogProfileSchema } from "@/lib/bark/models/dog-profile-models";
+import { DogProfileSpecSchema } from "@/lib/bark/models/dog-profile-models";
 import { DogStatusesSchema } from "@/lib/bark/models/dog-statuses";
 import { z } from "zod";
 
 export const DogViewerDataSchema = z.object({
   dogId: z.string(),
-  dogProfile: DogProfileSchema,
+  dogProfile: DogProfileSpecSchema,
   dogStatuses: DogStatusesSchema,
   dogAppointments: z.array(DogAppointmentSchema),
   dogPreferredVet: DogPreferredVetSchema.nullable(),

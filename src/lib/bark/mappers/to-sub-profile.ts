@@ -1,7 +1,7 @@
-import { DogProfile } from "../models/dog-profile-models";
+import { DogProfileSpec } from "../models/dog-profile-models";
 import { SubProfile, SubProfileSchema } from "../models/dog-profile-models";
 
-export function toSubProfile(dogProfile: DogProfile): SubProfile {
+export function toSubProfile(dogProfile: DogProfileSpec): SubProfile {
   const {
     dogName,
     dogWeightKg,

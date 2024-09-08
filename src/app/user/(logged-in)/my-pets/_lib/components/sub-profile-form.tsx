@@ -10,7 +10,7 @@ import { BarkFormRadioGroup } from "@/components/bark/bark-form-radio-group";
 import { BarkFormOption } from "@/components/bark/bark-form-option";
 import { YesNoSchema } from "@/lib/bark/enums/yes-no";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
-import { DogProfile } from "@/lib/bark/models/dog-profile-models";
+import { DogProfileSpec } from "@/lib/bark/models/dog-profile-models";
 import {
   SubProfile,
   SubProfileSchema,
@@ -32,7 +32,7 @@ type FormData = z.infer<typeof FormDataSchema>;
 
 export function SubProfileForm(props: {
   vetOptions: BarkFormOption[];
-  dogProfile: DogProfile;
+  dogProfile: DogProfileSpec;
   subProfile: SubProfile;
   handleSubmit: (subProfile: SubProfile) => Promise<Result<true, string>>;
   handleCancel: () => Promise<void>;

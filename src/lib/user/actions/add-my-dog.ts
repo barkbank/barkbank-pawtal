@@ -1,6 +1,6 @@
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { UserActor } from "../user-actor";
-import { DogProfile } from "@/lib/bark/models/dog-profile-models";
+import { DogProfileSpec } from "@/lib/bark/models/dog-profile-models";
 import { dbBegin, dbCommit, dbRelease, dbRollback } from "@/lib/data/db-utils";
 import { DogSpec } from "@/lib/data/db-models";
 import { dbInsertDog, dbInsertDogVetPreference } from "@/lib/data/db-dogs";
@@ -8,7 +8,7 @@ import { CODE } from "@/lib/utilities/bark-code";
 
 export async function addMyDog(
   actor: UserActor,
-  dogProfile: DogProfile,
+  dogProfile: DogProfileSpec,
 ): Promise<
   Result<
     {

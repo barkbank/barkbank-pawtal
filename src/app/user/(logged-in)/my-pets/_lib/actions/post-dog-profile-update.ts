@@ -3,13 +3,13 @@
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { updateDogProfile } from "@/lib/user/actions/update-dog-profile";
-import { DogProfile } from "@/lib/bark/models/dog-profile-models";
+import { DogProfileSpec } from "@/lib/bark/models/dog-profile-models";
 import { CODE } from "@/lib/utilities/bark-code";
 import { revalidatePath } from "next/cache";
 
 export async function postDogProfileUpdate(args: {
   dogId: string;
-  dogProfile: DogProfile;
+  dogProfile: DogProfileSpec;
 }): Promise<
   | typeof CODE.OK
   | typeof CODE.ERROR_NOT_LOGGED_IN

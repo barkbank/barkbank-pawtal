@@ -1,7 +1,7 @@
 "use client";
 
 import { BarkFormOption } from "@/components/bark/bark-form-option";
-import { DogProfile } from "@/lib/bark/models/dog-profile-models";
+import { DogProfileSpec } from "@/lib/bark/models/dog-profile-models";
 import { postDogProfile } from "../actions/post-dog-profile";
 import { useRouter } from "next/navigation";
 import { RoutePath } from "@/lib/route-path";
@@ -21,7 +21,7 @@ export default function AddDogFormController(props: {
   const { vetOptions, breeds } = props;
 
   async function handleValues(
-    dogProfile: DogProfile,
+    dogProfile: DogProfileSpec,
   ): Promise<Result<true, string>> {
     const { dogName } = dogProfile;
     toast({

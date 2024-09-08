@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { DogProfileSchema } from "./dog-profile-models";
+import { DogProfileSpecSchema } from "./dog-profile-models";
 
-export const EncryptedDogProfileSchema = DogProfileSchema.omit({
+export const EncryptedDogProfileSchema = DogProfileSpecSchema.omit({
   dogName: true,
 }).extend({
   dogEncryptedOii: z.string(),

@@ -1,6 +1,6 @@
 import { Result } from "@/lib/utilities/result";
 import { BarkContext } from "../bark-context";
-import { DogProfile, SubProfile } from "../models/dog-profile-models";
+import { DogProfileSpec, SubProfile } from "../models/dog-profile-models";
 import { CODE } from "@/lib/utilities/bark-code";
 
 export class DogProfileService {
@@ -8,7 +8,7 @@ export class DogProfileService {
 
   async addDogProfile(args: {
     userId: string;
-    dogProfile: DogProfile;
+    dogProfile: DogProfileSpec;
   }): Promise<Result<{ dogId: string }, typeof CODE.FAILED>> {
     throw new Error("Not implemented");
   }
@@ -17,21 +17,21 @@ export class DogProfileService {
     userId: string;
     dogId: string;
   }): Promise<
-    Result<DogProfile, typeof CODE.FAILED | typeof CODE.ERROR_DOG_NOT_FOUND>
+    Result<DogProfileSpec, typeof CODE.FAILED | typeof CODE.ERROR_DOG_NOT_FOUND>
   > {
     throw new Error("Not implemented");
   }
 
   async listDogProfile(args: {
     userId: string;
-  }): Promise<Result<DogProfile[], typeof CODE.FAILED>> {
+  }): Promise<Result<DogProfileSpec[], typeof CODE.FAILED>> {
     throw new Error("Not implemented");
   }
 
   async updateDogProfile(args: {
     userId: string;
     dogId: string;
-    dogProfile: DogProfile;
+    dogProfile: DogProfileSpec;
   }): Promise<typeof CODE.OK | typeof CODE.FAILED> {
     throw new Error("Not implemented");
   }

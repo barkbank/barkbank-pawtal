@@ -2,7 +2,7 @@
 
 import { BarkFormOption } from "@/components/bark/bark-form-option";
 import { SubProfileForm } from "./sub-profile-form";
-import { DogProfile } from "@/lib/bark/models/dog-profile-models";
+import { DogProfileSpec } from "@/lib/bark/models/dog-profile-models";
 import { SubProfile } from "@/lib/bark/models/dog-profile-models";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { useRouter } from "next/navigation";
@@ -14,7 +14,7 @@ import { useToast } from "@/components/ui/use-toast";
 export function SubProfileFormController(props: {
   vetOptions: BarkFormOption[];
   dogId: string;
-  dogProfile: DogProfile;
+  dogProfile: DogProfileSpec;
   subProfile: SubProfile;
 }) {
   const { vetOptions, dogId, dogProfile, subProfile } = props;

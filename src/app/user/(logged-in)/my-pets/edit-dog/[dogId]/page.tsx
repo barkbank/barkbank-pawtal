@@ -13,7 +13,7 @@ import {
   SubProfileSchema,
 } from "@/lib/bark/models/dog-profile-models";
 import { Err, Ok, Result } from "@/lib/utilities/result";
-import { DogProfile } from "@/lib/bark/models/dog-profile-models";
+import { DogProfileSpec } from "@/lib/bark/models/dog-profile-models";
 import { CODE } from "@/lib/utilities/bark-code";
 import { toSubProfile } from "@/lib/bark/mappers/to-sub-profile";
 import { getDogBreeds } from "@/app/_lib/get-dog-breeds";
@@ -72,7 +72,7 @@ export default async function Page(props: { params: { dogId: string } }) {
 }
 
 function _toSubProfile(
-  dogProfile: DogProfile,
+  dogProfile: DogProfileSpec,
 ): Result<SubProfile, typeof CODE.FAILED> {
   try {
     return Ok(toSubProfile(dogProfile));

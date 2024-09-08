@@ -5,8 +5,8 @@ import { USER_TITLE } from "@/lib/bark/enums/user-title";
 import { USER_RESIDENCY } from "@/lib/bark/enums/user-residency";
 import { UserAccountService } from "@/lib/bark/services/user-account-service";
 import {
-  DogProfile,
-  DogProfileSchema,
+  DogProfileSpec,
+  DogProfileSpecSchema,
 } from "@/lib/bark/models/dog-profile-models";
 import { dateAgo } from "../../_time_helpers";
 import { DOG_ANTIGEN_PRESENCE } from "@/lib/bark/enums/dog-antigen-presence";
@@ -54,8 +54,8 @@ describe("DogProfileService", () => {
   });
 });
 
-function _mockDogProfile(overrides?: Partial<DogProfile>): DogProfile {
-  const base: DogProfile = {
+function _mockDogProfile(overrides?: Partial<DogProfileSpec>): DogProfileSpec {
+  const base: DogProfileSpec = {
     dogName: "Woofgang",
     dogBirthday: dateAgo({ numYears: 3 }),
     dogBreed: "German Guard Dog",
@@ -67,7 +67,7 @@ function _mockDogProfile(overrides?: Partial<DogProfile>): DogProfile {
     dogPreferredVetId: "",
   };
   const out = { ...base, ...overrides };
-  return DogProfileSchema.parse(out);
+  return DogProfileSpecSchema.parse(out);
 }
 
 async function _createTestUser(args: {

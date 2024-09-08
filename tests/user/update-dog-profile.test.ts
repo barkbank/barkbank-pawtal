@@ -9,7 +9,7 @@ import {
   insertUser,
   insertVet,
 } from "../_fixtures";
-import { DogProfile } from "@/lib/bark/models/dog-profile-models";
+import { DogProfileSpec } from "@/lib/bark/models/dog-profile-models";
 import {
   SINGAPORE_TIME_ZONE,
   parseCommonDate,
@@ -111,8 +111,8 @@ describe("updateDogProfile", () => {
   });
 });
 
-function _getDogProfile(overrides?: Partial<DogProfile>): DogProfile {
-  const base: DogProfile = {
+function _getDogProfile(overrides?: Partial<DogProfileSpec>): DogProfileSpec {
+  const base: DogProfileSpec = {
     dogName: "updated name",
     dogBreed: "updated breed",
     dogBirthday: parseCommonDate("1970-01-01", SINGAPORE_TIME_ZONE),

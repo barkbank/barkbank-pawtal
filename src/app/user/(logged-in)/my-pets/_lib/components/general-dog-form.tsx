@@ -15,7 +15,7 @@ import { z } from "zod";
 import { BarkButton } from "@/components/bark/bark-button";
 import { BarkH1 } from "@/components/bark/bark-typography";
 import { Result } from "@/lib/utilities/result";
-import { DogProfile } from "@/lib/bark/models/dog-profile-models";
+import { DogProfileSpec } from "@/lib/bark/models/dog-profile-models";
 import { RequiredDateField } from "@/app/_lib/field-schemas/required-date-field";
 import { OptionalDogWeightKgField } from "@/app/_lib/field-schemas/optional-dog-weight-kg-field";
 import { useEffect } from "react";
@@ -43,7 +43,7 @@ const EMPTY_VALUES: Partial<DogFormData> = {
   dogPreferredVetId: "",
 };
 
-function toDogFormData(dogProfile: DogProfile): DogFormData {
+function toDogFormData(dogProfile: DogProfileSpec): DogFormData {
   const { dogBirthday, dogWeightKg, ...otherFields } = dogProfile;
   const dogBirthdayString = RequiredDateField.new().format(dogBirthday);
   const dogWeightKgString = OptionalDogWeightKgField.new().format(dogWeightKg);
@@ -55,7 +55,7 @@ function toDogFormData(dogProfile: DogProfile): DogFormData {
   return dogFormData;
 }
 
-function toDogProfile(dogFormData: DogFormData): DogProfile {
+function toDogProfile(dogFormData: DogFormData): DogProfileSpec {
   const {
     dogBirthday: dogBirthdayString,
     dogWeightKg: dogWeightKgString,
@@ -63,7 +63,7 @@ function toDogProfile(dogFormData: DogFormData): DogProfile {
   } = dogFormData;
   const dogBirthday = RequiredDateField.new().parse(dogBirthdayString);
   const dogWeightKg = OptionalDogWeightKgField.new().parse(dogWeightKgString);
-  const dogProfile: DogProfile = {
+  const dogProfile: DogProfileSpec = {
     dogBirthday,
     dogWeightKg,
     ...otherFields,
@@ -75,8 +75,8 @@ export function GeneralDogForm(props: {
   formTitle: string;
   vetOptions: BarkFormOption[];
   breeds: string[];
-  prefillData?: DogProfile;
-  handleSubmit: (dogProfile: DogProfile) => Promise<Result<true, string>>;
+  prefillData?: DogProfileSpec;
+  handleSubmit: (dogProfile: DogProfileSpec) => Promise<Result<true, string>>;
   handleCancel: () => Promise<void>;
 }) {
   const {

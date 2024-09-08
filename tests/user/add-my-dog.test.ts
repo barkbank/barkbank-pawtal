@@ -1,4 +1,4 @@
-import { DogProfile } from "@/lib/bark/models/dog-profile-models";
+import { DogProfileSpec } from "@/lib/bark/models/dog-profile-models";
 import { withDb } from "../_db_helpers";
 import {
   fetchDogInfo,
@@ -25,7 +25,7 @@ describe("addMyDog", () => {
       const v1 = await insertVet(1, dbPool);
 
       // AND dog profile p1
-      const p1: DogProfile = {
+      const p1: DogProfileSpec = {
         ...DOG_PROFILE_WITHOUT_VET,
         dogPreferredVetId: v1.vetId,
       };
@@ -52,7 +52,7 @@ describe("addMyDog", () => {
       const v1 = await insertVet(1, dbPool);
 
       // AND dog profile p1
-      const p1: DogProfile = {
+      const p1: DogProfileSpec = {
         ...DOG_PROFILE_WITHOUT_VET,
         dogPreferredVetId: "",
       };
@@ -71,7 +71,7 @@ describe("addMyDog", () => {
   });
 });
 
-const DOG_PROFILE_WITHOUT_VET: DogProfile = {
+const DOG_PROFILE_WITHOUT_VET: DogProfileSpec = {
   dogName: "Hippo",
   dogBreed: "Greyhound",
   dogBirthday: parseCommonDate("2023-01-01", SINGAPORE_TIME_ZONE),
