@@ -21,14 +21,14 @@ describe("DogProfileService", () => {
     await withBarkContext(async ({ context }) => {
       const { userId } = await _createTestUser({ context, idx: 1 });
       const { vetId } = await _createTestVetClinic({ context, idx: 2 });
-      const dogProfile = _mockDogProfile({ dogPreferredVetId: vetId });
+      const spec = _mockDogProfileSpec({ dogPreferredVetId: vetId });
       const service = new DogProfileService({ context });
-      const res1 = await service.addDogProfile({ userId, dogProfile });
+      const res1 = await service.addDogProfile({ userId, spec });
       const { dogId } = res1.result!;
       const res2 = await service.getDogProfile({ userId, dogId });
       const retrieved = res2.result!;
-      expect(retrieved).toMatchObject(dogProfile);
-      expect(dogProfile).toMatchObject(retrieved);
+      expect(retrieved).toMatchObject(spec);
+      expect(spec).toMatchObject(retrieved);
     });
   });
   it("can list dog profiles by user", async () => {
@@ -54,7 +54,9 @@ describe("DogProfileService", () => {
   });
 });
 
-function _mockDogProfile(overrides?: Partial<DogProfileSpec>): DogProfileSpec {
+function _mockDogProfileSpec(
+  overrides?: Partial<DogProfileSpec>,
+): DogProfileSpec {
   const base: DogProfileSpec = {
     dogName: "Woofgang",
     dogBirthday: dateAgo({ numYears: 3 }),

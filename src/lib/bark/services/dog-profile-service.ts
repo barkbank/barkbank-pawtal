@@ -12,7 +12,7 @@ export class DogProfileService {
 
   async addDogProfile(args: {
     userId: string;
-    dogProfile: DogProfileSpec;
+    spec: DogProfileSpec;
   }): Promise<Result<{ dogId: string }, typeof CODE.FAILED>> {
     throw new Error("Not implemented");
   }
@@ -35,7 +35,7 @@ export class DogProfileService {
   async updateDogProfile(args: {
     userId: string;
     dogId: string;
-    dogProfile: DogProfileSpec;
+    spec: DogProfileSpec;
   }): Promise<
     | typeof CODE.OK
     | typeof CODE.FAILED
@@ -47,7 +47,7 @@ export class DogProfileService {
   async updateSubProfile(args: {
     userId: string;
     dogId: string;
-    subProfile: SubProfileSpec;
+    spec: SubProfileSpec;
   }): Promise<
     | typeof CODE.OK
     | typeof CODE.FAILED
