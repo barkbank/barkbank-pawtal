@@ -7,6 +7,7 @@ import {
 import { z } from "zod";
 
 export class EncryptedDogDao {
+  // (!) WIP: These should be using dogs and latest_values
   private table = `"dogs"`;
   private projection = `
   user_id as "userId",
@@ -55,6 +56,36 @@ export class EncryptedDogDao {
     return RowSchema.parse(res.rows[0]);
   }
 
+  async update(args: { dogId: string; spec: EncryptedDogSpec }) {
+    const { dogId, spec } = args;
+    const sql = `
+    UPDATE dogs
+    SET
+      dog_encrypted_oii = $2,
+      dog_breed = $3,
+      dog_birthday = $4,
+      dog_gender = $5,
+      dog_weight_kg = $6,
+      dog_dea1_point1 = $7,
+      dog_ever_pregnant = $8,
+      dog_ever_received_transfusion = $9,
+      profile_modification_time = CURRENT_TIMESTAMP
+    WHERE
+      dog_id = $1
+    `;
+    await dbQuery(this.db, sql, [
+      dogId,
+      spec.dogEncryptedOii,
+      spec.dogBreed,
+      spec.dogBirthday,
+      spec.dogGender,
+      spec.dogWeightKg,
+      spec.dogDea1Point1,
+      spec.dogEverPregnant,
+      spec.dogEverReceivedTransfusion,
+    ]);
+  }
+
   async get(args: { dogId: string }): Promise<EncryptedDog | null> {
     const { dogId } = args;
     const sql = `
@@ -67,6 +98,21 @@ export class EncryptedDogDao {
       return null;
     }
     return EncryptedDogSchema.parse(res.rows[0]);
+  }
+
+  async getOwner(args: { dogId: string }): Promise<{ userId: string } | null> {
+    const { dogId } = args;
+    const RowSchema = z.object({ userId: z.string() });
+    const sql = `
+    SELECT user_id as "userId"
+    FROM dogs
+    WHERE dog_id = $1
+    `;
+    const res = await dbQuery<typeof RowSchema>(this.db, sql, [dogId]);
+    if (res.rows.length !== 1) {
+      return null;
+    }
+    return RowSchema.parse(res.rows[0]);
   }
 
   async listByUser(args: { userId: string }): Promise<EncryptedDog[]> {

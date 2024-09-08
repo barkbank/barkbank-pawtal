@@ -80,7 +80,7 @@ describe("DogProfileService", () => {
           dogId,
           spec: spec2,
         });
-        expect(resUpdate).toEqual(CODE.OK);
+        expect(resUpdate.error).toBeUndefined();
         const resGet = await service.getDogProfile({ userId, dogId });
         const retrieved = DogProfileSpecSchema.parse(resGet.result);
         expect(retrieved).toMatchObject(spec2);
@@ -118,6 +118,9 @@ describe("DogProfileService", () => {
       });
     });
   });
+
+  // WIP: It uses value from reports when it is more recent than value in dogs
+  // WIP: It uses value from dogs when value in reports is less recent.
 });
 
 function _mockSubProfileSpec(

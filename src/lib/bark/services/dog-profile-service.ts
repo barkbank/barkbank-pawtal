@@ -18,6 +18,7 @@ import { dbTransaction } from "@/lib/data/db-utils";
 import { EncryptedDogDao } from "../daos/encrypted-dog-dao";
 import { VetPreferenceDao } from "../daos/vet-preference-dao";
 import { isEmpty } from "lodash";
+import { EncryptedBarkReportDao } from "../daos/encrypted-bark-report-dao";
 
 export class DogProfileService {
   constructor(private config: { context: BarkContext }) {}
@@ -99,11 +100,38 @@ export class DogProfileService {
     dogId: string;
     spec: DogProfileSpec;
   }): Promise<
-    | typeof CODE.OK
-    | typeof CODE.FAILED
-    | typeof CODE.ERROR_CANNOT_UPDATE_FULL_PROFILE
+    Result<
+      true,
+      | typeof CODE.FAILED
+      | typeof CODE.ERROR_DOG_NOT_FOUND
+      | typeof CODE.ERROR_CANNOT_UPDATE_FULL_PROFILE
+    >
   > {
-    throw new Error("Not implemented");
+    const { userId, dogId, spec } = args;
+    const vetId = spec.dogPreferredVetId;
+    return dbTransaction(this.pool(), async (conn) => {
+      const dogDao = new EncryptedDogDao(conn);
+      const prefDao = new VetPreferenceDao(conn);
+      const reportDao = new EncryptedBarkReportDao(conn);
+      const resOwner = await dogDao.getOwner({ dogId });
+      if (resOwner === null) {
+        return Err(CODE.ERROR_DOG_NOT_FOUND);
+      }
+      if (resOwner.userId !== userId) {
+        return Err(CODE.ERROR_DOG_NOT_FOUND);
+      }
+      const { reportCount } = await reportDao.getReportCountByDog({ dogId });
+      if (reportCount > 0) {
+        return Err(CODE.ERROR_CANNOT_UPDATE_FULL_PROFILE);
+      }
+      const encryptedSpec = await this.toEncryptedDogSpec({ userId, spec });
+      await dogDao.update({ dogId, spec: encryptedSpec });
+      await prefDao.deleteByDog({ dogId });
+      if (!isEmpty(vetId)) {
+        await prefDao.insert({ pref: { userId, dogId, vetId } });
+      }
+      return Ok(true);
+    });
   }
 
   async updateSubProfile(args: {
