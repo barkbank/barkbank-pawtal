@@ -35,13 +35,17 @@ describe("DogProfileService", () => {
   it("can list dog profiles by user", async () => {
     await withBarkContext(async ({ context }) => {
       const { userId } = await _createTestUser({ context, idx: 3 });
+      const v1 = await _createTestVetClinic({ context, idx: 1 });
+      const v2 = await _createTestVetClinic({ context, idx: 2 });
       const spec1 = _mockDogProfileSpec({
         dogName: "Alan",
         dogGender: DOG_GENDER.MALE,
+        dogPreferredVetId: v1.vetId,
       });
       const spec2 = _mockDogProfileSpec({
         dogName: "Beth",
         dogGender: DOG_GENDER.FEMALE,
+        dogPreferredVetId: v2.vetId,
       });
 
       const service = new DogProfileService({ context });
