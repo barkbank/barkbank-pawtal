@@ -1,7 +1,7 @@
 import { BarkReportSchema } from "@/lib/bark/models/bark-report";
 import { DogAppointmentSchema } from "@/lib/bark/models/dog-appointment";
 import { DogPreferredVetSchema } from "@/lib/bark/models/dog-preferred-vet";
-import { DogProfileSchema } from "@/lib/bark/models/dog-profile";
+import { DogProfileSchema } from "@/lib/bark/models/dog-profile-models";
 import { DogStatusesSchema } from "@/lib/bark/models/dog-statuses";
 import { z } from "zod";
 

@@ -9,7 +9,7 @@ import {
   insertUser,
   insertVet,
 } from "../_fixtures";
-import { DogProfile } from "@/lib/bark/models/dog-profile";
+import { DogProfile } from "@/lib/bark/models/dog-profile-models";
 import {
   SINGAPORE_TIME_ZONE,
   parseCommonDate,

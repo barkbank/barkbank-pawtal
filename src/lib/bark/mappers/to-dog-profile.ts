@@ -1,5 +1,5 @@
 import { BarkContext } from "../bark-context";
-import { DogProfile } from "../models/dog-profile";
+import { DogProfile } from "../models/dog-profile-models";
 import { EncryptedDogProfile } from "../models/encrypted-dog-profile";
 import { toDogName } from "./to-dog-name";
 

@@ -1,4 +1,4 @@
-import { DogProfile } from "../models/dog-profile";
+import { DogProfile } from "../models/dog-profile-models";
 import { SubProfile, SubProfileSchema } from "../models/sub-profile";
 
 export function toSubProfile(dogProfile: DogProfile): SubProfile {

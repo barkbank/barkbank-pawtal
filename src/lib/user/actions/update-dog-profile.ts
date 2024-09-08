@@ -6,7 +6,7 @@ import {
   dbRollback,
 } from "@/lib/data/db-utils";
 import { UserActor } from "../user-actor";
-import { DogProfile } from "@/lib/bark/models/dog-profile";
+import { DogProfile } from "@/lib/bark/models/dog-profile-models";
 import { PoolClient } from "pg";
 import {
   dbDeleteDogVetPreferences,

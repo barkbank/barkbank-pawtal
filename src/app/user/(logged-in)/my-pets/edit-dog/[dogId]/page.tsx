@@ -10,7 +10,7 @@ import { SubProfileFormController } from "../../_lib/components/sub-profile-form
 import { opFetchDogReportCount } from "@/lib/bark/operations/op-fetch-dog-report-count";
 import { SubProfile, SubProfileSchema } from "@/lib/bark/models/sub-profile";
 import { Err, Ok, Result } from "@/lib/utilities/result";
-import { DogProfile } from "@/lib/bark/models/dog-profile";
+import { DogProfile } from "@/lib/bark/models/dog-profile-models";
 import { CODE } from "@/lib/utilities/bark-code";
 import { toSubProfile } from "@/lib/bark/mappers/to-sub-profile";
 import { getDogBreeds } from "@/app/_lib/get-dog-breeds";

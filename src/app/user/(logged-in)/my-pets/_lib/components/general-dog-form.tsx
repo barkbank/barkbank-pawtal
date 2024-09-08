@@ -15,7 +15,7 @@ import { z } from "zod";
 import { BarkButton } from "@/components/bark/bark-button";
 import { BarkH1 } from "@/components/bark/bark-typography";
 import { Result } from "@/lib/utilities/result";
-import { DogProfile } from "@/lib/bark/models/dog-profile";
+import { DogProfile } from "@/lib/bark/models/dog-profile-models";
 import { RequiredDateField } from "@/app/_lib/field-schemas/required-date-field";
 import { OptionalDogWeightKgField } from "@/app/_lib/field-schemas/optional-dog-weight-kg-field";
 import { useEffect } from "react";

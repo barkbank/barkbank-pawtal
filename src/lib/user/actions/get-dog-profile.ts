@@ -1,6 +1,9 @@
 import { dbResultQuery } from "@/lib/data/db-utils";
 import { UserActor } from "../user-actor";
-import { DogProfile, DogProfileSchema } from "@/lib/bark/models/dog-profile";
+import {
+  DogProfile,
+  DogProfileSchema,
+} from "@/lib/bark/models/dog-profile-models";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { CODE } from "@/lib/utilities/bark-code";
 import { EncryptedDogProfileSchema } from "@/lib/bark/models/encrypted-dog-profile";
