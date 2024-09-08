@@ -143,7 +143,7 @@ export class DogProfileService {
     | typeof CODE.FAILED
     | typeof CODE.ERROR_SHOULD_UPDATE_FULL_PROFILE
   > {
-    throw new Error("Not implemented");
+    throw new Error("WIP: Impl updateSubProfile");
   }
 
   private async toEncryptedDogSpec(args: {
