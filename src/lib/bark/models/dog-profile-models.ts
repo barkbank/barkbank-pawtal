@@ -25,11 +25,9 @@ export const VetPreferenceSchema = z.object({
   vetId: z.string(),
 });
 
-/**
- * The dog fields that can be updated prior to the first medical report. This
- * can be used by registration and add-dog.
- */
-export const DogProfileSpecSchema = z.object({
+export const DogProfileSchema = z.object({
+  userId: z.string(),
+  dogId: z.string(),
   dogName: z.string(),
   dogBreed: z.string(),
   dogBirthday: z.date(),
@@ -39,6 +37,11 @@ export const DogProfileSpecSchema = z.object({
   dogEverPregnant: YesNoUnknownSchema,
   dogEverReceivedTransfusion: YesNoUnknownSchema,
   dogPreferredVetId: z.string(),
+});
+
+export const DogProfileSpecSchema = DogProfileSchema.omit({
+  userId: true,
+  dogId: true,
 });
 
 /**
@@ -67,5 +70,6 @@ export const SubProfileSchema = z.object({
 export type EncryptedDog = z.infer<typeof EncryptedDogSchema>;
 export type EncryptedDogSpec = z.infer<typeof EncryptedDogSpecSchema>;
 export type VetPreference = z.infer<typeof VetPreferenceSchema>;
+export type DogProfile = z.infer<typeof DogProfileSchema>;
 export type DogProfileSpec = z.infer<typeof DogProfileSpecSchema>;
 export type SubProfile = z.infer<typeof SubProfileSchema>;
