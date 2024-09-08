@@ -7,4 +7,5 @@ export const EncryptedDogProfileSchema = DogProfileSchema.omit({
   dogEncryptedOii: z.string(),
 });
 
+// TODO: We should be able to remove this when DogProfileService is done.
 export type EncryptedDogProfile = z.infer<typeof EncryptedDogProfileSchema>;
