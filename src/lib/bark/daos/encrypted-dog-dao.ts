@@ -7,31 +7,31 @@ export class EncryptedDogDao {
 
   async insert(args: { spec: EncryptedDogSpec }): Promise<{ dogId: string }> {
     const RowSchema = z.object({ dogId: z.string() });
-    throw Error("Not implemented");
+    throw new Error("Not implemented");
   }
 
   async get(args: { dogId: string }): Promise<EncryptedDog> {
-    throw Error("Not implemented");
+    throw new Error("Not implemented");
   }
 
   async listByUser(args: { userId: string }): Promise<EncryptedDog[]> {
-    throw Error("Not implemented");
+    throw new Error("Not implemented");
   }
 
   async listByVet(args: { vetId: string }): Promise<EncryptedDog[]> {
-    throw Error("Not implemented");
+    throw new Error("Not implemented");
   }
 
   async clearPreferredVet(args: { dogId: string }): Promise<void> {
-    throw Error("Not implemented");
+    throw new Error("Not implemented");
   }
 
   async setPreferredVet(args: { dogId: string; vetId: string }): Promise<void> {
-    throw Error("Not implemented");
+    throw new Error("Not implemented");
   }
 
   async getPreferredVet(args: { dogId: string }): Promise<{ vetId: string }> {
     const RowSchema = z.object({ vetId: z.string() });
-    throw Error("Not implemented");
+    throw new Error("Not implemented");
   }
 }

@@ -9,11 +9,26 @@ describe("DogProfileService", () => {
   it("can be used to create and retrieve dog profile", async () => {
     await withBarkContext(async ({ context }) => {});
   });
-  it("can be used to update dog profile", async () => {
-    await withBarkContext(async ({ context }) => {});
-  });
   it("can list dog profiles by user", async () => {
     await withBarkContext(async ({ context }) => {});
+  });
+
+  describe("When there is no existing report", () => {
+    it("can be used to update dog profile", async () => {
+      await withBarkContext(async ({ context }) => {});
+    });
+    it("cannot be used to update sub profile", async () => {
+      await withBarkContext(async ({ context }) => {});
+    });
+  });
+
+  describe("When there is an existing medical report", () => {
+    it("cannot be used to update dog profile", async () => {
+      await withBarkContext(async ({ context }) => {});
+    });
+    it("can be used to update sub profile", async () => {
+      await withBarkContext(async ({ context }) => {});
+    });
   });
 });
 
