@@ -31,9 +31,31 @@ describe("DogProfileService", () => {
       expect(spec).toMatchObject(retrieved);
     });
   });
+
   it("can list dog profiles by user", async () => {
     await withBarkContext(async ({ context }) => {
-      throw new Error("Test not implemented");
+      const { userId } = await _createTestUser({ context, idx: 3 });
+      const spec1 = _mockDogProfileSpec({
+        dogName: "Alan",
+        dogGender: DOG_GENDER.MALE,
+      });
+      const spec2 = _mockDogProfileSpec({
+        dogName: "Beth",
+        dogGender: DOG_GENDER.FEMALE,
+      });
+
+      const service = new DogProfileService({ context });
+      await service.addDogProfile({ userId, spec: spec1 });
+      await service.addDogProfile({ userId, spec: spec2 });
+
+      const { result, error } = await service.listDogProfiles({ userId });
+      expect(error).toBeUndefined();
+      const profileMap: Record<string, DogProfileSpec> = {};
+      for (const profile of result!) {
+        profileMap[profile.dogName] = DogProfileSpecSchema.parse(profile);
+      }
+      expect(profileMap["Alan"]).toMatchObject(spec1);
+      expect(profileMap["Beth"]).toMatchObject(spec2);
     });
   });
 

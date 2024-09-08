@@ -26,7 +26,7 @@ export class DogProfileService {
     throw new Error("Not implemented");
   }
 
-  async listDogProfile(args: {
+  async listDogProfiles(args: {
     userId: string;
   }): Promise<Result<DogProfile[], typeof CODE.FAILED>> {
     throw new Error("Not implemented");
