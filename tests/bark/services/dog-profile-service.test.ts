@@ -7,6 +7,8 @@ import { UserAccountService } from "@/lib/bark/services/user-account-service";
 import {
   DogProfileSpec,
   DogProfileSpecSchema,
+  SubProfileSpec,
+  SubProfileSpecSchema,
 } from "@/lib/bark/models/dog-profile-models";
 import { dateAgo } from "../../_time_helpers";
 import { DOG_ANTIGEN_PRESENCE } from "@/lib/bark/enums/dog-antigen-presence";
@@ -15,6 +17,7 @@ import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
 import { DogProfileService } from "@/lib/bark/services/dog-profile-service";
 import { VetClinicSpec } from "@/lib/bark/models/vet-models";
 import { VetAccountService } from "@/lib/bark/services/vet-account-service";
+import { CODE } from "@/lib/utilities/bark-code";
 
 describe("DogProfileService", () => {
   it("can be used to create and retrieve dog profile", async () => {
@@ -26,7 +29,7 @@ describe("DogProfileService", () => {
       const res1 = await service.addDogProfile({ userId, spec });
       const { dogId } = res1.result!;
       const res2 = await service.getDogProfile({ userId, dogId });
-      const retrieved = res2.result!;
+      const retrieved = DogProfileSpecSchema.parse(res2.result);
       expect(retrieved).toMatchObject(spec);
       expect(spec).toMatchObject(retrieved);
     });
@@ -63,32 +66,73 @@ describe("DogProfileService", () => {
     });
   });
 
-  describe("When there is no existing report", () => {
-    it("can be used to update dog profile", async () => {
+  describe("When a dog has no existing report", () => {
+    it("can be used to update dog-profiles with no existing reports", async () => {
       await withBarkContext(async ({ context }) => {
-        throw new Error("Test not implemented");
+        const { userId } = await _createTestUser({ context, idx: 1 });
+        const spec1 = _mockDogProfileSpec({ dogName: "Eric" });
+        const service = new DogProfileService({ context });
+        const resAdd = await service.addDogProfile({ userId, spec: spec1 });
+        const { dogId } = resAdd.result!;
+        const spec2 = _mockDogProfileSpec({ dogName: "Erik" });
+        const resUpdate = await service.updateDogProfile({
+          userId,
+          dogId,
+          spec: spec2,
+        });
+        expect(resUpdate).toEqual(CODE.OK);
+        const resGet = await service.getDogProfile({ userId, dogId });
+        const retrieved = DogProfileSpecSchema.parse(resGet.result);
+        expect(retrieved).toMatchObject(spec2);
+        expect(spec2).toMatchObject(retrieved);
       });
     });
-    it("cannot be used to update sub profile", async () => {
+
+    it("does not allow sub-profile updates on dog without an existing report", async () => {
       await withBarkContext(async ({ context }) => {
-        throw new Error("Test not implemented");
+        const { userId } = await _createTestUser({ context, idx: 1 });
+        const spec1 = _mockDogProfileSpec({ dogName: "Eric" });
+        const service = new DogProfileService({ context });
+        const resAdd = await service.addDogProfile({ userId, spec: spec1 });
+        const { dogId } = resAdd.result!;
+        const spec2 = _mockSubProfileSpec({ dogName: "Erik" });
+        const resUpdate = await service.updateSubProfile({
+          userId,
+          dogId,
+          spec: spec2,
+        });
+        expect(resUpdate).toEqual(CODE.ERROR_SHOULD_UPDATE_FULL_PROFILE);
       });
     });
   });
 
   describe("When there is an existing medical report", () => {
-    it("cannot be used to update dog profile", async () => {
+    it("does not allow dog-profile updates on dogs with an existing report", async () => {
       await withBarkContext(async ({ context }) => {
         throw new Error("Test not implemented");
       });
     });
-    it("can be used to update sub profile", async () => {
+    it("can be used to update sub-profile of dog with existing medical report", async () => {
       await withBarkContext(async ({ context }) => {
         throw new Error("Test not implemented");
       });
     });
   });
 });
+
+function _mockSubProfileSpec(
+  overrides?: Partial<SubProfileSpec>,
+): SubProfileSpec {
+  const base: SubProfileSpec = {
+    dogName: "Woofgang",
+    dogWeightKg: 26.5,
+    dogEverPregnant: YES_NO_UNKNOWN.NO,
+    dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
+    dogPreferredVetId: "",
+  };
+  const out = { ...base, ...overrides };
+  return SubProfileSpecSchema.parse(out);
+}
 
 function _mockDogProfileSpec(
   overrides?: Partial<DogProfileSpec>,

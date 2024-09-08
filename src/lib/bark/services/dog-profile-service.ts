@@ -21,7 +21,7 @@ export class DogProfileService {
     userId: string;
     dogId: string;
   }): Promise<
-    Result<DogProfileSpec, typeof CODE.FAILED | typeof CODE.ERROR_DOG_NOT_FOUND>
+    Result<DogProfile, typeof CODE.FAILED | typeof CODE.ERROR_DOG_NOT_FOUND>
   > {
     throw new Error("Not implemented");
   }
