@@ -15,7 +15,8 @@ export class EncryptedDogProfileDao {
     profile: EncryptedDogProfile;
   }): Promise<DogIdentifier> {
     const { userId, profile } = args;
-    const sql = ``;
+    const sql = `
+    `;
     const res = await dbQuery<DogIdentifier>(this.conn, sql, [
       userId,
       profile.dogBreed,

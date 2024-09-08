@@ -1,6 +1,5 @@
 import { UserAccountService } from "@/lib/bark/services/user-account-service";
 import { withBarkContext } from "../_context";
-import { PawtalService } from "@/lib/bark/services/pawtal-service";
 import { UserAccountSpec } from "@/lib/bark/models/user-models";
 import { USER_RESIDENCY } from "@/lib/bark/enums/user-residency";
 import { USER_TITLE } from "@/lib/bark/enums/user-title";
@@ -12,20 +11,24 @@ import {
 import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
 import { DOG_ANTIGEN_PRESENCE } from "@/lib/bark/enums/dog-antigen-presence";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
+import { DogProfileService } from "@/lib/bark/services/dog-profile-service";
 
-describe("PawtalService", () => {
+describe("DogProfileService", () => {
   it("can be used to insert and retrieve dog profiles", async () => {
     await withBarkContext(async ({ context }) => {
       const userService = new UserAccountService(context);
-      const pawtalService = new PawtalService({ context });
+      const dogProfileService = new DogProfileService({ context });
       const { userId } = (
         await userService.create({ spec: _mockUserAccountSpec() })
       ).result!;
       const p1 = _mockDogProfile();
-      const { dogId } = (
-        await pawtalService.addOwnerDog({ userId, profile: p1 })
-      ).result!;
-      const p2 = await pawtalService.getOwnerDog({ userId, dogId });
+      const res = await dogProfileService.addDogProfile({
+        userId,
+        profile: p1,
+      });
+      expect(res.error).toBeUndefined();
+      const { dogId } = res.result!;
+      const p2 = await dogProfileService.getDogProfile({ userId, dogId });
       expect(p2).toMatchObject(p1);
       expect(p1).toMatchObject(p2);
     });

@@ -14,7 +14,7 @@ import { DogOii } from "../models/dog-oii";
 import { toDogEncryptedOii } from "../mappers/to-dog-encrypted-oii";
 import { toDogProfile } from "../mappers/to-dog-profile";
 
-export class PawtalService {
+export class DogProfileService {
   constructor(private config: { context: BarkContext }) {}
 
   private context(): BarkContext {
@@ -25,7 +25,7 @@ export class PawtalService {
     return this.config.context.dbPool.connect();
   }
 
-  async addOwnerDog(args: {
+  async addDogProfile(args: {
     userId: string;
     profile: DogProfile;
   }): Promise<Result<DogIdentifier, typeof CODE.FAILED>> {
@@ -35,6 +35,14 @@ export class PawtalService {
       await dbBegin(conn);
       const encrypted = await this.toEncryptedDogProfile(profile);
       const dao = new EncryptedDogProfileDao(conn);
+
+      // const dogDao = new EncryptedDogDao(conn);
+      // const preferenceDao = new VetPreferenceDao(conn);
+      // const dogSpec = await this.toDogSpec(profile);
+      // const vetPreference = await this.toVetPreference(profile);
+      // const encryptedDogSpec = await this.toEncryptedDogSpec(dogSpec);
+      // dogDao.insert(dogSpec);
+
       const res = await dao.insert({ userId, profile: encrypted });
       await dbCommit(conn);
       return Ok(res);
@@ -47,7 +55,7 @@ export class PawtalService {
     }
   }
 
-  async getOwnerDog(args: {
+  async getDogProfile(args: {
     userId: string;
     dogId: string;
   }): Promise<
