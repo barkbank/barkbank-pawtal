@@ -32,24 +32,34 @@ describe("DogProfileService", () => {
     });
   });
   it("can list dog profiles by user", async () => {
-    await withBarkContext(async ({ context }) => {});
+    await withBarkContext(async ({ context }) => {
+      throw new Error("Test not implemented");
+    });
   });
 
   describe("When there is no existing report", () => {
     it("can be used to update dog profile", async () => {
-      await withBarkContext(async ({ context }) => {});
+      await withBarkContext(async ({ context }) => {
+        throw new Error("Test not implemented");
+      });
     });
     it("cannot be used to update sub profile", async () => {
-      await withBarkContext(async ({ context }) => {});
+      await withBarkContext(async ({ context }) => {
+        throw new Error("Test not implemented");
+      });
     });
   });
 
   describe("When there is an existing medical report", () => {
     it("cannot be used to update dog profile", async () => {
-      await withBarkContext(async ({ context }) => {});
+      await withBarkContext(async ({ context }) => {
+        throw new Error("Test not implemented");
+      });
     });
     it("can be used to update sub profile", async () => {
-      await withBarkContext(async ({ context }) => {});
+      await withBarkContext(async ({ context }) => {
+        throw new Error("Test not implemented");
+      });
     });
   });
 });
