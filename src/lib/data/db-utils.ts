@@ -7,6 +7,28 @@ import { BARKBANK_ENV } from "../barkbank-env";
 
 export type DbContext = Pool | PoolClient;
 
+export async function dbTransaction<T, E>(
+  pool: Pool,
+  body: (conn: PoolClient) => Promise<Result<T, E>>,
+) {
+  const conn = await pool.connect();
+  try {
+    await dbBegin(conn);
+    const res = await body(conn);
+    if (res.error !== undefined) {
+      return res;
+    }
+    await dbCommit(conn);
+    return res;
+  } catch (err) {
+    console.error(err);
+    return Err(CODE.FAILED);
+  } finally {
+    await dbRollback(conn);
+    await dbRelease(conn);
+  }
+}
+
 export async function dbBegin(conn: PoolClient): Promise<void> {
   await conn.query("BEGIN");
 }

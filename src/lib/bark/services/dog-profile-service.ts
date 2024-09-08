@@ -13,8 +13,8 @@ import {
 import { CODE } from "@/lib/utilities/bark-code";
 import { toDogEncryptedOii } from "../mappers/to-dog-encrypted-oii";
 import { toDogOii } from "../mappers/to-dog-oii";
-import { PoolClient } from "pg";
-import { dbBegin, dbCommit, dbRelease, dbRollback } from "@/lib/data/db-utils";
+import { Pool } from "pg";
+import { dbTransaction } from "@/lib/data/db-utils";
 import { EncryptedDogDao } from "../daos/encrypted-dog-dao";
 import { VetPreferenceDao } from "../daos/vet-preference-dao";
 import { isEmpty } from "lodash";
@@ -26,31 +26,19 @@ export class DogProfileService {
     userId: string;
     spec: DogProfileSpec;
   }): Promise<Result<{ dogId: string }, typeof CODE.FAILED>> {
-    const conn = await this.connect();
-    try {
-      await dbBegin(conn);
+    const { userId, spec } = args;
+    const vetId = spec.dogPreferredVetId;
+    return dbTransaction(this.pool(), async (conn) => {
       const dogDao = new EncryptedDogDao(conn);
-      const { userId, spec } = args;
+      const prefDao = new VetPreferenceDao(conn);
       const dog = await this.toEncryptedDogSpec({ userId, spec });
       const { dogId } = await dogDao.insert({ spec: dog });
-      if (!isEmpty(spec.dogPreferredVetId)) {
-        const prefDao = new VetPreferenceDao(conn);
-        const pref: VetPreference = {
-          userId,
-          dogId,
-          vetId: spec.dogPreferredVetId,
-        };
+      if (!isEmpty(vetId)) {
+        const pref: VetPreference = { userId, dogId, vetId };
         await prefDao.insert({ pref });
       }
-      await dbCommit(conn);
       return Ok({ dogId });
-    } catch (err) {
-      console.error(err);
-      return Err(CODE.FAILED);
-    } finally {
-      await dbRollback(conn);
-      await dbRelease(conn);
-    }
+    });
   }
 
   async getDogProfile(args: {
@@ -59,12 +47,10 @@ export class DogProfileService {
   }): Promise<
     Result<DogProfile, typeof CODE.FAILED | typeof CODE.ERROR_DOG_NOT_FOUND>
   > {
-    const conn = await this.connect();
-    try {
-      await dbBegin(conn);
+    const { userId, dogId } = args;
+    return dbTransaction(this.pool(), async (conn) => {
       const dogDao = new EncryptedDogDao(conn);
       const preferenceDao = new VetPreferenceDao(conn);
-      const { userId, dogId } = args;
       const dog = await dogDao.get({ dogId });
       if (dog === null) {
         return Err(CODE.ERROR_DOG_NOT_FOUND);
@@ -74,26 +60,17 @@ export class DogProfileService {
       }
       const preferences = await preferenceDao.listByDog({ dogId });
       const profile = await this.toDogProfile({ dog, preferences });
-      await dbCommit(conn);
       return Ok(profile);
-    } catch (err) {
-      console.error(err);
-      return Err(CODE.FAILED);
-    } finally {
-      await dbRollback(conn);
-      await dbRelease(conn);
-    }
+    });
   }
 
   async listDogProfiles(args: {
     userId: string;
   }): Promise<Result<DogProfile[], typeof CODE.FAILED>> {
-    const conn = await this.connect();
-    try {
-      await dbBegin(conn);
+    const { userId } = args;
+    return dbTransaction(this.pool(), async (conn) => {
       const dogDao = new EncryptedDogDao(conn);
       const preferenceDao = new VetPreferenceDao(conn);
-      const { userId } = args;
       const dogs = await dogDao.listByUser({ userId });
       const preferences: VetPreference[] = await preferenceDao.listByUser({
         userId,
@@ -113,15 +90,8 @@ export class DogProfileService {
           });
         }),
       );
-      await dbCommit(conn);
       return Ok(profiles);
-    } catch (err) {
-      console.error(err);
-      return Err(CODE.FAILED);
-    } finally {
-      await dbRollback(conn);
-      await dbRelease(conn);
-    }
+    });
   }
 
   async updateDogProfile(args: {
@@ -178,7 +148,7 @@ export class DogProfileService {
     return this.config.context;
   }
 
-  private async connect(): Promise<PoolClient> {
-    return this.context().dbPool.connect();
+  private pool(): Pool {
+    return this.context().dbPool;
   }
 }
