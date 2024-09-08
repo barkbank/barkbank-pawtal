@@ -1,37 +1,81 @@
-import { DbContext } from "@/lib/data/db-utils";
-import { EncryptedDog, EncryptedDogSpec } from "../models/dog-profile-models";
+import { DbContext, dbQuery } from "@/lib/data/db-utils";
+import {
+  EncryptedDog,
+  EncryptedDogSchema,
+  EncryptedDogSpec,
+} from "../models/dog-profile-models";
 import { z } from "zod";
 
 export class EncryptedDogDao {
+  private table = `"dogs"`;
+  private projection = `
+  user_id as "userId",
+  dog_id as "dogId",
+  dog_encrypted_oii as "dogEncryptedOii",
+  dog_breed as "dogBreed",
+  dog_birthday as "dogBirthday",
+  dog_gender as "dogGender",
+  dog_weight_kg as "dogWeightKg",
+  dog_dea1_point1 as "dogDea1Point1",
+  dog_ever_pregnant as "dogEverPregnant",
+  dog_ever_received_transfusion as "dogEverReceivedTransfusion"
+  `;
+
   constructor(private db: DbContext) {}
 
   async insert(args: { spec: EncryptedDogSpec }): Promise<{ dogId: string }> {
     const RowSchema = z.object({ dogId: z.string() });
-    throw new Error("Not implemented");
+    const { spec } = args;
+    const sql = `
+    INSERT INTO ${this.table} (
+      user_id,
+      dog_encrypted_oii,
+      dog_breed,
+      dog_birthday,
+      dog_gender,
+      dog_weight_kg,
+      dog_dea1_point1,
+      dog_ever_pregnant,
+      dog_ever_received_transfusion
+    )
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+    RETURNING dog_id AS "dogId"
+    `;
+    const res = await dbQuery<typeof RowSchema>(this.db, sql, [
+      spec.userId,
+      spec.dogEncryptedOii,
+      spec.dogBreed,
+      spec.dogBirthday,
+      spec.dogGender,
+      spec.dogWeightKg,
+      spec.dogDea1Point1,
+      spec.dogEverPregnant,
+      spec.dogEverReceivedTransfusion,
+    ]);
+    return RowSchema.parse(res.rows[0]);
   }
 
-  async get(args: { dogId: string }): Promise<EncryptedDog> {
-    throw new Error("Not implemented");
+  async get(args: { dogId: string }): Promise<EncryptedDog | null> {
+    const { dogId } = args;
+    const sql = `
+    SELECT ${this.projection}
+    FROM ${this.table}
+    WHERE dog_id = $1
+    `;
+    const res = await dbQuery<EncryptedDog>(this.db, sql, [dogId]);
+    if (res.rows.length !== 1) {
+      return null;
+    }
+    return EncryptedDogSchema.parse(res.rows[0]);
   }
 
   async listByUser(args: { userId: string }): Promise<EncryptedDog[]> {
+    // TODO: Impl listByUser
     throw new Error("Not implemented");
   }
 
   async listByVet(args: { vetId: string }): Promise<EncryptedDog[]> {
-    throw new Error("Not implemented");
-  }
-
-  async clearPreferredVet(args: { dogId: string }): Promise<void> {
-    throw new Error("Not implemented");
-  }
-
-  async setPreferredVet(args: { dogId: string; vetId: string }): Promise<void> {
-    throw new Error("Not implemented");
-  }
-
-  async getPreferredVet(args: { dogId: string }): Promise<{ vetId: string }> {
-    const RowSchema = z.object({ vetId: z.string() });
+    // TODO: Impl listByVet
     throw new Error("Not implemented");
   }
 }
