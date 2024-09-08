@@ -1,6 +1,10 @@
 import { Result } from "@/lib/utilities/result";
 import { BarkContext } from "../bark-context";
-import { DogProfileSpec, SubProfileSpec } from "../models/dog-profile-models";
+import {
+  DogProfile,
+  DogProfileSpec,
+  SubProfileSpec,
+} from "../models/dog-profile-models";
 import { CODE } from "@/lib/utilities/bark-code";
 
 export class DogProfileService {
@@ -24,7 +28,7 @@ export class DogProfileService {
 
   async listDogProfile(args: {
     userId: string;
-  }): Promise<Result<DogProfileSpec[], typeof CODE.FAILED>> {
+  }): Promise<Result<DogProfile[], typeof CODE.FAILED>> {
     throw new Error("Not implemented");
   }
 
@@ -32,7 +36,11 @@ export class DogProfileService {
     userId: string;
     dogId: string;
     dogProfile: DogProfileSpec;
-  }): Promise<typeof CODE.OK | typeof CODE.FAILED> {
+  }): Promise<
+    | typeof CODE.OK
+    | typeof CODE.FAILED
+    | typeof CODE.ERROR_CANNOT_UPDATE_FULL_PROFILE
+  > {
     throw new Error("Not implemented");
   }
 
@@ -40,7 +48,11 @@ export class DogProfileService {
     userId: string;
     dogId: string;
     subProfile: SubProfileSpec;
-  }): Promise<typeof CODE.OK | typeof CODE.FAILED> {
+  }): Promise<
+    | typeof CODE.OK
+    | typeof CODE.FAILED
+    | typeof CODE.ERROR_SHOULD_UPDATE_FULL_PROFILE
+  > {
     throw new Error("Not implemented");
   }
 }
