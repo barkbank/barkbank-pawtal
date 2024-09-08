@@ -1,8 +1,8 @@
 import { PoolClient } from "pg";
 import { UserActor } from "../user-actor";
 import {
-  SubProfile,
-  SubProfileSchema,
+  SubProfileSpec,
+  SubProfileSpecSchema,
 } from "@/lib/bark/models/dog-profile-models";
 import {
   dbBegin,
@@ -20,13 +20,13 @@ import { CODE } from "@/lib/utilities/bark-code";
 type Context = {
   actor: UserActor;
   dogId: string;
-  subProfile: SubProfile;
+  subProfile: SubProfileSpec;
 };
 
 export async function updateSubProfile(
   actor: UserActor,
   dogId: string,
-  subProfile: SubProfile,
+  subProfile: SubProfileSpec,
 ): Promise<
   | typeof CODE.OK
   | typeof CODE.DB_QUERY_FAILURE
@@ -39,7 +39,7 @@ export async function updateSubProfile(
   const { dbPool } = actor.getParams();
   const conn = await dbPool.connect();
   try {
-    SubProfileSchema.parse(subProfile);
+    SubProfileSpecSchema.parse(subProfile);
     await dbBegin(conn);
     const resOwnership = await checkOwnership(conn, ctx);
     if (resOwnership !== CODE.OK) {

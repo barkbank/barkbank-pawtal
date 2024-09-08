@@ -12,8 +12,8 @@ import { YesNoSchema } from "@/lib/bark/enums/yes-no";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { DogProfileSpec } from "@/lib/bark/models/dog-profile-models";
 import {
-  SubProfile,
-  SubProfileSchema,
+  SubProfileSpec,
+  SubProfileSpecSchema,
 } from "@/lib/bark/models/dog-profile-models";
 import { Result } from "@/lib/utilities/result";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -33,8 +33,8 @@ type FormData = z.infer<typeof FormDataSchema>;
 export function SubProfileForm(props: {
   vetOptions: BarkFormOption[];
   dogProfile: DogProfileSpec;
-  subProfile: SubProfile;
-  handleSubmit: (subProfile: SubProfile) => Promise<Result<true, string>>;
+  subProfile: SubProfileSpec;
+  handleSubmit: (subProfile: SubProfileSpec) => Promise<Result<true, string>>;
   handleCancel: () => Promise<void>;
 }) {
   const { vetOptions, dogProfile, subProfile, handleSubmit, handleCancel } =
@@ -138,7 +138,7 @@ export function SubProfileForm(props: {
   );
 }
 
-function _toFormData(subProfile: SubProfile): FormData {
+function _toFormData(subProfile: SubProfileSpec): FormData {
   const { dogWeightKg, ...fields } = subProfile;
   const out: FormData = {
     dogWeightKg: RequiredDogWeightKgField.new().format(dogWeightKg),
@@ -147,11 +147,11 @@ function _toFormData(subProfile: SubProfile): FormData {
   return FormDataSchema.parse(out);
 }
 
-function _toSubProfile(formData: FormData): SubProfile {
+function _toSubProfile(formData: FormData): SubProfileSpec {
   const { dogWeightKg, ...fields } = formData;
-  const out: SubProfile = {
+  const out: SubProfileSpec = {
     dogWeightKg: RequiredDogWeightKgField.new().parse(dogWeightKg),
     ...fields,
   };
-  return SubProfileSchema.parse(out);
+  return SubProfileSpecSchema.parse(out);
 }

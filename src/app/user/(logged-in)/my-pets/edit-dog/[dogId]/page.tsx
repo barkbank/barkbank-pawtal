@@ -9,8 +9,8 @@ import { SimpleErrorPage } from "@/app/_components/simple-error-page";
 import { SubProfileFormController } from "../../_lib/components/sub-profile-form-controller";
 import { opFetchDogReportCount } from "@/lib/bark/operations/op-fetch-dog-report-count";
 import {
-  SubProfile,
-  SubProfileSchema,
+  SubProfileSpec,
+  SubProfileSpecSchema,
 } from "@/lib/bark/models/dog-profile-models";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { DogProfileSpec } from "@/lib/bark/models/dog-profile-models";
@@ -73,7 +73,7 @@ export default async function Page(props: { params: { dogId: string } }) {
 
 function _toSubProfile(
   dogProfile: DogProfileSpec,
-): Result<SubProfile, typeof CODE.FAILED> {
+): Result<SubProfileSpec, typeof CODE.FAILED> {
   try {
     return Ok(toSubProfile(dogProfile));
   } catch (err) {

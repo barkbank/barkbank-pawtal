@@ -70,7 +70,7 @@ import {
 import { VetActor, VetActorConfig } from "@/lib/vet/vet-actor";
 import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
 import { DogProfileSpec } from "@/lib/bark/models/dog-profile-models";
-import { SubProfile } from "@/lib/bark/models/dog-profile-models";
+import { SubProfileSpec } from "@/lib/bark/models/dog-profile-models";
 import { getDogProfile } from "@/lib/user/actions/get-dog-profile";
 import { sprintf } from "sprintf-js";
 import { toSubProfile } from "@/lib/bark/mappers/to-sub-profile";
@@ -574,7 +574,7 @@ export async function fetchDogInfo(
 ): Promise<{
   userId: string;
   dogProfile: DogProfileSpec;
-  subProfile: SubProfile;
+  subProfile: SubProfileSpec;
   profileModificationTime: Date;
 }> {
   const { userId } = await fetchDogOwnerId(dbPool, dogId);

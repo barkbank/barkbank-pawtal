@@ -1,7 +1,10 @@
 import { DogProfileSpec } from "../models/dog-profile-models";
-import { SubProfile, SubProfileSchema } from "../models/dog-profile-models";
+import {
+  SubProfileSpec,
+  SubProfileSpecSchema,
+} from "../models/dog-profile-models";
 
-export function toSubProfile(dogProfile: DogProfileSpec): SubProfile {
+export function toSubProfile(dogProfile: DogProfileSpec): SubProfileSpec {
   const {
     dogName,
     dogWeightKg,
@@ -9,7 +12,7 @@ export function toSubProfile(dogProfile: DogProfileSpec): SubProfile {
     dogEverReceivedTransfusion,
     dogPreferredVetId,
   } = dogProfile;
-  return SubProfileSchema.parse({
+  return SubProfileSpecSchema.parse({
     dogName,
     dogWeightKg,
     dogEverPregnant,

@@ -55,7 +55,7 @@ export const DogProfileSpecSchema = DogProfileSchema.omit({
  *
  * -(c) dogWeightKg cannot be null.
  */
-export const SubProfileSchema = z.object({
+export const SubProfileSpecSchema = z.object({
   dogName: z.string(),
   // dogBreed: z.string(),
   // dogBirthday: z.date(),
@@ -72,4 +72,4 @@ export type EncryptedDogSpec = z.infer<typeof EncryptedDogSpecSchema>;
 export type VetPreference = z.infer<typeof VetPreferenceSchema>;
 export type DogProfile = z.infer<typeof DogProfileSchema>;
 export type DogProfileSpec = z.infer<typeof DogProfileSpecSchema>;
-export type SubProfile = z.infer<typeof SubProfileSchema>;
+export type SubProfileSpec = z.infer<typeof SubProfileSpecSchema>;

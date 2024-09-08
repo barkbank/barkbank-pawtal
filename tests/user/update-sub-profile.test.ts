@@ -1,4 +1,4 @@
-import { SubProfile } from "@/lib/bark/models/dog-profile-models";
+import { SubProfileSpec } from "@/lib/bark/models/dog-profile-models";
 import { withDb } from "../_db_helpers";
 import { CALL_OUTCOME } from "@/lib/bark/enums/call-outcome";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
@@ -88,8 +88,8 @@ describe("updateSubProfile", () => {
   });
 });
 
-function _getSubProfile(overrides?: Partial<SubProfile>): SubProfile {
-  const base: SubProfile = {
+function _getSubProfile(overrides?: Partial<SubProfileSpec>): SubProfileSpec {
+  const base: SubProfileSpec = {
     dogName: "updated name",
     dogWeightKg: 50,
     dogEverPregnant: YES_NO_UNKNOWN.NO,

@@ -1,6 +1,6 @@
 import { Result } from "@/lib/utilities/result";
 import { BarkContext } from "../bark-context";
-import { DogProfileSpec, SubProfile } from "../models/dog-profile-models";
+import { DogProfileSpec, SubProfileSpec } from "../models/dog-profile-models";
 import { CODE } from "@/lib/utilities/bark-code";
 
 export class DogProfileService {
@@ -39,7 +39,7 @@ export class DogProfileService {
   async updateSubProfile(args: {
     userId: string;
     dogId: string;
-    subProfile: SubProfile;
+    subProfile: SubProfileSpec;
   }): Promise<typeof CODE.OK | typeof CODE.FAILED> {
     throw new Error("Not implemented");
   }
