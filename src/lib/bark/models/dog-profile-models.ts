@@ -4,6 +4,12 @@ import { DogGenderSchema } from "../enums/dog-gender";
 import { YesNoUnknownSchema } from "../enums/yes-no-unknown";
 import { YesNoSchema } from "../enums/yes-no";
 
+export const VetPreferenceSchema = z.object({
+  userId: z.string(),
+  dogId: z.string(),
+  vetId: z.string(),
+});
+
 /**
  * The dog fields that can be updated prior to the first medical report. This
  * can be used by registration and add-dog.
@@ -43,5 +49,6 @@ export const SubProfileSchema = z.object({
   dogPreferredVetId: z.string(),
 });
 
+export type VetPreference = z.infer<typeof VetPreferenceSchema>;
 export type DogProfile = z.infer<typeof DogProfileSchema>;
 export type SubProfile = z.infer<typeof SubProfileSchema>;
