@@ -26,6 +26,7 @@ export class EncryptedDogDao {
 
   async insert(args: { spec: EncryptedDogSpec }): Promise<{ dogId: string }> {
     const RowSchema = z.object({ dogId: z.string() });
+    type Row = z.infer<typeof RowSchema>;
     const { spec } = args;
     const sql = `
     INSERT INTO ${this.table} (
@@ -42,7 +43,7 @@ export class EncryptedDogDao {
     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
     RETURNING dog_id AS "dogId"
     `;
-    const res = await dbQuery<typeof RowSchema>(this.db, sql, [
+    const res = await dbQuery<Row>(this.db, sql, [
       spec.userId,
       spec.dogEncryptedOii,
       spec.dogBreed,
@@ -101,14 +102,15 @@ export class EncryptedDogDao {
   }
 
   async getOwner(args: { dogId: string }): Promise<{ userId: string } | null> {
-    const { dogId } = args;
     const RowSchema = z.object({ userId: z.string() });
+    type Row = z.infer<typeof RowSchema>;
+    const { dogId } = args;
     const sql = `
     SELECT user_id as "userId"
     FROM dogs
     WHERE dog_id = $1
     `;
-    const res = await dbQuery<typeof RowSchema>(this.db, sql, [dogId]);
+    const res = await dbQuery<Row>(this.db, sql, [dogId]);
     if (res.rows.length !== 1) {
       return null;
     }
