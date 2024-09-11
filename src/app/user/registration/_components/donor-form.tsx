@@ -249,11 +249,28 @@ export default function DonorForm(props: {
           height={100}
           width={100}
         />
-        <div className="mt-6 text-center">
-          <BarkH4>Bark Bank Canine Blood Donation Pawtal</BarkH4>
-        </div>
+        {currentStep === STEPS.PET && (
+          <div className="prose mt-6 leading-6">
+            <p className="text-center font-bold">
+              Join Bark Bank&apos;s Life-Saving Community
+            </p>
+            <p>
+              By registering your dog as a blood donor, you&apos;re helping
+              build Singapore&apos;s first nationwide canine blood registry. Our
+              secure platform helps connect eligible donors with veterinary
+              clinics to provide life-saving transfusions to dogs in need.
+              Registering is simple and will take just a few minutes—your dog
+              could save a life!
+            </p>
+            <p>
+              <Link href={RoutePath.WEBSITE_ABOUT_US} className="text-blue-400">
+                Learn more about how Bark Bank works.
+              </Link>
+            </p>
+          </div>
+        )}
       </div>
-      <div className="stretch mt-6">
+      <div className="stretch mb-12 mt-12">
         <Stepper steps={steps} currentStep={currentStep} />
       </div>
 
