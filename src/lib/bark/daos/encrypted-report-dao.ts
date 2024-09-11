@@ -1,7 +1,7 @@
 import { DbContext, dbQuery } from "@/lib/data/db-utils";
 import { z } from "zod";
 
-export class EncryptedBarkReportDao {
+export class EncryptedReportDao {
   constructor(private db: DbContext) {}
 
   async getReportCountByDog(args: {

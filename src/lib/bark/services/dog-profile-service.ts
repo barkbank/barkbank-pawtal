@@ -18,7 +18,7 @@ import { dbTransaction } from "@/lib/data/db-utils";
 import { EncryptedDogDao } from "../daos/encrypted-dog-dao";
 import { VetPreferenceDao } from "../daos/vet-preference-dao";
 import { isEmpty } from "lodash";
-import { EncryptedBarkReportDao } from "../daos/encrypted-bark-report-dao";
+import { EncryptedReportDao } from "../daos/encrypted-report-dao";
 
 export class DogProfileService {
   constructor(private config: { context: BarkContext }) {}
@@ -112,7 +112,7 @@ export class DogProfileService {
     return dbTransaction(this.pool(), async (conn) => {
       const dogDao = new EncryptedDogDao(conn);
       const prefDao = new VetPreferenceDao(conn);
-      const reportDao = new EncryptedBarkReportDao(conn);
+      const reportDao = new EncryptedReportDao(conn);
       const resOwner = await dogDao.getOwner({ dogId });
       if (resOwner === null) {
         return Err(CODE.ERROR_DOG_NOT_FOUND);
