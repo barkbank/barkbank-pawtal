@@ -1,4 +1,4 @@
-import { BarkReport, BarkReportSchema } from "@/lib/bark/models/bark-report";
+import { BarkReport, BarkReportSchema } from "@/lib/bark/models/report-models";
 import { BarkReportData } from "@/lib/bark/models/bark-report-data";
 import { givenDog, givenReport, givenVet } from "../_given";
 import { withBarkContext } from "../_context";

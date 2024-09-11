@@ -1,6 +1,6 @@
 import { CODE } from "@/lib/utilities/bark-code";
 import { BarkContext } from "../bark-context";
-import { BarkReport } from "../models/bark-report";
+import { BarkReport } from "../models/report-models";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { selectReportsByDogId } from "../queries/select-reports-by-dog-id";
 import { toBarkReport } from "../mappers/to-bark-report";
