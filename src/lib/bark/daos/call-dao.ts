@@ -13,9 +13,10 @@ export class CallDao {
     INSERT INTO calls (
       dog_id,
       vet_id,
-      call_outcome
+      call_outcome,
+      encrypted_opt_out_reason
     )
-    VALUES ($1, $2, $3)
+    VALUES ($1, $2, $3, '')
     RETURNING
       call_id as "callId"
     `;

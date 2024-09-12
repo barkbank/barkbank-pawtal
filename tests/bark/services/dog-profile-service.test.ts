@@ -181,7 +181,7 @@ async function _attachReportToDog(args: {
   context: BarkContext;
 }) {
   const { vetId, dogId, context } = args;
-  const result = await dbTransaction(context.dbPool, async (conn) => {
+  const res = await dbTransaction(context.dbPool, async (conn) => {
     const callDao = new CallDao(conn);
     const { callId } = await callDao.insert({
       spec: { dogId, vetId, callOutcome: "REPORTED" },
@@ -191,10 +191,11 @@ async function _attachReportToDog(args: {
     const { reportId } = await reportDao.insert({ spec });
     return Ok({ reportId, callId });
   });
+  expect(res.error).toBeUndefined();
   const dao = new EncryptedReportDao(context.dbPool);
   const { reportCount } = await dao.getReportCountByDog({ dogId });
   expect(reportCount).toEqual(1);
-  return result;
+  return res;
 }
 
 function _mockEncryptedReportSpec(
