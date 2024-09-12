@@ -171,23 +171,49 @@ describe("DogProfileService", () => {
     });
   });
 
-  // WIP: It uses value from reports when it is more recent than value in dogs
-  // WIP: It uses value from dogs when value in reports is less recent.
+  it("uses value from reports when it is more recent than value in dogs", async () => {
+    await withBarkContext(async ({ context }) => {
+      const { vetId } = await _createTestVetClinic({ context, idx: 1 });
+      const { userId } = await _createTestUser({ context, idx: 1 });
+      const spec1 = _mockDogProfileSpec({
+        dogName: "Eric",
+        dogWeightKg: null,
+        dogPreferredVetId: vetId,
+      });
+      const service = new DogProfileService({ context });
+      const resAdd = await service.addDogProfile({ userId, spec: spec1 });
+      const { dogId } = resAdd.result!;
+      await _attachReportToDog({
+        vetId,
+        dogId,
+        context,
+        reportOverrides: { dogWeightKg: 1111 },
+      });
+      const resGet = await service.getDogProfile({ userId, dogId });
+      expect(resGet.result?.dogWeightKg).toEqual(1111);
+    });
+  });
 });
 
 async function _attachReportToDog(args: {
   vetId: string;
   dogId: string;
   context: BarkContext;
+  reportOverrides?: Partial<EncryptedReportSpec>;
 }) {
-  const { vetId, dogId, context } = args;
+  const { vetId, dogId, context, reportOverrides } = args;
   const res = await dbTransaction(context.dbPool, async (conn) => {
     const callDao = new CallDao(conn);
     const { callId } = await callDao.insert({
       spec: { dogId, vetId, callOutcome: "REPORTED" },
     });
     const reportDao = new EncryptedReportDao(conn);
-    const spec = _mockEncryptedReportSpec({ callId, dogId, vetId });
+    const spec = _mockEncryptedReportSpec({
+      ...reportOverrides,
+      callId,
+      dogId,
+      vetId,
+    });
     const { reportId } = await reportDao.insert({ spec });
     return Ok({ reportId, callId });
   });

@@ -8,19 +8,21 @@ import {
 import { z } from "zod";
 
 export class EncryptedDogDao {
-  // (!) WIP: These should be using dogs and latest_values
-  private table = `"dogs"`;
-  private projection = `
-  user_id as "userId",
-  dog_id as "dogId",
-  dog_encrypted_oii as "dogEncryptedOii",
-  dog_breed as "dogBreed",
-  dog_birthday as "dogBirthday",
-  dog_gender as "dogGender",
-  dog_weight_kg as "dogWeightKg",
-  dog_dea1_point1 as "dogDea1Point1",
-  dog_ever_pregnant as "dogEverPregnant",
-  dog_ever_received_transfusion as "dogEverReceivedTransfusion"
+  private latestProjection = `
+  tDog.user_id as "userId",
+  tDog.dog_id as "dogId",
+  tDog.dog_encrypted_oii as "dogEncryptedOii",
+  tDog.dog_breed as "dogBreed",
+  tDog.dog_birthday as "dogBirthday",
+  tDog.dog_gender as "dogGender",
+  tLatest.latest_dog_weight_kg as "dogWeightKg",
+  CASE
+    WHEN tLatest.latest_dog_dea1_point1 = 'POSITIVE' THEN 'POSITIVE'::t_dog_antigen_presence
+    WHEN tLatest.latest_dog_dea1_point1 = 'NEGATIVE' THEN 'NEGATIVE'::t_dog_antigen_presence
+    ELSE 'UNKNOWN'::t_dog_antigen_presence
+  END as "dogDea1Point1",
+  tDog.dog_ever_pregnant as "dogEverPregnant",
+  tDog.dog_ever_received_transfusion as "dogEverReceivedTransfusion"
   `;
 
   constructor(private db: DbContext) {}
@@ -30,7 +32,7 @@ export class EncryptedDogDao {
     type Row = z.infer<typeof RowSchema>;
     const { spec } = args;
     const sql = `
-    INSERT INTO ${this.table} (
+    INSERT INTO dogs (
       user_id,
       dog_encrypted_oii,
       dog_breed,
@@ -113,9 +115,10 @@ export class EncryptedDogDao {
   async get(args: { dogId: string }): Promise<EncryptedDog | null> {
     const { dogId } = args;
     const sql = `
-    SELECT ${this.projection}
-    FROM ${this.table}
-    WHERE dog_id = $1
+    SELECT ${this.latestProjection}
+    FROM dogs as tDog
+    LEFT JOIN latest_values as tLatest on tDog.dog_id = tLatest.dog_id
+    WHERE tDog.dog_id = $1
     `;
     const res = await dbQuery<EncryptedDog>(this.db, sql, [dogId]);
     if (res.rows.length !== 1) {
@@ -143,9 +146,10 @@ export class EncryptedDogDao {
   async listByUser(args: { userId: string }): Promise<EncryptedDog[]> {
     const { userId } = args;
     const sql = `
-    SELECT ${this.projection}
-    FROM ${this.table}
-    WHERE user_id = $1
+    SELECT ${this.latestProjection}
+    FROM dogs as tDog
+    LEFT JOIN latest_values as tLatest on tDog.dog_id = tLatest.dog_id
+    WHERE tDog.user_id = $1
     `;
     const res = await dbQuery<EncryptedDog>(this.db, sql, [userId]);
     return z.array(EncryptedDogSchema).parse(res.rows);
