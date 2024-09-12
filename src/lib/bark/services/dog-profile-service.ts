@@ -139,9 +139,12 @@ export class DogProfileService {
     dogId: string;
     spec: SubProfileSpec;
   }): Promise<
-    | typeof CODE.OK
-    | typeof CODE.FAILED
-    | typeof CODE.ERROR_SHOULD_UPDATE_FULL_PROFILE
+    Result<
+      true,
+      | typeof CODE.OK
+      | typeof CODE.FAILED
+      | typeof CODE.ERROR_SHOULD_UPDATE_FULL_PROFILE
+    >
   > {
     throw new Error("WIP: Impl updateSubProfile");
   }

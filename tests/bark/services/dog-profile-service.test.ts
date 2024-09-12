@@ -18,6 +18,22 @@ import { DogProfileService } from "@/lib/bark/services/dog-profile-service";
 import { VetClinicSpec } from "@/lib/bark/models/vet-models";
 import { VetAccountService } from "@/lib/bark/services/vet-account-service";
 import { CODE } from "@/lib/utilities/bark-code";
+import { VetPreferenceDao } from "@/lib/bark/daos/vet-preference-dao";
+import { dbTransaction } from "@/lib/data/db-utils";
+import { Ok } from "@/lib/utilities/result";
+import { EncryptedDogDao } from "@/lib/bark/daos/encrypted-dog-dao";
+import { CallDao } from "@/lib/bark/daos/call-dao";
+import { EncryptedReportDao } from "@/lib/bark/daos/encrypted-report-dao";
+import {
+  EncryptedReportSpec,
+  EncryptedReportSpecSchema,
+} from "@/lib/bark/models/report-models";
+import {
+  parseCommonDate,
+  SINGAPORE_TIME_ZONE,
+} from "@/lib/utilities/bark-time";
+import { POS_NEG_NIL } from "@/lib/bark/enums/pos-neg-nil";
+import { REPORTED_INELIGIBILITY } from "@/lib/bark/enums/reported-ineligibility";
 
 describe("DogProfileService", () => {
   it("can be used to create and retrieve dog profile", async () => {
@@ -109,12 +125,48 @@ describe("DogProfileService", () => {
   describe("When there is an existing medical report", () => {
     it("does not allow dog-profile updates on dogs with an existing report", async () => {
       await withBarkContext(async ({ context }) => {
-        throw new Error("Test not implemented");
+        const { vetId } = await _createTestVetClinic({ context, idx: 1 });
+        const { userId } = await _createTestUser({ context, idx: 1 });
+        const spec1 = _mockDogProfileSpec({
+          dogName: "Eric",
+          dogPreferredVetId: vetId,
+        });
+        const service = new DogProfileService({ context });
+        const resAdd = await service.addDogProfile({ userId, spec: spec1 });
+        const { dogId } = resAdd.result!;
+        await _attachReportToDog({ vetId, userId, dogId, context });
+        const spec2 = _mockDogProfileSpec({ dogName: "Erik" });
+        const resUpdate = await service.updateDogProfile({
+          userId,
+          dogId,
+          spec: spec2,
+        });
+        expect(resUpdate.error).toEqual(CODE.ERROR_CANNOT_UPDATE_FULL_PROFILE);
       });
     });
     it("can be used to update sub-profile of dog with existing medical report", async () => {
       await withBarkContext(async ({ context }) => {
-        throw new Error("Test not implemented");
+        const { vetId } = await _createTestVetClinic({ context, idx: 1 });
+        const { userId } = await _createTestUser({ context, idx: 1 });
+        const spec1 = _mockDogProfileSpec({
+          dogName: "Eric",
+          dogPreferredVetId: vetId,
+        });
+        const service = new DogProfileService({ context });
+        const resAdd = await service.addDogProfile({ userId, spec: spec1 });
+        const { dogId } = resAdd.result!;
+        await _attachReportToDog({ vetId, userId, dogId, context });
+        const spec2 = _mockSubProfileSpec({ dogName: "Erik" });
+        const resUpdate = await service.updateSubProfile({
+          userId,
+          dogId,
+          spec: spec2,
+        });
+        expect(resUpdate.error).toBeUndefined();
+        const resGet = await service.getDogProfile({ userId, dogId });
+        const retrieved = SubProfileSpecSchema.parse(resGet.result);
+        expect(retrieved).toMatchObject(spec2);
+        expect(spec2).toMatchObject(retrieved);
       });
     });
   });
@@ -122,6 +174,46 @@ describe("DogProfileService", () => {
   // WIP: It uses value from reports when it is more recent than value in dogs
   // WIP: It uses value from dogs when value in reports is less recent.
 });
+
+async function _attachReportToDog(args: {
+  vetId: string;
+  userId: string;
+  dogId: string;
+  context: BarkContext;
+}) {
+  const { vetId, userId, dogId, context } = args;
+  return dbTransaction(context.dbPool, async (conn) => {
+    const callDao = new CallDao(conn);
+    const { callId } = await callDao.insert({
+      spec: { dogId, vetId, callOutcome: "REPORTED" },
+    });
+    const reportDao = new EncryptedReportDao(conn);
+    const spec = _mockEncryptedReportSpec({ callId, dogId, vetId });
+    const { reportId } = await reportDao.insert({ spec });
+    return Ok({ reportId });
+  });
+}
+
+function _mockEncryptedReportSpec(
+  overrides?: Partial<EncryptedReportSpec>,
+): EncryptedReportSpec {
+  const base: EncryptedReportSpec = {
+    callId: "Must Override",
+    dogId: "Must Override",
+    vetId: "Must Override",
+    visitTime: parseCommonDate("8 Mar 2022", SINGAPORE_TIME_ZONE),
+    dogWeightKg: 26.5,
+    dogBodyConditioningScore: 5,
+    dogHeartworm: POS_NEG_NIL.NEGATIVE,
+    dogDea1Point1: POS_NEG_NIL.NEGATIVE,
+    ineligibilityStatus: REPORTED_INELIGIBILITY.NIL,
+    encryptedIneligibilityReason: "",
+    ineligibilityExpiryTime: null,
+    dogDidDonateBlood: true,
+  };
+  const out = { ...base, ...overrides };
+  return EncryptedReportSpecSchema.parse(out);
+}
 
 function _mockSubProfileSpec(
   overrides?: Partial<SubProfileSpec>,
