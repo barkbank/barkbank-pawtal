@@ -1,6 +1,6 @@
 import { Separator } from "@/components/ui/separator";
 import { DogViewerData } from "./dog-viewer-data";
-import { BarkReport } from "@/lib/bark/models/bark-report";
+import { BarkReport } from "@/lib/bark/models/report-models";
 import { SGT_UI_DATE, formatDateTime } from "@/lib/utilities/bark-time";
 import Link from "next/link";
 import { RoutePath } from "@/lib/route-path";

@@ -3,7 +3,7 @@ import { SimpleErrorPage } from "@/app/_components/simple-error-page";
 import { BarkButton } from "@/components/bark/bark-button";
 import APP from "@/lib/app";
 import { getAuthenticatedUserActor } from "@/lib/auth";
-import { BarkReport } from "@/lib/bark/models/bark-report";
+import { BarkReport } from "@/lib/bark/models/report-models";
 import { opFetchReport } from "@/lib/bark/operations/op-fetch-report";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";

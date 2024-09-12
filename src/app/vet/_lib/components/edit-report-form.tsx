@@ -6,7 +6,7 @@ import { RoutePath } from "@/lib/route-path";
 import { capitalize } from "lodash";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { GeneralReportForm } from "./general-report-form";
-import { BarkReport } from "@/lib/bark/models/bark-report";
+import { BarkReport } from "@/lib/bark/models/report-models";
 import { postUpdatedReport } from "../actions/post-updated-report";
 import { CODE } from "@/lib/utilities/bark-code";
 import { useToast } from "@/components/ui/use-toast";

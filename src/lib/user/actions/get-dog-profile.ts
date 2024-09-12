@@ -1,6 +1,9 @@
 import { dbResultQuery } from "@/lib/data/db-utils";
 import { UserActor } from "../user-actor";
-import { DogProfile, DogProfileSchema } from "@/lib/bark/models/dog-profile";
+import {
+  DogProfileSpec,
+  DogProfileSpecSchema,
+} from "@/lib/bark/models/dog-profile-models";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { CODE } from "@/lib/utilities/bark-code";
 import { EncryptedDogProfileSchema } from "@/lib/bark/models/encrypted-dog-profile";
@@ -11,7 +14,7 @@ export async function getDogProfile(
   dogId: string,
 ): Promise<
   Result<
-    DogProfile,
+    DogProfileSpec,
     | typeof CODE.ERROR_DOG_NOT_FOUND
     | typeof CODE.ERROR_WRONG_OWNER
     | typeof CODE.DB_QUERY_FAILURE
@@ -63,6 +66,6 @@ export async function getDogProfile(
   const { dogName } = await dogMapper.mapDogSecureOiiToDogOii({
     dogEncryptedOii,
   });
-  const profile: DogProfile = { dogName, ...otherFields };
-  return Ok(DogProfileSchema.parse(profile));
+  const profile: DogProfileSpec = { dogName, ...otherFields };
+  return Ok(DogProfileSpecSchema.parse(profile));
 }

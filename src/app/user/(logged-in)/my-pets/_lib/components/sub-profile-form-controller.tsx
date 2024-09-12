@@ -2,8 +2,8 @@
 
 import { BarkFormOption } from "@/components/bark/bark-form-option";
 import { SubProfileForm } from "./sub-profile-form";
-import { DogProfile } from "@/lib/bark/models/dog-profile";
-import { SubProfile } from "@/lib/bark/models/sub-profile";
+import { DogProfileSpec } from "@/lib/bark/models/dog-profile-models";
+import { SubProfileSpec } from "@/lib/bark/models/dog-profile-models";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { useRouter } from "next/navigation";
 import { RoutePath } from "@/lib/route-path";
@@ -14,8 +14,8 @@ import { useToast } from "@/components/ui/use-toast";
 export function SubProfileFormController(props: {
   vetOptions: BarkFormOption[];
   dogId: string;
-  dogProfile: DogProfile;
-  subProfile: SubProfile;
+  dogProfile: DogProfileSpec;
+  subProfile: SubProfileSpec;
 }) {
   const { vetOptions, dogId, dogProfile, subProfile } = props;
   const router = useRouter();
@@ -26,7 +26,7 @@ export function SubProfileFormController(props: {
   };
 
   const onSubmit = async (
-    subProfile: SubProfile,
+    subProfile: SubProfileSpec,
   ): Promise<Result<true, string>> => {
     const { dogName } = subProfile;
     toast({

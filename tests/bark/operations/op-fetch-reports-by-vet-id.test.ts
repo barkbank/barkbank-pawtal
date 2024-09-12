@@ -1,7 +1,7 @@
 import { opFetchReportsByVetId } from "@/lib/bark/operations/op-fetch-reports-by-vet-id";
 import { withBarkContext } from "../_context";
 import { givenReport, givenVet } from "../_given";
-import { BarkReport } from "@/lib/bark/models/bark-report";
+import { BarkReport } from "@/lib/bark/models/report-models";
 import { mockReportData } from "../_mocks";
 
 describe("opFetchReportsByVetId", () => {

@@ -3,7 +3,7 @@ import { BarkBackLink } from "@/components/bark/bark-back-link";
 import { BarkError } from "@/components/bark/bark-error";
 import APP from "@/lib/app";
 import { getAuthenticatedVetActor } from "@/lib/auth";
-import { BarkReport } from "@/lib/bark/models/bark-report";
+import { BarkReport } from "@/lib/bark/models/report-models";
 import { opFetchReport } from "@/lib/bark/operations/op-fetch-report";
 import { RoutePath } from "@/lib/route-path";
 import { capitalize } from "lodash";

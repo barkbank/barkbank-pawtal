@@ -1,6 +1,6 @@
 "use client";
 
-import { BarkReport } from "@/lib/bark/models/bark-report";
+import { BarkReport } from "@/lib/bark/models/report-models";
 import { ReportCard } from "./report-card";
 import { ChangeEvent, useState } from "react";
 import { getMatchingItems } from "@/lib/utilities/get-matching-items";

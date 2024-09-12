@@ -8,9 +8,12 @@ import { EditDogProfileFormController } from "../../_lib/components/edit-dog-pro
 import { SimpleErrorPage } from "@/app/_components/simple-error-page";
 import { SubProfileFormController } from "../../_lib/components/sub-profile-form-controller";
 import { opFetchDogReportCount } from "@/lib/bark/operations/op-fetch-dog-report-count";
-import { SubProfile, SubProfileSchema } from "@/lib/bark/models/sub-profile";
+import {
+  SubProfileSpec,
+  SubProfileSpecSchema,
+} from "@/lib/bark/models/dog-profile-models";
 import { Err, Ok, Result } from "@/lib/utilities/result";
-import { DogProfile } from "@/lib/bark/models/dog-profile";
+import { DogProfileSpec } from "@/lib/bark/models/dog-profile-models";
 import { CODE } from "@/lib/utilities/bark-code";
 import { toSubProfile } from "@/lib/bark/mappers/to-sub-profile";
 import { getDogBreeds } from "@/app/_lib/get-dog-breeds";
@@ -69,8 +72,8 @@ export default async function Page(props: { params: { dogId: string } }) {
 }
 
 function _toSubProfile(
-  dogProfile: DogProfile,
-): Result<SubProfile, typeof CODE.FAILED> {
+  dogProfile: DogProfileSpec,
+): Result<SubProfileSpec, typeof CODE.FAILED> {
   try {
     return Ok(toSubProfile(dogProfile));
   } catch (err) {

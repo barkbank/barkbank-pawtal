@@ -6,7 +6,7 @@ import {
   dbRollback,
 } from "@/lib/data/db-utils";
 import { UserActor } from "../user-actor";
-import { DogProfile } from "@/lib/bark/models/dog-profile";
+import { DogProfileSpec } from "@/lib/bark/models/dog-profile-models";
 import { PoolClient } from "pg";
 import {
   dbDeleteDogVetPreferences,
@@ -17,13 +17,13 @@ import { CODE } from "@/lib/utilities/bark-code";
 type Context = {
   actor: UserActor;
   dogId: string;
-  dogProfile: DogProfile;
+  dogProfile: DogProfileSpec;
 };
 
 export async function updateDogProfile(
   actor: UserActor,
   dogId: string,
-  dogProfile: DogProfile,
+  dogProfile: DogProfileSpec,
 ): Promise<
   | typeof CODE.OK
   | typeof CODE.ERROR_CANNOT_UPDATE_FULL_PROFILE

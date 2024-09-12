@@ -10,8 +10,11 @@ import { BarkFormRadioGroup } from "@/components/bark/bark-form-radio-group";
 import { BarkFormOption } from "@/components/bark/bark-form-option";
 import { YesNoSchema } from "@/lib/bark/enums/yes-no";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
-import { DogProfile } from "@/lib/bark/models/dog-profile";
-import { SubProfile, SubProfileSchema } from "@/lib/bark/models/sub-profile";
+import { DogProfileSpec } from "@/lib/bark/models/dog-profile-models";
+import {
+  SubProfileSpec,
+  SubProfileSpecSchema,
+} from "@/lib/bark/models/dog-profile-models";
 import { Result } from "@/lib/utilities/result";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -29,9 +32,9 @@ type FormData = z.infer<typeof FormDataSchema>;
 
 export function SubProfileForm(props: {
   vetOptions: BarkFormOption[];
-  dogProfile: DogProfile;
-  subProfile: SubProfile;
-  handleSubmit: (subProfile: SubProfile) => Promise<Result<true, string>>;
+  dogProfile: DogProfileSpec;
+  subProfile: SubProfileSpec;
+  handleSubmit: (subProfile: SubProfileSpec) => Promise<Result<true, string>>;
   handleCancel: () => Promise<void>;
 }) {
   const { vetOptions, dogProfile, subProfile, handleSubmit, handleCancel } =
@@ -135,7 +138,7 @@ export function SubProfileForm(props: {
   );
 }
 
-function _toFormData(subProfile: SubProfile): FormData {
+function _toFormData(subProfile: SubProfileSpec): FormData {
   const { dogWeightKg, ...fields } = subProfile;
   const out: FormData = {
     dogWeightKg: RequiredDogWeightKgField.new().format(dogWeightKg),
@@ -144,11 +147,11 @@ function _toFormData(subProfile: SubProfile): FormData {
   return FormDataSchema.parse(out);
 }
 
-function _toSubProfile(formData: FormData): SubProfile {
+function _toSubProfile(formData: FormData): SubProfileSpec {
   const { dogWeightKg, ...fields } = formData;
-  const out: SubProfile = {
+  const out: SubProfileSpec = {
     dogWeightKg: RequiredDogWeightKgField.new().parse(dogWeightKg),
     ...fields,
   };
-  return SubProfileSchema.parse(out);
+  return SubProfileSpecSchema.parse(out);
 }

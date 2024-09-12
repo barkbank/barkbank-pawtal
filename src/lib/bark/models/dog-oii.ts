@@ -1,5 +1,6 @@
 import { z } from "zod";
 
+// TODO: Move into dog-profile-models
 export const DogOiiSchema = z.object({
   dogName: z.string(),
 });

@@ -36,7 +36,8 @@ export class PawtalEventDao {
     WHERE event_type = $1
     `;
     const RowSchema = z.object({ eventCount: z.number() });
-    const res = await dbQuery<typeof RowSchema>(this.db, sql, [args.eventType]);
+    type Row = z.infer<typeof RowSchema>;
+    const res = await dbQuery<Row>(this.db, sql, [args.eventType]);
     return RowSchema.parse(res.rows[0]);
   }
 

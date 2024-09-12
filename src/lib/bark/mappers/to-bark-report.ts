@@ -1,6 +1,6 @@
 import { BarkContext } from "../bark-context";
 import { EncryptedBarkReport } from "../models/encrypted-bark-report";
-import { BarkReport, BarkReportSchema } from "../models/bark-report";
+import { BarkReport, BarkReportSchema } from "../models/report-models";
 import { toDecryptedText } from "./to-decrypted-text";
 import { toOwnerName } from "./to-owner-name";
 import { toDogName } from "./to-dog-name";

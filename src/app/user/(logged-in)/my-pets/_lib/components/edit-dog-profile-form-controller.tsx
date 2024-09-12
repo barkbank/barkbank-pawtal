@@ -1,7 +1,7 @@
 "use client";
 
 import { BarkFormOption } from "@/components/bark/bark-form-option";
-import { DogProfile } from "@/lib/bark/models/dog-profile";
+import { DogProfileSpec } from "@/lib/bark/models/dog-profile-models";
 import { useRouter } from "next/navigation";
 import { RoutePath } from "@/lib/route-path";
 import { Err, Ok, Result } from "@/lib/utilities/result";
@@ -16,14 +16,14 @@ export function EditDogProfileFormController(props: {
   vetOptions: BarkFormOption[];
   breeds: string[];
   dogId: string;
-  existingDogProfile: DogProfile;
+  existingDogProfile: DogProfileSpec;
 }) {
   const router = useRouter();
   const { toast } = useToast();
   const { vetOptions, breeds, dogId, existingDogProfile } = props;
 
   async function handleValues(
-    dogProfile: DogProfile,
+    dogProfile: DogProfileSpec,
   ): Promise<Result<true, string>> {
     const { dogName } = dogProfile;
 

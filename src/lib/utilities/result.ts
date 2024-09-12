@@ -8,10 +8,10 @@ export type Result<T, E> =
       error: E;
     };
 
-export function Ok<T, E>(result: T): Result<T, E> {
+export function Ok<T>(result: T): Result<T, never> {
   return { result };
 }
 
-export function Err<T, E>(error: E): Result<T, E> {
+export function Err<E>(error: E): Result<never, E> {
   return { error };
 }

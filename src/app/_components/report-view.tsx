@@ -1,6 +1,6 @@
 import { NA_TEXT } from "@/app/_lib/constants";
 import { Textarea } from "@/components/ui/textarea";
-import { BarkReport } from "@/lib/bark/models/bark-report";
+import { BarkReport } from "@/lib/bark/models/report-models";
 import { REPORTED_INELIGIBILITY } from "@/lib/bark/enums/reported-ineligibility";
 import { POS_NEG_NIL } from "@/lib/bark/enums/pos-neg-nil";
 import {
