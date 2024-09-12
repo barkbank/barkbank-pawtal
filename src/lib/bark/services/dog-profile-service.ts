@@ -7,6 +7,8 @@ import {
   EncryptedDog,
   EncryptedDogSpec,
   EncryptedDogSpecSchema,
+  EncryptedSubDogSpec,
+  EncryptedSubDogSpecSchema,
   SubProfileSpec,
   VetPreference,
 } from "../models/dog-profile-models";
@@ -141,12 +143,64 @@ export class DogProfileService {
   }): Promise<
     Result<
       true,
-      | typeof CODE.OK
       | typeof CODE.FAILED
+      | typeof CODE.ERROR_DOG_NOT_FOUND
       | typeof CODE.ERROR_SHOULD_UPDATE_FULL_PROFILE
     >
   > {
-    throw new Error("WIP: Impl updateSubProfile");
+    const { userId, dogId, spec } = args;
+    const vetId = spec.dogPreferredVetId;
+    return dbTransaction(this.pool(), async (conn) => {
+      const dogDao = new EncryptedDogDao(conn);
+      const prefDao = new VetPreferenceDao(conn);
+      const reportDao = new EncryptedReportDao(conn);
+      const resOwner = await dogDao.getOwner({ dogId });
+      if (resOwner === null) {
+        return Err(CODE.ERROR_DOG_NOT_FOUND);
+      }
+      if (resOwner.userId !== userId) {
+        return Err(CODE.ERROR_DOG_NOT_FOUND);
+      }
+      const { reportCount } = await reportDao.getReportCountByDog({ dogId });
+      if (reportCount === 0) {
+        return Err(CODE.ERROR_SHOULD_UPDATE_FULL_PROFILE);
+      }
+      const encryptedSpec = await this.toEncryptedSubDogSpec({ spec });
+      await dogDao.updateSubDog({ dogId, spec: encryptedSpec });
+      await prefDao.deleteByDog({ dogId });
+      if (!isEmpty(vetId)) {
+        await prefDao.insert({ pref: { userId, dogId, vetId } });
+      }
+      return Ok(true);
+    });
+  }
+
+  private async toDogEncryptedOii(args: {
+    dogName: string;
+  }): Promise<{ dogEncryptedOii: string }> {
+    const { dogName } = args;
+    const dogEncryptedOii = await toDogEncryptedOii(this.context(), {
+      dogName,
+    });
+    return { dogEncryptedOii };
+  }
+
+  private async toDogName(args: {
+    dogEncryptedOii: string;
+  }): Promise<{ dogName: string }> {
+    const { dogEncryptedOii } = args;
+    const { dogName } = await toDogOii(this.context(), dogEncryptedOii);
+    return { dogName };
+  }
+
+  private async toEncryptedSubDogSpec(args: {
+    spec: SubProfileSpec;
+  }): Promise<EncryptedSubDogSpec> {
+    const { spec } = args;
+    const { dogName, ...others } = spec;
+    const { dogEncryptedOii } = await this.toDogEncryptedOii({ dogName });
+    const out: EncryptedSubDogSpec = { ...others, dogEncryptedOii };
+    return EncryptedSubDogSpecSchema.parse(out);
   }
 
   private async toEncryptedDogSpec(args: {
@@ -155,9 +209,7 @@ export class DogProfileService {
   }): Promise<EncryptedDogSpec> {
     const { userId, spec } = args;
     const { dogName, ...others } = spec;
-    const dogEncryptedOii = await toDogEncryptedOii(this.context(), {
-      dogName,
-    });
+    const { dogEncryptedOii } = await this.toDogEncryptedOii({ dogName });
     const out: EncryptedDogSpec = { ...others, dogEncryptedOii, userId };
     return EncryptedDogSpecSchema.parse(out);
   }
@@ -168,7 +220,7 @@ export class DogProfileService {
   }): Promise<DogProfile> {
     const { dog, preferences } = args;
     const { dogEncryptedOii, ...others } = dog;
-    const { dogName } = await toDogOii(this.context(), dogEncryptedOii);
+    const { dogName } = await this.toDogName({ dogEncryptedOii });
     const dogPreferredVetId =
       preferences.length === 1 ? preferences[0].vetId : "";
     const out: DogProfile = { dogName, dogPreferredVetId, ...others };

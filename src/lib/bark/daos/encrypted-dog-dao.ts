@@ -3,6 +3,7 @@ import {
   EncryptedDog,
   EncryptedDogSchema,
   EncryptedDogSpec,
+  EncryptedSubDogSpec,
 } from "../models/dog-profile-models";
 import { z } from "zod";
 
@@ -82,6 +83,28 @@ export class EncryptedDogDao {
       spec.dogGender,
       spec.dogWeightKg,
       spec.dogDea1Point1,
+      spec.dogEverPregnant,
+      spec.dogEverReceivedTransfusion,
+    ]);
+  }
+
+  async updateSubDog(args: { dogId: string; spec: EncryptedSubDogSpec }) {
+    const { dogId, spec } = args;
+    const sql = `
+    UPDATE dogs
+    SET
+      dog_encrypted_oii = $2,
+      dog_weight_kg = $3,
+      dog_ever_pregnant = $4,
+      dog_ever_received_transfusion = $5,
+      profile_modification_time = CURRENT_TIMESTAMP
+    WHERE
+      dog_id = $1
+    `;
+    await dbQuery(this.db, sql, [
+      dogId,
+      spec.dogEncryptedOii,
+      spec.dogWeightKg,
       spec.dogEverPregnant,
       spec.dogEverReceivedTransfusion,
     ]);

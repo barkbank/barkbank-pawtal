@@ -117,7 +117,7 @@ describe("DogProfileService", () => {
           dogId,
           spec: spec2,
         });
-        expect(resUpdate).toEqual(CODE.ERROR_SHOULD_UPDATE_FULL_PROFILE);
+        expect(resUpdate.error).toEqual(CODE.ERROR_SHOULD_UPDATE_FULL_PROFILE);
       });
     });
   });
@@ -134,7 +134,7 @@ describe("DogProfileService", () => {
         const service = new DogProfileService({ context });
         const resAdd = await service.addDogProfile({ userId, spec: spec1 });
         const { dogId } = resAdd.result!;
-        await _attachReportToDog({ vetId, userId, dogId, context });
+        await _attachReportToDog({ vetId, dogId, context });
         const spec2 = _mockDogProfileSpec({ dogName: "Erik" });
         const resUpdate = await service.updateDogProfile({
           userId,
@@ -155,7 +155,7 @@ describe("DogProfileService", () => {
         const service = new DogProfileService({ context });
         const resAdd = await service.addDogProfile({ userId, spec: spec1 });
         const { dogId } = resAdd.result!;
-        await _attachReportToDog({ vetId, userId, dogId, context });
+        await _attachReportToDog({ vetId, dogId, context });
         const spec2 = _mockSubProfileSpec({ dogName: "Erik" });
         const resUpdate = await service.updateSubProfile({
           userId,
@@ -177,12 +177,11 @@ describe("DogProfileService", () => {
 
 async function _attachReportToDog(args: {
   vetId: string;
-  userId: string;
   dogId: string;
   context: BarkContext;
 }) {
-  const { vetId, userId, dogId, context } = args;
-  return dbTransaction(context.dbPool, async (conn) => {
+  const { vetId, dogId, context } = args;
+  const result = await dbTransaction(context.dbPool, async (conn) => {
     const callDao = new CallDao(conn);
     const { callId } = await callDao.insert({
       spec: { dogId, vetId, callOutcome: "REPORTED" },
@@ -190,8 +189,12 @@ async function _attachReportToDog(args: {
     const reportDao = new EncryptedReportDao(conn);
     const spec = _mockEncryptedReportSpec({ callId, dogId, vetId });
     const { reportId } = await reportDao.insert({ spec });
-    return Ok({ reportId });
+    return Ok({ reportId, callId });
   });
+  const dao = new EncryptedReportDao(context.dbPool);
+  const { reportCount } = await dao.getReportCountByDog({ dogId });
+  expect(reportCount).toEqual(1);
+  return result;
 }
 
 function _mockEncryptedReportSpec(
