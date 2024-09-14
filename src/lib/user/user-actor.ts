@@ -101,7 +101,6 @@ export class UserActor {
     return res;
   }
 
-  // TODO: Update tests to test UserActor::getMyDogs
   async getMyDogs() {
     // TODO: dogProfileService.getMyDogs
     return getMyPets(this);
