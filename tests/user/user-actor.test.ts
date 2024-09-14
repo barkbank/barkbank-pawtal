@@ -1,28 +1,17 @@
 import { DogProfileSpecSchema } from "@/lib/bark/models/dog-profile-models";
-import {
-  getUserActor,
-  insertDog,
-  insertUser,
-  mockDogProfileSpec,
-} from "../_fixtures";
+import { givenUserActor, mockDogProfileSpec } from "../_fixtures";
 import { withBarkContext } from "../bark/_context";
 import { CODE } from "@/lib/utilities/bark-code";
 
 describe("UserActor", () => {
   it("can add and get dog", async () => {
     await withBarkContext(async ({ context }) => {
-      const { dbPool } = context;
-
-      // TODO: In _fixtures, impl givenUserActor(1, context), givenVetActor(1, context), givenAdminActor(1, context)
-      // TODO: Replace insertUser, getUserActor with givenUserActor
-      const { userId } = await insertUser(1, dbPool);
-      const actor = getUserActor(dbPool, userId);
-
+      const u1 = await givenUserActor({ idx: 1, context });
       const spec = mockDogProfileSpec();
-      const resAdd = await actor.addDogProfile({ spec });
+      const resAdd = await u1.addDogProfile({ spec });
       expect(resAdd.error).toBeUndefined();
       const { dogId } = resAdd.result!;
-      const resGet = await actor.getDogProfile({ dogId });
+      const resGet = await u1.getDogProfile({ dogId });
       expect(resGet.error).toBeUndefined();
       const receivedSpec = DogProfileSpecSchema.parse(resGet.result);
       expect(receivedSpec).toMatchObject(spec);
@@ -31,19 +20,14 @@ describe("UserActor", () => {
   });
   it("cannot get other user's dog profile", async () => {
     await withBarkContext(async ({ context }) => {
-      const { dbPool } = context;
-
-      // TODO: Replace insertUser with givenUserActor
-      // TODO: Replace insertDog with actor.addDogProfile
-
       // Given u1 owns d1
-      const u1 = await insertUser(1, dbPool);
-      const d1 = await insertDog(1, u1.userId, dbPool);
+      const u1 = await givenUserActor({ idx: 1, context });
+      const spec = mockDogProfileSpec();
+      const d1 = (await u1.addDogProfile({ spec })).result!;
 
       // When u2 tries to get d1
-      const u2 = await insertUser(2, dbPool);
-      const actor = getUserActor(dbPool, u2.userId);
-      const resGet = await actor.getDogProfile({ dogId: d1.dogId });
+      const u2 = await givenUserActor({ idx: 2, context });
+      const resGet = await u2.getDogProfile({ dogId: d1.dogId });
 
       // Then
       expect(resGet.error).toEqual(CODE.ERROR_DOG_NOT_FOUND);
@@ -53,11 +37,8 @@ describe("UserActor", () => {
     await withBarkContext(async ({ context }) => {
       const { dbPool } = context;
 
-      // TODO: Replace insertUser with givenUserActor
-
       // Given actor
-      const { userId } = await insertUser(1, dbPool);
-      const actor = getUserActor(dbPool, userId);
+      const actor = await givenUserActor({ idx: 1, context });
 
       // With one dog
       const spec1 = mockDogProfileSpec({ dogName: "Rayden" });
@@ -80,23 +61,17 @@ describe("UserActor", () => {
   });
   it("cannot update another user's dog", async () => {
     await withBarkContext(async ({ context }) => {
-      const { dbPool } = context;
-
-      // TODO: Replace insertUser with givenUserActor
-
       // Given a dog belonging to user 1
-      const u1 = await insertUser(1, dbPool);
-      const actor1 = getUserActor(dbPool, u1.userId);
+      const u1 = await givenUserActor({ idx: 1, context });
       const spec1 = mockDogProfileSpec({ dogName: "Rayden" });
-      const resAdd = await actor1.addDogProfile({ spec: spec1 });
+      const resAdd = await u1.addDogProfile({ spec: spec1 });
       expect(resAdd.error).toBeUndefined();
       const d1 = resAdd.result!;
 
       // When another user 2 attempts to update the dog
-      const u2 = await insertUser(2, dbPool);
-      const actor2 = getUserActor(dbPool, u2.userId);
+      const u2 = await givenUserActor({ idx: 2, context });
       const spec2 = mockDogProfileSpec({ dogName: "Raiden" });
-      const resUpdate = await actor2.updateDogProfile({
+      const resUpdate = await u2.updateDogProfile({
         dogId: d1.dogId,
         spec: spec2,
       });

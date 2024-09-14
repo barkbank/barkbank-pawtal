@@ -1,19 +1,14 @@
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
-import { getDogPreferredVet } from "@/lib/user/actions/get-dog-preferred-vet";
-import { getDogStatuses } from "@/lib/user/actions/get-dog-statuses";
 import { UserActor } from "@/lib/user/user-actor";
 import { CODE } from "@/lib/utilities/bark-code";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { redirect } from "next/navigation";
 import { DogViewer } from "../../_lib/dog-viewer/dog-viewer";
-import APP from "@/lib/app";
-import { opFetchDogAppointmentsByDogId } from "@/lib/bark/operations/op-fetch-dog-appointments-by-dog-id";
 import {
   DogViewerData,
   DogViewerDataSchema,
 } from "../../_lib/dog-viewer/dog-viewer-data";
-import { opFetchReportsByDogId } from "@/lib/bark/operations/op-fetch-reports-by-dog-id";
 
 export default async function Page(props: { params: { dogId: string } }) {
   const actor = await getAuthenticatedUserActor();
@@ -43,8 +38,6 @@ async function getDogViewerData(
     | typeof CODE.FAILED
   >
 > {
-  const actorUserId = actor.getUserId();
-  const context = await APP.getBarkContext();
   const [
     resDogProfile,
     resDogStatuses,
@@ -53,13 +46,10 @@ async function getDogViewerData(
     resDogReports,
   ] = await Promise.all([
     actor.getDogProfile({ dogId }),
-    getDogStatuses(actor, dogId),
-    opFetchDogAppointmentsByDogId(context, {
-      dogId,
-      actorUserId,
-    }),
-    getDogPreferredVet(actor, dogId),
-    opFetchReportsByDogId(context, { dogId, actorUserId }),
+    actor.getDogStatuses({ dogId }),
+    actor.getDogAppointments({ dogId }),
+    actor.getDogPreferredVet({ dogId }),
+    actor.getDogReports({ dogId }),
   ]);
 
   if (resDogProfile.error !== undefined) {

@@ -1,7 +1,6 @@
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { redirect } from "next/navigation";
-import { getMyPets } from "@/lib/user/actions/get-my-pets";
 import { BarkButton } from "@/components/bark/bark-button";
 import { DogCard, DogCardData } from "./_lib/components/dog-card";
 import APP from "@/lib/app";
@@ -13,7 +12,7 @@ export default async function Page() {
   if (!actor) {
     redirect(RoutePath.USER_LOGIN_PAGE);
   }
-  const { result: dogs, error } = await getMyPets(actor);
+  const { result: dogs, error } = await actor.getMyDogs();
   if (error !== undefined) {
     return (
       <div className="m-3">

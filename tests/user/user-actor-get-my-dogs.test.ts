@@ -8,18 +8,17 @@ import {
   insertUser,
   insertVet,
 } from "../_fixtures";
-import { getMyPets } from "@/lib/user/actions/get-my-pets";
 import { PARTICIPATION_STATUS } from "@/lib/bark/enums/participation-status";
 import { CALL_OUTCOME } from "@/lib/bark/enums/call-outcome";
 import { guaranteed } from "@/lib/utilities/bark-utils";
 import { dbQuery } from "@/lib/data/db-utils";
 
-describe("getMyPets", () => {
+describe("UserActor::getMyDogs", () => {
   it("should return empty list when user has no dogs", async () => {
     await withDb(async (dbPool) => {
       const { userId } = await insertUser(34, dbPool);
       const actor = getUserActor(dbPool, userId);
-      const { result: dogs, error } = await getMyPets(actor);
+      const { result: dogs, error } = await actor.getMyDogs();
       expect(error).toBeUndefined();
       expect(dogs).toEqual([]);
     });
@@ -30,7 +29,7 @@ describe("getMyPets", () => {
       await insertDog(2, userId, dbPool);
       await insertDog(3, userId, dbPool);
       const actor = getUserActor(dbPool, userId);
-      const { result: dogs, error } = await getMyPets(actor);
+      const { result: dogs, error } = await actor.getMyDogs();
       expect(error).toBeUndefined();
       const receivedName = dogs!.map((dog) => dog.dogName);
       const expectedNames = await Promise.all(
@@ -54,7 +53,7 @@ describe("getMyPets", () => {
         CALL_OUTCOME.APPOINTMENT,
       );
       const actor = getUserActor(dbPool, userId);
-      const { result: dogs, error } = await getMyPets(actor);
+      const { result: dogs, error } = await actor.getMyDogs();
       expect(error).toBeUndefined();
       expect(guaranteed(dogs![0].dogAppointments[0]).vetName).toEqual(vetName);
     });
@@ -72,7 +71,7 @@ describe("getMyPets", () => {
       );
       const { reportId } = await insertReport(dbPool, callId);
       const actor = getUserActor(dbPool, userId);
-      const { result: dogs, error } = await getMyPets(actor);
+      const { result: dogs, error } = await actor.getMyDogs();
       expect(error).toBeUndefined();
       expect(dogs![0].dogAppointments).toEqual([]);
     });
@@ -93,7 +92,7 @@ describe("getMyPets", () => {
         [dogId, tomorrow],
       );
       const actor = getUserActor(dbPool, userId);
-      const { result: dogs, error } = await getMyPets(actor);
+      const { result: dogs, error } = await actor.getMyDogs();
       expect(error).toBeUndefined();
       expect(dogs![0].dogStatuses.dogParticipationStatus).toEqual(
         PARTICIPATION_STATUS.PAUSED,
@@ -116,7 +115,7 @@ describe("getMyPets", () => {
         [dogId, yesterday],
       );
       const actor = getUserActor(dbPool, userId);
-      const { result: dogs, error } = await getMyPets(actor);
+      const { result: dogs, error } = await actor.getMyDogs();
       expect(error).toBeUndefined();
       expect(dogs![0].dogStatuses.dogParticipationStatus).toEqual(
         PARTICIPATION_STATUS.PARTICIPATING,

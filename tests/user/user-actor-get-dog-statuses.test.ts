@@ -1,4 +1,3 @@
-import { getDogStatuses } from "@/lib/user/actions/get-dog-statuses";
 import { withDb } from "../_db_helpers";
 import { getUserActor, insertDog, insertUser } from "../_fixtures";
 import { DogStatuses } from "@/lib/bark/models/dog-statuses";
@@ -10,14 +9,14 @@ import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
 import { dateAgo } from "../_time_helpers";
 
-describe("getDogStatuses", () => {
+describe("UserActor::getDogStatuses", () => {
   it("should return ERROR_WRONG_OWNER when the user does not own the requested dog", async () => {
     await withDb(async (dbPool) => {
       const u1 = await insertUser(1, dbPool);
       const u2 = await insertUser(2, dbPool);
       const d3 = await insertDog(3, u2.userId, dbPool);
       const actor = getUserActor(dbPool, u1.userId);
-      const { result, error } = await getDogStatuses(actor, d3.dogId);
+      const { result, error } = await actor.getDogStatuses({ dogId: d3.dogId });
       expect(result).toBeUndefined();
       expect(error).toEqual("ERROR_WRONG_OWNER");
     });
@@ -27,7 +26,9 @@ describe("getDogStatuses", () => {
       const u1 = await insertUser(1, dbPool);
       const noSuchDogId = "1234567";
       const actor = getUserActor(dbPool, u1.userId);
-      const { result, error } = await getDogStatuses(actor, noSuchDogId);
+      const { result, error } = await actor.getDogStatuses({
+        dogId: noSuchDogId,
+      });
       expect(result).toBeUndefined();
       expect(error).toEqual("ERROR_DOG_NOT_FOUND");
     });
@@ -44,7 +45,7 @@ describe("getDogStatuses", () => {
         dogWeightKg: 28.88,
       });
       const actor = getUserActor(dbPool, u1.userId);
-      const { result, error } = await getDogStatuses(actor, d2.dogId);
+      const { result, error } = await actor.getDogStatuses({ dogId: d2.dogId });
       const expected: DogStatuses = {
         dogServiceStatus: SERVICE_STATUS.AVAILABLE,
         dogMedicalStatus: MEDICAL_STATUS.ELIGIBLE,

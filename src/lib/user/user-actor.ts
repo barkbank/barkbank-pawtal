@@ -10,6 +10,11 @@ import {
   SubProfileSpec,
 } from "../bark/models/dog-profile-models";
 import { DogProfileService } from "../bark/services/dog-profile-service";
+import { getMyPets } from "./actions/get-my-pets";
+import { getDogStatuses } from "./actions/get-dog-statuses";
+import { getDogPreferredVet } from "./actions/get-dog-preferred-vet";
+import { opFetchDogAppointmentsByDogId } from "../bark/operations/op-fetch-dog-appointments-by-dog-id";
+import { opFetchReportsByDogId } from "../bark/operations/op-fetch-reports-by-dog-id";
 
 export type UserActorConfig = {
   dbPool: Pool;
@@ -94,5 +99,45 @@ export class UserActor {
       spec,
     });
     return res;
+  }
+
+  async getMyDogs() {
+    // TODO: dogProfileService.getMyDogs - there is also a listDogProfiles
+    return getMyPets(this);
+  }
+
+  async getDogStatuses(args: { dogId: string }) {
+    const { dogId } = args;
+    // TODO: Use DogProfileService to check dog ownership
+    // TODO: dogProfileService.getDogStatuses
+    return getDogStatuses(this, dogId);
+  }
+
+  async getDogPreferredVet(args: { dogId: string }) {
+    const { dogId } = args;
+    // TODO: Use DogProfileService to check dog ownership
+    // TODO: dogProfileService.getDogPreferredVet
+    return getDogPreferredVet(this, dogId);
+  }
+
+  // TODO: Test UserActor::getDogAppointments
+  async getDogAppointments(args: { dogId: string }) {
+    const { dogId } = args;
+    const { context, userId } = this.getParams();
+    // TODO: Use DogProfileService to check dog ownership
+    // TODO: Impl a AppointmentService to get appointments
+    return opFetchDogAppointmentsByDogId(context, {
+      dogId,
+      actorUserId: userId,
+    });
+  }
+
+  // TODO: Test UserActor::getDogReports
+  async getDogReports(args: { dogId: string }) {
+    const { dogId } = args;
+    const { context, userId } = this.getParams();
+    // TODO: Use DogProfileService to check dog ownership
+    // TODO: Impl a ReportService to get reports
+    return opFetchReportsByDogId(context, { dogId, actorUserId: userId });
   }
 }
