@@ -5,7 +5,10 @@ import { EncryptionService } from "../services/encryption";
 import { BarkContext } from "../bark/bark-context";
 import { UserAccountService } from "../bark/services/user-account-service";
 import { UserAccount, UserAccountUpdate } from "../bark/models/user-models";
-import { DogProfileSpec, SubProfileSpec } from "../bark/models/dog-profile-models";
+import {
+  DogProfileSpec,
+  SubProfileSpec,
+} from "../bark/models/dog-profile-models";
 import { DogProfileService } from "../bark/services/dog-profile-service";
 
 export type UserActorConfig = {
@@ -82,10 +85,14 @@ export class UserActor {
   }
 
   // TODO: Write a test for this when VetActor can schedule appoints and write reports.
-  async updateSubProfile(args: { dogId: string, spec: SubProfileSpec }) {
-    const {dogId, spec} = args;
-    const {userId, dogProfileService} = this.getParams();
-    const res = await dogProfileService.updateSubProfile({userId, dogId, spec});
+  async updateSubProfile(args: { dogId: string; spec: SubProfileSpec }) {
+    const { dogId, spec } = args;
+    const { userId, dogProfileService } = this.getParams();
+    const res = await dogProfileService.updateSubProfile({
+      userId,
+      dogId,
+      spec,
+    });
     return res;
   }
 }
