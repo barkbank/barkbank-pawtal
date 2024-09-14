@@ -13,6 +13,8 @@ import { DogProfileService } from "../bark/services/dog-profile-service";
 import { getMyPets } from "./actions/get-my-pets";
 import { getDogStatuses } from "./actions/get-dog-statuses";
 import { getDogPreferredVet } from "./actions/get-dog-preferred-vet";
+import { opFetchDogAppointmentsByDogId } from "../bark/operations/op-fetch-dog-appointments-by-dog-id";
+import { opFetchReportsByDogId } from "../bark/operations/op-fetch-reports-by-dog-id";
 
 export type UserActorConfig = {
   dbPool: Pool;
@@ -117,5 +119,22 @@ export class UserActor {
     const { dogId } = args;
     // TODO: dogProfileService.getDogPreferredVet
     return getDogPreferredVet(this, dogId);
+  }
+
+  async getDogAppointments(args: { dogId: string }) {
+    const { dogId } = args;
+    const { context, userId } = this.getParams();
+    // TODO: AppointmentService
+    return opFetchDogAppointmentsByDogId(context, {
+      dogId,
+      actorUserId: userId,
+    });
+  }
+
+  async getDogReports(args: { dogId: string }) {
+    const { dogId } = args;
+    const { context, userId } = this.getParams();
+    // TODO: ReportService
+    return opFetchReportsByDogId(context, { dogId, actorUserId: userId });
   }
 }
