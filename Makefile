@@ -17,11 +17,15 @@ all: default test-ui
 ######################################################################
 # Utilities
 #
-.PHONY: ticket
+.PHONY: ticket ticket-hist
 
 # Generate branch name, checkout from main, and push to origin
 ticket:
 	@bash scripts/make-ticket.sh
+
+# Show histogram of allocated tickets
+ticket-hist:
+	@bash scripts/show-ticket-hist.sh
 
 
 ######################################################################
