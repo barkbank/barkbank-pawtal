@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { BarkNavRoute } from "@/components/bark/navigation/bark-nav-route";
 import { ExternalLink } from "lucide-react";
-import { VERSION } from "../_lib/version";
+import { VERSION } from "../../lib/version";
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
 

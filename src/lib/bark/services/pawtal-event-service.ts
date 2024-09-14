@@ -3,6 +3,7 @@ import { BarkContext } from "../bark-context";
 import { PawtalEventDao } from "../daos/pawtal-event-dao";
 import { PawtalEventType } from "../enums/pawtal-event-type";
 import { PawtalEventSpec } from "../models/event-models";
+import { VERSION } from "@/lib/version";
 
 export class PawtalEventService {
   private dao: PawtalEventDao;
@@ -19,7 +20,8 @@ export class PawtalEventService {
     const { spec } = args;
     await this.sem.acquire();
     try {
-      await this.dao.insert({ spec });
+      const enriched: PawtalEventSpec = { ...spec, pawtalVersion: VERSION };
+      await this.dao.insert({ spec: enriched });
     } finally {
       this.sem.release();
     }
