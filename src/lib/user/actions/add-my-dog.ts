@@ -6,6 +6,7 @@ import { DogSpec } from "@/lib/data/db-models";
 import { dbInsertDog, dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import { CODE } from "@/lib/utilities/bark-code";
 
+// WIP: Replace this with a call to UserActor::addDogProfile
 export async function addMyDog(
   actor: UserActor,
   dogProfile: DogProfileSpec,

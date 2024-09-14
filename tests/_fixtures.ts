@@ -69,7 +69,10 @@ import {
 } from "@/lib/services/email-otp-service";
 import { VetActor, VetActorConfig } from "@/lib/vet/vet-actor";
 import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
-import { DogProfileSpec } from "@/lib/bark/models/dog-profile-models";
+import {
+  DogProfileSpec,
+  DogProfileSpecSchema,
+} from "@/lib/bark/models/dog-profile-models";
 import { SubProfileSpec } from "@/lib/bark/models/dog-profile-models";
 import { getDogProfile } from "@/lib/user/actions/get-dog-profile";
 import { sprintf } from "sprintf-js";
@@ -81,6 +84,7 @@ import { RegistrationService } from "@/lib/bark/services/registration-service";
 import { VetAccountService } from "@/lib/bark/services/vet-account-service";
 import { VetClinicDao } from "@/lib/bark/daos/vet-clinic-dao";
 import { AdminAccountService } from "@/lib/bark/services/admin-account-service";
+import { dateAgo } from "./_time_helpers";
 
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
@@ -426,6 +430,7 @@ export function getEligibleDogSpecOverrides(): Partial<DogSpec> {
   };
 }
 
+// TODO: Update insertDog to use mockDogProfileSpec. Difficulty is that getDogSpec is used in get-dog-profile.test.ts as expected value.
 export async function insertDog(
   idx: number,
   userId: string,
@@ -470,6 +475,24 @@ export async function getDogOii(idx: number): Promise<DogOii> {
   return {
     dogName: `DogName${idx}`,
   };
+}
+
+export function mockDogProfileSpec(
+  overrides?: Partial<DogProfileSpec>,
+): DogProfileSpec {
+  const base: DogProfileSpec = {
+    dogName: "Woofgang",
+    dogBirthday: dateAgo({ numYears: 3 }),
+    dogBreed: "German Guard Dog",
+    dogGender: DOG_GENDER.MALE,
+    dogWeightKg: 26.5,
+    dogDea1Point1: DOG_ANTIGEN_PRESENCE.UNKNOWN,
+    dogEverPregnant: YES_NO_UNKNOWN.NO,
+    dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
+    dogPreferredVetId: "",
+  };
+  const out = { ...base, ...overrides };
+  return DogProfileSpecSchema.parse(out);
 }
 
 function getDogBreed(idx: number): string {

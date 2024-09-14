@@ -5,6 +5,9 @@ import { EncryptionService } from "../services/encryption";
 import { BarkContext } from "../bark/bark-context";
 import { UserAccountService } from "../bark/services/user-account-service";
 import { UserAccount, UserAccountUpdate } from "../bark/models/user-models";
+import { DogProfile, DogProfileSpec } from "../bark/models/dog-profile-models";
+import { Err, Result } from "../utilities/result";
+import { CODE } from "../utilities/bark-code";
 
 // TODO: Remove UserActorConfig when UserActor::getParams is no longer used.
 export type UserActorConfig = {
@@ -52,5 +55,21 @@ export class UserActor {
     const { userId, userAccountService } = this.args;
     const res = await userAccountService.applyUpdate({ userId, update });
     return res;
+  }
+
+  async addDogProfile(args: {
+    spec: DogProfileSpec;
+  }): Promise<Result<{ dogId: string }, typeof CODE.FAILED>> {
+    // WIP: Implement addDog
+    return Err(CODE.FAILED);
+  }
+
+  async getDogProfile(args: {
+    dogId: string;
+  }): Promise<
+    Result<DogProfile, typeof CODE.FAILED | typeof CODE.ERROR_DOG_NOT_FOUND>
+  > {
+    // WIP: Implement getDog
+    return Err(CODE.FAILED);
   }
 }
