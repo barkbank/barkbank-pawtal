@@ -12,8 +12,12 @@ describe("UserActor", () => {
   it("can add and get dog", async () => {
     await withBarkContext(async ({ context }) => {
       const { dbPool } = context;
+
+      // TODO: In _fixtures, impl givenUserActor(1, context), givenVetActor(1, context), givenAdminActor(1, context)
+      // TODO: Replace insertUser, getUserActor with givenUserActor
       const { userId } = await insertUser(1, dbPool);
       const actor = getUserActor(dbPool, userId);
+
       const spec = mockDogProfileSpec();
       const resAdd = await actor.addDogProfile({ spec });
       expect(resAdd.error).toBeUndefined();
@@ -28,6 +32,9 @@ describe("UserActor", () => {
   it("cannot get other user's dog profile", async () => {
     await withBarkContext(async ({ context }) => {
       const { dbPool } = context;
+
+      // TODO: Replace insertUser with givenUserActor
+      // TODO: Replace insertDog with actor.addDogProfile
 
       // Given u1 owns d1
       const u1 = await insertUser(1, dbPool);
@@ -45,6 +52,8 @@ describe("UserActor", () => {
   it("can update dog profile", async () => {
     await withBarkContext(async ({ context }) => {
       const { dbPool } = context;
+
+      // TODO: Replace insertUser with givenUserActor
 
       // Given actor
       const { userId } = await insertUser(1, dbPool);
@@ -72,6 +81,8 @@ describe("UserActor", () => {
   it("cannot update another user's dog", async () => {
     await withBarkContext(async ({ context }) => {
       const { dbPool } = context;
+
+      // TODO: Replace insertUser with givenUserActor
 
       // Given a dog belonging to user 1
       const u1 = await insertUser(1, dbPool);
