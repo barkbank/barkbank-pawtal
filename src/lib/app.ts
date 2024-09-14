@@ -60,6 +60,7 @@ import { VetAccountService } from "./bark/services/vet-account-service";
 import { PawtalEventService } from "./bark/services/pawtal-event-service";
 import { opIndexDonorSnapshots } from "./bark/operations/op-index-donor-snapshots";
 import { AdminAccountService } from "./bark/services/admin-account-service";
+import { DogProfileService } from "./bark/services/dog-profile-service";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -86,6 +87,7 @@ export class AppFactory {
   private promisedTrackerService: Promise<TrackerService> | null = null;
   private promisedCronService: Promise<CronService> | null = null;
   private promisedUserAccountService: Promise<UserAccountService> | null = null;
+  private promisedDogProfileService: Promise<DogProfileService> | null = null;
   private promisedVisitor: Promise<Visitor> | null = null;
   private promisedVetAccountService: Promise<VetAccountService> | null = null;
   private promisedPawtalEventService: Promise<PawtalEventService> | null = null;
@@ -545,6 +547,7 @@ export class AppFactory {
           textEncryptionService,
           context,
           userAccountService,
+          dogProfileService,
         ] = await Promise.all([
           this.getDbPool(),
           this.getUserMapper(),
@@ -552,16 +555,19 @@ export class AppFactory {
           this.getTextEncryptionService(),
           this.getBarkContext(),
           this.getUserAccountService(),
+          this.getDogProfileService(),
         ]);
         const actorConfig: UserActorConfig = {
           dbPool,
           userMapper,
           dogMapper,
           textEncryptionService,
+          context,
+          userAccountService,
+          dogProfileService,
         };
         const factory = new UserActorFactory({
           actorConfig,
-          context,
           userAccountService,
         });
         this.logCreated("UserActorFactory");
@@ -581,6 +587,18 @@ export class AppFactory {
       });
     }
     return this.promisedUserAccountService;
+  }
+
+  public getDogProfileService(): Promise<DogProfileService> {
+    if (this.promisedDogProfileService === null) {
+      this.promisedDogProfileService = new Promise(async (resolve) => {
+        const context = await this.getBarkContext();
+        const service = new DogProfileService({ context });
+        this.logCreated("DogProfileService");
+        resolve(service);
+      });
+    }
+    return this.promisedDogProfileService;
   }
 
   public getUserMapper(): Promise<UserMapper> {

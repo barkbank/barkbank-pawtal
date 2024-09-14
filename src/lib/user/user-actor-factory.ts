@@ -1,5 +1,4 @@
 import { UserActor, UserActorConfig } from "./user-actor";
-import { BarkContext } from "../bark/bark-context";
 import { UserAccountService } from "../bark/services/user-account-service";
 
 /**
@@ -9,13 +8,12 @@ export class UserActorFactory {
   constructor(
     private args: {
       actorConfig: UserActorConfig;
-      context: BarkContext;
       userAccountService: UserAccountService;
     },
   ) {}
 
   public async getUserActor(userEmail: string): Promise<UserActor | null> {
-    const { context, actorConfig, userAccountService } = this.args;
+    const { actorConfig, userAccountService } = this.args;
     const { result } = await userAccountService.getUserIdByUserEmail({
       userEmail,
     });
@@ -26,8 +24,6 @@ export class UserActorFactory {
     return new UserActor({
       userId,
       config: actorConfig,
-      context,
-      userAccountService,
     });
   }
 }

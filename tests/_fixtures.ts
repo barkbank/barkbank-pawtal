@@ -85,6 +85,7 @@ import { VetAccountService } from "@/lib/bark/services/vet-account-service";
 import { VetClinicDao } from "@/lib/bark/daos/vet-clinic-dao";
 import { AdminAccountService } from "@/lib/bark/services/admin-account-service";
 import { dateAgo } from "./_time_helpers";
+import { DogProfileService } from "@/lib/bark/services/dog-profile-service";
 
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
@@ -190,11 +191,15 @@ export function getUserAccountService(dbPool: Pool) {
   return new UserAccountService(context);
 }
 
+export function getDogProfileService(dbPool: Pool) {
+  const context = getBarkContext(dbPool);
+  return new DogProfileService({ context });
+}
+
 export function getUserActor(dbPool: Pool, userId: string): UserActor {
   const config = getUserActorConfig(dbPool);
   const context = getBarkContext(dbPool);
-  const userAccountService = new UserAccountService(context);
-  return new UserActor({ userId, config, context, userAccountService });
+  return new UserActor({ userId, config });
 }
 
 export function getUserActorConfig(dbPool: Pool): UserActorConfig {
@@ -203,6 +208,9 @@ export function getUserActorConfig(dbPool: Pool): UserActorConfig {
     userMapper: getUserMapper(),
     dogMapper: getDogMapper(),
     textEncryptionService: getTextEncryptionService(),
+    context: getBarkContext(dbPool),
+    userAccountService: getUserAccountService(dbPool),
+    dogProfileService: getDogProfileService(dbPool),
   };
 }
 
@@ -210,7 +218,7 @@ export function getUserActorFactory(dbPool: Pool) {
   const actorConfig = getUserActorConfig(dbPool);
   const context = getBarkContext(dbPool);
   const userAccountService = new UserAccountService(context);
-  return new UserActorFactory({ context, actorConfig, userAccountService });
+  return new UserActorFactory({ actorConfig, userAccountService });
 }
 
 export function getAdminAccountService(dbPool: Pool) {
