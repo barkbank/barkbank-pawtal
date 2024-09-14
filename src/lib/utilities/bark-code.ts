@@ -63,6 +63,7 @@ export const CODE = {
    */
   ERROR_VET_NOT_FOUND: "ERROR_VET_NOT_FOUND",
 
+  // TODO: Can ERROR_WRONG_OWNER be removed?
   /**
    * When a user is not the owner of a specified dog.
    */

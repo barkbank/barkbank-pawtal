@@ -2,7 +2,6 @@
 
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
-import { addMyDog } from "@/lib/user/actions/add-my-dog";
 import { DogProfileSpec } from "@/lib/bark/models/dog-profile-models";
 import { CODE } from "@/lib/utilities/bark-code";
 import { Err, Ok, Result } from "@/lib/utilities/result";
@@ -20,7 +19,7 @@ export async function postDogProfile(
   if (actor === null) {
     return Err(CODE.ERROR_NOT_LOGGED_IN);
   }
-  const { result, error } = await addMyDog(actor, dogProfile);
+  const { result, error } = await actor.addDogProfile({ spec: dogProfile });
   if (error !== undefined) {
     return Err(CODE.FAILED);
   }

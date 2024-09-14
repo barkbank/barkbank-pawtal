@@ -69,9 +69,11 @@ import {
 } from "@/lib/services/email-otp-service";
 import { VetActor, VetActorConfig } from "@/lib/vet/vet-actor";
 import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
-import { DogProfileSpec } from "@/lib/bark/models/dog-profile-models";
+import {
+  DogProfileSpec,
+  DogProfileSpecSchema,
+} from "@/lib/bark/models/dog-profile-models";
 import { SubProfileSpec } from "@/lib/bark/models/dog-profile-models";
-import { getDogProfile } from "@/lib/user/actions/get-dog-profile";
 import { sprintf } from "sprintf-js";
 import { toSubProfile } from "@/lib/bark/mappers/to-sub-profile";
 import { BarkContext } from "@/lib/bark/bark-context";
@@ -81,6 +83,8 @@ import { RegistrationService } from "@/lib/bark/services/registration-service";
 import { VetAccountService } from "@/lib/bark/services/vet-account-service";
 import { VetClinicDao } from "@/lib/bark/daos/vet-clinic-dao";
 import { AdminAccountService } from "@/lib/bark/services/admin-account-service";
+import { dateAgo } from "./_time_helpers";
+import { DogProfileService } from "@/lib/bark/services/dog-profile-service";
 
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
@@ -186,11 +190,15 @@ export function getUserAccountService(dbPool: Pool) {
   return new UserAccountService(context);
 }
 
+export function getDogProfileService(dbPool: Pool) {
+  const context = getBarkContext(dbPool);
+  return new DogProfileService({ context });
+}
+
 export function getUserActor(dbPool: Pool, userId: string): UserActor {
   const config = getUserActorConfig(dbPool);
   const context = getBarkContext(dbPool);
-  const userAccountService = new UserAccountService(context);
-  return new UserActor({ userId, config, context, userAccountService });
+  return new UserActor({ userId, config });
 }
 
 export function getUserActorConfig(dbPool: Pool): UserActorConfig {
@@ -199,6 +207,9 @@ export function getUserActorConfig(dbPool: Pool): UserActorConfig {
     userMapper: getUserMapper(),
     dogMapper: getDogMapper(),
     textEncryptionService: getTextEncryptionService(),
+    context: getBarkContext(dbPool),
+    userAccountService: getUserAccountService(dbPool),
+    dogProfileService: getDogProfileService(dbPool),
   };
 }
 
@@ -206,7 +217,7 @@ export function getUserActorFactory(dbPool: Pool) {
   const actorConfig = getUserActorConfig(dbPool);
   const context = getBarkContext(dbPool);
   const userAccountService = new UserAccountService(context);
-  return new UserActorFactory({ context, actorConfig, userAccountService });
+  return new UserActorFactory({ actorConfig, userAccountService });
 }
 
 export function getAdminAccountService(dbPool: Pool) {
@@ -426,6 +437,7 @@ export function getEligibleDogSpecOverrides(): Partial<DogSpec> {
   };
 }
 
+// TODO: Update insertDog to use mockDogProfileSpec. Difficulty is that getDogSpec is used in get-dog-profile.test.ts as expected value.
 export async function insertDog(
   idx: number,
   userId: string,
@@ -470,6 +482,24 @@ export async function getDogOii(idx: number): Promise<DogOii> {
   return {
     dogName: `DogName${idx}`,
   };
+}
+
+export function mockDogProfileSpec(
+  overrides?: Partial<DogProfileSpec>,
+): DogProfileSpec {
+  const base: DogProfileSpec = {
+    dogName: "Woofgang",
+    dogBirthday: dateAgo({ numYears: 3 }),
+    dogBreed: "German Guard Dog",
+    dogGender: DOG_GENDER.MALE,
+    dogWeightKg: 26.5,
+    dogDea1Point1: DOG_ANTIGEN_PRESENCE.UNKNOWN,
+    dogEverPregnant: YES_NO_UNKNOWN.NO,
+    dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
+    dogPreferredVetId: "",
+  };
+  const out = { ...base, ...overrides };
+  return DogProfileSpecSchema.parse(out);
 }
 
 function getDogBreed(idx: number): string {
@@ -568,6 +598,8 @@ export async function fetchDogOwnerId(
   return res.rows[0];
 }
 
+// TODO: Remove this when no longer used.
+// - It is used by tests for addMyDog, updateDogProfile, and updateSubProfile
 export async function fetchDogInfo(
   dbPool: Pool,
   dogId: string,
@@ -579,8 +611,8 @@ export async function fetchDogInfo(
 }> {
   const { userId } = await fetchDogOwnerId(dbPool, dogId);
   const actor = getUserActor(dbPool, userId);
-  const { result } = await getDogProfile(actor, dogId);
-  const dogProfile = result!;
+  const { result } = await actor.getDogProfile({ dogId });
+  const dogProfile = DogProfileSpecSchema.parse(result);
   const subProfile = toSubProfile(dogProfile);
   const { profileModificationTime } = await _getProfileModificationTime(
     dbPool,

@@ -3,15 +3,11 @@ import APP from "@/lib/app";
 import { getVetFormOptions } from "@/app/_lib/get-vet-form-options";
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { getDogProfile } from "@/lib/user/actions/get-dog-profile";
 import { EditDogProfileFormController } from "../../_lib/components/edit-dog-profile-form-controller";
 import { SimpleErrorPage } from "@/app/_components/simple-error-page";
 import { SubProfileFormController } from "../../_lib/components/sub-profile-form-controller";
 import { opFetchDogReportCount } from "@/lib/bark/operations/op-fetch-dog-report-count";
-import {
-  SubProfileSpec,
-  SubProfileSpecSchema,
-} from "@/lib/bark/models/dog-profile-models";
+import { SubProfileSpec } from "@/lib/bark/models/dog-profile-models";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { DogProfileSpec } from "@/lib/bark/models/dog-profile-models";
 import { CODE } from "@/lib/utilities/bark-code";
@@ -33,10 +29,9 @@ export default async function Page(props: { params: { dogId: string } }) {
   if (errCount !== undefined) {
     return <SimpleErrorPage error={errCount} />;
   }
-  const { result: dogProfile, error: errFetch } = await getDogProfile(
-    actor,
+  const { result: dogProfile, error: errFetch } = await actor.getDogProfile({
     dogId,
-  );
+  });
   if (errFetch !== undefined) {
     return <SimpleErrorPage error={errFetch} />;
   }

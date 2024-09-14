@@ -156,7 +156,9 @@ export class EncryptedDogDao {
   }
 
   async listByVet(args: { vetId: string }): Promise<EncryptedDog[]> {
-    // TODO: Impl listByVet
+    // TODO: Impl listByVet?
+    // This might not be needed as vets should list eligible dogs.
+    // We want something more like selectCallTasksByVetId
     throw new Error("Not implemented");
   }
 }

@@ -10,8 +10,6 @@ import {
   SubProfileSpec,
   SubProfileSpecSchema,
 } from "@/lib/bark/models/dog-profile-models";
-import { dateAgo } from "../../_time_helpers";
-import { DOG_ANTIGEN_PRESENCE } from "@/lib/bark/enums/dog-antigen-presence";
 import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
 import { DogProfileService } from "@/lib/bark/services/dog-profile-service";
@@ -32,13 +30,14 @@ import {
 } from "@/lib/utilities/bark-time";
 import { POS_NEG_NIL } from "@/lib/bark/enums/pos-neg-nil";
 import { REPORTED_INELIGIBILITY } from "@/lib/bark/enums/reported-ineligibility";
+import { mockDogProfileSpec } from "../../_fixtures";
 
 describe("DogProfileService", () => {
   it("can be used to create and retrieve dog profile", async () => {
     await withBarkContext(async ({ context }) => {
       const { userId } = await _createTestUser({ context, idx: 1 });
       const { vetId } = await _createTestVetClinic({ context, idx: 2 });
-      const spec = _mockDogProfileSpec({ dogPreferredVetId: vetId });
+      const spec = mockDogProfileSpec({ dogPreferredVetId: vetId });
       const service = new DogProfileService({ context });
       const res1 = await service.addDogProfile({ userId, spec });
       const { dogId } = res1.result!;
@@ -54,12 +53,12 @@ describe("DogProfileService", () => {
       const { userId } = await _createTestUser({ context, idx: 3 });
       const v1 = await _createTestVetClinic({ context, idx: 1 });
       const v2 = await _createTestVetClinic({ context, idx: 2 });
-      const spec1 = _mockDogProfileSpec({
+      const spec1 = mockDogProfileSpec({
         dogName: "Alan",
         dogGender: DOG_GENDER.MALE,
         dogPreferredVetId: v1.vetId,
       });
-      const spec2 = _mockDogProfileSpec({
+      const spec2 = mockDogProfileSpec({
         dogName: "Beth",
         dogGender: DOG_GENDER.FEMALE,
         dogPreferredVetId: v2.vetId,
@@ -84,11 +83,11 @@ describe("DogProfileService", () => {
     it("can be used to update dog-profiles with no existing reports", async () => {
       await withBarkContext(async ({ context }) => {
         const { userId } = await _createTestUser({ context, idx: 1 });
-        const spec1 = _mockDogProfileSpec({ dogName: "Eric" });
+        const spec1 = mockDogProfileSpec({ dogName: "Eric" });
         const service = new DogProfileService({ context });
         const resAdd = await service.addDogProfile({ userId, spec: spec1 });
         const { dogId } = resAdd.result!;
-        const spec2 = _mockDogProfileSpec({ dogName: "Erik" });
+        const spec2 = mockDogProfileSpec({ dogName: "Erik" });
         const resUpdate = await service.updateDogProfile({
           userId,
           dogId,
@@ -105,7 +104,7 @@ describe("DogProfileService", () => {
     it("does not allow sub-profile updates on dog without an existing report", async () => {
       await withBarkContext(async ({ context }) => {
         const { userId } = await _createTestUser({ context, idx: 1 });
-        const spec1 = _mockDogProfileSpec({ dogName: "Eric" });
+        const spec1 = mockDogProfileSpec({ dogName: "Eric" });
         const service = new DogProfileService({ context });
         const resAdd = await service.addDogProfile({ userId, spec: spec1 });
         const { dogId } = resAdd.result!;
@@ -125,7 +124,7 @@ describe("DogProfileService", () => {
       await withBarkContext(async ({ context }) => {
         const { vetId } = await _createTestVetClinic({ context, idx: 1 });
         const { userId } = await _createTestUser({ context, idx: 1 });
-        const spec1 = _mockDogProfileSpec({
+        const spec1 = mockDogProfileSpec({
           dogName: "Eric",
           dogPreferredVetId: vetId,
         });
@@ -133,7 +132,7 @@ describe("DogProfileService", () => {
         const resAdd = await service.addDogProfile({ userId, spec: spec1 });
         const { dogId } = resAdd.result!;
         await _attachReportToDog({ vetId, dogId, context });
-        const spec2 = _mockDogProfileSpec({ dogName: "Erik" });
+        const spec2 = mockDogProfileSpec({ dogName: "Erik" });
         const resUpdate = await service.updateDogProfile({
           userId,
           dogId,
@@ -146,7 +145,7 @@ describe("DogProfileService", () => {
       await withBarkContext(async ({ context }) => {
         const { vetId } = await _createTestVetClinic({ context, idx: 1 });
         const { userId } = await _createTestUser({ context, idx: 1 });
-        const spec1 = _mockDogProfileSpec({
+        const spec1 = mockDogProfileSpec({
           dogName: "Eric",
           dogPreferredVetId: vetId,
         });
@@ -173,7 +172,7 @@ describe("DogProfileService", () => {
     await withBarkContext(async ({ context }) => {
       const { vetId } = await _createTestVetClinic({ context, idx: 1 });
       const { userId } = await _createTestUser({ context, idx: 1 });
-      const spec1 = _mockDogProfileSpec({
+      const spec1 = mockDogProfileSpec({
         dogName: "Eric",
         dogWeightKg: null,
         dogPreferredVetId: vetId,
@@ -255,24 +254,6 @@ function _mockSubProfileSpec(
   };
   const out = { ...base, ...overrides };
   return SubProfileSpecSchema.parse(out);
-}
-
-function _mockDogProfileSpec(
-  overrides?: Partial<DogProfileSpec>,
-): DogProfileSpec {
-  const base: DogProfileSpec = {
-    dogName: "Woofgang",
-    dogBirthday: dateAgo({ numYears: 3 }),
-    dogBreed: "German Guard Dog",
-    dogGender: DOG_GENDER.MALE,
-    dogWeightKg: 26.5,
-    dogDea1Point1: DOG_ANTIGEN_PRESENCE.UNKNOWN,
-    dogEverPregnant: YES_NO_UNKNOWN.NO,
-    dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
-    dogPreferredVetId: "",
-  };
-  const out = { ...base, ...overrides };
-  return DogProfileSpecSchema.parse(out);
 }
 
 async function _createTestUser(args: {
