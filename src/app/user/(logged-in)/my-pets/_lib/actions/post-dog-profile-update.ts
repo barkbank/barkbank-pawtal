@@ -24,9 +24,9 @@ export async function postDogProfileUpdate(args: {
   if (actor === null) {
     return CODE.ERROR_NOT_LOGGED_IN;
   }
-  const res = await updateDogProfile(actor, dogId, dogProfile);
-  if (res !== CODE.OK) {
-    return res;
+  const { error } = await actor.updateDogProfile({ dogId, spec: dogProfile });
+  if (error !== undefined) {
+    return error;
   }
   revalidatePath(RoutePath.USER_MY_PETS, "layout");
   return CODE.OK;
