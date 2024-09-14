@@ -18,10 +18,8 @@ import { DogProfileService } from "@/lib/bark/services/dog-profile-service";
 import { VetClinicSpec } from "@/lib/bark/models/vet-models";
 import { VetAccountService } from "@/lib/bark/services/vet-account-service";
 import { CODE } from "@/lib/utilities/bark-code";
-import { VetPreferenceDao } from "@/lib/bark/daos/vet-preference-dao";
 import { dbTransaction } from "@/lib/data/db-utils";
 import { Ok } from "@/lib/utilities/result";
-import { EncryptedDogDao } from "@/lib/bark/daos/encrypted-dog-dao";
 import { CallDao } from "@/lib/bark/daos/call-dao";
 import { EncryptedReportDao } from "@/lib/bark/daos/encrypted-report-dao";
 import {
