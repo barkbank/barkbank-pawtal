@@ -2,7 +2,6 @@
 
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
-import { updateDogProfile } from "@/lib/user/actions/update-dog-profile";
 import { DogProfileSpec } from "@/lib/bark/models/dog-profile-models";
 import { CODE } from "@/lib/utilities/bark-code";
 import { revalidatePath } from "next/cache";
