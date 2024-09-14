@@ -10,6 +10,9 @@ import {
   SubProfileSpec,
 } from "../bark/models/dog-profile-models";
 import { DogProfileService } from "../bark/services/dog-profile-service";
+import { getMyPets } from "./actions/get-my-pets";
+import { getDogStatuses } from "./actions/get-dog-statuses";
+import { getDogPreferredVet } from "./actions/get-dog-preferred-vet";
 
 export type UserActorConfig = {
   dbPool: Pool;
@@ -94,5 +97,25 @@ export class UserActor {
       spec,
     });
     return res;
+  }
+
+  // TODO: Update tests to test UserActor::getMyDogs
+  async getMyDogs() {
+    // TODO: dogProfileService.getMyDogs
+    return getMyPets(this);
+  }
+
+  // TODO: Update tests to test UserActor::getDogStatuses
+  async getDogStatuses(args: { dogId: string }) {
+    const { dogId } = args;
+    // TODO: dogProfileService.getDogStatuses
+    return getDogStatuses(this, dogId);
+  }
+
+  // TODO: Update tests to test UserActor::getDogPreferredVet
+  async getDogPreferredVet(args: { dogId: string }) {
+    const { dogId } = args;
+    // TODO: dogProfileService.getDogPreferredVet
+    return getDogPreferredVet(this, dogId);
   }
 }
