@@ -34,12 +34,22 @@ export type AdminActorConfig = {
  */
 export class AdminActor {
   constructor(
-    private adminId: string,
-    private config: AdminActorConfig,
+    private args: {
+      adminId: string;
+      config: AdminActorConfig;
+    },
   ) {}
 
+  getParams() {
+    return {
+      adminId: this.args.adminId,
+      ...this.args.config,
+    };
+  }
+
   getAdminId(): string {
-    return this.adminId;
+    const { adminId } = this.getParams();
+    return adminId;
   }
 
   async getIsRoot() {
@@ -48,14 +58,14 @@ export class AdminActor {
       return false;
     }
     const { adminEmail } = result;
-    const { rootAdminEmail } = this.config;
+    const { rootAdminEmail } = this.getParams();
     return adminEmail === rootAdminEmail;
   }
 
   // TODO: Cache the response
   async getOwnAdminAccount() {
-    const { adminId } = this;
-    return this.config.adminAccountService.getAdminAccountByAdminId({
+    const { adminId, adminAccountService } = this.getParams();
+    return adminAccountService.getAdminAccountByAdminId({
       adminId,
     });
   }
@@ -76,7 +86,8 @@ export class AdminActor {
     if (!permissions.adminCanManageAdminAccounts) {
       return Err(CODE.ERROR_NOT_ALLOWED);
     }
-    return this.config.adminAccountService.getAllAdminAccounts();
+    const { adminAccountService } = this.getParams();
+    return adminAccountService.getAllAdminAccounts();
   }
 
   async getAdminAccountByAdminId(args: {
@@ -94,7 +105,8 @@ export class AdminActor {
     if (!permissions.adminCanManageAdminAccounts) {
       return Err(CODE.ERROR_NOT_ALLOWED);
     }
-    return this.config.adminAccountService.getAdminAccountByAdminId({
+    const { adminAccountService } = this.getParams();
+    return adminAccountService.getAdminAccountByAdminId({
       adminId,
     });
   }
@@ -109,7 +121,8 @@ export class AdminActor {
     if (!permissions.adminCanManageAdminAccounts) {
       return Err(CODE.ERROR_NOT_ALLOWED);
     }
-    return this.config.adminAccountService.createAdminAccount({ spec });
+    const { adminAccountService } = this.getParams();
+    return adminAccountService.createAdminAccount({ spec });
   }
 
   async updateAdminAccount(args: { adminId: string; spec: AdminAccountSpec }) {
@@ -118,7 +131,8 @@ export class AdminActor {
     if (!permissions.adminCanManageAdminAccounts) {
       return CODE.ERROR_NOT_ALLOWED;
     }
-    return this.config.adminAccountService.updateAdminAccount({
+    const { adminAccountService } = this.getParams();
+    return adminAccountService.updateAdminAccount({
       adminId,
       spec,
     });
@@ -130,7 +144,8 @@ export class AdminActor {
     if (!permissions.adminCanManageAdminAccounts) {
       return CODE.ERROR_NOT_ALLOWED;
     }
-    return this.config.adminAccountService.deleteAdminAccount({ adminId });
+    const { adminAccountService } = this.getParams();
+    return adminAccountService.deleteAdminAccount({ adminId });
   }
 
   async getVetClinics(): Promise<
@@ -143,7 +158,8 @@ export class AdminActor {
     if (!permissions.adminCanManageVetAccounts) {
       return Err(CODE.ERROR_NOT_ALLOWED);
     }
-    return this.config.vetAccountService.getVetClinics();
+    const { vetAccountService } = this.getParams();
+    return vetAccountService.getVetClinics();
   }
 
   async getVetClinicByVetId(args: {
@@ -161,7 +177,8 @@ export class AdminActor {
     if (!permissions.adminCanManageVetAccounts) {
       return Err(CODE.ERROR_NOT_ALLOWED);
     }
-    return this.config.vetAccountService.getVetClinicByVetId({ vetId });
+    const { vetAccountService } = this.getParams();
+    return vetAccountService.getVetClinicByVetId({ vetId });
   }
 
   async getVetAccountsByVetId(args: {
@@ -177,7 +194,8 @@ export class AdminActor {
     if (!permissions.adminCanManageVetAccounts) {
       return Err(CODE.ERROR_NOT_ALLOWED);
     }
-    return this.config.vetAccountService.getVetAccountsByVetId({ vetId });
+    const { vetAccountService } = this.getParams();
+    return vetAccountService.getVetAccountsByVetId({ vetId });
   }
 
   async createVetClinic(args: {
@@ -193,7 +211,8 @@ export class AdminActor {
     if (!permissions.adminCanManageVetAccounts) {
       return Err(CODE.ERROR_NOT_ALLOWED);
     }
-    return this.config.vetAccountService.createVetClinic({ spec });
+    const { vetAccountService } = this.getParams();
+    return vetAccountService.createVetClinic({ spec });
   }
 
   async addVetAccount(args: {
@@ -209,7 +228,8 @@ export class AdminActor {
     if (!permissions.adminCanManageVetAccounts) {
       return Err(CODE.ERROR_NOT_ALLOWED);
     }
-    return this.config.vetAccountService.addVetAccount({ spec });
+    const { vetAccountService } = this.getParams();
+    return vetAccountService.addVetAccount({ spec });
   }
 
   async getAllUserAccounts(): Promise<
@@ -219,7 +239,8 @@ export class AdminActor {
     if (!permissions.adminCanManageUserAccounts) {
       return Err(CODE.ERROR_NOT_ALLOWED);
     }
-    return this.config.userAccountService.getAll();
+    const { userAccountService } = this.getParams();
+    return userAccountService.getAll();
   }
 
   async getUserAccountByUserId(args: {
@@ -237,7 +258,8 @@ export class AdminActor {
     if (!permissions.adminCanManageUserAccounts) {
       return Err(CODE.ERROR_NOT_ALLOWED);
     }
-    return this.config.userAccountService.getByUserId({ userId });
+    const { userAccountService } = this.getParams();
+    return userAccountService.getByUserId({ userId });
   }
 
   async registerWebFlowUsers(args: {
@@ -253,6 +275,7 @@ export class AdminActor {
     if (!permissions.adminCanManageUserAccounts) {
       return CODE.ERROR_NOT_ALLOWED;
     }
-    return this.config.registrationService.addUserAndDog(request);
+    const { registrationService } = this.getParams();
+    return registrationService.addUserAndDog(request);
   }
 }

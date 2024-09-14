@@ -21,7 +21,7 @@ export class VetActorFactory {
       return null;
     }
     const { vetLogin } = result;
-    const actor = new VetActor(vetLogin, this.config.actorConfig);
+    const actor = new VetActor({ vetLogin, config: this.config.actorConfig });
     return actor;
   }
 }

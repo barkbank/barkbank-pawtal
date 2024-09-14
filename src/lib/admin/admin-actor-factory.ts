@@ -27,12 +27,12 @@ export class AdminActorFactory {
 
     if (adminId !== null && adminEmail !== rootAdminEmail) {
       // Return actor for the normal admin account
-      return new AdminActor(adminId, adminActorConfig);
+      return new AdminActor({ adminId, config: adminActorConfig });
     }
 
     if (adminId !== null && adminEmail === rootAdminEmail) {
       // Ensure actor for the root admin account can manage admin accounts and return it.
-      const actor = new AdminActor(adminId, adminActorConfig);
+      const actor = new AdminActor({ adminId, config: adminActorConfig });
       const didGrant =
         await adminAccountService.grantPermissionsToManageAdminAccounts({
           adminId,
@@ -62,7 +62,10 @@ export class AdminActorFactory {
         return null;
       }
       console.log("Created root admin account");
-      return new AdminActor(resCreate.result.adminId, adminActorConfig);
+      return new AdminActor({
+        adminId: resCreate.result.adminId,
+        config: adminActorConfig,
+      });
     }
 
     throw new Error("BUG - Unhandled case");

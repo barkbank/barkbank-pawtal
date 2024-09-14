@@ -263,7 +263,7 @@ export function getAdminActorFactory(dbPool: Pool) {
 
 export function getAdminActor(dbPool: Pool, adminId: string): AdminActor {
   const config = getAdminActorConfig(dbPool);
-  return new AdminActor(adminId, config);
+  return new AdminActor({ adminId, config });
 }
 
 export async function insertAdmin(

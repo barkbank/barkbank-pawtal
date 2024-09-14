@@ -20,22 +20,24 @@ export type VetActorConfig = {
  */
 export class VetActor {
   constructor(
-    private vetLogin: VetLogin,
-    private config: VetActorConfig,
+    private args: {
+      vetLogin: VetLogin;
+      config: VetActorConfig;
+    },
   ) {}
 
-  public getVetId(): string {
-    return this.vetLogin.clinic.vetId;
+  getVetId(): string {
+    return this.args.vetLogin.clinic.vetId;
   }
 
-  public getParams(): VetActorConfig & { vetId: string } {
+  getParams() {
     return {
       vetId: this.getVetId(),
-      ...this.config,
+      ...this.args.config,
     };
   }
 
-  public getLogin(): VetLogin | undefined {
-    return this.vetLogin;
+  getLogin(): VetLogin | undefined {
+    return this.args.vetLogin;
   }
 }
