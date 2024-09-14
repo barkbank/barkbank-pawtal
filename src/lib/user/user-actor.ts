@@ -34,7 +34,7 @@ export class UserActor {
     },
   ) {}
 
-  getParams(): UserActorConfig & { userId: string } {
+  getParams() {
     return {
       ...this.args.config,
       userId: this.args.userId,
@@ -46,33 +46,29 @@ export class UserActor {
   }
 
   async getMyAccount(): Promise<UserAccount | null> {
-    const { userId, config } = this.args;
-    const { userAccountService } = config;
+    const { userId, userAccountService } = this.getParams();
     const { result } = await userAccountService.getByUserId({ userId });
     return result ?? null;
   }
 
   async updateMyAccount(args: { update: UserAccountUpdate }) {
     const { update } = args;
-    const { userId, config } = this.args;
-    const { userAccountService } = config;
+    const { userId, userAccountService } = this.getParams();
     const res = await userAccountService.applyUpdate({ userId, update });
     return res;
   }
 
-  async addDogProfile(args: {
-    spec: DogProfileSpec;
-  }): Promise<Result<{ dogId: string }, typeof CODE.FAILED>> {
-    // WIP: Implement addDog
-    return Err(CODE.FAILED);
+  async addDogProfile(args: { spec: DogProfileSpec }) {
+    const { spec } = args;
+    const { userId, dogProfileService } = this.getParams();
+    const res = await dogProfileService.addDogProfile({ userId, spec });
+    return res;
   }
 
-  async getDogProfile(args: {
-    dogId: string;
-  }): Promise<
-    Result<DogProfile, typeof CODE.FAILED | typeof CODE.ERROR_DOG_NOT_FOUND>
-  > {
-    // WIP: Implement getDog
-    return Err(CODE.FAILED);
+  async getDogProfile(args: { dogId: string }) {
+    const { dogId } = args;
+    const { userId, dogProfileService } = this.getParams();
+    const res = await dogProfileService.getDogProfile({ userId, dogId });
+    return res;
   }
 }
