@@ -15,6 +15,7 @@ export const PawtalEventSchema = z.object({
   pathname: z.string().optional().nullable(),
   vetAccountId: z.string().optional().nullable(),
   queryString: z.string().optional().nullable(),
+  pawtalVersion: z.string().optional().nullable(),
 });
 
 /**

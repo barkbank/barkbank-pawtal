@@ -25,6 +25,7 @@ describe("PawtalEventDao", () => {
         accountType: AccountType.ADMIN,
         accountId: "811",
         queryString: "rabbit=1&dog=89",
+        pawtalVersion: "0.14.1",
       };
       const { eventId } = await dao.insert({ spec });
       const event = await dao.getByEventId({ eventId });

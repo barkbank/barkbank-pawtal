@@ -22,7 +22,8 @@ export class PawtalEventDao {
   stk as "stk",
   x_pathname as "pathname",
   x_vet_account_id as "vetAccountId",
-  x_query_string as "queryString"
+  x_query_string as "queryString",
+  pawtal_version as "pawtalVersion"
   `;
 
   constructor(private db: DbContext) {}
@@ -69,9 +70,10 @@ export class PawtalEventDao {
       stk,
       x_pathname,
       x_query_string,
-      x_vet_account_id
+      x_vet_account_id,
+      pawtal_version
     )
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
     RETURNING event_id as "eventId"
     `;
     const spec = PawtalEventSpecSchema.parse(args.spec);
@@ -86,6 +88,7 @@ export class PawtalEventDao {
       spec.pathname,
       spec.queryString,
       spec.vetAccountId,
+      spec.pawtalVersion,
     ]);
     return PawtalEventIdentifierSchema.parse(res.rows[0]);
   }
