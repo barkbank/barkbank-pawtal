@@ -112,7 +112,6 @@ export class UserActor {
     return getDogStatuses(this, dogId);
   }
 
-  // TODO: Update tests to test UserActor::getDogPreferredVet
   async getDogPreferredVet(args: { dogId: string }) {
     const { dogId } = args;
     // TODO: dogProfileService.getDogPreferredVet
