@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Generate the list of numbers
-numbers=$(git log --oneline | cut -d ' ' -f2 | grep BARK | cut -d ':' -f1 | sort | uniq | cut -d '-' -f2 | sort -n)
+numbers=$(git log --oneline --all | cut -d ' ' -f2 | grep BARK | cut -d ':' -f1 | sort | uniq | cut -d '-' -f2 | sort -n)
 
 # Process the numbers and create the histogram
 echo "$numbers" | awk '
