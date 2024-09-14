@@ -3,7 +3,7 @@ import { BarkContext } from "../bark-context";
 import { PawtalEventDao } from "../daos/pawtal-event-dao";
 import { PawtalEventType } from "../enums/pawtal-event-type";
 import { PawtalEventSpec } from "../models/event-models";
-import { VERSION } from "@/app/_lib/version";
+import { VERSION } from "@/lib/version";
 
 export class PawtalEventService {
   private dao: PawtalEventDao;
