@@ -1,6 +1,4 @@
-import {
-  givenUserActor, mockDogProfileSpec
-} from "../_fixtures";
+import { givenUserActor, mockDogProfileSpec } from "../_fixtures";
 import { DogStatuses } from "@/lib/bark/models/dog-statuses";
 import { PARTICIPATION_STATUS } from "@/lib/bark/enums/participation-status";
 import { MEDICAL_STATUS } from "@/lib/bark/enums/medical-status";
