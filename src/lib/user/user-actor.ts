@@ -82,7 +82,7 @@ export class UserActor {
       dogId,
     });
     if (error !== undefined) {
-      return error;
+      return Err(error);
     }
     if (result.userId !== userId) {
       return Err(CODE.ERROR_DOG_NOT_FOUND);
