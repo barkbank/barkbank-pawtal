@@ -2,7 +2,6 @@
 
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
-import { updateDogProfile } from "@/lib/user/actions/update-dog-profile";
 import { DogProfileSpec } from "@/lib/bark/models/dog-profile-models";
 import { CODE } from "@/lib/utilities/bark-code";
 import { revalidatePath } from "next/cache";
@@ -24,9 +23,9 @@ export async function postDogProfileUpdate(args: {
   if (actor === null) {
     return CODE.ERROR_NOT_LOGGED_IN;
   }
-  const res = await updateDogProfile(actor, dogId, dogProfile);
-  if (res !== CODE.OK) {
-    return res;
+  const { error } = await actor.updateDogProfile({ dogId, spec: dogProfile });
+  if (error !== undefined) {
+    return error;
   }
   revalidatePath(RoutePath.USER_MY_PETS, "layout");
   return CODE.OK;

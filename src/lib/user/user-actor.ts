@@ -69,4 +69,15 @@ export class UserActor {
     const res = await dogProfileService.getDogProfile({ userId, dogId });
     return res;
   }
+
+  async updateDogProfile(args: { dogId: string; spec: DogProfileSpec }) {
+    const { dogId, spec } = args;
+    const { userId, dogProfileService } = this.getParams();
+    const res = await dogProfileService.updateDogProfile({
+      userId,
+      dogId,
+      spec,
+    });
+    return res;
+  }
 }
