@@ -598,6 +598,8 @@ export async function fetchDogOwnerId(
   return res.rows[0];
 }
 
+// TODO: Remove this when no longer used.
+// - It is used by tests for addMyDog, updateDogProfile, and updateSubProfile
 export async function fetchDogInfo(
   dbPool: Pool,
   dogId: string,
@@ -610,7 +612,7 @@ export async function fetchDogInfo(
   const { userId } = await fetchDogOwnerId(dbPool, dogId);
   const actor = getUserActor(dbPool, userId);
   const { result } = await actor.getDogProfile({ dogId });
-  const dogProfile = result!;
+  const dogProfile = DogProfileSpecSchema.parse(result);
   const subProfile = toSubProfile(dogProfile);
   const { profileModificationTime } = await _getProfileModificationTime(
     dbPool,
