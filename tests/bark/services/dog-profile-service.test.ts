@@ -41,7 +41,7 @@ describe("DogProfileService", () => {
       const service = new DogProfileService({ context });
       const res1 = await service.addDogProfile({ userId, spec });
       const { dogId } = res1.result!;
-      const res2 = await service.getDogProfile({ userId, dogId });
+      const res2 = await service.getDogProfile({ dogId });
       const retrieved = DogProfileSpecSchema.parse(res2.result);
       expect(retrieved).toMatchObject(spec);
       expect(spec).toMatchObject(retrieved);
@@ -94,7 +94,7 @@ describe("DogProfileService", () => {
           spec: spec2,
         });
         expect(resUpdate.error).toBeUndefined();
-        const resGet = await service.getDogProfile({ userId, dogId });
+        const resGet = await service.getDogProfile({ dogId });
         const retrieved = DogProfileSpecSchema.parse(resGet.result);
         expect(retrieved).toMatchObject(spec2);
         expect(spec2).toMatchObject(retrieved);
@@ -160,7 +160,7 @@ describe("DogProfileService", () => {
           spec: spec2,
         });
         expect(resUpdate.error).toBeUndefined();
-        const resGet = await service.getDogProfile({ userId, dogId });
+        const resGet = await service.getDogProfile({ dogId });
         const retrieved = SubProfileSpecSchema.parse(resGet.result);
         expect(retrieved).toMatchObject(spec2);
         expect(spec2).toMatchObject(retrieved);
@@ -186,7 +186,7 @@ describe("DogProfileService", () => {
         context,
         reportOverrides: { dogWeightKg: 1111 },
       });
-      const resGet = await service.getDogProfile({ userId, dogId });
+      const resGet = await service.getDogProfile({ dogId });
       expect(resGet.result?.dogWeightKg).toEqual(1111);
     });
   });

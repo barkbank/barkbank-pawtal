@@ -45,20 +45,16 @@ export class DogProfileService {
   }
 
   async getDogProfile(args: {
-    userId: string;
     dogId: string;
   }): Promise<
     Result<DogProfile, typeof CODE.FAILED | typeof CODE.ERROR_DOG_NOT_FOUND>
   > {
-    const { userId, dogId } = args;
+    const { dogId } = args;
     return dbTransaction(this.pool(), async (conn) => {
       const dogDao = new EncryptedDogDao(conn);
       const preferenceDao = new VetPreferenceDao(conn);
       const dog = await dogDao.get({ dogId });
       if (dog === null) {
-        return Err(CODE.ERROR_DOG_NOT_FOUND);
-      }
-      if (dog.userId !== userId) {
         return Err(CODE.ERROR_DOG_NOT_FOUND);
       }
       const preferences = await preferenceDao.listByDog({ dogId });

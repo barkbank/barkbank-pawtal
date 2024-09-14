@@ -15,6 +15,8 @@ import { getDogStatuses } from "./actions/get-dog-statuses";
 import { getDogPreferredVet } from "./actions/get-dog-preferred-vet";
 import { opFetchDogAppointmentsByDogId } from "../bark/operations/op-fetch-dog-appointments-by-dog-id";
 import { opFetchReportsByDogId } from "../bark/operations/op-fetch-reports-by-dog-id";
+import { Err, Ok } from "../utilities/result";
+import { CODE } from "../utilities/bark-code";
 
 export type UserActorConfig = {
   dbPool: Pool;
@@ -74,8 +76,16 @@ export class UserActor {
   async getDogProfile(args: { dogId: string }) {
     const { dogId } = args;
     const { userId, dogProfileService } = this.getParams();
-    const res = await dogProfileService.getDogProfile({ userId, dogId });
-    return res;
+    const { result, error } = await dogProfileService.getDogProfile({
+      dogId,
+    });
+    if (error !== undefined) {
+      return error;
+    }
+    if (result.userId !== userId) {
+      return Err(CODE.ERROR_DOG_NOT_FOUND);
+    }
+    return Ok(result);
   }
 
   async updateDogProfile(args: { dogId: string; spec: DogProfileSpec }) {
