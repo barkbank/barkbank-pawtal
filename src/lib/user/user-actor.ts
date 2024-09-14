@@ -5,9 +5,7 @@ import { EncryptionService } from "../services/encryption";
 import { BarkContext } from "../bark/bark-context";
 import { UserAccountService } from "../bark/services/user-account-service";
 import { UserAccount, UserAccountUpdate } from "../bark/models/user-models";
-import { DogProfile, DogProfileSpec } from "../bark/models/dog-profile-models";
-import { Err, Result } from "../utilities/result";
-import { CODE } from "../utilities/bark-code";
+import { DogProfileSpec } from "../bark/models/dog-profile-models";
 import { DogProfileService } from "../bark/services/dog-profile-service";
 
 export type UserActorConfig = {
