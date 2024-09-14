@@ -12,6 +12,8 @@ export type VetActorConfig = {
   dogMapper: DogMapper;
   textEncryptionService: EncryptionService;
   context: BarkContext;
+  // TODO: At some point there should only be services in VetActorConfig and the above should be removed.
+
   vetAccountService: VetAccountService;
 };
 

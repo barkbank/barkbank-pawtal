@@ -24,6 +24,8 @@ export type UserActorConfig = {
   dogMapper: DogMapper;
   textEncryptionService: EncryptionService;
   context: BarkContext;
+  // TODO: At some point there should only be services in UserActorConfig and the above should be removed.
+
   userAccountService: UserAccountService;
   dogProfileService: DogProfileService;
 };
