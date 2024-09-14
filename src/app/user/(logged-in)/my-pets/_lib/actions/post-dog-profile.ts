@@ -19,7 +19,7 @@ export async function postDogProfile(
   if (actor === null) {
     return Err(CODE.ERROR_NOT_LOGGED_IN);
   }
-  const { result, error } = await actor.addDogProfile({spec: dogProfile})
+  const { result, error } = await actor.addDogProfile({ spec: dogProfile });
   if (error !== undefined) {
     return Err(CODE.FAILED);
   }

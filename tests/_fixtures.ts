@@ -74,7 +74,6 @@ import {
   DogProfileSpecSchema,
 } from "@/lib/bark/models/dog-profile-models";
 import { SubProfileSpec } from "@/lib/bark/models/dog-profile-models";
-import { getDogProfile } from "@/lib/user/actions/get-dog-profile";
 import { sprintf } from "sprintf-js";
 import { toSubProfile } from "@/lib/bark/mappers/to-sub-profile";
 import { BarkContext } from "@/lib/bark/bark-context";
@@ -610,7 +609,7 @@ export async function fetchDogInfo(
 }> {
   const { userId } = await fetchDogOwnerId(dbPool, dogId);
   const actor = getUserActor(dbPool, userId);
-  const { result } = await getDogProfile(actor, dogId);
+  const { result } = await actor.getDogProfile({ dogId });
   const dogProfile = result!;
   const subProfile = toSubProfile(dogProfile);
   const { profileModificationTime } = await _getProfileModificationTime(

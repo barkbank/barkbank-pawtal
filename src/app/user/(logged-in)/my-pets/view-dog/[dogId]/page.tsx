@@ -1,7 +1,6 @@
 import { getAuthenticatedUserActor } from "@/lib/auth";
 import { RoutePath } from "@/lib/route-path";
 import { getDogPreferredVet } from "@/lib/user/actions/get-dog-preferred-vet";
-import { getDogProfile } from "@/lib/user/actions/get-dog-profile";
 import { getDogStatuses } from "@/lib/user/actions/get-dog-statuses";
 import { UserActor } from "@/lib/user/user-actor";
 import { CODE } from "@/lib/utilities/bark-code";
@@ -53,7 +52,7 @@ async function getDogViewerData(
     resDogPreferredVet,
     resDogReports,
   ] = await Promise.all([
-    getDogProfile(actor, dogId),
+    actor.getDogProfile({ dogId }),
     getDogStatuses(actor, dogId),
     opFetchDogAppointmentsByDogId(context, {
       dogId,
