@@ -102,36 +102,42 @@ export class UserActor {
   }
 
   async getMyDogs() {
-    // TODO: dogProfileService.getMyDogs
+    // TODO: dogProfileService.getMyDogs - there is also a listDogProfiles
     return getMyPets(this);
   }
 
   async getDogStatuses(args: { dogId: string }) {
     const { dogId } = args;
+    // TODO: Use DogProfileService to check dog ownership
     // TODO: dogProfileService.getDogStatuses
     return getDogStatuses(this, dogId);
   }
 
   async getDogPreferredVet(args: { dogId: string }) {
     const { dogId } = args;
+    // TODO: Use DogProfileService to check dog ownership
     // TODO: dogProfileService.getDogPreferredVet
     return getDogPreferredVet(this, dogId);
   }
 
+  // TODO: Test UserActor::getDogAppointments
   async getDogAppointments(args: { dogId: string }) {
     const { dogId } = args;
     const { context, userId } = this.getParams();
-    // TODO: AppointmentService
+    // TODO: Use DogProfileService to check dog ownership
+    // TODO: Impl a AppointmentService to get appointments
     return opFetchDogAppointmentsByDogId(context, {
       dogId,
       actorUserId: userId,
     });
   }
 
+  // TODO: Test UserActor::getDogReports
   async getDogReports(args: { dogId: string }) {
     const { dogId } = args;
     const { context, userId } = this.getParams();
-    // TODO: ReportService
+    // TODO: Use DogProfileService to check dog ownership
+    // TODO: Impl a ReportService to get reports
     return opFetchReportsByDogId(context, { dogId, actorUserId: userId });
   }
 }
