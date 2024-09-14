@@ -85,6 +85,11 @@ import { VetClinicDao } from "@/lib/bark/daos/vet-clinic-dao";
 import { AdminAccountService } from "@/lib/bark/services/admin-account-service";
 import { dateAgo } from "./_time_helpers";
 import { DogProfileService } from "@/lib/bark/services/dog-profile-service";
+import {
+  UserAccountSpec,
+  UserAccountSpecSchema,
+} from "@/lib/bark/models/user-models";
+import { USER_TITLE } from "@/lib/bark/enums/user-title";
 
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
@@ -193,6 +198,38 @@ export function getUserAccountService(dbPool: Pool) {
 export function getDogProfileService(dbPool: Pool) {
   const context = getBarkContext(dbPool);
   return new DogProfileService({ context });
+}
+
+export function mockUserAccountSpec(
+  overrides?: Partial<UserAccountSpec>,
+): UserAccountSpec {
+  const base: UserAccountSpec = {
+    userEmail: `mock.user@mock.com`,
+    userName: `Mok Yu Ser`,
+    userPhoneNumber: `1800 130 133`,
+    userResidency: USER_RESIDENCY.SINGAPORE,
+    userTitle: USER_TITLE.PREFER_NOT_TO_SAY,
+  };
+  const out = { ...base, ...overrides };
+  return UserAccountSpecSchema.parse(out);
+}
+
+export async function givenUserActor(args: {
+  idx: number;
+  context: BarkContext;
+}) {
+  const { idx, context } = args;
+  const { dbPool } = context;
+  const userAccountService = getUserAccountService(dbPool);
+  const spec = mockUserAccountSpec({
+    userEmail: `user.${idx}@given.com`,
+  });
+  const resCreate = await userAccountService.create({ spec });
+  if (resCreate.error !== undefined) {
+    throw new Error(resCreate.error);
+  }
+  const { userId } = resCreate.result;
+  return getUserActor(dbPool, userId);
 }
 
 export function getUserActor(dbPool: Pool, userId: string): UserActor {
