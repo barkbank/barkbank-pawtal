@@ -2,7 +2,7 @@ import { Pool } from "pg";
 import { EncryptionService } from "../services/encryption";
 import { UserMapper } from "../data/user-mapper";
 import { DogMapper } from "../data/dog-mapper";
-import { VetLogin } from "../bark/models/vet-models";
+import { VetClinic, VetLogin } from "../bark/models/vet-models";
 import { BarkContext } from "../bark/bark-context";
 import { VetAccountService } from "../bark/services/vet-account-service";
 
@@ -37,6 +37,11 @@ export class VetActor {
     };
   }
 
+  getVetClinic(): VetClinic {
+    return this.args.vetLogin.clinic;
+  }
+
+  // TODO: How can this be undefined?
   getLogin(): VetLogin | undefined {
     return this.args.vetLogin;
   }

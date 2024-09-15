@@ -143,6 +143,12 @@ export class EncryptedDogDao {
     return RowSchema.parse(res.rows[0]);
   }
 
+  async isOwner(args: { userId: string; dogId: string }): Promise<boolean> {
+    const { userId, dogId } = args;
+    const owner = await this.getOwner({ dogId });
+    return owner !== null && owner.userId === userId;
+  }
+
   async listByUser(args: { userId: string }): Promise<EncryptedDog[]> {
     const { userId } = args;
     const sql = `

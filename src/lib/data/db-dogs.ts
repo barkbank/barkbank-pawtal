@@ -2,6 +2,8 @@ import { DbContext, dbQuery, toCamelCaseRow } from "./db-utils";
 import { DogRecord, DogGen, DogSpec } from "./db-models";
 import { ParticipationStatus } from "../bark/enums/participation-status";
 
+// TODO: Can we remove all of these?
+
 const DOG_COLUMNS = [
   "dog_id",
   "dog_creation_time",
