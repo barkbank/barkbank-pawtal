@@ -115,7 +115,6 @@ export class UserActor {
     return dogProfileService.getDogPreferredVet({ userId, dogId });
   }
 
-  // WIP: Test UserActor::getDogAppointments
   async getDogAppointments(args: { dogId: string }) {
     const { dogId } = args;
     const { userId, dogProfileService } = this.getParams();
