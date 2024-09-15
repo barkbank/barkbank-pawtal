@@ -90,6 +90,10 @@ import {
   UserAccountSpecSchema,
 } from "@/lib/bark/models/user-models";
 import { USER_TITLE } from "@/lib/bark/enums/user-title";
+import {
+  VetClinicSpec,
+  VetClinicSpecSchema,
+} from "@/lib/bark/models/vet-models";
 
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
@@ -429,6 +433,44 @@ export async function getVetActor(
   const factory = getVetActorFactory(dbPool);
   const actor = await factory.getVetActor(vetEmail);
   return actor!;
+}
+
+export function mockVetClinicSpec(
+  overrides?: Partial<VetClinicSpec>,
+): VetClinicSpec {
+  const base: VetClinicSpec = {
+    vetEmail: "vet.clinic@mock.com",
+    vetName: "Mock Vet Name",
+    vetAddress: "123 Mock Street, Mock Town, Mockington",
+    vetPhoneNumber: "1612 0808",
+  };
+  const out = { ...base, ...overrides };
+  return VetClinicSpecSchema.parse(out);
+}
+
+export async function givenVetActor(args: {
+  idx: number;
+  context: BarkContext;
+}): Promise<VetActor> {
+  const { idx, context } = args;
+  const { dbPool } = context;
+  const vetAccountService = getVetAccountService(dbPool);
+  const spec = mockVetClinicSpec({
+    vetEmail: `given.vet.${idx}@given.com`,
+    vetName: `Given Vet ${idx}`,
+  });
+  const resCreate = await vetAccountService.createVetClinic({ spec });
+  if (resCreate.error !== undefined) {
+    throw new Error(
+      `Failed to create mock vet account from spec: ${JSON.stringify(spec)}`,
+    );
+  }
+  const factory = getVetActorFactory(dbPool);
+  const actor = await factory.getVetActor(spec.vetEmail);
+  if (actor === null) {
+    throw new Error(`Failed to get mock vet by email ${spec.vetEmail}`);
+  }
+  return actor;
 }
 
 export async function insertVet(idx: number, dbPool: Pool): Promise<Vet> {

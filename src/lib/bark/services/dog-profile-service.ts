@@ -23,6 +23,11 @@ import { isEmpty } from "lodash";
 import { EncryptedReportDao } from "../daos/encrypted-report-dao";
 import { DogStatuses } from "../models/dog-statuses";
 import { DogStatusesDao } from "../daos/dog-statuses-dao";
+import {
+  DogPreferredVet,
+  DogPreferredVetSchema,
+} from "../models/dog-preferred-vet";
+import { VetClinicDao } from "../daos/vet-clinic-dao";
 
 /**
  * Service for users to manage their dog profiles.
@@ -120,11 +125,8 @@ export class DogProfileService {
       const dogDao = new EncryptedDogDao(conn);
       const prefDao = new VetPreferenceDao(conn);
       const reportDao = new EncryptedReportDao(conn);
-      const resOwner = await dogDao.getOwner({ dogId });
-      if (resOwner === null) {
-        return Err(CODE.ERROR_DOG_NOT_FOUND);
-      }
-      if (resOwner.userId !== userId) {
+      const isOwner = await dogDao.isOwner({ userId, dogId });
+      if (!isOwner) {
         return Err(CODE.ERROR_DOG_NOT_FOUND);
       }
       const { reportCount } = await reportDao.getReportCountByDog({ dogId });
@@ -159,11 +161,8 @@ export class DogProfileService {
       const dogDao = new EncryptedDogDao(conn);
       const prefDao = new VetPreferenceDao(conn);
       const reportDao = new EncryptedReportDao(conn);
-      const resOwner = await dogDao.getOwner({ dogId });
-      if (resOwner === null) {
-        return Err(CODE.ERROR_DOG_NOT_FOUND);
-      }
-      if (resOwner.userId !== userId) {
+      const isOwner = await dogDao.isOwner({ userId, dogId });
+      if (!isOwner) {
         return Err(CODE.ERROR_DOG_NOT_FOUND);
       }
       const { reportCount } = await reportDao.getReportCountByDog({ dogId });
@@ -190,11 +189,8 @@ export class DogProfileService {
     return dbTransaction(this.pool(), async (conn) => {
       const dogDao = new EncryptedDogDao(conn);
       const statusDao = new DogStatusesDao(conn);
-      const resOwner = await dogDao.getOwner({ dogId });
-      if (resOwner === null) {
-        return Err(CODE.ERROR_DOG_NOT_FOUND);
-      }
-      if (resOwner.userId !== userId) {
+      const isOwner = await dogDao.isOwner({ userId, dogId });
+      if (!isOwner) {
         return Err(CODE.ERROR_DOG_NOT_FOUND);
       }
       const resStatus = await statusDao.getDogStatuses({ dogId });
@@ -202,6 +198,48 @@ export class DogProfileService {
         return Err(CODE.ERROR_DOG_NOT_FOUND);
       }
       return Ok(resStatus);
+    });
+  }
+
+  async getDogPreferredVet(args: {
+    userId: string;
+    dogId: string;
+  }): Promise<
+    Result<
+      DogPreferredVet | null,
+      | typeof CODE.FAILED
+      | typeof CODE.ERROR_DOG_NOT_FOUND
+      | typeof CODE.ERROR_MORE_THAN_ONE_PREFERRED_VET
+    >
+  > {
+    const { userId, dogId } = args;
+    return dbTransaction(this.pool(), async (conn) => {
+      const dogDao = new EncryptedDogDao(conn);
+      const isOwner = await dogDao.isOwner({ userId, dogId });
+      if (!isOwner) {
+        return Err(CODE.ERROR_DOG_NOT_FOUND);
+      }
+
+      const prefDao = new VetPreferenceDao(conn);
+      const preferences = await prefDao.listByDog({ dogId });
+      if (preferences.length === 0) {
+        return Ok(null);
+      }
+      if (preferences.length > 1) {
+        return Err(CODE.ERROR_MORE_THAN_ONE_PREFERRED_VET);
+      }
+      const { vetId } = preferences[0];
+
+      const vetDao = new VetClinicDao(conn);
+      const clinic = await vetDao.getByVetId({ vetId });
+      if (clinic === null) {
+        return Ok(null);
+      }
+      const out: DogPreferredVet = {
+        dogId,
+        ...clinic,
+      };
+      return Ok(DogPreferredVetSchema.parse(out));
     });
   }
 

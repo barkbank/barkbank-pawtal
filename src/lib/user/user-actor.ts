@@ -11,7 +11,6 @@ import {
 } from "../bark/models/dog-profile-models";
 import { DogProfileService } from "../bark/services/dog-profile-service";
 import { getMyPets } from "./actions/get-my-pets";
-import { getDogPreferredVet } from "./actions/get-dog-preferred-vet";
 import { opFetchDogAppointmentsByDogId } from "../bark/operations/op-fetch-dog-appointments-by-dog-id";
 import { opFetchReportsByDogId } from "../bark/operations/op-fetch-reports-by-dog-id";
 
@@ -113,17 +112,15 @@ export class UserActor {
 
   async getDogPreferredVet(args: { dogId: string }) {
     const { dogId } = args;
-    // TODO: Use DogProfileService to check dog ownership
-    // TODO: dogProfileService.getDogPreferredVet
-    return getDogPreferredVet(this, dogId);
+    const { userId, dogProfileService } = this.getParams();
+    return dogProfileService.getDogPreferredVet({ userId, dogId });
   }
 
   // TODO: Test UserActor::getDogAppointments
   async getDogAppointments(args: { dogId: string }) {
     const { dogId } = args;
     const { context, userId } = this.getParams();
-    // TODO: Use DogProfileService to check dog ownership
-    // TODO: Impl a AppointmentService to get appointments
+    // TODO: dogProfileService.getDogAppointments({userId, dogId})
     return opFetchDogAppointmentsByDogId(context, {
       dogId,
       actorUserId: userId,
