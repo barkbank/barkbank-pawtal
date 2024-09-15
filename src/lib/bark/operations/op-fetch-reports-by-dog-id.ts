@@ -2,10 +2,10 @@ import { CODE } from "@/lib/utilities/bark-code";
 import { BarkContext } from "../bark-context";
 import { BarkReport } from "../models/report-models";
 import { Err, Ok, Result } from "@/lib/utilities/result";
-import { selectReportsByDogId } from "../queries/select-reports-by-dog-id";
 import { toBarkReport } from "../mappers/to-bark-report";
 import { dbRelease } from "@/lib/data/db-utils";
 import { selectOwnerByDogId } from "../queries/select-owner-by-dog-id";
+import { EncryptedReportDao } from "../daos/encrypted-report-dao";
 
 export async function opFetchReportsByDogId(
   context: BarkContext,
@@ -31,7 +31,10 @@ export async function opFetchReportsByDogId(
         return Err(CODE.ERROR_WRONG_OWNER);
       }
     }
-    const encryptedReports = await selectReportsByDogId(conn, { dogId });
+    const dao = new EncryptedReportDao(conn);
+    const encryptedReports = await dao.getEncryptedBarkReportsByDogId({
+      dogId,
+    });
     const reports = await Promise.all(
       encryptedReports.map((encrypted) => toBarkReport(context, encrypted)),
     );
