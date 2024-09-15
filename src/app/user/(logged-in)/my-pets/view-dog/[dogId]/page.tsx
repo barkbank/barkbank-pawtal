@@ -33,7 +33,6 @@ async function getDogViewerData(
     DogViewerData,
     | typeof CODE.ERROR_DOG_NOT_FOUND
     | typeof CODE.ERROR_WRONG_OWNER
-    | typeof CODE.DB_QUERY_FAILURE
     | typeof CODE.ERROR_MORE_THAN_ONE_PREFERRED_VET
     | typeof CODE.FAILED
   >
