@@ -1,6 +1,6 @@
 import { CODE } from "@/lib/utilities/bark-code";
-import { withBarkContext } from "../_context";
-import { givenDog, givenVet } from "../_given";
+import { withBarkContext } from "../bark/_context";
+import { givenDog, givenVet } from "../bark/_given";
 import { BarkContext } from "@/lib/bark/bark-context";
 import {
   SINGAPORE_TIME_ZONE,
@@ -8,13 +8,8 @@ import {
 } from "@/lib/utilities/bark-time";
 import { dbQuery } from "@/lib/data/db-utils";
 import { insertAppointment } from "@/lib/bark/queries/insert-appointment";
-import {
-  getUserActor,
-  givenUserActor,
-  mockDogProfileSpec,
-} from "../../_fixtures";
+import { getUserActor, givenUserActor, mockDogProfileSpec } from "../_fixtures";
 
-// WIP: Move it into tests/user/user-actor-get-dog-appointments.test.ts
 describe("UserActor::getDogAppointments", () => {
   it("returns empty list when there are no appointments", async () => {
     await withBarkContext(async ({ context }) => {
