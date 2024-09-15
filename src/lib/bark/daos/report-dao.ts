@@ -104,6 +104,22 @@ export class ReportDao {
     return RowSchema.parse(res.rows[0]);
   }
 
+  async getEncryptedBarkReport(args: {
+    reportId: string;
+  }): Promise<EncryptedBarkReport | null> {
+    const { reportId } = args;
+    const sql = `
+    SELECT *
+    FROM (${this.barkReportQuery}) as tReport
+    WHERE tReport."reportId" = $1
+    `;
+    const res = await dbQuery<EncryptedBarkReport>(this.db, sql, [reportId]);
+    if (res.rows.length === 0) {
+      return null;
+    }
+    return EncryptedBarkReportSchema.parse(res.rows[0]);
+  }
+
   async getEncryptedBarkReportsByDogId(args: {
     dogId: string;
   }): Promise<EncryptedBarkReport[]> {

@@ -2,10 +2,10 @@ import { BarkReport } from "../models/report-models";
 import { CODE } from "@/lib/utilities/bark-code";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { BarkContext } from "@/lib/bark/bark-context";
-import { selectReport } from "../queries/select-report";
 import { toBarkReport } from "../mappers/to-bark-report";
 import { selectOwnerByDogId } from "../queries/select-owner-by-dog-id";
 import { dbRelease } from "@/lib/data/db-utils";
+import { ReportDao } from "../daos/report-dao";
 
 /**
  * Fetch report by ID
@@ -26,7 +26,8 @@ export async function opFetchReport(
   const { reportId, actorVetId, actorUserId } = args;
   const conn = await dbPool.connect();
   try {
-    const encryptedReport = await selectReport(conn, {
+    const reportDao = new ReportDao(conn);
+    const encryptedReport = await reportDao.getEncryptedBarkReport({
       reportId,
     });
     if (encryptedReport === null) {
