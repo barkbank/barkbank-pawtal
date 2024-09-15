@@ -15,7 +15,7 @@ import {
 import { CODE } from "@/lib/utilities/bark-code";
 import { toDogEncryptedOii } from "../mappers/to-dog-encrypted-oii";
 import { toDogOii } from "../mappers/to-dog-oii";
-import { Pool, PoolClient } from "pg";
+import { Pool } from "pg";
 import { dbTransaction } from "@/lib/data/db-utils";
 import { EncryptedDogDao } from "../daos/encrypted-dog-dao";
 import { VetPreferenceDao } from "../daos/vet-preference-dao";
