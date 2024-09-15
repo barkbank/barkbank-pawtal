@@ -3,7 +3,7 @@ import { BarkContext } from "../bark-context";
 import { BarkReport } from "../models/report-models";
 import { CODE } from "@/lib/utilities/bark-code";
 import { toBarkReport } from "../mappers/to-bark-report";
-import { selectReportsByVetId } from "../queries/select-reports-by-vet-id";
+import { ReportDao } from "../daos/report-dao";
 
 export async function opFetchReportsByVetId(
   context: BarkContext,
@@ -12,7 +12,10 @@ export async function opFetchReportsByVetId(
   const { dbPool } = context;
   const { vetId } = args;
   try {
-    const encryptedReports = await selectReportsByVetId(dbPool, { vetId });
+    const dao = new ReportDao(dbPool);
+    const encryptedReports = await dao.getEncryptedBarkReportsByVetId({
+      vetId,
+    });
     const futureReports = encryptedReports.map(async (encryptedReport) =>
       toBarkReport(context, encryptedReport),
     );

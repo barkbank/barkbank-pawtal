@@ -1,4 +1,4 @@
-// WIP: Move this into EncryptedReportDao
+// WIP: Delete when no longer used.
 /**
  * This projects DB tables into the fields for EncryptedBarkReport.
  */

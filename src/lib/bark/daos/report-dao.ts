@@ -117,4 +117,18 @@ export class ReportDao {
     const res = await dbQuery<EncryptedBarkReport>(this.db, sql, [dogId]);
     return z.array(EncryptedBarkReportSchema).parse(res.rows);
   }
+
+  async getEncryptedBarkReportsByVetId(args: {
+    vetId: string;
+  }): Promise<EncryptedBarkReport[]> {
+    const { vetId } = args;
+    const sql = `
+    SELECT *
+    FROM (${this.barkReportQuery}) as tReport
+    WHERE tReport."vetId" = $1
+    ORDER BY tReport."visitTime" DESC
+    `;
+    const res = await dbQuery<EncryptedBarkReport>(this.db, sql, [vetId]);
+    return z.array(EncryptedBarkReportSchema).parse(res.rows);
+  }
 }
