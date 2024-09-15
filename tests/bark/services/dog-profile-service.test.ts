@@ -19,7 +19,7 @@ import { CODE } from "@/lib/utilities/bark-code";
 import { dbTransaction } from "@/lib/data/db-utils";
 import { Ok } from "@/lib/utilities/result";
 import { CallDao } from "@/lib/bark/daos/call-dao";
-import { EncryptedReportDao } from "@/lib/bark/daos/encrypted-report-dao";
+import { ReportDao } from "@/lib/bark/daos/report-dao";
 import {
   EncryptedReportSpec,
   EncryptedReportSpecSchema,
@@ -204,7 +204,7 @@ async function _attachReportToDog(args: {
     const { callId } = await callDao.insert({
       spec: { dogId, vetId, callOutcome: "REPORTED" },
     });
-    const reportDao = new EncryptedReportDao(conn);
+    const reportDao = new ReportDao(conn);
     const spec = _mockEncryptedReportSpec({
       ...reportOverrides,
       callId,
@@ -215,7 +215,7 @@ async function _attachReportToDog(args: {
     return Ok({ reportId, callId });
   });
   expect(res.error).toBeUndefined();
-  const dao = new EncryptedReportDao(context.dbPool);
+  const dao = new ReportDao(context.dbPool);
   const { reportCount } = await dao.getReportCountByDog({ dogId });
   expect(reportCount).toEqual(1);
   return res;

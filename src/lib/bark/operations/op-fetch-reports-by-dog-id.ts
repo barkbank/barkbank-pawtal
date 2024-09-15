@@ -5,7 +5,7 @@ import { Err, Ok, Result } from "@/lib/utilities/result";
 import { toBarkReport } from "../mappers/to-bark-report";
 import { dbRelease } from "@/lib/data/db-utils";
 import { selectOwnerByDogId } from "../queries/select-owner-by-dog-id";
-import { EncryptedReportDao } from "../daos/encrypted-report-dao";
+import { ReportDao } from "../daos/report-dao";
 
 export async function opFetchReportsByDogId(
   context: BarkContext,
@@ -31,7 +31,7 @@ export async function opFetchReportsByDogId(
         return Err(CODE.ERROR_WRONG_OWNER);
       }
     }
-    const dao = new EncryptedReportDao(conn);
+    const dao = new ReportDao(conn);
     const encryptedReports = await dao.getEncryptedBarkReportsByDogId({
       dogId,
     });

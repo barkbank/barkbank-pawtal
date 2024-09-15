@@ -6,7 +6,7 @@ import {
   EncryptedBarkReportSchema,
 } from "../models/encrypted-bark-report";
 
-export class EncryptedReportDao {
+export class ReportDao {
   private barkReportQuery = `
   SELECT
     tReport.report_id as "reportId",
