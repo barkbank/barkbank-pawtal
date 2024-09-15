@@ -44,17 +44,17 @@ describe("UserActor::getDogAppointments", () => {
       const v3 = await givenVet(context, { vetIdx: 3 });
 
       // And appointments a1, a2, a3, in that order, vets v1, v2, and v3.
-      const a1 = await addAppointment(context, {
+      const a1 = await _addAppointment(context, {
         dogId: d1.dogId,
         vetId: v1.vetId,
         creationTime: parseCommonDate("10 May 2020", SINGAPORE_TIME_ZONE),
       });
-      const a2 = await addAppointment(context, {
+      const a2 = await _addAppointment(context, {
         dogId: d1.dogId,
         vetId: v2.vetId,
         creationTime: parseCommonDate("10 May 2021", SINGAPORE_TIME_ZONE),
       });
-      const a3 = await addAppointment(context, {
+      const a3 = await _addAppointment(context, {
         dogId: d1.dogId,
         vetId: v2.vetId,
         creationTime: parseCommonDate("10 May 2022", SINGAPORE_TIME_ZONE),
@@ -106,7 +106,7 @@ describe("UserActor::getDogAppointments", () => {
 });
 
 // TODO: Remove this when the test adds appointments using vet actor
-async function addAppointment(
+async function _addAppointment(
   context: BarkContext,
   args: {
     dogId: string;
