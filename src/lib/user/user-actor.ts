@@ -120,8 +120,7 @@ export class UserActor {
   async getDogAppointments(args: { dogId: string }) {
     const { dogId } = args;
     const { context, userId } = this.getParams();
-    // TODO: Use DogProfileService to check dog ownership
-    // TODO: Impl a AppointmentService to get appointments
+    // TODO: dogProfileService.getDogAppointments({userId, dogId})
     return opFetchDogAppointmentsByDogId(context, {
       dogId,
       actorUserId: userId,
