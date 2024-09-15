@@ -9,9 +9,22 @@ const RowSchema = z.object({
   reportId: z.string(),
 });
 
-// WIP: Caller of this should call ReportDao. Note that this is a little
-//     different. It uses EncryptedBarkReportData, not EncryptedReportSpec. What
-//     is the difference?
+/*
+
+WIP: Caller of this should call ReportDao.
+
+- Note that this is a little different. It uses EncryptedBarkReportData (DATA),
+  not EncryptedReportSpec (SPEC). What is the difference?
+
+- Well, the difference is that SPEC has callId, dogId, and vetId. DATA does not
+  have these. As you can see in the insertReport function below, the
+  appointmentId is provided. This is the same as callId.
+
+- In order to have a easy time refactoring, I think we should adopt DATA and
+  refactor out SPEC.
+
+*/
+
 export async function insertReport(
   dbContext: DbContext,
   args: {
