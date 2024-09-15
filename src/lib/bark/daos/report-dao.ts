@@ -5,7 +5,21 @@ import {
   EncryptedBarkReport,
   EncryptedBarkReportSchema,
 } from "../models/encrypted-bark-report";
+import {
+  BarkReportMetadata,
+  BarkReportMetadataSchema,
+} from "../models/bark-report-metadata";
 
+/**
+ * Data Access Object
+ *
+ * Input Types:
+ * - EncryptedReportSpec
+ *
+ * Output Types:
+ * - EncryptedBarkReport
+ * - BarkReportMetadata
+ */
 export class ReportDao {
   private barkReportQuery = `
   SELECT
@@ -102,6 +116,28 @@ export class ReportDao {
     `;
     const res = await dbQuery<Row>(this.db, sql, [dogId]);
     return RowSchema.parse(res.rows[0]);
+  }
+
+  async getMetadata(args: {
+    reportId: string;
+  }): Promise<BarkReportMetadata | null> {
+    const { reportId } = args;
+    const sql = `
+    SELECT
+      report_id as "reportId",
+      report_creation_time as "reportCreationTime",
+      report_modification_time as "reportModificationTime",
+      call_id as "appointmentId",
+      dog_id as "dogId",
+      vet_id as "vetId"
+    FROM reports
+    WHERE report_id = $1
+    `;
+    const res = await dbQuery<BarkReportMetadata>(this.db, sql, [reportId]);
+    if (res.rows.length === 0) {
+      return null;
+    }
+    return BarkReportMetadataSchema.parse(res.rows[0]);
   }
 
   async getEncryptedBarkReport(args: {

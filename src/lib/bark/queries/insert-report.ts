@@ -9,7 +9,9 @@ const RowSchema = z.object({
   reportId: z.string(),
 });
 
-// WIP: Caller of this should call ReportDao. Note that this is a little different.
+// WIP: Caller of this should call ReportDao. Note that this is a little
+//     different. It uses EncryptedBarkReportData, not EncryptedReportSpec. What
+//     is the difference?
 export async function insertReport(
   dbContext: DbContext,
   args: {

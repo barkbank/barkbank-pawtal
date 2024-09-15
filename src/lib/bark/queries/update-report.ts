@@ -4,6 +4,7 @@ import {
   EncryptedBarkReportDataSchema,
 } from "../models/encrypted-bark-report-data";
 
+// WIP: Move this into ReportDao.
 export async function updateReport(
   dbContext: DbContext,
   args: {

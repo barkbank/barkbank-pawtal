@@ -4,7 +4,7 @@ import { BarkContext } from "../bark-context";
 import { updateReport } from "../queries/update-report";
 import { toEncryptedBarkReportData } from "../mappers/to-encrypted-bark-report-data";
 import { dbBegin, dbCommit, dbRelease, dbRollback } from "@/lib/data/db-utils";
-import { selectReportMetadata } from "../queries/select-report-metadata";
+import { ReportDao } from "../daos/report-dao";
 
 export async function opEditReport(
   context: BarkContext,
@@ -25,7 +25,8 @@ export async function opEditReport(
     );
 
     await dbBegin(conn);
-    const metadata = await selectReportMetadata(conn, { reportId });
+    const reportDao = new ReportDao(conn);
+    const metadata = await reportDao.getMetadata({ reportId });
     if (metadata === null) {
       return CODE.ERROR_REPORT_NOT_FOUND;
     }
