@@ -9,7 +9,7 @@ const RowSchema = z.object({
   reportId: z.string(),
 });
 
-// WIP: Caller of this should call EncryptedReportDao. Note that this is a little different.
+// WIP: Caller of this should call ReportDao. Note that this is a little different.
 export async function insertReport(
   dbContext: DbContext,
   args: {

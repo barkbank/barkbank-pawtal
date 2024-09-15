@@ -221,6 +221,7 @@ async function _attachReportToDog(args: {
   return res;
 }
 
+// WIP: Move this into _fixtures
 function _mockEncryptedReportSpec(
   overrides?: Partial<EncryptedReportSpec>,
 ): EncryptedReportSpec {
@@ -242,6 +243,7 @@ function _mockEncryptedReportSpec(
   return EncryptedReportSpecSchema.parse(out);
 }
 
+// WIP: Move this into _fixtures
 function _mockSubProfileSpec(
   overrides?: Partial<SubProfileSpec>,
 ): SubProfileSpec {
@@ -256,6 +258,7 @@ function _mockSubProfileSpec(
   return SubProfileSpecSchema.parse(out);
 }
 
+// TODO: Callers of this function should use givenUserActor from _fixtures
 async function _createTestUser(args: {
   context: BarkContext;
   idx: number;
@@ -277,6 +280,7 @@ async function _createTestUser(args: {
   return { userId };
 }
 
+// TODO: Callers of this function should use givenVetActor from _fixtures
 async function _createTestVetClinic(args: {
   context: BarkContext;
   idx: number;
