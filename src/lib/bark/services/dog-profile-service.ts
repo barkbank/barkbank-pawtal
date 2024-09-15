@@ -21,7 +21,12 @@ import { EncryptedDogDao } from "../daos/encrypted-dog-dao";
 import { VetPreferenceDao } from "../daos/vet-preference-dao";
 import { isEmpty } from "lodash";
 import { EncryptedReportDao } from "../daos/encrypted-report-dao";
+import { DogStatuses } from "../models/dog-statuses";
+import { DogStatusesDao } from "../daos/dog-statuses-dao";
 
+/**
+ * Service for users to manage their dog profiles.
+ */
 export class DogProfileService {
   constructor(private config: { context: BarkContext }) {}
 
@@ -172,6 +177,31 @@ export class DogProfileService {
         await prefDao.insert({ pref: { userId, dogId, vetId } });
       }
       return Ok(true);
+    });
+  }
+
+  async getDogStatuses(args: {
+    userId: string;
+    dogId: string;
+  }): Promise<
+    Result<DogStatuses, typeof CODE.FAILED | typeof CODE.ERROR_DOG_NOT_FOUND>
+  > {
+    const { userId, dogId } = args;
+    return dbTransaction(this.pool(), async (conn) => {
+      const dogDao = new EncryptedDogDao(conn);
+      const statusDao = new DogStatusesDao(conn);
+      const resOwner = await dogDao.getOwner({ dogId });
+      if (resOwner === null) {
+        return Err(CODE.ERROR_DOG_NOT_FOUND);
+      }
+      if (resOwner.userId !== userId) {
+        return Err(CODE.ERROR_DOG_NOT_FOUND);
+      }
+      const resStatus = await statusDao.getDogStatuses({ dogId });
+      if (resStatus === null) {
+        return Err(CODE.ERROR_DOG_NOT_FOUND);
+      }
+      return Ok(resStatus);
     });
   }
 

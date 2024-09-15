@@ -11,7 +11,6 @@ import {
 } from "../bark/models/dog-profile-models";
 import { DogProfileService } from "../bark/services/dog-profile-service";
 import { getMyPets } from "./actions/get-my-pets";
-import { getDogStatuses } from "./actions/get-dog-statuses";
 import { getDogPreferredVet } from "./actions/get-dog-preferred-vet";
 import { opFetchDogAppointmentsByDogId } from "../bark/operations/op-fetch-dog-appointments-by-dog-id";
 import { opFetchReportsByDogId } from "../bark/operations/op-fetch-reports-by-dog-id";
@@ -108,9 +107,8 @@ export class UserActor {
 
   async getDogStatuses(args: { dogId: string }) {
     const { dogId } = args;
-    // TODO: Use DogProfileService to check dog ownership
-    // TODO: dogProfileService.getDogStatuses
-    return getDogStatuses(this, dogId);
+    const { userId, dogProfileService } = this.getParams();
+    return dogProfileService.getDogStatuses({ userId, dogId });
   }
 
   async getDogPreferredVet(args: { dogId: string }) {
