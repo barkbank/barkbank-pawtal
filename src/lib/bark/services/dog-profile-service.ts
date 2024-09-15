@@ -28,6 +28,8 @@ import {
   DogPreferredVetSchema,
 } from "../models/dog-preferred-vet";
 import { VetClinicDao } from "../daos/vet-clinic-dao";
+import { DogAppointment } from "../models/dog-appointment";
+import { DogAppointmentDao } from "../daos/dog-appointment-dao";
 
 /**
  * Service for users to manage their dog profiles.
@@ -240,6 +242,30 @@ export class DogProfileService {
         ...clinic,
       };
       return Ok(DogPreferredVetSchema.parse(out));
+    });
+  }
+
+  async getDogAppointments(args: {
+    userId: string;
+    dogId: string;
+  }): Promise<
+    Result<
+      DogAppointment[],
+      typeof CODE.FAILED | typeof CODE.ERROR_DOG_NOT_FOUND
+    >
+  > {
+    const { userId, dogId } = args;
+    return dbTransaction(this.pool(), async (conn) => {
+      const dogDao = new EncryptedDogDao(conn);
+      const isOwner = await dogDao.isOwner({ userId, dogId });
+      if (!isOwner) {
+        return Err(CODE.ERROR_DOG_NOT_FOUND);
+      }
+      const appointmentDao = new DogAppointmentDao(conn);
+      const appointments = await appointmentDao.getDogAppointmentsByDogId({
+        dogId,
+      });
+      return Ok(appointments);
     });
   }
 

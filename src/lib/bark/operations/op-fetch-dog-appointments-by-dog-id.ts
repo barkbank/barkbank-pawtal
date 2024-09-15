@@ -6,6 +6,7 @@ import { dbRelease } from "@/lib/data/db-utils";
 import { selectOwnerByDogId } from "../queries/select-owner-by-dog-id";
 import { DogAppointmentDao } from "../daos/dog-appointment-dao";
 
+// WIP: No longer used. Remove it.
 export async function opFetchDogAppointmentsByDogId(
   context: BarkContext,
   args: { dogId: string; actorUserId?: string },
