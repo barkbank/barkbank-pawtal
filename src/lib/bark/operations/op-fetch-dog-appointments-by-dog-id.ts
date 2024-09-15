@@ -4,7 +4,7 @@ import { DogAppointment } from "../models/dog-appointment";
 import { CODE } from "@/lib/utilities/bark-code";
 import { dbRelease } from "@/lib/data/db-utils";
 import { selectOwnerByDogId } from "../queries/select-owner-by-dog-id";
-import { selectDogAppointmentsByDogId } from "../queries/select-dog-appointments-by-dog-id";
+import { DogAppointmentDao } from "../daos/dog-appointment-dao";
 
 export async function opFetchDogAppointmentsByDogId(
   context: BarkContext,
@@ -28,10 +28,10 @@ export async function opFetchDogAppointmentsByDogId(
     if (actorUserId !== undefined && ownerInfo.ownerUserId !== actorUserId) {
       return Err(CODE.ERROR_WRONG_OWNER);
     }
-    const appointments: DogAppointment[] = await selectDogAppointmentsByDogId(
-      conn,
-      { dogId },
-    );
+    const dao = new DogAppointmentDao(conn);
+    const appointments: DogAppointment[] = await dao.getDogAppointmentsByDogId({
+      dogId,
+    });
     return Ok({ appointments });
   } catch (err) {
     console.error(err);

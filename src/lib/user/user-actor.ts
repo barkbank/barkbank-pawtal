@@ -116,11 +116,11 @@ export class UserActor {
     return dogProfileService.getDogPreferredVet({ userId, dogId });
   }
 
-  // TODO: Test UserActor::getDogAppointments
+  // WIP: Test UserActor::getDogAppointments
   async getDogAppointments(args: { dogId: string }) {
     const { dogId } = args;
     const { context, userId } = this.getParams();
-    // TODO: dogProfileService.getDogAppointments({userId, dogId})
+    // WIP: dogProfileService.getDogAppointments({userId, dogId})
     return opFetchDogAppointmentsByDogId(context, {
       dogId,
       actorUserId: userId,
