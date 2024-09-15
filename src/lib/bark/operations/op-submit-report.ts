@@ -9,6 +9,7 @@ import { BarkContext } from "@/lib/bark/bark-context";
 import { toEncryptedBarkReportData } from "../mappers/to-encrypted-bark-report-data";
 import { APPOINTMENT_STATUS } from "../enums/appointment-status";
 
+// WIP: Move this into a ReportService
 /**
  * Submits a medical report for a specified appointment and progresses that
  * appointment's status to REPORTED.
@@ -33,6 +34,7 @@ export async function opSubmitReport(
   const { appointmentId, reportData, actorVetId } = args;
   const conn = await dbPool.connect();
   try {
+    // WIP: How different is EncryptedBarkReportData from EncryptedReportSpec?
     const encryptedReportData = await toEncryptedBarkReportData(
       context,
       reportData,

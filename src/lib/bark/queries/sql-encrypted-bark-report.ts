@@ -1,3 +1,4 @@
+// WIP: Move this into EncryptedReportDao
 /**
  * This projects DB tables into the fields for EncryptedBarkReport.
  */

@@ -4,6 +4,7 @@ import {
   BarkReportMetadataSchema,
 } from "../models/bark-report-metadata";
 
+// WIP: Move into EncryptedReportDao
 export async function selectReportMetadata(
   dbContext: DbContext,
   args: { reportId: string },

@@ -5,6 +5,7 @@ import {
 } from "../models/encrypted-bark-report";
 import { SQL_ENCRYPTED_BARK_REPORT } from "./sql-encrypted-bark-report";
 
+// WIP: Move this into EncryptedReportDao
 export async function selectReportsByVetId(
   dbContext: DbContext,
   args: { vetId: string },
