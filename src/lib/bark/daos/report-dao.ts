@@ -1,6 +1,5 @@
 import { DbContext, dbQuery } from "@/lib/data/db-utils";
 import { z } from "zod";
-import { EncryptedReportSpec } from "../models/report-models";
 import {
   EncryptedBarkReport,
   EncryptedBarkReportSchema,
@@ -9,12 +8,13 @@ import {
   BarkReportMetadata,
   BarkReportMetadataSchema,
 } from "../models/bark-report-metadata";
+import { EncryptedBarkReportData } from "../models/encrypted-bark-report-data";
 
 /**
  * Data Access Object
  *
  * Input Types:
- * - EncryptedReportSpec
+ * - EncryptedBarkReportData
  *
  * Output Types:
  * - EncryptedBarkReport
@@ -63,33 +63,48 @@ export class ReportDao {
   constructor(private db: DbContext) {}
 
   async insert(args: {
-    spec: EncryptedReportSpec;
+    callId: string;
+    spec: EncryptedBarkReportData;
   }): Promise<{ reportId: string }> {
     const RowSchema = z.object({ reportId: z.string() });
     type Row = z.infer<typeof RowSchema>;
-    const { spec } = args;
+    const { callId, spec } = args;
     const sql = `
-    INSERT INTO reports (
-      call_id,
-      dog_id,
-      vet_id,
-      visit_time,
-      dog_weight_kg,
-      dog_body_conditioning_score,
-      dog_heartworm,
-      dog_dea1_point1,
-      dog_reported_ineligibility,
-      encrypted_ineligibility_reason,
-      ineligibility_expiry_time,
-      dog_did_donate_blood
+    WITH
+    mAppointmentDetails as (
+      SELECT call_id, dog_id, vet_id
+      FROM calls
+      WHERE call_id = $1
+    ),
+    mInsertion as (
+      INSERT INTO reports (
+        call_id,
+        dog_id,
+        vet_id,
+
+        visit_time,
+        dog_weight_kg,
+        dog_body_conditioning_score,
+        dog_heartworm,
+        dog_dea1_point1,
+        dog_reported_ineligibility,
+        encrypted_ineligibility_reason,
+        ineligibility_expiry_time,
+        dog_did_donate_blood
+      )
+      VALUES (
+        (SELECT call_id FROM mAppointmentDetails),
+        (SELECT dog_id FROM mAppointmentDetails),
+        (SELECT vet_id FROM mAppointmentDetails),
+        $2, $3, $4, $5, $6, $7, $8, $9, $10
+      )
+      RETURNING report_id
     )
-    VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
-    RETURNING report_id as "reportId"
+
+    SELECT report_id::text as "reportId" FROM mInsertion
     `;
     const res = await dbQuery<Row>(this.db, sql, [
-      spec.callId,
-      spec.dogId,
-      spec.vetId,
+      callId,
       spec.visitTime,
       spec.dogWeightKg,
       spec.dogBodyConditioningScore,

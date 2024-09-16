@@ -72,6 +72,7 @@ import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
 import {
   DogProfileSpec,
   DogProfileSpecSchema,
+  SubProfileSpecSchema,
 } from "@/lib/bark/models/dog-profile-models";
 import { SubProfileSpec } from "@/lib/bark/models/dog-profile-models";
 import { sprintf } from "sprintf-js";
@@ -94,6 +95,10 @@ import {
   VetClinicSpec,
   VetClinicSpecSchema,
 } from "@/lib/bark/models/vet-models";
+import {
+  EncryptedBarkReportData,
+  EncryptedBarkReportDataSchema,
+} from "@/lib/bark/models/encrypted-bark-report-data";
 
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
@@ -579,6 +584,38 @@ export function mockDogProfileSpec(
   };
   const out = { ...base, ...overrides };
   return DogProfileSpecSchema.parse(out);
+}
+
+export function mockSubProfileSpec(
+  overrides?: Partial<SubProfileSpec>,
+): SubProfileSpec {
+  const base: SubProfileSpec = {
+    dogName: "Woofgang",
+    dogWeightKg: 26.5,
+    dogEverPregnant: YES_NO_UNKNOWN.NO,
+    dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
+    dogPreferredVetId: "",
+  };
+  const out = { ...base, ...overrides };
+  return SubProfileSpecSchema.parse(out);
+}
+
+export function mockEncryptedBarkReportData(
+  overrides?: Partial<EncryptedBarkReportData>,
+): EncryptedBarkReportData {
+  const base: EncryptedBarkReportData = {
+    visitTime: parseCommonDate("8 Mar 2022", SINGAPORE_TIME_ZONE),
+    dogWeightKg: 26.5,
+    dogBodyConditioningScore: 5,
+    dogHeartworm: POS_NEG_NIL.NEGATIVE,
+    dogDea1Point1: POS_NEG_NIL.NEGATIVE,
+    ineligibilityStatus: REPORTED_INELIGIBILITY.NIL,
+    encryptedIneligibilityReason: "",
+    ineligibilityExpiryTime: null,
+    dogDidDonateBlood: true,
+  };
+  const out = { ...base, ...overrides };
+  return EncryptedBarkReportDataSchema.parse(out);
 }
 
 function getDogBreed(idx: number): string {

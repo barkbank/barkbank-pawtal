@@ -1,6 +1,7 @@
 import { DbContext, dbQuery } from "@/lib/data/db-utils";
 import { APPOINTMENT_STATUS } from "../enums/appointment-status";
 
+// TODO: Move this into call-dao.ts
 /**
  * Updates an appointment status to REPORTED or CANCELLED.
  */
