@@ -1,4 +1,4 @@
-import { DbContext, dbQuery } from "@/lib/data/db-utils";
+import { DbConnection, DbContext, dbQuery } from "@/lib/data/db-utils";
 import { z } from "zod";
 import {
   EncryptedBarkReport,
@@ -60,15 +60,17 @@ export class ReportDao {
   LEFT JOIN vets as tVet on tReport.vet_id = tVet.vet_id
   `;
 
+  // TODO: Allow conn to be given to all dao methods and restrict constructor db to DbPool.
   constructor(private db: DbContext) {}
 
   async insert(args: {
     callId: string;
     spec: EncryptedBarkReportData;
+    conn?: DbConnection;
   }): Promise<{ reportId: string }> {
     const RowSchema = z.object({ reportId: z.string() });
     type Row = z.infer<typeof RowSchema>;
-    const { callId, spec } = args;
+    const { callId, spec, conn } = args;
     const sql = `
     WITH
     mAppointmentDetails as (
@@ -103,7 +105,7 @@ export class ReportDao {
 
     SELECT report_id::text as "reportId" FROM mInsertion
     `;
-    const res = await dbQuery<Row>(this.db, sql, [
+    const res = await dbQuery<Row>(conn ?? this.db, sql, [
       callId,
       spec.visitTime,
       spec.dogWeightKg,
