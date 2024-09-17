@@ -120,6 +120,41 @@ export class ReportDao {
     return RowSchema.parse(res.rows[0]);
   }
 
+  async update(args: {
+    reportId: string;
+    spec: EncryptedBarkReportData;
+  }): Promise<boolean> {
+    const { reportId, spec } = args;
+    const sql = `
+    UPDATE reports
+    SET
+      visit_time = $2,
+      dog_weight_kg = $3,
+      dog_body_conditioning_score = $4,
+      dog_heartworm = $5,
+      dog_dea1_point1 = $6,
+      dog_reported_ineligibility = $7,
+      encrypted_ineligibility_reason = $8,
+      ineligibility_expiry_time = $9,
+      dog_did_donate_blood = $10
+    WHERE report_id = $1
+    RETURNING 1
+    `;
+    const res = await dbQuery(this.db, sql, [
+      reportId,
+      spec.visitTime,
+      spec.dogWeightKg,
+      spec.dogBodyConditioningScore,
+      spec.dogHeartworm,
+      spec.dogDea1Point1,
+      spec.ineligibilityStatus,
+      spec.encryptedIneligibilityReason,
+      spec.ineligibilityExpiryTime,
+      spec.dogDidDonateBlood,
+    ]);
+    return res.rows.length == 1;
+  }
+
   async getReportCountByDog(args: {
     dogId: string;
   }): Promise<{ reportCount: number }> {
