@@ -126,7 +126,9 @@ export class UserActor {
     return dogProfileService.getDogAppointments({ userId, dogId });
   }
 
-  // TODO: Test UserActor::getDogReports
+  // TODO: Test UserActor::getDogReports when VetActor can create them so that
+  //     the tests can be written using user and vet actors with minimal
+  //     mocking.
   async getDogReports(args: {
     dogId: string;
   }): Promise<
