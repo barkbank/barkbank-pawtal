@@ -6,7 +6,6 @@ import { redirect } from "next/navigation";
 import { EditDogProfileFormController } from "../../_lib/components/edit-dog-profile-form-controller";
 import { SimpleErrorPage } from "@/app/_components/simple-error-page";
 import { SubProfileFormController } from "../../_lib/components/sub-profile-form-controller";
-import { opFetchDogReportCount } from "@/lib/bark/operations/op-fetch-dog-report-count";
 import { SubProfileSpec } from "@/lib/bark/models/dog-profile-models";
 import { Err, Ok, Result } from "@/lib/utilities/result";
 import { DogProfileSpec } from "@/lib/bark/models/dog-profile-models";
@@ -21,26 +20,25 @@ export default async function Page(props: { params: { dogId: string } }) {
   }
 
   const { dogId } = props.params;
-  const context = await APP.getBarkContext();
-  const { result: reportCount, error: errCount } = await opFetchDogReportCount(
-    context,
-    { dogId },
-  );
-  if (errCount !== undefined) {
-    return <SimpleErrorPage error={errCount} />;
+  const resCount = await actor.getDogReportCount({ dogId });
+  if (resCount.error !== undefined) {
+    return <SimpleErrorPage error={resCount.error} />;
   }
-  const { result: dogProfile, error: errFetch } = await actor.getDogProfile({
+  const reportCount = resCount.result.numReports;
+  const resProfile = await actor.getDogProfile({
     dogId,
   });
-  if (errFetch !== undefined) {
-    return <SimpleErrorPage error={errFetch} />;
+  if (resProfile.error !== undefined) {
+    return <SimpleErrorPage error={resProfile.error} />;
   }
+  const dogProfile = resProfile.result;
   const vetOptions = await APP.getDbPool().then(getVetFormOptions);
-  if (reportCount.numReports > 0) {
-    const { result: subProfile, error: errMap } = _toSubProfile(dogProfile);
-    if (errMap !== undefined) {
-      return <SimpleErrorPage error={errMap} />;
+  if (reportCount > 0) {
+    const resSubProfile = _toSubProfile(dogProfile);
+    if (resSubProfile.error !== undefined) {
+      return <SimpleErrorPage error={resSubProfile.error} />;
     }
+    const subProfile = resSubProfile.result;
     return (
       <div className="m-3">
         <SubProfileFormController
