@@ -30,6 +30,7 @@ import {
 import { VetClinicDao } from "../daos/vet-clinic-dao";
 import { DogAppointment } from "../models/dog-appointment";
 import { DogAppointmentDao } from "../daos/dog-appointment-dao";
+import { BarkReport } from "../models/report-models";
 
 /**
  * Service for users to manage their dog profiles.
@@ -267,6 +268,15 @@ export class DogProfileService {
       });
       return Ok(appointments);
     });
+  }
+
+  async getDogReports(args: {
+    userId: string;
+    dogId: string;
+  }): Promise<
+    Result<BarkReport[], typeof CODE.FAILED | typeof CODE.ERROR_DOG_NOT_FOUND>
+  > {
+    throw new Error("TODO: Not Implement");
   }
 
   private async toDogEncryptedOii(args: {

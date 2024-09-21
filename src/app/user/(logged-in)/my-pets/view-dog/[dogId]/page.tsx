@@ -72,7 +72,7 @@ async function getDogViewerData(
     dogStatuses: resDogStatuses.result,
     dogAppointments: resDogAppointments.result,
     dogPreferredVet: resDogPreferredVet.result,
-    dogReports: resDogReports.result.reports,
+    dogReports: resDogReports.result,
   };
   return Ok(DogViewerDataSchema.parse(data));
 }
