@@ -4,6 +4,7 @@ import {
   EncryptedReportNotificationSchema,
 } from "../models/report-notification";
 
+// TODO: Move into ReportNotificationDao
 export async function selectReportNotification(
   db: DbContext,
   args: { reportId: string },

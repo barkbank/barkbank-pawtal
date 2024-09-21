@@ -11,6 +11,7 @@ export const EncryptedBarkReportDataSchema = BarkReportDataSchema.omit({
   encryptedIneligibilityReason: z.string(),
 });
 
+// TODO: Rename this to EncryptedReportSpec and move report-models.ts
 export type EncryptedBarkReportData = z.infer<
   typeof EncryptedBarkReportDataSchema
 >;

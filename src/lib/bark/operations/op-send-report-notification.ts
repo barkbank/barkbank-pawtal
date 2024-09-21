@@ -11,6 +11,7 @@ import { PAWTAL_EVENT_TYPE } from "../enums/pawtal-event-type";
 import { AccountType } from "@/lib/auth-models";
 import { toPawtalEventSpecFromSentEmailEvent } from "../mappers/event-mappers";
 
+// TODO: NotificationService?
 export async function opSendReportNotification(
   context: BarkContext,
   args: {

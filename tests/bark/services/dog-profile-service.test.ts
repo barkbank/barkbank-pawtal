@@ -7,10 +7,8 @@ import { UserAccountService } from "@/lib/bark/services/user-account-service";
 import {
   DogProfileSpec,
   DogProfileSpecSchema,
-  SubProfileSpec,
   SubProfileSpecSchema,
 } from "@/lib/bark/models/dog-profile-models";
-import { YES_NO_UNKNOWN } from "@/lib/bark/enums/yes-no-unknown";
 import { DOG_GENDER } from "@/lib/bark/enums/dog-gender";
 import { DogProfileService } from "@/lib/bark/services/dog-profile-service";
 import { VetClinicSpec } from "@/lib/bark/models/vet-models";
@@ -19,18 +17,13 @@ import { CODE } from "@/lib/utilities/bark-code";
 import { dbTransaction } from "@/lib/data/db-utils";
 import { Ok } from "@/lib/utilities/result";
 import { CallDao } from "@/lib/bark/daos/call-dao";
-import { EncryptedReportDao } from "@/lib/bark/daos/encrypted-report-dao";
+import { ReportDao } from "@/lib/bark/daos/report-dao";
 import {
-  EncryptedReportSpec,
-  EncryptedReportSpecSchema,
-} from "@/lib/bark/models/report-models";
-import {
-  parseCommonDate,
-  SINGAPORE_TIME_ZONE,
-} from "@/lib/utilities/bark-time";
-import { POS_NEG_NIL } from "@/lib/bark/enums/pos-neg-nil";
-import { REPORTED_INELIGIBILITY } from "@/lib/bark/enums/reported-ineligibility";
-import { mockDogProfileSpec } from "../../_fixtures";
+  mockDogProfileSpec,
+  mockEncryptedBarkReportData,
+  mockSubProfileSpec,
+} from "../../_fixtures";
+import { EncryptedBarkReportData } from "@/lib/bark/models/encrypted-bark-report-data";
 
 describe("DogProfileService", () => {
   it("can be used to create and retrieve dog profile", async () => {
@@ -108,7 +101,7 @@ describe("DogProfileService", () => {
         const service = new DogProfileService({ context });
         const resAdd = await service.addDogProfile({ userId, spec: spec1 });
         const { dogId } = resAdd.result!;
-        const spec2 = _mockSubProfileSpec({ dogName: "Erik" });
+        const spec2 = mockSubProfileSpec({ dogName: "Erik" });
         const resUpdate = await service.updateSubProfile({
           userId,
           dogId,
@@ -153,7 +146,7 @@ describe("DogProfileService", () => {
         const resAdd = await service.addDogProfile({ userId, spec: spec1 });
         const { dogId } = resAdd.result!;
         await _attachReportToDog({ vetId, dogId, context });
-        const spec2 = _mockSubProfileSpec({ dogName: "Erik" });
+        const spec2 = mockSubProfileSpec({ dogName: "Erik" });
         const resUpdate = await service.updateSubProfile({
           userId,
           dogId,
@@ -196,7 +189,7 @@ async function _attachReportToDog(args: {
   vetId: string;
   dogId: string;
   context: BarkContext;
-  reportOverrides?: Partial<EncryptedReportSpec>;
+  reportOverrides?: Partial<EncryptedBarkReportData>;
 }) {
   const { vetId, dogId, context, reportOverrides } = args;
   const res = await dbTransaction(context.dbPool, async (conn) => {
@@ -204,58 +197,21 @@ async function _attachReportToDog(args: {
     const { callId } = await callDao.insert({
       spec: { dogId, vetId, callOutcome: "REPORTED" },
     });
-    const reportDao = new EncryptedReportDao(conn);
-    const spec = _mockEncryptedReportSpec({
+    const reportDao = new ReportDao(conn);
+    const spec = mockEncryptedBarkReportData({
       ...reportOverrides,
-      callId,
-      dogId,
-      vetId,
     });
-    const { reportId } = await reportDao.insert({ spec });
+    const { reportId } = await reportDao.insert({ callId, spec });
     return Ok({ reportId, callId });
   });
   expect(res.error).toBeUndefined();
-  const dao = new EncryptedReportDao(context.dbPool);
+  const dao = new ReportDao(context.dbPool);
   const { reportCount } = await dao.getReportCountByDog({ dogId });
   expect(reportCount).toEqual(1);
   return res;
 }
 
-function _mockEncryptedReportSpec(
-  overrides?: Partial<EncryptedReportSpec>,
-): EncryptedReportSpec {
-  const base: EncryptedReportSpec = {
-    callId: "Must Override",
-    dogId: "Must Override",
-    vetId: "Must Override",
-    visitTime: parseCommonDate("8 Mar 2022", SINGAPORE_TIME_ZONE),
-    dogWeightKg: 26.5,
-    dogBodyConditioningScore: 5,
-    dogHeartworm: POS_NEG_NIL.NEGATIVE,
-    dogDea1Point1: POS_NEG_NIL.NEGATIVE,
-    ineligibilityStatus: REPORTED_INELIGIBILITY.NIL,
-    encryptedIneligibilityReason: "",
-    ineligibilityExpiryTime: null,
-    dogDidDonateBlood: true,
-  };
-  const out = { ...base, ...overrides };
-  return EncryptedReportSpecSchema.parse(out);
-}
-
-function _mockSubProfileSpec(
-  overrides?: Partial<SubProfileSpec>,
-): SubProfileSpec {
-  const base: SubProfileSpec = {
-    dogName: "Woofgang",
-    dogWeightKg: 26.5,
-    dogEverPregnant: YES_NO_UNKNOWN.NO,
-    dogEverReceivedTransfusion: YES_NO_UNKNOWN.NO,
-    dogPreferredVetId: "",
-  };
-  const out = { ...base, ...overrides };
-  return SubProfileSpecSchema.parse(out);
-}
-
+// TODO: Callers of this function should use givenUserActor from _fixtures
 async function _createTestUser(args: {
   context: BarkContext;
   idx: number;
@@ -277,6 +233,7 @@ async function _createTestUser(args: {
   return { userId };
 }
 
+// TODO: Callers of this function should use givenVetActor from _fixtures
 async function _createTestVetClinic(args: {
   context: BarkContext;
   idx: number;

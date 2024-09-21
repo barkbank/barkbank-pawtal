@@ -3,12 +3,13 @@ import { CODE } from "@/lib/utilities/bark-code";
 import { BarkReportData } from "../models/bark-report-data";
 import { dbBegin, dbCommit, dbRelease, dbRollback } from "@/lib/data/db-utils";
 import { selectAppointmentMetadata } from "../queries/select-appointment-metadata";
-import { insertReport } from "../queries/insert-report";
 import { updateAppointment } from "../queries/update-appointment";
 import { BarkContext } from "@/lib/bark/bark-context";
 import { toEncryptedBarkReportData } from "../mappers/to-encrypted-bark-report-data";
 import { APPOINTMENT_STATUS } from "../enums/appointment-status";
+import { ReportDao } from "../daos/report-dao";
 
+// TODO: Move this into a ReportService
 /**
  * Submits a medical report for a specified appointment and progresses that
  * appointment's status to REPORTED.
@@ -51,9 +52,10 @@ export async function opSubmitReport(
     if (res.appointmentStatus !== APPOINTMENT_STATUS.PENDING) {
       return Err(CODE.ERROR_APPOINTMENT_IS_NOT_PENDING);
     }
-    const { reportId } = await insertReport(conn, {
-      appointmentId,
-      encryptedReportData,
+    const dao = new ReportDao(conn);
+    const { reportId } = await dao.insert({
+      callId: appointmentId,
+      spec: encryptedReportData,
     });
     await updateAppointment(conn, {
       appointmentId,

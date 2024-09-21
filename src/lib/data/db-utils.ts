@@ -5,11 +5,13 @@ import { CODE } from "../utilities/bark-code";
 import { asyncSleep } from "../utilities/async-sleep";
 import { BARKBANK_ENV } from "../barkbank-env";
 
-export type DbContext = Pool | PoolClient;
+export type DbPool = Pool;
+export type DbConnection = PoolClient;
+export type DbContext = DbPool | DbConnection;
 
 export async function dbTransaction<T, E>(
   pool: Pool,
-  body: (conn: PoolClient) => Promise<Result<T, E>>,
+  body: (conn: DbConnection) => Promise<Result<T, E>>,
 ) {
   const conn = await pool.connect();
   try {
@@ -29,24 +31,24 @@ export async function dbTransaction<T, E>(
   }
 }
 
-export async function dbBegin(conn: PoolClient): Promise<void> {
+export async function dbBegin(conn: DbConnection): Promise<void> {
   await conn.query("BEGIN");
 }
 
-export async function dbCommit(conn: PoolClient): Promise<void> {
+export async function dbCommit(conn: DbConnection): Promise<void> {
   await conn.query("COMMIT");
 }
 
-export async function dbRollback(conn: PoolClient): Promise<void> {
+export async function dbRollback(conn: DbConnection): Promise<void> {
   await conn.query("ROLLBACK");
 }
 
-export async function dbRollbackAndRelease(conn: PoolClient): Promise<void> {
+export async function dbRollbackAndRelease(conn: DbConnection): Promise<void> {
   await conn.query("ROLLBACK");
   conn.release();
 }
 
-export async function dbRelease(conn: PoolClient): Promise<void> {
+export async function dbRelease(conn: DbConnection): Promise<void> {
   conn.release();
 }
 

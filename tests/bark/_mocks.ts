@@ -7,6 +7,8 @@ import { DogSpec } from "@/lib/data/db-models";
 import { MILLIS_PER_WEEK } from "@/lib/utilities/bark-millis";
 import { weeksAgo } from "../_time_helpers";
 
+// TODO: Move this file into tests/_mocks
+
 export function mockEligibleDogOverrides(): Partial<DogSpec> {
   return {
     dogBreed: "Great Elidog",

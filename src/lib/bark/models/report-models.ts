@@ -5,7 +5,6 @@ import { DogIdInfoSchema } from "./dog-id-info";
 import { VetContactDetailsSchema } from "./vet-contact-details";
 import { PosNegNilSchema } from "../enums/pos-neg-nil";
 import { ReportedIneligibilitySchema } from "../enums/reported-ineligibility";
-import { DogGenderSchema } from "../enums/dog-gender";
 
 export const BarkReportSchema = z
   .object({})
@@ -39,11 +38,6 @@ export const EncryptedReportSchema = ReportSchema.omit({
   }),
 );
 
-export const EncryptedReportSpecSchema = EncryptedReportSchema.omit({
-  reportId: true,
-});
-
 export type BarkReport = z.infer<typeof BarkReportSchema>;
 export type Report = z.infer<typeof ReportSchema>;
 export type EncryptedReport = z.infer<typeof EncryptedReportSchema>;
-export type EncryptedReportSpec = z.infer<typeof EncryptedReportSpecSchema>;
