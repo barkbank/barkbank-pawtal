@@ -128,7 +128,8 @@ export class UserActor {
 
   // TODO: Test UserActor::getDogReports when VetActor can create them so that
   //     the tests can be written using user and vet actors with minimal
-  //     mocking.
+  //     mocking. In the meantime, this behaviour is covered by the "user can
+  //     view report and edit sub-profile" UI Test.
   async getDogReports(args: {
     dogId: string;
   }): Promise<
