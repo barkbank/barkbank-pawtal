@@ -31,6 +31,8 @@ import { VetClinicDao } from "../daos/vet-clinic-dao";
 import { DogAppointment } from "../models/dog-appointment";
 import { DogAppointmentDao } from "../daos/dog-appointment-dao";
 import { BarkReport } from "../models/report-models";
+import { EncryptedBarkReport } from "../models/encrypted-bark-report";
+import { toBarkReport } from "../mappers/to-bark-report";
 
 /**
  * Service for users to manage their dog profiles.
@@ -276,7 +278,31 @@ export class DogProfileService {
   }): Promise<
     Result<BarkReport[], typeof CODE.FAILED | typeof CODE.ERROR_DOG_NOT_FOUND>
   > {
-    throw new Error("TODO: Not Implement");
+    const { userId, dogId } = args;
+    return dbTransaction(this.pool(), async (conn) => {
+      const dogDao = new EncryptedDogDao(conn);
+      const isOwner = await dogDao.isOwner({ userId, dogId });
+      if (!isOwner) {
+        return Err(CODE.ERROR_DOG_NOT_FOUND);
+      }
+      const reportDao = new ReportDao(conn);
+      const encrytpedReports = await reportDao.getEncryptedBarkReportsByDogId({
+        dogId,
+      });
+      const futureReports = encrytpedReports.map(async (encrypted) =>
+        this.toBarkReport({ encrypted }),
+      );
+      const reports = await Promise.all(futureReports);
+      return Ok(reports);
+    });
+  }
+
+  private async toBarkReport(args: {
+    encrypted: EncryptedBarkReport;
+  }): Promise<BarkReport> {
+    const { encrypted } = args;
+    const report = await toBarkReport(this.context(), encrypted);
+    return report;
   }
 
   private async toDogEncryptedOii(args: {

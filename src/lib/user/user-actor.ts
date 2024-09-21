@@ -11,10 +11,8 @@ import {
 } from "../bark/models/dog-profile-models";
 import { DogProfileService } from "../bark/services/dog-profile-service";
 import { getMyPets } from "./actions/get-my-pets";
-import { opFetchReportsByDogId } from "../bark/operations/op-fetch-reports-by-dog-id";
-import { ReportDao } from "../bark/daos/report-dao";
 import { opFetchDogReportCount } from "../bark/operations/op-fetch-dog-report-count";
-import { Err, Ok, Result } from "../utilities/result";
+import { Result } from "../utilities/result";
 import { CODE } from "../utilities/bark-code";
 import { BarkReport } from "../bark/models/report-models";
 
@@ -136,19 +134,8 @@ export class UserActor {
     Result<BarkReport[], typeof CODE.FAILED | typeof CODE.ERROR_DOG_NOT_FOUND>
   > {
     const { dogId } = args;
-    const { context, userId } = this.getParams();
-    // TODO: Impl DogProfileService::getDogReports it should check dog ownership
-    const { result, error } = await opFetchReportsByDogId(context, {
-      dogId,
-      actorUserId: userId,
-    });
-    if (error === CODE.FAILED) {
-      return Err(CODE.FAILED);
-    }
-    if (error !== undefined) {
-      return Err(CODE.ERROR_DOG_NOT_FOUND);
-    }
-    return Ok(result.reports);
+    const { userId, dogProfileService } = this.getParams();
+    return dogProfileService.getDogReports({ userId, dogId });
   }
 
   async getDogReportCount(args: { dogId: string }) {
