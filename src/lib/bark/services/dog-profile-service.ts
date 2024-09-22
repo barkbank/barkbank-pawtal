@@ -297,6 +297,28 @@ export class DogProfileService {
     });
   }
 
+  async getDogReportCount(args: {
+    userId: string;
+    dogId: string;
+  }): Promise<
+    Result<
+      { reportCount: number },
+      typeof CODE.FAILED | typeof CODE.ERROR_DOG_NOT_FOUND
+    >
+  > {
+    const { userId, dogId } = args;
+    return dbTransaction(this.pool(), async (conn) => {
+      const dogDao = new EncryptedDogDao(conn);
+      const isOwner = await dogDao.isOwner({ userId, dogId });
+      if (!isOwner) {
+        return Err(CODE.ERROR_DOG_NOT_FOUND);
+      }
+      const reportDao = new ReportDao(conn);
+      const { reportCount } = await reportDao.getReportCountByDog({ dogId });
+      return Ok({ reportCount });
+    });
+  }
+
   private async toBarkReport(args: {
     encrypted: EncryptedBarkReport;
   }): Promise<BarkReport> {

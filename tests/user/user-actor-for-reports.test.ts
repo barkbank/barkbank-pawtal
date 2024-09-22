@@ -11,8 +11,8 @@ import {
 import { CODE } from "@/lib/utilities/bark-code";
 import { givenUserActor } from "../_fixtures";
 
-describe("UserActor::getDogReports", () => {
-  it("returns empty list when dog has no reports", async () => {
+describe("UserActor getDogReports and getDogReportCount", () => {
+  it("can retrieve empty list of reports when there are no reports", async () => {
     await withBarkContext(async ({ context }) => {
       const u1 = await givenUserActor({ idx: 1, context });
       const d1 = await givenDog(context, { userId: u1.getUserId() });
@@ -22,7 +22,7 @@ describe("UserActor::getDogReports", () => {
     });
   });
 
-  it("returns reports, newest to oldest", async () => {
+  it("can retrieve reports reports, newest to oldes, and also count them", async () => {
     await withBarkContext(async ({ context }) => {
       // Given vet v1
       const { vetId } = await givenVet(context, { vetIdx: 1 });
@@ -63,10 +63,14 @@ describe("UserActor::getDogReports", () => {
       expect(reports[0].reportId).toEqual(r3.reportId);
       expect(reports[1].reportId).toEqual(r1.reportId);
       expect(reports[2].reportId).toEqual(r2.reportId);
+
+      // And when...
+      const resCount = await u1.getDogReportCount({ dogId });
+      expect(resCount.result?.reportCount).toEqual(3);
     });
   });
 
-  it("returns ERROR_DOG_NOT_FOUND when actor is not the dog owner", async () => {
+  it("checks whether actor is the dog owner", async () => {
     await withBarkContext(async ({ context }) => {
       // Given two users u1 and u2
       const u1 = await givenUserActor({ idx: 1, context });
@@ -81,6 +85,10 @@ describe("UserActor::getDogReports", () => {
       // Then
       expect(error).toEqual(CODE.ERROR_DOG_NOT_FOUND);
       expect(result).toBeUndefined();
+
+      // And also when...
+      const resCount = await u2.getDogReportCount({ dogId: d1.dogId });
+      expect(resCount.error).toEqual(CODE.ERROR_DOG_NOT_FOUND);
     });
   });
 });

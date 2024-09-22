@@ -24,7 +24,7 @@ export default async function Page(props: { params: { dogId: string } }) {
   if (resCount.error !== undefined) {
     return <SimpleErrorPage error={resCount.error} />;
   }
-  const reportCount = resCount.result.numReports;
+  const { reportCount } = resCount.result;
   const resProfile = await actor.getDogProfile({
     dogId,
   });
