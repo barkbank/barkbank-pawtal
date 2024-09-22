@@ -11,7 +11,6 @@ import {
 } from "../bark/models/dog-profile-models";
 import { DogProfileService } from "../bark/services/dog-profile-service";
 import { getMyPets } from "./actions/get-my-pets";
-import { opFetchDogReportCount } from "../bark/operations/op-fetch-dog-report-count";
 
 export type UserActorConfig = {
   dbPool: Pool;
@@ -129,8 +128,7 @@ export class UserActor {
 
   async getDogReportCount(args: { dogId: string }) {
     const { dogId } = args;
-    const { context } = this.getParams();
-    // TODO: Impl DogProfileService::getDogReportCount it should check dog ownership
-    return opFetchDogReportCount(context, { dogId });
+    const { userId, dogProfileService } = this.getParams();
+    return dogProfileService.getDogReportCount({ userId, dogId });
   }
 }
