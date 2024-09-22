@@ -44,19 +44,24 @@ PW_WORKERS=1
 #
 # build - Next Build - this checks types are correct
 #
+# run-build - Runs the Next Build
+#
 # fmt - Formats the code
 #
 # test - Execute unit tests, checks for wip tasks
 #
 # lint - Linting checks
 #
-.PHONY: run build fmt test lint test-ui
+.PHONY: run build run-build fmt test lint test-ui
 
 run:
 	npm run dev
 
 build:
 	npm run build
+
+run-build:
+	npm run start
 
 fmt:
 	npm run fmt

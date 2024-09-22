@@ -11,8 +11,6 @@ import {
 } from "../bark/models/dog-profile-models";
 import { DogProfileService } from "../bark/services/dog-profile-service";
 import { getMyPets } from "./actions/get-my-pets";
-import { opFetchReportsByDogId } from "../bark/operations/op-fetch-reports-by-dog-id";
-import { ReportDao } from "../bark/daos/report-dao";
 import { opFetchDogReportCount } from "../bark/operations/op-fetch-dog-report-count";
 
 export type UserActorConfig = {
@@ -123,12 +121,10 @@ export class UserActor {
     return dogProfileService.getDogAppointments({ userId, dogId });
   }
 
-  // TODO: Test UserActor::getDogReports
   async getDogReports(args: { dogId: string }) {
     const { dogId } = args;
-    const { context, userId } = this.getParams();
-    // TODO: Impl DogProfileService::getDogReports it should check dog ownership
-    return opFetchReportsByDogId(context, { dogId, actorUserId: userId });
+    const { userId, dogProfileService } = this.getParams();
+    return dogProfileService.getDogReports({ userId, dogId });
   }
 
   async getDogReportCount(args: { dogId: string }) {
