@@ -12,9 +12,6 @@ import {
 import { DogProfileService } from "../bark/services/dog-profile-service";
 import { getMyPets } from "./actions/get-my-pets";
 import { opFetchDogReportCount } from "../bark/operations/op-fetch-dog-report-count";
-import { Result } from "../utilities/result";
-import { CODE } from "../utilities/bark-code";
-import { BarkReport } from "../bark/models/report-models";
 
 export type UserActorConfig = {
   dbPool: Pool;
@@ -128,11 +125,7 @@ export class UserActor {
   //     the tests can be written using user and vet actors with minimal
   //     mocking. In the meantime, this behaviour is covered by the "user can
   //     view report and edit sub-profile" UI Test.
-  async getDogReports(args: {
-    dogId: string;
-  }): Promise<
-    Result<BarkReport[], typeof CODE.FAILED | typeof CODE.ERROR_DOG_NOT_FOUND>
-  > {
+  async getDogReports(args: { dogId: string }) {
     const { dogId } = args;
     const { userId, dogProfileService } = this.getParams();
     return dogProfileService.getDogReports({ userId, dogId });
