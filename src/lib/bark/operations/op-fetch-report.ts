@@ -24,11 +24,12 @@ export async function opFetchReport(
 > {
   const { dbPool } = context;
   const { reportId, actorVetId, actorUserId } = args;
+  const reportDao = new ReportDao({ dbPool });
   const conn = await dbPool.connect();
   try {
-    const reportDao = new ReportDao(conn);
     const encryptedReport = await reportDao.getEncryptedBarkReport({
       reportId,
+      conn,
     });
     if (encryptedReport === null) {
       return Err(CODE.ERROR_REPORT_NOT_FOUND);

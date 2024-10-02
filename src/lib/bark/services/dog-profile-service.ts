@@ -38,7 +38,7 @@ import { toBarkReport } from "../mappers/to-bark-report";
  * Service for users to manage their dog profiles.
  */
 export class DogProfileService {
-  constructor(private config: { context: BarkContext }) {}
+  constructor(private config: { context: BarkContext; reportDao: ReportDao }) {}
 
   async addDogProfile(args: {
     userId: string;
@@ -126,15 +126,18 @@ export class DogProfileService {
   > {
     const { userId, dogId, spec } = args;
     const vetId = spec.dogPreferredVetId;
+    const { reportDao } = this.config;
     return dbTransaction(this.pool(), async (conn) => {
       const dogDao = new EncryptedDogDao(conn);
       const prefDao = new VetPreferenceDao(conn);
-      const reportDao = new ReportDao(conn);
       const isOwner = await dogDao.isOwner({ userId, dogId });
       if (!isOwner) {
         return Err(CODE.ERROR_DOG_NOT_FOUND);
       }
-      const { reportCount } = await reportDao.getReportCountByDog({ dogId });
+      const { reportCount } = await reportDao.getReportCountByDog({
+        dogId,
+        conn,
+      });
       if (reportCount > 0) {
         return Err(CODE.ERROR_CANNOT_UPDATE_FULL_PROFILE);
       }
@@ -162,15 +165,18 @@ export class DogProfileService {
   > {
     const { userId, dogId, spec } = args;
     const vetId = spec.dogPreferredVetId;
+    const { reportDao } = this.config;
     return dbTransaction(this.pool(), async (conn) => {
       const dogDao = new EncryptedDogDao(conn);
       const prefDao = new VetPreferenceDao(conn);
-      const reportDao = new ReportDao(conn);
       const isOwner = await dogDao.isOwner({ userId, dogId });
       if (!isOwner) {
         return Err(CODE.ERROR_DOG_NOT_FOUND);
       }
-      const { reportCount } = await reportDao.getReportCountByDog({ dogId });
+      const { reportCount } = await reportDao.getReportCountByDog({
+        dogId,
+        conn,
+      });
       if (reportCount === 0) {
         return Err(CODE.ERROR_SHOULD_UPDATE_FULL_PROFILE);
       }
@@ -279,15 +285,16 @@ export class DogProfileService {
     Result<BarkReport[], typeof CODE.FAILED | typeof CODE.ERROR_DOG_NOT_FOUND>
   > {
     const { userId, dogId } = args;
+    const { reportDao } = this.config;
     return dbTransaction(this.pool(), async (conn) => {
       const dogDao = new EncryptedDogDao(conn);
       const isOwner = await dogDao.isOwner({ userId, dogId });
       if (!isOwner) {
         return Err(CODE.ERROR_DOG_NOT_FOUND);
       }
-      const reportDao = new ReportDao(conn);
       const encrytpedReports = await reportDao.getEncryptedBarkReportsByDogId({
         dogId,
+        conn,
       });
       const futureReports = encrytpedReports.map(async (encrypted) =>
         this.toBarkReport({ encrypted }),
@@ -307,14 +314,17 @@ export class DogProfileService {
     >
   > {
     const { userId, dogId } = args;
+    const { reportDao } = this.config;
     return dbTransaction(this.pool(), async (conn) => {
       const dogDao = new EncryptedDogDao(conn);
       const isOwner = await dogDao.isOwner({ userId, dogId });
       if (!isOwner) {
         return Err(CODE.ERROR_DOG_NOT_FOUND);
       }
-      const reportDao = new ReportDao(conn);
-      const { reportCount } = await reportDao.getReportCountByDog({ dogId });
+      const { reportCount } = await reportDao.getReportCountByDog({
+        dogId,
+        conn,
+      });
       return Ok({ reportCount });
     });
   }

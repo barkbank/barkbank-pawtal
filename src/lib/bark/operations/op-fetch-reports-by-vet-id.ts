@@ -12,7 +12,7 @@ export async function opFetchReportsByVetId(
   const { dbPool } = context;
   const { vetId } = args;
   try {
-    const dao = new ReportDao(dbPool);
+    const dao = new ReportDao({ dbPool });
     const encryptedReports = await dao.getEncryptedBarkReportsByVetId({
       vetId,
     });

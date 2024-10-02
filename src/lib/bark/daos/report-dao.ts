@@ -1,4 +1,4 @@
-import { DbConnection, DbContext, dbQuery } from "@/lib/data/db-utils";
+import { DbConnection, DbContext, DbPool, dbQuery } from "@/lib/data/db-utils";
 import { z } from "zod";
 import {
   EncryptedBarkReport,
@@ -61,7 +61,14 @@ export class ReportDao {
   `;
 
   // TODO: Allow conn to be given to all dao methods and restrict constructor db to DbPool.
-  constructor(private db: DbContext) {}
+  constructor(private args: { dbPool: DbPool }) {}
+
+  private db(conn?: DbConnection): DbContext {
+    if (conn !== undefined) {
+      return conn;
+    }
+    return this.args.dbPool;
+  }
 
   async insert(args: {
     callId: string;
@@ -105,7 +112,7 @@ export class ReportDao {
 
     SELECT report_id::text as "reportId" FROM mInsertion
     `;
-    const res = await dbQuery<Row>(conn ?? this.db, sql, [
+    const res = await dbQuery<Row>(this.db(conn), sql, [
       callId,
       spec.visitTime,
       spec.dogWeightKg,
@@ -123,8 +130,9 @@ export class ReportDao {
   async update(args: {
     reportId: string;
     spec: EncryptedBarkReportData;
+    conn?: DbConnection;
   }): Promise<boolean> {
-    const { reportId, spec } = args;
+    const { reportId, spec, conn } = args;
     const sql = `
     UPDATE reports
     SET
@@ -140,7 +148,7 @@ export class ReportDao {
     WHERE report_id = $1
     RETURNING 1
     `;
-    const res = await dbQuery(this.db, sql, [
+    const res = await dbQuery(this.db(conn), sql, [
       reportId,
       spec.visitTime,
       spec.dogWeightKg,
@@ -157,23 +165,25 @@ export class ReportDao {
 
   async getReportCountByDog(args: {
     dogId: string;
+    conn?: DbConnection;
   }): Promise<{ reportCount: number }> {
     const RowSchema = z.object({ reportCount: z.number() });
     type Row = z.infer<typeof RowSchema>;
-    const { dogId } = args;
+    const { dogId, conn } = args;
     const sql = `
     SELECT COUNT(1)::integer as "reportCount"
     FROM reports
     WHERE dog_id = $1
     `;
-    const res = await dbQuery<Row>(this.db, sql, [dogId]);
+    const res = await dbQuery<Row>(this.db(conn), sql, [dogId]);
     return RowSchema.parse(res.rows[0]);
   }
 
   async getMetadata(args: {
     reportId: string;
+    conn?: DbConnection;
   }): Promise<BarkReportMetadata | null> {
-    const { reportId } = args;
+    const { reportId, conn } = args;
     const sql = `
     SELECT
       report_id as "reportId",
@@ -185,7 +195,9 @@ export class ReportDao {
     FROM reports
     WHERE report_id = $1
     `;
-    const res = await dbQuery<BarkReportMetadata>(this.db, sql, [reportId]);
+    const res = await dbQuery<BarkReportMetadata>(this.db(conn), sql, [
+      reportId,
+    ]);
     if (res.rows.length === 0) {
       return null;
     }
@@ -194,14 +206,17 @@ export class ReportDao {
 
   async getEncryptedBarkReport(args: {
     reportId: string;
+    conn?: DbConnection;
   }): Promise<EncryptedBarkReport | null> {
-    const { reportId } = args;
+    const { reportId, conn } = args;
     const sql = `
     SELECT *
     FROM (${this.barkReportQuery}) as tReport
     WHERE tReport."reportId" = $1
     `;
-    const res = await dbQuery<EncryptedBarkReport>(this.db, sql, [reportId]);
+    const res = await dbQuery<EncryptedBarkReport>(this.db(conn), sql, [
+      reportId,
+    ]);
     if (res.rows.length === 0) {
       return null;
     }
@@ -210,29 +225,31 @@ export class ReportDao {
 
   async getEncryptedBarkReportsByDogId(args: {
     dogId: string;
+    conn?: DbConnection;
   }): Promise<EncryptedBarkReport[]> {
-    const { dogId } = args;
+    const { dogId, conn } = args;
     const sql = `
     SELECT *
     FROM (${this.barkReportQuery}) as tReport
     WHERE tReport."dogId" = $1
     ORDER BY tReport."visitTime" DESC
     `;
-    const res = await dbQuery<EncryptedBarkReport>(this.db, sql, [dogId]);
+    const res = await dbQuery<EncryptedBarkReport>(this.db(conn), sql, [dogId]);
     return z.array(EncryptedBarkReportSchema).parse(res.rows);
   }
 
   async getEncryptedBarkReportsByVetId(args: {
     vetId: string;
+    conn?: DbConnection;
   }): Promise<EncryptedBarkReport[]> {
-    const { vetId } = args;
+    const { vetId, conn } = args;
     const sql = `
     SELECT *
     FROM (${this.barkReportQuery}) as tReport
     WHERE tReport."vetId" = $1
     ORDER BY tReport."visitTime" DESC
     `;
-    const res = await dbQuery<EncryptedBarkReport>(this.db, sql, [vetId]);
+    const res = await dbQuery<EncryptedBarkReport>(this.db(conn), sql, [vetId]);
     return z.array(EncryptedBarkReportSchema).parse(res.rows);
   }
 }

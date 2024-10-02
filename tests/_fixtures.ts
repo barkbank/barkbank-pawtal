@@ -99,6 +99,7 @@ import {
   EncryptedBarkReportData,
   EncryptedBarkReportDataSchema,
 } from "@/lib/bark/models/encrypted-bark-report-data";
+import { ReportDao } from "@/lib/bark/daos/report-dao";
 
 export function ensureTimePassed(): void {
   const t0 = new Date().getTime();
@@ -206,7 +207,8 @@ export function getUserAccountService(dbPool: Pool) {
 
 export function getDogProfileService(dbPool: Pool) {
   const context = getBarkContext(dbPool);
-  return new DogProfileService({ context });
+  const reportDao = new ReportDao({ dbPool });
+  return new DogProfileService({ context, reportDao });
 }
 
 export function mockUserAccountSpec(

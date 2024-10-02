@@ -31,7 +31,9 @@ describe("DogProfileService", () => {
       const { userId } = await _createTestUser({ context, idx: 1 });
       const { vetId } = await _createTestVetClinic({ context, idx: 2 });
       const spec = mockDogProfileSpec({ dogPreferredVetId: vetId });
-      const service = new DogProfileService({ context });
+      const { dbPool } = context;
+      const reportDao = new ReportDao({ dbPool });
+      const service = new DogProfileService({ context, reportDao });
       const res1 = await service.addDogProfile({ userId, spec });
       const { dogId } = res1.result!;
       const res2 = await service.getDogProfile({ userId, dogId });
@@ -57,7 +59,9 @@ describe("DogProfileService", () => {
         dogPreferredVetId: v2.vetId,
       });
 
-      const service = new DogProfileService({ context });
+      const { dbPool } = context;
+      const reportDao = new ReportDao({ dbPool });
+      const service = new DogProfileService({ context, reportDao });
       await service.addDogProfile({ userId, spec: spec1 });
       await service.addDogProfile({ userId, spec: spec2 });
 
@@ -77,7 +81,9 @@ describe("DogProfileService", () => {
       await withBarkContext(async ({ context }) => {
         const { userId } = await _createTestUser({ context, idx: 1 });
         const spec1 = mockDogProfileSpec({ dogName: "Eric" });
-        const service = new DogProfileService({ context });
+        const { dbPool } = context;
+        const reportDao = new ReportDao({ dbPool });
+        const service = new DogProfileService({ context, reportDao });
         const resAdd = await service.addDogProfile({ userId, spec: spec1 });
         const { dogId } = resAdd.result!;
         const spec2 = mockDogProfileSpec({ dogName: "Erik" });
@@ -98,7 +104,9 @@ describe("DogProfileService", () => {
       await withBarkContext(async ({ context }) => {
         const { userId } = await _createTestUser({ context, idx: 1 });
         const spec1 = mockDogProfileSpec({ dogName: "Eric" });
-        const service = new DogProfileService({ context });
+        const { dbPool } = context;
+        const reportDao = new ReportDao({ dbPool });
+        const service = new DogProfileService({ context, reportDao });
         const resAdd = await service.addDogProfile({ userId, spec: spec1 });
         const { dogId } = resAdd.result!;
         const spec2 = mockSubProfileSpec({ dogName: "Erik" });
@@ -121,7 +129,9 @@ describe("DogProfileService", () => {
           dogName: "Eric",
           dogPreferredVetId: vetId,
         });
-        const service = new DogProfileService({ context });
+        const { dbPool } = context;
+        const reportDao = new ReportDao({ dbPool });
+        const service = new DogProfileService({ context, reportDao });
         const resAdd = await service.addDogProfile({ userId, spec: spec1 });
         const { dogId } = resAdd.result!;
         await _attachReportToDog({ vetId, dogId, context });
@@ -142,7 +152,9 @@ describe("DogProfileService", () => {
           dogName: "Eric",
           dogPreferredVetId: vetId,
         });
-        const service = new DogProfileService({ context });
+        const { dbPool } = context;
+        const reportDao = new ReportDao({ dbPool });
+        const service = new DogProfileService({ context, reportDao });
         const resAdd = await service.addDogProfile({ userId, spec: spec1 });
         const { dogId } = resAdd.result!;
         await _attachReportToDog({ vetId, dogId, context });
@@ -170,7 +182,9 @@ describe("DogProfileService", () => {
         dogWeightKg: null,
         dogPreferredVetId: vetId,
       });
-      const service = new DogProfileService({ context });
+      const { dbPool } = context;
+      const reportDao = new ReportDao({ dbPool });
+      const service = new DogProfileService({ context, reportDao });
       const resAdd = await service.addDogProfile({ userId, spec: spec1 });
       const { dogId } = resAdd.result!;
       await _attachReportToDog({
@@ -192,21 +206,21 @@ async function _attachReportToDog(args: {
   reportOverrides?: Partial<EncryptedBarkReportData>;
 }) {
   const { vetId, dogId, context, reportOverrides } = args;
+  const { dbPool } = context;
+  const reportDao = new ReportDao({ dbPool });
   const res = await dbTransaction(context.dbPool, async (conn) => {
     const callDao = new CallDao(conn);
     const { callId } = await callDao.insert({
       spec: { dogId, vetId, callOutcome: "REPORTED" },
     });
-    const reportDao = new ReportDao(conn);
     const spec = mockEncryptedBarkReportData({
       ...reportOverrides,
     });
-    const { reportId } = await reportDao.insert({ callId, spec });
+    const { reportId } = await reportDao.insert({ callId, spec, conn });
     return Ok({ reportId, callId });
   });
   expect(res.error).toBeUndefined();
-  const dao = new ReportDao(context.dbPool);
-  const { reportCount } = await dao.getReportCountByDog({ dogId });
+  const { reportCount } = await reportDao.getReportCountByDog({ dogId });
   expect(reportCount).toEqual(1);
   return res;
 }
