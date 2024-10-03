@@ -16,7 +16,7 @@ export async function opEditReport(
 > {
   const { dbPool } = context;
   const { reportId, reportData, actorVetId } = args;
-  const reportDao = new ReportDao({ dbPool });
+  const reportDao = new ReportDao();
   const conn = await dbPool.connect();
   try {
     const encryptedReportData = await toEncryptedBarkReportData(
@@ -25,7 +25,7 @@ export async function opEditReport(
     );
 
     await dbBegin(conn);
-    const metadata = await reportDao.getMetadata({ reportId, conn });
+    const metadata = await reportDao.getMetadata({ reportId, db: conn });
     if (metadata === null) {
       return CODE.ERROR_REPORT_NOT_FOUND;
     }
@@ -35,7 +35,7 @@ export async function opEditReport(
     const didUpdate = await reportDao.update({
       reportId,
       spec: encryptedReportData,
-      conn,
+      db: conn,
     });
     if (!didUpdate) {
       return CODE.ERROR_REPORT_NOT_FOUND;

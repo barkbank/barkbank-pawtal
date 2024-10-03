@@ -136,7 +136,7 @@ export class DogProfileService {
       }
       const { reportCount } = await reportDao.getReportCountByDog({
         dogId,
-        conn,
+        db: conn,
       });
       if (reportCount > 0) {
         return Err(CODE.ERROR_CANNOT_UPDATE_FULL_PROFILE);
@@ -175,7 +175,7 @@ export class DogProfileService {
       }
       const { reportCount } = await reportDao.getReportCountByDog({
         dogId,
-        conn,
+        db: conn,
       });
       if (reportCount === 0) {
         return Err(CODE.ERROR_SHOULD_UPDATE_FULL_PROFILE);
@@ -294,7 +294,7 @@ export class DogProfileService {
       }
       const encrytpedReports = await reportDao.getEncryptedBarkReportsByDogId({
         dogId,
-        conn,
+        db: conn,
       });
       const futureReports = encrytpedReports.map(async (encrypted) =>
         this.toBarkReport({ encrypted }),
@@ -323,7 +323,7 @@ export class DogProfileService {
       }
       const { reportCount } = await reportDao.getReportCountByDog({
         dogId,
-        conn,
+        db: conn,
       });
       return Ok({ reportCount });
     });

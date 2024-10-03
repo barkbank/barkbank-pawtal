@@ -607,8 +607,7 @@ export class AppFactory {
   public getReportDao(): Promise<ReportDao> {
     if (this.promisedReportDao === null) {
       this.promisedReportDao = new Promise(async (resolve) => {
-        const dbPool = await this.getDbPool();
-        const dao = new ReportDao({ dbPool });
+        const dao = new ReportDao();
         this.logCreated("ReportDao");
         resolve(dao);
       });

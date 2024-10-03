@@ -207,7 +207,7 @@ export function getUserAccountService(dbPool: Pool) {
 
 export function getDogProfileService(dbPool: Pool) {
   const context = getBarkContext(dbPool);
-  const reportDao = new ReportDao({ dbPool });
+  const reportDao = new ReportDao();
   return new DogProfileService({ context, reportDao });
 }
 
