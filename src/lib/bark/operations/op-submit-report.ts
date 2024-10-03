@@ -32,6 +32,7 @@ export async function opSubmitReport(
 > {
   const { dbPool } = context;
   const { appointmentId, reportData, actorVetId } = args;
+  const dao = new ReportDao();
   const conn = await dbPool.connect();
   try {
     const encryptedReportData = await toEncryptedBarkReportData(
@@ -52,10 +53,10 @@ export async function opSubmitReport(
     if (res.appointmentStatus !== APPOINTMENT_STATUS.PENDING) {
       return Err(CODE.ERROR_APPOINTMENT_IS_NOT_PENDING);
     }
-    const dao = new ReportDao(conn);
     const { reportId } = await dao.insert({
       callId: appointmentId,
       spec: encryptedReportData,
+      db: conn,
     });
     await updateAppointment(conn, {
       appointmentId,

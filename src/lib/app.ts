@@ -61,6 +61,7 @@ import { PawtalEventService } from "./bark/services/pawtal-event-service";
 import { opIndexDonorSnapshots } from "./bark/operations/op-index-donor-snapshots";
 import { AdminAccountService } from "./bark/services/admin-account-service";
 import { DogProfileService } from "./bark/services/dog-profile-service";
+import { ReportDao } from "./bark/daos/report-dao";
 
 export class AppFactory {
   private envs: NodeJS.Dict<string>;
@@ -93,6 +94,7 @@ export class AppFactory {
   private promisedPawtalEventService: Promise<PawtalEventService> | null = null;
   private promisedAdminAccountService: Promise<AdminAccountService> | null =
     null;
+  private promisedReportDao: Promise<ReportDao> | null = null;
 
   constructor(envs: NodeJS.Dict<string>) {
     this.envs = envs;
@@ -593,12 +595,24 @@ export class AppFactory {
     if (this.promisedDogProfileService === null) {
       this.promisedDogProfileService = new Promise(async (resolve) => {
         const context = await this.getBarkContext();
-        const service = new DogProfileService({ context });
+        const reportDao = await this.getReportDao();
+        const service = new DogProfileService({ context, reportDao });
         this.logCreated("DogProfileService");
         resolve(service);
       });
     }
     return this.promisedDogProfileService;
+  }
+
+  public getReportDao(): Promise<ReportDao> {
+    if (this.promisedReportDao === null) {
+      this.promisedReportDao = new Promise(async (resolve) => {
+        const dao = new ReportDao();
+        this.logCreated("ReportDao");
+        resolve(dao);
+      });
+    }
+    return this.promisedReportDao;
   }
 
   public getUserMapper(): Promise<UserMapper> {
