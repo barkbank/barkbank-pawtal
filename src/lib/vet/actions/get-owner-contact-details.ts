@@ -9,6 +9,7 @@ import { CODE } from "@/lib/utilities/bark-code";
 import { UserPii } from "@/lib/bark/models/user-pii";
 import { toUserPii } from "@/lib/bark/mappers/user-mappers";
 
+// STEP: Move getOwnerContactDetails into VetService
 /**
  * Get contact details of a dog's owner.
  *

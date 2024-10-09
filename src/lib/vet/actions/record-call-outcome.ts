@@ -11,6 +11,7 @@ import {
 } from "@/lib/data/db-utils";
 import { PoolClient } from "pg";
 
+// STEP: Move recordCallOutcome into VetService
 export async function recordCallOutcome(
   actor: VetActor,
   args: {

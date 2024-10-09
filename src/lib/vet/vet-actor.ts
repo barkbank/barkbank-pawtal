@@ -16,6 +16,7 @@ export type VetActorConfig = {
   textEncryptionService: EncryptionService;
   context: BarkContext;
   vetAccountService: VetAccountService;
+  // STEP: Define a VetService and wire it into VetActorConfig
 };
 
 /**
@@ -52,6 +53,7 @@ export class VetActor {
   getOwnerContactDetails(args: { dogId: string }) {
     const { dogId } = args;
     return getOwnerContactDetails(this, dogId);
+    // STEP: Move this into VetService
   }
 
   recordCallOutcome(args: {
@@ -60,5 +62,6 @@ export class VetActor {
   }) {
     const { dogId, callOutcome } = args;
     return recordCallOutcome(this, { dogId, callOutcome });
+    // STEP: Move this into VetService
   }
 }
