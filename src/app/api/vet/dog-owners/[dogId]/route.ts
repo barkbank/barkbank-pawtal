@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAuthenticatedVetActor } from "@/lib/auth";
 import { HttpStatus } from "@/app/_lib/http-status-codes";
-import { getOwnerContactDetails } from "@/lib/vet/actions/get-owner-contact-details";
 import { CODE } from "@/lib/utilities/bark-code";
 
 export async function GET(
@@ -13,10 +12,8 @@ export async function GET(
     return NextResponse.json({}, { status: HttpStatus.HTTP_401_UNAUTHORIZED });
   }
   const { dogId } = args.params;
-  const { result: ownerContactDetails, error } = await getOwnerContactDetails(
-    actor,
-    dogId,
-  );
+  const { result: ownerContactDetails, error } =
+    await actor.getOwnerContactDetails({ dogId });
   if (error === CODE.ERROR_DOG_NOT_FOUND) {
     return NextResponse.json({}, { status: HttpStatus.HTTP_404_NOT_FOUND });
   }

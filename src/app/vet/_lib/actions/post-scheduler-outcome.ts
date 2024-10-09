@@ -2,7 +2,6 @@
 
 import { CODE } from "@/lib/utilities/bark-code";
 import { getAuthenticatedVetActor } from "@/lib/auth";
-import { recordCallOutcome } from "@/lib/vet/actions/record-call-outcome";
 import { revalidatePath } from "next/cache";
 import { RoutePath } from "@/lib/route-path";
 import { SchedulerOutcome } from "../models/scheduler-outcome";
@@ -20,7 +19,7 @@ export async function postSchedulerOutcome(args: {
   if (actor === null) {
     return CODE.ERROR_NOT_LOGGED_IN;
   }
-  const { error } = await recordCallOutcome(actor, args);
+  const { error } = await actor.recordCallOutcome(args);
   if (error !== undefined) {
     return error;
   }

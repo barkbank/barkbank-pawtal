@@ -1,13 +1,12 @@
 import { dbInsertDogVetPreference } from "@/lib/data/db-dogs";
 import { withDb } from "../_db_helpers";
 import { getVetActor, insertDog, insertUser, insertVet } from "../_fixtures";
-import { recordCallOutcome } from "@/lib/vet/actions/record-call-outcome";
 import { CALL_OUTCOME, CallOutcome } from "@/lib/bark/enums/call-outcome";
 import { CODE } from "@/lib/utilities/bark-code";
 import { dbResultQuery } from "@/lib/data/db-utils";
 import { Pool } from "pg";
 
-describe("recordCallOutcome", () => {
+describe("VetActor::recordCallOutcome", () => {
   it("should return ERROR_NOT_PREFERRED_VET if vet is not the preferred vet of the dog", async () => {
     await withDb(async (dbPool) => {
       const u1 = await insertUser(1, dbPool);
@@ -17,7 +16,7 @@ describe("recordCallOutcome", () => {
       await dbInsertDogVetPreference(dbPool, d1.dogId, v2.vetId);
 
       const actor = await getVetActor(v1.vetId, dbPool);
-      const { result, error } = await recordCallOutcome(actor, {
+      const { result, error } = await actor.recordCallOutcome({
         dogId: d1.dogId,
         callOutcome: CALL_OUTCOME.APPOINTMENT,
       });
@@ -33,7 +32,7 @@ describe("recordCallOutcome", () => {
       await dbInsertDogVetPreference(dbPool, d1.dogId, v1.vetId);
 
       const actor = await getVetActor(v1.vetId, dbPool);
-      const { result, error } = await recordCallOutcome(actor, {
+      const { result, error } = await actor.recordCallOutcome({
         dogId: d1.dogId,
         callOutcome: CALL_OUTCOME.APPOINTMENT,
       });
@@ -51,7 +50,7 @@ describe("recordCallOutcome", () => {
       await dbInsertDogVetPreference(dbPool, d1.dogId, v1.vetId);
 
       const actor = await getVetActor(v1.vetId, dbPool);
-      const { result, error } = await recordCallOutcome(actor, {
+      const { result, error } = await actor.recordCallOutcome({
         dogId: d1.dogId,
         callOutcome: CALL_OUTCOME.DECLINED,
       });
