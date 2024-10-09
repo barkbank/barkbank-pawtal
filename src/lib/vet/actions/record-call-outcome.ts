@@ -17,7 +17,7 @@ export async function recordCallOutcome(
 ): Promise<
   Result<
     { callId: string },
-    typeof CODE.ERROR_NOT_PREFERRED_VET | typeof CODE.DB_QUERY_FAILURE
+    typeof CODE.ERROR_NOT_PREFERRED_VET | typeof CODE.FAILED
   >
 > {
   const { dogId, callOutcome } = args;
@@ -38,8 +38,7 @@ export async function recordCallOutcome(
   } catch (err) {
     await dbRollback(conn);
     console.error(err);
-    // WIP: Change this to CODE.FAILED;
-    return Err(CODE.DB_QUERY_FAILURE);
+    return Err(CODE.FAILED);
   } finally {
     await dbRelease(conn);
   }
