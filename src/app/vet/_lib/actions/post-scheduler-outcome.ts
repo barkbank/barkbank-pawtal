@@ -13,7 +13,7 @@ export async function postSchedulerOutcome(args: {
   | typeof CODE.OK
   | typeof CODE.ERROR_NOT_LOGGED_IN
   | typeof CODE.ERROR_NOT_PREFERRED_VET
-  | typeof CODE.DB_QUERY_FAILURE
+  | typeof CODE.FAILED
 > {
   const actor = await getAuthenticatedVetActor();
   if (actor === null) {

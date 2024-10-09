@@ -27,6 +27,24 @@ export class VetPreferenceDao {
     await dbQuery(this.db, sql, [pref.userId, pref.dogId, pref.vetId]);
   }
 
+  async getByDogAndVet(args: {
+    dogId: string;
+    vetId: string;
+  }): Promise<VetPreference | null> {
+    const { dogId, vetId } = args;
+    const sql = `
+    SELECT ${this.projection}
+    FROM dog_vet_preferences
+    WHERE dog_id = $1
+    AND vet_id = $2
+    `;
+    const res = await dbQuery(this.db, sql, [dogId, vetId]);
+    if (res.rows.length !== 1) {
+      return null;
+    }
+    return VetPreferenceSchema.parse(res.rows[0]);
+  }
+
   async deleteByDog(args: { dogId: string }): Promise<void> {
     const { dogId } = args;
     const sql = `
