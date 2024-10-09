@@ -136,28 +136,40 @@ db-refill:
 
 ######################################################################
 # Task management
+#
+# wip - WIP notes for the current merge request. These should not be
+#     merged into main.
+#
+# step - A small step towards some direction. These should be small
+#     changes. They can be merged into main.
+#
+# todo - Something we should work on later.
+#
+.PHONY: wip todo step
 
-# Lists work-in-progress notes. These shouldn't be merged into
-# main. Use TODO if they should be worked on in another feature
-# branch.
-.PHONY: wip
 wip:
 	@echo Remaining wip tasks
 	@echo
 	@grep -n --color=always -R 'WIP[:]' src tests db e2e scripts || true
 	@echo
-	@echo Number of tasks remaining
+	@echo Number of WIPs remaining
 	@grep -n --color=always -R 'WIP[:]' src tests db e2e scripts | wc -l
 
-# Lists TODO notes.
-.PHONY: todo
 todo:
 	@echo Remaining todo tasks
 	@echo
 	@grep -n --color=always -R 'TODO[:]' src tests db e2e scripts || true
 	@echo
-	@echo Number of tasks remaining
+	@echo Number of TODOs remaining
 	@grep -n --color=always -R 'TODO[:]' src tests db e2e scripts | wc -l
+
+step:
+	@echo Remaining step tasks
+	@echo
+	@grep -n --color=always -R 'STEP[:]' src tests db e2e scripts || true
+	@echo
+	@echo Number of STEPs remaining
+	@grep -n --color=always -R 'STEP[:]' src tests db e2e scripts | wc -l
 
 
 ######################################################################
