@@ -6,6 +6,8 @@ import { VetClinic, VetLogin } from "../bark/models/vet-models";
 import { BarkContext } from "../bark/bark-context";
 import { VetAccountService } from "../bark/services/vet-account-service";
 import { getOwnerContactDetails } from "./actions/get-owner-contact-details";
+import { CALL_OUTCOME } from "../bark/enums/call-outcome";
+import { recordCallOutcome } from "./actions/record-call-outcome";
 
 export type VetActorConfig = {
   dbPool: Pool;
@@ -50,5 +52,13 @@ export class VetActor {
   getOwnerContactDetails(args: { dogId: string }) {
     const { dogId } = args;
     return getOwnerContactDetails(this, dogId);
+  }
+
+  recordCallOutcome(args: {
+    dogId: string;
+    callOutcome: typeof CALL_OUTCOME.APPOINTMENT | typeof CALL_OUTCOME.DECLINED;
+  }) {
+    const { dogId, callOutcome } = args;
+    return recordCallOutcome(this, { dogId, callOutcome });
   }
 }
