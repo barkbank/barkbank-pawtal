@@ -5,6 +5,7 @@ import { DogMapper } from "../data/dog-mapper";
 import { VetClinic, VetLogin } from "../bark/models/vet-models";
 import { BarkContext } from "../bark/bark-context";
 import { VetAccountService } from "../bark/services/vet-account-service";
+import { getOwnerContactDetails } from "./actions/get-owner-contact-details";
 
 export type VetActorConfig = {
   dbPool: Pool;
@@ -44,5 +45,10 @@ export class VetActor {
   // TODO: How can this be undefined?
   getLogin(): VetLogin | undefined {
     return this.args.vetLogin;
+  }
+
+  getOwnerContactDetails(args: { dogId: string }) {
+    const { dogId } = args;
+    return getOwnerContactDetails(this, dogId);
   }
 }

@@ -16,11 +16,10 @@ import {
   OwnerContactDetails,
   OwnerContactDetailsSchema,
 } from "@/lib/bark/models/owner-contact-details";
-import { getOwnerContactDetails } from "@/lib/vet/actions/get-owner-contact-details";
 import { CALL_OUTCOME } from "@/lib/bark/enums/call-outcome";
 import { CODE } from "@/lib/utilities/bark-code";
 
-describe("getOwnerContactDetails", () => {
+describe("VetActor::getOwnerContactDetails", () => {
   it("should return a dog's owner contact details", async () => {
     await withDb(async (dbPool) => {
       const { vetId } = await insertVet(1, dbPool);
@@ -28,7 +27,7 @@ describe("getOwnerContactDetails", () => {
         preferredVetId: vetId,
       });
       const actor = await getVetActor(vetId, dbPool);
-      const { result, error } = await getOwnerContactDetails(actor, dogId);
+      const { result, error } = await actor.getOwnerContactDetails({ dogId });
       expect(error).toBeUndefined();
       expect(result).toEqual(ownerContactDetails);
     });
@@ -56,7 +55,9 @@ describe("getOwnerContactDetails", () => {
 
       // WHEN v1 retrieves owner details of d2
       const actor = await getVetActor(v1.vetId, dbPool);
-      const { result, error } = await getOwnerContactDetails(actor, d2.dogId);
+      const { result, error } = await actor.getOwnerContactDetails({
+        dogId: d2.dogId,
+      });
 
       // THEN
       expect(error).toBeUndefined();
@@ -74,7 +75,7 @@ describe("getOwnerContactDetails", () => {
 
       // WHEN
       const actor = await getVetActor(vetId, dbPool);
-      const { result, error } = await getOwnerContactDetails(actor, dogId);
+      const { result, error } = await actor.getOwnerContactDetails({ dogId });
 
       // THEN
       expect(error).toEqual(CODE.ERROR_NOT_PREFERRED_VET);
@@ -100,7 +101,9 @@ describe("getOwnerContactDetails", () => {
 
       // WHEN v1 requests for owner details of d2.
       const actor = await getVetActor(v1.vetId, dbPool);
-      const { result, error } = await getOwnerContactDetails(actor, d2.dogId);
+      const { result, error } = await actor.getOwnerContactDetails({
+        dogId: d2.dogId,
+      });
 
       // THEN
       expect(error).toEqual(CODE.ERROR_NOT_PREFERRED_VET);
@@ -115,7 +118,7 @@ describe("getOwnerContactDetails", () => {
 
       // WHEN
       const actor = await getVetActor(vetId, dbPool);
-      const { result, error } = await getOwnerContactDetails(actor, dogId);
+      const { result, error } = await actor.getOwnerContactDetails({ dogId });
 
       // THEN
       expect(error).toEqual(CODE.ERROR_DOG_NOT_FOUND);
