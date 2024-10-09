@@ -30,13 +30,15 @@ export async function recordCallOutcome(
   const { dbPool, vetId } = actor.getParams();
   const conn = await dbPool.connect();
   try {
+    const callDao = new CallDao(conn);
+    const spec: CallSpec = { dogId, vetId, callOutcome };
     const ctx = { actor, vetId, dogId, callOutcome, conn };
     await dbBegin(conn);
     const resPref = await checkPreferredVet(ctx);
     if (resPref !== CODE.OK) {
       return Err(resPref);
     }
-    const { callId } = await insertCallRecord(ctx);
+    const { callId } = await callDao.insert({ spec });
     await dbCommit(conn);
     return Ok({ callId });
   } catch (err) {
@@ -79,12 +81,4 @@ async function checkPreferredVet(
     return CODE.ERROR_NOT_PREFERRED_VET;
   }
   return CODE.OK;
-}
-
-async function insertCallRecord(ctx: Context): Promise<{ callId: string }> {
-  const { conn, dogId, vetId, callOutcome } = ctx;
-  const dao = new CallDao(conn);
-  const spec: CallSpec = { dogId, vetId, callOutcome };
-  const { callId } = await dao.insert({ spec });
-  return { callId };
 }
