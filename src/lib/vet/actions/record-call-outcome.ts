@@ -10,6 +10,8 @@ import {
   dbRollback,
 } from "@/lib/data/db-utils";
 import { PoolClient } from "pg";
+import { CallDao } from "@/lib/bark/daos/call-dao";
+import { CallSpec } from "@/lib/bark/models/call-models";
 
 // STEP: Move recordCallOutcome into VetService
 export async function recordCallOutcome(
@@ -34,14 +36,15 @@ export async function recordCallOutcome(
     if (resPref !== CODE.OK) {
       return Err(resPref);
     }
-    const { result, error } = await insertCallRecord(ctx);
-    if (error !== undefined) {
-      return Err(error);
-    }
+    const { callId } = await insertCallRecord(ctx);
     await dbCommit(conn);
-    return Ok(result);
-  } finally {
+    return Ok({ callId });
+  } catch (err) {
     await dbRollback(conn);
+    console.error(err);
+    // WIP: Change this to CODE.FAILED;
+    return Err(CODE.DB_QUERY_FAILURE);
+  } finally {
     await dbRelease(conn);
   }
 }
@@ -78,30 +81,10 @@ async function checkPreferredVet(
   return CODE.OK;
 }
 
-async function insertCallRecord(
-  ctx: Context,
-): Promise<Result<{ callId: string }, typeof CODE.DB_QUERY_FAILURE>> {
+async function insertCallRecord(ctx: Context): Promise<{ callId: string }> {
   const { conn, dogId, vetId, callOutcome } = ctx;
-  const sql = `
-  INSERT INTO calls (
-    dog_id,
-    vet_id,
-    call_outcome,
-    encrypted_opt_out_reason
-  )
-  VALUES ($1, $2, $3, '')
-  RETURNING call_id as "callId"
-  `;
-  const { result, error } = await dbResultQuery<{ callId: string }>(conn, sql, [
-    dogId,
-    vetId,
-    callOutcome,
-  ]);
-  if (error !== undefined) {
-    return Err(error);
-  }
-  if (result.rows.length !== 1) {
-    return Err(CODE.DB_QUERY_FAILURE);
-  }
-  return Ok(result.rows[0]);
+  const dao = new CallDao(conn);
+  const spec: CallSpec = { dogId, vetId, callOutcome };
+  const { callId } = await dao.insert({ spec });
+  return { callId };
 }
