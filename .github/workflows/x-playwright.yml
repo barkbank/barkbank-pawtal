@@ -29,7 +29,8 @@ jobs:
 
       # ref: https://playwright.dev/docs/ci-intro
       - name: install playwright browsers
-        run: npx playwright install --with-deps
+        # run: npx playwright install --with-deps
+        run: npx playwright install chromium firefox webkit
 
       - name: install flyway
         run: |
