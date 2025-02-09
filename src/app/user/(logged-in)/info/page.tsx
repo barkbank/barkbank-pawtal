@@ -128,7 +128,7 @@ const faqs = [
           conditions.
         </p>
         <p>
-          <b>Blood Type:</b> Dogs must have DEA 1.1 or 1.2 negative blood type.
+          <b>Blood Type:</b> Dogs must have DEA 1 negative blood type.
         </p>
         <p>
           <b>Vaccinations:</b> Donor dogs should be up to date on vaccinations.
