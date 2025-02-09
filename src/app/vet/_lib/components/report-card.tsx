@@ -93,10 +93,10 @@ const getHeartworm = (dogHeartworm: PosNegNil) => {
 
 const getBloodType = (dogDea1Point1: PosNegNil) => {
   if (dogDea1Point1 === POS_NEG_NIL.POSITIVE) {
-    return <Badge className="bg-blue-700 text-xs">DEA1.1 Positive</Badge>;
+    return <Badge className="bg-blue-700 text-xs">DEA 1 Positive</Badge>;
   }
   if (dogDea1Point1 === POS_NEG_NIL.NEGATIVE) {
-    return <Badge className="bg-blue-500 text-xs">DEA1.1 Negative</Badge>;
+    return <Badge className="bg-blue-500 text-xs">DEA 1 Negative</Badge>;
   }
   return <Badge className="bg-slate-300">No Blood Test</Badge>;
 };

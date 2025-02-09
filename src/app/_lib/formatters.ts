@@ -56,10 +56,10 @@ export function formatPregnancyHistory(
 
 export function formatBloodType(dogDea1Point1: DogAntigenPresence): string {
   if (dogDea1Point1 === DOG_ANTIGEN_PRESENCE.POSITIVE) {
-    return "DEA 1.1 Positive";
+    return "DEA 1 Positive";
   }
   if (dogDea1Point1 === DOG_ANTIGEN_PRESENCE.NEGATIVE) {
-    return "DEA 1.1 Negative";
+    return "DEA 1 Negative";
   }
   return "Unknown";
 }

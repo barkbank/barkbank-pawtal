@@ -167,11 +167,11 @@ export function GeneralDogForm(props: {
               value: DOG_ANTIGEN_PRESENCE.UNKNOWN,
             },
             {
-              label: "D.E.A 1.1 positive",
+              label: "DEA 1 Positive",
               value: DOG_ANTIGEN_PRESENCE.POSITIVE,
             },
             {
-              label: "D.E.A 1.1 negative",
+              label: "DEA 1 Negative",
               value: DOG_ANTIGEN_PRESENCE.NEGATIVE,
             },
           ]}
