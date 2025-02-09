@@ -19,6 +19,10 @@ export class UserViewReportPage extends PomDynamicPage {
     return this.reportItem("Dog Weight (KG)");
   }
 
+  dogBloodTypeItem(): Locator {
+    return this.reportItem("Blood Test Result");
+  }
+
   dogGenderItem(): Locator {
     return this.reportItem("Dog Gender");
   }

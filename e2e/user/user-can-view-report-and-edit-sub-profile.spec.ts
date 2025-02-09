@@ -49,6 +49,7 @@ test("user can view report and edit sub-profile", async ({
     overrides: {
       visitTime,
       dogWeightKg: parseFloat(reportedDogWeightKg),
+      dogDea1Point1: "POSITIVE",
     },
   });
   await doLogoutSequence(context);
@@ -73,6 +74,7 @@ test("user can view report and edit sub-profile", async ({
   await pgViewDog.getReportItem({ visitTime, vetName }).click();
   await pgViewReport.checkReady();
   await expect(pgViewReport.dogWeightItem()).toContainText(reportedDogWeightKg);
+  await expect(pgViewReport.dogBloodTypeItem()).toContainText("DEA 1 Positive");
   await expect(pgViewReport.dogBreedItem()).toContainText(dogBreed);
 
   // Edit sub-profile. When a dog has a report, the View Dog edit button should
@@ -81,8 +83,12 @@ test("user can view report and edit sub-profile", async ({
   const newWeight = "333";
   await pgViewReport.backButton().click();
   await pgViewDog.checkReady();
+  await expect(pgViewDog.dogBloodTypeItem()).toContainText("DEA 1 Positive");
   await pgViewDog.editButton().click();
   await pgEdit.checkReady();
+  await expect(
+    pgEdit.page().getByText("Blood Type: DEA 1 Positive"),
+  ).toBeVisible();
   await expect(pgEdit.evidenceThisIsTheSubProfileForm()).toBeVisible();
   await pgEdit.dogNameField().fill(newName);
   await pgEdit.dogEverReceivedTransfusionOption(YES_NO.YES).click();
