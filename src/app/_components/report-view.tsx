@@ -63,10 +63,10 @@ export function ReportView(props: { report: BarkReport; canEdit: boolean }) {
       label: "Blood Test Result",
       value: (() => {
         if (dogDea1Point1 === POS_NEG_NIL.POSITIVE) {
-          return "DEA1.1 Positive";
+          return "DEA 1 Positive";
         }
         if (dogDea1Point1 === POS_NEG_NIL.NEGATIVE) {
-          return "DEA1.1 Negative";
+          return "DEA 1 Negative";
         }
         return "Did not test";
       })(),
