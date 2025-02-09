@@ -14,7 +14,7 @@ import Link from "next/link";
 import { CONTACT_EMAIL } from "@/lib/bark/constants/contact-email";
 
 const criterias = [
-  { text: ">20KG in weight", imgUrl: IMG_PATH.WEIGHING_MACHINE },
+  { text: "At least 20KG in weight", imgUrl: IMG_PATH.WEIGHING_MACHINE },
   {
     text: "Between 1 to 8 years old",
     imgUrl: IMG_PATH.BIRTHDAY_CAKE,
@@ -114,7 +114,7 @@ const faqs = [
           active participation. Criteria for canine blood donation:
         </p>
         <p>
-          <b>Weight:</b> Dogs should weigh at least 25kg but not be overweight.
+          <b>Weight:</b> Dogs should weigh at least 20kg but not be overweight.
         </p>
         <p>
           <b>Age:</b> Dogs between 1 to 8 years old are generally eligible.
