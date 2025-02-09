@@ -67,7 +67,7 @@ test("call task uses latest values", async ({ page, request }) => {
   await pgSubmit.dogDidDonateBlood_NO().click();
   await pgSubmit.dogBcsSelector().click();
   await pgSubmit.dogBcsOption5().click();
-  await pgSubmit.dogDea1Point1_POSITIVE().click();
+  await pgSubmit.dogDea1_POSITIVE().click();
   const newWeight = toString(parseFloat(dogWeightKg) * 2);
   await pgSubmit.dogWeightField().fill(newWeight);
   await pgSubmit.dogHeartwormOption_NEGATIVE().click();

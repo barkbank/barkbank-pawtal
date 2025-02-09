@@ -17,21 +17,21 @@ test("vet can edit report", async ({ page }, testInfo) => {
 
   const pgList = new VetReportListPage(context);
 
-  // Should be DEA1.1 Positive at first
+  // Should be DEA 1 Positive at first
   await pgList.checkReady();
   await expect(pgList.reportCard({ dogName }).locator()).toBeVisible();
   await expect(
-    pgList.reportCard({ dogName }).dea1Point1PositiveBadge(),
+    pgList.reportCard({ dogName }).dea1PositiveBadge(),
   ).toBeVisible();
 
-  // Edit to DEA1.1 Negative
+  // Edit to DEA 1 Negative
   await changeBloodTypeToNegative(context, { dogName });
 
-  // Should now be DEA1.1 Negative
+  // Should now be DEA 1 Negative
   await pgList.checkReady();
   await expect(pgList.reportCard({ dogName }).locator()).toBeVisible();
   await expect(
-    pgList.reportCard({ dogName }).dea1Point1NegativeBadge(),
+    pgList.reportCard({ dogName }).dea1NegativeBadge(),
   ).toBeVisible();
 });
 
@@ -56,7 +56,7 @@ async function givenSubmittedReport(context: PomContext): Promise<{
   await pgSubmit.dogBcsSelector().click();
   await pgSubmit.dogBcsOption8().click();
   await pgSubmit.dogHeartwormOption_NEGATIVE().click();
-  await pgSubmit.dogDea1Point1_POSITIVE().click();
+  await pgSubmit.dogDea1_POSITIVE().click();
   await pgSubmit.dogDidDonateBlood_YES().click();
   await pgSubmit.submitButton().click();
   await expect(toast.locator()).toContainText("Submitted");
@@ -90,7 +90,7 @@ async function changeBloodTypeToNegative(
   await pgEdit.checkReady();
   await expect(pgEdit.submitButton()).toBeVisible();
 
-  await pgEdit.dogDea1Point1_NEGATIVE().click();
+  await pgEdit.dogDea1_NEGATIVE().click();
   await pgEdit.submitButton().click();
   await expect(toast.locator()).toContainText("Saved");
   await toast.closeButton().click();

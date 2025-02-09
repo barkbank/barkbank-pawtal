@@ -32,7 +32,7 @@ test("vet can view report", async ({ page }, testInfo) => {
   await pgSubmit.dogBcsSelector().click();
   await pgSubmit.dogBcsOption5().click();
   await pgSubmit.dogHeartwormOption_POSITIVE().click();
-  await pgSubmit.dogDea1Point1_POSITIVE().click();
+  await pgSubmit.dogDea1_POSITIVE().click();
   await pgSubmit.dogDidDonateBlood_NO().click();
   await pgSubmit.ineligibilityReasonTextArea().fill("The dog is too fat.");
   await pgSubmit.dogEligibility_TEMPORARILY_INELIGIBLE().click();
@@ -66,7 +66,7 @@ test("vet can view report", async ({ page }, testInfo) => {
   await expect(
     pgView
       .field("Blood Test Result")
-      .getByText("DEA1.1 Positive", { exact: true }),
+      .getByText("DEA 1 Positive", { exact: true }),
   ).toBeVisible();
   await expect(
     pgView

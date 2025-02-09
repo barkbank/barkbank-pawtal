@@ -28,7 +28,7 @@ test("vet can submit report", async ({ page }, testInfo) => {
   await pgSubmit.dogBcsSelector().click();
   await pgSubmit.dogBcsOption8().click();
   await pgSubmit.dogHeartwormOption_NEGATIVE().click();
-  await pgSubmit.dogDea1Point1_POSITIVE().click();
+  await pgSubmit.dogDea1_POSITIVE().click();
   await pgSubmit.dogDidDonateBlood_YES().click();
   await pgSubmit.submitButton().click();
   await expect(toast.locator()).toContainText("Submitted");

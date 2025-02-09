@@ -59,23 +59,23 @@ export abstract class VetGeneralReportForm extends PomDynamicPage {
 
   dogDea1Point1(val: PosNegNil): Locator {
     if (val === POS_NEG_NIL.POSITIVE) {
-      return this.dogDea1Point1_POSITIVE();
+      return this.dogDea1_POSITIVE();
     } else if (val === POS_NEG_NIL.NEGATIVE) {
-      return this.dogDea1Point1_NEGATIVE();
+      return this.dogDea1_NEGATIVE();
     } else {
-      return this.dogDea1Point1_NIL();
+      return this.dogDea1_NIL();
     }
   }
 
-  dogDea1Point1_POSITIVE(): Locator {
-    return this.page().getByLabel("DEA 1.1 Positive");
+  dogDea1_POSITIVE(): Locator {
+    return this.page().getByLabel("DEA 1 Positive");
   }
 
-  dogDea1Point1_NEGATIVE(): Locator {
-    return this.page().getByLabel("DEA 1.1 Negative");
+  dogDea1_NEGATIVE(): Locator {
+    return this.page().getByLabel("DEA 1 Negative");
   }
 
-  dogDea1Point1_NIL(): Locator {
+  dogDea1_NIL(): Locator {
     return this.page()
       .getByText("Blood Test Result")
       .locator("..")

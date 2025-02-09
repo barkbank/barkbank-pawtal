@@ -62,11 +62,11 @@ export class UserRegistrationPetFormPage extends PomPage {
   }
 
   dogBloodType_POSITIVE(): Locator {
-    return this.dogBloodTypeOptions().getByLabel("D.E.A 1.1 Positive");
+    return this.dogBloodTypeOptions().getByLabel("DEA 1 Positive");
   }
 
   dogBloodType_NEGATIVE(): Locator {
-    return this.dogBloodTypeOptions().getByLabel("D.E.A 1.1 Negative");
+    return this.dogBloodTypeOptions().getByLabel("DEA 1 Negative");
   }
 
   private dogEverReceivedTransfusionOptions(): Locator {
