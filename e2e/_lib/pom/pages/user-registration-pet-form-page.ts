@@ -18,6 +18,9 @@ export class UserRegistrationPetFormPage extends PomPage {
 
   async checkPageLoaded(): Promise<void> {
     await expect(this.dogEverPregnantOptions()).toBeVisible();
+    await expect(this.dogBloodType_POSITIVE()).toBeVisible();
+    await expect(this.dogBloodType_NEGATIVE()).toBeVisible();
+    await expect(this.dogBloodType_UNKNOWN()).toBeVisible();
   }
 
   dogFormHeader(): Locator {

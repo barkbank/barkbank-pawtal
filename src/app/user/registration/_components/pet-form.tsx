@@ -124,11 +124,11 @@ export default function PetForm(props: {
               value: DOG_ANTIGEN_PRESENCE.UNKNOWN,
             },
             {
-              label: "D.E.A 1.1 Positive",
+              label: "DEA 1 Positive",
               value: DOG_ANTIGEN_PRESENCE.POSITIVE,
             },
             {
-              label: "D.E.A 1.1 Negative",
+              label: "DEA 1 Negative",
               value: DOG_ANTIGEN_PRESENCE.NEGATIVE,
             },
           ]}
