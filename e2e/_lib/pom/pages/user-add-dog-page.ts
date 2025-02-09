@@ -1,10 +1,16 @@
 import { RoutePath } from "@/lib/route-path";
 import { PomPage } from "../core/pom-page";
-import { Locator } from "@playwright/test";
+import { Locator, expect } from "@playwright/test";
 
 export class UserAddDogPage extends PomPage {
   url(): string {
     return this.website().urlOf(RoutePath.USER_ADD_DOG);
+  }
+
+  async checkPageLoaded() {
+    await expect(this.dogBloodTypeOption_POSITIVE()).toBeVisible();
+    await expect(this.dogBloodTypeOption_NEGATIVE()).toBeVisible();
+    await expect(this.dogBloodTypeOption_UNKNOWN()).toBeVisible();
   }
 
   dogNameField(): Locator {
@@ -38,6 +44,20 @@ export class UserAddDogPage extends PomPage {
       .getByText("Dog Gender", { exact: true })
       .locator("..")
       .getByLabel("Female", { exact: true });
+  }
+
+  dogBloodTypeOption_POSITIVE(): Locator {
+    return this.page()
+      .getByText("Dog Blood Type")
+      .locator("..")
+      .getByLabel("DEA 1 Positive");
+  }
+
+  dogBloodTypeOption_NEGATIVE(): Locator {
+    return this.page()
+      .getByText("Dog Blood Type")
+      .locator("..")
+      .getByLabel("DEA 1 Negative");
   }
 
   dogBloodTypeOption_UNKNOWN(): Locator {
