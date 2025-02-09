@@ -349,11 +349,11 @@ export function GeneralReportForm(props: {
               options={[
                 {
                   value: POS_NEG_NIL.POSITIVE,
-                  label: "DEA 1.1 Positive",
+                  label: "DEA 1 Positive",
                 },
                 {
                   value: POS_NEG_NIL.NEGATIVE,
-                  label: "DEA 1.1 Negative",
+                  label: "DEA 1 Negative",
                 },
                 {
                   value: POS_NEG_NIL.NIL,
