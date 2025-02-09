@@ -40,11 +40,11 @@ PW_WORKERS=1
 ######################################################################
 # Development
 #
-# run - Runs the development server
+# dev - Runs the development server
 #
 # build - Next Build - this checks types are correct
 #
-# run-build - Runs the Next Build
+# start - Runs the Next Build
 #
 # fmt - Formats the code
 #
@@ -52,15 +52,15 @@ PW_WORKERS=1
 #
 # lint - Linting checks
 #
-.PHONY: run build run-build fmt test lint test-ui
+.PHONY: dev build start fmt test lint test-ui
 
-run:
+dev:
 	npm run dev
 
 build:
 	npm run build
 
-run-build:
+start:
 	npm run start
 
 fmt:
