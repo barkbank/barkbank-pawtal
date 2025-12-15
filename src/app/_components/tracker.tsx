@@ -8,17 +8,17 @@ import { toQueryParams } from "../_lib/to-query-params";
 
 export function Tracker() {
   return (
-    <Suspense fallback={<_Fallback />}>
-      <_Effect />
+    <Suspense fallback={<TrackerFallback />}>
+      <TrackerEffect />
     </Suspense>
   );
 }
 
-function _Fallback() {
+function TrackerFallback() {
   return null;
 }
 
-function _Effect() {
+function TrackerEffect() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   useEffect(() => {

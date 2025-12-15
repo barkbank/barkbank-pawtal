@@ -29,14 +29,15 @@ describe("db-users", () => {
   describe("dbSelectUser", () => {
     it("should return User", async () => {
       await withDb(async (db) => {
-        const userGen = await dbInsertUser(db, await getUserSpec(1));
+        const spec1 = await getUserSpec(1);
+        const userGen = await dbInsertUser(db, spec1);
         const user = await dbSelectUser(db, userGen.userId);
         expect(user).not.toBeNull();
         expect(user?.userCreationTime).toEqual(userGen.userCreationTime);
         expect(user?.userModificationTime).toEqual(userGen.userCreationTime);
         const mapper = getUserMapper();
         const spec = mapper.toUserSpec(guaranteed(user));
-        expect(spec).toMatchObject(getUserSpec(1));
+        expect(spec).toMatchObject(spec1);
       });
     });
     it("should return user that does not reside in singapore", async () => {
