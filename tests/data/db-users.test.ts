@@ -29,7 +29,7 @@ describe("db-users", () => {
   describe("dbSelectUser", () => {
     it("should return User", async () => {
       await withDb(async (db) => {
-        const spec1 = await getUserSpec(1)
+        const spec1 = await getUserSpec(1);
         const userGen = await dbInsertUser(db, spec1);
         const user = await dbSelectUser(db, userGen.userId);
         expect(user).not.toBeNull();
