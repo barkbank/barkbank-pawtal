@@ -1,4 +1,4 @@
 /**
  * Pawtal Version
  */
-export const VERSION = "0.15.1";
+export const VERSION = "0.15.2";
